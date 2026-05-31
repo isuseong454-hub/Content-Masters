@@ -1,15 +1,17 @@
 <!-- Benchmark Sheet v4 - Real Spreadsheet + Sidebar Navigation -->
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-<title>컨텐츠 마스터즈</title>
-<meta name="description" content="수익화 컨텐츠 마스터즈 — 헤어디자이너를 위한 인스타그램 수익화 트레이닝 도구" />
+<title>컨텐츠 집중 트레이닝</title>
+<meta name="description" content="수익화 컨텐츠 집중 트레이닝 — 헤어디자이너를 위한 인스타그램 수익화 트레이닝 도구" />
 <meta name="theme-color" content="#0D0D0D" />
 <link rel="manifest" href="manifest.json" />
 <link rel="icon" type="image/png" href="favicon.png" />
 <link rel="apple-touch-icon" href="apple-touch-icon.png" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-<meta name="apple-mobile-web-app-title" content="컨텐츠 마스터즈" />
+<meta name="apple-mobile-web-app-title" content="컨텐츠 집중 트레이닝" />
+<!-- Supabase JS (v2 UMD) — window.supabase 전역 노출 -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <style>
   @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css');
   @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap');
@@ -10778,8 +10780,8 @@
     50%      { box-shadow: 0 0 28px rgba(46, 204, 113, 0.55), 0 0 0 6px rgba(46, 204, 113, 0.08); }
   }
   @keyframes auth-glow-breath {
-    0%, 100% { opacity: 0.35; transform: translate(-50%, -50%) scale(1); }
-    50%      { opacity: 0.55; transform: translate(-50%, -50%) scale(1.05); }
+    0%, 100% { opacity: 0.6; transform: translate(-50%, -50%) scale(1); }
+    50%      { opacity: 0.9; transform: translate(-50%, -50%) scale(1.06); }
   }
   @keyframes auth-pin-pop {
     0%   { transform: scale(1); }
@@ -10817,10 +10819,11 @@
     border-radius: 50%;
     pointer-events: none;
     background:
-      radial-gradient(circle at center, transparent 0%, transparent 14%, rgba(46, 204, 113, 0.08) 16%, transparent 18%),
-      radial-gradient(circle at center, transparent 0%, transparent 26%, rgba(46, 204, 113, 0.06) 28%, transparent 30%),
-      radial-gradient(circle at center, transparent 0%, transparent 38%, rgba(46, 204, 113, 0.05) 40%, transparent 42%),
-      radial-gradient(circle at center, rgba(46, 204, 113, 0.12) 0%, rgba(46, 204, 113, 0.04) 35%, transparent 60%);
+      radial-gradient(circle at center, transparent 0%, transparent 13%, rgba(46, 204, 113, 0.20) 16%, transparent 19%),
+      radial-gradient(circle at center, transparent 0%, transparent 25%, rgba(46, 204, 113, 0.16) 28%, transparent 31%),
+      radial-gradient(circle at center, transparent 0%, transparent 37%, rgba(46, 204, 113, 0.13) 40%, transparent 43%),
+      radial-gradient(circle at center, transparent 0%, transparent 49%, rgba(46, 204, 113, 0.10) 52%, transparent 55%),
+      radial-gradient(circle at center, rgba(46, 204, 113, 0.26) 0%, rgba(46, 204, 113, 0.10) 38%, transparent 64%);
     transform: translate(-50%, -50%);
     animation: auth-glow-breath 5.5s ease-in-out infinite;
   }
@@ -11591,8 +11594,8 @@
   <!-- 화면 1: 코드 입력 -->
   <div class="auth-screen" id="auth-screen-code" data-screen="code">
     <div class="auth-emoji">🔥</div>
-    <h1 class="auth-h1">수익화<br/>컨텐츠 마스터즈</h1>
-    <div class="auth-h1-sub">컨텐츠 집중 트레이닝</div>
+    <h1 class="auth-h1">수익화 컨텐츠</h1>
+    <div class="auth-h1-sub">집중 트레이닝</div>
     <p class="auth-desc">코드를 입력하고 나만의 트레이닝을 시작하세요.<br/>한 번 입력한 기록은 계속 보관됩니다.</p>
 
     <div class="auth-input-wrap">
@@ -11609,7 +11612,7 @@
     <div class="auth-hint">코드가 없으신가요? 운영자에게 문의하세요</div>
 
     <button class="auth-info-box" id="auth-info-btn">
-      <div class="auth-info-eyebrow">수익화 컨텐츠 마스터즈란?</div>
+      <div class="auth-info-eyebrow">수익화 컨텐츠 집중 트레이닝이란?</div>
       <div class="auth-info-title">서비스 소개 보기 →</div>
     </button>
   </div>
@@ -11617,7 +11620,7 @@
   <!-- 화면 2: PIN 입력 (로그인) -->
   <div class="auth-screen" id="auth-screen-pin" data-screen="pin" style="display:none;">
     <div class="auth-emoji">🔒</div>
-    <div class="auth-pin-brand">수익화 마스터즈</div>
+    <div class="auth-pin-brand">수익화 컨텐츠 집중 트레이닝</div>
     <button class="auth-code-chip" id="auth-code-chip-back">
       <span id="auth-chip-code">·</span>
       <span class="auth-code-chip-divider">·</span>
@@ -11746,7 +11749,7 @@
   <!-- ===== SIDEBAR ===== -->
   <aside class="sh-sidebar" id="sh-sidebar">
     <div class="sh-sb-eyebrow">고객관점</div>
-    <h1 class="sh-sb-brand-title"><span class="em">수익화</span><br/>컨텐츠 마스터즈</h1>
+    <h1 class="sh-sb-brand-title"><span class="em">수익화 컨텐츠</span><br/>집중 트레이닝</h1>
     <div class="sh-sb-line"></div>
 
     <!-- WORKSPACE SWITCHER -->
@@ -11975,7 +11978,7 @@
     <div id="home-view" class="home-wrap">
       <section class="home-hero">
         <div class="home-hero-page"><span class="em">01</span> / 03</div>
-        <div class="home-eyebrow">고객관점 · 수익화 컨텐츠 마스터즈</div>
+        <div class="home-eyebrow">고객관점 · 수익화 컨텐츠 집중 트레이닝</div>
         <h1 class="home-title">트레이닝 <span class="em">룸</span></h1>
         <div class="home-divline"></div>
         <p style="font-family:'Pretendard',sans-serif;font-size:15px;color:var(--text-sub);max-width:520px;line-height:1.6;font-weight:500;">
@@ -13189,17 +13192,188 @@
 
 <script>
 (function() {
-  // Storage fallback: if window.storage is unavailable (e.g. preview sandbox),
-  // use an in-memory store so the app still works for the session.
-  if (typeof window.storage === 'undefined' || !window.storage) {
-    const _mem = {};
-    window.storage = {
-      get: async (k) => (k in _mem ? { key: k, value: _mem[k] } : null),
-      set: async (k, v) => { _mem[k] = v; return { key: k, value: v }; },
-      delete: async (k) => { const had = k in _mem; delete _mem[k]; return { key: k, deleted: had }; },
-      list: async (prefix) => ({ keys: Object.keys(_mem).filter(k => !prefix || k.startsWith(prefix)) })
-    };
+  // ============================================================
+  // === Supabase 클라이언트 초기화 (1단계) =====================
+  // publishable 키는 브라우저 노출용 키라 코드에 둬도 안전.
+  // 실제 데이터 격리는 RLS + RPC 함수가 담당 (이후 단계).
+  // ============================================================
+  const SUPABASE_URL = 'https://azmayrzdzdeftrjzcycf.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_U8UKG1E4bimFMLkZVCYlVw_8IQXZcC4';
+  try {
+    if (window.supabase && typeof window.supabase.createClient === 'function') {
+      window.sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+      // 연결 자가진단 — 콘솔에만 출력 (화면 노출 금지)
+      window.sb.rpc('cm_list_hints', { p_q: '' })
+        .then(({ error }) => {
+          if (!error) { console.log('[Supabase] 연결 성공 ✓ RPC(cm_list_hints) 호출 OK'); return; }
+          const m = error.message || '';
+          if (error.code === 'PGRST202' || m.indexOf('cm_list_hints') !== -1 || m.indexOf('function') !== -1)
+            console.log('[Supabase] 연결됨 ✓ — 2단계 SQL 아직 미적용(RPC 함수 대기 중)');
+          else console.error('[Supabase] RPC 오류:', m);
+        });
+    } else {
+      console.error('[Supabase] 라이브러리 로드 실패 — CDN 차단/오프라인 여부 확인');
+    }
+  } catch (e) {
+    console.error('[Supabase] 초기화 예외:', e);
   }
+
+  // ============================================================
+  // === Storage 백엔드 (3단계) =================================
+  // 데이터 키(시트/원고/PMM/키워드/퍼널/주간슬롯)는 Supabase로 동기화.
+  // 세션·이미지·기타 키는 기기 localStorage 유지.
+  // 인증은 window.__cmAuth(로그인 시 설정: {code, pinHash})로 매 요청 동봉.
+  // ============================================================
+  (function setupStorage() {
+    // 저장 키 → Supabase 전용 테이블 종류 (1키=1테이블, data jsonb 통째)
+    const KIND = {
+      'shv4-rows': 'rows',
+      'shv4-scripts': 'scripts',
+      'shv4-pmms': 'pmms',
+      'shv4-keywords': 'keywords',
+      'shv4-funnel-slots': 'funnel_slots',
+      'shv4-week-slots': 'week_slots'
+    };
+    // profiles 묶음(설정·커스텀목록·무드보드·홈/챌린지) — profiles.data jsonb 한 행에 모아 동기화
+    const PROFILE_KEYS = new Set([
+      'shv4-prefs',
+      'shv4-custom-keywords', 'shv4-custom-formats', 'shv4-custom-audio', 'shv4-custom-tags', 'shv4-custom-content-types',
+      'shv4-gj-milestones',
+      'mbv2-meta', 'mbv2-cards',
+      'hmv1-home', 'hmv1-challenges', 'hmv1-seen'
+    ]);
+    // 이미지 키(벤치마크 시트·무드보드) → Supabase Storage 버킷
+    const IMG_BUCKET = 'cm-images';
+    function isSynced(k) { return !!KIND[k]; }
+    function isProfile(k) { return PROFILE_KEYS.has(k); }
+    function isImage(k) { return k.indexOf('shv4-img-') === 0 || k.indexOf('mbv2-img-') === 0; }
+    function authReady() { const a = window.__cmAuth; return !!(window.sb && a && a.code && a.pinHash); }
+
+    // dataURL ↔ Blob 변환
+    async function dataUrlToBlob(durl) { const r = await fetch(durl); return r.blob(); }
+    function blobToDataUrl(blob) { return new Promise((res, rej) => { const fr = new FileReader(); fr.onload = () => res(fr.result); fr.onerror = rej; fr.readAsDataURL(blob); }); }
+    function imgPath(k) { return window.__cmAuth.code + '/' + k; }
+
+    // ── profiles 묶음 메모리 캐시 + 디바운스 저장 ──
+    let _bag = null, _bagLoading = null, _bagKeyFor = null, _flushTimer = null;
+    async function loadBag() {
+      const a = window.__cmAuth;
+      try {
+        const { data, error } = await window.sb.rpc('cm_data_get', { p_code: a.code, p_pin_hash: a.pinHash, p_kind: 'profiles' });
+        if (error || !data || !data.ok) return {};
+        const v = data.value;
+        return (v && typeof v === 'object' && !Array.isArray(v)) ? v : {};
+      } catch (e) { return {}; }
+    }
+    async function ensureBag() {
+      const a = window.__cmAuth;
+      if (_bag && _bagKeyFor === a.code) return _bag;
+      if (_bagLoading && _bagKeyFor === a.code) return _bagLoading;
+      _bagKeyFor = a.code;
+      _bagLoading = loadBag().then(b => { _bag = b; _bagLoading = null; return b; });
+      return _bagLoading;
+    }
+    async function flushBag() {
+      _flushTimer = null;
+      const a = window.__cmAuth;
+      if (!a || !a.code || !_bag) return;
+      try { await window.sb.rpc('cm_data_set', { p_code: a.code, p_pin_hash: a.pinHash, p_kind: 'profiles', p_data: _bag }); }
+      catch (e) { console.error('[Supabase] profiles 저장 예외', e); }
+    }
+    function scheduleFlush() { if (_flushTimer) clearTimeout(_flushTimer); _flushTimer = setTimeout(flushBag, 400); }
+    // 사용자 전환 시: 이전 사용자 묶음 즉시 저장 후 캐시 비움 (반드시 __cmAuth 바뀌기 전에 호출)
+    window.__cmStorageReset = () => { if (_flushTimer) { clearTimeout(_flushTimer); flushBag(); } _bag = null; _bagLoading = null; _bagKeyFor = null; };
+
+    // 로컬(기기) 저장 — localStorage, 실패 시 메모리
+    const _mem = {};
+    const local = {
+      get: async (k) => {
+        try { const v = localStorage.getItem(k); return v === null ? null : { key: k, value: v }; }
+        catch (e) { return (k in _mem) ? { key: k, value: _mem[k] } : null; }
+      },
+      set: async (k, v) => { try { localStorage.setItem(k, v); } catch (e) { _mem[k] = v; } return { key: k, value: v }; },
+      delete: async (k) => { try { localStorage.removeItem(k); } catch (e) {} delete _mem[k]; return { key: k, deleted: true }; },
+      list: async (prefix) => {
+        const keys = [];
+        try { for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (!prefix || k.startsWith(prefix)) keys.push(k); } }
+        catch (e) { Object.keys(_mem).forEach(k => { if (!prefix || k.startsWith(prefix)) keys.push(k); }); }
+        return { keys };
+      }
+    };
+
+    window.storage = {
+      get: async (k) => {
+        if (authReady() && isSynced(k)) {
+          try {
+            const a = window.__cmAuth;
+            const { data, error } = await window.sb.rpc('cm_data_get', { p_code: a.code, p_pin_hash: a.pinHash, p_kind: KIND[k] });
+            if (error || !data || !data.ok) { console.warn('[Supabase] get 실패(' + k + ') → 로컬 폴백', error && error.message); return local.get(k); }
+            if (data.value === null || data.value === undefined) return null;
+            return { key: k, value: JSON.stringify(data.value) };
+          } catch (e) { console.warn('[Supabase] get 예외(' + k + ') → 로컬 폴백', e); return local.get(k); }
+        }
+        if (authReady() && isProfile(k)) {
+          try { const bag = await ensureBag(); return (k in bag) ? { key: k, value: bag[k] } : null; }
+          catch (e) { return local.get(k); }
+        }
+        if (authReady() && isImage(k)) {
+          try {
+            const { data, error } = await window.sb.storage.from(IMG_BUCKET).download(imgPath(k));
+            if (error || !data) return local.get(k);
+            const durl = await blobToDataUrl(data);
+            return { key: k, value: durl };
+          } catch (e) { return local.get(k); }
+        }
+        return local.get(k);
+      },
+      set: async (k, v) => {
+        if (authReady() && isSynced(k)) {
+          let payload; try { payload = JSON.parse(v); } catch (e) { payload = v; }
+          try {
+            const a = window.__cmAuth;
+            const { data, error } = await window.sb.rpc('cm_data_set', { p_code: a.code, p_pin_hash: a.pinHash, p_kind: KIND[k], p_data: payload });
+            if (error || !data || !data.ok) console.error('[Supabase] 저장 실패(' + k + ')', error && error.message);
+          } catch (e) { console.error('[Supabase] 저장 예외(' + k + ')', e); }
+          return { key: k, value: v };
+        }
+        if (authReady() && isProfile(k)) {
+          try { const bag = await ensureBag(); bag[k] = v; scheduleFlush(); }
+          catch (e) { return local.set(k, v); }
+          return { key: k, value: v };
+        }
+        if (authReady() && isImage(k) && typeof v === 'string' && v.indexOf('data:') === 0) {
+          try {
+            const blob = await dataUrlToBlob(v);
+            const ct = (v.match(/^data:([^;]+)/) || [])[1] || 'image/png';
+            const { error } = await window.sb.storage.from(IMG_BUCKET).upload(imgPath(k), blob, { upsert: true, contentType: ct });
+            if (error) { console.error('[Supabase] 이미지 저장 실패(' + k + ')', error.message); return local.set(k, v); }
+          } catch (e) { console.error('[Supabase] 이미지 저장 예외(' + k + ')', e); return local.set(k, v); }
+          return { key: k, value: v };
+        }
+        return local.set(k, v);
+      },
+      delete: async (k) => {
+        if (authReady() && isSynced(k)) {
+          try {
+            const a = window.__cmAuth;
+            await window.sb.rpc('cm_data_set', { p_code: a.code, p_pin_hash: a.pinHash, p_kind: KIND[k], p_data: [] });
+          } catch (e) {}
+          return { key: k, deleted: true };
+        }
+        if (authReady() && isProfile(k)) {
+          try { const bag = await ensureBag(); delete bag[k]; scheduleFlush(); }
+          catch (e) { return local.delete(k); }
+          return { key: k, deleted: true };
+        }
+        if (authReady() && isImage(k)) {
+          try { await window.sb.storage.from(IMG_BUCKET).remove([imgPath(k)]); } catch (e) {}
+          return { key: k, deleted: true };
+        }
+        return local.delete(k);
+      },
+      list: async (prefix) => local.list(prefix)
+    };
+  })();
 
   const ROWS_KEY = 'shv4-rows';
   const IMG_KEY_PREFIX = 'shv4-img-';
@@ -21661,11 +21835,22 @@
   const AUTOLOGIN_KEY = 'shv4-auth-autologin';
   const ADMIN_PW = '1134';
 
-  let _codes = [];
+  let _codes = [];          // (구) 로컬 캐시 — 마이그레이션 용도로만 남김
+  let _adminUsers = [];     // 관리자 목록 (Supabase에서 로드)
   let _currentUser = null;
   let _adminListFilter = 'all';
   let _pendingCode = null; // 코드 검증 통과 후 임시 보관
   let _signupPin1Cache = ''; // 가입 1단계 입력값
+
+  // === Supabase RPC 호출 헬퍼 ===
+  async function cmRpc(fn, params) {
+    if (!window.sb) { console.error('[Supabase] 클라이언트 미초기화'); return { ok: false, reason: 'noclient' }; }
+    try {
+      const { data, error } = await window.sb.rpc(fn, params || {});
+      if (error) { console.error('[Supabase] ' + fn + ' 오류:', error.message); return { ok: false, reason: 'network', _error: error.message }; }
+      return data;
+    } catch (e) { console.error('[Supabase] ' + fn + ' 예외:', e); return { ok: false, reason: 'network' }; }
+  }
 
   // === SHA-256 해시 ===
   async function sha256(text) {
@@ -21674,36 +21859,30 @@
     return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
   }
 
-  // === 코드 생성 (6자 영숫자) ===
-  function generateCode() {
-    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-    let code;
-    do {
-      code = '';
-      for (let i = 0; i < 6; i++) code += chars[Math.floor(Math.random() * chars.length)];
-    } while (_codes.some(c => c.code === code));
-    return code;
+  // === 저장/로드 (Supabase) ===
+  // 관리자 목록을 서버에서 로드 (관리자 패널 전용)
+  async function loadAdminUsers() {
+    const res = await cmRpc('cm_admin_list', { p_admin_pw: ADMIN_PW });
+    _adminUsers = (res && res.ok && Array.isArray(res.users)) ? res.users : [];
+    return _adminUsers;
   }
-
-  // === 저장/로드 ===
-  async function loadCodes() {
-    try {
-      const r = await window.storage.get(CODES_KEY);
-      if (r) _codes = JSON.parse(r.value);
-    } catch (e) { _codes = []; }
-    if (!Array.isArray(_codes)) _codes = [];
-  }
-  async function saveCodes() {
-    try { await window.storage.set(CODES_KEY, JSON.stringify(_codes)); } catch (e) {}
+  // 데이터 RPC 인증용 전역 (code + pinHash) 동기화
+  function syncCmAuth() {
+    window.__cmAuth = (_currentUser && _currentUser.code && _currentUser.pinHash)
+      ? { code: _currentUser.code, pinHash: _currentUser.pinHash } : null;
   }
   async function loadCurrentUser() {
     try {
       const r = await window.storage.get(CURRENT_USER_KEY);
       if (r) _currentUser = JSON.parse(r.value);
     } catch (e) { _currentUser = null; }
+    syncCmAuth();
   }
   async function setCurrentUser(u) {
+    // 사용자 전환 전에 이전 사용자 profiles 묶음 flush + 캐시 초기화
+    if (window.__cmStorageReset) window.__cmStorageReset();
     _currentUser = u;
+    syncCmAuth();
     try {
       if (u) await window.storage.set(CURRENT_USER_KEY, JSON.stringify(u));
       else await window.storage.delete(CURRENT_USER_KEY);
@@ -21833,21 +22012,21 @@
     setTimeout(() => row.classList.remove('shake'), 450);
   }
 
-  // === 자동완성 (가입된 코드 목록) ===
-  function renderAuthSuggest() {
+  // === 자동완성 (코드만 표시, 이름·PIN 미노출) — Supabase RPC ===
+  async function renderAuthSuggest() {
     const inp = document.getElementById('auth-code-input');
     const wrap = document.getElementById('auth-suggest');
     if (!inp || !wrap) return;
     const q = inp.value.trim().toUpperCase();
-    const candidates = _codes.filter(c => c.signedUpAt && !isCodeExpired(c));
-    if (candidates.length === 0) { wrap.style.display = 'none'; return; }
-    const filtered = q ? candidates.filter(c => c.code.includes(q)) : candidates;
-    if (filtered.length === 0) { wrap.style.display = 'none'; return; }
-    wrap.innerHTML = filtered.slice(0, 5).map(c => `
-      <button class="auth-suggest-item" data-code="${c.code}">
+    const res = await cmRpc('cm_list_hints', { p_q: q });
+    const codes = Array.isArray(res) ? res : [];
+    // 입력 중 다른 값으로 바뀌었으면 무시 (경쟁 방지)
+    if (inp.value.trim().toUpperCase() !== q) return;
+    if (codes.length === 0) { wrap.style.display = 'none'; return; }
+    wrap.innerHTML = codes.slice(0, 5).map(code => `
+      <button class="auth-suggest-item" data-code="${esc(code)}">
         <span class="auth-suggest-left">
-          <span class="auth-suggest-code">${c.code}</span>
-          <span class="auth-suggest-name">${esc(c.name)}</span>
+          <span class="auth-suggest-code">${esc(code)}</span>
         </span>
         <span class="auth-suggest-cta">탭하여 입장 →</span>
       </button>
@@ -21882,26 +22061,23 @@
       };
     }
 
-    // 코드 → 다음
-    document.getElementById('auth-code-next').onclick = () => {
+    // 코드 → 다음 (Supabase: cm_code_status)
+    document.getElementById('auth-code-next').onclick = async () => {
       const errEl = document.getElementById('auth-code-error');
       const code = codeInp.value.trim().toUpperCase();
       if (!code) { errEl.textContent = '코드를 입력해주세요.'; return; }
-      const found = _codes.find(c => c.code === code);
-      if (!found) { errEl.textContent = '코드를 찾을 수 없어요. 다시 확인해주세요.'; return; }
-      if (isCodeExpired(found)) { errEl.textContent = '만료된 코드예요. 운영자에게 문의해주세요.'; return; }
+      errEl.textContent = '확인 중…';
+      const st = await cmRpc('cm_code_status', { p_code: code });
+      if (!st || st.ok === false) { errEl.textContent = '네트워크 오류. 잠시 후 다시 시도해주세요.'; return; }
+      if (!st.exists) { errEl.textContent = '코드를 찾을 수 없어요. 다시 확인해주세요.'; return; }
+      if (st.expired) { errEl.textContent = '만료된 코드예요. 운영자에게 문의해주세요.'; return; }
+      errEl.textContent = '';
       _pendingCode = code;
-      // 칩 텍스트 채우기
-      const chipCode = document.getElementById('auth-chip-code');
-      const chipName = document.getElementById('auth-chip-name');
-      const chipCode2 = document.getElementById('auth-chip-code-2');
-      const chipName2 = document.getElementById('auth-chip-name-2');
-      if (chipCode) chipCode.textContent = found.code;
-      if (chipName) chipName.textContent = found.name;
-      if (chipCode2) chipCode2.textContent = found.code;
-      if (chipName2) chipName2.textContent = found.name;
+      // 칩 텍스트 (코드만 표시, 이름 미노출)
+      ['auth-chip-code', 'auth-chip-code-2'].forEach(id => { const el = document.getElementById(id); if (el) el.textContent = code; });
+      ['auth-chip-name', 'auth-chip-name-2'].forEach(id => { const el = document.getElementById(id); if (el) el.textContent = ''; });
       // 가입 여부에 따라 분기
-      if (found.signedUpAt && found.pwHash) {
+      if (st.signedUp) {
         showAuthScreen('pin');
         clearPin('#auth-pin-row .auth-pin-box');
       } else {
@@ -21914,14 +22090,19 @@
       }
     };
 
-    // PIN 입력 (로그인)
+    // PIN 입력 (로그인) — Supabase: cm_login
     bindPinBoxes('#auth-pin-row .auth-pin-box', async (pin) => {
       const errEl = document.getElementById('auth-pin-error');
-      const found = _codes.find(c => c.code === _pendingCode);
-      if (!found) { errEl.textContent = '코드 오류. 다시 시도해주세요.'; return; }
+      if (!_pendingCode) { errEl.textContent = '코드 오류. 다시 시도해주세요.'; return; }
       const hash = await sha256(pin);
-      if (hash !== found.pwHash) {
-        errEl.textContent = '비밀번호가 틀려요.';
+      const res = await cmRpc('cm_login', { p_code: _pendingCode, p_pin_hash: hash });
+      if (!res || !res.ok) {
+        const reason = res && res.reason;
+        if (reason === 'badpin') errEl.textContent = '비밀번호가 틀려요.';
+        else if (reason === 'expired') errEl.textContent = '만료된 코드예요. 운영자에게 문의해주세요.';
+        else if (reason === 'nosignup') errEl.textContent = '아직 가입되지 않은 코드예요.';
+        else if (reason === 'notfound') errEl.textContent = '코드를 찾을 수 없어요.';
+        else errEl.textContent = '로그인 실패. 잠시 후 다시 시도해주세요.';
         shakePinRow('#auth-pin-row');
         clearPin('#auth-pin-row .auth-pin-box');
         return;
@@ -21929,7 +22110,7 @@
       // 통과
       const autoLogin = document.getElementById('auth-autologin').checked;
       await setAutologin(autoLogin);
-      await setCurrentUser({ code: found.code, name: found.name });
+      await setCurrentUser({ code: res.user.code, name: res.user.name, is_master: !!res.user.is_master, pinHash: hash });
       hideAuth();
       onLoggedIn();
     });
@@ -21979,14 +22160,19 @@
         clearPin('.auth-signup-pin2');
         return;
       }
-      const found = _codes.find(c => c.code === _pendingCode);
-      if (!found) { errEl.textContent = '코드 오류. 다시 시도해주세요.'; return; }
+      if (!_pendingCode) { errEl.textContent = '코드 오류. 다시 시도해주세요.'; return; }
       const hash = await sha256(pin1);
-      found.pwHash = hash;
-      found.signedUpAt = Date.now();
-      await saveCodes();
+      const res = await cmRpc('cm_signup', { p_code: _pendingCode, p_pin_hash: hash });
+      if (!res || !res.ok) {
+        const reason = res && res.reason;
+        if (reason === 'already') errEl.textContent = '이미 가입된 코드예요. 비밀번호로 로그인해주세요.';
+        else if (reason === 'expired') errEl.textContent = '만료된 코드예요. 운영자에게 문의해주세요.';
+        else if (reason === 'notfound') errEl.textContent = '코드를 찾을 수 없어요.';
+        else errEl.textContent = '가입 실패. 잠시 후 다시 시도해주세요.';
+        return;
+      }
       await setAutologin(true);
-      await setCurrentUser({ code: found.code, name: found.name });
+      await setCurrentUser({ code: res.user.code, name: res.user.name, is_master: !!res.user.is_master, pinHash: hash });
       hideAuth();
       onLoggedIn();
     };
@@ -22001,19 +22187,13 @@
     // 서비스 소개 (지금은 안내만)
     const infoBtn = document.getElementById('auth-info-btn');
     if (infoBtn) infoBtn.onclick = () => {
-      alert('수익화 컨텐츠 마스터즈\n\n헤어디자이너를 위한\n인스타그램 수익화 트레이닝 도구.\n\n• 트레이닝 룸\n• 벤치마크 시트\n• 컨텐츠 퍼널\n• 고객 분석\n• 유형 보드\n\n수강 문의: 운영자 (이수성)');
+      alert('수익화 컨텐츠 집중 트레이닝\n\n헤어디자이너를 위한\n인스타그램 수익화 트레이닝 도구.\n\n• 트레이닝 룸\n• 벤치마크 시트\n• 컨텐츠 퍼널\n• 고객 분석\n• 유형 보드\n\n수강 문의: 운영자 (이수성)');
     };
   }
 
-  // 마스터 코드 판별 — 가장 먼저 발급된 코드가 마스터
-  function getMasterCode() {
-    if (_codes.length === 0) return null;
-    return _codes.slice().sort((a, b) => (a.createdAt || 0) - (b.createdAt || 0))[0];
-  }
+  // 마스터 판별 — users 테이블의 is_master 플래그 (로그인 시 서버에서 전달)
   function isMasterUser() {
-    if (!_currentUser) return false;
-    const master = getMasterCode();
-    return master && master.code === _currentUser.code;
+    return !!(_currentUser && _currentUser.is_master);
   }
 
   function onLoggedIn() {
@@ -22083,19 +22263,12 @@
       const name = document.getElementById('admin-new-name').value.trim();
       const period = document.getElementById('admin-new-period').value;
       if (!name) { toast('수강생 이름을 입력해주세요'); return; }
-      const code = generateCode();
-      const now = Date.now();
-      let expiresAt;
-      if (period === 'lifetime') expiresAt = null;
-      else expiresAt = now + parseInt(period, 10) * 24 * 60 * 60 * 1000;
-      _codes.push({
-        code, name, periodDays: period === 'lifetime' ? 'lifetime' : parseInt(period, 10),
-        createdAt: now, expiresAt, pwHash: null, signedUpAt: null
-      });
-      await saveCodes();
+      const res = await cmRpc('cm_admin_create', { p_admin_pw: ADMIN_PW, p_name: name, p_period: period });
+      if (!res || !res.ok) { toast('코드 생성 실패' + (res && res._error ? ' (' + res._error + ')' : '')); return; }
       document.getElementById('admin-new-name').value = '';
+      await loadAdminUsers();
       renderAdminList();
-      toast(`코드 생성: ${code}`);
+      toast(`코드 생성: ${res.code}`);
     };
 
     document.querySelectorAll('.admin-filter-btn').forEach(b => {
@@ -22108,9 +22281,12 @@
     });
   }
 
-  function openAdmin() {
+  async function openAdmin() {
     document.getElementById('admin-overlay').classList.add('show');
     document.body.style.overflow = 'hidden';
+    const el = document.getElementById('admin-list');
+    if (el) el.innerHTML = '<div class="admin-empty">불러오는 중…</div>';
+    await loadAdminUsers();
     renderAdminList();
   }
 
@@ -22119,12 +22295,12 @@
     const countEl = document.getElementById('admin-list-count');
     if (!el) return;
 
-    let items = _codes.slice().sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+    let items = _adminUsers.slice().sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
     if (_adminListFilter === 'active') items = items.filter(c => !isCodeExpired(c));
     else if (_adminListFilter === 'expired') items = items.filter(c => isCodeExpired(c));
 
-    const total = _codes.length;
-    const active = _codes.filter(c => !isCodeExpired(c)).length;
+    const total = _adminUsers.length;
+    const active = _adminUsers.filter(c => !isCodeExpired(c)).length;
     if (countEl) countEl.textContent = `전체 ${total}명 · 사용중 ${active}명`;
 
     if (items.length === 0) {
@@ -22178,23 +22354,23 @@
   window.__copyCode = copyCode;
 
   async function extendCode(code, days) {
-    const c = _codes.find(x => x.code === code);
-    if (!c) return;
-    if (c.expiresAt === null) { toast('평생 계정은 연장 불필요'); return; }
-    const base = Math.max(c.expiresAt, Date.now());
-    c.expiresAt = base + days * 24 * 60 * 60 * 1000;
-    await saveCodes();
+    const c = _adminUsers.find(x => x.code === code);
+    if (c && c.expiresAt === null) { toast('평생 계정은 연장 불필요'); return; }
+    const res = await cmRpc('cm_admin_extend', { p_admin_pw: ADMIN_PW, p_code: code, p_days: days });
+    if (!res || !res.ok) { toast(res && res.reason === 'lifetime' ? '평생 계정은 연장 불필요' : '연장 실패'); return; }
+    await loadAdminUsers();
     renderAdminList();
     toast(`+${days}일 연장됨`);
   }
   window.__extendCode = extendCode;
 
   async function deleteCode(code) {
-    const c = _codes.find(x => x.code === code);
-    if (!c) return;
-    if (!confirm(`정말 삭제할까요?\n\n코드: ${code}\n이름: ${c.name}\n\n(이 코드와 가입 정보가 사라집니다.\n이 코드로 로그인하던 데이터는 다른 코드로도 접근 가능합니다.)`)) return;
-    _codes = _codes.filter(x => x.code !== code);
-    await saveCodes();
+    const c = _adminUsers.find(x => x.code === code);
+    const nm = c ? c.name : '';
+    if (!confirm(`정말 삭제할까요?\n\n코드: ${code}\n이름: ${nm}\n\n(이 코드와 가입 정보가 사라집니다.)`)) return;
+    const res = await cmRpc('cm_admin_delete', { p_admin_pw: ADMIN_PW, p_code: code });
+    if (!res || !res.ok) { toast('삭제 실패'); return; }
+    await loadAdminUsers();
     renderAdminList();
     toast('삭제됨');
   }
@@ -22202,12 +22378,12 @@
 
   // 비번 초기화 — 비번 해시 + signedUpAt 제거 → 미가입 상태로
   async function resetPw(code) {
-    const c = _codes.find(x => x.code === code);
-    if (!c) return;
-    if (!confirm(`비밀번호를 초기화할까요?\n\n코드: ${code}\n이름: ${c.name}\n\n수강생이 다시 로그인하면 새 비밀번호를 설정하는 화면이 나옵니다.\n기존 데이터는 그대로 보존됩니다.`)) return;
-    c.pwHash = null;
-    c.signedUpAt = null;
-    await saveCodes();
+    const c = _adminUsers.find(x => x.code === code);
+    const nm = c ? c.name : '';
+    if (!confirm(`비밀번호를 초기화할까요?\n\n코드: ${code}\n이름: ${nm}\n\n수강생이 다시 로그인하면 새 비밀번호를 설정하는 화면이 나옵니다.\n기존 데이터는 그대로 보존됩니다.`)) return;
+    const res = await cmRpc('cm_admin_reset_pw', { p_admin_pw: ADMIN_PW, p_code: code });
+    if (!res || !res.ok) { toast('초기화 실패'); return; }
+    await loadAdminUsers();
     renderAdminList();
     toast('비번 초기화 완료. 수강생에게 알려주세요.');
   }
@@ -22215,7 +22391,6 @@
 
   // === AUTH 게이트 ===
   async function authGate() {
-    await loadCodes();
     await loadCurrentUser();
     bindAuthHandlers();
     bindAdminHandlers();
@@ -22233,26 +22408,24 @@
     const autoCb = document.getElementById('auth-autologin');
     if (autoCb) autoCb.checked = autoLogin;
 
-    // 자동 로그인 시도
-    if (_currentUser && autoLogin) {
-      const found = _codes.find(c => c.code === _currentUser.code);
-      if (found && !isCodeExpired(found) && found.signedUpAt) {
+    // 자동 로그인 시도 — 저장된 PIN 해시로 서버 재검증 (데이터 RPC 인증도 확보)
+    if (_currentUser && _currentUser.code && _currentUser.pinHash && autoLogin) {
+      const res = await cmRpc('cm_login', { p_code: _currentUser.code, p_pin_hash: _currentUser.pinHash });
+      if (res && res.ok) {
+        await setCurrentUser({ code: res.user.code, name: res.user.name, is_master: !!res.user.is_master, pinHash: _currentUser.pinHash });
         onLoggedIn();
         return true;
       }
-      // 무효
+      // 무효(삭제·만료·비번변경) → 세션 해제. 네트워크 오류면 유지하고 수동 로그인 유도.
+      if (res && res.reason !== 'network' && res.reason !== 'noclient') await setCurrentUser(null);
+    } else if (_currentUser && !_currentUser.pinHash) {
+      // 구버전 세션(해시 없음) → 재로그인 유도
       await setCurrentUser(null);
     }
 
-    // 코드 없으면 안내
+    // 코드 입력 화면 표시 (코드 없음 안내 문구는 노출하지 않음)
     showAuthScreen('code');
     showAuth();
-    if (_codes.length === 0) {
-      setTimeout(() => {
-        const errEl = document.getElementById('auth-code-error');
-        if (errEl) errEl.textContent = '아직 발급된 코드가 없어요. 운영자(이수성)에게 문의해주세요.';
-      }, 300);
-    }
     return false;
   }
 
