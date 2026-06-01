@@ -12695,12 +12695,13 @@
     <!-- ===== 썸네일/수식어/오디오 몰아보기 ===== -->
     <div id="thumb-view" class="fb-wrap" style="display:none;">
       <section class="fb-header">
-        <div class="fb-eyebrow">썸네일 · 수식어 · 오디오</div>
+        <div class="fb-eyebrow">썸네일 · 수식어 · 바이럴 · 오디오</div>
         <h1 class="fb-title">잘 된 <span class="em">소재</span> 몰아보기</h1>
-        <p class="fb-sub">강하게 표시한 썸네일·수식어를 유형별로 한눈에.<br/>콘텐츠 만들 때 영감으로 바로 꺼내 쓰세요.</p>
+        <p class="fb-sub">썸네일·수식어·바이럴(떡상)을 유형별로 한눈에.<br/>같은 패턴을 나란히 보고 "왜 터졌나"를 바로 꺼내 쓰세요.</p>
         <div class="fb-toggle">
           <button class="tb-toggle-btn on" data-tbmode="thumb">썸네일</button>
           <button class="tb-toggle-btn" data-tbmode="copy">수식어</button>
+          <button class="tb-toggle-btn" data-tbmode="viral">바이럴</button>
           <button class="tb-toggle-btn" data-tbmode="audio">오디오</button>
         </div>
       </section>
@@ -13311,11 +13312,21 @@
         </div>
       </div>
 
-      <!-- ===== 4. 떡상 바이럴 ===== -->
-      <div class="sh-field">
-        <label class="sh-label">떡상 바이럴 <span class="opt">— 묶어서 분석</span></label>
-        <input type="text" class="sh-input" id="f-viral" placeholder="예: 1주변신, 비포애프터남편반응" />
-        <div class="sh-field-desc">지금 바이럴 라인이 되고 있는 유형이라면 메모해두고 같은 이름으로 묶어볼 수 있습니다.</div>
+      <!-- ===== 4. 바이럴(떡상) ===== -->
+      <div class="fmt-block">
+        <div class="fmt-block-head">
+          <label class="sh-label">바이럴 <span class="opt">— 터진 이유로 묶기 (여러 개)</span></label>
+          <button class="fmt-add-inline-btn" id="f-viral-add-btn">+ 유형 추가</button>
+        </div>
+        <div class="fmt-picker" id="f-viral-picker"></div>
+        <div class="fmt-add-inline" id="f-viral-add-row" style="display:none;">
+          <input type="text" class="fmt-add-input" id="f-viral-add-input" placeholder="예: 비포애프터, 남편반응" maxlength="20" />
+          <button class="fmt-add-confirm" id="f-viral-add-confirm">추가</button>
+          <button class="fmt-add-cancel" id="f-viral-add-cancel">취소</button>
+        </div>
+        <div class="sh-field-desc">알고리즘이 밀어준·반응 터진 컨텐츠라면 "왜 터졌나" 유형을 골라두세요. 같은 유형끼리 <b>썸네일 탭 → 바이럴</b>에서 나란히 모아볼 수 있어요.</div>
+        <!-- 호환성: 기존 코드가 f-viral을 참조할 수 있어 hidden 유지 -->
+        <input type="hidden" id="f-viral" value="" />
       </div>
 
       <!-- ===== 5. 자유 태그 ===== -->
@@ -13436,7 +13447,7 @@
     // profiles 묶음(설정·커스텀목록·무드보드·홈/챌린지) — profiles.data jsonb 한 행에 모아 동기화
     const PROFILE_KEYS = new Set([
       'shv4-prefs',
-      'shv4-custom-keywords', 'shv4-custom-formats', 'shv4-custom-audio', 'shv4-custom-tags', 'shv4-custom-content-types',
+      'shv4-custom-keywords', 'shv4-custom-formats', 'shv4-custom-audio', 'shv4-custom-tags', 'shv4-custom-viral', 'shv4-custom-content-types',
       'shv4-gj-milestones',
       'mbv2-meta', 'mbv2-cards',
       'hmv1-home', 'hmv1-challenges', 'hmv1-seen',
@@ -13593,6 +13604,7 @@
   }
   const BASE_AUDIO = ['템포 빠름', '감정적'];
   const BASE_TAGS = ['후킹강함', '컷편집빠름', '정보밀도', '감정몰입', '시각자극', '친밀감', '전문성', '반전'];
+  const BASE_VIRAL = ['저장각', '공유각', '논쟁유발', '공감폭발', '반전결말', '정보꿀팁'];
   const SCRIPT_STATES = [
     { id: 'idea', label: '아이디어', icon: '💡', color: 'var(--text-mute)' },
     { id: 'draft', label: '초안', icon: '✏️', color: 'var(--cream)' },
@@ -13821,6 +13833,7 @@
   const CF_KEY = 'shv4-custom-formats';
   const CA_KEY = 'shv4-custom-audio';
   const CT_KEY = 'shv4-custom-tags';
+  const CV_KEY = 'shv4-custom-viral';
   const CCT_KEY = 'shv4-custom-content-types';
   const SCRIPTS_KEY = 'shv4-scripts';
   const PMMS_KEY = 'shv4-pmms';
@@ -13834,6 +13847,7 @@
   let customFormats = []; // user-added content formats
   let customAudio = []; // user-added audio categories
   let customTags = []; // user-added free tags
+  let customViral = []; // 사용자 추가 바이럴(떡상) 유형
   let customContentTypes = []; // 사용자 추가 컨텐츠 유형 (라벨 배열)
   let scripts = []; // 내 원고들
   let pmms = []; // 고객 분석 (PMM)
@@ -13906,6 +13920,7 @@
   let formFormat = '';
   let formAudioType = '';
   let formTags = []; // 다중 선택 자유 태그
+  let formViralTypes = []; // 다중 선택 바이럴(떡상) 유형
   let formFunnelStage = ''; // 퍼널 단계 (v41)
 
   // ===== STORAGE =====
@@ -13942,6 +13957,11 @@
       const r = await window.storage.get(CT_KEY);
       if (r) customTags = JSON.parse(r.value);
     } catch (e) { customTags = []; }
+    // Load custom viral(떡상) types
+    try {
+      const r = await window.storage.get(CV_KEY);
+      if (r) customViral = JSON.parse(r.value);
+    } catch (e) { customViral = []; }
     // Load custom content types
     try {
       const r = await window.storage.get(CCT_KEY);
@@ -13963,6 +13983,9 @@
   }
   async function saveCustomTags() {
     try { await window.storage.set(CT_KEY, JSON.stringify(customTags)); } catch (e) {}
+  }
+  async function saveCustomViral() {
+    try { await window.storage.set(CV_KEY, JSON.stringify(customViral)); } catch (e) {}
   }
 
   // === PMM (고객 분석) ===
@@ -14192,7 +14215,7 @@
       audioArtist: '', // 가수 이름
       audioLink: '', // 오디오 링크 (들으러 가기)
       intro: '', develop: '', outro: '', cta: '',
-      viralLine: '', tags: [], rating: 0, favorite: false,
+      viralLine: '', viralTypes: [], tags: [], rating: 0, favorite: false,
       hasThumb: false, hasComment: false,
       funnelStage: '', // '' | 'attract' (유입용) | 'convert' (전환용) | 'retain' (재구매)
       createdAt: Date.now(), updatedAt: 0
@@ -14205,6 +14228,8 @@
     if (typeof r.copyStrong !== 'boolean') r.copyStrong = false;
     if (!Array.isArray(r.thumbTypes)) r.thumbTypes = [];
     if (!Array.isArray(r.copyTypes)) r.copyTypes = [];
+    // 바이럴(떡상): 기존 단일 문자열 viralLine → 배열 viralTypes로 마이그레이션
+    if (!Array.isArray(r.viralTypes)) r.viralTypes = (r.viralLine && typeof r.viralLine === 'string') ? [r.viralLine] : [];
     if (typeof r.script !== 'string') r.script = '';
     if (typeof r.memo !== 'string') r.memo = '';
     if (typeof r.format !== 'string') r.format = '';
@@ -14292,7 +14317,7 @@
 
   function isDetailFilled(r) {
     return !!(r.author || r.hook || r.views || r.likes || r.commentsNum ||
-      r.intro || r.develop || r.outro || r.cta || r.viralLine ||
+      r.intro || r.develop || r.outro || r.cta || r.viralLine || (r.viralTypes && r.viralTypes.length) ||
       (r.hookTypes && r.hookTypes.length) || (r.partTypes && r.partTypes.length) ||
       (r.tags && r.tags.length) || r.rating);
   }
@@ -14332,7 +14357,7 @@
 
     // Viral lines list
     const viralMap = {};
-    rows.forEach(r => { if (r.viralLine) viralMap[r.viralLine] = (viralMap[r.viralLine] || 0) + 1; });
+    rows.forEach(r => (r.viralTypes || []).forEach(v => { if (v) viralMap[v] = (viralMap[v] || 0) + 1; }));
     const viralEntries = Object.entries(viralMap).sort((a, b) => b[1] - a[1]);
     const viralEl = document.getElementById('sb-viral-list');
     if (viralEntries.length === 0) {
@@ -14682,7 +14707,7 @@
   }
 
   // === 썸네일/수식어/오디오 몰아보기 보드 ===
-  let thumbMode = 'thumb'; // 'thumb' | 'copy' | 'audio'
+  let thumbMode = 'thumb'; // 'thumb' | 'copy' | 'viral' | 'audio'
   function bindTbToggle() {
     document.querySelectorAll('.tb-toggle-btn').forEach(b => {
       b.classList.toggle('on', b.dataset.tbmode === thumbMode);
@@ -14720,6 +14745,25 @@
       const views = r.views ? fmtNum(r.views) : '';
       return '<div class="tg-card" data-row="' + r.id + '"><div class="tg-thumb" data-thumb="' + r.id + '">' + (r.hasThumb ? '' : '<span class="tg-noimg">이미지 없음</span>') + '</div><div class="tg-cap">' + (esc(hookText) || '(내용 없음)') + '</div>' + (views ? '<div class="tg-views">▶ ' + views + '</div>' : '') + '</div>';
     };
+    // 바이럴(떡상) 모드 — 터진 이유(viralTypes)별로 컨텐츠를 핀터레스트처럼 묶어서 패턴 비교
+    if (thumbMode === 'viral') {
+      const vRows = rows.filter(r => isFilled(r) && (r.viralTypes || []).length);
+      const vGroups = BASE_VIRAL.concat(customViral);
+      let vhtml = '';
+      vGroups.forEach(g => {
+        const list = vRows.filter(r => (r.viralTypes || []).includes(g));
+        if (!list.length) return;
+        vhtml += '<div class="tb-sec"><div class="tb-sec-head">◆ ' + esc(g) + ' <span class="tb-sec-cnt">' + list.length + '</span></div><div class="tg-grid">' + list.map(renderCard).join('') + '</div></div>';
+      });
+      el.innerHTML = vhtml || '<div class="tb-empty">바이럴(떡상)로 표시한 컨텐츠가 없어요. 분해하기 → <b>바이럴</b>에서 "왜 터졌나" 유형을 골라보세요.<br/>같은 유형 3개가 모이면 사람들이 반응한 공통점이 보입니다.</div>';
+      el.querySelectorAll('.tg-card').forEach(c => { c.onclick = () => openDetail(c.dataset.row); });
+      el.querySelectorAll('.tg-thumb[data-thumb]').forEach(async box => {
+        const id = box.dataset.thumb; const r = rows.find(x => x.id === id);
+        if (r && r.hasThumb) { try { const u = await loadImage(id, 'thumb'); if (u) box.innerHTML = '<img src="' + u + '" alt="" />'; } catch (e) {} }
+      });
+      bindTbToggle();
+      return;
+    }
     const types = BASE_TYPES.concat(customKeywords);
     let html = '';
     types.forEach(t => {
@@ -16210,7 +16254,7 @@
     const q = refSearch.trim().toLowerCase();
     if (q) {
       arr = arr.filter(r => {
-        const text = (r.hook || '') + ' ' + (r.author || '') + ' ' + (r.why || '') + ' ' + (r.idea || '') + ' ' + stripHtml(r.script || '') + ' ' + (r.tags || []).join(' ') + ' ' + (r.viralLine || '') + ' ' + (r.memo || '');
+        const text = (r.hook || '') + ' ' + (r.author || '') + ' ' + (r.why || '') + ' ' + (r.idea || '') + ' ' + stripHtml(r.script || '') + ' ' + (r.tags || []).join(' ') + ' ' + (r.viralTypes || []).join(' ') + ' ' + (r.memo || '');
         return text.toLowerCase().includes(q);
       });
     }
@@ -16340,7 +16384,7 @@
     else if (filterBy === 'strength:both') arr = arr.filter(r => r.thumbStrong && r.copyStrong);
     else if (filterBy.startsWith('v:')) {
       const v = filterBy.slice(2);
-      arr = arr.filter(r => r.viralLine === v);
+      arr = arr.filter(r => (r.viralTypes || []).includes(v));
     } else if (filterBy.startsWith('tt:')) {
       const t = filterBy.slice(3);
       arr = arr.filter(r => (r.thumbTypes || []).includes(t));
@@ -16368,7 +16412,7 @@
           (r.idea || '').toLowerCase().includes(q) ||
           (r.hook || '').toLowerCase().includes(q) ||
           (r.author || '').toLowerCase().includes(q) ||
-          (r.viralLine || '').toLowerCase().includes(q) ||
+          (r.viralTypes || []).some(v => v.toLowerCase().includes(q)) ||
           (r.tags || []).some(t => t.toLowerCase().includes(q)) ||
           (r.thumbTypes || []).some(t => t.toLowerCase().includes(q)) ||
           (r.copyTypes || []).some(t => t.toLowerCase().includes(q));
@@ -16427,7 +16471,7 @@
         const audioLabel = r.audioTitle ? `♪ ${r.audioTitle}` : `♪ ${r.audioType}`;
         marks.push(`<span class="sh-mark" style="color:#FF6B9D;border-color:rgba(255,107,157,0.4);background:rgba(255,107,157,0.08);">${esc(audioLabel)}</span>`);
       }
-      if (r.viralLine) marks.push(`<span class="sh-mark viral">◆ ${esc(r.viralLine)}</span>`);
+      (r.viralTypes || []).forEach(v => marks.push(`<span class="sh-mark viral">◆ ${esc(v)}</span>`));
       // 자유 태그 (다중)
       (r.tags || []).forEach(t => {
         const isCustomTag = customTags.includes(t);
@@ -16937,7 +16981,7 @@
     document.getElementById('f-develop').value = r.develop || '';
     document.getElementById('f-outro').value = r.outro || '';
     document.getElementById('f-cta').value = r.cta || '';
-    document.getElementById('f-viral').value = r.viralLine || '';
+    formViralTypes = (r.viralTypes || []).slice();
     document.getElementById('f-tags').value = (r.tags || []).join(', ');
     document.getElementById('f-memo').value = r.memo || '';
 
@@ -16966,6 +17010,7 @@
     renderFormatPicker();
     renderAudioPicker();
     renderTagsPicker();
+    renderViralPicker();
     renderFunnelStagePicker();
 
     document.getElementById('sh-modal').classList.add('show');
@@ -17114,6 +17159,41 @@
     });
   }
 
+  // === 바이럴(떡상) 피커 — 멀티선택 칩 + 커스텀 추가/삭제 (태그 피커 미러) ===
+  function renderViralPicker() {
+    const el = document.getElementById('f-viral-picker');
+    if (!el) return;
+    const all = BASE_VIRAL.concat(customViral);
+    el.innerHTML = all.map(t => {
+      const isCustom = customViral.includes(t);
+      const isOn = formViralTypes.includes(t);
+      const cls = ['tag-chip', isCustom ? 'custom' : '', isOn ? 'on' : ''].filter(Boolean).join(' ');
+      return `<button class="${cls}" data-viral="${esc(t)}">${esc(t)}${isCustom ? `<span class="chip-del" data-vdel="${esc(t)}" title="삭제">×</span>` : ''}</button>`;
+    }).join('');
+    el.querySelectorAll('.tag-chip').forEach(btn => {
+      btn.onclick = async (e) => {
+        e.preventDefault();
+        const del = e.target.closest('.chip-del');
+        if (del) {
+          e.stopPropagation();
+          const t = del.dataset.vdel;
+          if (!confirm(`"${t}" 바이럴 유형을 삭제할까요? (이미 분류된 곳에서도 제거됩니다)`)) return;
+          customViral = customViral.filter(x => x !== t);
+          rows.forEach(r => { r.viralTypes = (r.viralTypes || []).filter(x => x !== t); });
+          const fi = formViralTypes.indexOf(t); if (fi >= 0) formViralTypes.splice(fi, 1);
+          await saveCustomViral(); await saveRows();
+          renderViralPicker();
+          return;
+        }
+        const t = btn.dataset.viral;
+        const idx = formViralTypes.indexOf(t);
+        if (idx >= 0) formViralTypes.splice(idx, 1);
+        else formViralTypes.push(t);
+        renderViralPicker();
+      };
+    });
+  }
+
   // === STRENGTH BLOCK RENDER ===
   function renderStrengthBlock() {
     const thumbEl = document.getElementById('str-thumb');
@@ -17222,7 +17302,7 @@
     r.develop = document.getElementById('f-develop').value.trim();
     r.outro = document.getElementById('f-outro').value.trim();
     r.cta = document.getElementById('f-cta').value.trim();
-    r.viralLine = document.getElementById('f-viral').value.trim();
+    r.viralTypes = formViralTypes.slice(); r.viralLine = '';
     r.tags = formTags.slice();
     r.memo = document.getElementById('f-memo').value.trim();
     r.hookTypes = formHookTypes.slice();
@@ -17265,14 +17345,19 @@
 
   // ===== ACTIONS =====
   async function addRow() {
-    const maxNo = rows.reduce((a, b) => Math.max(a, b.no || 0), 0);
-    const r = newRow(maxNo + 1);
-    rows.push(r);
+    const ADD_COUNT = 10; // 한 번에 10행 추가
+    let maxNo = rows.reduce((a, b) => Math.max(a, b.no || 0), 0);
+    let firstId = null;
+    for (let i = 0; i < ADD_COUNT; i++) {
+      const r = newRow(++maxNo);
+      if (!firstId) firstId = r.id;
+      rows.push(r);
+    }
     await saveRows();
     renderTable();
-    toast(`No.${String(r.no).padStart(3, '0')} 행 추가됨`);
+    toast(`행 ${ADD_COUNT}개 추가됨`);
     setTimeout(() => {
-      const tr = document.querySelector(`tr[data-id="${r.id}"]`);
+      const tr = document.querySelector(`tr[data-id="${firstId}"]`);
       if (tr) tr.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }, 100);
   }
@@ -17297,7 +17382,7 @@
     const maxH = Math.max(1, ...hookEntries.map(e => e[1]));
 
     const byViral = {};
-    filled.forEach(r => { if (r.viralLine) byViral[r.viralLine] = (byViral[r.viralLine] || 0) + 1; });
+    filled.forEach(r => (r.viralTypes || []).forEach(v => { if (v) byViral[v] = (byViral[v] || 0) + 1; }));
     const viralEntries = Object.entries(byViral).sort((a, b) => b[1] - a[1]);
     const maxV = Math.max(1, ...viralEntries.map(e => e[1]));
 
@@ -17406,7 +17491,7 @@
       r.views || 0, r.likes || 0, r.commentsNum || 0,
       r.intro || '', r.develop || '', r.outro || '', r.cta || '',
       (r.hookTypes || []).join(', '), (r.partTypes || []).join(', '),
-      r.viralLine || '', (r.tags || []).join(', '),
+      (r.viralTypes || []).join(', '), (r.tags || []).join(', '),
       r.rating || 0, r.favorite ? '★' : '', r.url || ''
     ].map(csvEsc).join(','));
     const csv = '\uFEFF' + [headers.join(','), ...allRows].join('\r\n');
@@ -17824,6 +17909,47 @@
       });
     }
 
+    // === 바이럴(떡상) 유형 인라인 추가 ===
+    const cvAddBtn = document.getElementById('f-viral-add-btn');
+    const cvAddRow = document.getElementById('f-viral-add-row');
+    const cvAddInput = document.getElementById('f-viral-add-input');
+    const cvAddConfirm = document.getElementById('f-viral-add-confirm');
+    const cvAddCancel = document.getElementById('f-viral-add-cancel');
+    const closeInlineViralRow = () => {
+      if (!cvAddRow) return;
+      cvAddRow.style.display = 'none';
+      if (cvAddBtn) cvAddBtn.style.display = '';
+      cvAddInput.value = '';
+    };
+    if (cvAddBtn) {
+      cvAddBtn.onclick = () => {
+        cvAddRow.style.display = 'flex';
+        cvAddBtn.style.display = 'none';
+        cvAddInput.value = '';
+        cvAddInput.focus();
+      };
+    }
+    const addInlineViral = async () => {
+      const v = cvAddInput.value.trim();
+      if (!v) { closeInlineViralRow(); return; }
+      if (BASE_VIRAL.includes(v) || customViral.includes(v)) { toast('이미 있는 유형입니다'); return; }
+      if (v.length > 20) { toast('20자 이내로 입력'); return; }
+      customViral.push(v);
+      await saveCustomViral();
+      if (!formViralTypes.includes(v)) formViralTypes.push(v);
+      renderViralPicker();
+      closeInlineViralRow();
+      toast(`"${v}" 추가됨`);
+    };
+    if (cvAddConfirm) cvAddConfirm.onclick = addInlineViral;
+    if (cvAddCancel) cvAddCancel.onclick = closeInlineViralRow;
+    if (cvAddInput) {
+      cvAddInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') { e.preventDefault(); addInlineViral(); }
+        if (e.key === 'Escape') { e.preventDefault(); closeInlineViralRow(); }
+      });
+    }
+
     document.getElementById('f-url').addEventListener('blur', (e) => {
       const url = e.target.value.trim();
       if (url) {
@@ -17952,7 +18078,7 @@
     likes: 0,
     commentsNum: 0,
     intro: '', develop: '', outro: '', cta: '',
-    viralLine: '', tags: [],
+    viralLine: '', viralTypes: [], tags: [],
     idea: ''
   };
 
@@ -17966,7 +18092,7 @@
       rating: 0, favorite: false, author: '', hook: '',
       views: 0, likes: 0, commentsNum: 0,
       intro: '', develop: '', outro: '', cta: '',
-      viralLine: '', tags: [], idea: ''
+      viralLine: '', viralTypes: [], tags: [], idea: ''
     };
   }
 
@@ -18174,7 +18300,7 @@
     document.getElementById('f-develop').value = entryState.develop || '';
     document.getElementById('f-outro').value = entryState.outro || '';
     document.getElementById('f-cta').value = entryState.cta || '';
-    document.getElementById('f-viral').value = entryState.viralLine || '';
+    formViralTypes = Array.isArray(entryState.viralTypes) ? entryState.viralTypes.slice() : (entryState.viralLine ? [entryState.viralLine] : []);
     document.getElementById('f-tags').value = (entryState.tags || []).join(', ');
     document.getElementById('f-audio-title').value = entryState.audioTitle || '';
     document.getElementById('f-audio-artist').value = entryState.audioArtist || '';
@@ -18200,6 +18326,7 @@
     renderFormatPicker();
     renderAudioPicker();
     renderTagsPicker();
+    renderViralPicker();
     renderFunnelStagePicker();
 
     document.getElementById('sh-modal').classList.add('show');
@@ -18220,7 +18347,7 @@
     entryState.develop = document.getElementById('f-develop').value.trim();
     entryState.outro = document.getElementById('f-outro').value.trim();
     entryState.cta = document.getElementById('f-cta').value.trim();
-    entryState.viralLine = document.getElementById('f-viral').value.trim();
+    entryState.viralTypes = formViralTypes.slice(); entryState.viralLine = '';
     entryState.tags = formTags.slice();
     entryState.thumbStrong = formThumbStrong;
     entryState.copyStrong = formCopyStrong;
@@ -18324,7 +18451,7 @@
     targetRow.develop = entryState.develop || '';
     targetRow.outro = entryState.outro || '';
     targetRow.cta = entryState.cta || '';
-    targetRow.viralLine = entryState.viralLine || '';
+    targetRow.viralTypes = Array.isArray(entryState.viralTypes) ? entryState.viralTypes.slice() : []; targetRow.viralLine = '';
     targetRow.tags = (entryState.tags || []).slice();
     targetRow.format = entryState.format || '';
     targetRow.audioType = entryState.audioType || '';
@@ -19920,10 +20047,10 @@
         </div>
       </div>
 
-      ${r.viralLine ? `
+      ${(r.viralTypes && r.viralTypes.length) ? `
         <div class="trs-section">
-          <div class="trs-section-label">📈 바이럴 라인</div>
-          <div class="trs-memo">${esc(r.viralLine)}</div>
+          <div class="trs-section-label">📈 바이럴(떡상)</div>
+          <div class="trs-memo">${r.viralTypes.map(v => '◆ ' + esc(v)).join('  ')}</div>
         </div>
       ` : ''}
 
@@ -21459,7 +21586,8 @@
       customKeywords: customKeywords,
       customFormats: customFormats,
       customAudio: customAudio,
-      customTags: customTags
+      customTags: customTags,
+      customViral: customViral
     };
     downloadJson(data, `customer-perspective-${timestampForFilename()}.json`);
     toast('전체 데이터 내보냄');
@@ -21548,11 +21676,13 @@
       if (data.customFormats) customFormats = mergeArr(customFormats, data.customFormats);
       if (data.customAudio) customAudio = mergeArr(customAudio, data.customAudio);
       if (data.customTags) customTags = mergeArr(customTags, data.customTags);
+      if (data.customViral) customViral = mergeArr(customViral, data.customViral);
       try {
         if (data.customKeywords) await window.storage.set(CK_KEY, JSON.stringify(customKeywords));
         if (data.customFormats) await window.storage.set(CF_KEY, JSON.stringify(customFormats));
         if (data.customAudio) await window.storage.set(CA_KEY, JSON.stringify(customAudio));
         if (data.customTags) await window.storage.set(CT_KEY, JSON.stringify(customTags));
+        if (data.customViral) await window.storage.set(CV_KEY, JSON.stringify(customViral));
       } catch(e) {}
 
       resultEl.className = 'settings-import-result success';
@@ -21587,7 +21717,7 @@
     for (const r of rows) {
       r.script = ''; r.format = ''; r.audioType = '';
       r.thumbStrong = false; r.copyStrong = false;
-      r.thumbTypes = []; r.copyTypes = []; r.tags = [];
+      r.thumbTypes = []; r.copyTypes = []; r.tags = []; r.viralTypes = [];
       r.viralLine = ''; r.memo = ''; r.hasThumb = false; r.hasComment = false;
       r.rating = 0; r.favorite = false; r.hook = ''; r.author = ''; r.views = 0;
       r.why = ''; r.idea = ''; r.url = ''; r.platform = '';
@@ -21608,12 +21738,12 @@
     for (const r of rows) {
       r.script = ''; r.format = ''; r.audioType = '';
       r.thumbStrong = false; r.copyStrong = false;
-      r.thumbTypes = []; r.copyTypes = []; r.tags = [];
+      r.thumbTypes = []; r.copyTypes = []; r.tags = []; r.viralTypes = [];
       r.viralLine = ''; r.memo = ''; r.hasThumb = false; r.hasComment = false;
       r.rating = 0; r.favorite = false; r.hook = ''; r.author = ''; r.views = 0;
       r.why = ''; r.idea = ''; r.url = ''; r.platform = '';
     }
-    customKeywords = []; customFormats = []; customAudio = []; customTags = [];
+    customKeywords = []; customFormats = []; customAudio = []; customTags = []; customViral = [];
     _gjMilestonesShown = {};
     try {
       await saveScripts();
@@ -21623,6 +21753,7 @@
       await window.storage.delete(CF_KEY);
       await window.storage.delete(CA_KEY);
       await window.storage.delete(CT_KEY);
+      await window.storage.delete(CV_KEY);
       await window.storage.delete('shv4-gj-milestones');
     } catch(e) {}
     renderSettingsStats();
