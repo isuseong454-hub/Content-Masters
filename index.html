@@ -452,7 +452,9 @@
     flex: 1;
     overflow: auto;
     padding-bottom: 80px;
+    touch-action: pan-x pan-y;  /* 두 손가락 줌은 직접 처리(아래 JS) */
   }
+  .sh-grid { transform-origin: 0 0; }
 
   .sh-grid {
     border-collapse: collapse;
@@ -4636,7 +4638,7 @@
     transition: transform 0.2s;
     display: none;
   }
-  .bot.show { display: block; }
+  .bot.show { display: none; }  /* 좌하단 봇 제거 — 기능 가림 */
   .bot:hover { transform: scale(1.06); }
   .bot:active { transform: scale(0.94); }
 
@@ -7743,6 +7745,10 @@
     overflow-y: auto;
     background: var(--bg-void);
   }
+  /* 원고 화면 순서: 헤더 → 원고 쓰기 → 주차별 (원고 쓰기를 위로) */
+  .sc-wrap > .sc-header { order: 0; }
+  .sc-wrap > .sc-entry-wrap { order: 1; }
+  .sc-wrap > .sc-plan-wrap { order: 2; }
 
   .sc-header {
     padding: 32px 32px 24px;
@@ -11134,8 +11140,25 @@
     text-align: center;
     outline: none;
     transition: all 0.18s;
-    -webkit-text-security: disc; /* iOS 점 */
+    -webkit-text-security: disc; /* 입력 즉시 ● 마스킹 (숫자 번쩍임 없음) */
+    text-security: disc;
   }
+  .auth-pin-box.reveal { -webkit-text-security: none; text-security: none; }
+  .auth-eye-btn {
+    display: inline-flex; align-items: center; gap: 5px;
+    background: transparent; border: none; cursor: pointer;
+    color: var(--text-mute); font-family: 'Pretendard', sans-serif;
+    font-size: 12px; margin: 2px auto 16px; padding: 5px 10px; border-radius: 8px;
+  }
+  .auth-eye-btn:hover { color: var(--emerald); }
+  .auth-big-btn.loading, .auth-btn.loading { color: transparent !important; pointer-events: none; position: relative; }
+  .auth-big-btn.loading::after, .auth-btn.loading::after {
+    content: ''; position: absolute; left: 50%; top: 50%;
+    width: 18px; height: 18px; margin: -9px 0 0 -9px;
+    border: 2px solid rgba(6,20,12,0.35); border-top-color: #06140C;
+    border-radius: 50%; animation: authSpin 0.6s linear infinite;
+  }
+  @keyframes authSpin { to { transform: rotate(360deg); } }
   .auth-pin-box:focus {
     border-color: var(--emerald);
     box-shadow: 0 0 0 4px rgba(46, 204, 113, 0.18);
@@ -11709,12 +11732,13 @@
     </button>
 
     <div class="auth-pin-row" id="auth-pin-row">
-      <input type="password" class="auth-pin-box" maxlength="1" inputmode="numeric" pattern="[0-9]*" data-pin="0" />
-      <input type="password" class="auth-pin-box" maxlength="1" inputmode="numeric" pattern="[0-9]*" data-pin="1" />
-      <input type="password" class="auth-pin-box" maxlength="1" inputmode="numeric" pattern="[0-9]*" data-pin="2" />
-      <input type="password" class="auth-pin-box" maxlength="1" inputmode="numeric" pattern="[0-9]*" data-pin="3" />
+      <input type="text" autocomplete="off" class="auth-pin-box" maxlength="1" inputmode="numeric" pattern="[0-9]*" data-pin="0" />
+      <input type="text" autocomplete="off" class="auth-pin-box" maxlength="1" inputmode="numeric" pattern="[0-9]*" data-pin="1" />
+      <input type="text" autocomplete="off" class="auth-pin-box" maxlength="1" inputmode="numeric" pattern="[0-9]*" data-pin="2" />
+      <input type="text" autocomplete="off" class="auth-pin-box" maxlength="1" inputmode="numeric" pattern="[0-9]*" data-pin="3" />
     </div>
     <div class="auth-pin-hint" id="auth-pin-hint">숫자 4자리를 입력하세요</div>
+    <button type="button" class="auth-eye-btn" id="auth-pin-eye">👁 비밀번호 보기</button>
     <div class="auth-error" id="auth-pin-error"></div>
 
     <button class="auth-big-btn" id="auth-pin-go">입장하기 →</button>
@@ -11739,23 +11763,24 @@
     <div class="auth-signup-step">
       <div class="auth-pin-label">비밀번호 (숫자 4자리)</div>
       <div class="auth-pin-row">
-        <input type="password" class="auth-pin-box auth-signup-pin1" maxlength="1" inputmode="numeric" pattern="[0-9]*" data-pin="0" />
-        <input type="password" class="auth-pin-box auth-signup-pin1" maxlength="1" inputmode="numeric" pattern="[0-9]*" data-pin="1" />
-        <input type="password" class="auth-pin-box auth-signup-pin1" maxlength="1" inputmode="numeric" pattern="[0-9]*" data-pin="2" />
-        <input type="password" class="auth-pin-box auth-signup-pin1" maxlength="1" inputmode="numeric" pattern="[0-9]*" data-pin="3" />
+        <input type="text" autocomplete="off" class="auth-pin-box auth-signup-pin1" maxlength="1" inputmode="numeric" pattern="[0-9]*" data-pin="0" />
+        <input type="text" autocomplete="off" class="auth-pin-box auth-signup-pin1" maxlength="1" inputmode="numeric" pattern="[0-9]*" data-pin="1" />
+        <input type="text" autocomplete="off" class="auth-pin-box auth-signup-pin1" maxlength="1" inputmode="numeric" pattern="[0-9]*" data-pin="2" />
+        <input type="text" autocomplete="off" class="auth-pin-box auth-signup-pin1" maxlength="1" inputmode="numeric" pattern="[0-9]*" data-pin="3" />
       </div>
     </div>
 
     <div class="auth-signup-step">
       <div class="auth-pin-label">비밀번호 확인 (한 번 더)</div>
       <div class="auth-pin-row">
-        <input type="password" class="auth-pin-box auth-signup-pin2" maxlength="1" inputmode="numeric" pattern="[0-9]*" data-pin="0" />
-        <input type="password" class="auth-pin-box auth-signup-pin2" maxlength="1" inputmode="numeric" pattern="[0-9]*" data-pin="1" />
-        <input type="password" class="auth-pin-box auth-signup-pin2" maxlength="1" inputmode="numeric" pattern="[0-9]*" data-pin="2" />
-        <input type="password" class="auth-pin-box auth-signup-pin2" maxlength="1" inputmode="numeric" pattern="[0-9]*" data-pin="3" />
+        <input type="text" autocomplete="off" class="auth-pin-box auth-signup-pin2" maxlength="1" inputmode="numeric" pattern="[0-9]*" data-pin="0" />
+        <input type="text" autocomplete="off" class="auth-pin-box auth-signup-pin2" maxlength="1" inputmode="numeric" pattern="[0-9]*" data-pin="1" />
+        <input type="text" autocomplete="off" class="auth-pin-box auth-signup-pin2" maxlength="1" inputmode="numeric" pattern="[0-9]*" data-pin="2" />
+        <input type="text" autocomplete="off" class="auth-pin-box auth-signup-pin2" maxlength="1" inputmode="numeric" pattern="[0-9]*" data-pin="3" />
       </div>
     </div>
 
+    <button type="button" class="auth-eye-btn" id="auth-signup-eye">👁 비밀번호 보기</button>
     <div class="auth-error" id="auth-signup-error"></div>
 
     <button class="auth-big-btn" id="auth-signup-go">비밀번호 설정하기 →</button>
@@ -17617,6 +17642,31 @@
       totop.onclick = () => wrap.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
+    // 시트 두 손가락(핀치) 줌 — CSS zoom으로 리플로우(스크롤 자연스러움). 더블탭=리셋
+    (function () {
+      const sw = document.querySelector('.sh-sheet-wrap');
+      const grid = document.querySelector('.sh-grid');
+      if (!sw || !grid) return;
+      let z = 1, startD = 0, startZ = 1, pinching = false, lastTap = 0;
+      const dist = t => Math.hypot(t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY);
+      sw.addEventListener('touchstart', e => {
+        if (e.touches.length === 2) { pinching = true; startD = dist(e.touches); startZ = z; }
+      }, { passive: true });
+      sw.addEventListener('touchmove', e => {
+        if (pinching && e.touches.length === 2) {
+          e.preventDefault();
+          z = Math.max(0.5, Math.min(2.5, startZ * dist(e.touches) / (startD || 1)));
+          grid.style.zoom = z;
+        }
+      }, { passive: false });
+      sw.addEventListener('touchend', e => {
+        if (e.touches.length < 2) pinching = false;
+        const now = Date.now();
+        if (e.touches.length === 0 && now - lastTap < 320 && z !== 1) { z = 1; grid.style.zoom = 1; }
+        lastTap = now;
+      });
+    })();
+
     // Workspace switcher
     document.querySelectorAll('[data-ws]').forEach(btn => {
       btn.onclick = () => switchWorkspace(btn.dataset.ws);
@@ -22221,7 +22271,7 @@
   const CODES_KEY = 'shv4-auth-codes';
   const CURRENT_USER_KEY = 'shv4-auth-current';
   const AUTOLOGIN_KEY = 'shv4-auth-autologin';
-  const ADMIN_PW = '1134';
+  let _adminPw = '';  // 관리자 비번은 코드에 두지 않음 — 서버(cm_is_admin)에서만 검증. 입력값을 세션 동안만 보관.
 
   let _codes = [];          // (구) 로컬 캐시 — 마이그레이션 용도로만 남김
   let _adminUsers = [];     // 관리자 목록 (Supabase에서 로드)
@@ -22250,7 +22300,7 @@
   // === 저장/로드 (Supabase) ===
   // 관리자 목록을 서버에서 로드 (관리자 패널 전용)
   async function loadAdminUsers() {
-    const res = await cmRpc('cm_admin_list', { p_admin_pw: ADMIN_PW });
+    const res = await cmRpc('cm_admin_list', { p_admin_pw: _adminPw });
     _adminUsers = (res && res.ok && Array.isArray(res.users)) ? res.users : [];
     return _adminUsers;
   }
@@ -22406,6 +22456,7 @@
     const wrap = document.getElementById('auth-suggest');
     if (!inp || !wrap) return;
     const q = inp.value.trim().toUpperCase();
+    if (q.length < 2) { wrap.style.display = 'none'; return; }  // 2글자 이상 입력 시에만 제안(전체 코드 노출 방지)
     const res = await cmRpc('cm_list_hints', { p_q: q });
     const codes = Array.isArray(res) ? res : [];
     // 입력 중 다른 값으로 바뀌었으면 무시 (경쟁 방지)
@@ -22452,10 +22503,13 @@
     // 코드 → 다음 (Supabase: cm_code_status)
     document.getElementById('auth-code-next').onclick = async () => {
       const errEl = document.getElementById('auth-code-error');
+      const nextBtn = document.getElementById('auth-code-next');
       const code = codeInp.value.trim().toUpperCase();
       if (!code) { errEl.textContent = '코드를 입력해주세요.'; return; }
-      errEl.textContent = '확인 중…';
+      errEl.textContent = '';
+      nextBtn.classList.add('loading');
       const st = await cmRpc('cm_code_status', { p_code: code });
+      nextBtn.classList.remove('loading');
       if (!st || st.ok === false) { errEl.textContent = '네트워크 오류. 잠시 후 다시 시도해주세요.'; return; }
       if (!st.exists) { errEl.textContent = '코드를 찾을 수 없어요. 다시 확인해주세요.'; return; }
       if (st.expired) { errEl.textContent = '만료된 코드예요. 운영자에게 문의해주세요.'; return; }
@@ -22481,8 +22535,10 @@
     bindPinBoxes('#auth-pin-row .auth-pin-box', async (pin) => {
       const errEl = document.getElementById('auth-pin-error');
       if (!_pendingCode) { errEl.textContent = '코드 오류. 다시 시도해주세요.'; return; }
+      const goBtn = document.getElementById('auth-pin-go'); if (goBtn) goBtn.classList.add('loading');
       const hash = await sha256(pin);
       const res = await cmRpc('cm_login', { p_code: _pendingCode, p_pin_hash: hash });
+      if (goBtn) goBtn.classList.remove('loading');
       if (!res || !res.ok) {
         const reason = res && res.reason;
         if (reason === 'badpin') errEl.textContent = '비밀번호가 틀려요.';
@@ -22507,6 +22563,21 @@
       const chip = document.getElementById(id);
       if (chip) chip.onclick = () => { _pendingCode = null; showAuthScreen('code'); };
     });
+
+    // 비밀번호 잠깐 보기(👁) 토글
+    (function () {
+      function bindEye(btnId, boxSel) {
+        const b = document.getElementById(btnId); if (!b) return;
+        b.onclick = () => {
+          const boxes = document.querySelectorAll(boxSel);
+          const reveal = !(boxes[0] && boxes[0].classList.contains('reveal'));
+          boxes.forEach(x => x.classList.toggle('reveal', reveal));
+          b.textContent = reveal ? '🙈 비밀번호 숨기기' : '👁 비밀번호 보기';
+        };
+      }
+      bindEye('auth-pin-eye', '#auth-pin-row .auth-pin-box');
+      bindEye('auth-signup-eye', '.auth-signup-pin1, .auth-signup-pin2');
+    })();
 
     // 비번 초기화 링크
     document.getElementById('auth-pin-reset').onclick = () => {
@@ -22539,8 +22610,10 @@
         return;
       }
       if (!_pendingCode) { errEl.textContent = '코드 오류. 다시 시도해주세요.'; return; }
+      const goBtn = document.getElementById('auth-signup-go'); if (goBtn) goBtn.classList.add('loading');
       const hash = await sha256(pin1);
       const res = await cmRpc('cm_signup', { p_code: _pendingCode, p_pin_hash: hash });
+      if (goBtn) goBtn.classList.remove('loading');
       if (!res || !res.ok) {
         const reason = res && res.reason;
         if (reason === 'already') errEl.textContent = '이미 가입된 코드예요. 비밀번호로 로그인해주세요.';
@@ -22590,11 +22663,12 @@
     if (adminBtn) {
       if (isMasterUser()) {
         adminBtn.style.display = '';
-        adminBtn.onclick = () => {
-          // 마스터는 비번 한 번만 확인
+        adminBtn.onclick = async () => {
           const pw = prompt('관리자 비밀번호를 입력해주세요');
-          if (pw === ADMIN_PW) openAdmin();
-          else if (pw !== null) alert('비밀번호가 틀려요.');
+          if (pw === null) return;
+          const r = await cmRpc('cm_admin_list', { p_admin_pw: pw });  // 서버에서 비번 검증
+          if (r && r.ok) { _adminPw = pw; openAdmin(); }
+          else alert('비밀번호가 틀려요.');
         };
       } else {
         adminBtn.style.display = 'none';
@@ -22663,9 +22737,14 @@
       document.getElementById('admin-pw-modal').classList.add('show');
       setTimeout(() => document.getElementById('admin-pw-input').focus(), 80);
     };
-    document.getElementById('admin-pw-go').onclick = () => {
+    document.getElementById('admin-pw-go').onclick = async () => {
       const v = document.getElementById('admin-pw-input').value;
-      if (v === ADMIN_PW) {
+      const goBtn = document.getElementById('admin-pw-go');
+      goBtn.classList.add('loading');
+      const r = await cmRpc('cm_admin_list', { p_admin_pw: v });  // 서버에서 비번 검증
+      goBtn.classList.remove('loading');
+      if (r && r.ok) {
+        _adminPw = v;
         document.getElementById('admin-pw-modal').classList.remove('show');
         openAdmin();
       } else {
@@ -22685,7 +22764,7 @@
       const name = document.getElementById('admin-new-name').value.trim();
       const period = document.getElementById('admin-new-period').value;
       if (!name) { toast('수강생 이름을 입력해주세요'); return; }
-      const res = await cmRpc('cm_admin_create', { p_admin_pw: ADMIN_PW, p_name: name, p_period: period });
+      const res = await cmRpc('cm_admin_create', { p_admin_pw: _adminPw, p_name: name, p_period: period });
       if (!res || !res.ok) { toast('코드 생성 실패' + (res && res._error ? ' (' + res._error + ')' : '')); return; }
       document.getElementById('admin-new-name').value = '';
       await loadAdminUsers();
@@ -22778,7 +22857,7 @@
   async function extendCode(code, days) {
     const c = _adminUsers.find(x => x.code === code);
     if (c && c.expiresAt === null) { toast('평생 계정은 연장 불필요'); return; }
-    const res = await cmRpc('cm_admin_extend', { p_admin_pw: ADMIN_PW, p_code: code, p_days: days });
+    const res = await cmRpc('cm_admin_extend', { p_admin_pw: _adminPw, p_code: code, p_days: days });
     if (!res || !res.ok) { toast(res && res.reason === 'lifetime' ? '평생 계정은 연장 불필요' : '연장 실패'); return; }
     await loadAdminUsers();
     renderAdminList();
@@ -22790,7 +22869,7 @@
     const c = _adminUsers.find(x => x.code === code);
     const nm = c ? c.name : '';
     if (!confirm(`정말 삭제할까요?\n\n코드: ${code}\n이름: ${nm}\n\n(이 코드와 가입 정보가 사라집니다.)`)) return;
-    const res = await cmRpc('cm_admin_delete', { p_admin_pw: ADMIN_PW, p_code: code });
+    const res = await cmRpc('cm_admin_delete', { p_admin_pw: _adminPw, p_code: code });
     if (!res || !res.ok) { toast('삭제 실패'); return; }
     await loadAdminUsers();
     renderAdminList();
@@ -22803,7 +22882,7 @@
     const c = _adminUsers.find(x => x.code === code);
     const nm = c ? c.name : '';
     if (!confirm(`비밀번호를 초기화할까요?\n\n코드: ${code}\n이름: ${nm}\n\n수강생이 다시 로그인하면 새 비밀번호를 설정하는 화면이 나옵니다.\n기존 데이터는 그대로 보존됩니다.`)) return;
-    const res = await cmRpc('cm_admin_reset_pw', { p_admin_pw: ADMIN_PW, p_code: code });
+    const res = await cmRpc('cm_admin_reset_pw', { p_admin_pw: _adminPw, p_code: code });
     if (!res || !res.ok) { toast('초기화 실패'); return; }
     await loadAdminUsers();
     renderAdminList();
