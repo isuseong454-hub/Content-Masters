@@ -947,6 +947,21 @@
     padding: 6px 12px;
   }
   .sh-close.sh-back:hover { color: var(--emerald); border-color: var(--emerald-line); }
+  /* 이걸로 원고 쓰기 버튼 (상세 모달) */
+  .sh-write-from-bench { width: 100%; margin-bottom: 12px; background: var(--emerald); color: #06140C; border: none; border-radius: 10px; padding: 13px; font-family: 'Pretendard', sans-serif; font-size: 14px; font-weight: 800; cursor: pointer; }
+  .sh-write-from-bench:hover { background: var(--neon); }
+  /* 참고 벤치마크 카드 (원고 에디터의 "참고한 벤치마킹") */
+  .scb-card { display: flex; align-items: center; gap: 11px; background: var(--bg-elev); border: 1px solid var(--emerald-line); border-radius: 12px; padding: 8px; cursor: pointer; }
+  .scb-thumb { width: 46px; height: 60px; flex: 0 0 auto; border-radius: 8px; overflow: hidden; background: var(--bg-void); display: flex; align-items: center; justify-content: center; font-size: 18px; }
+  .scb-thumb img { width: 100%; height: 100%; object-fit: cover; }
+  .scb-body { flex: 1; min-width: 0; }
+  .scb-no { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--emerald); margin-bottom: 3px; }
+  .scb-hook { font-size: 12.5px; color: var(--text-main); font-weight: 600; line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .scb-tags { display: flex; gap: 5px; margin-top: 5px; flex-wrap: wrap; }
+  .scb-tag { font-size: 10px; font-weight: 700; color: var(--emerald); border: 1px solid var(--emerald-line); border-radius: 100px; padding: 1px 7px; }
+  .scb-tag.muted { color: var(--text-mute); border-color: var(--line); }
+  .scb-rm { flex: 0 0 auto; background: transparent; border: none; color: var(--text-faint); font-size: 18px; cursor: pointer; padding: 0 6px; align-self: flex-start; }
+  .scb-rm:hover { color: var(--wine); }
 
   .sh-field { margin-bottom: 14px; }
 
@@ -11901,9 +11916,9 @@
   <nav class="bottom-nav" id="bottom-nav">
     <button class="bn-tab" data-ws="home"><span class="bn-ico">⌂</span><span class="bn-lab">홈</span></button>
     <button class="bn-tab" data-ws="sheet"><span class="bn-ico">▤</span><span class="bn-lab">시트</span></button>
+    <button class="bn-tab" data-ws="thumb"><span class="bn-ico">▣</span><span class="bn-lab">썸네일</span></button>
     <button class="bn-tab" data-ws="scripts"><span class="bn-ico">✎</span><span class="bn-lab">원고</span></button>
     <button class="bn-tab" data-ws="formatboard"><span class="bn-ico">▦</span><span class="bn-lab">분류</span></button>
-    <button class="bn-tab" data-ws="thumb"><span class="bn-ico">▣</span><span class="bn-lab">썸네일</span></button>
     <button class="bn-tab" id="bn-more"><span class="bn-ico">☰</span><span class="bn-lab">더보기</span></button>
   </nav>
 
@@ -12664,12 +12679,12 @@
     <div id="fb-view" class="fb-wrap">
       <section class="fb-header">
         <div class="fb-page"><span class="em">02</span> / 03</div>
-        <div class="fb-eyebrow">분류 · 형식 · 목적</div>
-        <h1 class="fb-title">형식·목적으로 <span class="em">분류된</span> 시트</h1>
-        <p class="fb-sub">한 계정은 3~4가지 형식을 반복해 돌립니다.<br/>분류해두면 다음 콘텐츠를 어떤 형식·목적으로 찍을지가 보입니다.</p>
+        <div class="fb-eyebrow">분류 · 유형 · 퍼널</div>
+        <h1 class="fb-title">유형·퍼널로 <span class="em">분류된</span> 시트</h1>
+        <p class="fb-sub">한 계정은 3~4가지 유형을 반복해 돌립니다.<br/>분류해두면 다음 콘텐츠를 어떤 유형·퍼널 단계로 찍을지가 보입니다.</p>
         <div class="fb-toggle">
-          <button class="fb-toggle-btn on" data-fbmode="format">형식별</button>
-          <button class="fb-toggle-btn" data-fbmode="purpose">목적별</button>
+          <button class="fb-toggle-btn on" data-fbmode="format">유형별</button>
+          <button class="fb-toggle-btn" data-fbmode="purpose">퍼널별</button>
         </div>
       </section>
       <div class="fb-board">
@@ -13357,6 +13372,7 @@
         <textarea class="sh-textarea" id="f-memo" rows="4" placeholder="도입·전개·마무리·CTA, 인상적인 부분, 응용 메모… 자유롭게."></textarea>
       </div>
 
+      <button class="sh-write-from-bench" id="sh-write-from-bench" type="button">✍️ 이걸로 원고 쓰기</button>
       <div class="sh-modal-btns">
         <button class="sh-btn sh-btn-del" id="sh-clear-row">초기화</button>
         <button class="sh-btn sh-btn-cancel" id="sh-cancel">취소</button>
@@ -15152,6 +15168,23 @@
     };
   }
 
+  // 벤치마크 → 원고 원클릭: 그 벤치마크를 연결한 새 원고를 바로 작성 시작
+  function startScriptFromBenchmark(rowId) {
+    const r = rows.find(x => x.id === rowId);
+    if (!r) { toast('먼저 이 행을 저장해주세요'); return; }
+    document.getElementById('sh-modal').classList.remove('show');
+    document.body.style.overflow = '';
+    switchWorkspace('scripts');
+    resetScriptEntryState();
+    scriptEntryState.benchmarkRowId = rowId;
+    const bt = (typeof mapFormatToBasicType === 'function') ? mapFormatToBasicType(r.format) : null;
+    if (bt) { scriptEntryState.writeMode = 'basic'; scriptEntryState.basic.type = bt; }
+    applyScriptEntryToUI();
+    setTimeout(() => { const c = document.querySelector('.sc-entry-card'); if (c) c.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 250);
+    toast('이 벤치마크로 원고 시작! ✍️');
+  }
+  window.__startScriptFromBench = startScriptFromBenchmark;
+
   // === 메인 카드 → UI 반영 ===
   function applyScriptEntryToUI() {
     document.getElementById('sc-entry-title').value = scriptEntryState.title || '';
@@ -15372,21 +15405,26 @@
       el.innerHTML = '';
       return;
     }
-    const label = r.hook || stripHtml(r.script || '').slice(0, 40) || `NO.${String(r.no).padStart(3, '0')}`;
-    el.innerHTML = `
-      <span class="sc-bench-chip" data-bench-chip>
-        NO.${String(r.no).padStart(3, '0')} · ${esc(label.slice(0, 30))}
-        <button class="rm" data-bench-rm title="해제">×</button>
-      </span>
-    `;
-    el.querySelector('.sc-bench-chip').onclick = (e) => {
+    const no = String(r.no).padStart(3, '0');
+    const label = r.hook || stripHtml(r.script || '').slice(0, 50) || ('NO.' + no);
+    const views = r.views ? fmtNum(r.views) : '';
+    const fmtTag = r.format ? '<span class="scb-tag">' + esc(r.format) + '</span>' : '';
+    const authTag = r.author ? '<span class="scb-tag muted">' + esc(r.author) + '</span>' : '';
+    el.innerHTML =
+      '<div class="scb-card" data-bench-chip>' +
+        (r.hasThumb ? '<div class="scb-thumb" data-bench-thumb></div>' : '<div class="scb-thumb empty">📄</div>') +
+        '<div class="scb-body">' +
+          '<div class="scb-no">참고 · NO.' + no + (views ? ' · ▶ ' + views : '') + '</div>' +
+          '<div class="scb-hook">' + esc(label) + '</div>' +
+          '<div class="scb-tags">' + fmtTag + authTag + '</div>' +
+        '</div>' +
+        '<button class="scb-rm" data-bench-rm title="연결 해제">×</button>' +
+      '</div>';
+    const tb = el.querySelector('[data-bench-thumb]');
+    if (tb && r.hasThumb) { loadImage(r.id, 'thumb').then(u => { if (u) tb.innerHTML = '<img src="' + u + '" alt="" />'; }).catch(() => {}); }
+    el.querySelector('[data-bench-chip]').onclick = (e) => {
       if (e.target.closest('[data-bench-rm]')) return;
-      // 벤치마킹 행으로 이동
-      switchWorkspace('sheet');
-      setTimeout(() => {
-        const tr = document.querySelector(`.sh-tr[data-id="${r.id}"]`);
-        if (tr) tr.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }, 300);
+      openDetail(r.id); // 탭하면 그 벤치마크 시트 정보 한눈에
     };
     el.querySelector('[data-bench-rm]').onclick = (e) => {
       e.stopPropagation();
@@ -17479,6 +17517,7 @@
     document.getElementById('sh-modal-close').onclick = closeModal;
     document.getElementById('sh-cancel').onclick = closeModal;
     document.getElementById('sh-save').onclick = saveDetail;
+    { const wb = document.getElementById('sh-write-from-bench'); if (wb) wb.onclick = () => { if (editingRowId) startScriptFromBenchmark(editingRowId); }; }
     document.getElementById('sh-clear-row').onclick = clearRow;
 
     document.getElementById('sh-modal').onclick = (e) => {
