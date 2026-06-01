@@ -17642,28 +17642,34 @@
       totop.onclick = () => wrap.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // 시트 두 손가락(핀치) 줌 — CSS zoom으로 리플로우(스크롤 자연스러움). 더블탭=리셋
+    // 시트 두 손가락(핀치) 줌 — CSS zoom 리플로우, 손 떼도 배율 그대로 유지. 더블탭(손가락 1개로 톡톡)=1배 리셋
     (function () {
       const sw = document.querySelector('.sh-sheet-wrap');
       const grid = document.querySelector('.sh-grid');
       if (!sw || !grid) return;
-      let z = 1, startD = 0, startZ = 1, pinching = false, lastTap = 0;
+      let z = 1, startD = 0, startZ = 1, pinching = false, pinchedSeq = false, lastTapTime = 0;
       const dist = t => Math.hypot(t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY);
       sw.addEventListener('touchstart', e => {
-        if (e.touches.length === 2) { pinching = true; startD = dist(e.touches); startZ = z; }
+        if (e.touches.length === 2) { pinching = true; pinchedSeq = true; startD = dist(e.touches); startZ = z; }
       }, { passive: true });
       sw.addEventListener('touchmove', e => {
         if (pinching && e.touches.length === 2) {
           e.preventDefault();
           z = Math.max(0.5, Math.min(2.5, startZ * dist(e.touches) / (startD || 1)));
-          grid.style.zoom = z;
+          grid.style.zoom = z;   // 배율 유지 (리셋 안 함)
         }
       }, { passive: false });
       sw.addEventListener('touchend', e => {
         if (e.touches.length < 2) pinching = false;
-        const now = Date.now();
-        if (e.touches.length === 0 && now - lastTap < 320 && z !== 1) { z = 1; grid.style.zoom = 1; }
-        lastTap = now;
+        if (e.touches.length === 0) {
+          if (!pinchedSeq) {
+            // 핀치가 아니라 순수 탭일 때만 더블탭 리셋 판정 (핀치 손 뗌으로는 절대 리셋 안 됨)
+            const now = Date.now();
+            if (now - lastTapTime < 300 && z !== 1) { z = 1; grid.style.zoom = 1; }
+            lastTapTime = now;
+          }
+          pinchedSeq = false;
+        }
       });
     })();
 
@@ -19093,13 +19099,13 @@
   let _accSaveTimer = null;
   const ACC_KEY = 'hmv1-acc';
   const ACC_SECTIONS = [
-    { key: 'mission',   title: '미션 · 레벨',    ico: '🎯', gen: true },
-    { key: 'week',      title: '이번 주',       ico: '🔥', sel: ['#home-view .tr-week-block'] },
-    { key: 'funnel',    title: '컨텐츠 퍼널',    ico: '🔻', sel: ['#home-view .funnel-section'] },
-    { key: 'challenge', title: '진행 중 챌린지', ico: '◆',  sel: ['#ch-list'], wrap: '.home-section' },
-    { key: 'calendar',  title: '캘린더 · 주차별', ico: '📅', sel: ['#home-view .tr-cal-block', '#tr-weeks-list'] },
-    { key: 'stats',     title: '통계',          ico: '📊', sel: ['#home-stats'], wrap: '.home-section' },
-    { key: 'goal',      title: '목표 / Why',     ico: '🎯', sel: ['#home-view .home-section.goal'] }
+    { key: 'mission',   title: '미션 · 레벨',    ico: '◆', gen: true },
+    { key: 'week',      title: '이번 주',       ico: '▦', sel: ['#home-view .tr-week-block'] },
+    { key: 'funnel',    title: '컨텐츠 퍼널',    ico: '▽', sel: ['#home-view .funnel-section'] },
+    { key: 'challenge', title: '진행 중 챌린지', ico: '◇',  sel: ['#ch-list'], wrap: '.home-section' },
+    { key: 'calendar',  title: '캘린더 · 주차별', ico: '▤', sel: ['#home-view .tr-cal-block', '#tr-weeks-list'] },
+    { key: 'stats',     title: '통계',          ico: '▥', sel: ['#home-stats'], wrap: '.home-section' },
+    { key: 'goal',      title: '목표 / Why',     ico: '◎', sel: ['#home-view .home-section.goal'] }
   ];
   function accInjectCss() {
     if (document.getElementById('acc-style')) return;
@@ -19152,6 +19158,25 @@
       .mz-badge.on{opacity:1;filter:none;border-color:var(--emerald-line);background:var(--emerald-faint);}
       .mz-badge-ico{font-size:20px;line-height:1;}
       .mz-badge-lab{font-size:9px;color:var(--text-mute);text-align:center;line-height:1.2;}
+      /* 상단 숫자카드 줄 제거 (미션 패널로 통합) */
+      #tr-status-bar{display:none !important;}
+      /* 아코디언 헤더 아이콘 단색 미니멀 */
+      .acc-ico{color:var(--sage);font-size:13px;}
+      /* 레벨 + STREAK 히어로 */
+      .mz-level-foot{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:7px;flex-wrap:wrap;}
+      .mz-streak{font-size:12px;font-weight:800;color:#FF8C42;}
+      .mz-streak-sub{font-size:10.5px;color:var(--text-mute);font-weight:600;}
+      /* 다음 뱃지 강조 */
+      .mz-nextbadge-wrap{display:flex;flex-direction:column;gap:8px;}
+      .mz-nextbadge{display:flex;align-items:center;gap:11px;background:var(--bg-card);border:1px solid var(--line);border-radius:11px;padding:11px 13px;}
+      .mz-nb-ico{font-size:22px;line-height:1;}
+      .mz-nb-body{flex:1;min-width:0;}
+      .mz-nb-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;}
+      .mz-nb-label{font-size:12.5px;font-weight:700;color:var(--text-sub);}
+      .mz-nb-num{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:800;color:var(--text-main);}
+      /* 획득한 뱃지 칩 */
+      .mz-earned{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
+      .mz-earned-chip{font-size:17px;width:34px;height:34px;display:flex;align-items:center;justify-content:center;background:var(--emerald-faint);border:1px solid var(--emerald-line);border-radius:9px;}
     `;
     document.head.appendChild(s);
   }
@@ -19195,6 +19220,8 @@
             expanded: (o.expanded && typeof o.expanded === 'object') ? o.expanded : { mission: true, week: true },
             pinned: (o.pinned && typeof o.pinned === 'object') ? o.pinned : {}
           };
+          // 미션 패널은 신규 추가분 — 옛 저장 레이아웃엔 없으니 기본 펼침으로 보정
+          if (accState.expanded.mission === undefined) accState.expanded.mission = true;
         }
       }
     } catch (e) {}
@@ -19296,18 +19323,18 @@
   function badgeList() {
     const c = missionCounts();
     return [
-      { id: 'b-an1', ico: '🌱', label: '첫 분석', ok: c.analyzed >= 1 },
-      { id: 'b-sc1', ico: '✍️', label: '첫 원고', ok: c.done >= 1 },
-      { id: 'b-up1', ico: '🚀', label: '첫 업로드', ok: c.uploaded >= 1 },
-      { id: 'b-an50', ico: '🔍', label: '분석 50', ok: c.analyzed >= 50 },
-      { id: 'b-an100', ico: '🔬', label: '분석 100', ok: c.analyzed >= 100 },
-      { id: 'b-up10', ico: '📤', label: '업로드 10', ok: c.uploaded >= 10 },
-      { id: 'b-up30', ico: '🎬', label: '업로드 30', ok: c.uploaded >= 30 },
-      { id: 'b-up100', ico: '🏆', label: '업로드 100', ok: c.uploaded >= 100 },
-      { id: 'b-st4', ico: '🔥', label: '4주 연속', ok: c.streakWeeks >= 4 },
-      { id: 'b-st8', ico: '⚡', label: '8주 연속', ok: c.streakWeeks >= 8 },
-      { id: 'b-ch', ico: '◆', label: '챌린지 완주', ok: !!(c.chBest && c.chBest.done) }
-    ];
+      { id: 'b-an1', ico: '🌱', label: '첫 분석', cur: c.analyzed, tgt: 1 },
+      { id: 'b-sc1', ico: '✍️', label: '첫 원고', cur: c.done, tgt: 1 },
+      { id: 'b-up1', ico: '🚀', label: '첫 업로드', cur: c.uploaded, tgt: 1 },
+      { id: 'b-an50', ico: '🔍', label: '분석 50', cur: c.analyzed, tgt: 50 },
+      { id: 'b-an100', ico: '🔬', label: '분석 100', cur: c.analyzed, tgt: 100 },
+      { id: 'b-up10', ico: '📤', label: '업로드 10', cur: c.uploaded, tgt: 10 },
+      { id: 'b-up30', ico: '🎬', label: '업로드 30', cur: c.uploaded, tgt: 30 },
+      { id: 'b-up100', ico: '🏆', label: '업로드 100', cur: c.uploaded, tgt: 100 },
+      { id: 'b-st4', ico: '🔥', label: '4주 연속', cur: c.streakWeeks, tgt: 4 },
+      { id: 'b-st8', ico: '⚡', label: '8주 연속', cur: c.streakWeeks, tgt: 8 },
+      { id: 'b-ch', ico: '🏁', label: '챌린지 완주', cur: (c.chBest && c.chBest.done) ? 1 : 0, tgt: 1 }
+    ].map(b => { b.ok = b.cur >= b.tgt; return b; });
   }
   // 업적 알림 (레벨업 / 새 뱃지) — 관점봇 축하
   let achSeen = { level: 0, badges: [] };
@@ -19337,7 +19364,7 @@
   function missionCardHtml(m) {
     const tgt = m.tgt || 1, pct = Math.min(100, Math.round(Math.min(m.cur, tgt) / tgt * 100)), done = m.cur >= tgt, unit = m.unit || '';
     return '<div class="mz-card' + (done ? ' done' : '') + '">' +
-      '<div class="mz-card-top"><span class="mz-ico">' + m.ico + '</span><span class="mz-label">' + esc(m.label) + '</span><span class="mz-num">' + m.cur + '<span class="mz-tgt">/' + tgt + unit + '</span></span></div>' +
+      '<div class="mz-card-top"><span class="mz-label">' + esc(m.label) + '</span><span class="mz-num">' + m.cur + '<span class="mz-tgt">/' + tgt + unit + '</span></span></div>' +
       '<div class="mz-bar"><div class="mz-fill" style="width:' + pct + '%"></div></div>' +
       (done ? '<div class="mz-done">✓ 달성</div>' : '') + '</div>';
   }
@@ -19345,22 +19372,33 @@
     const el = document.getElementById('mission-panel-body'); if (!el) return;
     try {
       const li = levelInfo();
+      const c = missionCounts();
       const wk = weeklyMissions(), mo = monthlyMissions(), badges = badgeList();
       const pending = wk.concat(mo).filter(m => m.cur < m.tgt).map(m => ({ m: m, rem: m.tgt - m.cur }));
       pending.sort((a, b) => a.rem - b.rem);
       const nudge = pending.length
-        ? (pending[0].m.ico + ' <strong>' + pending[0].rem + (pending[0].m.unit || '개') + '</strong>만 더 하면 «' + esc(pending[0].m.label) + '» 달성! 🔥')
+        ? ('<strong>' + pending[0].rem + (pending[0].m.unit || '개') + '</strong> 더 하면 «' + esc(pending[0].m.label) + '» 달성!')
         : '이번 목표 다 달성했어요! 🎉';
-      const earnedCount = badges.filter(b => b.ok).length;
+      const earned = badges.filter(b => b.ok);
+      const next = badges.filter(b => !b.ok).map(b => ({ b: b, ratio: b.cur / b.tgt })).sort((a, b) => b.ratio - a.ratio).slice(0, 2);
+      const streakLine = '<span class="mz-streak">🔥 ' + c.streakWeeks + '주 연속</span>' + (c.streakDays ? ' <span class="mz-streak-sub">이번 주 ' + c.streakDays + '/5일</span>' : '');
       el.innerHTML =
-        '<div class="mz-level"><div class="mz-level-top"><span class="mz-lv">Lv.' + li.level + '</span><span class="mz-title">' + li.title + '</span><span class="mz-xp">' + li.xp + ' XP</span></div>' +
-        '<div class="mz-bar lg"><div class="mz-fill" style="width:' + li.pct + '%"></div></div>' +
-        '<div class="mz-next">' + (li.next ? ('다음 «' + li.next.t + '»까지 ' + li.toNext + ' XP') : '최고 레벨 달성! 👑') + '</div></div>' +
+        '<div class="mz-level">' +
+          '<div class="mz-level-top"><span class="mz-lv">Lv.' + li.level + '</span><span class="mz-title">' + li.title + '</span><span class="mz-xp">' + li.xp + ' XP</span></div>' +
+          '<div class="mz-bar lg"><div class="mz-fill" style="width:' + li.pct + '%"></div></div>' +
+          '<div class="mz-level-foot"><span class="mz-next">' + (li.next ? ('다음 «' + li.next.t + '»까지 ' + li.toNext + ' XP') : '최고 레벨! 👑') + '</span>' + streakLine + '</div>' +
+        '</div>' +
         '<div class="mz-nudge">' + nudge + '</div>' +
-        '<div class="mz-sec-label">이번 주 미션</div><div class="mz-grid">' + wk.map(missionCardHtml).join('') + '</div>' +
-        '<div class="mz-sec-label">이달의 미션</div><div class="mz-grid">' + mo.map(missionCardHtml).join('') + '</div>' +
-        '<div class="mz-sec-label">뱃지 <span class="mz-badge-count">' + earnedCount + '/' + badges.length + '</span></div>' +
-        '<div class="mz-badges">' + badges.map(b => '<div class="mz-badge' + (b.ok ? ' on' : '') + '" title="' + esc(b.label) + '"><span class="mz-badge-ico">' + b.ico + '</span><span class="mz-badge-lab">' + esc(b.label) + '</span></div>').join('') + '</div>';
+        '<div class="mz-sec-label">이번 주</div><div class="mz-grid">' + wk.map(missionCardHtml).join('') + '</div>' +
+        '<div class="mz-sec-label">이달</div><div class="mz-grid">' + mo.map(missionCardHtml).join('') + '</div>' +
+        '<div class="mz-sec-label">뱃지 <span class="mz-badge-count">' + earned.length + '/' + badges.length + '</span></div>' +
+        (next.length
+          ? '<div class="mz-nextbadge-wrap">' + next.map(n => {
+              const p = Math.min(100, Math.round(n.b.cur / n.b.tgt * 100));
+              return '<div class="mz-nextbadge"><span class="mz-nb-ico">' + n.b.ico + '</span><div class="mz-nb-body"><div class="mz-nb-top"><span class="mz-nb-label">' + esc(n.b.label) + '</span><span class="mz-nb-num">' + n.b.cur + '/' + n.b.tgt + '</span></div><div class="mz-bar"><div class="mz-fill" style="width:' + p + '%"></div></div></div></div>';
+            }).join('') + '</div>'
+          : '<div class="mz-nudge">모든 뱃지 획득! 🏆</div>') +
+        (earned.length ? '<div class="mz-earned">' + earned.map(b => '<span class="mz-earned-chip" title="' + esc(b.label) + '">' + b.ico + '</span>').join('') + '</div>' : '');
       checkAchievements();
     } catch (e) { el.innerHTML = '<div style="color:var(--text-mute);font-size:12px;padding:8px;">미션 불러오는 중…</div>'; }
   }
