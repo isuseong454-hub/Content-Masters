@@ -9700,6 +9700,18 @@
   .fb-col.fmt-edit   { border-top: 3px solid var(--ice); }
   .fb-col.fmt-custom { border-top: 3px solid var(--neon); }
   .fb-col.fmt-none   { border-top: 3px solid var(--text-faint); opacity: 0.7; }
+  .fb-col.fmt-attract { border-top: 3px solid #C29CFF; }
+  .fb-col.fmt-convert { border-top: 3px solid #F9A8D4; }
+  .fb-col.fmt-retain  { border-top: 3px solid var(--emerald); }
+  /* 유형 보드 형식별/목적별 토글 */
+  .fb-toggle { display: inline-flex; gap: 5px; margin-top: 18px; background: var(--bg-card); border: 1px solid var(--line); border-radius: 10px; padding: 4px; }
+  .fb-toggle-btn { background: transparent; border: none; cursor: pointer; color: var(--text-mute); font-family: 'Pretendard', sans-serif; font-size: 13px; font-weight: 700; padding: 7px 16px; border-radius: 7px; transition: all 0.15s; }
+  .fb-toggle-btn.on { background: var(--emerald); color: #06140C; }
+  .fb-col-stat { font-size: 11px; color: var(--text-mute); padding: 0 12px 8px; font-family: 'Pretendard', sans-serif; }
+  .fb-col-stat::first-letter { color: var(--cream); }
+  /* 분해하기 커스텀 칩 삭제(×) */
+  .chip-del { display: inline-flex; align-items: center; justify-content: center; margin-left: 6px; width: 16px; height: 16px; border-radius: 50%; font-size: 12px; line-height: 1; color: var(--text-faint); background: rgba(255,255,255,0.07); }
+  .chip-del:hover { color: var(--wine); background: var(--wine-soft); }
 
   .fb-col-head {
     padding: 16px 18px 12px;
@@ -12621,6 +12633,12 @@
         <div class="fb-eyebrow">유형 보드 · 컨텐츠 유형</div>
         <h1 class="fb-title">유형으로 <span class="em">분류된</span> 시트</h1>
         <p class="fb-sub">한 계정은 3~4가지 콘텐츠 유형을 반복해 돌립니다.<br/>분류해두면 다음 콘텐츠를 어떤 유형으로 찍을지가 보입니다.</p>
+        <div class="fb-toggle">
+          <button class="fb-toggle-btn on" data-fbmode="format">형식별</button>
+          <button class="fb-toggle-btn" data-fbmode="purpose">목적별</button>
+          <button class="fb-toggle-btn" data-fbmode="thumb">썸네일</button>
+          <button class="fb-toggle-btn" data-fbmode="copy">수식어</button>
+        </div>
       </section>
       <div class="fb-board">
         <div class="fb-columns" id="fb-columns"></div>
@@ -14516,29 +14534,41 @@
   }
 
   // === FORMAT BOARD (칸반) ===
+  let fbGroupMode = 'format'; // 'format'(형식별) | 'purpose'(목적별: 유입/전환/재구매)
   function renderFormatBoard() {
     const el = document.getElementById('fb-columns');
     if (!el) return;
 
-    const allFmts = BASE_FORMATS.concat(customFormats);
-    // also include "분류 안 됨" column
-    const colKeys = allFmts.concat(['__none__']);
+    let cols;
+    if (fbGroupMode === 'purpose') {
+      cols = [
+        { key: 'attract', title: '유입용', cls: 'fmt-attract', match: r => r.funnelStage === 'attract' },
+        { key: 'convert', title: '전환용', cls: 'fmt-convert', match: r => r.funnelStage === 'convert' },
+        { key: 'retain', title: '재구매', cls: 'fmt-retain', match: r => r.funnelStage === 'retain' },
+        { key: '__none__', title: '미분류', cls: 'fmt-none', match: r => !r.funnelStage }
+      ];
+    } else if (fbGroupMode === 'thumb' || fbGroupMode === 'copy') {
+      // 썸네일/수식어가 강한 카드만, 세부 유형별로 묶어 보기
+      const strongKey = fbGroupMode === 'thumb' ? 'thumbStrong' : 'copyStrong';
+      const typesKey = fbGroupMode === 'thumb' ? 'thumbTypes' : 'copyTypes';
+      const typeSet = new Set();
+      rows.forEach(r => { if (isFilled(r) && r[strongKey]) (r[typesKey] || []).forEach(t => typeSet.add(t)); });
+      cols = [...typeSet].map(t => ({ key: t, title: t, cls: 'fb-col-other', match: r => r[strongKey] && (r[typesKey] || []).includes(t) }));
+      cols.push({ key: '__none__', title: '유형 미지정', cls: 'fmt-none', match: r => r[strongKey] && !((r[typesKey] || []).length) });
+    } else {
+      const allFmts = BASE_FORMATS.concat(customFormats);
+      cols = allFmts.map(f => ({
+        key: f, title: f,
+        cls: f === '문제 해결' ? 'fmt-prob' : f === '욕구 충족' ? 'fmt-want' : f === '꿀팁' ? 'fmt-tip' : f === '편집' ? 'fmt-edit' : (customFormats.includes(f) ? 'fmt-custom' : 'fb-col-other'),
+        match: r => r.format === f
+      }));
+      cols.push({ key: '__none__', title: '분류 안 됨', cls: 'fmt-none', match: r => !r.format });
+    }
 
-    el.innerHTML = colKeys.map(f => {
-      const isNone = f === '__none__';
-      const isCustom = customFormats.includes(f);
-      const fmtRows = rows.filter(r => isFilled(r) && (isNone ? !r.format : r.format === f));
-
-      let colClass = 'fb-col-other';
-      if (f === '문제 해결') colClass = 'fmt-prob';
-      else if (f === '욕구 충족') colClass = 'fmt-want';
-      else if (f === '꿀팁') colClass = 'fmt-tip';
-      else if (f === '편집') colClass = 'fmt-edit';
-      else if (isNone) colClass = 'fmt-none';
-      else if (isCustom) colClass = 'fmt-custom';
-
-      const title = isNone ? '분류 안 됨' : f;
-
+    el.innerHTML = cols.map(col => {
+      const fmtRows = rows.filter(r => isFilled(r) && col.match(r));
+      const starred = fmtRows.filter(r => r.favorite);
+      const avgStar = starred.length ? Math.round(starred.reduce((s, r) => s + (r.views || 0), 0) / starred.length) : 0;
       const cards = fmtRows.map(r => {
         const thumbUrl = thumbCache[r.id] || null;
         const hookText = r.hook || stripHtml(r.script || '').slice(0, 80) || r.why || '(내용 없음)';
@@ -14556,15 +14586,19 @@
           </div>
         `;
       }).join('');
-
+      const emptyMsg = (fbGroupMode === 'thumb') ? '강한 썸네일로 표시한 카드 없음'
+        : (fbGroupMode === 'copy') ? '강한 수식어로 표시한 카드 없음'
+        : col.key === '__none__' ? (fbGroupMode === 'purpose' ? '모든 콘텐츠에 목적이 정해짐' : '모든 콘텐츠가 분류됨')
+        : '아직 없어요. 시트에서 분류해보세요.';
       return `
-        <div class="fb-col ${colClass}">
+        <div class="fb-col ${col.cls}">
           <div class="fb-col-head">
-            <div class="fb-col-title">${esc(title)}</div>
+            <div class="fb-col-title">${esc(col.title)}</div>
             <div class="fb-col-count">${fmtRows.length}</div>
           </div>
+          ${starred.length ? `<div class="fb-col-stat">★ ${starred.length} · 기대 ${fmtNum(avgStar)}</div>` : ''}
           <div class="fb-col-body">
-            ${cards || `<div class="fb-col-empty">${isNone ? '모든 콘텐츠가 분류됨' : '아직 없어요. 시트에서 분류해보세요.'}</div>`}
+            ${cards || `<div class="fb-col-empty">${emptyMsg}</div>`}
           </div>
         </div>
       `;
@@ -14573,6 +14607,11 @@
     // Card click → open detail
     el.querySelectorAll('.fb-card').forEach(card => {
       card.onclick = () => openDetail(card.dataset.row);
+    });
+    // 토글 버튼 (형식별/목적별)
+    document.querySelectorAll('.fb-toggle-btn').forEach(b => {
+      b.classList.toggle('on', b.dataset.fbmode === fbGroupMode);
+      b.onclick = () => { fbGroupMode = b.dataset.fbmode; renderFormatBoard(); };
     });
   }
 
@@ -16816,11 +16855,23 @@
     el.innerHTML = all.map(f => {
       const isCustom = customFormats.includes(f);
       const isOn = formFormat === f;
-      return `<button class="fmt-chip ${isCustom ? 'custom' : ''} ${isOn ? 'on' : ''}" data-fmt="${esc(f)}">${esc(f)}</button>`;
+      return `<button class="fmt-chip ${isCustom ? 'custom' : ''} ${isOn ? 'on' : ''}" data-fmt="${esc(f)}">${esc(f)}${isCustom ? `<span class="chip-del" data-del="${esc(f)}" title="삭제">×</span>` : ''}</button>`;
     }).join('');
     el.querySelectorAll('.fmt-chip').forEach(btn => {
-      btn.onclick = (e) => {
+      btn.onclick = async (e) => {
         e.preventDefault();
+        const del = e.target.closest('.chip-del');
+        if (del) {
+          e.stopPropagation();
+          const f = del.dataset.del;
+          if (!confirm(`"${f}" 유형을 삭제할까요? (이미 분류된 항목에서도 제거됩니다)`)) return;
+          customFormats = customFormats.filter(x => x !== f);
+          rows.forEach(r => { if (r.format === f) r.format = ''; });
+          if (formFormat === f) formFormat = '';
+          await saveCustomFormats(); await saveRows();
+          renderFormatPicker();
+          return;
+        }
         const f = btn.dataset.fmt;
         formFormat = (formFormat === f) ? '' : f; // toggle (allow deselect)
         renderFormatPicker();
@@ -16835,11 +16886,23 @@
     el.innerHTML = all.map(a => {
       const isCustom = customAudio.includes(a);
       const isOn = formAudioType === a;
-      return `<button class="fmt-chip audio-chip ${isCustom ? 'custom' : ''} ${isOn ? 'on' : ''}" data-au="${esc(a)}">${esc(a)}</button>`;
+      return `<button class="fmt-chip audio-chip ${isCustom ? 'custom' : ''} ${isOn ? 'on' : ''}" data-au="${esc(a)}">${esc(a)}${isCustom ? `<span class="chip-del" data-del="${esc(a)}" title="삭제">×</span>` : ''}</button>`;
     }).join('');
     el.querySelectorAll('.audio-chip').forEach(btn => {
-      btn.onclick = (e) => {
+      btn.onclick = async (e) => {
         e.preventDefault();
+        const del = e.target.closest('.chip-del');
+        if (del) {
+          e.stopPropagation();
+          const a = del.dataset.del;
+          if (!confirm(`"${a}" 오디오 분류를 삭제할까요?`)) return;
+          customAudio = customAudio.filter(x => x !== a);
+          rows.forEach(r => { if (r.audioType === a) r.audioType = ''; });
+          if (formAudioType === a) formAudioType = '';
+          await saveCustomAudio(); await saveRows();
+          renderAudioPicker();
+          return;
+        }
         const a = btn.dataset.au;
         formAudioType = (formAudioType === a) ? '' : a;
         renderAudioPicker();
@@ -16879,11 +16942,23 @@
         isOn ? 'on' : ''
       ].filter(Boolean).join(' ');
       const title = isGold ? '★ 황금 키워드' : (isKw ? '🔑 키워드' : '');
-      return `<button class="${cls}" data-tag="${esc(t)}"${title ? ` title="${title}"` : ''}>${isGold ? '★ ' : ''}${esc(t)}</button>`;
+      return `<button class="${cls}" data-tag="${esc(t)}"${title ? ` title="${title}"` : ''}>${isGold ? '★ ' : ''}${esc(t)}${isCustom ? `<span class="chip-del" data-del="${esc(t)}" title="삭제">×</span>` : ''}</button>`;
     }).join('');
     el.querySelectorAll('.tag-chip').forEach(btn => {
-      btn.onclick = (e) => {
+      btn.onclick = async (e) => {
         e.preventDefault();
+        const del = e.target.closest('.chip-del');
+        if (del) {
+          e.stopPropagation();
+          const t = del.dataset.del;
+          if (!confirm(`"${t}" 태그를 삭제할까요? (이미 사용된 곳에서도 제거됩니다)`)) return;
+          customTags = customTags.filter(x => x !== t);
+          rows.forEach(r => { r.tags = (r.tags || []).filter(x => x !== t); });
+          const fi = formTags.indexOf(t); if (fi >= 0) formTags.splice(fi, 1);
+          await saveCustomTags(); await saveRows();
+          renderTagsPicker();
+          return;
+        }
         const t = btn.dataset.tag;
         const idx = formTags.indexOf(t);
         if (idx >= 0) formTags.splice(idx, 1);
@@ -19174,6 +19249,9 @@
       .mz-nb-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;}
       .mz-nb-label{font-size:12.5px;font-weight:700;color:var(--text-sub);}
       .mz-nb-num{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:800;color:var(--text-main);}
+      .mz-nb-ico.locked{filter:grayscale(1);opacity:0.45;}
+      .mz-nextbadge.done{border-color:var(--emerald-line);background:var(--emerald-faint);}
+      .mz-nextbadge.done .mz-nb-num{color:var(--emerald);}
       /* 획득한 뱃지 칩 */
       .mz-earned{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
       .mz-earned-chip{font-size:17px;width:34px;height:34px;display:flex;align-items:center;justify-content:center;background:var(--emerald-faint);border:1px solid var(--emerald-line);border-radius:9px;}
@@ -19392,13 +19470,10 @@
         '<div class="mz-sec-label">이번 주</div><div class="mz-grid">' + wk.map(missionCardHtml).join('') + '</div>' +
         '<div class="mz-sec-label">이달</div><div class="mz-grid">' + mo.map(missionCardHtml).join('') + '</div>' +
         '<div class="mz-sec-label">뱃지 <span class="mz-badge-count">' + earned.length + '/' + badges.length + '</span></div>' +
-        (next.length
-          ? '<div class="mz-nextbadge-wrap">' + next.map(n => {
-              const p = Math.min(100, Math.round(n.b.cur / n.b.tgt * 100));
-              return '<div class="mz-nextbadge"><span class="mz-nb-ico">' + n.b.ico + '</span><div class="mz-nb-body"><div class="mz-nb-top"><span class="mz-nb-label">' + esc(n.b.label) + '</span><span class="mz-nb-num">' + n.b.cur + '/' + n.b.tgt + '</span></div><div class="mz-bar"><div class="mz-fill" style="width:' + p + '%"></div></div></div></div>';
-            }).join('') + '</div>'
-          : '<div class="mz-nudge">모든 뱃지 획득! 🏆</div>') +
-        (earned.length ? '<div class="mz-earned">' + earned.map(b => '<span class="mz-earned-chip" title="' + esc(b.label) + '">' + b.ico + '</span>').join('') + '</div>' : '');
+        '<div class="mz-nextbadge-wrap">' + badges.map(b => {
+          const p = Math.min(100, Math.round(b.cur / b.tgt * 100));
+          return '<div class="mz-nextbadge' + (b.ok ? ' done' : '') + '"><span class="mz-nb-ico' + (b.ok ? '' : ' locked') + '">' + b.ico + '</span><div class="mz-nb-body"><div class="mz-nb-top"><span class="mz-nb-label">' + esc(b.label) + '</span><span class="mz-nb-num">' + (b.ok ? '✓ 획득' : (b.cur + '/' + b.tgt)) + '</span></div><div class="mz-bar"><div class="mz-fill" style="width:' + p + '%"></div></div></div></div>';
+        }).join('') + '</div>';
       checkAchievements();
     } catch (e) { el.innerHTML = '<div style="color:var(--text-mute);font-size:12px;padding:8px;">미션 불러오는 중…</div>'; }
   }
