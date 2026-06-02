@@ -5111,6 +5111,31 @@
     line-height: 1.55;
     margin: 0 0 12px;
   }
+  /* 유형 관리 / 휴지통 */
+  .tm-toggle { width: 100%; display: flex; align-items: center; justify-content: space-between; background: var(--bg-card); border: 1px solid var(--line); border-radius: 10px; padding: 11px 13px; font-family: 'Pretendard', sans-serif; font-size: 13px; font-weight: 700; color: var(--text-sub); cursor: pointer; margin-bottom: 12px; }
+  .tm-toggle:hover { border-color: var(--emerald-line); }
+  .tm-chev { color: var(--text-faint); font-size: 11px; }
+  .tm-count { font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; color: var(--text-faint); background: var(--bg-void); border-radius: 5px; padding: 1px 5px; }
+  .tm-chip.unused { border-style: dashed; opacity: 0.72; }
+  .tm-chip.unused .tm-count { color: var(--wine); }
+  .tm-group { margin-bottom: 12px; }
+  .tm-group-title { font-family: 'Pretendard', sans-serif; font-size: 12px; font-weight: 700; color: var(--text-sub); margin-bottom: 7px; }
+  .tm-cnt { color: var(--emerald); margin-left: 3px; }
+  .tm-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tm-chip { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; color: var(--text-main); background: var(--bg-card); border: 1px solid var(--line); border-radius: 8px; padding: 5px 7px 5px 10px; }
+  .tm-del { background: transparent; border: none; cursor: pointer; font-size: 11px; opacity: 0.55; padding: 0 2px; border-radius: 4px; }
+  .tm-del:hover { opacity: 1; }
+  .tm-none { font-size: 11.5px; color: var(--text-faint); }
+  .tm-trash { margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--line); }
+  .tm-trash-item { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 7px 0; border-bottom: 1px solid var(--line); }
+  .tm-trash-label { font-size: 12.5px; color: var(--text-sub); }
+  .tm-trash-sys { font-size: 10px; color: var(--text-faint); margin-left: 4px; }
+  .tm-trash-acts { display: flex; gap: 6px; flex: 0 0 auto; }
+  .tm-restore, .tm-purge { font-size: 11px; font-weight: 700; border-radius: 7px; padding: 5px 10px; cursor: pointer; border: 1px solid var(--line); background: var(--bg-card); }
+  .tm-restore { color: var(--emerald); border-color: var(--emerald-line); }
+  .tm-restore:hover { background: var(--emerald-faint); }
+  .tm-purge { color: var(--wine); border-color: var(--wine-line); }
+  .tm-purge:hover { background: var(--wine-soft); }
   .settings-actions {
     display: flex;
     flex-wrap: wrap;
@@ -9515,6 +9540,28 @@
     flex-direction: column;
     gap: 10px;
   }
+  /* 레퍼런스 패널 탭 (벤치마크/키워드/타겟) */
+  .sc-ref-tabs { display: flex; gap: 6px; padding: 10px 18px 0; }
+  .sc-ref-tab { flex: 1; padding: 9px 6px; border-radius: 9px; border: 1px solid var(--line); background: var(--bg-card); color: var(--text-mute); font-family: 'Pretendard', sans-serif; font-size: 12.5px; font-weight: 700; cursor: pointer; transition: all .15s; }
+  .sc-ref-tab.on { background: var(--emerald); color: #06140C; border-color: var(--emerald); }
+  #rtab-bench { display: flex; flex-direction: column; flex: 1; min-height: 0; }
+  .sc-ref-tabbody { flex: 1; overflow-y: auto; padding: 14px 18px 24px; }
+  .sc-ref-empty { text-align: center; color: var(--text-mute); font-size: 13px; padding: 40px 14px; line-height: 1.6; }
+  .ref-sec-label { font-family: 'Pretendard', sans-serif; font-size: 11px; font-weight: 800; letter-spacing: .04em; color: var(--text-mute); margin: 4px 0 9px; }
+  .ref-sec-label + .ref-kw-wrap { margin-bottom: 18px; }
+  .ref-kw-wrap { display: flex; flex-wrap: wrap; gap: 7px; }
+  .ref-kw-chip { font-size: 13px; color: var(--text-main); background: var(--bg-card); border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; }
+  .ref-kw-chip.gold { color: #FFD700; border-color: rgba(255,215,0,0.4); background: rgba(255,215,0,0.06); }
+  .ref-tg-card { background: var(--bg-elev); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; margin-bottom: 10px; }
+  .ref-tg-card.open { border-color: var(--emerald-line); }
+  .ref-tg-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; cursor: pointer; }
+  .ref-tg-name { font-family: 'Pretendard', sans-serif; font-size: 14px; font-weight: 800; color: var(--text-main); }
+  .ref-tg-cnt { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: var(--emerald); flex: 0 0 auto; }
+  .ref-tg-prod { font-size: 11.5px; color: var(--text-mute); margin-top: 4px; }
+  .ref-tg-body { margin-top: 10px; display: flex; flex-direction: column; gap: 9px; }
+  .ref-tg-qa .ref-tg-q { font-size: 11px; font-weight: 700; color: var(--emerald); margin-bottom: 3px; }
+  .ref-tg-qa .ref-tg-a { font-size: 12.5px; color: var(--text-sub); line-height: 1.5; white-space: pre-wrap; }
+  .ref-tg-empty { font-size: 12px; color: var(--text-faint); }
   .sc-ref-card {
     background: var(--bg-elev);
     border: 1px solid var(--line);
@@ -9763,6 +9810,12 @@
   .tb-audio-play:hover { background: var(--emerald); color: #06140C; }
   .tb-audio-nolink { flex: 0 0 auto; font-size: 11px; color: var(--text-faint); }
   .tb-empty { text-align: center; color: var(--text-mute); font-size: 13px; padding: 40px 20px; }
+  /* 키워드 몰아보기 칩 */
+  .tb-kw-wrap { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tb-kw-chip { display: inline-flex; align-items: center; gap: 7px; font-size: 13px; color: var(--text-main); background: var(--bg-card); border: 1px solid var(--line); border-radius: 9px; padding: 7px 9px 7px 12px; }
+  .tb-kw-chip.gold { color: #FFD700; border-color: rgba(255,215,0,0.4); background: rgba(255,215,0,0.06); }
+  .tb-kw-cnt { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: var(--text-faint); background: var(--bg-void); border-radius: 6px; padding: 1px 6px; }
+  .tb-kw-chip.gold .tb-kw-cnt { color: #FFD700; }
 
   .fb-col-head {
     padding: 16px 18px 12px;
@@ -9913,20 +9966,20 @@
 
   .entry-body {
     display: grid;
-    grid-template-columns: 140px 140px 1fr;
-    gap: 18px;
+    grid-template-columns: 112px 112px 112px 1fr;
+    gap: 16px;
     position: relative;
     z-index: 1;
   }
 
   @media (max-width: 880px) {
-    .entry-body { grid-template-columns: 1fr 1fr; }
+    .entry-body { grid-template-columns: 1fr 1fr 1fr; }
     .entry-col-main { grid-column: 1 / -1; }
   }
   @media (max-width: 480px) {
     .entry-wrap { padding: 14px 14px 6px; }
     .entry-card { padding: 18px; }
-    .entry-body { grid-template-columns: 1fr 1fr; gap: 12px; }
+    .entry-body { grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
     .entry-title { font-size: 22px; }
   }
 
@@ -9964,6 +10017,19 @@
   .entry-thumb-box:hover {
     border-color: var(--emerald);
     background: var(--emerald-faint);
+    box-shadow: 0 0 0 3px var(--emerald-faint), 0 0 22px var(--emerald-glow);
+    transform: translateY(-2px) scale(1.012);
+  }
+  .entry-thumb-box:active {
+    transform: scale(0.985);
+    box-shadow: 0 0 0 3px var(--emerald-line), 0 0 26px var(--emerald-glow);
+  }
+  /* 막 저장된 박스 — 에메랄드 펄스 */
+  .entry-thumb-box.just-saved { animation: entrySaved 0.9s ease-out; }
+  @keyframes entrySaved {
+    0% { box-shadow: 0 0 0 0 var(--emerald); border-color: var(--emerald); }
+    60% { box-shadow: 0 0 28px 4px var(--emerald-glow); }
+    100% { box-shadow: 0 0 0 0 rgba(0,0,0,0); }
   }
   .entry-thumb-box.drag-over {
     border-color: var(--neon);
@@ -11921,8 +11987,8 @@
   <nav class="bottom-nav" id="bottom-nav">
     <button class="bn-tab" data-ws="home"><span class="bn-ico">⌂</span><span class="bn-lab">홈</span></button>
     <button class="bn-tab" data-ws="sheet"><span class="bn-ico">▤</span><span class="bn-lab">시트</span></button>
-    <button class="bn-tab" data-ws="thumb"><span class="bn-ico">▣</span><span class="bn-lab">썸네일</span></button>
     <button class="bn-tab" data-ws="scripts"><span class="bn-ico">✎</span><span class="bn-lab">원고</span></button>
+    <button class="bn-tab" data-ws="thumb"><span class="bn-ico">▣</span><span class="bn-lab">썸네일</span></button>
     <button class="bn-tab" data-ws="formatboard"><span class="bn-ico">▦</span><span class="bn-lab">분류</span></button>
     <button class="bn-tab" id="bn-more"><span class="bn-ico">☰</span><span class="bn-lab">더보기</span></button>
   </nav>
@@ -11944,13 +12010,7 @@
       <button class="sh-sb-item sh-sb-main" data-ws="sheet" id="ws-sheet">
         <span class="sh-sb-icon">▤</span><span class="sh-sb-label">벤치마크 시트</span>
       </button>
-      <button class="sh-sb-item" data-ws="scripts" id="ws-scripts">
-        <span class="sh-sb-icon">✎</span><span class="sh-sb-label">내 원고</span>
-      </button>
-      <button class="sh-sb-item" data-ws="formatboard" id="ws-formatboard">
-        <span class="sh-sb-icon">▦</span><span class="sh-sb-label">분류</span>
-      </button>
-      <button class="sh-sb-item" data-ws="customer" id="ws-customer">
+      <button class="sh-sb-item sh-sb-main" data-ws="customer" id="ws-customer">
         <span class="sh-sb-icon">◉</span><span class="sh-sb-label">고객 분석</span>
       </button>
       <button class="sh-sb-item" data-ws="moodboard" id="ws-moodboard">
@@ -11965,6 +12025,9 @@
       <button class="sh-sb-item sh-sb-settings" id="ws-settings">
         <span class="sh-sb-icon">⚙</span><span class="sh-sb-label">설정</span>
       </button>
+      <button class="sh-sb-item sh-sb-settings" id="ws-trash" title="유형 휴지통">
+        <span class="sh-sb-icon">🗑</span><span class="sh-sb-label">휴지통</span>
+      </button>
       <button class="sh-sb-item sh-sb-logout" id="ws-logout" title="로그아웃">
         <span class="sh-sb-icon">⏻</span><span class="sh-sb-label">로그아웃 <span class="sb-user-name" id="sb-user-name"></span></span>
       </button>
@@ -11974,7 +12037,7 @@
     <div id="sb-sheet-sections">
     <!-- VIEW MODE -->
     <div class="sh-sb-section">
-      <div class="sh-sb-section-title">VIEW</div>
+      <div class="sh-sb-section-title">보기</div>
       <div class="sh-sb-toggle-row">
         <button class="sh-sb-toggle active" data-view="all" id="vt-all">전체 보기</button>
         <button class="sh-sb-toggle" data-view="filled" id="vt-filled">작성된 행만</button>
@@ -11983,7 +12046,7 @@
 
     <!-- SORT -->
     <div class="sh-sb-section">
-      <div class="sh-sb-section-title">SORT</div>
+      <div class="sh-sb-section-title">정렬</div>
       <button class="sh-sb-item active" data-sort="no">
         <span class="sh-sb-icon">↑</span><span class="sh-sb-label">번호순</span>
       </button>
@@ -12003,7 +12066,7 @@
 
     <!-- VIRAL LINES -->
     <div class="sh-sb-section">
-      <div class="sh-sb-section-title">VIRAL LINES ◆</div>
+      <div class="sh-sb-section-title">바이럴 ◆</div>
       <div id="sb-viral-list">
         <div style="padding:6px 10px;font-size:11px;color:var(--text-faint);">라인 없음</div>
       </div>
@@ -12011,7 +12074,7 @@
 
     <!-- STRENGTH -->
     <div class="sh-sb-section">
-      <div class="sh-sb-section-title">STRENGTH</div>
+      <div class="sh-sb-section-title">강점</div>
       <button class="sh-sb-item" data-filter="strength:thumb">
         <span class="sb-strength-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -12100,16 +12163,7 @@
       </div>
     </div>
 
-    <!-- ACTIONS -->
-    <div class="sh-sb-section">
-      <div class="sh-sb-section-title">ACTIONS</div>
-      <div class="sh-sb-action-grid">
-        <button class="sh-sb-action full" id="act-stats">▤ STATS</button>
-        <button class="sh-sb-action" id="act-csv">⇣ CSV</button>
-        <button class="sh-sb-action" id="act-backup">💾 BACKUP</button>
-        <button class="sh-sb-action full" id="act-restore">📥 RESTORE</button>
-      </div>
-    </div>
+    <!-- 도구(통계·CSV·백업·복원)는 설정으로 통합 — 중복 제거 -->
     </div><!-- /sb-sheet-sections -->
 
     <!-- CUSTOMER-ONLY SIDEBAR -->
@@ -12133,10 +12187,10 @@
         </button>
       </div>
       <div class="sh-sb-section">
-        <div class="sh-sb-section-title">ACTIONS</div>
+        <div class="sh-sb-section-title">도구</div>
         <div class="sh-sb-action-grid">
-          <button class="sh-sb-action full" id="mb-act-backup">💾 BACKUP</button>
-          <button class="sh-sb-action full" id="mb-act-restore">📥 RESTORE</button>
+          <button class="sh-sb-action full" id="mb-act-backup">💾 백업</button>
+          <button class="sh-sb-action full" id="mb-act-restore">📥 복원</button>
         </div>
       </div>
       <div class="sh-sb-section">
@@ -12375,6 +12429,25 @@
         </div>
       </div>
 
+      <!-- 휴지통 모달 (설정과 분리 — 유형 관리/복구/영구삭제만) -->
+      <div class="settings-modal" id="trash-modal">
+        <div class="settings-modal-box">
+          <div class="settings-modal-head">
+            <div>
+              <div class="settings-modal-eyebrow">🗑 TRASH · 유형 휴지통</div>
+              <h3 class="settings-modal-title">휴지통</h3>
+            </div>
+            <button class="settings-modal-close" id="trash-modal-close">×</button>
+          </div>
+          <div class="settings-modal-body">
+            <div class="settings-section">
+              <p class="settings-section-desc">유형을 휴지통으로 보내면 피커·보드에서 숨겨지고, 분류해둔 데이터는 보존돼요. 여기서 <b>복구</b>하거나 <b>영구삭제</b>할 수 있어요. 옆 숫자는 그 유형을 쓴 컨텐츠 수예요.</p>
+              <div id="type-manage"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="home-grid">
         <div>
           <!-- GOAL & WHY -->
@@ -12570,6 +12643,19 @@
               </div>
             </div>
 
+            <!-- 가운데: 수식어 (세로 9:16) -->
+            <div class="entry-col entry-col-copy">
+              <label class="entry-mini-label">수식어</label>
+              <div class="entry-thumb-box" id="entry-copy-box">
+                <div class="entry-thumb-empty">
+                  <div class="entry-thumb-plus">+</div>
+                  <div class="entry-thumb-hint">이미지 드래그<br/>또는 클릭</div>
+                </div>
+                <img class="entry-thumb-img" id="entry-copy-img" alt="" style="display:none;" />
+                <button class="entry-thumb-rm" id="entry-copy-rm" style="display:none;">×</button>
+              </div>
+            </div>
+
             <!-- 가운데: 공감 댓글 (세로 9:16) -->
             <div class="entry-col entry-col-comm">
               <label class="entry-mini-label">공감 댓글</label>
@@ -12690,6 +12776,7 @@
         <div class="fb-toggle">
           <button class="fb-toggle-btn on" data-fbmode="format">유형별</button>
           <button class="fb-toggle-btn" data-fbmode="purpose">퍼널별</button>
+          <button class="fb-toggle-btn" data-fbmode="views">조회수별</button>
         </div>
       </section>
       <div class="fb-board">
@@ -12707,6 +12794,8 @@
           <button class="tb-toggle-btn on" data-tbmode="thumb">썸네일</button>
           <button class="tb-toggle-btn" data-tbmode="copy">수식어</button>
           <button class="tb-toggle-btn" data-tbmode="viral">바이럴</button>
+          <button class="tb-toggle-btn" data-tbmode="kw">키워드</button>
+          <button class="tb-toggle-btn" data-tbmode="comment">댓글</button>
           <button class="tb-toggle-btn" data-tbmode="audio">오디오</button>
         </div>
       </section>
@@ -12956,6 +13045,15 @@
         <button class="sc-ref-close" id="sc-ref-close" title="뒤로가기">← 뒤로</button>
       </div>
 
+      <!-- 탭: 벤치마크 / 키워드 / 타겟 -->
+      <div class="sc-ref-tabs">
+        <button class="sc-ref-tab on" data-rtab="bench">벤치마크</button>
+        <button class="sc-ref-tab" data-rtab="kw">키워드</button>
+        <button class="sc-ref-tab" data-rtab="target">타겟</button>
+      </div>
+
+      <!-- 벤치마크 탭 -->
+      <div id="rtab-bench">
       <!-- 필터 -->
       <div class="sc-ref-filters">
         <div class="sc-ref-filter-group">
@@ -12990,6 +13088,12 @@
 
       <!-- 카드 목록 -->
       <div class="sc-ref-list" id="sc-ref-list"></div>
+      </div><!-- /rtab-bench -->
+
+      <!-- 키워드 탭 -->
+      <div id="rtab-kw" class="sc-ref-tabbody" style="display:none;"></div>
+      <!-- 타겟(고객분석) 탭 -->
+      <div id="rtab-target" class="sc-ref-tabbody" style="display:none;"></div>
     </div>
 
     <!-- 백드롭 (모바일에서 패널 외부 클릭으로 닫기) -->
@@ -13334,6 +13438,19 @@
         <input type="hidden" id="f-viral" value="" />
       </div>
 
+      <!-- ===== 4-2. 키워드 ===== -->
+      <div class="fmt-block">
+        <div class="fmt-block-head">
+          <label class="sh-label">키워드 <span class="opt">— 이 컨텐츠가 노리는 단어</span></label>
+        </div>
+        <div class="fmt-picker" id="f-kw-picker"></div>
+        <div class="fmt-add-inline" id="f-kw-add-row" style="display:flex;">
+          <input type="text" class="fmt-add-input" id="f-kw-add-input" placeholder="키워드 입력 후 추가" maxlength="24" />
+          <button class="fmt-add-confirm" id="f-kw-add-confirm">추가</button>
+        </div>
+        <div class="sh-field-desc">여기서 모은 키워드는 <b>썸네일 탭 → 키워드</b>에 한곳으로 모여요. 고객 분석에서 ★를 누른 건 <b>황금 키워드</b>로 따로 모입니다.</div>
+      </div>
+
       <!-- ===== 5. 자유 태그 ===== -->
       <div class="fmt-block">
         <div class="fmt-block-head">
@@ -13367,12 +13484,27 @@
           <input type="text" class="sh-input" id="f-audio-title" placeholder="오디오 제목" />
           <input type="text" class="sh-input" id="f-audio-artist" placeholder="가수 / 출처" />
         </div>
-        <input type="text" class="sh-input" id="f-audio-link" placeholder="오디오 링크 (인스타 사운드/유튜브 등) — ▶ 들으러 가기" style="margin-top:8px;" />
+        <div class="sh-field-desc">▶ 들으러 가기는 시트에 입력한 <b>컨텐츠 링크</b>로 연결돼요. (오디오 링크 따로 입력 불필요)</div>
+      </div>
+
+      <!-- ===== 6-2. 공감 댓글 유형 ===== -->
+      <div class="fmt-block">
+        <div class="fmt-block-head">
+          <label class="sh-label">공감 댓글 유형 <span class="opt">— 어떤 반응을 노렸나</span></label>
+          <button class="fmt-add-inline-btn" id="f-comment-add-btn">+ 유형 추가</button>
+        </div>
+        <div class="fmt-picker" id="f-comment-picker"></div>
+        <div class="fmt-add-inline" id="f-comment-add-row" style="display:none;">
+          <input type="text" class="fmt-add-input" id="f-comment-add-input" placeholder="새 댓글 유형" maxlength="20" />
+          <button class="fmt-add-confirm" id="f-comment-add-confirm">추가</button>
+          <button class="fmt-add-cancel" id="f-comment-add-cancel">취소</button>
+        </div>
+        <div class="sh-field-desc">저장한 공감댓글 이미지는 <b>썸네일 탭 → 댓글</b>에서 유형별로 모여요.</div>
       </div>
 
       <!-- ===== 7. 별점 ===== -->
       <div class="sh-field">
-        <label class="sh-label">별점</label>
+        <label class="sh-label">별점 <span class="opt">— 나에게 핏한 정도</span></label>
         <div class="sh-rating" id="f-rating">
           <span class="sh-star" data-val="1">★</span>
           <span class="sh-star" data-val="2">★</span>
@@ -13380,6 +13512,7 @@
           <span class="sh-star" data-val="4">★</span>
           <span class="sh-star" data-val="5">★</span>
         </div>
+        <div class="sh-field-desc"><b>내가 할 수 있는 것</b>과 <b>시장이 원하는 것</b>이 만나는 핏(fit)이 클수록 별점↑. 별 많은 것끼리 모이면 "나에게 맞는 시장성 있는 컨텐츠"가 보입니다.</div>
       </div>
 
       <!-- ===== 8. 메모 (최하단) ===== -->
@@ -13452,7 +13585,7 @@
     // profiles 묶음(설정·커스텀목록·무드보드·홈/챌린지) — profiles.data jsonb 한 행에 모아 동기화
     const PROFILE_KEYS = new Set([
       'shv4-prefs',
-      'shv4-custom-keywords', 'shv4-custom-formats', 'shv4-custom-audio', 'shv4-custom-tags', 'shv4-custom-viral', 'shv4-custom-content-types',
+      'shv4-custom-keywords', 'shv4-custom-formats', 'shv4-custom-audio', 'shv4-custom-tags', 'shv4-custom-viral', 'shv4-custom-comment', 'shv4-type-trash', 'shv4-custom-content-types',
       'shv4-gj-milestones',
       'mbv2-meta', 'mbv2-cards',
       'hmv1-home', 'hmv1-challenges', 'hmv1-seen',
@@ -13610,6 +13743,7 @@
   const BASE_AUDIO = ['템포 빠름', '감정적'];
   const BASE_TAGS = ['후킹강함', '컷편집빠름', '정보밀도', '감정몰입', '시각자극', '친밀감', '전문성', '반전'];
   const BASE_VIRAL = ['저장각', '공유각', '논쟁유발', '공감폭발', '반전결말', '정보꿀팁'];
+  const BASE_COMMENT = ['공감', '문제 호소', '반박', '질문', '칭찬', '경험담'];
   const SCRIPT_STATES = [
     { id: 'idea', label: '아이디어', icon: '💡', color: 'var(--text-mute)' },
     { id: 'draft', label: '초안', icon: '✏️', color: 'var(--cream)' },
@@ -13839,6 +13973,8 @@
   const CA_KEY = 'shv4-custom-audio';
   const CT_KEY = 'shv4-custom-tags';
   const CV_KEY = 'shv4-custom-viral';
+  const CM_KEY = 'shv4-custom-comment';
+  const TT_KEY = 'shv4-type-trash'; // 유형 휴지통 [{sys,label}]
   const CCT_KEY = 'shv4-custom-content-types';
   const SCRIPTS_KEY = 'shv4-scripts';
   const PMMS_KEY = 'shv4-pmms';
@@ -13853,6 +13989,8 @@
   let customAudio = []; // user-added audio categories
   let customTags = []; // user-added free tags
   let customViral = []; // 사용자 추가 바이럴(떡상) 유형
+  let customComment = []; // 사용자 추가 댓글 유형
+  let typeTrash = []; // 유형 휴지통: [{sys:'format'|'keyword'|'viral'|'tag'|'audio'|'comment', label}]
   let customContentTypes = []; // 사용자 추가 컨텐츠 유형 (라벨 배열)
   let scripts = []; // 내 원고들
   let pmms = []; // 고객 분석 (PMM)
@@ -13924,8 +14062,10 @@
   let formCopyTypes = [];
   let formFormat = '';
   let formAudioType = '';
+  let formCommentType = ''; // 공감댓글 유형 (단일 선택)
   let formTags = []; // 다중 선택 자유 태그
   let formViralTypes = []; // 다중 선택 바이럴(떡상) 유형
+  let formKeywords = []; // 이 컨텐츠가 노리는 키워드(라벨 배열)
   let formFunnelStage = ''; // 퍼널 단계 (v41)
 
   // ===== STORAGE =====
@@ -13967,6 +14107,16 @@
       const r = await window.storage.get(CV_KEY);
       if (r) customViral = JSON.parse(r.value);
     } catch (e) { customViral = []; }
+    // Load custom comment types
+    try {
+      const r = await window.storage.get(CM_KEY);
+      if (r) customComment = JSON.parse(r.value);
+    } catch (e) { customComment = []; }
+    // Load 유형 휴지통
+    try {
+      const r = await window.storage.get(TT_KEY);
+      if (r) { const a = JSON.parse(r.value); if (Array.isArray(a)) typeTrash = a; }
+    } catch (e) { typeTrash = []; }
     // Load custom content types
     try {
       const r = await window.storage.get(CCT_KEY);
@@ -13991,6 +14141,109 @@
   }
   async function saveCustomViral() {
     try { await window.storage.set(CV_KEY, JSON.stringify(customViral)); } catch (e) {}
+  }
+  async function saveCustomComment() {
+    try { await window.storage.set(CM_KEY, JSON.stringify(customComment)); } catch (e) {}
+  }
+  async function saveTypeTrash() {
+    try { await window.storage.set(TT_KEY, JSON.stringify(typeTrash)); } catch (e) {}
+  }
+  // ===== 유형 휴지통 헬퍼 =====
+  // 활성 목록 = (기본 + 커스텀) − 휴지통. 모든 피커/보드/사이드바가 이걸 통해 렌더.
+  function _trashedSet(sys) { return new Set((typeTrash || []).filter(t => t && t.sys === sys).map(t => t.label)); }
+  function activeFormats() { const h = _trashedSet('format'); return BASE_FORMATS.concat(customFormats).filter(x => !h.has(x)); }
+  function activeKeywords() { const h = _trashedSet('keyword'); return BASE_TYPES.concat(customKeywords).filter(x => !h.has(x)); }
+  function activeViral() { const h = _trashedSet('viral'); return BASE_VIRAL.concat(customViral).filter(x => !h.has(x)); }
+  function activeTags() { const h = _trashedSet('tag'); return BASE_TAGS.concat(customTags).filter(x => !h.has(x)); }
+  function activeAudio() { const h = _trashedSet('audio'); return BASE_AUDIO.concat(customAudio).filter(x => !h.has(x)); }
+  function activeComment() { const h = _trashedSet('comment'); return BASE_COMMENT.concat(customComment).filter(x => !h.has(x)); }
+  function isTypeTrashed(sys, label) { return (typeTrash || []).some(t => t && t.sys === sys && t.label === label); }
+  // 유형을 휴지통으로 (복구 가능). 행 데이터는 보존.
+  async function trashType(sys, label) {
+    if (!isTypeTrashed(sys, label)) typeTrash.push({ sys: sys, label: label });
+    await saveTypeTrash();
+    try { renderSidebarCounts(); } catch (e) {}
+    try { renderTable(); } catch (e) {}
+    try { if (typeof renderFormatBoard === 'function') renderFormatBoard(); } catch (e) {}
+    try { if (typeof renderThumbBoard === 'function') renderThumbBoard(); } catch (e) {}
+    toast('🗑 휴지통으로 이동 (설정에서 복구)');
+  }
+  // 휴지통에서 복구
+  async function restoreType(sys, label) {
+    typeTrash = (typeTrash || []).filter(t => !(t && t.sys === sys && t.label === label));
+    await saveTypeTrash();
+    renderTypeTrash();
+    try { renderSidebarCounts(); } catch (e) {}
+    try { renderTable(); } catch (e) {}
+    toast('"' + label + '" 복구됨');
+  }
+  // 영구삭제 (커스텀만 실제 삭제 + 행에서 제거)
+  async function purgeType(sys, label) {
+    typeTrash = (typeTrash || []).filter(t => !(t && t.sys === sys && t.label === label));
+    if (sys === 'format') { customFormats = customFormats.filter(x => x !== label); rows.forEach(r => { if (r.format === label) r.format = ''; }); await saveCustomFormats(); }
+    else if (sys === 'keyword') { customKeywords = customKeywords.filter(x => x !== label); rows.forEach(r => { r.thumbTypes = (r.thumbTypes || []).filter(x => x !== label); r.copyTypes = (r.copyTypes || []).filter(x => x !== label); }); await saveCustomKeywords(); }
+    else if (sys === 'viral') { customViral = customViral.filter(x => x !== label); rows.forEach(r => { r.viralTypes = (r.viralTypes || []).filter(x => x !== label); }); await saveCustomViral(); }
+    else if (sys === 'tag') { customTags = customTags.filter(x => x !== label); rows.forEach(r => { r.tags = (r.tags || []).filter(x => x !== label); }); await saveCustomTags(); }
+    else if (sys === 'audio') { customAudio = customAudio.filter(x => x !== label); rows.forEach(r => { if (r.audioType === label) r.audioType = ''; }); await saveCustomAudio(); }
+    else if (sys === 'comment') { customComment = customComment.filter(x => x !== label); rows.forEach(r => { if (r.commentType === label) r.commentType = ''; }); await saveCustomComment(); }
+    await saveTypeTrash(); await saveRows();
+    renderTypeTrash();
+    try { renderSidebarCounts(); } catch (e) {}
+    try { renderTable(); } catch (e) {}
+    toast('"' + label + '" 영구 삭제됨');
+  }
+  const TT_SYS = [
+    { sys: 'format',  name: '컨텐츠 유형',       active: activeFormats,  custom: () => customFormats },
+    { sys: 'keyword', name: '썸네일·수식어 유형', active: activeKeywords,  custom: () => customKeywords },
+    { sys: 'viral',   name: '바이럴 유형',        active: activeViral,    custom: () => customViral },
+    { sys: 'tag',     name: '자유 태그',          active: activeTags,     custom: () => customTags },
+    { sys: 'audio',   name: '오디오 분류',        active: activeAudio,    custom: () => customAudio },
+    { sys: 'comment', name: '댓글 유형',          active: activeComment,  custom: () => customComment }
+  ];
+  let _typeManageOpen = false;
+  // 각 유형이 실제 몇 개 컨텐츠에 쓰였는지 (0 = 미사용 → 지우기 좋음)
+  function typeUsage(sys, label) {
+    try {
+      if (sys === 'format') return (rows || []).filter(r => r.format === label).length;
+      if (sys === 'keyword') return (rows || []).filter(r => (r.thumbTypes || []).includes(label) || (r.copyTypes || []).includes(label)).length;
+      if (sys === 'viral') return (rows || []).filter(r => (r.viralTypes || []).includes(label)).length;
+      if (sys === 'tag') return (rows || []).filter(r => (r.tags || []).includes(label)).length;
+      if (sys === 'audio') return (rows || []).filter(r => r.audioType === label).length;
+      if (sys === 'comment') return (rows || []).filter(r => r.commentType === label).length;
+    } catch (e) {}
+    return 0;
+  }
+  function renderTypeTrash() {
+    const el = document.getElementById('type-manage'); if (!el) return;
+    let html = '';
+    // 유형 목록 바로 표시 (각 유형 옆 숫자 = 사용 컨텐츠 수, 0이면 점선 강조)
+    html += '<div class="tm-groups">';
+    TT_SYS.forEach(s => {
+      const list = s.active();
+      html += '<div class="tm-group"><div class="tm-group-title">' + esc(s.name) + '</div><div class="tm-chips">' +
+        (list.length ? list.map(l => { const n = typeUsage(s.sys, l); return '<span class="tm-chip' + (n === 0 ? ' unused' : '') + '" data-sys="' + s.sys + '" data-label="' + esc(l) + '">' + esc(l) + '<span class="tm-count">' + n + '</span><button class="tm-del" title="휴지통으로">🗑</button></span>'; }).join('') : '<span class="tm-none">없음</span>') +
+        '</div></div>';
+    });
+    html += '</div>';
+    const tr = typeTrash || [];
+    html += '<div class="tm-trash"><div class="tm-group-title">🗑 휴지통 <span class="tm-cnt">' + tr.length + '</span></div>';
+    if (!tr.length) html += '<div class="tm-none">비어 있음</div>';
+    else html += tr.map(t => {
+      const meta = TT_SYS.find(x => x.sys === t.sys) || {};
+      const sysName = meta.name || t.sys;
+      const isCustom = (meta.custom ? meta.custom() : []).includes(t.label);
+      return '<div class="tm-trash-item"><span class="tm-trash-label">' + esc(t.label) + ' <span class="tm-trash-sys">' + esc(sysName) + '</span></span>' +
+        '<span class="tm-trash-acts"><button class="tm-restore" data-sys="' + t.sys + '" data-label="' + esc(t.label) + '">복구</button>' +
+        (isCustom ? '<button class="tm-purge" data-sys="' + t.sys + '" data-label="' + esc(t.label) + '">영구삭제</button>' : '') + '</span></div>';
+    }).join('');
+    html += '</div>';
+    el.innerHTML = html;
+    const tg = el.querySelector('#tm-toggle'); if (tg) tg.onclick = () => { _typeManageOpen = !_typeManageOpen; renderTypeTrash(); };
+    el.querySelectorAll('.tm-chip .tm-del').forEach(b => {
+      b.onclick = async () => { const chip = b.closest('.tm-chip'); await trashType(chip.dataset.sys, chip.dataset.label); renderTypeTrash(); };
+    });
+    el.querySelectorAll('.tm-restore').forEach(b => { b.onclick = () => restoreType(b.dataset.sys, b.dataset.label); });
+    el.querySelectorAll('.tm-purge').forEach(b => { b.onclick = () => { if (confirm('"' + b.dataset.label + '"를 영구 삭제할까요? 분류해둔 데이터에서도 제거되고 되돌릴 수 없어요.')) purgeType(b.dataset.sys, b.dataset.label); }; });
   }
 
   // === PMM (고객 분석) ===
@@ -14216,12 +14469,13 @@
       memo: '', // 분해 메모 (단계별 분석 통합)
       format: '', // 컨텐츠 유형 (문제해결/욕구충족/꿀팁/편집 + 커스텀)
       audioType: '', // 오디오 분류 (템포빠름/감정적 + 커스텀)
+      commentType: '', // 공감댓글 유형 (공감/문제호소/반박 + 커스텀)
       audioTitle: '', // 오디오 제목
       audioArtist: '', // 가수 이름
       audioLink: '', // 오디오 링크 (들으러 가기)
       intro: '', develop: '', outro: '', cta: '',
-      viralLine: '', viralTypes: [], tags: [], rating: 0, favorite: false,
-      hasThumb: false, hasComment: false,
+      viralLine: '', viralTypes: [], tags: [], keywords: [], rating: 0, favorite: false,
+      hasThumb: false, hasCopy: false, hasComment: false,
       funnelStage: '', // '' | 'attract' (유입용) | 'convert' (전환용) | 'retain' (재구매)
       createdAt: Date.now(), updatedAt: 0
     };
@@ -14235,6 +14489,9 @@
     if (!Array.isArray(r.copyTypes)) r.copyTypes = [];
     // 바이럴(떡상): 기존 단일 문자열 viralLine → 배열 viralTypes로 마이그레이션
     if (!Array.isArray(r.viralTypes)) r.viralTypes = (r.viralLine && typeof r.viralLine === 'string') ? [r.viralLine] : [];
+    if (!Array.isArray(r.keywords)) r.keywords = [];
+    if (typeof r.hasCopy !== 'boolean') r.hasCopy = false;
+    if (typeof r.commentType !== 'string') r.commentType = '';
     if (typeof r.script !== 'string') r.script = '';
     if (typeof r.memo !== 'string') r.memo = '';
     if (typeof r.format !== 'string') r.format = '';
@@ -14480,7 +14737,7 @@
   function renderFormatList() {
     const el = document.getElementById('sb-format-list');
     if (!el) return;
-    const allFmts = BASE_FORMATS.concat(customFormats);
+    const allFmts = activeFormats();
     // count usage
     const usage = {};
     allFmts.forEach(f => usage[f] = 0);
@@ -14528,7 +14785,7 @@
   function renderAudioList() {
     const el = document.getElementById('sb-audio-list');
     if (!el) return;
-    const allAudio = BASE_AUDIO.concat(customAudio);
+    const allAudio = activeAudio();
     const usage = {};
     allAudio.forEach(a => usage[a] = 0);
     rows.forEach(r => { if (r.audioType && usage[r.audioType] !== undefined) usage[r.audioType]++; });
@@ -14579,7 +14836,7 @@
   function renderTagsList() {
     const el = document.getElementById('sb-tags-list');
     if (!el) return;
-    const allTags = BASE_TAGS.concat(customTags);
+    const allTags = activeTags();
     // count usage (tags is array)
     const usage = {};
     allTags.forEach(t => usage[t] = 0);
@@ -14630,13 +14887,24 @@
   }
 
   // === FORMAT BOARD (칸반) ===
-  let fbGroupMode = 'format'; // 'format'(형식별) | 'purpose'(목적별: 유입/전환/재구매)
+  let fbGroupMode = 'format'; // 'format'(유형별) | 'purpose'(퍼널별) | 'views'(조회수별)
   function renderFormatBoard() {
     const el = document.getElementById('fb-columns');
     if (!el) return;
 
     let cols;
-    if (fbGroupMode === 'purpose') {
+    if (fbGroupMode === 'views') {
+      cols = [
+        { key: 'v7', title: '🔥 1000만+',     cls: 'fb-col-other', match: r => (r.views || 0) >= 10000000 },
+        { key: 'v6', title: '500만~1000만',   cls: 'fb-col-other', match: r => (r.views || 0) >= 5000000 && (r.views || 0) < 10000000 },
+        { key: 'v5', title: '100만~500만',    cls: 'fb-col-other', match: r => (r.views || 0) >= 1000000 && (r.views || 0) < 5000000 },
+        { key: 'v4', title: '50만~100만',     cls: 'fb-col-other', match: r => (r.views || 0) >= 500000 && (r.views || 0) < 1000000 },
+        { key: 'v3', title: '30만~50만',      cls: 'fb-col-other', match: r => (r.views || 0) >= 300000 && (r.views || 0) < 500000 },
+        { key: 'v2', title: '10만~30만',      cls: 'fb-col-other', match: r => (r.views || 0) >= 100000 && (r.views || 0) < 300000 },
+        { key: 'v1', title: '10만 미만',      cls: 'fb-col-other', match: r => (r.views || 0) > 0 && (r.views || 0) < 100000 },
+        { key: '__none__', title: '조회수 미입력', cls: 'fmt-none', match: r => !(r.views || 0) }
+      ];
+    } else if (fbGroupMode === 'purpose') {
       cols = [
         { key: 'attract', title: '유입용', cls: 'fmt-attract', match: r => r.funnelStage === 'attract' },
         { key: 'convert', title: '전환용', cls: 'fmt-convert', match: r => r.funnelStage === 'convert' },
@@ -14648,11 +14916,11 @@
       const strongKey = fbGroupMode === 'thumb' ? 'thumbStrong' : 'copyStrong';
       const typesKey = fbGroupMode === 'thumb' ? 'thumbTypes' : 'copyTypes';
       const typeSet = new Set();
-      rows.forEach(r => { if (isFilled(r) && r[strongKey]) (r[typesKey] || []).forEach(t => typeSet.add(t)); });
+      rows.forEach(r => { if (isFilled(r) && r[strongKey]) (r[typesKey] || []).forEach(t => { if (!isTypeTrashed('keyword', t)) typeSet.add(t); }); });
       cols = [...typeSet].map(t => ({ key: t, title: t, cls: 'fb-col-other', match: r => r[strongKey] && (r[typesKey] || []).includes(t) }));
       cols.push({ key: '__none__', title: '유형 미지정', cls: 'fmt-none', match: r => r[strongKey] && !((r[typesKey] || []).length) });
     } else {
-      const allFmts = BASE_FORMATS.concat(customFormats);
+      const allFmts = activeFormats();
       cols = allFmts.map(f => ({
         key: f, title: f,
         cls: f === '문제 해결' ? 'fmt-prob' : f === '욕구 충족' ? 'fmt-want' : f === '꿀팁' ? 'fmt-tip' : f === '편집' ? 'fmt-edit' : (customFormats.includes(f) ? 'fmt-custom' : 'fb-col-other'),
@@ -14663,6 +14931,7 @@
 
     el.innerHTML = cols.map(col => {
       const fmtRows = rows.filter(r => isFilled(r) && col.match(r));
+      if (fbGroupMode === 'views') fmtRows.sort((a, b) => (b.views || 0) - (a.views || 0));
       const starred = fmtRows.filter(r => r.favorite);
       const avgStar = starred.length ? Math.round(starred.reduce((s, r) => s + (r.views || 0), 0) / starred.length) : 0;
       const cards = fmtRows.map(r => {
@@ -14684,6 +14953,7 @@
       }).join('');
       const emptyMsg = (fbGroupMode === 'thumb') ? '강한 썸네일로 표시한 카드 없음'
         : (fbGroupMode === 'copy') ? '강한 수식어로 표시한 카드 없음'
+        : (fbGroupMode === 'views') ? (col.key === '__none__' ? '모든 콘텐츠에 조회수 입력됨' : '이 구간 컨텐츠 없음')
         : col.key === '__none__' ? (fbGroupMode === 'purpose' ? '모든 콘텐츠에 목적이 정해짐' : '모든 콘텐츠가 분류됨')
         : '아직 없어요. 시트에서 분류해보세요.';
       return `
@@ -14723,7 +14993,7 @@
     const el = document.getElementById('tb-body'); if (!el) return;
     if (thumbMode === 'audio') {
       const audioRows = rows.filter(r => isFilled(r) && (r.audioType || r.audioTitle || r.audioLink));
-      const groups = BASE_AUDIO.concat(customAudio).concat(['__none__']);
+      const groups = activeAudio().concat(['__none__']);
       let html = '';
       groups.forEach(g => {
         const isNone = g === '__none__';
@@ -14733,7 +15003,8 @@
           list.map(r => {
             const t = r.audioTitle || '(제목 없음)';
             const a = r.audioArtist ? ' · ' + esc(r.audioArtist) : '';
-            const link = r.audioLink ? '<a class="tb-audio-play" href="' + esc(r.audioLink) + '" target="_blank" rel="noopener">▶ 들으러 가기</a>' : '<span class="tb-audio-nolink">링크 없음</span>';
+            const audioHref = r.url || r.audioLink || '';
+            const link = audioHref ? '<a class="tb-audio-play" href="' + esc(audioHref) + '" target="_blank" rel="noopener">▶ 들으러 가기</a>' : '<span class="tb-audio-nolink">링크 없음</span>';
             return '<div class="tb-audio-item" data-row="' + r.id + '"><div class="tb-audio-info"><span class="tb-audio-title">♪ ' + esc(t) + a + '</span><span class="tb-audio-no">NO.' + String(r.no).padStart(3, '0') + '</span></div>' + link + '</div>';
           }).join('') + '</div></div>';
       });
@@ -14742,18 +15013,45 @@
       bindTbToggle();
       return;
     }
+    // 키워드 몰아보기 — 황금/일반 분리, 옆 숫자는 그 키워드를 쓴 컨텐츠 수
+    if (thumbMode === 'kw') {
+      const used = {};
+      rows.forEach(r => { if (isFilled(r)) (r.keywords || []).forEach(l => { used[l] = (used[l] || 0) + 1; }); });
+      const pool = sortedKeywords();
+      const poolLabels = new Set(pool.map(k => k.label));
+      const goldList = pool.filter(k => k.gold);
+      const normList = pool.filter(k => !k.gold);
+      Object.keys(used).forEach(l => { if (!poolLabels.has(l)) normList.push({ label: l, gold: false }); });
+      const chip = k => '<span class="tb-kw-chip' + (k.gold ? ' gold' : '') + '">' + (k.gold ? '★ ' : '') + esc(k.label) + '<span class="tb-kw-cnt">' + (used[k.label] || 0) + '</span></span>';
+      let h = '';
+      if (goldList.length) h += '<div class="tb-sec"><div class="tb-sec-head">★ 황금 키워드 <span class="tb-sec-cnt">' + goldList.length + '</span></div><div class="tb-kw-wrap">' + goldList.map(chip).join('') + '</div></div>';
+      if (normList.length) h += '<div class="tb-sec"><div class="tb-sec-head">키워드 <span class="tb-sec-cnt">' + normList.length + '</span></div><div class="tb-kw-wrap">' + normList.map(chip).join('') + '</div></div>';
+      el.innerHTML = h || '<div class="tb-empty">아직 키워드가 없어요. 분해하기에서 키워드를 입력하거나, 고객 분석에서 추가해보세요.</div>';
+      bindTbToggle();
+      return;
+    }
     const strongKey = thumbMode === 'thumb' ? 'thumbStrong' : 'copyStrong';
     const typesKey = thumbMode === 'thumb' ? 'thumbTypes' : 'copyTypes';
     const strongRows = rows.filter(r => isFilled(r) && r[strongKey]);
+    const imgKind = thumbMode === 'copy' ? 'copy' : 'thumb'; // 수식어 탭은 수식어 이미지를 보여줌
     const renderCard = r => {
       const hookText = (r.hook || stripHtml(r.script || '').slice(0, 60) || r.why || '');
       const views = r.views ? fmtNum(r.views) : '';
-      return '<div class="tg-card" data-row="' + r.id + '"><div class="tg-thumb" data-thumb="' + r.id + '">' + (r.hasThumb ? '' : '<span class="tg-noimg">이미지 없음</span>') + '</div><div class="tg-cap">' + (esc(hookText) || '(내용 없음)') + '</div>' + (views ? '<div class="tg-views">▶ ' + views + '</div>' : '') + '</div>';
+      const hasImg = imgKind === 'copy' ? r.hasCopy : r.hasThumb;
+      return '<div class="tg-card" data-row="' + r.id + '"><div class="tg-thumb" data-img="' + r.id + '" data-kind="' + imgKind + '">' + (hasImg ? '' : '<span class="tg-noimg">이미지 없음</span>') + '</div><div class="tg-cap">' + (esc(hookText) || '(내용 없음)') + '</div>' + (views ? '<div class="tg-views">▶ ' + views + '</div>' : '') + '</div>';
+    };
+    const loadCardImgs = () => {
+      el.querySelectorAll('.tg-thumb[data-img]').forEach(async box => {
+        const id = box.dataset.img, kind = box.dataset.kind || 'thumb';
+        const r = rows.find(x => x.id === id); if (!r) return;
+        const has = kind === 'copy' ? r.hasCopy : r.hasThumb;
+        if (has) { try { const u = await loadImage(id, kind); if (u) box.innerHTML = '<img src="' + u + '" alt="" />'; } catch (e) {} }
+      });
     };
     // 바이럴(떡상) 모드 — 터진 이유(viralTypes)별로 컨텐츠를 핀터레스트처럼 묶어서 패턴 비교
     if (thumbMode === 'viral') {
       const vRows = rows.filter(r => isFilled(r) && (r.viralTypes || []).length);
-      const vGroups = BASE_VIRAL.concat(customViral);
+      const vGroups = activeViral();
       let vhtml = '';
       vGroups.forEach(g => {
         const list = vRows.filter(r => (r.viralTypes || []).includes(g));
@@ -14762,14 +15060,35 @@
       });
       el.innerHTML = vhtml || '<div class="tb-empty">바이럴(떡상)로 표시한 컨텐츠가 없어요. 분해하기 → <b>바이럴</b>에서 "왜 터졌나" 유형을 골라보세요.<br/>같은 유형 3개가 모이면 사람들이 반응한 공통점이 보입니다.</div>';
       el.querySelectorAll('.tg-card').forEach(c => { c.onclick = () => openDetail(c.dataset.row); });
-      el.querySelectorAll('.tg-thumb[data-thumb]').forEach(async box => {
-        const id = box.dataset.thumb; const r = rows.find(x => x.id === id);
-        if (r && r.hasThumb) { try { const u = await loadImage(id, 'thumb'); if (u) box.innerHTML = '<img src="' + u + '" alt="" />'; } catch (e) {} }
+      loadCardImgs();
+      bindTbToggle();
+      return;
+    }
+    // 댓글 모드 — 저장한 공감댓글 이미지를 유형별로 모아보기
+    if (thumbMode === 'comment') {
+      const cRows = rows.filter(r => isFilled(r) && r.hasComment);
+      const cGroups = activeComment().concat(['__none__']);
+      const cCard = r => {
+        const hookText = (r.hook || stripHtml(r.script || '').slice(0, 60) || r.why || '');
+        return '<div class="tg-card" data-row="' + r.id + '"><div class="tg-thumb" data-img="' + r.id + '" data-kind="comment">' + (r.hasComment ? '' : '<span class="tg-noimg">이미지 없음</span>') + '</div><div class="tg-cap">' + (esc(hookText) || '(내용 없음)') + '</div></div>';
+      };
+      let chtml = '';
+      cGroups.forEach(g => {
+        const isNone = g === '__none__';
+        const list = cRows.filter(r => isNone ? !r.commentType : r.commentType === g);
+        if (!list.length) return;
+        chtml += '<div class="tb-sec"><div class="tb-sec-head">💬 ' + (isNone ? '유형 미지정' : esc(g)) + ' <span class="tb-sec-cnt">' + list.length + '</span></div><div class="tg-grid">' + list.map(cCard).join('') + '</div></div>';
+      });
+      el.innerHTML = chtml || '<div class="tb-empty">저장한 공감댓글이 없어요. 분해하기(작성)에서 공감댓글 이미지를 올리고, 댓글 유형을 골라보세요.</div>';
+      el.querySelectorAll('.tg-card').forEach(c => { c.onclick = () => openDetail(c.dataset.row); });
+      el.querySelectorAll('.tg-thumb[data-img]').forEach(async box => {
+        const id = box.dataset.img; const r = rows.find(x => x.id === id);
+        if (r && r.hasComment) { try { const u = await loadImage(id, 'comment'); if (u) box.innerHTML = '<img src="' + u + '" alt="" />'; } catch (e) {} }
       });
       bindTbToggle();
       return;
     }
-    const types = BASE_TYPES.concat(customKeywords);
+    const types = activeKeywords();
     let html = '';
     types.forEach(t => {
       const list = strongRows.filter(r => (r[typesKey] || []).includes(t));
@@ -14780,10 +15099,7 @@
     if (noneList.length) html += '<div class="tb-sec"><div class="tb-sec-head">유형 미지정 <span class="tb-sec-cnt">' + noneList.length + '</span></div><div class="tg-grid">' + noneList.map(renderCard).join('') + '</div></div>';
     el.innerHTML = html || ('<div class="tb-empty">' + (thumbMode === 'thumb' ? '강한 썸네일' : '강한 수식어') + '로 표시한 카드가 없어요. 분해하기에서 표시해보세요.</div>');
     el.querySelectorAll('.tg-card').forEach(c => { c.onclick = () => openDetail(c.dataset.row); });
-    el.querySelectorAll('.tg-thumb[data-thumb]').forEach(async box => {
-      const id = box.dataset.thumb; const r = rows.find(x => x.id === id);
-      if (r && r.hasThumb) { try { const u = await loadImage(id, 'thumb'); if (u) box.innerHTML = '<img src="' + u + '" alt="" />'; } catch (e) {} }
-    });
+    loadCardImgs();
     bindTbToggle();
   }
 
@@ -16157,6 +16473,18 @@
   let refFormat = 'all';
   let refStrength = 'all';
   let refSearch = '';
+  let refTab = 'bench'; // 'bench' | 'kw' | 'target'
+
+  function switchRefTab(tab) {
+    refTab = tab;
+    document.querySelectorAll('.sc-ref-tab').forEach(b => b.classList.toggle('on', b.dataset.rtab === tab));
+    const show = (id, on) => { const el = document.getElementById(id); if (el) el.style.display = on ? '' : 'none'; };
+    show('rtab-bench', tab === 'bench');
+    show('rtab-kw', tab === 'kw');
+    show('rtab-target', tab === 'target');
+    if (tab === 'kw') renderRefKeywords();
+    if (tab === 'target') renderRefTargets();
+  }
 
   function initRefPanel() {
     const toggleBtn = document.getElementById('sc-ref-toggle');
@@ -16166,6 +16494,9 @@
     if (toggleBtn) toggleBtn.onclick = openRefPanel;
     if (closeBtn) closeBtn.onclick = closeRefPanel;
     if (backdrop) backdrop.onclick = closeRefPanel;
+
+    // 탭 전환
+    document.querySelectorAll('.sc-ref-tab').forEach(b => { b.onclick = () => switchRefTab(b.dataset.rtab); });
 
     // 정렬 칩
     document.querySelectorAll('#sc-ref-sort-chips .sc-ref-chip').forEach(chip => {
@@ -16205,6 +16536,7 @@
     refPanelOpen = true;
     renderRefFormatFilter();
     renderRefList();
+    switchRefTab('bench');
     document.getElementById('sc-ref-panel').classList.add('open');
     document.body.classList.add('ref-open'); // 우상단 로그아웃 숨김
     // 모바일에서만 백드롭 표시
@@ -16217,6 +16549,34 @@
     document.getElementById('sc-ref-panel').classList.remove('open');
     document.getElementById('sc-ref-backdrop').classList.remove('show');
     document.body.classList.remove('ref-open');
+  }
+
+  // 레퍼런스 패널 — 키워드 탭 (원고 쓰며 키워드 참고)
+  function renderRefKeywords() {
+    const el = document.getElementById('rtab-kw'); if (!el) return;
+    const pool = sortedKeywords();
+    if (!pool.length) { el.innerHTML = '<div class="sc-ref-empty">키워드가 없어요.<br/>분해하기나 고객 분석에서 추가해보세요.</div>'; return; }
+    const gold = pool.filter(k => k.gold), norm = pool.filter(k => !k.gold);
+    const chip = k => '<span class="ref-kw-chip' + (k.gold ? ' gold' : '') + '">' + (k.gold ? '★ ' : '') + esc(k.label) + '</span>';
+    let h = '';
+    if (gold.length) h += '<div class="ref-sec-label">★ 황금 키워드</div><div class="ref-kw-wrap">' + gold.map(chip).join('') + '</div>';
+    if (norm.length) h += '<div class="ref-sec-label">키워드</div><div class="ref-kw-wrap">' + norm.map(chip).join('') + '</div>';
+    el.innerHTML = h;
+  }
+  // 레퍼런스 패널 — 타겟(고객분석) 탭. 카드 탭하면 5문답 펼침
+  function renderRefTargets() {
+    const el = document.getElementById('rtab-target'); if (!el) return;
+    if (!pmms || !pmms.length) { el.innerHTML = '<div class="sc-ref-empty">타겟이 없어요.<br/>고객 분석에서 타겟을 추가해보세요.</div>'; return; }
+    el.innerHTML = pmms.map(p => {
+      const name = pmmDisplayName(p);
+      const filled = countFilledPmm(p);
+      const qa = PMM_QUESTIONS.map(q => { const a = ((p.answers && p.answers[q.id]) || '').trim(); return a ? '<div class="ref-tg-qa"><div class="ref-tg-q">' + esc(q.label) + '</div><div class="ref-tg-a">' + esc(a) + '</div></div>' : ''; }).join('');
+      return '<div class="ref-tg-card" data-tg="' + p.id + '"><div class="ref-tg-head"><span class="ref-tg-name">🎯 ' + esc(name) + '</span><span class="ref-tg-cnt">' + filled + '/5</span></div>' + (p.productName ? '<div class="ref-tg-prod">' + esc(p.productName) + '</div>' : '') + '<div class="ref-tg-body" style="display:none;">' + (qa || '<div class="ref-tg-empty">아직 작성된 내용이 없어요.</div>') + '</div></div>';
+    }).join('');
+    el.querySelectorAll('.ref-tg-card').forEach(c => {
+      const head = c.querySelector('.ref-tg-head');
+      head.onclick = () => { const b = c.querySelector('.ref-tg-body'); const open = b.style.display === 'none'; b.style.display = open ? 'block' : 'none'; c.classList.toggle('open', open); };
+    });
   }
 
   function renderRefFormatFilter() {
@@ -16261,7 +16621,7 @@
     const q = refSearch.trim().toLowerCase();
     if (q) {
       arr = arr.filter(r => {
-        const text = (r.hook || '') + ' ' + (r.author || '') + ' ' + (r.why || '') + ' ' + (r.idea || '') + ' ' + stripHtml(r.script || '') + ' ' + (r.tags || []).join(' ') + ' ' + (r.viralTypes || []).join(' ') + ' ' + (r.memo || '');
+        const text = (r.hook || '') + ' ' + (r.author || '') + ' ' + (r.why || '') + ' ' + (r.idea || '') + ' ' + stripHtml(r.script || '') + ' ' + (r.tags || []).join(' ') + ' ' + (r.viralTypes || []).join(' ') + ' ' + (r.keywords || []).join(' ') + ' ' + (r.memo || '');
         return text.toLowerCase().includes(q);
       });
     }
@@ -16989,6 +17349,7 @@
     document.getElementById('f-outro').value = r.outro || '';
     document.getElementById('f-cta').value = r.cta || '';
     formViralTypes = (r.viralTypes || []).slice();
+    formKeywords = (r.keywords || []).slice();
     document.getElementById('f-tags').value = (r.tags || []).join(', ');
     document.getElementById('f-memo').value = r.memo || '';
 
@@ -17000,10 +17361,10 @@
     formCopyTypes = (r.copyTypes || []).slice();
     formFormat = r.format || '';
     formAudioType = r.audioType || '';
+    formCommentType = r.commentType || '';
     formFunnelStage = r.funnelStage || '';
     document.getElementById('f-audio-title').value = r.audioTitle || '';
     document.getElementById('f-audio-artist').value = r.audioArtist || '';
-    document.getElementById('f-audio-link').value = r.audioLink || '';
     setPlatform(r.platform || 'ig');
     setRating(r.rating || 0);
 
@@ -17016,8 +17377,10 @@
     renderStrengthBlock();
     renderFormatPicker();
     renderAudioPicker();
+    renderCommentPicker();
     renderTagsPicker();
     renderViralPicker();
+    renderKwPicker();
     renderFunnelStagePicker();
 
     document.getElementById('sh-modal').classList.add('show');
@@ -17049,7 +17412,7 @@
   // === FORMAT PICKER (콘텐츠 유형) ===
   function renderFormatPicker() {
     const el = document.getElementById('f-format-picker');
-    const all = BASE_FORMATS.concat(customFormats);
+    const all = activeFormats();
     el.innerHTML = all.map(f => {
       const isCustom = customFormats.includes(f);
       const isOn = formFormat === f;
@@ -17062,11 +17425,8 @@
         if (del) {
           e.stopPropagation();
           const f = del.dataset.del;
-          if (!confirm(`"${f}" 유형을 삭제할까요? (이미 분류된 항목에서도 제거됩니다)`)) return;
-          customFormats = customFormats.filter(x => x !== f);
-          rows.forEach(r => { if (r.format === f) r.format = ''; });
           if (formFormat === f) formFormat = '';
-          await saveCustomFormats(); await saveRows();
+          await trashType('format', f);
           renderFormatPicker();
           return;
         }
@@ -17080,7 +17440,7 @@
   // === AUDIO PICKER ===
   function renderAudioPicker() {
     const el = document.getElementById('f-audio-picker');
-    const all = BASE_AUDIO.concat(customAudio);
+    const all = activeAudio();
     el.innerHTML = all.map(a => {
       const isCustom = customAudio.includes(a);
       const isOn = formAudioType === a;
@@ -17093,11 +17453,8 @@
         if (del) {
           e.stopPropagation();
           const a = del.dataset.del;
-          if (!confirm(`"${a}" 오디오 분류를 삭제할까요?`)) return;
-          customAudio = customAudio.filter(x => x !== a);
-          rows.forEach(r => { if (r.audioType === a) r.audioType = ''; });
           if (formAudioType === a) formAudioType = '';
-          await saveCustomAudio(); await saveRows();
+          await trashType('audio', a);
           renderAudioPicker();
           return;
         }
@@ -17108,11 +17465,40 @@
     });
   }
 
+  // === 공감 댓글 유형 피커 (단일 선택, 오디오 미러) ===
+  function renderCommentPicker() {
+    const el = document.getElementById('f-comment-picker');
+    if (!el) return;
+    const all = activeComment();
+    el.innerHTML = all.map(a => {
+      const isCustom = customComment.includes(a);
+      const isOn = formCommentType === a;
+      return `<button class="fmt-chip comment-chip ${isCustom ? 'custom' : ''} ${isOn ? 'on' : ''}" data-cm="${esc(a)}">${esc(a)}${isCustom ? `<span class="chip-del" data-del="${esc(a)}" title="삭제">×</span>` : ''}</button>`;
+    }).join('');
+    el.querySelectorAll('.comment-chip').forEach(btn => {
+      btn.onclick = async (e) => {
+        e.preventDefault();
+        const del = e.target.closest('.chip-del');
+        if (del) {
+          e.stopPropagation();
+          const a = del.dataset.del;
+          if (formCommentType === a) formCommentType = '';
+          await trashType('comment', a);
+          renderCommentPicker();
+          return;
+        }
+        const a = btn.dataset.cm;
+        formCommentType = (formCommentType === a) ? '' : a;
+        renderCommentPicker();
+      };
+    });
+  }
+
   // === FREE TAGS PICKER (다중 선택) ===
   function renderTagsPicker() {
     const el = document.getElementById('f-tags-picker');
     if (!el) return;
-    const baseAll = BASE_TAGS.concat(customTags);
+    const baseAll = activeTags();
 
     // 키워드 후보 (중복 제거)
     const seen = new Set(baseAll);
@@ -17149,11 +17535,8 @@
         if (del) {
           e.stopPropagation();
           const t = del.dataset.del;
-          if (!confirm(`"${t}" 태그를 삭제할까요? (이미 사용된 곳에서도 제거됩니다)`)) return;
-          customTags = customTags.filter(x => x !== t);
-          rows.forEach(r => { r.tags = (r.tags || []).filter(x => x !== t); });
           const fi = formTags.indexOf(t); if (fi >= 0) formTags.splice(fi, 1);
-          await saveCustomTags(); await saveRows();
+          await trashType('tag', t);
           renderTagsPicker();
           return;
         }
@@ -17170,7 +17553,7 @@
   function renderViralPicker() {
     const el = document.getElementById('f-viral-picker');
     if (!el) return;
-    const all = BASE_VIRAL.concat(customViral);
+    const all = activeViral();
     el.innerHTML = all.map(t => {
       const isCustom = customViral.includes(t);
       const isOn = formViralTypes.includes(t);
@@ -17184,11 +17567,8 @@
         if (del) {
           e.stopPropagation();
           const t = del.dataset.vdel;
-          if (!confirm(`"${t}" 바이럴 유형을 삭제할까요? (이미 분류된 곳에서도 제거됩니다)`)) return;
-          customViral = customViral.filter(x => x !== t);
-          rows.forEach(r => { r.viralTypes = (r.viralTypes || []).filter(x => x !== t); });
           const fi = formViralTypes.indexOf(t); if (fi >= 0) formViralTypes.splice(fi, 1);
-          await saveCustomViral(); await saveRows();
+          await trashType('viral', t);
           renderViralPicker();
           return;
         }
@@ -17197,6 +17577,30 @@
         if (idx >= 0) formViralTypes.splice(idx, 1);
         else formViralTypes.push(t);
         renderViralPicker();
+      };
+    });
+  }
+
+  // === 키워드 피커 (전역 풀에서 선택 + 자유 추가, 황금 표시) ===
+  function renderKwPicker() {
+    const el = document.getElementById('f-kw-picker'); if (!el) return;
+    const pool = sortedKeywords();
+    const poolLabels = new Set(pool.map(k => k.label));
+    const extras = formKeywords.filter(l => !poolLabels.has(l)).map(l => ({ label: l, gold: false }));
+    const all = pool.concat(extras);
+    if (!all.length) { el.innerHTML = '<div class="sh-field-desc" style="margin:6px 0 0;">아직 키워드가 없어요. 아래에 입력해서 추가하세요.</div>'; return; }
+    el.innerHTML = all.map(k => {
+      const on = formKeywords.includes(k.label);
+      const cls = ['tag-chip', k.gold ? 'from-kw-gold' : 'from-kw', on ? 'on' : ''].filter(Boolean).join(' ');
+      return '<button class="' + cls + '" data-kw="' + esc(k.label) + '"' + (k.gold ? ' title="★ 황금 키워드"' : '') + '>' + (k.gold ? '★ ' : '') + esc(k.label) + '</button>';
+    }).join('');
+    el.querySelectorAll('.tag-chip').forEach(btn => {
+      btn.onclick = (e) => {
+        e.preventDefault();
+        const l = btn.dataset.kw;
+        const i = formKeywords.indexOf(l);
+        if (i >= 0) formKeywords.splice(i, 1); else formKeywords.push(l);
+        renderKwPicker();
       };
     });
   }
@@ -17220,7 +17624,7 @@
   function renderStrengthTypes(containerId, currentArr) {
     const el = document.getElementById(containerId);
     const isThumb = containerId === 'f-thumb-types';
-    const allTypes = BASE_TYPES.concat(customKeywords);
+    const allTypes = activeKeywords();
     el.innerHTML = allTypes.map(t => {
       const isCustom = customKeywords.includes(t);
       const isOn = currentArr.includes(t);
@@ -17310,6 +17714,7 @@
     r.outro = document.getElementById('f-outro').value.trim();
     r.cta = document.getElementById('f-cta').value.trim();
     r.viralTypes = formViralTypes.slice(); r.viralLine = '';
+    r.keywords = formKeywords.slice();
     r.tags = formTags.slice();
     r.memo = document.getElementById('f-memo').value.trim();
     r.hookTypes = formHookTypes.slice();
@@ -17320,10 +17725,10 @@
     r.copyTypes = formCopyStrong ? formCopyTypes.slice() : [];
     r.format = formFormat || '';
     r.audioType = formAudioType || '';
+    r.commentType = formCommentType || '';
     r.funnelStage = formFunnelStage || '';
     r.audioTitle = document.getElementById('f-audio-title').value.trim();
     r.audioArtist = document.getElementById('f-audio-artist').value.trim();
-    r.audioLink = (document.getElementById('f-audio-link').value || '').trim();
     r.rating = formRating;
     r.updatedAt = Date.now();
 
@@ -17597,10 +18002,12 @@
       t.onclick = () => setFilter(t.dataset.filter);
     });
 
-    document.getElementById('act-stats').onclick = showStats;
-    document.getElementById('act-csv').onclick = exportCsv;
-    document.getElementById('act-backup').onclick = exportBackup;
-    document.getElementById('act-restore').onclick = () => document.getElementById('json-import-file').click();
+    // 도구(통계/CSV/백업/복원)는 설정으로 통합 — 사이드바 버튼 제거됨(있으면만 바인딩)
+    const _bind = (id, fn) => { const el = document.getElementById(id); if (el) el.onclick = fn; };
+    _bind('act-stats', showStats);
+    _bind('act-csv', exportCsv);
+    _bind('act-backup', exportBackup);
+    _bind('act-restore', () => document.getElementById('json-import-file').click());
 
     document.getElementById('sh-add-row').onclick = addRow;
     const addTopBtn = document.getElementById('sh-add-top');
@@ -17957,6 +18364,48 @@
       });
     }
 
+    // === 키워드 추가 (전역 풀에 없으면 추가 + 이 컨텐츠에 선택) ===
+    const kwAddInput = document.getElementById('f-kw-add-input');
+    const kwAddConfirm = document.getElementById('f-kw-add-confirm');
+    const addInlineKw = async () => {
+      if (!kwAddInput) return;
+      const v = (kwAddInput.value || '').trim();
+      if (!v) return;
+      if (v.length > 24) { toast('24자 이내로 입력'); return; }
+      if (!keywords.some(k => k.label === v)) { const k = newKeyword(v); keywords.push(k); await saveKeywordsList(); }
+      if (!formKeywords.includes(v)) formKeywords.push(v);
+      kwAddInput.value = '';
+      renderKwPicker();
+    };
+    if (kwAddConfirm) kwAddConfirm.onclick = addInlineKw;
+    if (kwAddInput) {
+      kwAddInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); addInlineKw(); } });
+    }
+
+    // === 공감 댓글 유형 인라인 추가 ===
+    const cmAddBtn = document.getElementById('f-comment-add-btn');
+    const cmAddRow = document.getElementById('f-comment-add-row');
+    const cmAddInput = document.getElementById('f-comment-add-input');
+    const cmAddConfirm = document.getElementById('f-comment-add-confirm');
+    const cmAddCancel = document.getElementById('f-comment-add-cancel');
+    const closeInlineCommentRow = () => { if (!cmAddRow) return; cmAddRow.style.display = 'none'; if (cmAddBtn) cmAddBtn.style.display = ''; cmAddInput.value = ''; };
+    if (cmAddBtn) cmAddBtn.onclick = () => { cmAddRow.style.display = 'flex'; cmAddBtn.style.display = 'none'; cmAddInput.value = ''; cmAddInput.focus(); };
+    const addInlineComment = async () => {
+      const v = (cmAddInput.value || '').trim();
+      if (!v) { closeInlineCommentRow(); return; }
+      if (BASE_COMMENT.includes(v) || customComment.includes(v)) { toast('이미 있는 유형입니다'); return; }
+      if (v.length > 20) { toast('20자 이내로 입력'); return; }
+      customComment.push(v);
+      await saveCustomComment();
+      formCommentType = v;
+      renderCommentPicker();
+      closeInlineCommentRow();
+      toast(`"${v}" 추가됨`);
+    };
+    if (cmAddConfirm) cmAddConfirm.onclick = addInlineComment;
+    if (cmAddCancel) cmAddCancel.onclick = closeInlineCommentRow;
+    if (cmAddInput) { cmAddInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); addInlineComment(); } if (e.key === 'Escape') { e.preventDefault(); closeInlineCommentRow(); } }); }
+
     document.getElementById('f-url').addEventListener('blur', (e) => {
       const url = e.target.value.trim();
       if (url) {
@@ -18034,6 +18483,9 @@
       btn.onclick = () => switchWorkspace(btn.dataset.ws);
     });
 
+    // 로그인 직후 시트가 번쩍 보였다 홈으로 가는 현상 방지 — async 초기화 전에 즉시 홈 표시
+    switchWorkspace('home');
+
     // Moodboard init
     await initMoodboard();
 
@@ -18063,6 +18515,7 @@
   // 시트 상단 메인 입력 카드의 임시 상태
   let entryState = {
     thumbDataUrl: null, // base64 data URL
+    copyDataUrl: null,
     commDataUrl: null,
     script: '',
     url: '',
@@ -18070,6 +18523,7 @@
     // disasm 데이터 (분해하기 모달에서 채워짐)
     format: '',
     audioType: '',
+    commentType: '',
     audioTitle: '',
     audioArtist: '',
     audioLink: '',
@@ -18085,21 +18539,21 @@
     likes: 0,
     commentsNum: 0,
     intro: '', develop: '', outro: '', cta: '',
-    viralLine: '', viralTypes: [], tags: [],
+    viralLine: '', viralTypes: [], tags: [], keywords: [],
     idea: ''
   };
 
   function resetEntryState() {
     entryState = {
-      thumbDataUrl: null, commDataUrl: null,
+      thumbDataUrl: null, copyDataUrl: null, commDataUrl: null,
       script: '', url: '', why: '',
-      format: '', audioType: '', audioTitle: '', audioArtist: '', audioLink: '',
+      format: '', audioType: '', commentType: '', audioTitle: '', audioArtist: '', audioLink: '',
       thumbStrong: false, copyStrong: false,
       thumbTypes: [], copyTypes: [],
       rating: 0, favorite: false, author: '', hook: '',
       views: 0, likes: 0, commentsNum: 0,
       intro: '', develop: '', outro: '', cta: '',
-      viralLine: '', viralTypes: [], tags: [], idea: ''
+      viralLine: '', viralTypes: [], tags: [], keywords: [], idea: ''
     };
   }
 
@@ -18199,8 +18653,8 @@
           rmEl.style.display = '';
           box.classList.add('has-img');
           box.querySelector('.entry-thumb-empty').style.display = 'none';
-          if (kind === 'thumb') entryState.thumbDataUrl = dataUrl;
-          else entryState.commDataUrl = dataUrl;
+          const sk = { thumb: 'thumbDataUrl', copy: 'copyDataUrl', comm: 'commDataUrl' }[kind] || 'commDataUrl';
+          entryState[sk] = dataUrl;
         };
         reader.readAsDataURL(file);
       };
@@ -18231,12 +18685,14 @@
         rmEl.style.display = 'none';
         box.classList.remove('has-img');
         box.querySelector('.entry-thumb-empty').style.display = '';
-        if (kind === 'thumb') entryState.thumbDataUrl = null;
-        else entryState.commDataUrl = null;
+        const sk = { thumb: 'thumbDataUrl', copy: 'copyDataUrl', comm: 'commDataUrl' }[kind] || 'commDataUrl';
+        entryState[sk] = null;
       });
     };
 
     setupImageBox(thumbBox, document.getElementById('entry-thumb-img'), document.getElementById('entry-thumb-rm'), 'thumb');
+    const copyBox = document.getElementById('entry-copy-box');
+    if (copyBox) setupImageBox(copyBox, document.getElementById('entry-copy-img'), document.getElementById('entry-copy-rm'), 'copy');
     setupImageBox(commBox, document.getElementById('entry-comm-img'), document.getElementById('entry-comm-rm'), 'comm');
 
     // === Script editor (entry version) ===
@@ -18308,10 +18764,10 @@
     document.getElementById('f-outro').value = entryState.outro || '';
     document.getElementById('f-cta').value = entryState.cta || '';
     formViralTypes = Array.isArray(entryState.viralTypes) ? entryState.viralTypes.slice() : (entryState.viralLine ? [entryState.viralLine] : []);
+    formKeywords = Array.isArray(entryState.keywords) ? entryState.keywords.slice() : [];
     document.getElementById('f-tags').value = (entryState.tags || []).join(', ');
     document.getElementById('f-audio-title').value = entryState.audioTitle || '';
     document.getElementById('f-audio-artist').value = entryState.audioArtist || '';
-    document.getElementById('f-audio-link').value = entryState.audioLink || '';
 
     formHookTypes = [];
     formPartTypes = [];
@@ -18321,6 +18777,7 @@
     formCopyTypes = (entryState.copyTypes || []).slice();
     formFormat = entryState.format || '';
     formAudioType = entryState.audioType || '';
+    formCommentType = entryState.commentType || '';
     formFunnelStage = entryState.funnelStage || '';
     formTags = Array.isArray(entryState.tags) ? entryState.tags.slice() : [];
     setPlatform('ig');
@@ -18332,8 +18789,10 @@
     renderStrengthBlock();
     renderFormatPicker();
     renderAudioPicker();
+    renderCommentPicker();
     renderTagsPicker();
     renderViralPicker();
+    renderKwPicker();
     renderFunnelStagePicker();
 
     document.getElementById('sh-modal').classList.add('show');
@@ -18355,6 +18814,7 @@
     entryState.outro = document.getElementById('f-outro').value.trim();
     entryState.cta = document.getElementById('f-cta').value.trim();
     entryState.viralTypes = formViralTypes.slice(); entryState.viralLine = '';
+    entryState.keywords = formKeywords.slice();
     entryState.tags = formTags.slice();
     entryState.thumbStrong = formThumbStrong;
     entryState.copyStrong = formCopyStrong;
@@ -18362,10 +18822,10 @@
     entryState.copyTypes = formCopyStrong ? formCopyTypes.slice() : [];
     entryState.format = formFormat || '';
     entryState.audioType = formAudioType || '';
+    entryState.commentType = formCommentType || '';
     entryState.funnelStage = formFunnelStage || '';
     entryState.audioTitle = document.getElementById('f-audio-title').value.trim();
     entryState.audioArtist = document.getElementById('f-audio-artist').value.trim();
-    entryState.audioLink = (document.getElementById('f-audio-link').value || '').trim();
     entryState.rating = formRating;
 
     // Reflect back to entry card
@@ -18414,7 +18874,7 @@
     }
 
     // 비어있는지 체크
-    const hasContent = entryState.thumbDataUrl || entryState.commDataUrl || 
+    const hasContent = entryState.thumbDataUrl || entryState.copyDataUrl || entryState.commDataUrl ||
                        entryState.script || entryState.url || entryState.why ||
                        entryState.format || entryState.thumbStrong || entryState.copyStrong;
     if (!hasContent) {
@@ -18459,9 +18919,11 @@
     targetRow.outro = entryState.outro || '';
     targetRow.cta = entryState.cta || '';
     targetRow.viralTypes = Array.isArray(entryState.viralTypes) ? entryState.viralTypes.slice() : []; targetRow.viralLine = '';
+    targetRow.keywords = Array.isArray(entryState.keywords) ? entryState.keywords.slice() : [];
     targetRow.tags = (entryState.tags || []).slice();
     targetRow.format = entryState.format || '';
     targetRow.audioType = entryState.audioType || '';
+    targetRow.commentType = entryState.commentType || '';
     targetRow.audioTitle = entryState.audioTitle || '';
     targetRow.audioArtist = entryState.audioArtist || '';
     targetRow.audioLink = entryState.audioLink || '';
@@ -18478,14 +18940,23 @@
     }
 
     // 이미지 저장
+    const _savedImgs = [];
     if (entryState.thumbDataUrl) {
       targetRow.hasThumb = true;
       try { await saveImage(targetRow.id, 'thumb', entryState.thumbDataUrl); } catch(e) {}
+      _savedImgs.push('썸네일');
+    }
+    if (entryState.copyDataUrl) {
+      targetRow.hasCopy = true;
+      try { await saveImage(targetRow.id, 'copy', entryState.copyDataUrl); } catch(e) {}
+      _savedImgs.push('수식어');
     }
     if (entryState.commDataUrl) {
       targetRow.hasComment = true;
       try { await saveImage(targetRow.id, 'comment', entryState.commDataUrl); } catch(e) {}
+      _savedImgs.push('공감댓글');
     }
+    if (_savedImgs.length) { try { toast('📥 ' + _savedImgs.join('·') + ' 저장됨 — 썸네일 탭에 모여요!'); } catch(e) {} }
 
     targetRow.updatedAt = Date.now();
     await saveRows();
@@ -18527,6 +18998,15 @@
     document.getElementById('entry-thumb-rm').style.display = 'none';
     document.getElementById('entry-thumb-box').classList.remove('has-img');
     document.getElementById('entry-thumb-box').querySelector('.entry-thumb-empty').style.display = '';
+
+    const _cp = document.getElementById('entry-copy-box');
+    if (_cp) {
+      document.getElementById('entry-copy-img').src = '';
+      document.getElementById('entry-copy-img').style.display = 'none';
+      document.getElementById('entry-copy-rm').style.display = 'none';
+      _cp.classList.remove('has-img');
+      _cp.querySelector('.entry-thumb-empty').style.display = '';
+    }
 
     document.getElementById('entry-comm-img').src = '';
     document.getElementById('entry-comm-img').style.display = 'none';
@@ -19465,17 +19945,19 @@
   // === 홈 아코디언 (접이식 + 고정, Phase A) ===================
   // 기존 섹션 요소를 접이식 패널로 '이동'(비파괴). 상태는 profiles 동기화.
   // ============================================================
-  let accState = { expanded: { mission: true, week: true }, pinned: {} };
+  let accState = { expanded: { mission: true, today: true, week: true }, pinned: {}, partner: true };
   let _accBuilt = false;
   let _accSaveTimer = null;
   const ACC_KEY = 'hmv1-acc';
   const ACC_SECTIONS = [
     { key: 'mission',   title: '미션 · 레벨',    ico: '◆', gen: true },
+    { key: 'today',     title: '오늘 할 일',     ico: '◈', gen: true },
     { key: 'week',      title: '이번 주',       ico: '▦', sel: ['#home-view .tr-week-block'] },
     { key: 'funnel',    title: '컨텐츠 퍼널',    ico: '▽', sel: ['#home-view .funnel-section'] },
     { key: 'challenge', title: '진행 중 챌린지', ico: '◇',  sel: ['#ch-list'], wrap: '.home-section' },
     { key: 'calendar',  title: '캘린더 · 주차별', ico: '▤', sel: ['#home-view .tr-cal-block', '#tr-weeks-list'] },
     { key: 'stats',     title: '통계',          ico: '▥', sel: ['#home-stats'], wrap: '.home-section' },
+    { key: 'insight',   title: '인사이트',       ico: '◐', gen: true },
     { key: 'goal',      title: '목표 / Why',     ico: '◎', sel: ['#home-view .home-section.goal'] }
   ];
   function accInjectCss() {
@@ -19555,20 +20037,50 @@
       .mz-badge-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;}
       .mz-badge-mini{font-size:18px;width:34px;height:34px;display:flex;align-items:center;justify-content:center;border-radius:9px;background:var(--bg-void);border:1px solid var(--line);filter:grayscale(1);opacity:0.4;}
       .mz-badge-mini.on{filter:none;opacity:1;background:var(--emerald-faint);border-color:var(--emerald-line);}
-      /* 이번 주 슬롯 넛지 — 안 채우면 은은한 주황 맥동, 다 채우면 멈춤 + 달성 플래시 */
-      .acc-panel.needs-fill{border-color:rgba(255,140,66,0.45);animation:weekNudgeGlow 2.4s ease-in-out infinite;}
-      .acc-panel.needs-fill .acc-sum{color:#FF8C42;font-weight:700;}
+      /* 이번 주 슬롯 넛지 — 안 채우면 주황 맥동(강조), 다 채우면 멈춤 + 달성 플래시 */
+      .acc-panel.needs-fill{animation:weekNudgeGlow 2s ease-in-out infinite;}
+      .acc-panel.needs-fill .acc-sum{color:#FF8C42;font-weight:800;}
       .acc-panel.needs-fill .acc-ico{color:#FF8C42;}
-      @keyframes weekNudgeGlow{0%,100%{box-shadow:0 0 0 rgba(255,140,66,0);}50%{box-shadow:0 0 14px rgba(255,140,66,0.32);}}
+      .acc-panel.needs-fill .acc-title{color:#FFB37A;}
+      @keyframes weekNudgeGlow{
+        0%,100%{box-shadow:0 0 7px rgba(255,140,66,0.18); border-color:rgba(255,140,66,0.40);}
+        50%{box-shadow:0 0 26px 3px rgba(255,140,66,0.55); border-color:rgba(255,140,66,0.95);}
+      }
       .acc-panel.just-filled{animation:weekFilledFlash 1.1s ease-out;}
       @keyframes weekFilledFlash{0%{box-shadow:0 0 22px var(--emerald-glow);border-color:var(--emerald);}100%{box-shadow:0 0 0 rgba(0,0,0,0);}}
       @media(prefers-reduced-motion:reduce){.acc-panel.needs-fill{animation:none;box-shadow:0 0 10px rgba(255,140,66,0.25);}.acc-panel.just-filled{animation:none;}}
+      /* 파트너 모드 토글 — 테두리 없는 슬림 한 줄(오른쪽 정렬) */
+      .mz-partner{display:flex;align-items:center;justify-content:flex-end;gap:8px;padding:0;margin:0 2px 8px;}
+      .mz-partner .mz-partner-label{font-family:'Pretendard',sans-serif;font-weight:600;font-size:11px;color:var(--text-mute);flex:0 0 auto;white-space:nowrap;}
+      .pb-switch{width:34px;height:20px;border-radius:12px;background:var(--bg-card);border:1px solid var(--line);position:relative;cursor:pointer;flex:0 0 auto;padding:0;transition:background .18s,border-color .18s;}
+      .pb-switch .pb-knob{position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:var(--text-faint);transition:left .18s,background .18s;}
+      .pb-switch.on{background:var(--emerald-faint);border-color:var(--emerald-line);}
+      .pb-switch.on .pb-knob{left:18px;background:var(--emerald);}
+      /* 오늘 할 일 */
+      .td-card{background:var(--bg-elev);border:1px solid var(--emerald-line);border-radius:12px;padding:14px;}
+      .td-head{display:flex;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap;}
+      .td-badge{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:800;letter-spacing:.08em;color:#06140C;background:var(--emerald);padding:2px 7px;border-radius:5px;}
+      .td-txt{font-family:'Pretendard',sans-serif;font-size:15px;font-weight:800;color:var(--text-main);}
+      .td-sub{font-size:12px;color:var(--text-mute);line-height:1.5;margin-bottom:11px;}
+      .td-cta{width:100%;padding:11px;border-radius:10px;border:none;background:var(--emerald);color:#06140C;font-family:'Pretendard',sans-serif;font-size:13.5px;font-weight:800;cursor:pointer;transition:filter .15s;}
+      .td-cta:hover{filter:brightness(1.08);}
+      /* 인사이트 */
+      .ins-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+      @media(max-width:600px){.ins-grid{grid-template-columns:1fr 1fr;}}
+      .ins-card{background:var(--bg-card);border:1px solid var(--line);border-radius:10px;padding:11px 12px;}
+      .ins-ic{font-size:13px;color:var(--sage);margin-bottom:5px;}
+      .ins-lab{font-size:11px;color:var(--text-mute);font-weight:600;margin-bottom:3px;}
+      .ins-val{font-family:'Pretendard',sans-serif;font-size:15px;font-weight:800;color:var(--text-main);line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+      .ins-sub{font-size:10.5px;color:var(--text-faint);margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+      .ins-empty{font-size:12.5px;color:var(--text-mute);padding:8px 2px;line-height:1.5;}
     `;
     document.head.appendChild(s);
   }
   function accSummary(key) {
     try {
       if (key === 'mission') { const li = levelInfo(); return 'Lv.' + li.level + ' ' + li.title; }
+      if (key === 'today') { return todaySuggestion().txt; }
+      if (key === 'insight') { const n = (rows || []).filter(isFilled).length; return n ? ('벤치마크 ' + n + '개') : '데이터 없음'; }
       if (key === 'week') { const t = (weekSlots || []).length, f = (weekSlots || []).filter(Boolean).length; return f + '/' + t + ' 슬롯'; }
       if (key === 'funnel') { const fs = funnelSlots || {}; const n = ((fs.attract || []).length) + ((fs.convert || []).length) + ((fs.retain || []).length); return n + '개 배치'; }
       if (key === 'challenge') { const act = (challenges || []).filter(c => { try { return challengeProgress(c) < (c.target || 0); } catch (e) { return true; } }); if (!act.length) return '진행 중 없음'; const c = act[0]; return challengeProgress(c) + '/' + (c.target || 0) + (act.length > 1 ? ' 외 ' + (act.length - 1) : ''); }
@@ -19580,6 +20092,7 @@
   }
   function applyAccordionState() {
     const cont = document.getElementById('home-accordion'); if (!cont) return;
+    const partner = accState.partner !== false;
     let pinOrder = 0;
     ACC_SECTIONS.forEach((def, idx) => {
       const p = cont.querySelector('.acc-panel[data-acc="' + def.key + '"]'); if (!p) return;
@@ -19587,10 +20100,33 @@
       const open = pinned || !!accState.expanded[def.key];
       p.classList.toggle('pinned', pinned);
       p.classList.toggle('open', open);
-      p.style.order = pinned ? String(pinOrder++) : String(1000 + idx);
+      // 순서: 고정 > 미션(대시보드) > (파트너 모드면) 채워야 할 것 > 나머지
+      let order;
+      if (pinned) order = pinOrder++;
+      else if (def.key === 'mission') order = partner ? 90 : (1000 + idx);
+      else if (def.key === 'today') order = partner ? 95 : (1000 + idx);
+      else if (partner && sectionNeedsFill(def.key)) order = 100 + idx;
+      else order = 1000 + idx;
+      p.style.order = String(order);
       const head = p.querySelector('.acc-head'); if (head) head.setAttribute('aria-expanded', open ? 'true' : 'false');
       const pin = p.querySelector('.acc-pin'); if (pin) pin.setAttribute('aria-pressed', pinned ? 'true' : 'false');
     });
+  }
+  // 파트너 모드에서 "채워야 할" 섹션 판별
+  function sectionNeedsFill(key) {
+    try {
+      if (key === 'week') { const t = (weekSlots || []).length, f = (weekSlots || []).filter(Boolean).length; return !(t > 0 && f >= t); }
+      if (key === 'funnel') { const fs = funnelSlots || {}; const n = ((fs.attract || []).length) + ((fs.convert || []).length) + ((fs.retain || []).length); return n === 0; }
+      if (key === 'goal') { return !(homeData && homeData.goal); }
+    } catch (e) {}
+    return false;
+  }
+  function applyPartnerUI() {
+    const on = accState.partner !== false;
+    const sw = document.getElementById('pb-switch');
+    if (sw) { sw.classList.toggle('on', on); sw.setAttribute('aria-checked', on ? 'true' : 'false'); }
+    const desc = document.getElementById('pb-desc');
+    if (desc) desc.textContent = on ? '채울 것을 끌어올려 안내 중' : '꺼짐 — 차분한 보기';
   }
   function saveAccordionState() {
     if (_accSaveTimer) clearTimeout(_accSaveTimer);
@@ -19604,10 +20140,12 @@
         if (o && typeof o === 'object') {
           accState = {
             expanded: (o.expanded && typeof o.expanded === 'object') ? o.expanded : { mission: true, week: true },
-            pinned: (o.pinned && typeof o.pinned === 'object') ? o.pinned : {}
+            pinned: (o.pinned && typeof o.pinned === 'object') ? o.pinned : {},
+            partner: (typeof o.partner === 'boolean') ? o.partner : true
           };
-          // 미션 패널은 신규 추가분 — 옛 저장 레이아웃엔 없으니 기본 펼침으로 보정
+          // 신규 패널 — 옛 저장 레이아웃엔 없으니 기본값 보정
           if (accState.expanded.mission === undefined) accState.expanded.mission = true;
+          if (accState.expanded.today === undefined) accState.expanded.today = true;
         }
       }
     } catch (e) {}
@@ -19622,14 +20160,20 @@
   let _weekWasFull = null;
   function updateWeekNudge() {
     const cont = document.getElementById('home-accordion'); if (!cont) return;
-    const panel = cont.querySelector('.acc-panel[data-acc="week"]'); if (!panel) return;
+    const partner = accState.partner !== false;
+    // 파트너 ON: 채워야 할 섹션(이번주·퍼널·목표)에 주황 넛지. OFF: 전부 차분.
+    ['week', 'funnel', 'goal'].forEach(key => {
+      const panel = cont.querySelector('.acc-panel[data-acc="' + key + '"]'); if (!panel) return;
+      panel.classList.toggle('needs-fill', partner && sectionNeedsFill(key));
+    });
+    // 이번 주 슬롯을 막 다 채운 순간 → 달성 플래시 + 축하
+    const wpanel = cont.querySelector('.acc-panel[data-acc="week"]');
     const total = (weekSlots || []).length;
     const filled = (weekSlots || []).filter(Boolean).length;
     const full = total > 0 && filled >= total;
-    panel.classList.toggle('needs-fill', !full);
-    if (full && _weekWasFull === false) {
-      panel.classList.remove('just-filled'); void panel.offsetWidth; panel.classList.add('just-filled');
-      setTimeout(() => { panel.classList.remove('just-filled'); }, 1200);
+    if (full && _weekWasFull === false && wpanel) {
+      wpanel.classList.remove('just-filled'); void wpanel.offsetWidth; wpanel.classList.add('just-filled');
+      setTimeout(() => { if (wpanel) wpanel.classList.remove('just-filled'); }, 1200);
       try { toast('🎉 이번 주 슬롯 다 채웠어요!'); } catch (e) {}
     }
     _weekWasFull = full;
@@ -19652,7 +20196,7 @@
       const head = document.createElement('div'); head.className = 'acc-head'; head.setAttribute('role', 'button'); head.setAttribute('tabindex', '0');
       head.innerHTML = '<span class="acc-ico">' + def.ico + '</span><span class="acc-title">' + def.title + '</span><span class="acc-sum"></span><button class="acc-pin" aria-label="고정" title="고정해서 항상 펼치기">📌</button><span class="acc-chev">▾</span>';
       const body = document.createElement('div'); body.className = 'acc-body';
-      if (def.gen) { const mb = document.createElement('div'); mb.className = 'mission-body'; mb.id = 'mission-panel-body'; body.appendChild(mb); }
+      if (def.gen) { const mb = document.createElement('div'); mb.className = 'mission-body'; mb.id = (def.key === 'mission') ? 'mission-panel-body' : def.key + '-panel-body'; body.appendChild(mb); }
       else els.forEach(el => body.appendChild(el));
       panel.appendChild(head); panel.appendChild(body); cont.appendChild(panel);
       head.addEventListener('click', (e) => {
@@ -19671,9 +20215,11 @@
     trSection.parentNode.insertBefore(cont, trSection.nextSibling);
     _accBuilt = true;
     applyAccordionState();
+    applyPartnerUI();
     // 동기화된 상태 비동기 로드 후 재적용
-    loadAccordionState().then(() => { applyAccordionState(); refreshAccordionSummaries(); });
+    loadAccordionState().then(() => { applyAccordionState(); applyPartnerUI(); refreshAccordionSummaries(); });
     loadAchSeen().then(() => { renderMissionPanel(); });
+    renderTodayPanel(); renderInsightPanel();
   }
 
   // ============================================================
@@ -19772,6 +20318,52 @@
       '<div class="mz-bar"><div class="mz-fill" style="width:' + pct + '%"></div></div>' +
       (done ? '<div class="mz-done">✓ 달성</div>' : '') + '</div>';
   }
+  // ===== 오늘 할 일 1개 (단일 액션 유도) =====
+  function todaySuggestion() {
+    try {
+      const c = missionCounts();
+      if ((c.slotsTotal || 0) > 0 && c.slotsFilled < c.slotsTotal) {
+        return { txt: '이번 주 슬롯 채우기', sub: c.slotsFilled + '/' + c.slotsTotal + ' — 이번 주 만들 컨텐츠를 슬롯에 넣어요', cta: '슬롯 채우러 가기',
+          act: () => { const w = document.querySelector('.acc-panel[data-acc="week"]'); if (w) { accState.expanded.week = true; applyAccordionState(); saveAccordionState(); w.scrollIntoView({ behavior: 'smooth', block: 'center' }); } } };
+      }
+      const filledRows = (rows || []).filter(isFilled).length;
+      if (filledRows < 3) return { txt: '벤치마크 1개 분석하기', sub: '잘 된 콘텐츠를 시트에 분해해두면 원고가 쉬워져요', cta: '시트로 가기', act: () => switchWorkspace('sheet') };
+      const fs = funnelSlots || {};
+      const emptyStage = !((fs.attract || []).length) ? '유입용' : !((fs.convert || []).length) ? '전환용' : !((fs.retain || []).length) ? '재구매' : null;
+      if (emptyStage) return { txt: emptyStage + ' 컨텐츠 분석하기', sub: '퍼널에서 ' + emptyStage + ' 칸이 비어 있어요', cta: '분류로 가기', act: () => switchWorkspace('formatboard') };
+      const drafting = (scripts || []).some(s => !s.done && !(s.state === 'uploaded' || s.uploadUrl));
+      if (!drafting) return { txt: '원고 하나 쓰기', sub: '분석한 벤치마크로 원고를 시작해요', cta: '원고 쓰러 가기', act: () => switchWorkspace('scripts') };
+      const readyUp = (scripts || []).some(s => s.done && !(s.state === 'uploaded' || s.uploadUrl));
+      if (readyUp) return { txt: '완성한 원고 업로드하기', sub: '다 쓴 원고를 실제로 올려서 성과를 받아봐요', cta: '원고로 가기', act: () => switchWorkspace('scripts') };
+    } catch (e) {}
+    return { txt: '오늘은 여유! 새 영감 찾기', sub: '벤치마크를 둘러보며 다음 아이디어를 모아요', cta: '시트로 가기', act: () => switchWorkspace('sheet') };
+  }
+  function renderTodayPanel() {
+    const el = document.getElementById('today-panel-body'); if (!el) return;
+    const s = todaySuggestion();
+    el.innerHTML = '<div class="td-card"><div class="td-head"><span class="td-badge">TODAY</span><span class="td-txt">' + esc(s.txt) + '</span></div><div class="td-sub">' + esc(s.sub) + '</div><button class="td-cta" id="td-cta">' + esc(s.cta) + ' →</button></div>';
+    const btn = el.querySelector('#td-cta'); if (btn) btn.onclick = s.act;
+  }
+  // ===== 인사이트 (데이터가 가리키는 방향) =====
+  function renderInsightPanel() {
+    const el = document.getElementById('insight-panel-body'); if (!el) return;
+    const filled = (rows || []).filter(isFilled);
+    if (!filled.length) { el.innerHTML = '<div class="ins-empty">시트에 벤치마크를 분석하면 여기서 인사이트를 정리해줘요.</div>'; return; }
+    const withViews = filled.filter(r => (r.views || 0) > 0);
+    const avg = withViews.length ? Math.round(withViews.reduce((s, r) => s + (r.views || 0), 0) / withViews.length) : 0;
+    const fmtAgg = {};
+    filled.forEach(r => { if (r.format && (r.views || 0) > 0) { fmtAgg[r.format] = fmtAgg[r.format] || { sum: 0, n: 0 }; fmtAgg[r.format].sum += r.views; fmtAgg[r.format].n++; } });
+    let bestFmt = null; Object.entries(fmtAgg).forEach(([f, a]) => { const av = a.sum / a.n; if (!bestFmt || av > bestFmt.av) bestFmt = { f: f, av: Math.round(av) }; });
+    const vMap = {}; filled.forEach(r => (r.viralTypes || []).forEach(v => { if (v) vMap[v] = (vMap[v] || 0) + 1; }));
+    const topViral = Object.entries(vMap).sort((a, b) => b[1] - a[1])[0];
+    const hi = filled.filter(r => (r.rating || 0) >= 4).length;
+    const cards = [];
+    cards.push({ ic: '▤', lab: '분석한 벤치마크', val: filled.length + '개', sub: withViews.length ? ('평균 조회수 ' + fmtNum(avg)) : '조회수 입력하면 평균 표시' });
+    if (bestFmt) cards.push({ ic: '▲', lab: '가장 잘 터진 유형', val: bestFmt.f, sub: '평균 ' + fmtNum(bestFmt.av) + ' 조회' });
+    if (topViral) cards.push({ ic: '◆', lab: '자주 본 바이럴 패턴', val: topViral[0], sub: topViral[1] + '개 컨텐츠' });
+    cards.push({ ic: '★', lab: '나에게 핏한 (4★+)', val: hi + '개', sub: '할 수 있고 시장성 있는 것' });
+    el.innerHTML = '<div class="ins-grid">' + cards.map(c => '<div class="ins-card"><div class="ins-ic">' + c.ic + '</div><div class="ins-lab">' + esc(c.lab) + '</div><div class="ins-val">' + esc(c.val) + '</div><div class="ins-sub">' + esc(c.sub) + '</div></div>').join('') + '</div>';
+  }
   function renderMissionPanel() {
     const el = document.getElementById('mission-panel-body'); if (!el) return;
     try {
@@ -19787,6 +20379,7 @@
       const next = badges.filter(b => !b.ok).map(b => ({ b: b, ratio: b.cur / b.tgt })).sort((a, b) => b.ratio - a.ratio).slice(0, 2);
       const streakLine = '<span class="mz-streak">🔥 ' + c.streakWeeks + '주 연속</span>' + (c.streakDays ? ' <span class="mz-streak-sub">이번 주 ' + c.streakDays + '/5일</span>' : '');
       el.innerHTML =
+        '<div class="mz-partner"><span class="mz-partner-label">🤝 파트너 모드</span><button class="pb-switch" id="pb-switch" role="switch" aria-label="파트너 모드 켜기/끄기" title="채울 것을 끌어올려 안내"><span class="pb-knob"></span></button></div>' +
         '<div class="mz-level">' +
           '<div class="mz-level-top"><span class="mz-lv">Lv.' + li.level + '</span><span class="mz-title">' + li.title + '</span><span class="mz-xp">' + li.xp + ' XP</span></div>' +
           '<div class="mz-bar lg"><div class="mz-fill" style="width:' + li.pct + '%"></div></div>' +
@@ -19801,6 +20394,9 @@
           return '<div class="mz-nextbadge"><span class="mz-nb-ico">' + n.b.ico + '</span><div class="mz-nb-body"><div class="mz-nb-top"><span class="mz-nb-label">' + esc(n.b.label) + '</span><span class="mz-nb-num">' + n.b.cur + '/' + n.b.tgt + '</span></div><div class="mz-bar"><div class="mz-fill" style="width:' + p + '%"></div></div></div></div>';
         }).join('') + '</div>' : '<div class="mz-nudge">모든 뱃지 획득! 🏆</div>') +
         '<div class="mz-badge-row">' + badges.map(b => '<span class="mz-badge-mini' + (b.ok ? ' on' : '') + '" title="' + esc(b.label) + (b.ok ? ' ✓' : ' (' + b.cur + '/' + b.tgt + ')') + '">' + b.ico + '</span>').join('') + '</div>';
+      const sw = el.querySelector('#pb-switch');
+      if (sw) sw.addEventListener('click', () => { accState.partner = !(accState.partner !== false); applyPartnerUI(); applyAccordionState(); updateWeekNudge(); saveAccordionState(); });
+      applyPartnerUI();
       checkAchievements();
     } catch (e) { el.innerHTML = '<div style="color:var(--text-mute);font-size:12px;padding:8px;">미션 불러오는 중…</div>'; }
   }
@@ -19818,6 +20414,8 @@
     renderHonorCards();
     renderTrainingRoom();
     renderMissionPanel();
+    renderTodayPanel();
+    renderInsightPanel();
     refreshAccordionSummaries();
   }
 
@@ -21540,6 +22138,14 @@
   function closeSettingsModal() {
     document.getElementById('settings-modal').classList.remove('show');
   }
+  function openTrashModal() {
+    const m = document.getElementById('trash-modal'); if (!m) return;
+    m.classList.add('show');
+    try { renderTypeTrash(); } catch (e) {}
+  }
+  function closeTrashModal() {
+    const m = document.getElementById('trash-modal'); if (m) m.classList.remove('show');
+  }
 
   function renderSettingsStats() {
     const el = document.getElementById('settings-stats');
@@ -21594,7 +22200,9 @@
       customFormats: customFormats,
       customAudio: customAudio,
       customTags: customTags,
-      customViral: customViral
+      customViral: customViral,
+      customComment: customComment,
+      typeTrash: typeTrash
     };
     downloadJson(data, `customer-perspective-${timestampForFilename()}.json`);
     toast('전체 데이터 내보냄');
@@ -21684,12 +22292,16 @@
       if (data.customAudio) customAudio = mergeArr(customAudio, data.customAudio);
       if (data.customTags) customTags = mergeArr(customTags, data.customTags);
       if (data.customViral) customViral = mergeArr(customViral, data.customViral);
+      if (data.customComment) customComment = mergeArr(customComment, data.customComment);
+      if (Array.isArray(data.typeTrash)) typeTrash = data.typeTrash;
       try {
         if (data.customKeywords) await window.storage.set(CK_KEY, JSON.stringify(customKeywords));
         if (data.customFormats) await window.storage.set(CF_KEY, JSON.stringify(customFormats));
         if (data.customAudio) await window.storage.set(CA_KEY, JSON.stringify(customAudio));
         if (data.customTags) await window.storage.set(CT_KEY, JSON.stringify(customTags));
         if (data.customViral) await window.storage.set(CV_KEY, JSON.stringify(customViral));
+        if (data.customComment) await window.storage.set(CM_KEY, JSON.stringify(customComment));
+        if (Array.isArray(data.typeTrash)) await window.storage.set(TT_KEY, JSON.stringify(typeTrash));
       } catch(e) {}
 
       resultEl.className = 'settings-import-result success';
@@ -21725,7 +22337,7 @@
       r.script = ''; r.format = ''; r.audioType = '';
       r.thumbStrong = false; r.copyStrong = false;
       r.thumbTypes = []; r.copyTypes = []; r.tags = []; r.viralTypes = [];
-      r.viralLine = ''; r.memo = ''; r.hasThumb = false; r.hasComment = false;
+      r.viralLine = ''; r.memo = ''; r.hasThumb = false; r.hasCopy = false; r.hasComment = false; r.commentType = '';
       r.rating = 0; r.favorite = false; r.hook = ''; r.author = ''; r.views = 0;
       r.why = ''; r.idea = ''; r.url = ''; r.platform = '';
     }
@@ -21746,11 +22358,11 @@
       r.script = ''; r.format = ''; r.audioType = '';
       r.thumbStrong = false; r.copyStrong = false;
       r.thumbTypes = []; r.copyTypes = []; r.tags = []; r.viralTypes = [];
-      r.viralLine = ''; r.memo = ''; r.hasThumb = false; r.hasComment = false;
+      r.viralLine = ''; r.memo = ''; r.hasThumb = false; r.hasCopy = false; r.hasComment = false; r.commentType = '';
       r.rating = 0; r.favorite = false; r.hook = ''; r.author = ''; r.views = 0;
       r.why = ''; r.idea = ''; r.url = ''; r.platform = '';
     }
-    customKeywords = []; customFormats = []; customAudio = []; customTags = []; customViral = [];
+    customKeywords = []; customFormats = []; customAudio = []; customTags = []; customViral = []; customComment = []; typeTrash = [];
     _gjMilestonesShown = {};
     try {
       await saveScripts();
@@ -21761,6 +22373,8 @@
       await window.storage.delete(CA_KEY);
       await window.storage.delete(CT_KEY);
       await window.storage.delete(CV_KEY);
+      await window.storage.delete(CM_KEY);
+      await window.storage.delete(TT_KEY);
       await window.storage.delete('shv4-gj-milestones');
     } catch(e) {}
     renderSettingsStats();
@@ -21775,6 +22389,8 @@
   function initSettingsModal() {
     const wsSettings = document.getElementById('ws-settings');
     if (wsSettings) wsSettings.onclick = openSettingsModal;
+    const wsTrash = document.getElementById('ws-trash');
+    if (wsTrash) wsTrash.onclick = openTrashModal;
 
     const close = document.getElementById('settings-modal-close');
     if (close) close.onclick = closeSettingsModal;
@@ -21783,6 +22399,11 @@
     if (modal) modal.onclick = (e) => {
       if (e.target.id === 'settings-modal') closeSettingsModal();
     };
+
+    const trashClose = document.getElementById('trash-modal-close');
+    if (trashClose) trashClose.onclick = closeTrashModal;
+    const trashModal = document.getElementById('trash-modal');
+    if (trashModal) trashModal.onclick = (e) => { if (e.target.id === 'trash-modal') closeTrashModal(); };
 
     const exportBtn = document.getElementById('settings-export-btn');
     if (exportBtn) exportBtn.onclick = exportAll;
