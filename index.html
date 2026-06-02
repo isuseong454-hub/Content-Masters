@@ -9800,6 +9800,24 @@
   .tg-noimg { font-size: 11px; color: var(--text-faint); }
   .tg-cap { font-family: 'Pretendard', sans-serif; font-size: 12px; color: var(--text-sub); line-height: 1.4; padding: 9px 10px 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
   .tg-views { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--text-mute); padding: 5px 10px 10px; }
+  /* ⚡ 빠른 수집 */
+  .tb-quick-btn { margin-top: 12px; padding: 9px 16px; border-radius: 9px; border: 1px solid var(--emerald-line); background: var(--emerald-faint); color: var(--emerald); font-family: 'Pretendard', sans-serif; font-size: 13px; font-weight: 800; cursor: pointer; transition: all .15s; }
+  .tb-quick-btn:hover { background: var(--emerald); color: #06140C; }
+  .tg-card.collect-card { position: relative; border-color: var(--emerald-line); }
+  .tg-quick-badge { font-size: 9.5px; font-weight: 800; color: var(--emerald); }
+  .tg-collect-link { font-size: 10px; color: var(--sage); text-decoration: none; margin-left: 4px; }
+  .tg-collect-del { position: absolute; top: 6px; right: 6px; width: 22px; height: 22px; border-radius: 50%; border: none; background: rgba(0,0,0,0.55); color: #fff; font-size: 13px; cursor: pointer; line-height: 1; }
+  .tg-collect-del:hover { background: var(--wine); }
+  .collect-box { max-width: 460px; }
+  .collect-thumb-box { width: 180px; aspect-ratio: 9/16; margin: 12px auto 0; background: var(--bg-input); border: 2px dashed var(--line); border-radius: 12px; cursor: pointer; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; transition: all .15s; }
+  .collect-thumb-box:hover { border-color: var(--emerald); background: var(--emerald-faint); }
+  .collect-thumb-box.drag-over { border-color: var(--neon); border-style: solid; }
+  .collect-thumb-box.has-img { border-style: solid; border-color: var(--emerald-line); }
+  .collect-empty { text-align: center; color: var(--text-faint); pointer-events: none; }
+  .collect-plus { font-size: 30px; font-weight: 300; }
+  .collect-hint { font-size: 11px; margin-top: 6px; }
+  .collect-img { width: 100%; height: 100%; object-fit: cover; }
+  .collect-types { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
   .tb-audio-list { display: flex; flex-direction: column; gap: 8px; }
   .tb-audio-item { display: flex; align-items: center; justify-content: space-between; gap: 10px; background: var(--bg-card); border: 1px solid var(--line); border-radius: 10px; padding: 11px 14px; cursor: pointer; }
   .tb-audio-item:hover { border-color: var(--sage); }
@@ -9816,6 +9834,9 @@
   .tb-kw-chip.gold { color: #FFD700; border-color: rgba(255,215,0,0.4); background: rgba(255,215,0,0.06); }
   .tb-kw-cnt { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: var(--text-faint); background: var(--bg-void); border-radius: 6px; padding: 1px 6px; }
   .tb-kw-chip.gold .tb-kw-cnt { color: #FFD700; }
+  .tb-kw-star { background: transparent; border: none; cursor: pointer; font-size: 13px; color: var(--text-faint); padding: 0 1px; transition: color .12s, transform .12s; line-height: 1; }
+  .tb-kw-star:hover { color: #FFD700; transform: scale(1.2); }
+  .tb-kw-star.on { color: #FFD700; }
 
   .fb-col-head {
     padding: 16px 18px 12px;
@@ -9966,20 +9987,20 @@
 
   .entry-body {
     display: grid;
-    grid-template-columns: 112px 112px 112px 1fr;
-    gap: 16px;
+    grid-template-columns: 140px 140px 1fr;
+    gap: 18px;
     position: relative;
     z-index: 1;
   }
 
   @media (max-width: 880px) {
-    .entry-body { grid-template-columns: 1fr 1fr 1fr; }
+    .entry-body { grid-template-columns: 1fr 1fr; }
     .entry-col-main { grid-column: 1 / -1; }
   }
   @media (max-width: 480px) {
     .entry-wrap { padding: 14px 14px 6px; }
     .entry-card { padding: 18px; }
-    .entry-body { grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+    .entry-body { grid-template-columns: 1fr 1fr; gap: 12px; }
     .entry-title { font-size: 22px; }
   }
 
@@ -10031,6 +10052,87 @@
     60% { box-shadow: 0 0 28px 4px var(--emerald-glow); }
     100% { box-shadow: 0 0 0 0 rgba(0,0,0,0); }
   }
+  /* 강점 칸 건드릴 때 9:16 박스가 반응 */
+  .entry-thumb-box.es-glow { border-color: var(--emerald); border-style: solid; box-shadow: 0 0 0 3px var(--emerald-faint), 0 0 26px var(--emerald-glow); transform: scale(1.025); }
+  /* 빠른 수집 (작성 영역 맨 위 · 컴팩트 가로 3칸 · 노란 테두리로 분리) */
+  .es-label { margin-bottom: 7px; }
+  .es-wrap { border: 1px solid var(--line); background: var(--bg-void); border-radius: 11px; padding: 9px; }
+  .es-hint { font-size: 10.5px; color: var(--text-faint); margin-top: 9px; line-height: 1.5; }
+  .es-hint b { color: var(--text-mute); }
+  .entry-strength .es-cards { display: flex; flex-flow: row wrap; gap: 6px; align-items: flex-start; }
+  .es-card { flex: 1 1 0; min-width: 0; border: 1px solid var(--line); border-radius: 9px; background: var(--bg-input); padding: 6px 8px; transition: border-color .15s, box-shadow .15s, transform .15s; }
+  .es-card.open { flex-basis: 100%; }
+  .es-card:hover { border-color: var(--emerald-line); transform: translateY(-1px); box-shadow: 0 0 12px var(--emerald-glow); }
+  .es-card.open { border-color: var(--emerald-line); }
+  .es-toggle { background: transparent; border: none; color: var(--text-mute); font-family: 'Pretendard', sans-serif; font-size: 11.5px; font-weight: 700; cursor: pointer; padding: 0; width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 4px; white-space: nowrap; overflow: hidden; }
+  .es-name { overflow: hidden; text-overflow: ellipsis; }
+  .es-card.open .es-toggle { color: var(--emerald); }
+  .es-chev { color: var(--text-faint); font-size: 9px; flex: 0 0 auto; }
+  .es-body { padding-top: 8px; }
+  .es-collect { margin-top: 8px; width: 100%; padding: 6px; border-radius: 7px; border: 1px solid var(--emerald-line); background: transparent; color: var(--emerald); font-family: 'Pretendard', sans-serif; font-size: 11px; font-weight: 800; cursor: pointer; transition: all .15s; }
+  .es-collect:hover { background: var(--emerald); color: #06140C; }
+  .es-types { display: flex; flex-wrap: wrap; gap: 5px; align-items: center; }
+  .es-type-chip { font-size: 11px; padding: 4px 7px; display: inline-flex; align-items: center; gap: 4px; }
+  .es-chip-x { font-size: 11px; opacity: 0.5; cursor: pointer; }
+  .es-chip-x:hover { opacity: 1; color: var(--wine); }
+  .es-type-add { font-size: 11px; padding: 4px 8px; border-radius: 7px; border: 1px dashed var(--line); background: transparent; color: var(--text-mute); cursor: pointer; }
+  .es-type-add:hover { border-color: var(--emerald-line); color: var(--emerald); }
+  .es-add-row { display: inline-flex; gap: 4px; align-items: center; }
+  .es-add-input { width: 90px; padding: 4px 7px; border-radius: 7px; border: 1px solid var(--emerald-line); background: var(--bg-void); color: var(--text-main); font-size: 11px; }
+  .es-add-ok { font-size: 11px; padding: 4px 8px; border-radius: 7px; border: none; background: var(--emerald); color: #06140C; font-weight: 800; cursor: pointer; }
+  /* ⚡ 소재 수집 버튼 + 창 */
+  .collect-open-row { display: flex; justify-content: flex-end; margin-bottom: 10px; }
+  .collect-open-btn { display: inline-flex; align-items: center; gap: 5px; padding: 7px 13px; border-radius: 999px; border: 1px solid var(--emerald-line); background: var(--emerald-faint); color: var(--emerald); font-family: 'Pretendard', sans-serif; font-size: 12px; font-weight: 800; cursor: pointer; transition: all .15s; box-shadow: 0 0 10px var(--emerald-glow); }
+  .collect-open-btn:hover { background: var(--emerald); color: #06140C; box-shadow: 0 0 20px var(--emerald-glow); transform: translateY(-1px); }
+  .collect-modal { display: none; position: fixed; inset: 0; z-index: 5400; background: rgba(0,0,0,0.6); backdrop-filter: blur(3px); align-items: center; justify-content: center; padding: 20px; }
+  .collect-modal.show { display: flex; }
+  .collect-modal-box { background: var(--bg-card); border: 1px solid var(--emerald-line); border-radius: 16px; max-width: 760px; width: 100%; max-height: 90vh; overflow-y: auto; padding: 22px; box-shadow: 0 20px 60px rgba(0,0,0,0.55); }
+  .collect-modal-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; }
+  .collect-eyebrow { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; letter-spacing: .2em; color: var(--emerald); font-weight: 700; text-transform: uppercase; }
+  .collect-title { font-family: 'Pretendard', sans-serif; font-size: 20px; font-weight: 800; color: var(--text-main); margin: 4px 0 0; }
+  .collect-modal-close { background: var(--bg-input); border: 1px solid var(--line); color: var(--text-mute); width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 16px; flex: 0 0 auto; }
+  .collect-desc { font-size: 12px; color: var(--text-mute); line-height: 1.5; margin: 0 0 16px; }
+  .cl-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  @media (max-width: 640px) { .cl-grid { grid-template-columns: 1fr; } }
+  .cl-sec { border: 1px solid var(--line); border-radius: 12px; background: var(--bg-void); padding: 12px; display: flex; flex-direction: column; gap: 10px; }
+  .cl-sec-title { font-family: 'Pretendard', sans-serif; font-size: 13px; font-weight: 800; color: var(--text-main); }
+  .cl-img { width: 100%; aspect-ratio: 9/16; border: 2px dashed var(--line); border-radius: 10px; background: var(--bg-input); cursor: pointer; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; transition: all .15s; }
+  .cl-img:hover { border-color: var(--emerald); background: var(--emerald-faint); }
+  .cl-img.drag-over { border-color: var(--neon); border-style: solid; }
+  .cl-img.has-img { border-style: solid; border-color: var(--emerald-line); }
+  .cl-img-empty { text-align: center; color: var(--text-faint); font-size: 11px; pointer-events: none; }
+  .cl-img-empty span { display: block; font-size: 26px; font-weight: 300; margin-bottom: 4px; }
+  .cl-img-el { width: 100%; height: 100%; object-fit: cover; }
+  .cl-img-rm { position: absolute; top: 5px; right: 5px; width: 22px; height: 22px; border-radius: 50%; border: none; background: rgba(0,0,0,0.6); color: #fff; font-size: 13px; cursor: pointer; line-height: 1; }
+  .cl-img-rm:hover { background: var(--wine); }
+  .cl-types { display: flex; flex-wrap: wrap; gap: 5px; align-items: center; }
+  .cl-collect { padding: 9px; border-radius: 8px; border: none; background: var(--emerald); color: #06140C; font-family: 'Pretendard', sans-serif; font-size: 12.5px; font-weight: 800; cursor: pointer; transition: filter .15s; }
+  .cl-collect:hover { filter: brightness(1.08); }
+  .cl-edit { padding: 6px; border-radius: 7px; border: 1px solid var(--line); background: var(--bg-input); color: var(--text-sub); font-family: 'Pretendard', sans-serif; font-size: 11px; font-weight: 700; cursor: pointer; }
+  .cl-edit:hover { border-color: var(--emerald-line); color: var(--emerald); }
+  /* 사진 편집기 */
+  .imed-modal { display: none; position: fixed; inset: 0; z-index: 5500; background: rgba(0,0,0,0.7); align-items: center; justify-content: center; padding: 16px; }
+  .imed-modal.show { display: flex; }
+  .imed-box { background: var(--bg-card); border: 1px solid var(--line); border-radius: 14px; padding: 16px; max-width: 600px; width: 100%; max-height: 92vh; overflow: auto; }
+  .imed-head { display: flex; justify-content: space-between; align-items: center; font-size: 14px; font-weight: 800; color: var(--text-main); margin-bottom: 12px; }
+  .imed-sub { font-size: 11px; font-weight: 500; color: var(--text-mute); margin-left: 6px; }
+  .imed-close { background: var(--bg-input); border: 1px solid var(--line); color: var(--text-mute); width: 30px; height: 30px; border-radius: 50%; cursor: pointer; flex: 0 0 auto; }
+  .imed-tools { display: flex; gap: 8px; margin-bottom: 12px; align-items: center; }
+  .imed-tool { display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; border-radius: 8px; border: 1px solid var(--line); background: var(--bg-input); color: var(--text-sub); font-size: 12px; font-weight: 700; cursor: pointer; }
+  .imed-tool.on { border-color: var(--emerald-line); background: var(--emerald-faint); color: var(--emerald); }
+  .imed-sw { width: 14px; height: 14px; border-radius: 50%; }
+  .imed-sw.hi { background: rgba(255,225,0,0.75); }
+  .imed-sw.pen { background: #E62828; }
+  .imed-undo { margin-left: auto; padding: 7px 12px; border-radius: 8px; border: 1px solid var(--line); background: var(--bg-input); color: var(--text-mute); font-size: 12px; cursor: pointer; }
+  .imed-canvas-wrap { display: flex; justify-content: center; background: var(--bg-void); border-radius: 10px; padding: 10px; }
+  #imed-canvas { max-width: 100%; touch-action: none; cursor: crosshair; border-radius: 6px; }
+  .imed-actions { display: flex; gap: 8px; margin-top: 14px; }
+  .imed-cancel { flex: 1; padding: 10px; border-radius: 9px; border: 1px solid var(--line); background: var(--bg-input); color: var(--text-mute); font-weight: 700; cursor: pointer; }
+  .imed-save { flex: 2; padding: 10px; border-radius: 9px; border: none; background: var(--emerald); color: #06140C; font-weight: 800; cursor: pointer; }
+  .es-type-chip { font-size: 11.5px; color: var(--text-mute); background: var(--bg-card); border: 1px solid var(--line); border-radius: 7px; padding: 5px 9px; cursor: pointer; transition: all .12s; }
+  .es-type-chip.on { background: var(--emerald); color: #06140C; border-color: var(--emerald); font-weight: 700; }
+  .entry-strength-hint { font-size: 11px; color: var(--text-faint); margin-top: 8px; line-height: 1.5; }
+  .entry-strength-hint b { color: var(--emerald); }
   .entry-thumb-box.drag-over {
     border-color: var(--neon);
     background: rgba(0, 230, 118, 0.08);
@@ -10107,6 +10209,8 @@
     gap: 6px;
   }
 
+  .entry-fmt-bar { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 7px; }
+  .entry-fmt-bar .fmt-btn { padding: 5px 9px; }
   .entry-script-edit {
     width: 100%;
     min-height: 100px;
@@ -12448,6 +12552,57 @@
         </div>
       </div>
 
+      <!-- ⚡ 소재 수집 창 (행 안 만들고 이미지+유형만 보드 컬렉션에 저장) -->
+      <div class="collect-modal" id="collect-modal">
+        <div class="collect-modal-box">
+          <div class="collect-modal-head">
+            <div>
+              <div class="collect-eyebrow">⚡ COLLECT · 소재 수집</div>
+              <h3 class="collect-title">좋은 소재 모아두기</h3>
+            </div>
+            <button class="collect-modal-close" id="collect-modal-close">×</button>
+          </div>
+          <p class="collect-desc">시트 행을 만들지 않고 <b>이미지 + 유형</b>만 보드에 유형별로 모아둬요. 각 칸에 이미지를 넣고 유형을 골라 <b>수집</b>!</p>
+          <div class="cl-grid">
+            <div class="cl-sec" data-q="thumb">
+              <div class="cl-sec-title">🖼 썸네일</div>
+              <div class="cl-img" id="cl-img-thumb"><div class="cl-img-empty"><span>+</span>이미지 드래그·클릭</div><img class="cl-img-el" id="cl-imgel-thumb" alt="" style="display:none;" /><button class="cl-img-rm" data-q="thumb" type="button" style="display:none;">×</button></div>
+              <button class="cl-edit" data-q="thumb" type="button" style="display:none;">✏️ 형광펜·빨간펜 편집</button>
+              <div class="cl-types" data-q="thumb"></div>
+              <button class="cl-collect" data-q="thumb" type="button">⚡ 썸네일 수집</button>
+            </div>
+            <div class="cl-sec" data-q="copy">
+              <div class="cl-sec-title">💬 수식어</div>
+              <div class="cl-img" id="cl-img-copy"><div class="cl-img-empty"><span>+</span>이미지 드래그·클릭</div><img class="cl-img-el" id="cl-imgel-copy" alt="" style="display:none;" /><button class="cl-img-rm" data-q="copy" type="button" style="display:none;">×</button></div>
+              <button class="cl-edit" data-q="copy" type="button" style="display:none;">✏️ 형광펜·빨간펜 편집</button>
+              <div class="cl-types" data-q="copy"></div>
+              <button class="cl-collect" data-q="copy" type="button">⚡ 수식어 수집</button>
+            </div>
+            <div class="cl-sec" data-q="comment">
+              <div class="cl-sec-title">🗨 공감댓글</div>
+              <div class="cl-img" id="cl-img-comment"><div class="cl-img-empty"><span>+</span>이미지 드래그·클릭</div><img class="cl-img-el" id="cl-imgel-comment" alt="" style="display:none;" /><button class="cl-img-rm" data-q="comment" type="button" style="display:none;">×</button></div>
+              <button class="cl-edit" data-q="comment" type="button" style="display:none;">✏️ 형광펜·빨간펜 편집</button>
+              <div class="cl-types" data-q="comment"></div>
+              <button class="cl-collect" data-q="comment" type="button">⚡ 댓글 수집</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ✏️ 사진 편집기 (형광펜 + 빨간펜) -->
+      <div class="imed-modal" id="imed-modal">
+        <div class="imed-box">
+          <div class="imed-head"><span>✏️ 사진 편집 <span class="imed-sub">강조할 곳에 형광펜, 짚을 곳에 빨간 펜</span></span><button class="imed-close" id="imed-close">×</button></div>
+          <div class="imed-tools">
+            <button class="imed-tool on" data-tool="hi" type="button"><span class="imed-sw hi"></span>형광펜</button>
+            <button class="imed-tool" data-tool="pen" type="button"><span class="imed-sw pen"></span>빨간 펜</button>
+            <button class="imed-undo" id="imed-undo" type="button">↶ 되돌리기</button>
+          </div>
+          <div class="imed-canvas-wrap"><canvas id="imed-canvas"></canvas></div>
+          <div class="imed-actions"><button class="imed-cancel" id="imed-cancel" type="button">취소</button><button class="imed-save" id="imed-save" type="button">저장</button></div>
+        </div>
+      </div>
+
       <div class="home-grid">
         <div>
           <!-- GOAL & WHY -->
@@ -12643,19 +12798,6 @@
               </div>
             </div>
 
-            <!-- 가운데: 수식어 (세로 9:16) -->
-            <div class="entry-col entry-col-copy">
-              <label class="entry-mini-label">수식어</label>
-              <div class="entry-thumb-box" id="entry-copy-box">
-                <div class="entry-thumb-empty">
-                  <div class="entry-thumb-plus">+</div>
-                  <div class="entry-thumb-hint">이미지 드래그<br/>또는 클릭</div>
-                </div>
-                <img class="entry-thumb-img" id="entry-copy-img" alt="" style="display:none;" />
-                <button class="entry-thumb-rm" id="entry-copy-rm" style="display:none;">×</button>
-              </div>
-            </div>
-
             <!-- 가운데: 공감 댓글 (세로 9:16) -->
             <div class="entry-col entry-col-comm">
               <label class="entry-mini-label">공감 댓글</label>
@@ -12671,7 +12813,12 @@
 
             <!-- 오른쪽: 주제 → 원고 → 링크 -->
             <div class="entry-col entry-col-main">
-              <!-- 주제 (맨 위, 제목처럼) -->
+              <!-- 소재 수집 버튼 (전용 창 열기 · 작은 알약) -->
+              <div class="collect-open-row">
+                <button type="button" class="collect-open-btn" id="collect-open-btn">⚡ 썸네일 수집</button>
+              </div>
+
+              <!-- 주제 -->
               <div class="entry-section">
                 <label class="entry-mini-label">주제</label>
                 <input type="text" class="entry-input entry-input-topic" id="entry-why" placeholder="얼굴형 분석 / 동기부여 영상 / 시스루뱅 망하는 이유" />
@@ -12688,11 +12835,18 @@
 
               <!-- 원고 -->
               <div class="entry-section">
-                <label class="entry-mini-label">원고</label>
-                <div class="entry-script-edit" 
-                     contenteditable="true" 
+                <label class="entry-mini-label">원고 <span class="opt">— 드래그 후 색 적용해 핏하게</span></label>
+                <div class="entry-fmt-bar">
+                  <button class="fmt-btn bold-btn" data-fmt="bold" title="굵게">B</button>
+                  <button class="fmt-btn red-btn" data-fmt="color:red" title="빨강 · 핵심"><span class="swatch"></span><span class="lbl">핵심</span></button>
+                  <button class="fmt-btn orange-btn" data-fmt="color:orange" title="주황 · 참고"><span class="swatch"></span><span class="lbl">참고</span></button>
+                  <button class="fmt-btn emerald-btn" data-fmt="color:emerald" title="에메랄드 · 보조"><span class="swatch"></span><span class="lbl">보조</span></button>
+                  <button class="fmt-btn clear-btn" data-fmt="clear" title="포맷 제거">✕</button>
+                </div>
+                <div class="entry-script-edit"
+                     contenteditable="true"
                      id="entry-script"
-                     data-placeholder="원고 — 벤치마킹할 글을 다듬어보세요. 드래그하면 위 툴바로 색 적용."></div>
+                     data-placeholder="원고 — 벤치마킹할 글을 다듬어보세요. 드래그해서 핵심·참고·보조 색을 입혀보세요."></div>
               </div>
 
               <!-- 링크 -->
@@ -13306,64 +13460,7 @@
         <button class="sh-pbtn" data-platform="other">Other</button>
       </div>
 
-      <!-- ===== 1. 강점 분석 ===== -->
-      <div class="str-block">
-        <label class="sh-label">강점 분석 <span class="opt">— 어디가 강했나? 각각 유형 분류</span></label>
-        <div class="str-grid">
-          <!-- 썸네일 -->
-          <div class="str-side thumb" data-side="thumb" id="str-thumb">
-            <div class="str-side-head">
-              <div class="str-side-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="3" y="4" width="18" height="14" rx="2"/>
-                  <circle cx="9" cy="10" r="2"/>
-                  <path d="M21 15l-5-5L7 18"/>
-                </svg>
-              </div>
-              <div>
-                <div class="str-side-title">썸네일</div>
-                <div class="str-side-sub">그림이 강함</div>
-              </div>
-              <div class="str-side-check">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="20 6 9 17 4 12"/>
-                </svg>
-              </div>
-            </div>
-            <div class="str-side-hint" id="thumb-hint">탭해서 활성화 → 어떤 유형의 썸네일인지 분류</div>
-            <div class="str-side-types">
-              <div class="str-side-types-label">썸네일 유형</div>
-              <div class="str-type-grid" id="f-thumb-types"></div>
-            </div>
-          </div>
-
-          <!-- 수식어 -->
-          <div class="str-side copy" data-side="copy" id="str-copy">
-            <div class="str-side-head">
-              <div class="str-side-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-                  <path d="M8 9h8M8 13h5"/>
-                </svg>
-              </div>
-              <div>
-                <div class="str-side-title">수식어</div>
-                <div class="str-side-sub">후킹 문구가 강함</div>
-              </div>
-              <div class="str-side-check">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                  <polyline points="20 6 9 17 4 12"/>
-                </svg>
-              </div>
-            </div>
-            <div class="str-side-hint" id="copy-hint">탭해서 활성화 → 어떤 유형의 수식어인지 분류</div>
-            <div class="str-side-types">
-              <div class="str-side-types-label">수식어 유형</div>
-              <div class="str-type-grid" id="f-copy-types"></div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <!-- (썸네일/수식어 강점 분류는 작성 영역 '빠른 수집'으로 이동 — 중복 제거) -->
 
       <!-- ===== 2. 조회수 ===== -->
       <div class="sh-field">
@@ -13487,20 +13584,7 @@
         <div class="sh-field-desc">▶ 들으러 가기는 시트에 입력한 <b>컨텐츠 링크</b>로 연결돼요. (오디오 링크 따로 입력 불필요)</div>
       </div>
 
-      <!-- ===== 6-2. 공감 댓글 유형 ===== -->
-      <div class="fmt-block">
-        <div class="fmt-block-head">
-          <label class="sh-label">공감 댓글 유형 <span class="opt">— 어떤 반응을 노렸나</span></label>
-          <button class="fmt-add-inline-btn" id="f-comment-add-btn">+ 유형 추가</button>
-        </div>
-        <div class="fmt-picker" id="f-comment-picker"></div>
-        <div class="fmt-add-inline" id="f-comment-add-row" style="display:none;">
-          <input type="text" class="fmt-add-input" id="f-comment-add-input" placeholder="새 댓글 유형" maxlength="20" />
-          <button class="fmt-add-confirm" id="f-comment-add-confirm">추가</button>
-          <button class="fmt-add-cancel" id="f-comment-add-cancel">취소</button>
-        </div>
-        <div class="sh-field-desc">저장한 공감댓글 이미지는 <b>썸네일 탭 → 댓글</b>에서 유형별로 모여요.</div>
-      </div>
+      <!-- (공감 댓글 유형은 작성 영역 '빠른 수집'으로 이동 — 중복 제거) -->
 
       <!-- ===== 7. 별점 ===== -->
       <div class="sh-field">
@@ -13585,7 +13669,7 @@
     // profiles 묶음(설정·커스텀목록·무드보드·홈/챌린지) — profiles.data jsonb 한 행에 모아 동기화
     const PROFILE_KEYS = new Set([
       'shv4-prefs',
-      'shv4-custom-keywords', 'shv4-custom-formats', 'shv4-custom-audio', 'shv4-custom-tags', 'shv4-custom-viral', 'shv4-custom-comment', 'shv4-type-trash', 'shv4-custom-content-types',
+      'shv4-custom-keywords', 'shv4-custom-formats', 'shv4-custom-audio', 'shv4-custom-tags', 'shv4-custom-viral', 'shv4-custom-comment', 'shv4-collects', 'shv4-type-trash', 'shv4-custom-content-types',
       'shv4-gj-milestones',
       'mbv2-meta', 'mbv2-cards',
       'hmv1-home', 'hmv1-challenges', 'hmv1-seen',
@@ -13974,6 +14058,7 @@
   const CT_KEY = 'shv4-custom-tags';
   const CV_KEY = 'shv4-custom-viral';
   const CM_KEY = 'shv4-custom-comment';
+  const COLLECTS_KEY = 'shv4-collects'; // 빠른 수집함 (행과 분리된 소재 라이브러리)
   const TT_KEY = 'shv4-type-trash'; // 유형 휴지통 [{sys,label}]
   const CCT_KEY = 'shv4-custom-content-types';
   const SCRIPTS_KEY = 'shv4-scripts';
@@ -13990,6 +14075,7 @@
   let customTags = []; // user-added free tags
   let customViral = []; // 사용자 추가 바이럴(떡상) 유형
   let customComment = []; // 사용자 추가 댓글 유형
+  let collects = []; // 빠른 수집함: [{id, kind:'thumb'|'copy'|'comment', type, link, createdAt}] — 이미지는 Storage(id,'c')
   let typeTrash = []; // 유형 휴지통: [{sys:'format'|'keyword'|'viral'|'tag'|'audio'|'comment', label}]
   let customContentTypes = []; // 사용자 추가 컨텐츠 유형 (라벨 배열)
   let scripts = []; // 내 원고들
@@ -14112,6 +14198,11 @@
       const r = await window.storage.get(CM_KEY);
       if (r) customComment = JSON.parse(r.value);
     } catch (e) { customComment = []; }
+    // Load 빠른 수집함
+    try {
+      const r = await window.storage.get(COLLECTS_KEY);
+      if (r) { const a = JSON.parse(r.value); if (Array.isArray(a)) collects = a; }
+    } catch (e) { collects = []; }
     // Load 유형 휴지통
     try {
       const r = await window.storage.get(TT_KEY);
@@ -14144,6 +14235,9 @@
   }
   async function saveCustomComment() {
     try { await window.storage.set(CM_KEY, JSON.stringify(customComment)); } catch (e) {}
+  }
+  async function saveCollects() {
+    try { await window.storage.set(COLLECTS_KEY, JSON.stringify(collects)); } catch (e) {}
   }
   async function saveTypeTrash() {
     try { await window.storage.set(TT_KEY, JSON.stringify(typeTrash)); } catch (e) {}
@@ -14988,6 +15082,64 @@
       b.classList.toggle('on', b.dataset.tbmode === thumbMode);
       b.onclick = () => { thumbMode = b.dataset.tbmode; renderThumbBoard(); };
     });
+    // 빠른 수집 버튼: 썸네일/수식어/댓글 탭에서만 표시
+    const qb = document.getElementById('tb-quick-btn');
+    if (qb) {
+      const showQuick = (thumbMode === 'thumb' || thumbMode === 'copy' || thumbMode === 'comment');
+      qb.style.display = showQuick ? '' : 'none';
+      if (showQuick) qb.onclick = () => openCollect(thumbMode);
+    }
+  }
+  // ===== ⚡ 빠른 수집 (행 안 만들고 이미지+유형만 컬렉션에 저장) =====
+  let _collectKind = 'thumb', _collectImg = null, _collectType = '', _collectInited = false;
+  function renderCollectTypes() {
+    const el = document.getElementById('collect-types'); if (!el) return;
+    const list = _collectKind === 'comment' ? activeComment() : activeKeywords();
+    el.innerHTML = list.map(t => '<button class="es-type-chip' + (_collectType === t ? ' on' : '') + '" data-t="' + esc(t) + '">' + esc(t) + '</button>').join('');
+    el.querySelectorAll('.es-type-chip').forEach(b => { b.onclick = () => { _collectType = (_collectType === b.dataset.t) ? '' : b.dataset.t; renderCollectTypes(); }; });
+  }
+  function initCollectModal() {
+    const box = document.getElementById('collect-img-box');
+    const imgEl = document.getElementById('collect-img');
+    const fileInput = document.createElement('input'); fileInput.type = 'file'; fileInput.accept = 'image/*'; fileInput.style.display = 'none'; document.body.appendChild(fileInput);
+    const handle = (file) => { if (!file || !file.type.startsWith('image/')) return; const rd = new FileReader(); rd.onload = e => { _collectImg = e.target.result; imgEl.src = _collectImg; imgEl.style.display = ''; box.classList.add('has-img'); box.querySelector('.collect-empty').style.display = 'none'; }; rd.readAsDataURL(file); };
+    box.addEventListener('click', () => fileInput.click());
+    fileInput.addEventListener('change', e => { if (e.target.files[0]) handle(e.target.files[0]); e.target.value = ''; });
+    box.addEventListener('dragover', e => { e.preventDefault(); box.classList.add('drag-over'); });
+    box.addEventListener('dragleave', () => box.classList.remove('drag-over'));
+    box.addEventListener('drop', e => { e.preventDefault(); box.classList.remove('drag-over'); if (e.dataTransfer.files[0]) handle(e.dataTransfer.files[0]); });
+    document.getElementById('collect-modal').addEventListener('paste', e => { if (e.clipboardData && e.clipboardData.files[0]) handle(e.clipboardData.files[0]); });
+    document.getElementById('collect-close').onclick = () => document.getElementById('collect-modal').classList.remove('show');
+    document.getElementById('collect-modal').onclick = (e) => { if (e.target.id === 'collect-modal') document.getElementById('collect-modal').classList.remove('show'); };
+    document.getElementById('collect-save').onclick = saveCollect;
+  }
+  function openCollect(kind) {
+    _collectKind = kind; _collectImg = null; _collectType = '';
+    if (!_collectInited) { initCollectModal(); _collectInited = true; }
+    const label = kind === 'thumb' ? '썸네일' : kind === 'copy' ? '수식어' : '공감댓글';
+    document.getElementById('collect-title').textContent = label + ' 빠르게 모으기';
+    const ib = document.getElementById('collect-img-box'); ib.classList.remove('has-img');
+    const im = document.getElementById('collect-img'); im.style.display = 'none'; im.src = '';
+    ib.querySelector('.collect-empty').style.display = '';
+    document.getElementById('collect-link').value = '';
+    renderCollectTypes();
+    document.getElementById('collect-modal').classList.add('show');
+  }
+  async function saveCollect() {
+    if (!_collectImg) { toast('이미지를 넣어주세요'); return; }
+    const id = 'col_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7);
+    const c = { id: id, kind: _collectKind, type: _collectType || '', link: (document.getElementById('collect-link').value || '').trim(), createdAt: Date.now() };
+    try { await saveImage(id, 'c', _collectImg); } catch (e) {}
+    collects.push(c); await saveCollects();
+    document.getElementById('collect-modal').classList.remove('show');
+    toast('⚡ 수집함에 저장됨!');
+    renderThumbBoard();
+  }
+  async function deleteCollect(id) {
+    if (!confirm('이 수집 항목을 삭제할까요?')) return;
+    collects = collects.filter(c => c.id !== id); await saveCollects();
+    renderThumbBoard();
+    toast('삭제됨');
   }
   function renderThumbBoard() {
     const el = document.getElementById('tb-body'); if (!el) return;
@@ -15022,32 +15174,47 @@
       const goldList = pool.filter(k => k.gold);
       const normList = pool.filter(k => !k.gold);
       Object.keys(used).forEach(l => { if (!poolLabels.has(l)) normList.push({ label: l, gold: false }); });
-      const chip = k => '<span class="tb-kw-chip' + (k.gold ? ' gold' : '') + '">' + (k.gold ? '★ ' : '') + esc(k.label) + '<span class="tb-kw-cnt">' + (used[k.label] || 0) + '</span></span>';
+      const inPool = (label) => keywords.some(k => k.label === label);
+      const chip = k => '<span class="tb-kw-chip' + (k.gold ? ' gold' : '') + '">' + esc(k.label) + '<span class="tb-kw-cnt">' + (used[k.label] || 0) + '</span>' + (inPool(k.label) ? '<button class="tb-kw-star' + (k.gold ? ' on' : '') + '" data-kwgold="' + esc(k.label) + '" title="황금 키워드 토글">★</button>' : '') + '</span>';
       let h = '';
+      h += '<div class="es-hint" style="margin:0 0 10px;">★ 를 눌러 <b>황금 키워드</b>로 올리거나 내릴 수 있어요.</div>';
       if (goldList.length) h += '<div class="tb-sec"><div class="tb-sec-head">★ 황금 키워드 <span class="tb-sec-cnt">' + goldList.length + '</span></div><div class="tb-kw-wrap">' + goldList.map(chip).join('') + '</div></div>';
       if (normList.length) h += '<div class="tb-sec"><div class="tb-sec-head">키워드 <span class="tb-sec-cnt">' + normList.length + '</span></div><div class="tb-kw-wrap">' + normList.map(chip).join('') + '</div></div>';
       el.innerHTML = h || '<div class="tb-empty">아직 키워드가 없어요. 분해하기에서 키워드를 입력하거나, 고객 분석에서 추가해보세요.</div>';
+      el.querySelectorAll('.tb-kw-star').forEach(b => {
+        b.onclick = async (e) => {
+          e.stopPropagation();
+          const kw = keywords.find(k => k.label === b.dataset.kwgold);
+          if (kw) { kw.gold = !kw.gold; await saveKeywordsList(); renderThumbBoard(); }
+        };
+      });
       bindTbToggle();
       return;
     }
     const strongKey = thumbMode === 'thumb' ? 'thumbStrong' : 'copyStrong';
     const typesKey = thumbMode === 'thumb' ? 'thumbTypes' : 'copyTypes';
     const strongRows = rows.filter(r => isFilled(r) && r[strongKey]);
-    const imgKind = thumbMode === 'copy' ? 'copy' : 'thumb'; // 수식어 탭은 수식어 이미지를 보여줌
+    const imgKind = 'thumb';
     const renderCard = r => {
       const hookText = (r.hook || stripHtml(r.script || '').slice(0, 60) || r.why || '');
       const views = r.views ? fmtNum(r.views) : '';
       const hasImg = imgKind === 'copy' ? r.hasCopy : r.hasThumb;
       return '<div class="tg-card" data-row="' + r.id + '"><div class="tg-thumb" data-img="' + r.id + '" data-kind="' + imgKind + '">' + (hasImg ? '' : '<span class="tg-noimg">이미지 없음</span>') + '</div><div class="tg-cap">' + (esc(hookText) || '(내용 없음)') + '</div>' + (views ? '<div class="tg-views">▶ ' + views + '</div>' : '') + '</div>';
     };
-    const loadCardImgs = () => {
+    function loadCardImgs() {
       el.querySelectorAll('.tg-thumb[data-img]').forEach(async box => {
         const id = box.dataset.img, kind = box.dataset.kind || 'thumb';
         const r = rows.find(x => x.id === id); if (!r) return;
         const has = kind === 'copy' ? r.hasCopy : r.hasThumb;
         if (has) { try { const u = await loadImage(id, kind); if (u) box.innerHTML = '<img src="' + u + '" alt="" />'; } catch (e) {} }
       });
-    };
+      el.querySelectorAll('.tg-thumb[data-cimg]').forEach(async box => {
+        const id = box.dataset.cimg; try { const u = await loadImage(id, 'c'); if (u) box.innerHTML = '<img src="' + u + '" alt="" />'; } catch (e) {}
+      });
+      el.querySelectorAll('.tg-collect-del').forEach(b => { b.onclick = (e) => { e.stopPropagation(); deleteCollect(b.dataset.cdel); }; });
+    }
+    // 빠른 수집 카드 (⚡ 표시 + 출처 + 삭제)
+    function collectCard(c) { return '<div class="tg-card collect-card" data-collect="' + c.id + '"><div class="tg-thumb" data-cimg="' + c.id + '"></div><div class="tg-cap"><span class="tg-quick-badge">⚡ 수집</span>' + (c.link ? ' <a class="tg-collect-link" href="' + esc(c.link) + '" target="_blank" rel="noopener">↗ 출처</a>' : '') + '</div><button class="tg-collect-del" data-cdel="' + c.id + '" title="삭제">×</button></div>'; }
     // 바이럴(떡상) 모드 — 터진 이유(viralTypes)별로 컨텐츠를 핀터레스트처럼 묶어서 패턴 비교
     if (thumbMode === 'viral') {
       const vRows = rows.filter(r => isFilled(r) && (r.viralTypes || []).length);
@@ -15076,29 +15243,34 @@
       cGroups.forEach(g => {
         const isNone = g === '__none__';
         const list = cRows.filter(r => isNone ? !r.commentType : r.commentType === g);
-        if (!list.length) return;
-        chtml += '<div class="tb-sec"><div class="tb-sec-head">💬 ' + (isNone ? '유형 미지정' : esc(g)) + ' <span class="tb-sec-cnt">' + list.length + '</span></div><div class="tg-grid">' + list.map(cCard).join('') + '</div></div>';
+        const colList = collects.filter(c => c.kind === 'comment' && (isNone ? !c.type : c.type === g));
+        if (!list.length && !colList.length) return;
+        chtml += '<div class="tb-sec"><div class="tb-sec-head">💬 ' + (isNone ? '유형 미지정' : esc(g)) + ' <span class="tb-sec-cnt">' + (list.length + colList.length) + '</span></div><div class="tg-grid">' + colList.map(collectCard).join('') + list.map(cCard).join('') + '</div></div>';
       });
-      el.innerHTML = chtml || '<div class="tb-empty">저장한 공감댓글이 없어요. 분해하기(작성)에서 공감댓글 이미지를 올리고, 댓글 유형을 골라보세요.</div>';
-      el.querySelectorAll('.tg-card').forEach(c => { c.onclick = () => openDetail(c.dataset.row); });
+      el.innerHTML = chtml || '<div class="tb-empty">저장한 공감댓글이 없어요.<br/>⚡ 소재 수집으로 공감댓글을 모아보세요.</div>';
+      el.querySelectorAll('.tg-card[data-row]').forEach(c => { c.onclick = () => openDetail(c.dataset.row); });
       el.querySelectorAll('.tg-thumb[data-img]').forEach(async box => {
         const id = box.dataset.img; const r = rows.find(x => x.id === id);
         if (r && r.hasComment) { try { const u = await loadImage(id, 'comment'); if (u) box.innerHTML = '<img src="' + u + '" alt="" />'; } catch (e) {} }
       });
+      loadCardImgs();
       bindTbToggle();
       return;
     }
     const types = activeKeywords();
+    const ckind = thumbMode; // 'thumb' | 'copy'
     let html = '';
     types.forEach(t => {
       const list = strongRows.filter(r => (r[typesKey] || []).includes(t));
-      if (!list.length) return;
-      html += '<div class="tb-sec"><div class="tb-sec-head">' + esc(t) + ' <span class="tb-sec-cnt">' + list.length + '</span></div><div class="tg-grid">' + list.map(renderCard).join('') + '</div></div>';
+      const colList = collects.filter(c => c.kind === ckind && c.type === t);
+      if (!list.length && !colList.length) return;
+      html += '<div class="tb-sec"><div class="tb-sec-head">' + esc(t) + ' <span class="tb-sec-cnt">' + (list.length + colList.length) + '</span></div><div class="tg-grid">' + colList.map(collectCard).join('') + list.map(renderCard).join('') + '</div></div>';
     });
     const noneList = strongRows.filter(r => !((r[typesKey] || []).length));
-    if (noneList.length) html += '<div class="tb-sec"><div class="tb-sec-head">유형 미지정 <span class="tb-sec-cnt">' + noneList.length + '</span></div><div class="tg-grid">' + noneList.map(renderCard).join('') + '</div></div>';
-    el.innerHTML = html || ('<div class="tb-empty">' + (thumbMode === 'thumb' ? '강한 썸네일' : '강한 수식어') + '로 표시한 카드가 없어요. 분해하기에서 표시해보세요.</div>');
-    el.querySelectorAll('.tg-card').forEach(c => { c.onclick = () => openDetail(c.dataset.row); });
+    const noneCol = collects.filter(c => c.kind === ckind && !c.type);
+    if (noneList.length || noneCol.length) html += '<div class="tb-sec"><div class="tb-sec-head">유형 미지정 <span class="tb-sec-cnt">' + (noneList.length + noneCol.length) + '</span></div><div class="tg-grid">' + noneCol.map(collectCard).join('') + noneList.map(renderCard).join('') + '</div></div>';
+    el.innerHTML = html || ('<div class="tb-empty">아직 ' + (thumbMode === 'thumb' ? '썸네일' : '수식어') + '이 없어요.<br/>⚡ 소재 수집으로 좋은 소재를 모아보세요.</div>');
+    el.querySelectorAll('.tg-card[data-row]').forEach(c => { c.onclick = () => openDetail(c.dataset.row); });
     loadCardImgs();
     bindTbToggle();
   }
@@ -17609,6 +17781,7 @@
   function renderStrengthBlock() {
     const thumbEl = document.getElementById('str-thumb');
     const copyEl = document.getElementById('str-copy');
+    if (!thumbEl || !copyEl) return; // 강점 분석은 작성영역 빠른수집으로 이동 — 모달에서 제거됨
     thumbEl.classList.toggle('active', formThumbStrong);
     copyEl.classList.toggle('active', formCopyStrong);
 
@@ -18053,14 +18226,16 @@
       });
     });
 
-    // Strength side click → toggle active
-    document.getElementById('str-thumb').addEventListener('click', (e) => {
+    // Strength side click → toggle active (강점 분석은 작성영역으로 이동, 모달엔 없을 수 있음 → 가드)
+    const _strThumb = document.getElementById('str-thumb');
+    if (_strThumb) _strThumb.addEventListener('click', (e) => {
       if (e.target.closest('.str-type-chip')) return;
       formThumbStrong = !formThumbStrong;
       if (!formThumbStrong) formThumbTypes = [];
       renderStrengthBlock();
     });
-    document.getElementById('str-copy').addEventListener('click', (e) => {
+    const _strCopy = document.getElementById('str-copy');
+    if (_strCopy) _strCopy.addEventListener('click', (e) => {
       if (e.target.closest('.str-type-chip')) return;
       formCopyStrong = !formCopyStrong;
       if (!formCopyStrong) formCopyTypes = [];
@@ -18558,6 +18733,233 @@
   }
 
   // === 메인 카드 컨텐츠 유형 픽커 ===
+  // === 작성 영역 강점 분류 (썸네일/수식어/공감댓글) ===
+  // 빠른 수집 토글 상태 (UI)
+  let _qType = { thumb: '', copy: '', comment: '' };
+  let _qOpen = { thumb: false, copy: false, comment: false };
+  let _qAddOpen = { thumb: false, copy: false, comment: false };
+  function _qSys(q) { return q === 'comment' ? 'comment' : 'keyword'; }
+  function _qIsCustom(q, label) { return (q === 'comment' ? customComment : customKeywords).includes(label); }
+  function renderEntryStrength() {
+    document.querySelectorAll('.es-card[data-q]').forEach(card => {
+      const q = card.dataset.q;
+      const open = !!_qOpen[q];
+      card.classList.toggle('open', open);
+      const chev = card.querySelector('.es-chev'); if (chev) chev.textContent = open ? '▴' : '▾';
+      const body = card.querySelector('.es-body'); if (body) body.style.display = open ? 'block' : 'none';
+      const typesEl = card.querySelector('.es-types');
+      if (typesEl && open) {
+        const list = (q === 'comment') ? activeComment() : activeKeywords();
+        let h = list.map(t => {
+          const on = _qType[q] === t;
+          return '<button class="es-type-chip' + (on ? ' on' : '') + '" data-t="' + esc(t) + '">' + esc(t) + '<span class="es-chip-x" data-del="' + esc(t) + '" title="삭제(휴지통)">×</span></button>';
+        }).join('');
+        h += '<button class="es-type-add" data-add="1">+ 유형 추가</button>';
+        if (_qAddOpen[q]) h += '<span class="es-add-row"><input class="es-add-input" placeholder="새 유형" maxlength="20" /><button class="es-add-ok">추가</button></span>';
+        typesEl.innerHTML = h;
+        if (_qAddOpen[q]) { const inp = typesEl.querySelector('.es-add-input'); if (inp) inp.focus(); }
+      } else if (typesEl) { typesEl.innerHTML = ''; }
+    });
+  }
+  function bindEntryStrength() {
+    document.querySelectorAll('.es-card[data-q]').forEach(card => {
+      const q = card.dataset.q;
+      const toggle = card.querySelector('.es-toggle');
+      if (toggle) toggle.onclick = () => { _qOpen[q] = !_qOpen[q]; renderEntryStrength(); };
+      const types = card.querySelector('.es-types');
+      if (types) types.onclick = async (e) => {
+        const del = e.target.closest('.es-chip-x');
+        if (del) { e.stopPropagation(); const t = del.dataset.del; if (_qType[q] === t) _qType[q] = ''; await trashType(_qSys(q), t); renderEntryStrength(); return; }
+        if (e.target.closest('.es-type-add')) { _qAddOpen[q] = !_qAddOpen[q]; renderEntryStrength(); return; }
+        if (e.target.closest('.es-add-ok')) { return; } // handled below
+        const chip = e.target.closest('.es-type-chip'); if (!chip) return;
+        _qType[q] = (_qType[q] === chip.dataset.t) ? '' : chip.dataset.t;
+        renderEntryStrength();
+      };
+      if (types) {
+        const doAdd = async () => {
+          const inp = types.querySelector('.es-add-input'); if (!inp) return;
+          const v = (inp.value || '').trim(); if (!v) { _qAddOpen[q] = false; renderEntryStrength(); return; }
+          if (v.length > 20) { toast('20자 이내'); return; }
+          const pool = q === 'comment' ? customComment : customKeywords;
+          const base = q === 'comment' ? BASE_COMMENT : BASE_TYPES;
+          if (base.includes(v) || pool.includes(v)) { toast('이미 있는 유형'); return; }
+          pool.push(v);
+          if (q === 'comment') await saveCustomComment(); else await saveCustomKeywords();
+          _qType[q] = v; _qAddOpen[q] = false;
+          renderEntryStrength();
+          toast('"' + v + '" 추가됨');
+        };
+        types.addEventListener('click', (e) => { if (e.target.closest('.es-add-ok')) { e.stopPropagation(); doAdd(); } });
+        types.addEventListener('keydown', (e) => { if (e.target.closest('.es-add-input') && e.key === 'Enter') { e.preventDefault(); doAdd(); } });
+      }
+      const collectBtn = card.querySelector('.es-collect');
+      if (collectBtn) collectBtn.onclick = () => quickCollect(q);
+      // 글로우 연동: 칸 건드리면 위 9:16 박스가 은은하게 반응
+      const box = document.getElementById(card.dataset.box);
+      const on = () => { if (box) box.classList.add('es-glow'); };
+      const off = () => { if (box) box.classList.remove('es-glow'); };
+      card.addEventListener('mouseenter', on); card.addEventListener('mouseleave', off);
+      card.addEventListener('touchstart', on, { passive: true }); card.addEventListener('touchend', off);
+    });
+  }
+  function quickCollect() {} // (구버전 인라인 — 미사용)
+
+  // ============================================================
+  // === ⚡ 소재 수집 창 (모달) — 행 안 만들고 이미지+유형만 컬렉션 저장 ===
+  // ============================================================
+  let _clImg = { thumb: null, copy: null, comment: null };
+  let _clType = { thumb: '', copy: '', comment: '' };
+  let _clAddOpen = { thumb: false, copy: false, comment: false };
+  let _clInited = false;
+  function _clActive(q) { return q === 'comment' ? activeComment() : activeKeywords(); }
+  function renderCollectSection(q) {
+    // 이미지 미리보기
+    const imgEl = document.getElementById('cl-imgel-' + q);
+    const box = document.getElementById('cl-img-' + q);
+    if (imgEl && box) {
+      if (_clImg[q]) { imgEl.src = _clImg[q]; imgEl.style.display = ''; box.classList.add('has-img'); box.querySelector('.cl-img-empty').style.display = 'none'; }
+      else { imgEl.src = ''; imgEl.style.display = 'none'; box.classList.remove('has-img'); box.querySelector('.cl-img-empty').style.display = ''; }
+    }
+    const editBtn = document.querySelector('.cl-edit[data-q="' + q + '"]');
+    if (editBtn) editBtn.style.display = _clImg[q] ? '' : 'none';
+    const rmBtn = document.querySelector('.cl-img-rm[data-q="' + q + '"]');
+    if (rmBtn) rmBtn.style.display = _clImg[q] ? '' : 'none';
+    // 유형 칩 (활성 + × 삭제 + + 추가)
+    const typesEl = document.querySelector('.cl-types[data-q="' + q + '"]');
+    if (typesEl) {
+      let h = _clActive(q).map(t => {
+        const on = _clType[q] === t;
+        return '<button class="es-type-chip' + (on ? ' on' : '') + '" data-t="' + esc(t) + '">' + esc(t) + '<span class="es-chip-x" data-del="' + esc(t) + '" title="삭제(휴지통)">×</span></button>';
+      }).join('');
+      h += '<button class="es-type-add" data-add="1">+ 유형 추가</button>';
+      if (_clAddOpen[q]) h += '<span class="es-add-row"><input class="es-add-input" placeholder="새 유형" maxlength="20" /><button class="es-add-ok">추가</button></span>';
+      typesEl.innerHTML = h;
+      if (_clAddOpen[q]) { const inp = typesEl.querySelector('.es-add-input'); if (inp) inp.focus(); }
+    }
+  }
+  function renderCollectModal() { ['thumb', 'copy', 'comment'].forEach(renderCollectSection); }
+  function initCollectModalUI() {
+    document.querySelectorAll('.collect-modal .cl-sec').forEach(sec => {
+      const q = sec.dataset.q;
+      // 이미지 드롭/클릭/붙여넣기
+      const box = document.getElementById('cl-img-' + q);
+      const fileInput = document.createElement('input'); fileInput.type = 'file'; fileInput.accept = 'image/*'; fileInput.style.display = 'none'; document.body.appendChild(fileInput);
+      const handle = (file) => { if (!file || !file.type.startsWith('image/')) return; const rd = new FileReader(); rd.onload = e => { _clImg[q] = e.target.result; renderCollectSection(q); }; rd.readAsDataURL(file); };
+      box.addEventListener('click', (e) => { if (e.target.closest('.cl-img-rm')) return; fileInput.click(); });
+      const rmBtn = box.querySelector('.cl-img-rm');
+      if (rmBtn) rmBtn.onclick = (e) => { e.stopPropagation(); _clImg[q] = null; renderCollectSection(q); };
+      fileInput.addEventListener('change', e => { if (e.target.files[0]) handle(e.target.files[0]); e.target.value = ''; });
+      box.addEventListener('dragover', e => { e.preventDefault(); box.classList.add('drag-over'); });
+      box.addEventListener('dragleave', () => box.classList.remove('drag-over'));
+      box.addEventListener('drop', e => { e.preventDefault(); box.classList.remove('drag-over'); if (e.dataTransfer.files[0]) handle(e.dataTransfer.files[0]); });
+      // 유형 칩 클릭 (선택 / 삭제 / 추가)
+      const typesEl = sec.querySelector('.cl-types');
+      typesEl.addEventListener('click', async (e) => {
+        const del = e.target.closest('.es-chip-x');
+        if (del) { e.stopPropagation(); const t = del.dataset.del; if (_clType[q] === t) _clType[q] = ''; await trashType(q === 'comment' ? 'comment' : 'keyword', t); renderCollectSection(q); return; }
+        if (e.target.closest('.es-type-add')) { _clAddOpen[q] = !_clAddOpen[q]; renderCollectSection(q); return; }
+        if (e.target.closest('.es-add-ok')) { await _clAdd(q); return; }
+        const chip = e.target.closest('.es-type-chip'); if (!chip) return;
+        _clType[q] = (_clType[q] === chip.dataset.t) ? '' : chip.dataset.t;
+        renderCollectSection(q);
+      });
+      typesEl.addEventListener('keydown', (e) => { if (e.target.closest('.es-add-input') && e.key === 'Enter') { e.preventDefault(); _clAdd(q); } });
+      // 수집 버튼
+      const btn = sec.querySelector('.cl-collect');
+      if (btn) btn.onclick = () => doCollect(q);
+      // 사진 편집 버튼
+      const editBtn = sec.querySelector('.cl-edit');
+      if (editBtn) editBtn.onclick = () => openImageEditor(_clImg[q], (url) => { _clImg[q] = url; renderCollectSection(q); });
+    });
+    const closeBtn = document.getElementById('collect-modal-close');
+    if (closeBtn) closeBtn.onclick = closeCollectModal;
+    const modal = document.getElementById('collect-modal');
+    if (modal) modal.onclick = (e) => { if (e.target.id === 'collect-modal') closeCollectModal(); };
+  }
+  async function _clAdd(q) {
+    const typesEl = document.querySelector('.cl-types[data-q="' + q + '"]'); if (!typesEl) return;
+    const inp = typesEl.querySelector('.es-add-input'); if (!inp) return;
+    const v = (inp.value || '').trim(); if (!v) { _clAddOpen[q] = false; renderCollectSection(q); return; }
+    if (v.length > 20) { toast('20자 이내'); return; }
+    const pool = q === 'comment' ? customComment : customKeywords;
+    const base = q === 'comment' ? BASE_COMMENT : BASE_TYPES;
+    if (base.includes(v) || pool.includes(v)) { toast('이미 있는 유형'); return; }
+    pool.push(v);
+    if (q === 'comment') await saveCustomComment(); else await saveCustomKeywords();
+    _clType[q] = v; _clAddOpen[q] = false;
+    renderCollectSection(q);
+    toast('"' + v + '" 추가됨');
+  }
+  function openCollectModal() {
+    if (!_clInited) { initCollectModalUI(); _clInited = true; }
+    // 작성 영역 이미지가 있으면 미리 채움
+    _clImg = { thumb: entryState.thumbDataUrl || null, copy: null, comment: entryState.commDataUrl || null };
+    _clType = { thumb: '', copy: '', comment: '' };
+    _clAddOpen = { thumb: false, copy: false, comment: false };
+    renderCollectModal();
+    document.getElementById('collect-modal').classList.add('show');
+  }
+  function closeCollectModal() { const m = document.getElementById('collect-modal'); if (m) m.classList.remove('show'); }
+  async function doCollect(q) {
+    if (!_clImg[q]) { toast('이미지를 먼저 넣어주세요'); return; }
+    if (!_clType[q]) { toast('유형을 먼저 골라주세요'); return; }
+    const id = 'col_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7);
+    const c = { id: id, kind: q, type: _clType[q], link: '', createdAt: Date.now() };
+    try { await saveImage(id, 'c', _clImg[q]); } catch (e) {}
+    collects.push(c); await saveCollects();
+    const label = q === 'thumb' ? '썸네일' : q === 'copy' ? '수식어' : '댓글';
+    toast('⚡ ' + label + ' "' + c.type + '" 수집함에 저장!');
+    // 같은 칸 초기화(연속 수집 편하게)
+    _clImg[q] = null; _clType[q] = '';
+    renderCollectSection(q);
+    try { renderThumbBoard(); } catch (e) {}
+  }
+
+  // === ✏️ 사진 편집기 (형광펜 + 빨간펜) ===
+  let _imedTool = 'hi', _imedOnSave = null, _imedHist = [], _imedDrawing = false, _imedLast = null, _imedInited = false;
+  function initImageEditor() {
+    const canvas = document.getElementById('imed-canvas');
+    const ctx = canvas.getContext('2d');
+    const pos = (e) => { const r = canvas.getBoundingClientRect(); const t = e.touches ? e.touches[0] : e; return { x: (t.clientX - r.left) * (canvas.width / r.width), y: (t.clientY - r.top) * (canvas.height / r.height) }; };
+    const start = (e) => { e.preventDefault(); _imedDrawing = true; _imedHist.push(ctx.getImageData(0, 0, canvas.width, canvas.height)); if (_imedHist.length > 20) _imedHist.shift(); _imedLast = pos(e); };
+    const move = (e) => {
+      if (!_imedDrawing) return; e.preventDefault(); const p = pos(e);
+      ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+      if (_imedTool === 'hi') { ctx.strokeStyle = 'rgba(255,225,0,0.4)'; ctx.lineWidth = 18; ctx.globalCompositeOperation = 'multiply'; }
+      else { ctx.strokeStyle = 'rgba(230,40,40,0.95)'; ctx.lineWidth = 3.5; ctx.globalCompositeOperation = 'source-over'; }
+      ctx.beginPath(); ctx.moveTo(_imedLast.x, _imedLast.y); ctx.lineTo(p.x, p.y); ctx.stroke();
+      ctx.globalCompositeOperation = 'source-over'; _imedLast = p;
+    };
+    const end = () => { _imedDrawing = false; };
+    canvas.addEventListener('mousedown', start); canvas.addEventListener('mousemove', move); window.addEventListener('mouseup', end);
+    canvas.addEventListener('touchstart', start, { passive: false }); canvas.addEventListener('touchmove', move, { passive: false }); canvas.addEventListener('touchend', end);
+    document.querySelectorAll('.imed-tool').forEach(b => b.onclick = () => { _imedTool = b.dataset.tool; document.querySelectorAll('.imed-tool').forEach(x => x.classList.toggle('on', x === b)); });
+    document.getElementById('imed-undo').onclick = () => { const s = _imedHist.pop(); if (s) ctx.putImageData(s, 0, 0); };
+    const close = () => document.getElementById('imed-modal').classList.remove('show');
+    document.getElementById('imed-save').onclick = () => { const url = canvas.toDataURL('image/png'); close(); if (_imedOnSave) _imedOnSave(url); };
+    document.getElementById('imed-cancel').onclick = close;
+    document.getElementById('imed-close').onclick = close;
+    document.getElementById('imed-modal').onclick = (e) => { if (e.target.id === 'imed-modal') close(); };
+  }
+  function openImageEditor(dataUrl, onSave) {
+    if (!dataUrl) { toast('이미지가 없어요'); return; }
+    if (!_imedInited) { initImageEditor(); _imedInited = true; }
+    _imedOnSave = onSave; _imedTool = 'hi'; _imedHist = [];
+    document.querySelectorAll('.imed-tool').forEach(b => b.classList.toggle('on', b.dataset.tool === 'hi'));
+    const canvas = document.getElementById('imed-canvas');
+    const ctx = canvas.getContext('2d');
+    const img = new Image();
+    img.onload = () => {
+      const maxW = 520; const scale = Math.min(1, maxW / img.width);
+      canvas.width = Math.round(img.width * scale); canvas.height = Math.round(img.height * scale);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    };
+    img.src = dataUrl;
+    document.getElementById('imed-modal').classList.add('show');
+  }
+
   function renderEntryFormatPicker() {
     const el = document.getElementById('entry-format-picker');
     if (!el) return;
@@ -18634,6 +19036,8 @@
     const formatAddBtn = document.getElementById('entry-format-add-btn');
     if (formatAddBtn) formatAddBtn.onclick = addCustomContentType;
     renderEntryFormatPicker();
+    const collectOpenBtn = document.getElementById('collect-open-btn');
+    if (collectOpenBtn) collectOpenBtn.onclick = openCollectModal;
 
     // === Thumbnail / Comment image picker ===
     const setupImageBox = (box, imgEl, rmEl, kind) => {
@@ -19019,6 +19423,7 @@
     document.getElementById('entry-why').value = '';
 
     renderEntryFormatPicker();
+    renderEntryStrength();
     updateEntryDisasmStatus();
   }
 
@@ -22202,6 +22607,7 @@
       customTags: customTags,
       customViral: customViral,
       customComment: customComment,
+      collects: collects,
       typeTrash: typeTrash
     };
     downloadJson(data, `customer-perspective-${timestampForFilename()}.json`);
@@ -22293,6 +22699,7 @@
       if (data.customTags) customTags = mergeArr(customTags, data.customTags);
       if (data.customViral) customViral = mergeArr(customViral, data.customViral);
       if (data.customComment) customComment = mergeArr(customComment, data.customComment);
+      if (Array.isArray(data.collects)) collects = data.collects;
       if (Array.isArray(data.typeTrash)) typeTrash = data.typeTrash;
       try {
         if (data.customKeywords) await window.storage.set(CK_KEY, JSON.stringify(customKeywords));
@@ -22301,6 +22708,7 @@
         if (data.customTags) await window.storage.set(CT_KEY, JSON.stringify(customTags));
         if (data.customViral) await window.storage.set(CV_KEY, JSON.stringify(customViral));
         if (data.customComment) await window.storage.set(CM_KEY, JSON.stringify(customComment));
+        if (Array.isArray(data.collects)) await window.storage.set(COLLECTS_KEY, JSON.stringify(collects));
         if (Array.isArray(data.typeTrash)) await window.storage.set(TT_KEY, JSON.stringify(typeTrash));
       } catch(e) {}
 
@@ -22362,7 +22770,7 @@
       r.rating = 0; r.favorite = false; r.hook = ''; r.author = ''; r.views = 0;
       r.why = ''; r.idea = ''; r.url = ''; r.platform = '';
     }
-    customKeywords = []; customFormats = []; customAudio = []; customTags = []; customViral = []; customComment = []; typeTrash = [];
+    customKeywords = []; customFormats = []; customAudio = []; customTags = []; customViral = []; customComment = []; collects = []; typeTrash = [];
     _gjMilestonesShown = {};
     try {
       await saveScripts();
@@ -22374,6 +22782,7 @@
       await window.storage.delete(CT_KEY);
       await window.storage.delete(CV_KEY);
       await window.storage.delete(CM_KEY);
+      await window.storage.delete(COLLECTS_KEY);
       await window.storage.delete(TT_KEY);
       await window.storage.delete('shv4-gj-milestones');
     } catch(e) {}
