@@ -232,7 +232,7 @@
     color: var(--emerald);
   }
 
-  /* 핵심 메뉴 (트레이닝룸, 벤치마크 시트) — 크고 강조 */
+  /* 핵심 메뉴 (트레이닝룸, 벤치마킹 시트) — 크고 강조 */
   .sh-sb-item.sh-sb-main {
     padding: 11px 12px;
     font-size: 14px;
@@ -950,7 +950,7 @@
   /* 이걸로 원고 쓰기 버튼 (상세 모달) */
   .sh-write-from-bench { width: 100%; margin-bottom: 12px; background: var(--emerald); color: #06140C; border: none; border-radius: 10px; padding: 13px; font-family: 'Pretendard', sans-serif; font-size: 14px; font-weight: 800; cursor: pointer; }
   .sh-write-from-bench:hover { background: var(--neon); }
-  /* 참고 벤치마크 카드 (원고 에디터의 "참고한 벤치마킹") */
+  /* 참고 벤치마킹 카드 (원고 에디터의 "참고한 벤치마킹") */
   .scb-card { display: flex; align-items: center; gap: 11px; background: var(--bg-elev); border: 1px solid var(--emerald-line); border-radius: 12px; padding: 8px; cursor: pointer; }
   .scb-thumb { width: 46px; height: 60px; flex: 0 0 auto; border-radius: 8px; overflow: hidden; background: var(--bg-void); display: flex; align-items: center; justify-content: center; font-size: 18px; }
   .scb-thumb img { width: 100%; height: 100%; object-fit: cover; }
@@ -1724,48 +1724,123 @@
     letter-spacing: 0.05em;
   }
   .ws-slots {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    display: flex;
+    flex-wrap: nowrap;
     gap: 12px;
     margin-top: 8px;
+    align-items: stretch;
   }
   @media (max-width: 600px) {
-    .ws-slots { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+    .ws-slots { gap: 8px; }
   }
   .ws-slot {
+    flex: 1 1 0;
+    min-width: 0;
     background: var(--bg-input);
     border: 1.5px dashed var(--line);
     border-radius: 12px;
-    padding: 16px;
-    min-height: 130px;
+    padding: 14px;
+    aspect-ratio: 9 / 16;
+    max-height: 340px;
     display: flex;
     flex-direction: column;
     transition: all 0.15s;
     position: relative;
+    overflow: hidden;
   }
+  @media (max-width: 600px) {
+    .ws-slot { padding: 10px; }
+  }
+  /* ===== 빈 슬롯 = 카드 뒷면(카드백) — "이번 주 덱 뽑기" ===== */
   .ws-slot.empty {
     align-items: center;
     justify-content: center;
-    color: var(--text-faint);
-    font-family: 'Pretendard', sans-serif;
-    font-size: 12.5px;
     text-align: center;
-    gap: 6px;
     cursor: pointer;
+    border-style: dashed;
+    background:
+      radial-gradient(ellipse at 50% 38%, rgba(46, 204, 113, 0.07), transparent 62%),
+      repeating-linear-gradient(45deg, rgba(255,255,255,0.018) 0 2px, transparent 2px 9px),
+      var(--bg-input);
+    transition: transform 0.22s cubic-bezier(0.34,1.4,0.64,1), border-color 0.2s ease, box-shadow 0.25s ease, background 0.2s ease;
   }
+  /* 광택 스윕 (호버 시 사선으로 스윽) */
+  .ws-slot.empty::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -120%;
+    width: 70%; height: 100%;
+    background: linear-gradient(105deg, transparent, rgba(46,204,113,0.13), transparent);
+    transform: skewX(-18deg);
+    transition: left 0.55s ease;
+    pointer-events: none;
+  }
+  .ws-slot.empty:hover::before { left: 130%; }
   .ws-slot.empty:hover {
     border-color: var(--emerald);
     border-style: solid;
-    background: var(--emerald-faint);
-    color: var(--emerald);
+    transform: translateY(-5px) scale(1.015);
+    box-shadow: 0 10px 26px rgba(0,0,0,0.35), 0 0 0 1px var(--emerald-line), 0 0 22px var(--emerald-glow);
   }
-  .ws-slot.empty .ws-slot-plus {
-    font-size: 26px;
+  /* 카드 번호 배지 */
+  .ws-cb-num {
+    position: absolute;
+    top: 10px; left: 11px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; font-weight: 800;
+    color: var(--text-mute);
+    letter-spacing: 0.04em;
+    transition: color 0.2s ease;
+  }
+  .ws-slot.empty:hover .ws-cb-num { color: var(--emerald); }
+  /* 가운데 엠블럼 */
+  .ws-cb-emblem {
+    font-size: 30px;
     line-height: 1;
-    margin-bottom: 4px;
-    opacity: 0.6;
+    color: var(--text-faint);
+    opacity: 0.55;
+    margin-bottom: 12px;
+    transition: transform 0.25s cubic-bezier(0.34,1.4,0.64,1), color 0.2s ease, opacity 0.2s ease;
+    text-shadow: 0 0 14px transparent;
   }
-  .ws-slot.empty:hover .ws-slot-plus { opacity: 1; }
+  .ws-slot.empty:hover .ws-cb-emblem {
+    color: var(--emerald);
+    opacity: 1;
+    transform: scale(1.18) rotate(8deg);
+    text-shadow: 0 0 18px var(--emerald-glow);
+  }
+  .ws-cb-label {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 13px; font-weight: 800;
+    color: var(--text-mute);
+    letter-spacing: -0.01em;
+    transition: color 0.2s ease;
+  }
+  .ws-slot.empty:hover .ws-cb-label { color: var(--text-main); }
+  .ws-cb-sub {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 10.5px; font-weight: 600;
+    color: var(--text-faint);
+    margin-top: 3px;
+  }
+  /* 호버 시 나타나는 CTA */
+  .ws-cb-cta {
+    position: absolute;
+    bottom: 12px; left: 0; right: 0;
+    font-family: 'Pretendard', sans-serif;
+    font-size: 11px; font-weight: 800;
+    color: var(--emerald);
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 0.2s ease, transform 0.22s ease;
+    pointer-events: none;
+  }
+  .ws-slot.empty:hover .ws-cb-cta { opacity: 1; transform: translateY(0); }
+  @media (max-width: 600px) {
+    .ws-cb-emblem { font-size: 24px; margin-bottom: 8px; }
+    .ws-cb-label { font-size: 11.5px; }
+    .ws-cb-sub, .ws-cb-cta { font-size: 9.5px; }
+  }
 
   .ws-slot.filled {
     border-style: solid;
@@ -1851,24 +1926,43 @@
   }
   .ws-slot.done .ws-slot-check { color: var(--emerald); }
   .ws-slot-remove {
-    background: transparent;
+    position: absolute;
+    top: 7px; right: 8px;
+    z-index: 2;
+    background: rgba(0,0,0,0.4);
     border: none;
     color: var(--text-faint);
     cursor: pointer;
-    width: 22px;
-    height: 22px;
+    width: 20px;
+    height: 20px;
     border-radius: 50%;
     font-size: 12px;
     line-height: 1;
     display: flex;
     align-items: center;
     justify-content: center;
+    opacity: 0;
     transition: all 0.12s;
   }
+  .ws-slot.filled:hover .ws-slot-remove { opacity: 1; }
   .ws-slot-remove:hover {
     background: var(--wine);
     color: white;
   }
+  /* 이번 주 슬롯 번호 → 좌상단 (삭제버튼과 분리) */
+  .ws-slot-num { left: 11px; right: auto; }
+  /* 이번 주 슬롯 업로드 버튼 */
+  .ws-slot .tr-up-btn { margin: 10px 0 0; width: 100%; }
+  /* 업로드된 이번 주 슬롯 — 금빛 */
+  .ws-slot.uploaded {
+    border-color: rgba(245, 200, 75, 0.6);
+    box-shadow: 0 0 20px rgba(245, 200, 75, 0.2), inset 0 0 30px rgba(245,200,75,0.04);
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(245,200,75,0.10), transparent 60%),
+      var(--bg-card);
+  }
+  .ws-slot.uploaded .ws-slot-title { color: #FFE08A; }
+  .ws-slot.just-uploaded { animation: uploadPop 0.5s ease-out; }
 
   /* === 시트 둘러보기 모달 === */
   .ws-picker-modal {
@@ -2088,6 +2182,150 @@
     transform: translateY(-1px);
     box-shadow: 0 0 18px var(--emerald-glow);
   }
+
+  /* ===== 슬롯 채우기 4지선다 (카드 느낌) ===== */
+  .ws-choice-sub {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 13px;
+    color: var(--text-mute);
+    margin-bottom: 14px;
+    font-weight: 600;
+  }
+  .ws-choice-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  @media (max-width: 520px) { .ws-choice-grid { grid-template-columns: 1fr; } }
+  .ws-choice-card {
+    text-align: left;
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(255,255,255,0.025), transparent 60%),
+      var(--bg-input);
+    border: 1.5px solid var(--line);
+    border-radius: 14px;
+    padding: 18px 16px 16px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s cubic-bezier(0.34,1.4,0.64,1), border-color 0.18s ease, box-shadow 0.22s ease, background 0.18s ease;
+    font-family: 'Pretendard', sans-serif;
+  }
+  .ws-choice-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -120%;
+    width: 60%; height: 100%;
+    background: linear-gradient(105deg, transparent, rgba(255,255,255,0.06), transparent);
+    transform: skewX(-18deg);
+    transition: left 0.5s ease;
+    pointer-events: none;
+  }
+  .ws-choice-card:hover::before { left: 130%; }
+  .ws-choice-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--emerald);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.35), 0 0 18px var(--emerald-glow);
+  }
+  .ws-choice-ico {
+    font-size: 26px;
+    line-height: 1;
+    margin-bottom: 12px;
+  }
+  .ws-choice-t {
+    font-size: 14.5px;
+    font-weight: 800;
+    color: var(--text-main);
+    letter-spacing: -0.01em;
+    margin-bottom: 4px;
+  }
+  .ws-choice-d {
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--text-faint);
+    line-height: 1.45;
+  }
+  /* 역할별 색 강조 (좌측 액센트 바) */
+  .ws-choice-card.attract { border-left: 3px solid rgba(139, 92, 246, 0.55); }
+  .ws-choice-card.convert { border-left: 3px solid rgba(236, 72, 153, 0.55); }
+  .ws-choice-card.free    { border-left: 3px solid var(--emerald-line); }
+  .ws-choice-card.attract:hover { box-shadow: 0 10px 24px rgba(0,0,0,0.35), 0 0 18px rgba(139,92,246,0.3); border-color: #C29CFF; }
+  .ws-choice-card.convert:hover { box-shadow: 0 10px 24px rgba(0,0,0,0.35), 0 0 18px rgba(236,72,153,0.3); border-color: #F9A8D4; }
+
+  /* 뒤로 버튼 / 자유작성 헤더 */
+  .ws-pick-back {
+    background: none;
+    border: none;
+    color: var(--text-mute);
+    font-family: 'Pretendard', sans-serif;
+    font-size: 12.5px;
+    font-weight: 700;
+    cursor: pointer;
+    padding: 4px 0;
+    margin-bottom: 10px;
+    transition: color 0.15s;
+  }
+  .ws-pick-back:hover { color: var(--emerald); }
+  .ws-free-head {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--text-main);
+    margin-bottom: 4px;
+  }
+  .ws-free-desc {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 12px;
+    color: var(--text-faint);
+    margin-bottom: 14px;
+  }
+  /* 시트 목록 헤더 */
+  .ws-sheet-head {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--text-main);
+    margin-bottom: 12px;
+  }
+  /* 자유 작성 큰 메모장 */
+  .ws-picker-textarea {
+    width: 100%;
+    box-sizing: border-box;
+    min-height: 150px;
+    resize: vertical;
+    background: var(--bg-input);
+    border: 1.5px solid var(--line);
+    border-radius: 12px;
+    padding: 14px 16px;
+    color: var(--text-main);
+    font-family: 'Pretendard', sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .ws-picker-textarea::placeholder { color: var(--text-faint); }
+  .ws-picker-textarea:focus {
+    outline: none;
+    border-color: var(--emerald);
+    box-shadow: 0 0 0 3px var(--emerald-faint);
+  }
+
+  /* 채워진 슬롯의 슬롯 번호 배지 + 역할 테두리 */
+  .ws-slot-num {
+    position: absolute;
+    top: 9px; right: 11px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; font-weight: 800;
+    color: var(--text-faint);
+    letter-spacing: 0.04em;
+    z-index: 1;
+  }
+  .ws-slot.filled.attract { border-color: rgba(139, 92, 246, 0.5); }
+  .ws-slot.filled.convert { border-color: rgba(236, 72, 153, 0.5); }
+  .ws-slot.filled.retain  { border-color: var(--emerald-line); }
+  .ws-slot-tag.attract { color: #C29CFF; background: rgba(139, 92, 246, 0.13); }
+  .ws-slot-tag.convert { color: #F9A8D4; background: rgba(236, 72, 153, 0.13); }
+  .ws-slot-tag.retain  { color: var(--emerald); background: var(--emerald-faint); }
 
   /* 기존 tr-cards 영역 숨김 (v48에서는 ws-slots가 대체) */
   .tr-cards { display: none; }
@@ -2407,14 +2645,36 @@
   }
   .tr-cal-title {
     font-family: 'Pretendard', sans-serif;
-    font-size: 16px;
-    font-weight: 800;
-    color: var(--text-main);
-    letter-spacing: -0.01em;
     margin: 0;
     flex: 1;
     text-align: center;
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 8px;
+    line-height: 1;
   }
+  /* 달(월) = 간판: 크게 강조 */
+  .tr-cal-title .cal-mo {
+    font-size: 30px;
+    font-weight: 900;
+    color: var(--emerald);
+    letter-spacing: -0.02em;
+    text-shadow: 0 0 18px var(--emerald-glow);
+  }
+  .tr-cal-title .cal-yr {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-mute);
+    letter-spacing: 0.02em;
+  }
+  .tr-cal-title .cal-mo-sub {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--text-sub);
+  }
+  @media (max-width: 600px) { .tr-cal-title .cal-mo { font-size: 24px; } }
   .tr-cal-today {
     background: var(--bg-input);
     border: 1px solid var(--line);
@@ -2520,12 +2780,12 @@
     border-radius: 12px;
     padding: 14px 16px;
     display: grid;
-    grid-template-columns: 130px 1fr;
+    grid-template-columns: 30px 130px 1fr;
     gap: 14px;
     align-items: stretch;
   }
   @media (max-width: 720px) {
-    .tr-week-row { grid-template-columns: 1fr; gap: 10px; }
+    .tr-week-row { grid-template-columns: 30px 1fr; gap: 10px; }
   }
   .tr-week-row.current {
     border-color: var(--emerald);
@@ -2600,6 +2860,316 @@
     font-weight: 700;
   }
 
+  /* 요일 룰러 (주차 레인 위 — 달력 판 느낌) */
+  .tr-dow-ruler {
+    display: grid;
+    grid-template-columns: 30px 130px 1fr;
+    gap: 14px;
+    padding: 0 16px;
+    margin: 2px 0;
+  }
+  .tr-dow-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+  }
+  .tr-dow-days span {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--text-mute);
+    letter-spacing: 0.02em;
+  }
+  .tr-dow-days span.sun { color: #FF6B6B; }
+  .tr-dow-days span.sat { color: #6AA9FF; }
+  @media (max-width: 720px) {
+    .tr-dow-ruler { grid-template-columns: 30px 1fr; }
+    .tr-dow-spacer.label { display: none; }
+  }
+
+  /* === 달력 판 (요일 룰러 + 주차 레인을 하나의 달력 프레임으로) === */
+  .tr-cal-board {
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    overflow: hidden;
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(255,255,255,0.015), transparent 50%),
+      var(--bg-card);
+  }
+  .tr-cal-board .tr-dow-ruler {
+    padding: 11px 16px;
+    margin: 0;
+    border-bottom: 1px solid var(--line);
+    background: var(--bg-elev);
+  }
+  /* 레인 = 달력 행 (붙여서 연결, 카드 느낌 제거) */
+  .tr-cal-board .tr-week-row {
+    border: none;
+    border-radius: 0;
+    border-bottom: 1px solid var(--line-soft);
+    border-left: 3px solid transparent;
+    box-shadow: none;
+    background: transparent;
+  }
+  .tr-cal-board .tr-week-row:last-child { border-bottom: none; }
+  .tr-cal-board .tr-week-row.current {
+    border-left-color: var(--emerald);
+    background: linear-gradient(90deg, rgba(46,204,113,0.06), transparent 40%);
+    box-shadow: none;
+  }
+  .tr-cal-board .tr-week-row.cleared {
+    border-left-color: #F5C84B;
+    background: linear-gradient(90deg, rgba(245,200,75,0.06), transparent 40%);
+    box-shadow: none;
+  }
+
+  /* === 게임화: 이번 달 캠페인 배너 === */
+  .tr-campaign {
+    background:
+      radial-gradient(ellipse at 0% 0%, rgba(46,204,113,0.10), transparent 55%),
+      linear-gradient(135deg, rgba(46,204,113,0.05), transparent 60%), var(--bg-card);
+    border: 1px solid var(--emerald-line);
+    border-radius: 14px;
+    padding: 14px 18px;
+    margin-bottom: 4px;
+  }
+  .tr-campaign.done {
+    border-color: rgba(245, 200, 75, 0.6);
+    box-shadow: 0 0 22px rgba(245, 200, 75, 0.18);
+    background: radial-gradient(ellipse at 0% 0%, rgba(245,200,75,0.12), transparent 55%), var(--bg-card);
+  }
+  .tr-campaign-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .tr-campaign-title {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 14.5px;
+    font-weight: 800;
+    color: var(--text-main);
+    letter-spacing: -0.01em;
+  }
+  .tr-campaign-meta { display: flex; align-items: center; gap: 10px; }
+  .tr-streak {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 11.5px; font-weight: 800;
+    color: #FFB44D;
+    background: rgba(255, 140, 50, 0.12);
+    border: 1px solid rgba(255, 140, 50, 0.3);
+    padding: 3px 9px; border-radius: 100px;
+  }
+  .tr-campaign-count {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; font-weight: 800;
+    color: var(--emerald);
+  }
+  .tr-campaign-bar {
+    height: 8px; border-radius: 100px;
+    background: var(--bg-input);
+    overflow: hidden;
+  }
+  .tr-campaign-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--emerald), var(--neon));
+    border-radius: 100px;
+    transition: width 0.5s cubic-bezier(0.22,1,0.36,1);
+    box-shadow: 0 0 10px var(--emerald-glow);
+  }
+  .tr-campaign.done .tr-campaign-bar-fill { background: linear-gradient(90deg, #F5C84B, #FFE08A); box-shadow: 0 0 12px rgba(245,200,75,0.4); }
+
+  /* === 이번 달 목표 업로드 배너 === */
+  .tr-goal {
+    background:
+      radial-gradient(ellipse at 0% 0%, rgba(46,204,113,0.10), transparent 55%),
+      linear-gradient(135deg, rgba(46,204,113,0.05), transparent 60%), var(--bg-card);
+    border: 1px solid var(--emerald-line);
+    border-radius: 14px;
+    padding: 14px 18px;
+    margin-bottom: 4px;
+  }
+  .tr-goal.done {
+    border-color: rgba(245, 200, 75, 0.6);
+    box-shadow: 0 0 22px rgba(245, 200, 75, 0.18);
+    background: radial-gradient(ellipse at 0% 0%, rgba(245,200,75,0.12), transparent 55%), var(--bg-card);
+  }
+  .tr-goal.done .tr-campaign-bar-fill { background: linear-gradient(90deg, #F5C84B, #FFE08A); box-shadow: 0 0 12px rgba(245,200,75,0.4); }
+  .tr-goal-sub {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 11.5px; font-weight: 600;
+    color: var(--text-mute);
+    margin-top: 9px;
+  }
+  .tr-goal-sub b { color: var(--emerald); font-weight: 800; }
+  .tr-goal.done .tr-goal-sub b { color: #F5C84B; }
+  .tr-goal-edit {
+    background: none; border: none; cursor: pointer;
+    color: var(--text-faint); font-size: 13px; padding: 0 2px;
+    transition: color 0.15s;
+  }
+  .tr-goal-edit:hover { color: var(--emerald); }
+  /* 목표 설정 폼 */
+  .tr-goal.setup { text-align: center; padding: 18px; }
+  .tr-goal-setup-text {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 13.5px; font-weight: 700;
+    color: var(--text-main); margin-bottom: 12px;
+  }
+  .tr-goal-setup-text b { color: var(--emerald); }
+  .tr-goal-setup-row { display: flex; gap: 8px; justify-content: center; align-items: center; }
+  .tr-goal-input {
+    width: 90px; text-align: center;
+    background: var(--bg-input);
+    border: 1.5px solid var(--line);
+    border-radius: 9px; padding: 9px 12px;
+    color: var(--text-main);
+    font-family: 'JetBrains Mono', monospace; font-size: 15px; font-weight: 800;
+  }
+  .tr-goal-input:focus { outline: none; border-color: var(--emerald); box-shadow: 0 0 0 3px var(--emerald-faint); }
+  .tr-goal-set-btn {
+    background: var(--emerald); color: #06140C; border: none;
+    border-radius: 9px; padding: 9px 18px;
+    font-family: 'Pretendard', sans-serif; font-size: 13px; font-weight: 800;
+    cursor: pointer; box-shadow: 0 0 12px var(--emerald-glow);
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .tr-goal-set-btn:hover { transform: translateY(-1px); box-shadow: 0 0 18px var(--emerald-glow); }
+
+  /* === 카드 업로드 완료 버튼/배지 === */
+  /* === 카드 하단 "업로드 완료" 버튼 (핵심 액션) === */
+  .tr-up-btn {
+    margin: 0 8px 8px;
+    width: calc(100% - 16px);
+    background: var(--emerald-faint);
+    border: 1.5px solid var(--emerald-line);
+    border-radius: 8px;
+    padding: 8px 4px;
+    font-family: 'Pretendard', sans-serif;
+    font-size: 11px; font-weight: 800;
+    color: var(--emerald);
+    cursor: pointer;
+    transition: all 0.18s cubic-bezier(0.34,1.4,0.64,1);
+  }
+  .tr-up-btn:hover {
+    background: var(--emerald);
+    color: #06140C;
+    transform: translateY(-1px);
+    box-shadow: 0 0 16px var(--emerald-glow);
+  }
+  /* 업로드 완료됨 — 기분 좋은 금빛 */
+  .tr-up-btn.done {
+    background: linear-gradient(135deg, #F5C84B, #FFE08A);
+    border-color: #F5C84B;
+    color: #2A1E00;
+    box-shadow: 0 0 16px rgba(245,200,75,0.45);
+  }
+  .tr-up-btn.done:hover { transform: translateY(-1px); box-shadow: 0 0 22px rgba(245,200,75,0.6); color: #2A1E00; }
+  /* 업로드된 카드 전체가 금빛으로 빛남 */
+  .tr-mini-card.uploaded {
+    border-color: rgba(245, 200, 75, 0.6);
+    box-shadow: 0 0 20px rgba(245, 200, 75, 0.22), inset 0 0 30px rgba(245, 200, 75, 0.04);
+    background:
+      radial-gradient(ellipse at 50% 0%, rgba(245,200,75,0.10), transparent 60%),
+      var(--bg-elev);
+  }
+  .tr-mini-card.uploaded .tr-mini-card-title { color: #FFE08A; }
+  @keyframes uploadPop {
+    0% { transform: scale(1); }
+    40% { transform: scale(1.05); box-shadow: 0 0 30px rgba(245,200,75,0.5); }
+    100% { transform: scale(1); }
+  }
+  .tr-mini-card.just-uploaded { animation: uploadPop 0.5s ease-out; }
+  /* 요약 모달 업로드 완료 버튼 (켜짐) */
+  .tr-summary-modal-btn.uploaded-on {
+    background: linear-gradient(135deg, #F5C84B, #FFE08A) !important;
+    border-color: #F5C84B !important;
+    color: #2A1E00 !important;
+  }
+
+  /* === 스테이지 메달 + 연결선 (RPG 맵 느낌) === */
+  .tr-week-stage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+  .tr-stage-dot {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; font-weight: 800;
+    color: var(--text-mute);
+    background: var(--bg-input);
+    border: 1.5px solid var(--line);
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+  }
+  .tr-stage-dot.current {
+    color: var(--emerald);
+    border-color: var(--emerald);
+    box-shadow: 0 0 12px var(--emerald-glow);
+  }
+  .tr-stage-dot.cleared {
+    color: #06140C;
+    background: linear-gradient(135deg, #F5C84B, #FFE08A);
+    border-color: #F5C84B;
+    box-shadow: 0 0 12px rgba(245,200,75,0.4);
+  }
+  .tr-stage-line {
+    flex: 1;
+    width: 2px;
+    min-height: 20px;
+    background: linear-gradient(180deg, var(--line), transparent);
+  }
+  @media (max-width: 720px) {
+    .tr-week-stage { flex-direction: row; }
+    .tr-stage-line { display: none; }
+  }
+
+  /* === 주차 진행 바 + 클리어 배지 === */
+  .tr-week-bar {
+    position: relative;
+    height: 6px; border-radius: 100px;
+    background: var(--bg-input);
+    overflow: hidden;
+    margin: 6px 0 4px;
+  }
+  /* 채움(계획) — 흐린 밑바탕 */
+  .tr-week-bar-plan {
+    position: absolute; left: 0; top: 0; height: 100%;
+    background: rgba(255,255,255,0.12);
+    border-radius: 100px;
+    transition: width 0.45s cubic-bezier(0.22,1,0.36,1);
+  }
+  /* 업로드(실제) — 밝은 오버레이 (핵심) */
+  .tr-week-bar-fill {
+    position: absolute; left: 0; top: 0; height: 100%;
+    background: linear-gradient(90deg, var(--emerald), var(--neon));
+    border-radius: 100px;
+    transition: width 0.45s cubic-bezier(0.22,1,0.36,1);
+    box-shadow: 0 0 8px var(--emerald-glow);
+  }
+  .tr-week-row.cleared .tr-week-bar-fill { background: linear-gradient(90deg, #F5C84B, #FFE08A); box-shadow: 0 0 10px rgba(245,200,75,0.5); }
+  .tr-week-row-progress .up { color: var(--neon); font-weight: 800; }
+  .tr-week-row.cleared .tr-week-row-progress .up { color: #F5C84B; }
+  .tr-clear-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px; font-weight: 800;
+    color: #06140C;
+    background: linear-gradient(135deg, #F5C84B, #FFE08A);
+    padding: 2px 7px; border-radius: 100px;
+    letter-spacing: 0.04em;
+  }
+  .tr-week-row.cleared {
+    border-color: rgba(245, 200, 75, 0.5);
+    background: linear-gradient(135deg, rgba(245,200,75,0.06), transparent 70%), var(--bg-card);
+    box-shadow: 0 0 16px rgba(245, 200, 75, 0.1);
+  }
+  .tr-week-row.cleared .tr-week-row-num { color: #F5C84B; }
+
   /* 가로 카드 영역 (4개씩) */
   .tr-week-row-cards-wrap {
     position: relative;
@@ -2609,18 +3179,73 @@
     gap: 6px;
   }
   .tr-week-row-cards {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    display: flex;
+    flex-wrap: nowrap;
     gap: 8px;
     flex: 1;
     min-width: 0;
+    align-items: stretch;
   }
-  @media (max-width: 920px) {
-    .tr-week-row-cards { grid-template-columns: repeat(2, 1fr); }
+  .tr-week-row-cards > .tr-mini-card,
+  .tr-week-row-cards > .tr-mini-slot-empty {
+    flex: 1 1 0;
+    min-width: 0;
+    max-width: 150px;
   }
-  @media (max-width: 480px) {
-    .tr-week-row-cards { grid-template-columns: 1fr; }
+  /* === 퍼널 단계 슬롯 — 세로 카드 행 === */
+  .funnel-mini-cards {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 8px;
+    align-items: stretch;
+    margin-top: 8px;
   }
+  .funnel-mini-cards > .tr-mini-card,
+  .funnel-mini-cards > .tr-mini-slot-empty {
+    flex: 1 1 0;
+    min-width: 0;
+    max-width: 130px;
+  }
+  .funnel-vcard { position: relative; }
+  .funnel-vcard .tr-mini-card-thumb-empty { font-size: 20px; }
+  .funnel-vcard-x {
+    position: absolute;
+    top: 4px; right: 4px;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(0,0,0,0.5);
+    color: var(--text-mute);
+    font-size: 12px; line-height: 1;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; transition: opacity 0.15s, color 0.15s;
+    z-index: 2;
+  }
+  .funnel-vcard:hover .funnel-vcard-x { opacity: 1; }
+  .funnel-vcard-x:hover { color: #FF6B6B; background: rgba(0,0,0,0.7); }
+  .funnel-slot.cleared { border-color: var(--emerald-line); }
+  .funnel-slot-controls { margin-top: 8px; justify-content: flex-start; }
+  /* 이번 주 슬롯 진행바 (게임화) */
+  .ws-week-progressbar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 10px 0 2px;
+  }
+  .ws-week-progresstext {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 11px; font-weight: 800;
+    color: var(--text-mute);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .tr-week-block.cleared {
+    border-color: rgba(245, 200, 75, 0.45) !important;
+    box-shadow: 0 0 18px rgba(245, 200, 75, 0.12);
+  }
+  .tr-week-block.cleared .tr-week-bar-fill { background: linear-gradient(90deg, #F5C84B, #FFE08A); }
+  .tr-week-block.cleared .ws-week-progresstext { color: #F5C84B; }
   .tr-week-row-nav {
     background: var(--bg-input);
     border: 1px solid var(--line);
@@ -2646,25 +3271,24 @@
     cursor: not-allowed;
   }
 
-  /* 작은 카드 (주차 행 안) */
+  /* 작은 카드 (주차 행 안) — 세로 카드 스타일 (이번 주 슬롯과 통일) */
   .tr-mini-card {
     background: var(--bg-elev);
     border: 1px solid var(--line);
-    border-radius: 8px;
-    padding: 8px 10px;
+    border-radius: 10px;
+    padding: 0;
     cursor: pointer;
-    transition: all 0.12s;
+    transition: all 0.16s cubic-bezier(0.34,1.4,0.64,1);
     position: relative;
     display: flex;
-    gap: 8px;
-    align-items: stretch;
-    min-height: 86px;
+    flex-direction: column;
     overflow: hidden;
   }
   .tr-mini-card:hover {
-    border-color: var(--emerald-line);
-    transform: translateY(-1px);
+    border-color: var(--emerald);
+    transform: translateY(-3px);
     background: var(--bg-row-hover);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3), 0 0 14px var(--emerald-glow);
   }
   .tr-mini-card[data-state="idea"]     { border-left: 2.5px solid var(--text-mute); }
   .tr-mini-card[data-state="draft"]    { border-left: 2.5px solid var(--cream); }
@@ -2691,34 +3315,39 @@
   }
 
   .tr-mini-card-thumb {
-    width: 38px;
+    width: 100%;
     aspect-ratio: 9 / 16;
-    border-radius: 4px;
+    max-height: 150px;
+    border-radius: 0;
     background: var(--bg-row);
     object-fit: cover;
     flex-shrink: 0;
   }
   .tr-mini-card-thumb-empty {
-    width: 38px;
+    width: 100%;
     aspect-ratio: 9 / 16;
-    border-radius: 4px;
-    background: var(--bg-row);
+    max-height: 150px;
+    border-radius: 0;
+    background:
+      repeating-linear-gradient(45deg, rgba(255,255,255,0.015) 0 2px, transparent 2px 9px),
+      var(--bg-row);
     flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
     color: var(--text-faint);
-    font-size: 14px;
+    font-size: 22px;
     font-weight: 300;
-    border: 1px dashed var(--line);
+    border-bottom: 1px dashed var(--line);
   }
   .tr-mini-card-body {
     flex: 1;
     min-width: 0;
     display: flex;
     flex-direction: column;
-    gap: 3px;
-    justify-content: space-between;
+    gap: 4px;
+    justify-content: flex-start;
+    padding: 8px 10px 10px;
   }
   .tr-mini-card-title {
     font-family: 'Pretendard', sans-serif;
@@ -2753,39 +3382,103 @@
   .tr-mini-card[data-state="done"] .tr-mini-card-state     { color: var(--emerald); }
   .tr-mini-card[data-state="uploaded"] .tr-mini-card-state { color: var(--neon); }
 
-  /* 미니 빈 슬롯 (대시드, 작게) */
+  /* 미니 빈 슬롯 = 세로 카드백 (이번 주 슬롯과 통일) */
   .tr-mini-slot-empty {
-    background: transparent;
     border: 1.5px dashed var(--line);
-    border-radius: 8px;
+    border-radius: 10px;
     cursor: pointer;
-    transition: all 0.15s;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s cubic-bezier(0.34,1.4,0.64,1), border-color 0.18s ease, box-shadow 0.22s ease, background 0.18s ease;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 3px;
-    color: var(--text-mute);
-    min-height: 86px;
-    padding: 8px;
+    gap: 7px;
+    color: var(--text-faint);
+    aspect-ratio: 9 / 16;
+    max-height: 232px;
+    padding: 10px;
     text-align: center;
+    background:
+      radial-gradient(ellipse at 50% 38%, rgba(46, 204, 113, 0.06), transparent 62%),
+      repeating-linear-gradient(45deg, rgba(255,255,255,0.016) 0 2px, transparent 2px 9px),
+      var(--bg-input);
   }
+  .tr-mini-slot-empty::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -120%;
+    width: 70%; height: 100%;
+    background: linear-gradient(105deg, transparent, rgba(46,204,113,0.12), transparent);
+    transform: skewX(-18deg);
+    transition: left 0.55s ease;
+    pointer-events: none;
+  }
+  .tr-mini-slot-empty:hover::before { left: 130%; }
   .tr-mini-slot-empty:hover {
     border-color: var(--emerald);
-    color: var(--emerald);
-    background: var(--emerald-faint);
+    border-style: solid;
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.32), 0 0 16px var(--emerald-glow);
   }
   .tr-mini-slot-empty .plus {
-    font-size: 18px;
+    font-size: 26px;
     font-weight: 300;
     line-height: 1;
+    color: var(--text-faint);
+    transition: transform 0.25s cubic-bezier(0.34,1.4,0.64,1), color 0.2s ease;
   }
+  .tr-mini-slot-empty:hover .plus { color: var(--emerald); transform: scale(1.18) rotate(8deg); }
   .tr-mini-slot-empty .label {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 11px;
+    letter-spacing: -0.01em;
+    font-weight: 800;
+    color: var(--text-mute);
+    transition: color 0.2s ease;
+  }
+  .tr-mini-slot-empty:hover .label { color: var(--text-main); }
+  .tr-mini-slot-num {
+    position: absolute;
+    top: 7px; left: 9px;
     font-family: 'JetBrains Mono', monospace;
-    font-size: 8.5px;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    font-weight: 600;
+    font-size: 9.5px; font-weight: 800;
+    color: var(--text-faint);
+    letter-spacing: 0.04em;
+    transition: color 0.2s ease;
+  }
+  .tr-mini-slot-empty:hover .tr-mini-slot-num { color: var(--emerald); }
+  /* 주차별 슬롯 −/+ 컨트롤 (라벨 영역 안) */
+  .tr-week-controls {
+    margin-top: 8px;
+    justify-content: flex-start;
+  }
+  @media (max-width: 720px) {
+    .tr-week-controls { margin-top: 0; }
+  }
+  /* 주차 행 우상단 미니 카운터 (이번 주 패널 스타일) */
+  .tr-week-row { position: relative; }
+  .tr-week-controls-mini {
+    position: absolute;
+    top: 8px; right: 10px;
+    z-index: 4;
+    gap: 3px;
+    padding: 3px;
+    border-radius: 100px;
+    background: rgba(10, 12, 11, 0.72);
+    backdrop-filter: blur(3px);
+    opacity: 0.5;
+    transition: opacity 0.15s;
+  }
+  .tr-week-row:hover .tr-week-controls-mini,
+  .tr-week-row.current .tr-week-controls-mini { opacity: 1; }
+  .tr-week-controls-mini .ws-slot-btn {
+    width: 19px; height: 19px;
+    font-size: 12px; border-radius: 6px;
+  }
+  .tr-week-controls-mini .ws-slot-counter {
+    font-size: 8.5px; padding: 2px 6px;
   }
 
   /* === 자유 메모 입력 모달 === */
@@ -2916,7 +3609,7 @@
     box-shadow: 0 0 12px rgba(245, 230, 211, 0.3);
   }
 
-  /* 벤치마크 선택 모달 키우기 (큰 면적 + 썸네일) */
+  /* 벤치마킹 선택 모달 키우기 (큰 면적 + 썸네일) */
   .tr-add-modal-box.bench-large {
     max-width: 760px;
     max-height: 88vh;
@@ -4333,7 +5026,27 @@
     transition: all 0.3s;
     position: relative;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
+  /* 날짜 숫자 (그리드를 달력처럼) */
+  .ch-dot-d {
+    position: relative;
+    z-index: 2;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 8.5px;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--text-faint);
+    pointer-events: none;
+  }
+  .ch-dot-sat .ch-dot-d { color: #6AA9FF; }   /* 토요일 파랑 */
+  .ch-dot-sun .ch-dot-d { color: #FF6B6B; }   /* 일요일·공휴일 빨강 */
+  .ch-dot.analyzed .ch-dot-d,
+  .ch-dot.uploaded .ch-dot-d { color: #06140C; }  /* 채워진 칸은 어둡게 */
+  .ch-dot-mstart { border-left: 2px solid var(--cream); }  /* 월 시작 */
+  .ch-dot-mstart .ch-dot-d { font-size: 7.5px; }
 
   .ch-dot:hover {
     border-color: var(--sage);
@@ -9540,7 +10253,7 @@
     flex-direction: column;
     gap: 10px;
   }
-  /* 레퍼런스 패널 탭 (벤치마크/키워드/타겟) */
+  /* 레퍼런스 패널 탭 (벤치마킹/키워드/타겟) */
   .sc-ref-tabs { display: flex; gap: 6px; padding: 10px 18px 0; }
   .sc-ref-tab { flex: 1; padding: 9px 6px; border-radius: 9px; border: 1px solid var(--line); background: var(--bg-card); color: var(--text-mute); font-family: 'Pretendard', sans-serif; font-size: 12.5px; font-weight: 700; cursor: pointer; transition: all .15s; }
   .sc-ref-tab.on { background: var(--emerald); color: #06140C; border-color: var(--emerald); }
@@ -9993,15 +10706,18 @@
     z-index: 1;
   }
 
-  @media (max-width: 880px) {
+  @media (max-width: 700px) {
     .entry-body { grid-template-columns: 1fr 1fr; }
     .entry-col-main { grid-column: 1 / -1; }
+    /* 좁은 화면에서 박스가 쌓일 때 9:16 박스가 너무 커지지 않게 제한 + 가운데 정렬 */
+    .entry-thumb-box { max-width: 170px; margin-left: auto; margin-right: auto; }
   }
   @media (max-width: 480px) {
     .entry-wrap { padding: 14px 14px 6px; }
     .entry-card { padding: 18px; }
     .entry-body { grid-template-columns: 1fr 1fr; gap: 12px; }
     .entry-title { font-size: 22px; }
+    .entry-thumb-box { max-width: none; }
   }
 
   .entry-col {
@@ -12112,7 +12828,7 @@
         <span class="sh-sb-icon">⌂</span><span class="sh-sb-label">트레이닝 룸</span>
       </button>
       <button class="sh-sb-item sh-sb-main" data-ws="sheet" id="ws-sheet">
-        <span class="sh-sb-icon">▤</span><span class="sh-sb-label">벤치마크 시트</span>
+        <span class="sh-sb-icon">▤</span><span class="sh-sb-label">벤치마킹 시트</span>
       </button>
       <button class="sh-sb-item sh-sb-main" data-ws="customer" id="ws-customer">
         <span class="sh-sb-icon">◉</span><span class="sh-sb-label">고객 분석</span>
@@ -12350,6 +13066,11 @@
             </div>
           </div>
 
+          <div class="ws-week-progressbar">
+            <div class="tr-week-bar" style="flex:1;margin:0;"><div class="tr-week-bar-plan" id="ws-week-bar-plan" style="width:0%"></div><div class="tr-week-bar-fill" id="ws-week-bar-fill" style="width:0%"></div></div>
+            <span class="ws-week-progresstext" id="ws-week-progresstext">0 / 3 채움</span>
+          </div>
+
           <div class="ws-slots" id="ws-slots"></div>
         </div>
 
@@ -12358,34 +13079,58 @@
           <div class="ws-picker-box">
             <div class="ws-picker-head">
               <div>
-                <div class="ws-picker-eyebrow">📋 이번 주 슬롯에 담기</div>
-                <h3 class="ws-picker-title">시트에서 카드 둘러보기</h3>
+                <div class="ws-picker-eyebrow">🃏 이번 주 슬롯에 담기</div>
+                <h3 class="ws-picker-title">이번 주 슬롯 채우기</h3>
               </div>
               <button class="ws-picker-close" onclick="document.getElementById('ws-picker-modal').classList.remove('show');">×</button>
             </div>
             <div class="ws-picker-body">
-              <!-- 단계 필터 -->
-              <div class="ws-picker-filter" id="ws-picker-filter">
-                <button class="ws-picker-filter-btn on" data-stage="all">전체</button>
-                <button class="ws-picker-filter-btn" data-stage="attract">🌐 유입용</button>
-                <button class="ws-picker-filter-btn" data-stage="convert">🤝 전환용</button>
-                <button class="ws-picker-filter-btn" data-stage="retain">💎 재구매</button>
-                <button class="ws-picker-filter-btn" data-stage="">○ 분류 없음</button>
-              </div>
-              <!-- 카드 가로 펼침 -->
-              <div class="ws-picker-cards" id="ws-picker-cards"></div>
-              <div class="ws-picker-empty" id="ws-picker-empty" style="display:none;">
-                <div class="ws-picker-empty-icon">📋</div>
-                <div>이 필터에 해당하는 카드가 없어요.</div>
+              <!-- STEP 1: 어떤 카드로 채울지 선택 (4지선다) -->
+              <div id="ws-pick-choice">
+                <div class="ws-choice-sub">이 슬롯을 어떤 카드로 채울까요?</div>
+                <div class="ws-choice-grid">
+                  <button class="ws-choice-card" data-choice="sheet">
+                    <div class="ws-choice-ico">📋</div>
+                    <div class="ws-choice-t">벤치마킹 시트에서</div>
+                    <div class="ws-choice-d">분석해둔 카드 불러오기</div>
+                  </button>
+                  <button class="ws-choice-card attract" data-choice="attract">
+                    <div class="ws-choice-ico">🧲</div>
+                    <div class="ws-choice-t">유입용 카드</div>
+                    <div class="ws-choice-d">유입용으로 모아둔 카드</div>
+                  </button>
+                  <button class="ws-choice-card convert" data-choice="convert">
+                    <div class="ws-choice-ico">🤝</div>
+                    <div class="ws-choice-t">전환용 카드</div>
+                    <div class="ws-choice-d">전환용으로 모아둔 카드</div>
+                  </button>
+                  <button class="ws-choice-card free" data-choice="free">
+                    <div class="ws-choice-ico">📝</div>
+                    <div class="ws-choice-t">자유 작성</div>
+                    <div class="ws-choice-d">직접 주제를 입력</div>
+                  </button>
+                </div>
               </div>
 
-              <!-- 또는 직접 작성 -->
-              <div class="ws-picker-divider">또는 직접 작성</div>
-              <div class="ws-picker-freewrite">
-                <input type="text" class="ws-picker-input" id="ws-picker-input"
-                       placeholder="새 아이디어 제목을 입력하세요" maxlength="80"
-                       onkeydown="if(event.key==='Enter'){event.preventDefault();var b=document.getElementById('ws-picker-add-free');if(b)b.click();}" />
-                <button class="ws-picker-add-free" id="ws-picker-add-free">+ 추가</button>
+              <!-- STEP 2a: 벤치마킹 시트 목록 (필터칩 제거 — 4지선다가 대신함) -->
+              <div id="ws-pick-sheet" style="display:none;">
+                <button class="ws-pick-back" data-back>← 뒤로</button>
+                <div class="ws-sheet-head" id="ws-sheet-head">📋 벤치마킹 시트 — 전체 카드</div>
+                <div class="ws-picker-cards" id="ws-picker-cards"></div>
+                <div class="ws-picker-empty" id="ws-picker-empty" style="display:none;">
+                  <div class="ws-picker-empty-icon">📋</div>
+                  <div>아직 분류된 카드가 없어요.</div>
+                </div>
+              </div>
+
+              <!-- STEP 2b: 자유 작성 (큰 메모장) -->
+              <div id="ws-pick-free" style="display:none;">
+                <button class="ws-pick-back" data-back>← 뒤로</button>
+                <div class="ws-free-head" id="ws-free-head">📝 자유 작성</div>
+                <div class="ws-free-desc" id="ws-free-desc">이번 주 만들 콘텐츠 주제를 자유롭게 적어주세요.</div>
+                <textarea class="ws-picker-textarea" id="ws-picker-input"
+                          placeholder="예) 시술 전후 비교 영상 / 고객 후기 모음 / 자주 묻는 질문 답변..." maxlength="400" rows="6"></textarea>
+                <button class="ws-picker-add-free" id="ws-picker-add-free" style="margin-top:12px; width:100%;">+ 슬롯에 담기</button>
               </div>
             </div>
           </div>
@@ -12399,7 +13144,6 @@
             <button class="tr-cal-nav" id="tr-cal-next" title="다음 달">▶</button>
             <button class="tr-cal-today" id="tr-cal-today" title="오늘로">이번 주</button>
           </div>
-          <div class="tr-cal-weeks" id="tr-cal-weeks"></div>
         </div>
 
         <!-- 1·2·3·4주차 세로 리스트 (가로 카드 4개씩) -->
@@ -12415,10 +13159,6 @@
               <h3>어떻게 채울까요?</h3>
             </div>
             <button class="tr-add-modal-close" id="tr-add-modal-close">×</button>
-          </div>
-          <div class="tr-add-tabs">
-            <button class="tr-add-tab on" data-mode="bench">📚 벤치마크에서</button>
-            <button class="tr-add-tab" data-mode="free">✎ 자유</button>
           </div>
           <div class="tr-add-body" id="tr-add-body"></div>
         </div>
@@ -12477,6 +13217,7 @@
           <div class="tr-summary-modal-body" id="tr-summary-modal-body"></div>
           <div class="tr-summary-modal-foot">
             <button class="tr-summary-modal-btn" id="tr-summary-modal-back">← 닫기</button>
+            <button class="tr-summary-modal-btn" id="tr-summary-upload">○ 업로드 완료 표시</button>
             <button class="tr-summary-modal-btn primary" id="tr-summary-modal-write">원고 쓰러 가기 →</button>
           </div>
         </div>
@@ -12503,7 +13244,7 @@
                   <span>⬇</span> 전체 내보내기 (.json)
                 </button>
                 <button class="settings-btn" id="settings-export-rows-btn">
-                  벤치마크만 내보내기
+                  벤치마킹만 내보내기
                 </button>
                 <button class="settings-btn" id="settings-export-scripts-btn">
                   원고만 내보내기
@@ -12618,7 +13359,7 @@
                 <div class="big">새로운 챌린지를 시작할 준비됐어요?</div>
                 <div class="small">동시에 여러 챌린지를 굴려도 괜찮아요.</div>
               </div>
-              <button class="home-start-btn" id="home-start-ch">▶ 벤치마크 챌린지 시작</button>
+              <button class="home-start-btn" id="home-start-ch">▶ 벤치마킹 챌린지 시작</button>
             </div>
 
             <div class="home-daily" id="home-daily" style="display:none;">
@@ -12662,7 +13403,7 @@
               레퍼런스가 쌓이면<br/><span style="color:var(--emerald);">감각이 된다.</span>
             </div>
             <div style="margin-top:16px;font-size:12.5px;color:var(--text-sub);line-height:1.7;font-weight:500;">
-              모든 벤치마크는 자동으로 저장됩니다.<br/>시트에서 분석을, 무드보드에서 비주얼 큐레이션을 이어가세요.
+              모든 벤치마킹는 자동으로 저장됩니다.<br/>시트에서 분석을, 무드보드에서 비주얼 큐레이션을 이어가세요.
             </div>
           </section>
         </div>
@@ -12766,13 +13507,13 @@
           <div class="slot-picker-empty" id="slot-picker-empty" style="display:none;">
             <div class="slot-picker-empty-icon">📋</div>
             <div class="slot-picker-empty-title">이 단계로 분류된 카드가 없어요</div>
-            <div class="slot-picker-empty-hint">벤치마크 시트에서 카드를 분해할 때 [🎯 퍼널 단계] 영역에서 이 단계를 선택해주세요.</div>
+            <div class="slot-picker-empty-hint">벤치마킹 시트에서 카드를 분해할 때 [🎯 퍼널 단계] 영역에서 이 단계를 선택해주세요.</div>
           </div>
         </div>
       </div>
     </div>
 
-    <div id="sh-sheet-view">
+    <div id="sh-sheet-view" style="display:none;">
       <!-- 관점이 환영 (첫 진입 시) -->
       <div id="sheet-gj-welcome" style="display:none;"></div>
 
@@ -12780,7 +13521,7 @@
       <div class="entry-wrap">
         <div class="entry-card">
           <div class="entry-head">
-            <div class="entry-eyebrow">새 벤치마크</div>
+            <div class="entry-eyebrow">새 벤치마킹</div>
             <h2 class="entry-title">컨텐츠 <span class="em">분해</span>하기</h2>
           </div>
 
@@ -12918,10 +13659,10 @@
       </div>
     </div>
 
-    <div id="sh-stats-view" class="sh-stats-wrap"></div>
+    <div id="sh-stats-view" class="sh-stats-wrap" style="display:none;"></div>
 
     <!-- ===== FORMAT BOARD VIEW (칸반) ===== -->
-    <div id="fb-view" class="fb-wrap">
+    <div id="fb-view" class="fb-wrap" style="display:none;">
       <section class="fb-header">
         <div class="fb-page"><span class="em">02</span> / 03</div>
         <div class="fb-eyebrow">분류 · 유형 · 퍼널</div>
@@ -12957,7 +13698,7 @@
     </div>
 
     <!-- ===== SCRIPTS VIEW (내 원고) ===== -->
-    <div id="sc-view" class="sc-wrap">
+    <div id="sc-view" class="sc-wrap" style="display:none;">
       <!-- 헤더 -->
       <section class="sc-header">
         <div class="sc-page"><span class="em">03</span> / 03</div>
@@ -12986,9 +13727,9 @@
       <!-- 메인 작성 카드 -->
       <div class="sc-entry-wrap">
         <div class="sc-entry-card">
-          <button class="sc-ref-toggle" id="sc-ref-toggle" title="벤치마크 레퍼런스 열기">
+          <button class="sc-ref-toggle" id="sc-ref-toggle" title="벤치마킹 레퍼런스 열기">
             <span class="sc-ref-toggle-icon">📚</span>
-            <span class="sc-ref-toggle-label">벤치마크 레퍼런스</span>
+            <span class="sc-ref-toggle-label">벤치마킹 레퍼런스</span>
           </button>
           <div class="sc-entry-head">
             <div class="sc-entry-eyebrow" id="sc-entry-eyebrow">새 원고 · NEW SCRIPT</div>
@@ -13013,7 +13754,7 @@
           <div class="sc-section">
             <label class="sc-mini-label">참고한 벤치마킹</label>
             <div class="sc-bench-picker" id="sc-entry-bench-picker">
-              <button class="sc-bench-add-btn" id="sc-entry-bench-add-btn">+ 벤치마크 행 선택</button>
+              <button class="sc-bench-add-btn" id="sc-entry-bench-add-btn">+ 벤치마킹 행 선택</button>
               <div class="sc-bench-selected" id="sc-entry-bench-selected"></div>
             </div>
           </div>
@@ -13189,24 +13930,24 @@
       </div>
     </div>
 
-    <!-- ===== 벤치마크 레퍼런스 패널 (우측 슬라이드) ===== -->
+    <!-- ===== 벤치마킹 레퍼런스 패널 (우측 슬라이드) ===== -->
     <div class="sc-ref-panel" id="sc-ref-panel">
       <div class="sc-ref-head">
         <div>
           <div class="sc-ref-eyebrow">REFERENCE · 옆에서 영감 가져오기</div>
-          <h3 class="sc-ref-title">벤치마크 <span class="em">레퍼런스</span></h3>
+          <h3 class="sc-ref-title">벤치마킹 <span class="em">레퍼런스</span></h3>
         </div>
         <button class="sc-ref-close" id="sc-ref-close" title="뒤로가기">← 뒤로</button>
       </div>
 
-      <!-- 탭: 벤치마크 / 키워드 / 타겟 -->
+      <!-- 탭: 벤치마킹 / 키워드 / 타겟 -->
       <div class="sc-ref-tabs">
-        <button class="sc-ref-tab on" data-rtab="bench">벤치마크</button>
+        <button class="sc-ref-tab on" data-rtab="bench">벤치마킹</button>
         <button class="sc-ref-tab" data-rtab="kw">키워드</button>
         <button class="sc-ref-tab" data-rtab="target">타겟</button>
       </div>
 
-      <!-- 벤치마크 탭 -->
+      <!-- 벤치마킹 탭 -->
       <div id="rtab-bench">
       <!-- 필터 -->
       <div class="sc-ref-filters">
@@ -13254,7 +13995,7 @@
     <div class="sc-ref-backdrop" id="sc-ref-backdrop"></div>
 
     <!-- ===== MOODBOARD VIEW (FREE CANVAS) ===== -->
-    <div id="mb-view" class="mb-wrap">
+    <div id="mb-view" class="mb-wrap" style="display:none;">
       <div class="mb-bar">
         <input type="text" class="mb-name" id="mb-name" value="My Moodboard" />
         <input type="text" class="mb-desc" id="mb-desc" placeholder="컨셉 한 줄 — 예: 따뜻하면서 시크한 변신 영상 톤" />
@@ -13379,7 +14120,7 @@
       <h2 class="cw-title">새로운 <span class="em">챌린지</span> 시작</h2>
 
       <div class="cw-intro">
-        <strong>벤치마크 챌린지</strong>는 한 화면에 모든 진행을 펼쳐놓는 게임입니다.
+        <strong>벤치마킹 챌린지</strong>는 한 화면에 모든 진행을 펼쳐놓는 게임입니다.
         예시: 50만 뷰 이상 영상 100개를 벤치마킹하면 그 중 30개를 콘텐츠로 만들 수 있어요.
         주 3개씩이면 약 100일 챌린지. 끝나면 한 발짝 다가가 있을 거예요.
       </div>
@@ -13482,7 +14223,7 @@
         </div>
         <div class="funnel-stage-picker" id="f-funnel-picker">
           <button class="funnel-stage-btn" data-stage="attract" type="button">
-            <span class="funnel-stage-emoji">🌐</span>
+            <span class="funnel-stage-emoji">🧲</span>
             <span class="funnel-stage-name">유입용</span>
             <span class="funnel-stage-sub">대중 → 예비 고객</span>
           </button>
@@ -13493,8 +14234,8 @@
           </button>
           <button class="funnel-stage-btn" data-stage="retain" type="button">
             <span class="funnel-stage-emoji">💎</span>
-            <span class="funnel-stage-name">재구매</span>
-            <span class="funnel-stage-sub">일반 → 재구매</span>
+            <span class="funnel-stage-name">세일즈</span>
+            <span class="funnel-stage-sub">일반 → 단골</span>
           </button>
           <button class="funnel-stage-btn" data-stage="" type="button">
             <span class="funnel-stage-emoji">○</span>
@@ -13673,9 +14414,9 @@
       'shv4-gj-milestones',
       'mbv2-meta', 'mbv2-cards',
       'hmv1-home', 'hmv1-challenges', 'hmv1-seen',
-      'hmv1-acc', 'hmv1-ach'
+      'hmv1-acc', 'hmv1-ach', 'hmv1-weekcounts', 'hmv1-funnelcounts', 'hmv1-uploadgoal', 'hmv1-funnelup'
     ]);
-    // 이미지 키(벤치마크 시트·무드보드) → Supabase Storage 버킷
+    // 이미지 키(벤치마킹 시트·무드보드) → Supabase Storage 버킷
     const IMG_BUCKET = 'cm-images';
     function isSynced(k) { return !!KIND[k]; }
     function isProfile(k) { return PROFILE_KEYS.has(k); }
@@ -14066,6 +14807,14 @@
   const KEYWORDS_KEY = 'shv4-keywords';
   const FUNNEL_SLOTS_KEY = 'shv4-funnel-slots';
   const WEEK_SLOTS_KEY = 'shv4-week-slots';
+  const TR_WEEK_COUNTS_KEY = 'hmv1-weekcounts';
+  let trWeekCounts = {}; // { 'YYYY-MM-DD'(주 월요일): 원하는 슬롯 수 } 기본 3, 1~5
+  const FUNNEL_COUNTS_KEY = 'hmv1-funnelcounts';
+  let funnelSlotCounts = {}; // { attract|convert|retain: 원하는 슬롯 수 } 기본 3, 1~5
+  const UPLOAD_GOAL_KEY = 'hmv1-uploadgoal';
+  let monthlyUploadGoal = 0; // 이번 달 목표 업로드 개수 (0=미설정)
+  const FUNNEL_UP_KEY = 'hmv1-funnelup';
+  let funnelUploaded = { attract: [], convert: [], retain: [] }; // 단계별 업로드 완료된 rowId
   let funnelSlots = { attract: [], convert: [], retain: [] }; // 각 단계별 rowId 배열 (이번 주 트레이닝)
   let weekSlots = [null, null, null]; // 이번 주 슬롯 (3개 기본, 최소 1, 최대 5)
                                        // 각 원소: null | { id, type:'sheet'|'free', rowId|title, done }
@@ -14448,6 +15197,47 @@
   async function saveWeekSlots() {
     try { await window.storage.set(WEEK_SLOTS_KEY, JSON.stringify(weekSlots)); } catch (e) {}
   }
+  async function loadTrWeekCounts() {
+    try {
+      const r = await window.storage.get(TR_WEEK_COUNTS_KEY);
+      if (r) trWeekCounts = JSON.parse(r.value) || {};
+    } catch (e) { trWeekCounts = {}; }
+    if (!trWeekCounts || typeof trWeekCounts !== 'object') trWeekCounts = {};
+  }
+  async function saveTrWeekCounts() {
+    try { await window.storage.set(TR_WEEK_COUNTS_KEY, JSON.stringify(trWeekCounts)); } catch (e) {}
+  }
+  async function loadFunnelSlotCounts() {
+    try {
+      const r = await window.storage.get(FUNNEL_COUNTS_KEY);
+      if (r) funnelSlotCounts = JSON.parse(r.value) || {};
+    } catch (e) { funnelSlotCounts = {}; }
+    if (!funnelSlotCounts || typeof funnelSlotCounts !== 'object') funnelSlotCounts = {};
+  }
+  async function saveFunnelSlotCounts() {
+    try { await window.storage.set(FUNNEL_COUNTS_KEY, JSON.stringify(funnelSlotCounts)); } catch (e) {}
+  }
+  async function loadUploadGoal() {
+    try {
+      const r = await window.storage.get(UPLOAD_GOAL_KEY);
+      if (r) monthlyUploadGoal = parseInt(r.value, 10) || 0;
+    } catch (e) { monthlyUploadGoal = 0; }
+    if (!(monthlyUploadGoal >= 0)) monthlyUploadGoal = 0;
+  }
+  async function saveUploadGoal() {
+    try { await window.storage.set(UPLOAD_GOAL_KEY, String(monthlyUploadGoal)); } catch (e) {}
+  }
+  async function loadFunnelUploaded() {
+    try {
+      const r = await window.storage.get(FUNNEL_UP_KEY);
+      if (r) funnelUploaded = JSON.parse(r.value) || {};
+    } catch (e) { funnelUploaded = {}; }
+    if (!funnelUploaded || typeof funnelUploaded !== 'object') funnelUploaded = {};
+    ['attract', 'convert', 'retain'].forEach(k => { if (!Array.isArray(funnelUploaded[k])) funnelUploaded[k] = []; });
+  }
+  async function saveFunnelUploaded() {
+    try { await window.storage.set(FUNNEL_UP_KEY, JSON.stringify(funnelUploaded)); } catch (e) {}
+  }
 
   // === SCRIPTS (원고) ===
   function newScript() {
@@ -14457,6 +15247,7 @@
       content: '', // HTML rich text (자유 모드용)
       state: 'idea', // legacy, 호환용 — 더 이상 사용하지 않음
       done: false, // 완료 여부 (새 단순 모델)
+      uploaded: false, // 실제 인스타 업로드 완료 (월 목표 집계 대상)
       benchmarkRowId: '',
       targetDate: todayStr(),
       // === 가이드 모드 ===
@@ -15002,7 +15793,7 @@
       cols = [
         { key: 'attract', title: '유입용', cls: 'fmt-attract', match: r => r.funnelStage === 'attract' },
         { key: 'convert', title: '전환용', cls: 'fmt-convert', match: r => r.funnelStage === 'convert' },
-        { key: 'retain', title: '재구매', cls: 'fmt-retain', match: r => r.funnelStage === 'retain' },
+        { key: 'retain', title: '세일즈', cls: 'fmt-retain', match: r => r.funnelStage === 'retain' },
         { key: '__none__', title: '미분류', cls: 'fmt-none', match: r => !r.funnelStage }
       ];
     } else if (fbGroupMode === 'thumb' || fbGroupMode === 'copy') {
@@ -15377,7 +16168,7 @@
     const rowsFilled = rows ? rows.filter(isFilled).length : 0;
 
     // 마일스톤별
-    if (ctx.milestone === 'firstBench')   return ['👋 첫 벤치마크 완료!', '잘하고 있어요. 이렇게 5개 모이면 패턴이 보이기 시작해요.'];
+    if (ctx.milestone === 'firstBench')   return ['👋 첫 벤치마킹 완료!', '잘하고 있어요. 이렇게 5개 모이면 패턴이 보이기 시작해요.'];
     if (ctx.milestone === 'fiveBench')    return ['🔥 5개 분석 돌파!', '이제 슬슬 감이 잡힐 거예요. 자주 보이는 후킹 유형을 메모해두세요.'];
     if (ctx.milestone === 'tenBench')     return ['⚡ 10개 분석!', '벤치마킹 잘 쌓이고 있어요. 이제 원고도 한 편 써보면 어떨까요?'];
     if (ctx.milestone === 'firstScript')  return ['✍️ 첫 원고 작성!', '시작이 반이에요. 이 흐름을 일주일만 유지해봐요.'];
@@ -15387,10 +16178,10 @@
 
     // 빈 상태
     if (ctx.space === 'sheet' && ctx.isEmpty) {
-      return ['벤치마크 시작해볼까요?', '잘 된 인스타 영상 하나 골라서 분석부터 해봐요.\n3개만 모아도 패턴이 보일 거예요.'];
+      return ['벤치마킹 시작해볼까요?', '잘 된 인스타 영상 하나 골라서 분석부터 해봐요.\n3개만 모아도 패턴이 보일 거예요.'];
     }
     if (ctx.space === 'home' && ctx.isEmpty) {
-      return [`안녕하세요! 저는 관점이에요`, '왼쪽에서 벤치마크 시트부터 시작해봐요.\n분석한 영상이 카드가 되어 여기로 옵니다.'];
+      return [`안녕하세요! 저는 관점이에요`, '왼쪽에서 벤치마킹 시트부터 시작해봐요.\n분석한 영상이 카드가 되어 여기로 옵니다.'];
     }
     if (ctx.space === 'scripts' && ctx.isEmpty) {
       return ['아직 원고가 없네요', '트레이닝 룸의 카드에서 시작하거나,\n바로 위에서 새 원고를 써보세요.'];
@@ -15404,7 +16195,7 @@
 
     // 기본 인사
     if (cardCount === 0 && rowsFilled === 0) {
-      return ['처음 오셨네요!', '벤치마크 시트에서 첫 영상부터\n분석해보면 어떨까요?'];
+      return ['처음 오셨네요!', '벤치마킹 시트에서 첫 영상부터\n분석해보면 어떨까요?'];
     }
     return ['👋 안녕하세요', '오늘도 한 걸음씩!'];
   }
@@ -15502,7 +16293,7 @@
       if (s.createdAt) dates.add(ymdFromTimestamp(s.createdAt));
       if (s.updatedAt) dates.add(ymdFromTimestamp(s.updatedAt));
     });
-    // 벤치마크 행의 updatedAt
+    // 벤치마킹 행의 updatedAt
     (rows || []).forEach(r => {
       if (r.updatedAt && isFilled(r)) dates.add(ymdFromTimestamp(r.updatedAt));
     });
@@ -15705,7 +16496,7 @@
     };
   }
 
-  // 벤치마크 → 원고 원클릭: 그 벤치마크를 연결한 새 원고를 바로 작성 시작
+  // 벤치마킹 → 원고 원클릭: 그 벤치마킹를 연결한 새 원고를 바로 작성 시작
   function startScriptFromBenchmark(rowId) {
     const r = rows.find(x => x.id === rowId);
     if (!r) { toast('먼저 이 행을 저장해주세요'); return; }
@@ -15718,7 +16509,7 @@
     if (bt) { scriptEntryState.writeMode = 'basic'; scriptEntryState.basic.type = bt; }
     applyScriptEntryToUI();
     setTimeout(() => { const c = document.querySelector('.sc-entry-card'); if (c) c.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 250);
-    toast('이 벤치마크로 원고 시작! ✍️');
+    toast('이 벤치마킹로 원고 시작! ✍️');
   }
   window.__startScriptFromBench = startScriptFromBenchmark;
 
@@ -15961,7 +16752,7 @@
     if (tb && r.hasThumb) { loadImage(r.id, 'thumb').then(u => { if (u) tb.innerHTML = '<img src="' + u + '" alt="" />'; }).catch(() => {}); }
     el.querySelector('[data-bench-chip]').onclick = (e) => {
       if (e.target.closest('[data-bench-rm]')) return;
-      openDetail(r.id); // 탭하면 그 벤치마크 시트 정보 한눈에
+      openDetail(r.id); // 탭하면 그 벤치마킹 시트 정보 한눈에
     };
     el.querySelector('[data-bench-rm]').onclick = (e) => {
       e.stopPropagation();
@@ -16123,7 +16914,7 @@
     if (!s) return;
 
     // 시트 컨텐츠 유형 → 원고 기본 가이드 유형 자동 매핑
-    // 이미 저장된 basic.type 우선, 비어있으면 벤치마크 행에서 추론
+    // 이미 저장된 basic.type 우선, 비어있으면 벤치마킹 행에서 추론
     let inferredBasicType = s.basic?.type || '';
     let inferredWriteMode = s.writeMode || 'free';
     if (!inferredBasicType && s.benchmarkRowId) {
@@ -16807,7 +17598,7 @@
     }
 
     if (arr.length === 0) {
-      el.innerHTML = `<div class="sc-ref-list-empty">조건에 맞는 벤치마크가 없어요.<br/>필터를 조정해보세요.</div>`;
+      el.innerHTML = `<div class="sc-ref-list-empty">조건에 맞는 벤치마킹가 없어요.<br/>필터를 조정해보세요.</div>`;
       return;
     }
 
@@ -18153,6 +18944,10 @@
     await loadKeywords();
     await loadFunnelSlots();
     await loadWeekSlots();
+    await loadTrWeekCounts();
+    await loadFunnelSlotCounts();
+    await loadUploadGoal();
+    await loadFunnelUploaded();
 
     // Restore UI states from prefs
     document.querySelectorAll('.sh-sb-toggle').forEach(t => t.classList.toggle('active', t.dataset.view === viewMode));
@@ -18898,9 +19693,20 @@
     _clType = { thumb: '', copy: '', comment: '' };
     _clAddOpen = { thumb: false, copy: false, comment: false };
     renderCollectModal();
-    document.getElementById('collect-modal').classList.add('show');
+    const _cm = document.getElementById('collect-modal');
+    // 모달이 #home-view 안에 갇혀 다른 화면에서 안 뜨는 문제 방지: body 직속으로 이동
+    if (_cm && _cm.parentElement !== document.body) document.body.appendChild(_cm);
+    _cm.classList.add('show');
   }
   function closeCollectModal() { const m = document.getElementById('collect-modal'); if (m) m.classList.remove('show'); }
+  // 안전망: 버튼이 언제/어떻게 그려지든 클릭이 항상 잡히도록 문서 전체에 위임 리스너 1회 바인딩
+  if (!window.__collectDelegated) {
+    window.__collectDelegated = true;
+    document.addEventListener('click', function (e) {
+      const t = e.target && e.target.closest && e.target.closest('#collect-open-btn');
+      if (t) { e.preventDefault(); try { openCollectModal(); } catch (err) { console.error('openCollectModal 실패', err); } }
+    });
+  }
   async function doCollect(q) {
     if (!_clImg[q]) { toast('이미지를 먼저 넣어주세요'); return; }
     if (!_clType[q]) { toast('유형을 먼저 골라주세요'); return; }
@@ -18957,7 +19763,9 @@
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
     };
     img.src = dataUrl;
-    document.getElementById('imed-modal').classList.add('show');
+    const _im = document.getElementById('imed-modal');
+    if (_im && _im.parentElement !== document.body) document.body.appendChild(_im);
+    _im.classList.add('show');
   }
 
   function renderEntryFormatPicker() {
@@ -19154,7 +19962,7 @@
     entryDisasmMode = true;
 
     // 임시 행 객체 만들어서 openDetail에 넘기는 대신, 모달을 entry mode로 직접 채움
-    document.getElementById('sh-modal-no').textContent = '· 새 벤치마크';
+    document.getElementById('sh-modal-no').textContent = '· 새 벤치마킹';
     document.getElementById('f-why').value = entryState.why || '';
     document.getElementById('f-idea').value = entryState.idea || '';
     document.getElementById('f-url').value = entryState.url || '';
@@ -20139,6 +20947,15 @@
   }
 
   // Compute challenge progress from sheet rows
+  // 한국 공휴일 (2025~2027 주요 — 그리드 색 표시용, 시각 참고)
+  const HOLIDAYS_KR = new Set([
+    // 2025
+    '2025-01-01','2025-01-28','2025-01-29','2025-01-30','2025-03-01','2025-05-05','2025-05-06','2025-06-06','2025-08-15','2025-10-03','2025-10-06','2025-10-07','2025-10-08','2025-10-09','2025-12-25',
+    // 2026
+    '2026-01-01','2026-02-16','2026-02-17','2026-02-18','2026-03-01','2026-03-02','2026-05-05','2026-05-24','2026-05-25','2026-06-06','2026-08-15','2026-09-24','2026-09-25','2026-09-26','2026-10-03','2026-10-05','2026-10-09','2026-12-25',
+    // 2027
+    '2027-01-01','2027-02-06','2027-02-07','2027-02-08','2027-02-09','2027-03-01','2027-05-05','2027-05-13','2027-06-06','2027-08-15','2027-09-14','2027-09-15','2027-09-16','2027-10-03','2027-10-09','2027-12-25'
+  ]);
   function challengeProgress(ch) {
     return rows.filter(r => isFilled(r) && (ch.rowIds || []).includes(r.id)).length;
   }
@@ -20159,6 +20976,7 @@
 
   // Ensure backward compat: uploadedSlots is per-position array of bool
   function ensureChallengeShape(ch) {
+    if (ch.name && ch.name.indexOf('벤치마크') >= 0) ch.name = ch.name.replace(/벤치마크/g, '벤치마킹'); // 표기 통일
     if (!ch.uploadedSlots) ch.uploadedSlots = new Array(ch.target).fill(false);
     if (ch.uploadedSlots.length < ch.target) {
       ch.uploadedSlots = ch.uploadedSlots.concat(new Array(ch.target - ch.uploadedSlots.length).fill(false));
@@ -20356,14 +21174,14 @@
   const ACC_KEY = 'hmv1-acc';
   const ACC_SECTIONS = [
     { key: 'mission',   title: '미션 · 레벨',    ico: '◆', gen: true },
-    { key: 'today',     title: '오늘 할 일',     ico: '◈', gen: true },
-    { key: 'week',      title: '이번 주',       ico: '▦', sel: ['#home-view .tr-week-block'] },
-    { key: 'funnel',    title: '컨텐츠 퍼널',    ico: '▽', sel: ['#home-view .funnel-section'] },
-    { key: 'challenge', title: '진행 중 챌린지', ico: '◇',  sel: ['#ch-list'], wrap: '.home-section' },
+    { key: 'goal',      title: '목표 / Why',     ico: '◎', sel: ['#home-view .home-section.goal'] },
+    { key: 'week',      title: '이번 주 할일!',  ico: '▦', sel: ['#home-view .tr-week-block'] },
     { key: 'calendar',  title: '캘린더 · 주차별', ico: '▤', sel: ['#home-view .tr-cal-block', '#tr-weeks-list'] },
-    { key: 'stats',     title: '통계',          ico: '▥', sel: ['#home-stats'], wrap: '.home-section' },
+    { key: 'challenge', title: '진행 중 챌린지', ico: '◇',  sel: ['#ch-list'], wrap: '.home-section' },
     { key: 'insight',   title: '인사이트',       ico: '◐', gen: true },
-    { key: 'goal',      title: '목표 / Why',     ico: '◎', sel: ['#home-view .home-section.goal'] }
+    { key: 'funnel',    title: '컨텐츠 퍼널',    ico: '▽', sel: ['#home-view .funnel-section'] },
+    // 통계는 흡수만 하고 숨김(요소가 home-grid에 다시 안 뜨게)
+    { key: 'stats',     title: '통계',          ico: '▥', sel: ['#home-stats'], wrap: '.home-section', hidden: true }
   ];
   function accInjectCss() {
     if (document.getElementById('acc-style')) return;
@@ -20485,11 +21303,11 @@
     try {
       if (key === 'mission') { const li = levelInfo(); return 'Lv.' + li.level + ' ' + li.title; }
       if (key === 'today') { return todaySuggestion().txt; }
-      if (key === 'insight') { const n = (rows || []).filter(isFilled).length; return n ? ('벤치마크 ' + n + '개') : '데이터 없음'; }
+      if (key === 'insight') { const n = (rows || []).filter(isFilled).length; return n ? ('벤치마킹 ' + n + '개') : '데이터 없음'; }
       if (key === 'week') { const t = (weekSlots || []).length, f = (weekSlots || []).filter(Boolean).length; return f + '/' + t + ' 슬롯'; }
       if (key === 'funnel') { const fs = funnelSlots || {}; const n = ((fs.attract || []).length) + ((fs.convert || []).length) + ((fs.retain || []).length); return n + '개 배치'; }
       if (key === 'challenge') { const act = (challenges || []).filter(c => { try { return challengeProgress(c) < (c.target || 0); } catch (e) { return true; } }); if (!act.length) return '진행 중 없음'; const c = act[0]; return challengeProgress(c) + '/' + (c.target || 0) + (act.length > 1 ? ' 외 ' + (act.length - 1) : ''); }
-      if (key === 'calendar') { const el = document.getElementById('tr-cal-title'); return el ? el.textContent.trim() : ''; }
+      if (key === 'calendar') { if (!calBaseMonday) return ''; return `${calBaseMonday.getFullYear()}년 ${calBaseMonday.getMonth() + 1}월`; }
       if (key === 'stats') { const n = (rows || []).filter(r => !!(r.why || r.idea || r.script || r.url || r.hook || r.author || r.hasThumb || r.hasComment)).length; return n + '개 분석'; }
       if (key === 'goal') { return (homeData && homeData.goal) ? '설정됨' : '미설정'; }
     } catch (e) {}
@@ -20501,18 +21319,14 @@
     let pinOrder = 0;
     ACC_SECTIONS.forEach((def, idx) => {
       const p = cont.querySelector('.acc-panel[data-acc="' + def.key + '"]'); if (!p) return;
+      // 통계 등 숨김 패널
+      if (def.hidden) { p.style.display = 'none'; return; }
       const pinned = !!accState.pinned[def.key];
       const open = pinned || !!accState.expanded[def.key];
       p.classList.toggle('pinned', pinned);
       p.classList.toggle('open', open);
-      // 순서: 고정 > 미션(대시보드) > (파트너 모드면) 채워야 할 것 > 나머지
-      let order;
-      if (pinned) order = pinOrder++;
-      else if (def.key === 'mission') order = partner ? 90 : (1000 + idx);
-      else if (def.key === 'today') order = partner ? 95 : (1000 + idx);
-      else if (partner && sectionNeedsFill(def.key)) order = 100 + idx;
-      else order = 1000 + idx;
-      p.style.order = String(order);
+      // 순서: 고정(핀)이 맨 위, 나머지는 ACC_SECTIONS 정의 순서 그대로
+      p.style.order = String(pinned ? pinOrder++ : (1000 + idx));
       const head = p.querySelector('.acc-head'); if (head) head.setAttribute('aria-expanded', open ? 'true' : 'false');
       const pin = p.querySelector('.acc-pin'); if (pin) pin.setAttribute('aria-pressed', pinned ? 'true' : 'false');
     });
@@ -20732,16 +21546,16 @@
           act: () => { const w = document.querySelector('.acc-panel[data-acc="week"]'); if (w) { accState.expanded.week = true; applyAccordionState(); saveAccordionState(); w.scrollIntoView({ behavior: 'smooth', block: 'center' }); } } };
       }
       const filledRows = (rows || []).filter(isFilled).length;
-      if (filledRows < 3) return { txt: '벤치마크 1개 분석하기', sub: '잘 된 콘텐츠를 시트에 분해해두면 원고가 쉬워져요', cta: '시트로 가기', act: () => switchWorkspace('sheet') };
+      if (filledRows < 3) return { txt: '벤치마킹 1개 분석하기', sub: '잘 된 콘텐츠를 시트에 분해해두면 원고가 쉬워져요', cta: '시트로 가기', act: () => switchWorkspace('sheet') };
       const fs = funnelSlots || {};
-      const emptyStage = !((fs.attract || []).length) ? '유입용' : !((fs.convert || []).length) ? '전환용' : !((fs.retain || []).length) ? '재구매' : null;
+      const emptyStage = !((fs.attract || []).length) ? '유입용' : !((fs.convert || []).length) ? '전환용' : !((fs.retain || []).length) ? '세일즈' : null;
       if (emptyStage) return { txt: emptyStage + ' 컨텐츠 분석하기', sub: '퍼널에서 ' + emptyStage + ' 칸이 비어 있어요', cta: '분류로 가기', act: () => switchWorkspace('formatboard') };
       const drafting = (scripts || []).some(s => !s.done && !(s.state === 'uploaded' || s.uploadUrl));
-      if (!drafting) return { txt: '원고 하나 쓰기', sub: '분석한 벤치마크로 원고를 시작해요', cta: '원고 쓰러 가기', act: () => switchWorkspace('scripts') };
+      if (!drafting) return { txt: '원고 하나 쓰기', sub: '분석한 벤치마킹로 원고를 시작해요', cta: '원고 쓰러 가기', act: () => switchWorkspace('scripts') };
       const readyUp = (scripts || []).some(s => s.done && !(s.state === 'uploaded' || s.uploadUrl));
       if (readyUp) return { txt: '완성한 원고 업로드하기', sub: '다 쓴 원고를 실제로 올려서 성과를 받아봐요', cta: '원고로 가기', act: () => switchWorkspace('scripts') };
     } catch (e) {}
-    return { txt: '오늘은 여유! 새 영감 찾기', sub: '벤치마크를 둘러보며 다음 아이디어를 모아요', cta: '시트로 가기', act: () => switchWorkspace('sheet') };
+    return { txt: '오늘은 여유! 새 영감 찾기', sub: '벤치마킹를 둘러보며 다음 아이디어를 모아요', cta: '시트로 가기', act: () => switchWorkspace('sheet') };
   }
   function renderTodayPanel() {
     const el = document.getElementById('today-panel-body'); if (!el) return;
@@ -20753,7 +21567,7 @@
   function renderInsightPanel() {
     const el = document.getElementById('insight-panel-body'); if (!el) return;
     const filled = (rows || []).filter(isFilled);
-    if (!filled.length) { el.innerHTML = '<div class="ins-empty">시트에 벤치마크를 분석하면 여기서 인사이트를 정리해줘요.</div>'; return; }
+    if (!filled.length) { el.innerHTML = '<div class="ins-empty">시트에 벤치마킹를 분석하면 여기서 인사이트를 정리해줘요.</div>'; return; }
     const withViews = filled.filter(r => (r.views || 0) > 0);
     const avg = withViews.length ? Math.round(withViews.reduce((s, r) => s + (r.views || 0), 0) / withViews.length) : 0;
     const fmtAgg = {};
@@ -20763,7 +21577,7 @@
     const topViral = Object.entries(vMap).sort((a, b) => b[1] - a[1])[0];
     const hi = filled.filter(r => (r.rating || 0) >= 4).length;
     const cards = [];
-    cards.push({ ic: '▤', lab: '분석한 벤치마크', val: filled.length + '개', sub: withViews.length ? ('평균 조회수 ' + fmtNum(avg)) : '조회수 입력하면 평균 표시' });
+    cards.push({ ic: '▤', lab: '분석한 벤치마킹', val: filled.length + '개', sub: withViews.length ? ('평균 조회수 ' + fmtNum(avg)) : '조회수 입력하면 평균 표시' });
     if (bestFmt) cards.push({ ic: '▲', lab: '가장 잘 터진 유형', val: bestFmt.f, sub: '평균 ' + fmtNum(bestFmt.av) + ' 조회' });
     if (topViral) cards.push({ ic: '◆', lab: '자주 본 바이럴 패턴', val: topViral[0], sub: topViral[1] + '개 컨텐츠' });
     cards.push({ ic: '★', lab: '나에게 핏한 (4★+)', val: hi + '개', sub: '할 수 있고 시장성 있는 것' });
@@ -20907,7 +21721,7 @@
         welcomeEl.style.display = '';
         welcomeEl.innerHTML = renderGwanjeomEmpty({
           space: 'home', isEmpty: true,
-          actionLabel: '벤치마크 시트로 가기 →',
+          actionLabel: '벤치마킹 시트로 가기 →',
           actionId: 'goto-sheet'
         });
         // 액션 핸들러
@@ -20945,6 +21759,12 @@
     const titleEl = document.getElementById('tr-summary-modal-title');
     const eyebrowEl = document.getElementById('tr-summary-modal-eyebrow');
     const bodyEl = document.getElementById('tr-summary-modal-body');
+    // 업로드 완료 버튼 상태 갱신
+    const upBtn = document.getElementById('tr-summary-upload');
+    if (upBtn) {
+      upBtn.classList.toggle('uploaded-on', !!s.uploaded);
+      upBtn.textContent = s.uploaded ? '✓ 업로드 완료됨 (해제)' : '○ 업로드 완료 표시';
+    }
 
     const isFree = isFreeCard(s);
     const freeEmpty = isFreeEmpty(s);
@@ -20969,16 +21789,16 @@
       return;
     }
 
-    // === 벤치마크 카드 — 모든 분석 데이터 표시 ===
+    // === 벤치마킹 카드 — 모든 분석 데이터 표시 ===
     const r = rows.find(x => x.id === s.benchmarkRowId);
     if (!r) {
-      bodyEl.innerHTML = `<div class="trs-free-empty">참고한 벤치마크를 찾을 수 없어요.</div>`;
-      eyebrowEl.textContent = '⚠ 벤치마크 없음';
+      bodyEl.innerHTML = `<div class="trs-free-empty">참고한 벤치마킹를 찾을 수 없어요.</div>`;
+      eyebrowEl.textContent = '⚠ 벤치마킹 없음';
       document.getElementById('tr-summary-modal').classList.add('show');
       return;
     }
 
-    eyebrowEl.textContent = `📚 벤치마크 NO.${String(r.no).padStart(3, '0')} · 분석 요약`;
+    eyebrowEl.textContent = `📚 벤치마킹 NO.${String(r.no).padStart(3, '0')} · 분석 요약`;
 
     // 썸네일 / 공감댓글 로드
     let thumbUrl = null, commUrl = null;
@@ -21098,6 +21918,16 @@
     const close = document.getElementById('tr-summary-modal-close');
     const back = document.getElementById('tr-summary-modal-back');
     const write = document.getElementById('tr-summary-modal-write');
+    const upBtn = document.getElementById('tr-summary-upload');
+    if (upBtn) upBtn.onclick = async () => {
+      if (!_trSummaryScriptId) return;
+      await toggleScriptUploaded(_trSummaryScriptId);
+      const s = scripts.find(x => x.id === _trSummaryScriptId);
+      if (s) {
+        upBtn.classList.toggle('uploaded-on', !!s.uploaded);
+        upBtn.textContent = s.uploaded ? '✓ 업로드 완료됨 (해제)' : '○ 업로드 완료 표시';
+      }
+    };
     const modal = document.getElementById('tr-summary-modal');
     if (close) close.onclick = closeTrSummaryModal;
     if (back) back.onclick = closeTrSummaryModal;
@@ -21248,83 +22078,126 @@
     }
     await Promise.all(thumbPromises);
 
-    listEl.innerHTML = weeksData.map((wk, i) => {
+    // 파생값 + 카드 HTML 계산
+    const calc = weeksData.map((wk, i) => {
       const { monday, weekScripts, thumbs } = wk;
-      const isCurrent = dateToYMD(monday) === dateToYMD(todayMonday);
       const ymd = dateToYMD(monday);
+      const isCurrent = ymd === dateToYMD(todayMonday);
       const done = weekScripts.filter(s => s.state === 'done' || s.state === 'uploaded').length;
-      const totalItems = weekScripts.length + 1; // +1 빈 슬롯
-      const pageSize = 4;
-      const totalPages = Math.ceil(totalItems / pageSize);
-      const curPage = weekPageIdx[ymd] || 0;
-      const safePage = Math.min(Math.max(0, curPage), Math.max(0, totalPages - 1));
-      weekPageIdx[ymd] = safePage;
+      const filled = weekScripts.length;
+      const desired = Math.min(5, Math.max(1, trWeekCounts[ymd] || 3));
+      const slotsTotal = Math.max(desired, filled);
+      const emptyCount = Math.max(0, slotsTotal - filled);
+      const uploaded = weekScripts.filter(s => s.uploaded).length;
+      // 클리어 = 슬롯을 다 "업로드"했을 때 (업로드가 핵심)
+      const cleared = slotsTotal > 0 && uploaded >= slotsTotal;
 
-      // 페이지 슬라이스
-      const startIdx = safePage * pageSize;
-      const endIdx = startIdx + pageSize;
-
-      // 카드 배열 (실제 카드 + 빈 슬롯 1개)
-      const items = weekScripts.map(s => ({ type: 'card', script: s }));
-      items.push({ type: 'empty' });
-      const slice = items.slice(startIdx, endIdx);
-
-      const itemsHtml = slice.map(item => {
-        if (item.type === 'empty') {
-          return `
-            <div class="tr-mini-slot-empty" data-tr-add-slot="${ymd}">
-              <div class="plus">+</div>
-              <div class="label">비어있음</div>
-            </div>
-          `;
-        }
-        const s = item.script;
-        const st = SCRIPT_STATES.find(x => x.id === s.state) || SCRIPT_STATES[0];
-        const isDoneState = !!s.done || (s.state === 'done' || s.state === 'uploaded');
+      const filledHtml = weekScripts.map(s => {
+        const isUploaded = !!s.uploaded;
         const freeEmpty = isFreeEmpty(s);
         const title = freeEmpty ? '자유' : scriptDisplayTitle(s);
-
-        let thumbHtml;
-        if (thumbs[s.id]) {
-          thumbHtml = `<img class="tr-mini-card-thumb" src="${esc(thumbs[s.id])}" alt="" />`;
-        } else {
-          thumbHtml = `<div class="tr-mini-card-thumb-empty">+</div>`;
-        }
-
+        const thumbHtml = thumbs[s.id]
+          ? `<img class="tr-mini-card-thumb" src="${esc(thumbs[s.id])}" alt="" />`
+          : `<div class="tr-mini-card-thumb-empty">+</div>`;
         return `
-          <div class="tr-mini-card ${isDoneState ? 'done-state' : ''} ${freeEmpty ? 'free-empty' : ''} ${s.id === _justSavedScriptId ? 'is-new' : ''}" data-state="${s.state}" data-script-id="${s.id}">
+          <div class="tr-mini-card ${isUploaded ? 'uploaded' : ''} ${freeEmpty ? 'free-empty' : ''}" data-script-id="${s.id}">
             ${thumbHtml}
             <div class="tr-mini-card-body">
               <div class="tr-mini-card-title">${esc(title)}</div>
-              <div class="tr-mini-card-state">${st.icon} ${esc(st.label)}</div>
             </div>
-          </div>
-        `;
+            <button class="tr-up-btn ${isUploaded ? 'done' : ''}" data-up-script="${s.id}">${isUploaded ? '✓ 업로드 완료!' : '업로드 완료'}</button>
+          </div>`;
       }).join('');
 
-      const showNav = totalPages > 1;
-      const navHtml = showNav ? `
-        <button class="tr-week-row-nav" data-week-prev="${ymd}" ${safePage === 0 ? 'disabled' : ''}>◀</button>
-        <button class="tr-week-row-nav" data-week-next="${ymd}" ${safePage >= totalPages - 1 ? 'disabled' : ''}>▶</button>
-      ` : '';
+      let emptyHtml = '';
+      for (let e = 0; e < emptyCount; e++) {
+        const slotNo = filled + e + 1;
+        emptyHtml += `
+          <div class="tr-mini-slot-empty" data-tr-add-slot="${ymd}">
+            <div class="tr-mini-slot-num">#${slotNo}</div>
+            <div class="plus">✦</div>
+            <div class="label">슬롯 채우기</div>
+          </div>`;
+      }
 
+      return { i, monday, ymd, isCurrent, done, filled, uploaded, desired, slotsTotal, cleared, filledHtml, emptyHtml };
+    });
+
+    // 스트릭(1주차부터 연속 클리어) + 이번 달 합계
+    let streak = 0;
+    for (const c of calc) { if (c.cleared) streak++; else break; }
+    const totUploaded = calc.reduce((a, c) => a + c.uploaded, 0);
+
+    // 이번 달 목표 업로드 배너
+    _monthUploaded = totUploaded;
+    _monthGoalReached = monthlyUploadGoal > 0 && totUploaded >= monthlyUploadGoal;
+    let campaignHtml;
+    if (!monthlyUploadGoal || monthlyUploadGoal <= 0) {
+      campaignHtml = `
+        <div class="tr-goal setup">
+          <div class="tr-goal-setup-text">🎯 이번 달 <b>인스타 목표 업로드 개수</b>를 정해보세요</div>
+          <div class="tr-goal-setup-row">
+            <input type="number" min="1" max="99" id="tr-goal-input" class="tr-goal-input" placeholder="예: 12" />
+            <button class="tr-goal-set-btn" id="tr-goal-set">목표 설정</button>
+          </div>
+        </div>`;
+    } else {
+      const gpct = Math.min(100, Math.round(totUploaded / monthlyUploadGoal * 100));
+      const reached = totUploaded >= monthlyUploadGoal;
+      const left = Math.max(0, monthlyUploadGoal - totUploaded);
+      campaignHtml = `
+        <div class="tr-goal ${reached ? 'done' : ''}">
+          <div class="tr-campaign-top">
+            <div class="tr-campaign-title">${reached ? '🏆 이번 달 목표 달성!' : '🎯 이번 달 목표 업로드'}</div>
+            <div class="tr-campaign-meta">
+              ${streak > 0 ? `<span class="tr-streak">🔥 ${streak}주 연속</span>` : ''}
+              <span class="tr-campaign-count">${totUploaded} / ${monthlyUploadGoal} 업로드</span>
+              <button class="tr-goal-edit" id="tr-goal-edit" title="목표 수정">✎</button>
+            </div>
+          </div>
+          <div class="tr-campaign-bar"><div class="tr-campaign-bar-fill" style="width:${gpct}%"></div></div>
+          <div class="tr-goal-sub">${reached ? '이번 달 목표를 다 채웠어요. 최고예요! 🎉' : `목표까지 <b>${left}개</b> — 실제로 올린 콘텐츠는 카드의 <b>“업로드 완료”</b>를 눌러 확정해요.`}</div>
+        </div>`;
+    }
+
+    const rowsHtml = calc.map(c => {
+      const upPct = c.slotsTotal > 0 ? Math.round(c.uploaded / c.slotsTotal * 100) : 0;
+      const planPct = c.slotsTotal > 0 ? Math.round(c.filled / c.slotsTotal * 100) : 0;
+      const counterShow = Math.min(c.slotsTotal, 5);
+      const dotCls = c.cleared ? 'cleared' : (c.isCurrent ? 'current' : '');
       return `
-        <div class="tr-week-row ${isCurrent ? 'current' : ''}">
+        <div class="tr-week-row ${c.isCurrent ? 'current' : ''} ${c.cleared ? 'cleared' : ''}">
+          <div class="tr-week-stage">
+            <div class="tr-stage-dot ${dotCls}">${c.cleared ? '✓' : (c.i + 1)}</div>
+            ${c.i < 3 ? '<div class="tr-stage-line"></div>' : ''}
+          </div>
           <div class="tr-week-row-label">
-            <div class="tr-week-row-num">${i+1}주차 ${isCurrent ? '<span class="badge">이번 주</span>' : ''}</div>
-            <div class="tr-week-row-range">${formatWeekRange(monday)}</div>
+            <div class="tr-week-row-num">${c.i + 1}주차 ${c.isCurrent ? '<span class="badge">이번 주</span>' : ''} ${c.cleared ? '<span class="tr-clear-badge">🏆 올업로드</span>' : ''}</div>
+            <div class="tr-week-row-range">${formatWeekRange(c.monday)}</div>
+            <div class="tr-week-bar"><div class="tr-week-bar-plan" style="width:${planPct}%"></div><div class="tr-week-bar-fill" style="width:${upPct}%"></div></div>
             <div class="tr-week-row-progress">
-              ${weekScripts.length > 0 ? `<span class="done">${done} 완료</span> / ${weekScripts.length} 카드` : '비어있음'}
+              <span class="up">${c.uploaded} 업로드</span> / ${c.slotsTotal}칸${c.filled > c.uploaded ? ` · ${c.filled} 채움` : ''}
             </div>
           </div>
           <div class="tr-week-row-cards-wrap">
-            ${showNav ? `<button class="tr-week-row-nav" data-week-prev="${ymd}" ${safePage === 0 ? 'disabled' : ''}>◀</button>` : ''}
-            <div class="tr-week-row-cards">${itemsHtml}</div>
-            ${showNav ? `<button class="tr-week-row-nav" data-week-next="${ymd}" ${safePage >= totalPages - 1 ? 'disabled' : ''}>▶</button>` : ''}
+            <div class="tr-week-row-cards">${c.filledHtml}${c.emptyHtml}</div>
           </div>
-        </div>
-      `;
+          <div class="ws-slot-controls tr-week-controls-mini">
+            <button class="ws-slot-btn" data-trweek-minus="${c.ymd}" ${c.desired <= 1 ? 'disabled' : ''} title="슬롯 줄이기">−</button>
+            <div class="ws-slot-counter">${counterShow} / 5</div>
+            <button class="ws-slot-btn" data-trweek-plus="${c.ymd}" ${c.desired >= 5 ? 'disabled' : ''} title="슬롯 늘리기">+</button>
+          </div>
+        </div>`;
     }).join('');
+
+    // 요일 룰러 (달력 판 느낌 — 시각용, 일=빨강 토=파랑). 카드 영역 위에 정렬.
+    const dowRuler = `<div class="tr-dow-ruler">
+        <div class="tr-dow-spacer stage"></div>
+        <div class="tr-dow-spacer label"></div>
+        <div class="tr-dow-days">${['일','월','화','수','목','금','토'].map((d, i) => `<span class="${i === 0 ? 'sun' : i === 6 ? 'sat' : ''}">${d}</span>`).join('')}</div>
+      </div>`;
+
+    listEl.innerHTML = campaignHtml + '<div class="tr-cal-board">' + dowRuler + rowsHtml + '</div>';
 
     // 카드 클릭 → 분석 요약 모달
     listEl.querySelectorAll('.tr-mini-card').forEach(card => {
@@ -21337,39 +22210,127 @@
     listEl.querySelectorAll('[data-tr-add-slot]').forEach(slot => {
       slot.onclick = () => openTrAddModal(slot.dataset.trAddSlot);
     });
-    // 페이지 네비
-    listEl.querySelectorAll('[data-week-prev]').forEach(btn => {
-      btn.onclick = (e) => {
+    // 주차별 슬롯 −/+
+    listEl.querySelectorAll('[data-trweek-minus]').forEach(btn => {
+      btn.onclick = async (e) => {
         e.stopPropagation();
-        const ymd = btn.dataset.weekPrev;
-        weekPageIdx[ymd] = Math.max(0, (weekPageIdx[ymd] || 0) - 1);
+        const ymd = btn.dataset.trweekMinus;
+        const cur = Math.min(5, Math.max(1, trWeekCounts[ymd] || 3));
+        trWeekCounts[ymd] = Math.max(1, cur - 1);
+        await saveTrWeekCounts();
         renderTrWeeksList();
       };
     });
-    listEl.querySelectorAll('[data-week-next]').forEach(btn => {
-      btn.onclick = (e) => {
+    listEl.querySelectorAll('[data-trweek-plus]').forEach(btn => {
+      btn.onclick = async (e) => {
         e.stopPropagation();
-        const ymd = btn.dataset.weekNext;
-        weekPageIdx[ymd] = (weekPageIdx[ymd] || 0) + 1;
+        const ymd = btn.dataset.trweekPlus;
+        const cur = Math.min(5, Math.max(1, trWeekCounts[ymd] || 3));
+        trWeekCounts[ymd] = Math.min(5, cur + 1);
+        await saveTrWeekCounts();
         renderTrWeeksList();
       };
     });
+    // 업로드 완료 토글 (카드 클릭과 분리)
+    listEl.querySelectorAll('[data-up-script]').forEach(btn => {
+      btn.onclick = (e) => { e.stopPropagation(); toggleScriptUploaded(btn.dataset.upScript); };
+    });
+    // 목표 설정
+    const goalSet = document.getElementById('tr-goal-set');
+    if (goalSet) goalSet.onclick = async () => {
+      const inp = document.getElementById('tr-goal-input');
+      const v = Math.max(1, Math.min(99, parseInt((inp && inp.value) || '0', 10) || 0));
+      if (!v) { if (inp) inp.focus(); toast('숫자를 입력해주세요'); return; }
+      monthlyUploadGoal = v;
+      await saveUploadGoal();
+      renderTrWeeksList();
+      toast(`🎯 이번 달 목표: ${v}개 업로드!`);
+    };
+    const goalInput = document.getElementById('tr-goal-input');
+    if (goalInput) goalInput.onkeydown = (e) => { if (e.key === 'Enter') { e.preventDefault(); const b = document.getElementById('tr-goal-set'); if (b) b.click(); } };
+    // 목표 수정
+    const goalEdit = document.getElementById('tr-goal-edit');
+    if (goalEdit) goalEdit.onclick = async () => {
+      const cur = monthlyUploadGoal;
+      const ans = prompt('이번 달 목표 업로드 개수 (1~99, 0=해제)', String(cur));
+      if (ans === null) return;
+      const v = Math.max(0, Math.min(99, parseInt(ans, 10) || 0));
+      monthlyUploadGoal = v;
+      await saveUploadGoal();
+      renderTrWeeksList();
+      toast(v > 0 ? `🎯 목표 ${v}개로 변경` : '목표 해제됨');
+    };
+  }
+
+  // 업로드 완료 토글 (실제 인스타 업로드 확정 — 월 목표 집계)
+  let _monthUploaded = 0, _monthGoalReached = false;
+  async function toggleScriptUploaded(id) {
+    const s = scripts.find(x => x.id === id);
+    if (!s) return;
+    const wasReached = _monthGoalReached;
+    const nowUploaded = !s.uploaded;
+    s.uploaded = nowUploaded;
+    s.updatedAt = Date.now();
+    await saveScripts();
+    await bumpChallengeUpload(nowUploaded ? 1 : -1); // 챌린지 업로드 자동 연동
+    await renderTrWeeksList();
+    try { renderWeekSlots(); } catch (e) {} // 이번 주 패널도 동기화
+    if (nowUploaded) {
+      // 방금 업로드한 카드 "팝!" 연출 (4주 + 이번 주 양쪽)
+      document.querySelectorAll(`.tr-mini-card[data-script-id="${id}"], #ws-slots .ws-slot[data-script-id="${id}"]`).forEach(card => {
+        card.classList.add('just-uploaded'); setTimeout(() => card.classList.remove('just-uploaded'), 600);
+      });
+      if (monthlyUploadGoal > 0 && _monthGoalReached && !wasReached) {
+        toast('🏆 이번 달 목표 달성! 최고예요! 🎉');
+      } else {
+        toast('✓ 업로드 완료! 🎉');
+      }
+    }
+  }
+  window.__toggleScriptUploaded = toggleScriptUploaded;
+
+  // 카드 업로드 → 활성 챌린지 업로드 수 자동 +1/−1 연동
+  async function bumpChallengeUpload(delta) {
+    if (!challenges || !challenges.length) return;
+    const ch = challenges.find(isChallengeActive) || challenges[0];
+    if (!ch) return;
+    ensureChallengeShape(ch);
+    if (delta > 0) {
+      const i = ch.uploadedSlots.findIndex(v => !v);
+      if (i < 0) return; // 이미 가득
+      ch.uploadedSlots[i] = true;
+    } else {
+      let last = -1;
+      for (let i = ch.uploadedSlots.length - 1; i >= 0; i--) { if (ch.uploadedSlots[i]) { last = i; break; } }
+      if (last < 0) return;
+      ch.uploadedSlots[last] = false;
+    }
+    await saveChallenges();
+    try { renderChallengeList(); } catch (e) {}
+    try { renderStatsMini(); } catch (e) {}
   }
 
   // === 4주 미니 캘린더 ===
   function renderTrCalendar() {
+    if (!calBaseMonday) return;
     const titleEl = document.getElementById('tr-cal-title');
-    const weeksEl = document.getElementById('tr-cal-weeks');
-    if (!weeksEl || !calBaseMonday) return;
-
     // 4주 기준: calBaseMonday부터 4주
     const firstMonth = calBaseMonday.getMonth();
     const firstYear = calBaseMonday.getFullYear();
     const lastWeek = addDays(calBaseMonday, 21);
     const sameYear = firstYear === lastWeek.getFullYear();
-    titleEl.textContent = sameYear
-      ? `${firstYear}년 ${firstMonth+1}월${firstMonth !== lastWeek.getMonth() ? ' - ' + (lastWeek.getMonth()+1) + '월' : ''}`
-      : `${firstYear}.${firstMonth+1} - ${lastWeek.getFullYear()}.${lastWeek.getMonth()+1}`;
+    // 달(월)을 간판처럼 강조
+    if (titleEl) {
+      if (sameYear && firstMonth === lastWeek.getMonth()) {
+        titleEl.innerHTML = `<span class="cal-yr">${firstYear}</span><span class="cal-mo">${firstMonth + 1}월</span>`;
+      } else if (sameYear) {
+        titleEl.innerHTML = `<span class="cal-yr">${firstYear}</span><span class="cal-mo">${firstMonth + 1}월</span><span class="cal-mo-sub"> – ${lastWeek.getMonth() + 1}월</span>`;
+      } else {
+        titleEl.innerHTML = `<span class="cal-mo">${firstYear}.${firstMonth + 1}</span><span class="cal-mo-sub"> – ${lastWeek.getFullYear()}.${lastWeek.getMonth() + 1}</span>`;
+      }
+    }
+    const weeksEl = document.getElementById('tr-cal-weeks');
+    if (!weeksEl) return; // 4주 요약 칩 줄은 제거됨
 
     const todayMonday = getMondayOf(new Date());
 
@@ -21514,9 +22475,9 @@
           <div class="tr-stat-sub">완료 / 전체</div>
         </div>
 
-        <!-- 누적 벤치마크 -->
+        <!-- 누적 벤치마킹 -->
         <div class="tr-stat-card">
-          <div class="tr-stat-eyebrow">📚 누적 벤치마크</div>
+          <div class="tr-stat-eyebrow">📚 누적 벤치마킹</div>
           <div class="tr-stat-main">
             <div class="tr-stat-big-num">${total.totalBench}</div>
             <div class="tr-stat-unit">개</div>
@@ -21699,7 +22660,48 @@
     document.getElementById('tr-add-modal').classList.add('show');
     document.querySelector('#tr-add-modal .tr-add-modal-box').classList.add('bench-large');
     trAddMode = 'bench';
-    document.querySelectorAll('.tr-add-tab').forEach(t => t.classList.toggle('on', t.dataset.mode === trAddMode));
+    _trAddFilter = 'all';
+    // 4지선다 카드 먼저 (이번 주 슬롯과 동일한 방식)
+    renderTrAddChoice();
+  }
+
+  // 추가 모달 — 4지선다 카드 (벤치/유입/전환/자유)
+  let _trAddFilter = 'all';
+  function renderTrAddChoice() {
+    const el = document.getElementById('tr-add-body');
+    if (!el) return;
+    el.innerHTML = `
+      <div class="ws-choice-sub">이 슬롯을 어떤 카드로 채울까요?</div>
+      <div class="ws-choice-grid">
+        <button class="ws-choice-card" data-trchoice="sheet">
+          <div class="ws-choice-ico">📋</div>
+          <div class="ws-choice-t">벤치마킹 시트에서</div>
+          <div class="ws-choice-d">분석해둔 카드 불러오기</div>
+        </button>
+        <button class="ws-choice-card attract" data-trchoice="attract">
+          <div class="ws-choice-ico">🧲</div>
+          <div class="ws-choice-t">유입용 카드</div>
+          <div class="ws-choice-d">유입용으로 모아둔 카드</div>
+        </button>
+        <button class="ws-choice-card convert" data-trchoice="convert">
+          <div class="ws-choice-ico">🤝</div>
+          <div class="ws-choice-t">전환용 카드</div>
+          <div class="ws-choice-d">전환용으로 모아둔 카드</div>
+        </button>
+        <button class="ws-choice-card free" data-trchoice="free">
+          <div class="ws-choice-ico">📝</div>
+          <div class="ws-choice-t">자유 작성</div>
+          <div class="ws-choice-d">직접 주제를 입력</div>
+        </button>
+      </div>`;
+    el.querySelectorAll('[data-trchoice]').forEach(c => {
+      c.onclick = () => chooseTrAdd(c.dataset.trchoice);
+    });
+  }
+  function chooseTrAdd(choice) {
+    if (choice === 'free') { openTrFreeModal(); return; }
+    trAddMode = 'bench';
+    _trAddFilter = (choice === 'sheet') ? 'all' : choice; // 'all' | 'attract' | 'convert'
     renderTrAddBody();
   }
   function closeTrAddModal() {
@@ -21713,6 +22715,10 @@
     if (trAddMode === 'bench') {
       const q = (searchQuery || '').trim().toLowerCase();
       let filled = rows.filter(isFilled);
+      // 4지선다에서 유입용/전환용 고른 경우 해당 단계만
+      if (_trAddFilter === 'attract' || _trAddFilter === 'convert') {
+        filled = filled.filter(r => r.funnelStage === _trAddFilter);
+      }
       if (q) {
         filled = filled.filter(r => {
           const text = (r.hook || '') + ' ' + (r.author || '') + ' ' + (r.why || '') + ' ' + stripHtml(r.script || '') + ' ' + (r.tags || []).join(' ');
@@ -21732,11 +22738,20 @@
       });
       await Promise.all(thumbPromises);
 
+      const headLabel = _trAddFilter === 'attract' ? '🧲 유입용 — 분류해둔 카드'
+                      : _trAddFilter === 'convert' ? '🤝 전환용 — 분류해둔 카드'
+                      : '📋 벤치마킹 시트 — 전체 카드';
+      const emptyMsg = q ? '검색 결과 없음'
+        : (_trAddFilter === 'attract' ? '아직 유입용으로 분류된 카드가 없어요.'
+        : _trAddFilter === 'convert' ? '아직 전환용으로 분류된 카드가 없어요.'
+        : '벤치마킹된 행이 없어요. 먼저 벤치마킹 시트에서 분석해보세요.');
       el.innerHTML = `
+        <button class="ws-pick-back" id="tr-add-back">← 뒤로</button>
+        <div class="ws-sheet-head" style="margin-bottom:10px;">${headLabel}</div>
         <input type="text" class="tr-add-search" id="tr-add-search-input" placeholder="검색 — 후킹·메모·태그·작성자…" value="${esc(searchQuery || '')}" />
         <div class="tr-add-bench-list">
           ${limit.length === 0
-            ? `<div class="tr-add-empty">${q ? '검색 결과 없음' : '벤치마킹된 행이 없어요. 먼저 벤치마크 시트에서 분석해보세요.'}</div>`
+            ? `<div class="tr-add-empty">${emptyMsg}</div>`
             : limit.map(r => {
                 const label = r.hook || stripHtml(r.script || '').slice(0, 60) || '(내용 없음)';
                 let thumbHtml = thumbs[r.id]
@@ -21760,10 +22775,11 @@
           }
         </div>
       `;
+      const backBtn = document.getElementById('tr-add-back');
+      if (backBtn) backBtn.onclick = renderTrAddChoice;
       const searchInput = document.getElementById('tr-add-search-input');
       if (searchInput) {
         searchInput.addEventListener('input', debounce((e) => renderTrAddBody(e.target.value), 200));
-        searchInput.focus();
       }
       el.querySelectorAll('.tr-add-bench-item').forEach(item => {
         item.onclick = () => addCardFromBench(item.dataset.rowId);
@@ -21788,7 +22804,7 @@
     const r = rows.find(x => x.id === rowId);
     if (!r) return;
     const s = newScript();
-    s.title = r.idea || r.hook || stripHtml(r.script || '').slice(0, 40) || `벤치마크 NO.${String(r.no).padStart(3,'0')}`;
+    s.title = r.idea || r.hook || stripHtml(r.script || '').slice(0, 40) || `벤치마킹 NO.${String(r.no).padStart(3,'0')}`;
     s.benchmarkRowId = rowId;
     s.targetDate = trAddTargetMonday ? dateToYMD(trAddTargetMonday) : todayStr();
     s.state = 'idea';
@@ -21997,7 +23013,7 @@
         const r = rows.find(x => x.id === editingRowId);
         if (!r) return;
         const s = newScript();
-        s.title = r.idea || r.hook || stripHtml(r.script || '').slice(0, 40) || `벤치마크 NO.${String(r.no).padStart(3,'0')}`;
+        s.title = r.idea || r.hook || stripHtml(r.script || '').slice(0, 40) || `벤치마킹 NO.${String(r.no).padStart(3,'0')}`;
         s.benchmarkRowId = editingRowId;
         s.targetDate = ymd;
         s.state = 'idea';
@@ -22013,7 +23029,7 @@
     menu.querySelectorAll('[data-act="remove"]').forEach(item => {
       item.onclick = async (e) => {
         e.stopPropagation();
-        if (!confirm(`이 벤치마크와 연결된 카드 ${linkedScripts.length}개를 모두 제거할까요?`)) return;
+        if (!confirm(`이 벤치마킹와 연결된 카드 ${linkedScripts.length}개를 모두 제거할까요?`)) return;
         scripts = scripts.filter(s => s.benchmarkRowId !== editingRowId);
         await saveScripts();
         menu.classList.remove('show');
@@ -22048,7 +23064,7 @@
   function renderChallengeList() {
     const el = document.getElementById('ch-list');
     if (challenges.length === 0) {
-      el.innerHTML = `<div class="ch-empty">아직 시작한 챌린지가 없어요. 위의 [▶ 벤치마크 챌린지 시작] 버튼을 눌러보세요.</div>`;
+      el.innerHTML = `<div class="ch-empty">아직 시작한 챌린지가 없어요. 위의 [▶ 벤치마킹 챌린지 시작] 버튼을 눌러보세요.</div>`;
       return;
     }
     // sort: active first, then completed
@@ -22069,7 +23085,8 @@
       const active = isChallengeActive(ch);
       const cols = ch.target <= 30 ? 'cols-10' : ch.target <= 60 ? 'cols-15' : '';
 
-      // Dots: 4 states
+      // Dots: 4 states + 시작일 기준 날짜 라벨(달력처럼)
+      const chStart0 = ch.startDate ? ymdToDate(ch.startDate) : null;
       const dots = Array.from({ length: ch.target }, (_, i) => {
         const isAnalyzed = i < ana;
         const isUploaded = !!ch.uploadedSlots[i];
@@ -22078,11 +23095,25 @@
         if (isAnalyzed) cls.push('analyzed');
         if (isUploaded) cls.push('uploaded');
         if (ms) cls.push('milestone');
-        const title = (isAnalyzed && isUploaded) ? '분석 ✓ · 업로드 ✓ — 클릭으로 업로드 해제'
-                    : isAnalyzed ? '분석 ✓ — 클릭으로 업로드 표시'
-                    : isUploaded ? '업로드 ✓ (분석 안 됨) — 클릭으로 해제'
-                    : '비어있음 — 클릭으로 업로드 표시';
-        return `<div class="${cls.join(' ')}" data-ch="${ch.id}" data-idx="${i}" title="${esc(title)}"></div>`;
+        // 날짜 라벨 (시작일 + i일) + 토/일·공휴일 색
+        let dateLabel = '', titleDate = '';
+        if (chStart0) {
+          const cd = addDays(chStart0, i);
+          const dnum = cd.getDate();
+          const dow = cd.getDay();
+          const ymd = dateToYMD(cd);
+          const isFirst = (i === 0 || dnum === 1);
+          dateLabel = isFirst ? `${cd.getMonth() + 1}/${dnum}` : `${dnum}`;
+          if (dow === 0 || HOLIDAYS_KR.has(ymd)) cls.push('ch-dot-sun');
+          else if (dow === 6) cls.push('ch-dot-sat');
+          if (isFirst) cls.push('ch-dot-mstart');
+          titleDate = `${cd.getMonth() + 1}월 ${dnum}일 (${['일','월','화','수','목','금','토'][dow]})${HOLIDAYS_KR.has(ymd) ? ' · 공휴일' : ''} — `;
+        }
+        const title = titleDate + ((isAnalyzed && isUploaded) ? '분석 ✓ · 업로드 ✓ (클릭=업로드 해제)'
+                    : isAnalyzed ? '분석 ✓ (클릭=업로드 표시)'
+                    : isUploaded ? '업로드 ✓ (클릭=해제)'
+                    : '클릭=업로드 표시');
+        return `<div class="${cls.join(' ')}" data-ch="${ch.id}" data-idx="${i}" title="${esc(title)}"><span class="ch-dot-d">${dateLabel}</span></div>`;
       }).join('');
 
       // Timeline today marker position (0~100%)
@@ -22307,7 +23338,7 @@
   }
 
   async function startChallenge() {
-    const name = document.getElementById('cw-name').value.trim() || `벤치마크 ${cwTarget} 챌린지`;
+    const name = document.getElementById('cw-name').value.trim() || `벤치마킹 ${cwTarget} 챌린지`;
     const start = document.getElementById('cw-start').value;
     const end = document.getElementById('cw-end').value;
 
@@ -22560,7 +23591,7 @@
     const doneCount = scripts.filter(s => s.done).length;
     el.innerHTML = `
       <div class="settings-stat">
-        <div class="settings-stat-label">벤치마크</div>
+        <div class="settings-stat-label">벤치마킹</div>
         <div class="settings-stat-value settings-stat-value-num">${rowsFilled}<span class="settings-stat-unit">/${rows.length}</span></div>
       </div>
       <div class="settings-stat">
@@ -22621,7 +23652,7 @@
       type: 'rows',
       rows: rows
     }, `customer-perspective-rows-${timestampForFilename()}.json`);
-    toast('벤치마크 내보냄');
+    toast('벤치마킹 내보냄');
   }
 
   function exportScriptsOnly() {
@@ -22713,7 +23744,7 @@
       } catch(e) {}
 
       resultEl.className = 'settings-import-result success';
-      resultEl.textContent = `✓ 가져오기 완료 — 벤치마크 ${stats.rows} · 원고 ${stats.scripts} · 챌린지 ${stats.challenges}`;
+      resultEl.textContent = `✓ 가져오기 완료 — 벤치마킹 ${stats.rows} · 원고 ${stats.scripts} · 챌린지 ${stats.challenges}`;
       renderSettingsStats();
       // 모든 뷰 갱신
       if (typeof renderTrainingRoom === 'function') renderTrainingRoom();
@@ -22738,8 +23769,8 @@
   }
 
   async function clearAllRows() {
-    if (!confirm('정말 모든 벤치마크 데이터를 초기화할까요? 100행은 비어진 채로 남습니다.')) return;
-    if (!confirm('한 번 더 확인합니다. 정말 모든 벤치마크 데이터를 지우시겠어요?')) return;
+    if (!confirm('정말 모든 벤치마킹 데이터를 초기화할까요? 100행은 비어진 채로 남습니다.')) return;
+    if (!confirm('한 번 더 확인합니다. 정말 모든 벤치마킹 데이터를 지우시겠어요?')) return;
     // 행 자체는 100개 유지, 내용만 비움
     for (const r of rows) {
       r.script = ''; r.format = ''; r.audioType = '';
@@ -22754,11 +23785,11 @@
     if (typeof renderTable === 'function') renderTable();
     if (typeof renderSidebarCounts === 'function') renderSidebarCounts();
     if (typeof updateSheetGjWelcome === 'function') updateSheetGjWelcome();
-    toast('벤치마크 초기화됨');
+    toast('벤치마킹 초기화됨');
   }
 
   async function clearAllData() {
-    if (!confirm('⚠️ 모든 데이터(벤치마크, 원고, 챌린지, 설정)를 삭제할까요?\n\n이 작업은 되돌릴 수 없습니다. 먼저 내보내기를 권장해요.')) return;
+    if (!confirm('⚠️ 모든 데이터(벤치마킹, 원고, 챌린지, 설정)를 삭제할까요?\n\n이 작업은 되돌릴 수 없습니다. 먼저 내보내기를 권장해요.')) return;
     if (!confirm('정말 마지막 확인입니다. 모든 데이터를 영구 삭제하시겠어요?')) return;
     scripts = [];
     challenges = [];
@@ -23212,7 +24243,7 @@
   // 일반 ↑ 예비 = convert
   // 예비 ↑ 대중 = attract
   const FUNNEL_SLOTS = [
-    { id: 'retain', label: '재구매 컨텐츠', stage: '일반 → 재구매', hint: '관계를 유지해 한 번 산 사람이 또 찾아오게' },
+    { id: 'retain', label: '세일즈 컨텐츠', stage: '일반 → 단골', hint: '관계를 유지해 한 번 산 사람이 또 찾아오게' },
     { id: 'convert', label: '전환용 컨텐츠', stage: '예비 → 일반 고객', hint: '신뢰를 만들어 구매·예약·문의로 이어지게' },
     { id: 'attract', label: '유입용 컨텐츠', stage: '대중 → 예비 고객', hint: '관심을 끌어 모르는 사람을 팔로워·구독자로 전환' }
   ];
@@ -23341,24 +24372,40 @@
     const slotCell = (slotIdx, rowNum) => {
       const slot = FUNNEL_SLOTS[slotIdx];
       const slotCards = getSlotCards(slot.id);
-      const count = slotCards.length;
-      const full = count >= MAX_SLOT;
-      const slotClass = count === 0 ? 'warn' : (full ? 'ok' : 'has');
+      const filled = slotCards.length;
+      const desired = Math.min(5, Math.max(1, funnelSlotCounts[slot.id] || 3));
+      const slotsTotal = Math.max(desired, filled);
+      const emptyCount = Math.max(0, slotsTotal - filled);
+      const cleared = slotsTotal > 0 && filled >= slotsTotal;
+      const slotClass = cleared ? 'cleared' : (filled > 0 ? 'has' : 'warn');
+
+      let cardsHtml = slotCards.map(r => renderFunnelSlotCard(r, slot.id)).join('');
+      for (let e = 0; e < emptyCount; e++) {
+        cardsHtml += `
+          <div class="tr-mini-slot-empty funnel-mini-slot" onclick="if(window.__openSlotPicker)window.__openSlotPicker('${slot.id}')">
+            <div class="tr-mini-slot-num">#${filled + e + 1}</div>
+            <div class="plus">✦</div>
+            <div class="label">슬롯 채우기</div>
+          </div>`;
+      }
       return `
         <div class="funnel-slot-cell row-${rowNum}">
           <div class="funnel-slot ${slotClass}">
             <div class="funnel-slot-head">
               <div class="funnel-slot-title">
                 ${slot.label}
-                <span class="badge">${count}/${MAX_SLOT}${full ? ' · 꽉 참' : ''}</span>
+                <span class="badge">${filled}/${slotsTotal}</span>
+                ${cleared ? '<span class="tr-clear-badge">✓ 채움</span>' : ''}
               </div>
               <div class="funnel-slot-stage">${slot.stage}</div>
             </div>
-            <div class="funnel-cards">
-              ${slotCards.map(r => renderFunnelSlotChip(r, slot.id)).join('')}
-              ${!full ? `<button class="funnel-add-btn" onclick="if(window.__openSlotPicker)window.__openSlotPicker('${slot.id}')">+ ${slot.label} 추가</button>` : ''}
-              ${count === 0 ? `<div class="funnel-slot-hint">${slot.hint}</div>` : ''}
+            <div class="ws-slot-controls funnel-slot-controls">
+              <button class="ws-slot-btn" onclick="if(window.__funnelSlotMinus)window.__funnelSlotMinus('${slot.id}')" ${desired <= 1 ? 'disabled' : ''} title="슬롯 줄이기">−</button>
+              <div class="ws-slot-counter">${Math.min(slotsTotal, 5)} / 5</div>
+              <button class="ws-slot-btn" onclick="if(window.__funnelSlotPlus)window.__funnelSlotPlus('${slot.id}')" ${desired >= 5 ? 'disabled' : ''} title="슬롯 늘리기">+</button>
             </div>
+            <div class="funnel-mini-cards">${cardsHtml}</div>
+            ${filled === 0 ? `<div class="funnel-slot-hint">${slot.hint}</div>` : ''}
           </div>
         </div>
       `;
@@ -23380,7 +24427,10 @@
         (funnelSlots.retain || []).length +
         (funnelSlots.convert || []).length +
         (funnelSlots.attract || []).length;
-      const max = MAX_SLOT * 3;
+      const max = ['attract', 'convert', 'retain'].reduce((sum, st) => {
+        const f = (funnelSlots[st] || []).length;
+        return sum + Math.max(Math.min(5, Math.max(1, funnelSlotCounts[st] || 3)), f);
+      }, 0);
       weekCountEl.innerHTML = `${totalCards}<span class="total"> / ${max}</span>`;
       weekCountEl.classList.toggle('has', totalCards > 0);
     }
@@ -23399,6 +24449,55 @@
     `;
   }
 
+  // 퍼널 슬롯 — 세로 카드 (이번 주 슬롯과 통일)
+  function renderFunnelSlotCard(r, slotStage) {
+    const title = (r.idea || r.hook || r.author || '카드 #' + r.no);
+    const up = (funnelUploaded[slotStage] || []).includes(r.id);
+    return `
+      <div class="tr-mini-card funnel-vcard ${up ? 'uploaded' : ''}" data-row-id="${r.id}">
+        <div class="tr-mini-card-thumb-empty">📋</div>
+        <div class="tr-mini-card-body">
+          <div class="tr-mini-card-title">${esc(title)}</div>
+        </div>
+        <button class="tr-up-btn ${up ? 'done' : ''}" onclick="event.stopPropagation();if(window.__funnelCardUploaded)window.__funnelCardUploaded('${slotStage}','${r.id}')">${up ? '✓ 업로드 완료!' : '업로드 완료'}</button>
+        <button class="funnel-vcard-x" onclick="event.stopPropagation();if(window.__removeFromSlot)window.__removeFromSlot('${slotStage}', '${r.id}')" title="슬롯에서 제거">×</button>
+      </div>
+    `;
+  }
+
+  // 퍼널 카드 업로드 완료 토글
+  async function funnelCardUploaded(stage, rowId) {
+    if (!Array.isArray(funnelUploaded[stage])) funnelUploaded[stage] = [];
+    const i = funnelUploaded[stage].indexOf(rowId);
+    let now = false;
+    if (i >= 0) { funnelUploaded[stage].splice(i, 1); }
+    else { funnelUploaded[stage].push(rowId); now = true; }
+    await saveFunnelUploaded();
+    renderFunnel();
+    if (now) {
+      const card = document.querySelector(`.funnel-vcard[data-row-id="${rowId}"]`);
+      if (card) { card.classList.add('just-uploaded'); setTimeout(() => card.classList.remove('just-uploaded'), 600); }
+      toast('✓ 업로드 완료! 🎉');
+    }
+  }
+  window.__funnelCardUploaded = funnelCardUploaded;
+
+  // 퍼널 슬롯 수 −/+ (단계별, 기본 3, 1~5)
+  async function funnelSlotMinus(stage) {
+    const cur = Math.min(5, Math.max(1, funnelSlotCounts[stage] || 3));
+    funnelSlotCounts[stage] = Math.max(1, cur - 1);
+    await saveFunnelSlotCounts();
+    renderFunnel();
+  }
+  async function funnelSlotPlus(stage) {
+    const cur = Math.min(5, Math.max(1, funnelSlotCounts[stage] || 3));
+    funnelSlotCounts[stage] = Math.min(5, cur + 1);
+    await saveFunnelSlotCounts();
+    renderFunnel();
+  }
+  window.__funnelSlotMinus = funnelSlotMinus;
+  window.__funnelSlotPlus = funnelSlotPlus;
+
   // 슬롯에서 제거
   async function removeFromSlot(stage, rowId) {
     if (!funnelSlots[stage]) return;
@@ -23416,8 +24515,8 @@
       toast('이미 슬롯에 있는 카드');
       return;
     }
-    if (funnelSlots[stage].length >= MAX_SLOT) {
-      toast(`최대 ${MAX_SLOT}개까지만 추가 가능해요`);
+    if (funnelSlots[stage].length >= 5) {
+      toast('한 단계에 최대 5개까지 담을 수 있어요');
       return;
     }
     funnelSlots[stage].push(rowId);
@@ -23504,11 +24603,11 @@
       msg = '유입용 ' + a + '개 좋아요. 다음은 신뢰를 만드는 전환용을 추가할 차례.';
       cls += ' warn';
     } else if (r === 0 && c >= 2) {
-      msg = '✓ 유입(' + a + ') · 전환(' + c + ') 잘 짜였어요. 재구매까지 챙기면 완성.';
+      msg = '✓ 유입(' + a + ') · 전환(' + c + ') 잘 짜였어요. 세일즈까지 챙기면 완성.';
     } else if (a >= 1 && c >= 1 && r >= 1) {
-      msg = '✓ 균형 잡힘 (유입 ' + a + ' · 전환 ' + c + ' · 재구매 ' + r + '). 이번 주 실행에 집중하세요.';
+      msg = '✓ 균형 잡힘 (유입 ' + a + ' · 전환 ' + c + ' · 세일즈 ' + r + '). 이번 주 실행에 집중하세요.';
     } else {
-      msg = '이번 주 슬롯: 유입 ' + a + ' · 전환 ' + c + ' · 재구매 ' + r + '. 균형을 맞춰가요.';
+      msg = '이번 주 슬롯: 유입 ' + a + ' · 전환 ' + c + ' · 세일즈 ' + r + '. 균형을 맞춰가요.';
     }
     el.className = cls;
     el.innerHTML = `<span class="funnel-balance-icon">${cls.includes('warn') ? '⚠' : '💡'}</span><span>${msg}</span>`;
@@ -23517,66 +24616,132 @@
   // ============================================================
   // ====================== WEEK SLOTS (v48) =====================
   // ============================================================
-  const WEEK_SLOT_STAGES = { attract: '🌐 유입', convert: '🤝 전환', retain: '💎 재구매' };
+  const WEEK_SLOT_STAGES = { attract: '🧲 유입', convert: '🤝 전환', retain: '💎 세일즈' };
   let _wsPickerFilter = 'all'; // 'all' | 'attract' | 'convert' | 'retain' | ''
   let _wsPickerTargetIdx = -1; // 어느 슬롯에 담을지
+  let _wsPickRole = null; // 자유작성 시 부여할 역할 'attract' | 'convert' | null
+
+  // 피커 내부 단계 전환: 'choice' | 'sheet' | 'free'
+  function showPickPane(name) {
+    const panes = { choice: 'ws-pick-choice', sheet: 'ws-pick-sheet', free: 'ws-pick-free' };
+    Object.keys(panes).forEach(k => {
+      const el = document.getElementById(panes[k]);
+      if (el) el.style.display = (k === name) ? 'block' : 'none';
+    });
+  }
 
   function renderWeekSlots() {
     const wrap = document.getElementById('ws-slots');
     if (!wrap) return;
 
+    // 이번 주 = 실제 현재 주. 4주 캘린더의 현재 주(scripts)와 같은 데이터 공유.
+    const mon = getMondayOf(new Date());
+    const ymd = dateToYMD(mon);
+
+    // 라벨
+    const wom = Math.ceil(mon.getDate() / 7);
+    const womName = ['첫째', '둘째', '셋째', '넷째', '다섯째', '여섯째'][wom - 1] || (wom + '');
+    const eyebrowEl = document.getElementById('tr-week-eyebrow');
+    const titleEl = document.getElementById('tr-week-title');
+    if (eyebrowEl) eyebrowEl.textContent = `🔥 이번 주 · ${mon.getMonth() + 1}월 ${womName} 주`;
+    if (titleEl) titleEl.textContent = formatWeekRange(mon);
+
+    const weekScripts = getScriptsInWeek(mon);
+    const filled = weekScripts.length;
+    const desired = Math.min(5, Math.max(1, trWeekCounts[ymd] || 3));
+    const slotsTotal = Math.max(desired, filled);
+    const emptyCount = Math.max(0, slotsTotal - filled);
+    const uploaded = weekScripts.filter(s => s.uploaded).length;
+
     let html = '';
-    weekSlots.forEach((slot, idx) => {
-      if (!slot) {
-        html += `
-          <div class="ws-slot empty" onclick="if(window.__openWsPicker)window.__openWsPicker(${idx})">
-            <div class="ws-slot-plus">+</div>
-            <div>비어있음</div>
-          </div>
-        `;
-        return;
-      }
-      const done = !!slot.done;
-      let tagHtml = '', stageHtml = '', titleText = '';
-      if (slot.type === 'sheet') {
-        const r = rows.find(x => x.id === slot.rowId);
-        if (!r) {
-          // 카드 사라진 경우
-          html += `<div class="ws-slot empty" onclick="if(window.__openWsPicker)window.__openWsPicker(${idx})"><div class="ws-slot-plus">+</div><div>비어있음</div></div>`;
-          return;
-        }
-        titleText = r.idea || r.hook || r.author || '카드 #' + r.no;
-        const stageLabel = r.funnelStage && WEEK_SLOT_STAGES[r.funnelStage];
-        const stageCls = r.funnelStage || '';
-        tagHtml = `<div class="ws-slot-tag sheet">📋 시트 #${r.no}${stageCls ? `<span class="ws-slot-stage ${stageCls}">${stageLabel}</span>` : ''}</div>`;
+    weekScripts.forEach((s, i) => {
+      const up = !!s.uploaded;
+      const freeEmpty = isFreeEmpty(s);
+      const title = freeEmpty ? '자유' : scriptDisplayTitle(s);
+      let tagHtml, roleCls = '';
+      const br = s.benchmarkRowId ? rows.find(r => r.id === s.benchmarkRowId) : null;
+      if (br) {
+        roleCls = br.funnelStage || '';
+        const stageLabel = roleCls && WEEK_SLOT_STAGES[roleCls];
+        tagHtml = `<div class="ws-slot-tag sheet">📋 시트 #${br.no}${roleCls ? `<span class="ws-slot-stage ${roleCls}">${stageLabel}</span>` : ''}</div>`;
       } else {
-        titleText = slot.title || '';
-        tagHtml = `<div class="ws-slot-tag free">✎ 직접 작성</div>`;
+        tagHtml = `<div class="ws-slot-tag free">✎ 자유</div>`;
       }
       html += `
-        <div class="ws-slot filled ${done ? 'done' : ''}" data-slot-idx="${idx}">
+        <div class="ws-slot filled ${roleCls} ${up ? 'uploaded' : ''}" data-script-id="${s.id}">
+          <div class="ws-slot-num">#${i + 1}</div>
           ${tagHtml}
-          <div class="ws-slot-title">${esc(titleText)}</div>
-          <div class="ws-slot-foot">
-            <label class="ws-slot-check">
-              <input type="checkbox" ${done ? 'checked' : ''} onchange="if(window.__toggleWsSlotDone)window.__toggleWsSlotDone(${idx})" />
-              완료
-            </label>
-            <button class="ws-slot-remove" onclick="if(window.__removeWsSlot)window.__removeWsSlot(${idx})" title="슬롯 비우기">×</button>
-          </div>
-        </div>
-      `;
+          <div class="ws-slot-title">${esc(title)}</div>
+          <button class="tr-up-btn ${up ? 'done' : ''}" onclick="event.stopPropagation();if(window.__toggleScriptUploaded)window.__toggleScriptUploaded('${s.id}')">${up ? '✓ 업로드 완료!' : '업로드 완료'}</button>
+        </div>`;
     });
+    for (let e = 0; e < emptyCount; e++) {
+      const n = filled + e + 1;
+      html += `
+        <div class="ws-slot empty" data-ws-add="1">
+          <div class="ws-cb-num">#${n}</div>
+          <div class="ws-cb-emblem">✦</div>
+          <div class="ws-cb-label">슬롯 채우기</div>
+          <div class="ws-cb-sub">이번 주 ${n}번째 콘텐츠</div>
+          <div class="ws-cb-cta">채우러 가기 →</div>
+        </div>`;
+    }
     wrap.innerHTML = html;
 
-    // 카운터 + 버튼 상태
+    // 카드 클릭 → 요약 모달 / 빈 슬롯 → 이번 주에 추가
+    wrap.querySelectorAll('.ws-slot.filled').forEach(c => {
+      c.onclick = () => { if (c.dataset.scriptId) openTrSummaryModal(c.dataset.scriptId); };
+    });
+    wrap.querySelectorAll('[data-ws-add]').forEach(c => {
+      c.onclick = () => openTrAddModal(ymd);
+    });
+
+    // 카운터 (현재 주 trWeekCounts 공유)
     const counter = document.getElementById('ws-slot-counter');
-    if (counter) counter.textContent = `${weekSlots.length} / 5`;
+    if (counter) counter.textContent = `${Math.min(slotsTotal, 5)} / 5`;
     const minus = document.getElementById('ws-slot-minus');
     const plus = document.getElementById('ws-slot-plus');
-    if (minus) minus.disabled = weekSlots.length <= 1;
-    if (plus) plus.disabled = weekSlots.length >= 5;
+    if (minus) minus.disabled = desired <= 1;
+    if (plus) plus.disabled = desired >= 5;
+
+    // 진행바 (업로드 중심)
+    const upPct = slotsTotal > 0 ? Math.round(uploaded / slotsTotal * 100) : 0;
+    const planPct = slotsTotal > 0 ? Math.round(filled / slotsTotal * 100) : 0;
+    const cleared = slotsTotal > 0 && uploaded >= slotsTotal;
+    const barFill = document.getElementById('ws-week-bar-fill');
+    if (barFill) barFill.style.width = upPct + '%';
+    const barPlan = document.getElementById('ws-week-bar-plan');
+    if (barPlan) barPlan.style.width = planPct + '%';
+    const barText = document.getElementById('ws-week-progresstext');
+    if (barText) barText.innerHTML = cleared ? `🏆 ${uploaded}/${slotsTotal} 이번 주 올업로드!` : `<span class="up">${uploaded} 업로드</span> / ${slotsTotal}칸${filled > uploaded ? ` · ${filled} 채움` : ''}`;
+    const block = wrap.closest('.tr-week-block');
+    if (block) block.classList.toggle('cleared', cleared);
   }
+
+  // 이번 주 슬롯 수 −/+ (현재 주 trWeekCounts 조정 — 4주 캘린더와 공유)
+  async function wsCurrentWeekCount(delta) {
+    const ymd = dateToYMD(getMondayOf(new Date()));
+    const cur = Math.min(5, Math.max(1, trWeekCounts[ymd] || 3));
+    trWeekCounts[ymd] = Math.min(5, Math.max(1, cur + delta));
+    await saveTrWeekCounts();
+    renderWeekSlots();
+    try { renderTrWeeksList(); } catch (e) {}
+  }
+
+  // 이번 주 슬롯 업로드 완료 토글
+  async function toggleWsSlotUploaded(idx) {
+    if (!weekSlots[idx]) return;
+    const now = !weekSlots[idx].uploaded;
+    weekSlots[idx].uploaded = now;
+    await saveWeekSlots();
+    renderWeekSlots();
+    if (now) {
+      const card = document.querySelector(`#ws-slots .ws-slot[data-slot-idx="${idx}"]`);
+      if (card) { card.classList.add('just-uploaded'); setTimeout(() => card.classList.remove('just-uploaded'), 600); }
+      toast('✓ 업로드 완료! 🎉');
+    }
+  }
+  window.__toggleWsSlotUploaded = toggleWsSlotUploaded;
 
   // [+/-] 핸들러
   async function addWeekSlot() {
@@ -23620,6 +24785,7 @@
   function openWsPicker(slotIdx) {
     _wsPickerTargetIdx = slotIdx;
     _wsPickerFilter = 'all';
+    _wsPickRole = null;
     const modal = document.getElementById('ws-picker-modal');
     if (modal) modal.classList.add('show');
     // 필터 버튼 초기화
@@ -23629,9 +24795,49 @@
     // 입력란 클리어
     const inp = document.getElementById('ws-picker-input');
     if (inp) inp.value = '';
+    // 항상 1단계(선택 카드)부터 시작
+    showPickPane('choice');
     renderWsPickerCards();
   }
   window.__openWsPicker = openWsPicker;
+
+  // 4지선다 선택 → 해당 단계로 이동
+  function chooseWsFill(choice) {
+    if (choice === 'free') { openFreePane(null); return; }
+    // 벤치마킹 시트(전체) / 유입용 / 전환용 → 분류된 시트 카드 모아보기
+    _wsPickerFilter = (choice === 'sheet') ? 'all' : choice; // 'all' | 'attract' | 'convert'
+    const head = document.getElementById('ws-sheet-head');
+    if (head) {
+      head.textContent =
+        choice === 'attract' ? '🧲 유입용 — 분류해둔 카드' :
+        choice === 'convert' ? '🤝 전환용 — 분류해둔 카드' :
+        '📋 벤치마킹 시트 — 전체 카드';
+    }
+    showPickPane('sheet');
+    renderWsPickerCards();
+  }
+
+  // 자유 작성(메모) 단계 — role: null | 'attract' | 'convert'
+  function openFreePane(role) {
+    _wsPickRole = (role === 'attract' || role === 'convert') ? role : null;
+    const head = document.getElementById('ws-free-head');
+    const desc = document.getElementById('ws-free-desc');
+    const inp = document.getElementById('ws-picker-input');
+    if (_wsPickRole === 'attract') {
+      if (head) head.textContent = '🧲 유입용 카드 직접 작성';
+      if (desc) desc.textContent = '관심·도달을 끄는 이번 주 콘텐츠 주제를 적어주세요.';
+    } else if (_wsPickRole === 'convert') {
+      if (head) head.textContent = '🤝 전환용 카드 직접 작성';
+      if (desc) desc.textContent = '신뢰·예약으로 잇는 이번 주 콘텐츠 주제를 적어주세요.';
+    } else {
+      if (head) head.textContent = '📝 자유 작성';
+      if (desc) desc.textContent = '이번 주 만들 콘텐츠 주제를 자유롭게 적어주세요.';
+    }
+    if (inp) inp.value = '';
+    showPickPane('free');
+    if (inp) setTimeout(() => inp.focus(), 50);
+  }
+  window.__freeWithRole = openFreePane;
 
   function renderWsPickerCards() {
     const el = document.getElementById('ws-picker-cards');
@@ -23647,11 +24853,20 @@
     } else if (_wsPickerFilter !== 'all') {
       candidates = candidates.filter(r => r.funnelStage === _wsPickerFilter);
     }
-    // 최신순
-    candidates.sort((a, b) => (b.no || 0) - (a.no || 0));
+    // 번호 오름차순 (위에서부터 1번)
+    candidates.sort((a, b) => (a.no || 0) - (b.no || 0));
     if (candidates.length === 0) {
       el.innerHTML = '';
-      if (empty) empty.style.display = 'block';
+      if (empty) {
+        empty.style.display = 'block';
+        const role = _wsPickerFilter;
+        let extra = '';
+        if (role === 'attract' || role === 'convert') {
+          const lbl = role === 'attract' ? '유입용' : '전환용';
+          extra = `<button class="ws-picker-add-free" style="margin-top:14px;" onclick="if(window.__freeWithRole)window.__freeWithRole('${role}')">✎ ${lbl}으로 직접 작성</button>`;
+        }
+        empty.innerHTML = `<div class="ws-picker-empty-icon">📋</div><div>아직 ${role === 'attract' ? '유입용으로 ' : role === 'convert' ? '전환용으로 ' : ''}분류된 카드가 없어요.</div>${extra}`;
+      }
       return;
     }
     if (empty) empty.style.display = 'none';
@@ -23704,12 +24919,14 @@
       id: 'ws_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8),
       type: 'free',
       title: val,
+      role: _wsPickRole || null,
       done: false
     };
     await saveWeekSlots();
     renderWeekSlots();
     document.getElementById('ws-picker-modal').classList.remove('show');
-    toast('슬롯에 담김');
+    const rl = _wsPickRole && WEEK_SLOT_STAGES[_wsPickRole];
+    toast(rl ? `${rl} 슬롯에 담김` : '슬롯에 담김');
   }
   window.__addFreeWsCard = addFreeWsCard;
 
@@ -23719,11 +24936,20 @@
     if (_wsPickerInited) return;
     _wsPickerInited = true;
 
-    // [+/-] 버튼
+    // [+/-] 버튼 — 현재 주 슬롯 수 조정 (4주 캘린더와 공유)
     const minus = document.getElementById('ws-slot-minus');
     const plus = document.getElementById('ws-slot-plus');
-    if (minus) minus.onclick = removeWeekSlot;
-    if (plus) plus.onclick = addWeekSlot;
+    if (minus) minus.onclick = () => wsCurrentWeekCount(-1);
+    if (plus) plus.onclick = () => wsCurrentWeekCount(1);
+
+    // 4지선다 선택 카드
+    document.querySelectorAll('#ws-pick-choice .ws-choice-card').forEach(c => {
+      c.onclick = () => chooseWsFill(c.dataset.choice);
+    });
+    // 뒤로 버튼 (시트/자유 → 선택)
+    document.querySelectorAll('#ws-picker-modal .ws-pick-back').forEach(b => {
+      b.onclick = () => showPickPane('choice');
+    });
 
     // 필터 버튼
     document.querySelectorAll('#ws-picker-filter .ws-picker-filter-btn').forEach(b => {
@@ -24113,7 +25339,7 @@
     // 서비스 소개 (지금은 안내만)
     const infoBtn = document.getElementById('auth-info-btn');
     if (infoBtn) infoBtn.onclick = () => {
-      alert('수익화 컨텐츠 집중 트레이닝\n\n헤어디자이너를 위한\n인스타그램 수익화 트레이닝 도구.\n\n• 트레이닝 룸\n• 벤치마크 시트\n• 컨텐츠 퍼널\n• 고객 분석\n• 유형 보드\n\n수강 문의: 운영자 (이수성)');
+      alert('수익화 컨텐츠 집중 트레이닝\n\n헤어디자이너를 위한\n인스타그램 수익화 트레이닝 도구.\n\n• 트레이닝 룸\n• 벤치마킹 시트\n• 컨텐츠 퍼널\n• 고객 분석\n• 유형 보드\n\n수강 문의: 운영자 (이수성)');
     };
   }
 
