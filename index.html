@@ -1724,8 +1724,8 @@
     letter-spacing: 0.05em;
   }
   .ws-slots {
-    display: flex;
-    flex-wrap: nowrap;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* JS가 min(슬롯,5)로 갱신 */
     gap: 12px;
     margin-top: 8px;
     align-items: stretch;
@@ -1733,8 +1733,94 @@
   @media (max-width: 600px) {
     .ws-slots { gap: 8px; }
   }
+
+  /* === 이번 주 D-day (마감 임박 다급함 게이지) === */
+  .ws-head-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+  }
+  .ws-dday {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1.05;
+    padding: 5px 12px;
+    border-radius: 12px;
+    border: 1px solid var(--line);
+    background: var(--bg-input);
+    transition: all 0.3s ease;
+    min-width: 64px;
+  }
+  .ws-dday-d {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 900;
+    letter-spacing: 0.02em;
+  }
+  .ws-dday-sub {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 9px;
+    font-weight: 700;
+    margin-top: 2px;
+    opacity: 0.85;
+  }
+  /* 차분 (여유) */
+  .ws-dday.cool { border-color: var(--line); }
+  .ws-dday.cool .ws-dday-d { font-size: 15px; color: var(--text-mute); }
+  .ws-dday.cool .ws-dday-sub { color: var(--text-faint); }
+  /* 주의 (중간) */
+  .ws-dday.warn {
+    border-color: rgba(255, 170, 60, 0.5);
+    background: rgba(255, 170, 60, 0.08);
+  }
+  .ws-dday.warn .ws-dday-d { font-size: 20px; color: #FFB44D; }
+  .ws-dday.warn .ws-dday-sub { color: #FFB44D; }
+  /* 다급 (임박) — 크고 붉고 두근두근 */
+  .ws-dday.urgent {
+    border-color: rgba(255, 80, 80, 0.7);
+    background: rgba(255, 70, 70, 0.12);
+    box-shadow: 0 0 18px rgba(255, 70, 70, 0.35);
+    padding: 7px 16px;
+    animation: ddayPulse 1.1s ease-in-out infinite;
+  }
+  .ws-dday.urgent .ws-dday-d { font-size: 28px; color: #FF5B5B; text-shadow: 0 0 12px rgba(255,70,70,0.6); }
+  .ws-dday.urgent .ws-dday-sub { color: #FF8080; font-size: 10px; }
+  @keyframes ddayPulse {
+    0%, 100% { transform: scale(1); box-shadow: 0 0 16px rgba(255,70,70,0.3); }
+    50% { transform: scale(1.06); box-shadow: 0 0 26px rgba(255,70,70,0.55); }
+  }
+  /* 완료 — 차분한 금빛 */
+  .ws-dday.done {
+    border-color: rgba(245, 200, 75, 0.5);
+    background: rgba(245, 200, 75, 0.1);
+  }
+  .ws-dday.done .ws-dday-d { font-size: 16px; color: #F5C84B; }
+  .ws-dday.done .ws-dday-sub { color: #F5C84B; }
+  @media (prefers-reduced-motion: reduce) { .ws-dday.urgent { animation: none; } }
+
+  /* 헤더(접힘 상태) D-day 칩 */
+  .acc-dday {
+    flex: 0 0 auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; font-weight: 800;
+    padding: 2px 8px; border-radius: 100px;
+    border: 1px solid var(--line);
+    background: var(--bg-input);
+    color: var(--text-mute);
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+  .acc-dday.warn { color: #FFB44D; border-color: rgba(255,170,60,0.5); background: rgba(255,170,60,0.1); }
+  .acc-dday.urgent {
+    color: #FF5B5B; border-color: rgba(255,80,80,0.65);
+    background: rgba(255,70,70,0.14);
+    box-shadow: 0 0 10px rgba(255,70,70,0.3);
+    font-size: 11px;
+    animation: ddayPulse 1.2s ease-in-out infinite;
+  }
+  .acc-dday.done { color: #F5C84B; border-color: rgba(245,200,75,0.5); background: rgba(245,200,75,0.1); }
   .ws-slot {
-    flex: 1 1 0;
     min-width: 0;
     background: var(--bg-input);
     border: 1.5px dashed var(--line);
@@ -3037,6 +3123,148 @@
   }
   .tr-goal-set-btn:hover { transform: translateY(-1px); box-shadow: 0 0 18px var(--emerald-glow); }
 
+  /* === 목표 타임라인 막대 (시작 → 마감, TODAY) === */
+  .tr-goal-timeline { margin: 12px 0 8px; }
+  .tr-goal-tl-bar {
+    position: relative;
+    height: 4px; border-radius: 100px;
+    background: var(--bg-input);
+  }
+  .tr-goal-tl-elapsed {
+    position: absolute; left: 0; top: 0; height: 100%;
+    background: var(--emerald-line); border-radius: 100px;
+  }
+  .tr-goal-tl-marker {
+    position: absolute; top: 50%; transform: translate(-50%, -50%);
+    width: 9px; height: 9px; border-radius: 50%;
+    background: var(--emerald); box-shadow: 0 0 8px var(--emerald-glow);
+  }
+  .tr-goal-tl-marker span {
+    position: absolute; top: -16px; left: 50%; transform: translateX(-50%);
+    font-family: 'JetBrains Mono', monospace; font-size: 7.5px; font-weight: 800;
+    color: var(--emerald); white-space: nowrap;
+  }
+  .tr-goal-tl-ends {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-top: 7px;
+    font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700;
+    color: var(--text-mute);
+  }
+  .tr-goal-period {
+    background: var(--bg-input); border: 1px solid var(--line);
+    color: var(--text-mute); border-radius: 100px; padding: 3px 10px;
+    font-family: 'Pretendard', sans-serif; font-size: 10px; font-weight: 800;
+    cursor: pointer; transition: all 0.15s;
+  }
+  .tr-goal-period:hover { border-color: var(--emerald); color: var(--emerald); }
+  /* 직접 기록 */
+  .tr-goal-foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 4px; }
+  .tr-goal-manual { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+  .tr-goal-mbtn {
+    background: var(--bg-input); border: 1px solid var(--line);
+    color: var(--text-mute); border-radius: 8px; padding: 5px 8px;
+    font-family: 'Pretendard', sans-serif; font-size: 10.5px; font-weight: 800;
+    cursor: pointer; transition: all 0.15s; white-space: nowrap;
+  }
+  .tr-goal-mbtn.add { color: var(--emerald); border-color: var(--emerald-line); }
+  .tr-goal-mbtn:hover { background: var(--emerald-faint); border-color: var(--emerald); color: var(--emerald); }
+
+  /* === 목표 기간 설정 모달 === */
+  .period-modal {
+    display: none; position: fixed; inset: 0; z-index: 5600;
+    background: rgba(0,0,0,0.72); backdrop-filter: blur(5px);
+    align-items: center; justify-content: center; padding: 20px;
+  }
+  .period-modal.show { display: flex; }
+  .period-box {
+    background: var(--bg-card); border: 1px solid var(--emerald-line);
+    border-radius: 16px; padding: 22px; width: 100%; max-width: 360px;
+    box-shadow: 0 0 50px rgba(0,0,0,0.5);
+  }
+  .period-head { font-family: 'Pretendard', sans-serif; font-size: 16px; font-weight: 800; color: var(--text-main); }
+  .period-desc { font-family: 'Pretendard', sans-serif; font-size: 11.5px; color: var(--text-faint); margin: 4px 0 16px; }
+  .period-field { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
+  .period-field span { font-family: 'Pretendard', sans-serif; font-size: 12.5px; font-weight: 700; color: var(--text-mute); }
+  .period-field input {
+    background: var(--bg-input); border: 1.5px solid var(--line); border-radius: 9px;
+    padding: 8px 10px; color: var(--text-main);
+    font-family: 'JetBrains Mono', monospace; font-size: 13px;
+    color-scheme: dark;
+  }
+  .period-field input:focus { outline: none; border-color: var(--emerald); }
+  .period-actions { display: flex; gap: 8px; margin-top: 8px; }
+  .period-btn {
+    flex: 1; padding: 10px; border-radius: 9px; cursor: pointer;
+    font-family: 'Pretendard', sans-serif; font-size: 12.5px; font-weight: 800;
+    background: var(--bg-input); border: 1px solid var(--line); color: var(--text-mute);
+    transition: all 0.15s;
+  }
+  .period-btn.primary { background: var(--emerald); border: none; color: #06140C; box-shadow: 0 0 12px var(--emerald-glow); }
+  .period-btn:hover { transform: translateY(-1px); }
+
+  /* === 목표·기간 통합 모달: 미니 달력 === */
+  .goal-box { max-width: 390px; }
+  .tr-goal-gear {
+    background: none; border: none; cursor: pointer;
+    color: var(--text-faint); font-size: 14px; padding: 0 2px;
+    transition: color 0.15s; line-height: 1;
+  }
+  .tr-goal-gear:hover { color: var(--emerald); }
+  /* 캘린더 상단 — 눈에 띄는 목표·기간 설정 버튼 */
+  .tr-goal-open-btn {
+    display: block; width: 100%;
+    margin: 10px 0 0;
+    background: var(--emerald-faint);
+    border: 1px solid var(--emerald-line);
+    border-radius: 12px;
+    padding: 12px;
+    color: var(--emerald);
+    font-family: 'Pretendard', sans-serif; font-size: 13px; font-weight: 800;
+    cursor: pointer; transition: all 0.15s;
+  }
+  .tr-goal-open-btn:hover { background: var(--emerald); color: #06140C; box-shadow: 0 0 16px var(--emerald-glow); transform: translateY(-1px); }
+  .gm-cal-head { display: flex; align-items: center; justify-content: space-between; margin: 6px 0 8px; }
+  .gm-cal-title { font-family: 'Pretendard', sans-serif; font-size: 14px; font-weight: 800; color: var(--text-main); }
+  .gm-nav {
+    background: var(--bg-input); border: 1px solid var(--line); color: var(--text-mute);
+    width: 28px; height: 28px; border-radius: 8px; cursor: pointer; font-size: 11px;
+    display: flex; align-items: center; justify-content: center; transition: all 0.12s;
+  }
+  .gm-nav:hover { color: var(--emerald); border-color: var(--emerald-line); }
+  .gm-cal { user-select: none; touch-action: none; }
+  .gm-dow { display: grid; grid-template-columns: repeat(7, 1fr); margin-bottom: 4px; }
+  .gm-dow span { text-align: center; font-family: 'Pretendard', sans-serif; font-size: 10px; font-weight: 800; color: var(--text-faint); }
+  .gm-dow span.sun { color: #FF6B6B; } .gm-dow span.sat { color: #6AA9FF; }
+  .gm-days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
+  .gm-day {
+    aspect-ratio: 1; display: flex; align-items: center; justify-content: center;
+    font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 700;
+    color: var(--text-mute); border-radius: 7px; cursor: pointer;
+    transition: background 0.1s, color 0.1s;
+  }
+  .gm-day.blank { cursor: default; }
+  .gm-day.sun { color: #FF6B6B; } .gm-day.sat { color: #6AA9FF; }
+  .gm-day.today { outline: 1px solid var(--text-faint); outline-offset: -2px; }
+  .gm-day:hover:not(.blank) { background: var(--bg-elev); }
+  .gm-day.inrange { background: var(--emerald-faint); color: var(--emerald); }
+  .gm-day.rstart, .gm-day.rend { background: var(--emerald); color: #06140C; font-weight: 900; }
+  .gm-range {
+    text-align: center; font-family: 'Pretendard', sans-serif; font-size: 12px;
+    color: var(--text-mute); margin: 10px 0 6px;
+  }
+  .gm-range b { color: var(--emerald); }
+  .gm-goal-field { border-top: 1px solid var(--line); padding-top: 12px; }
+  .gm-goal-input {
+    width: 70px; text-align: center; background: var(--bg-input);
+    border: 1.5px solid var(--line); border-radius: 9px; padding: 7px 8px;
+    color: var(--text-main); font-family: 'JetBrains Mono', monospace; font-size: 15px; font-weight: 800;
+    margin-left: auto;
+  }
+  .gm-goal-input:focus { outline: none; border-color: var(--emerald); box-shadow: 0 0 0 3px var(--emerald-faint); }
+  .gm-unit { font-size: 12px; color: var(--text-mute); font-weight: 700; }
+  .gm-hint { font-family: 'Pretendard', sans-serif; font-size: 11px; color: var(--text-faint); margin: 8px 0 4px; text-align: center; }
+  .gm-hint b { color: var(--emerald); }
+
   /* === 카드 업로드 완료 버튼/배지 === */
   /* === 카드 하단 "업로드 완료" 버튼 (핵심 액션) === */
   .tr-up-btn {
@@ -3075,6 +3303,31 @@
       var(--bg-elev);
   }
   .tr-mini-card.uploaded .tr-mini-card-title { color: #FFE08A; }
+  /* 카드 주차 드래그 이동 */
+  .tr-mini-card { touch-action: pan-y; }
+  .tr-mini-card.dragging {                     /* 원본(육체)은 자리에 흐리게 남음 */
+    opacity: 0.22;
+    filter: grayscale(0.5);
+  }
+  .tr-card-ghost {
+    position: fixed; z-index: 6000; pointer-events: none; margin: 0;
+    transform: translate(-50%, -60%) rotate(-5deg) scale(1.14);  /* 살짝 위로 떠오름 */
+    box-shadow: 0 22px 50px rgba(0,0,0,0.55), 0 0 34px var(--emerald-glow), 0 0 0 2px var(--emerald);
+    border-color: var(--emerald) !important;
+    opacity: 0.78;                             /* 또렷한 유체이탈 */
+    transition: left 0.08s ease-out, top 0.08s ease-out;  /* 마우스 부드럽게 따라옴 */
+    animation: ghostFloat 1.3s ease-in-out infinite;
+  }
+  @keyframes ghostFloat {
+    0%, 100% { transform: translate(-50%, -60%) rotate(-5deg) scale(1.14); }
+    50% { transform: translate(-50%, -66%) rotate(-2deg) scale(1.16); }
+  }
+  @media (prefers-reduced-motion: reduce) { .tr-card-ghost { animation: none; transition: none; } }
+  .tr-week-row.drop-target {
+    background: linear-gradient(90deg, rgba(46,204,113,0.12), transparent 60%) !important;
+    box-shadow: inset 0 0 0 2px var(--emerald);
+    border-radius: 8px;
+  }
   @keyframes uploadPop {
     0% { transform: scale(1); }
     40% { transform: scale(1.05); box-shadow: 0 0 30px rgba(245,200,75,0.5); }
@@ -3179,8 +3432,8 @@
     gap: 6px;
   }
   .tr-week-row-cards {
-    display: flex;
-    flex-wrap: nowrap;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* JS가 min(슬롯,5)로 갱신 */
     gap: 8px;
     flex: 1;
     min-width: 0;
@@ -3188,9 +3441,7 @@
   }
   .tr-week-row-cards > .tr-mini-card,
   .tr-week-row-cards > .tr-mini-slot-empty {
-    flex: 1 1 0;
     min-width: 0;
-    max-width: 150px;
   }
   /* === 퍼널 단계 슬롯 — 세로 카드 행 === */
   .funnel-mini-cards {
@@ -6773,7 +7024,7 @@
   /* === HONOR CARD (우하단 떠다니는 챌린지 진행 카드) === */
   .honor-stack {
     position: fixed;
-    bottom: 24px;
+    bottom: calc(env(safe-area-inset-bottom, 0px) + 78px); /* 하단 메뉴 위로 */
     right: 24px;
     z-index: 280;
     display: flex;
@@ -6990,7 +7241,7 @@
 
   /* Mobile: smaller honor cards */
   @media (max-width: 720px) {
-    .honor-stack { right: 12px; bottom: 12px; }
+    .honor-stack { right: 12px; bottom: calc(env(safe-area-inset-bottom, 0px) + 72px); }
     .honor-card { width: 240px; padding: 12px 14px; }
   }
 
@@ -13059,10 +13310,13 @@
               <h2 class="tr-week-title" id="tr-week-title">1월 15일 - 21일</h2>
               <div class="tr-week-progress" id="tr-week-progress"></div>
             </div>
-            <div class="ws-slot-controls">
-              <button class="ws-slot-btn" id="ws-slot-minus" title="슬롯 줄이기">−</button>
-              <div class="ws-slot-counter" id="ws-slot-counter">3 / 5</div>
-              <button class="ws-slot-btn" id="ws-slot-plus" title="슬롯 늘리기">+</button>
+            <div class="ws-head-right">
+              <div class="ws-dday" id="ws-dday"></div>
+              <div class="ws-slot-controls">
+                <button class="ws-slot-btn" id="ws-slot-minus" title="슬롯 줄이기">−</button>
+                <div class="ws-slot-counter" id="ws-slot-counter">3 / 5</div>
+                <button class="ws-slot-btn" id="ws-slot-plus" title="슬롯 늘리기">+</button>
+              </div>
             </div>
           </div>
 
@@ -13144,6 +13398,7 @@
             <button class="tr-cal-nav" id="tr-cal-next" title="다음 달">▶</button>
             <button class="tr-cal-today" id="tr-cal-today" title="오늘로">이번 주</button>
           </div>
+          <button class="tr-goal-open-btn" id="tr-goal-open" onclick="if(window.__openGoalModal)window.__openGoalModal()">🎯 이번 달 목표 · 기간 설정</button>
         </div>
 
         <!-- 1·2·3·4주차 세로 리스트 (가로 카드 4개씩) -->
@@ -13161,6 +13416,30 @@
             <button class="tr-add-modal-close" id="tr-add-modal-close">×</button>
           </div>
           <div class="tr-add-body" id="tr-add-body"></div>
+        </div>
+      </div>
+
+      <!-- 목표 · 기간 통합 설정 모달 -->
+      <div class="period-modal" id="goal-modal" onclick="if(event.target.id==='goal-modal')this.classList.remove('show');">
+        <div class="period-box goal-box">
+          <div class="period-head">🎯 목표 · 기간 설정</div>
+          <div class="period-desc">달력을 <b>드래그</b>해 기간을 정하고, 목표 개수를 적으면 <b>4주에 자동 분배</b>돼요.</div>
+          <!-- 미니 달력 (메인) -->
+          <div class="gm-cal-head">
+            <button class="gm-nav" id="gm-prev">◀</button>
+            <div class="gm-cal-title" id="gm-cal-title">2026년 6월</div>
+            <button class="gm-nav" id="gm-next">▶</button>
+          </div>
+          <div class="gm-cal" id="gm-cal"></div>
+          <div class="gm-range" id="gm-range"></div>
+          <!-- 목표 개수 -->
+          <div class="period-field gm-goal-field"><span>이 기간 목표 업로드</span><input type="number" min="1" max="99" id="gm-goal" class="gm-goal-input" placeholder="예: 12" /><span class="gm-unit">개</span></div>
+          <div class="gm-hint" id="gm-hint"></div>
+          <input type="hidden" id="period-start" /><input type="hidden" id="period-deadline" />
+          <div class="period-actions">
+            <button class="period-btn" id="period-reset">이번 달 기본</button>
+            <button class="period-btn primary" id="period-save">저장</button>
+          </div>
         </div>
       </div>
 
@@ -14414,7 +14693,7 @@
       'shv4-gj-milestones',
       'mbv2-meta', 'mbv2-cards',
       'hmv1-home', 'hmv1-challenges', 'hmv1-seen',
-      'hmv1-acc', 'hmv1-ach', 'hmv1-weekcounts', 'hmv1-funnelcounts', 'hmv1-uploadgoal', 'hmv1-funnelup'
+      'hmv1-acc', 'hmv1-ach', 'hmv1-weekcounts', 'hmv1-funnelcounts', 'hmv1-uploadgoal', 'hmv1-funnelup', 'hmv1-goalperiod', 'hmv1-uploadmanual'
     ]);
     // 이미지 키(벤치마킹 시트·무드보드) → Supabase Storage 버킷
     const IMG_BUCKET = 'cm-images';
@@ -14813,6 +15092,10 @@
   let funnelSlotCounts = {}; // { attract|convert|retain: 원하는 슬롯 수 } 기본 3, 1~5
   const UPLOAD_GOAL_KEY = 'hmv1-uploadgoal';
   let monthlyUploadGoal = 0; // 이번 달 목표 업로드 개수 (0=미설정)
+  const GOAL_PERIOD_KEY = 'hmv1-goalperiod';
+  let goalStart = '', goalDeadline = '';   // 목표 기간 (YYYY-MM-DD, 빈값=이번 달 자동)
+  const UPLOAD_MANUAL_KEY = 'hmv1-uploadmanual';
+  let manualUploadAdd = 0;                  // 직접 보정한 업로드 수 (자동 + 보정)
   const FUNNEL_UP_KEY = 'hmv1-funnelup';
   let funnelUploaded = { attract: [], convert: [], retain: [] }; // 단계별 업로드 완료된 rowId
   let funnelSlots = { attract: [], convert: [], retain: [] }; // 각 단계별 rowId 배열 (이번 주 트레이닝)
@@ -15226,6 +15509,19 @@
   }
   async function saveUploadGoal() {
     try { await window.storage.set(UPLOAD_GOAL_KEY, String(monthlyUploadGoal)); } catch (e) {}
+  }
+  async function loadGoalPeriod() {
+    try { const r = await window.storage.get(GOAL_PERIOD_KEY); if (r) { const o = JSON.parse(r.value) || {}; goalStart = o.start || ''; goalDeadline = o.deadline || ''; } } catch (e) { goalStart = ''; goalDeadline = ''; }
+  }
+  async function saveGoalPeriod() {
+    try { await window.storage.set(GOAL_PERIOD_KEY, JSON.stringify({ start: goalStart, deadline: goalDeadline })); } catch (e) {}
+  }
+  async function loadManualUpload() {
+    try { const r = await window.storage.get(UPLOAD_MANUAL_KEY); if (r) manualUploadAdd = parseInt(r.value, 10) || 0; } catch (e) { manualUploadAdd = 0; }
+    if (!(manualUploadAdd >= 0)) manualUploadAdd = 0;
+  }
+  async function saveManualUpload() {
+    try { await window.storage.set(UPLOAD_MANUAL_KEY, String(manualUploadAdd)); } catch (e) {}
   }
   async function loadFunnelUploaded() {
     try {
@@ -18947,6 +19243,8 @@
     await loadTrWeekCounts();
     await loadFunnelSlotCounts();
     await loadUploadGoal();
+    await loadGoalPeriod();
+    await loadManualUpload();
     await loadFunnelUploaded();
 
     // Restore UI states from prefs
@@ -21105,7 +21403,7 @@
         </div>
         <div class="honor-bars">
           <div class="honor-bar-row">
-            <span class="honor-bar-lbl ana">분석</span>
+            <span class="honor-bar-lbl ana">시트</span>
             <div class="honor-bar"><div class="honor-bar-fill ana" style="width:${anaPct}%"></div></div>
             <span class="honor-bar-num ana">${ana}/${ch.target}</span>
           </div>
@@ -21304,14 +21602,196 @@
       if (key === 'mission') { const li = levelInfo(); return 'Lv.' + li.level + ' ' + li.title; }
       if (key === 'today') { return todaySuggestion().txt; }
       if (key === 'insight') { const n = (rows || []).filter(isFilled).length; return n ? ('벤치마킹 ' + n + '개') : '데이터 없음'; }
-      if (key === 'week') { const t = (weekSlots || []).length, f = (weekSlots || []).filter(Boolean).length; return f + '/' + t + ' 슬롯'; }
+      if (key === 'week') { const dd = getWeekDday(); return dd.uploaded + ' 업로드 / ' + dd.slotsTotal + '칸'; }
       if (key === 'funnel') { const fs = funnelSlots || {}; const n = ((fs.attract || []).length) + ((fs.convert || []).length) + ((fs.retain || []).length); return n + '개 배치'; }
       if (key === 'challenge') { const act = (challenges || []).filter(c => { try { return challengeProgress(c) < (c.target || 0); } catch (e) { return true; } }); if (!act.length) return '진행 중 없음'; const c = act[0]; return challengeProgress(c) + '/' + (c.target || 0) + (act.length > 1 ? ' 외 ' + (act.length - 1) : ''); }
-      if (key === 'calendar') { if (!calBaseMonday) return ''; return `${calBaseMonday.getFullYear()}년 ${calBaseMonday.getMonth() + 1}월`; }
+      if (key === 'calendar') { if (!calBaseMonday) return ''; const mo = `${calBaseMonday.getMonth() + 1}월`; const g = monthlyUploadGoal || 0; return g > 0 ? `${mo} · ${_monthUploaded || 0}/${g} 업로드` : `${calBaseMonday.getFullYear()}년 ${mo}`; }
       if (key === 'stats') { const n = (rows || []).filter(r => !!(r.why || r.idea || r.script || r.url || r.hook || r.author || r.hasThumb || r.hasComment)).length; return n + '개 분석'; }
       if (key === 'goal') { return (homeData && homeData.goal) ? '설정됨' : '미설정'; }
     } catch (e) {}
     return '';
+  }
+
+  // 이번 주 D-day 계산 (헤더 칩 + 본문 배지 공용)
+  function getWeekDday() {
+    const mon = getMondayOf(new Date());
+    const ymd = dateToYMD(mon);
+    const ws = getScriptsInWeek(mon);
+    const filled = ws.length;
+    const desired = Math.min(10, Math.max(1, trWeekCounts[ymd] || 3));
+    const slotsTotal = Math.max(desired, filled);
+    const uploaded = ws.filter(s => s.uploaded).length;
+    const cleared = slotsTotal > 0 && uploaded >= slotsTotal;
+    const td = new Date(); td.setHours(0, 0, 0, 0);
+    const dow = td.getDay();
+    const daysLeft = dow === 0 ? 0 : 7 - dow;
+    const remaining = Math.max(0, slotsTotal - uploaded);
+    let level, label, sub;
+    if (cleared) { level = 'done'; label = '✓ 완료'; sub = '이번 주 끝!'; }
+    else {
+      level = daysLeft >= 4 ? 'cool' : daysLeft >= 2 ? 'warn' : 'urgent';
+      label = daysLeft === 0 ? 'D-DAY' : 'D-' + daysLeft;
+      sub = (daysLeft === 0 ? '오늘 마감!' : daysLeft === 1 ? '내일 마감' : daysLeft + '일 남음') + ' · ' + remaining + '개';
+    }
+    return { mon, ymd, filled, slotsTotal, uploaded, cleared, daysLeft, remaining, level, label, sub };
+  }
+  // 목표 기간 시작/마감 날짜 (직접 설정 우선, 없으면 이번 달)
+  function goalStartDate() {
+    const now = new Date();
+    return goalStart ? ymdToDate(goalStart) : new Date(now.getFullYear(), now.getMonth(), 1);
+  }
+  function goalDeadlineDate() {
+    const now = new Date();
+    return goalDeadline ? ymdToDate(goalDeadline) : new Date(now.getFullYear(), now.getMonth() + 1, 0);
+  }
+  // 이번 달 목표 D-day (마감일 기준)
+  function getMonthDday() {
+    const now = new Date(); now.setHours(0, 0, 0, 0);
+    const dl = goalDeadlineDate(); dl.setHours(0, 0, 0, 0);
+    const daysLeft = Math.max(0, Math.round((dl - now) / 86400000));
+    const goal = monthlyUploadGoal || 0;
+    const achieved = _monthUploaded || 0;
+    const done = goal > 0 && achieved >= goal;
+    let level, label, sub;
+    if (goal <= 0) { level = 'none'; label = ''; sub = '목표 미설정'; }
+    else if (done) { level = 'done'; label = '✓ 달성'; sub = '이번 달 완료!'; }
+    else {
+      level = daysLeft >= 10 ? 'cool' : daysLeft >= 4 ? 'warn' : 'urgent';
+      label = daysLeft === 0 ? 'D-DAY' : 'D-' + daysLeft;
+      sub = daysLeft + '일 남음 · ' + Math.max(0, goal - achieved) + '개';
+    }
+    return { daysLeft, goal, achieved, done, level, label, sub };
+  }
+  // 접혀 있어도 보이게 — 헤더에 D-day 칩 (공용)
+  function setAccDdayChip(panelKey, dd) {
+    const cont = document.getElementById('home-accordion'); if (!cont) return;
+    const head = cont.querySelector('.acc-panel[data-acc="' + panelKey + '"] .acc-head'); if (!head) return;
+    let chip = head.querySelector('.acc-dday');
+    if (dd.level === 'none') { if (chip) chip.remove(); return; }
+    if (!chip) {
+      chip = document.createElement('span');
+      chip.className = 'acc-dday';
+      head.insertBefore(chip, head.querySelector('.acc-pin'));
+    }
+    chip.className = 'acc-dday ' + dd.level;
+    chip.textContent = dd.label;
+    chip.title = dd.sub;
+  }
+  function updateWeekDdayChip() { setAccDdayChip('week', getWeekDday()); }
+  function updateCalendarDdayChip() { setAccDdayChip('calendar', getMonthDday()); }
+
+  // === 목표 · 기간 통합 모달 (미니 달력 드래그) ===
+  let _gmStart = '', _gmEnd = '', _gmMonth = null, _gmAnchor = null, _gmDragging = false, _gmBound = false;
+  function openGoalModal() {
+    const m = document.getElementById('goal-modal'); if (!m) return;
+    _gmStart = dateToYMD(goalStartDate());
+    _gmEnd = dateToYMD(goalDeadlineDate());
+    const sd = ymdToDate(_gmStart);
+    _gmMonth = new Date(sd.getFullYear(), sd.getMonth(), 1);
+    document.getElementById('period-start').value = _gmStart;
+    document.getElementById('period-deadline').value = _gmEnd;
+    document.getElementById('gm-goal').value = monthlyUploadGoal || '';
+    bindGoalModalOnce();
+    renderGmCal();
+    updateGmHint();
+    m.classList.add('show');
+  }
+  window.__openGoalModal = openGoalModal;
+  function openPeriodModal() { openGoalModal(); } // 호환
+
+  function renderGmCal() {
+    const el = document.getElementById('gm-cal'); if (!el || !_gmMonth) return;
+    const titleEl = document.getElementById('gm-cal-title');
+    if (titleEl) titleEl.textContent = `${_gmMonth.getFullYear()}년 ${_gmMonth.getMonth() + 1}월`;
+    const year = _gmMonth.getFullYear(), month = _gmMonth.getMonth();
+    const startDow = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const s = _gmStart ? ymdToDate(_gmStart) : null, e = _gmEnd ? ymdToDate(_gmEnd) : null;
+    const todayY = dateToYMD(new Date());
+    let html = '<div class="gm-dow">' + ['일', '월', '화', '수', '목', '금', '토'].map((d, i) => `<span class="${i === 0 ? 'sun' : i === 6 ? 'sat' : ''}">${d}</span>`).join('') + '</div><div class="gm-days">';
+    for (let i = 0; i < startDow; i++) html += '<span class="gm-day blank"></span>';
+    for (let d = 1; d <= daysInMonth; d++) {
+      const cd = new Date(year, month, d); const ymd = dateToYMD(cd); const dow = cd.getDay();
+      let cls = 'gm-day';
+      if (s && e) { if (cd >= s && cd <= e) cls += ' inrange'; if (ymd === dateToYMD(s)) cls += ' rstart'; if (ymd === dateToYMD(e)) cls += ' rend'; }
+      else if (s && ymd === dateToYMD(s)) cls += ' inrange rstart rend';
+      if (ymd === todayY) cls += ' today';
+      if (dow === 0) cls += ' sun'; else if (dow === 6) cls += ' sat';
+      if (HOLIDAYS_KR.has(ymd)) cls += ' sun';
+      html += `<span class="${cls}" data-ymd="${ymd}">${d}</span>`;
+    }
+    html += '</div>';
+    el.innerHTML = html;
+  }
+  function gmSetRange(a, b) {
+    const A = ymdToDate(a), B = ymdToDate(b);
+    if (A <= B) { _gmStart = a; _gmEnd = b; } else { _gmStart = b; _gmEnd = a; }
+    document.getElementById('period-start').value = _gmStart;
+    document.getElementById('period-deadline').value = _gmEnd;
+    renderGmCal();
+    updateGmHint();
+  }
+  function updateGmHint() {
+    const el = document.getElementById('gm-range'); if (el) {
+      const sd = ymdToDate(_gmStart), ed = ymdToDate(_gmEnd);
+      const days = Math.round((ed - sd) / 86400000) + 1;
+      el.innerHTML = `📅 <b>${sd.getMonth() + 1}/${sd.getDate()}</b> ~ <b>${ed.getMonth() + 1}/${ed.getDate()}</b> · ${days}일`;
+    }
+    const hint = document.getElementById('gm-hint');
+    if (hint) {
+      const g = parseInt((document.getElementById('gm-goal') || {}).value || '0', 10) || 0;
+      const sd = ymdToDate(_gmStart), ed = ymdToDate(_gmEnd);
+      const days = Math.round((ed - sd) / 86400000) + 1;
+      const wk = Math.max(1, Math.ceil(days / 7));
+      const per = Math.min(10, Math.max(1, Math.ceil(g / wk)));
+      hint.innerHTML = g > 0 ? `목표 <b>${g}개</b> → 기간 <b>${wk}주</b>에 주당 약 <b>${per}개</b>씩 담겨요` : '목표 개수를 적으면 기간에 맞춰 자동으로 나눠져요';
+    }
+  }
+  function bindGoalModalOnce() {
+    if (_gmBound) return; _gmBound = true;
+    const cal = document.getElementById('gm-cal');
+    const dayFromPoint = (x, y) => { const t = document.elementFromPoint(x, y); return t && t.classList.contains('gm-day') && !t.classList.contains('blank') ? t.dataset.ymd : null; };
+    if (cal) {
+      cal.addEventListener('pointerdown', (ev) => {
+        const t = ev.target.closest('.gm-day'); if (!t || t.classList.contains('blank')) return;
+        ev.preventDefault();
+        _gmAnchor = t.dataset.ymd; _gmDragging = true;
+        gmSetRange(_gmAnchor, _gmAnchor);
+      });
+      document.addEventListener('pointermove', (ev) => {
+        if (!_gmDragging) return;
+        const y = dayFromPoint(ev.clientX, ev.clientY);
+        if (y) gmSetRange(_gmAnchor, y);
+      });
+      document.addEventListener('pointerup', () => { _gmDragging = false; });
+    }
+    const prev = document.getElementById('gm-prev'); if (prev) prev.onclick = () => { _gmMonth = new Date(_gmMonth.getFullYear(), _gmMonth.getMonth() - 1, 1); renderGmCal(); };
+    const next = document.getElementById('gm-next'); if (next) next.onclick = () => { _gmMonth = new Date(_gmMonth.getFullYear(), _gmMonth.getMonth() + 1, 1); renderGmCal(); };
+    const gi = document.getElementById('gm-goal'); if (gi) gi.oninput = updateGmHint;
+  }
+  // 기간과 겹치는 주차들의 ymd (4주 뷰 기준)
+  function goalPeriodWeekYmds() {
+    if (!calBaseMonday) return [];
+    const ps = goalStartDate(); ps.setHours(0, 0, 0, 0);
+    const pd = goalDeadlineDate(); pd.setHours(0, 0, 0, 0);
+    const out = [];
+    for (let i = 0; i < 4; i++) {
+      const mon = addDays(calBaseMonday, i * 7); mon.setHours(0, 0, 0, 0);
+      const wend = addDays(mon, 6); wend.setHours(23, 59, 59, 0);
+      if (mon <= pd && wend >= ps) out.push(dateToYMD(mon));
+    }
+    return out.length ? out : [dateToYMD(calBaseMonday)];
+  }
+  // 목표 개수 → 기간에 걸친 주차에만 평균 분배 (슬롯 수, 최대 10)
+  async function distributeGoalToWeeks(goal) {
+    if (!calBaseMonday) return;
+    const inPeriod = goalPeriodWeekYmds();
+    const per = Math.min(10, Math.max(1, Math.ceil(goal / inPeriod.length)));
+    for (let i = 0; i < 4; i++) {
+      const ymd = dateToYMD(addDays(calBaseMonday, i * 7));
+      trWeekCounts[ymd] = inPeriod.includes(ymd) ? per : 1; // 기간 밖 주차는 최소화
+    }
+    await saveTrWeekCounts();
   }
   function applyAccordionState() {
     const cont = document.getElementById('home-accordion'); if (!cont) return;
@@ -21372,6 +21852,8 @@
   function refreshAccordionSummaries() {
     const cont = document.getElementById('home-accordion'); if (!cont) return;
     ACC_SECTIONS.forEach(def => { const el = cont.querySelector('.acc-panel[data-acc="' + def.key + '"] .acc-sum'); if (el) el.textContent = accSummary(def.key); });
+    updateWeekDdayChip();
+    updateCalendarDdayChip();
     updateWeekNudge();
   }
   // 이번 주 슬롯 = 살아있는 넛지. 안 채우면 패널이 은은히 주황으로 맥동(채워야 할 느낌),
@@ -22085,7 +22567,7 @@
       const isCurrent = ymd === dateToYMD(todayMonday);
       const done = weekScripts.filter(s => s.state === 'done' || s.state === 'uploaded').length;
       const filled = weekScripts.length;
-      const desired = Math.min(5, Math.max(1, trWeekCounts[ymd] || 3));
+      const desired = Math.min(10, Math.max(1, trWeekCounts[ymd] || 3));
       const slotsTotal = Math.max(desired, filled);
       const emptyCount = Math.max(0, slotsTotal - filled);
       const uploaded = weekScripts.filter(s => s.uploaded).length;
@@ -22128,45 +22610,20 @@
     for (const c of calc) { if (c.cleared) streak++; else break; }
     const totUploaded = calc.reduce((a, c) => a + c.uploaded, 0);
 
-    // 이번 달 목표 업로드 배너
-    _monthUploaded = totUploaded;
-    _monthGoalReached = monthlyUploadGoal > 0 && totUploaded >= monthlyUploadGoal;
-    let campaignHtml;
-    if (!monthlyUploadGoal || monthlyUploadGoal <= 0) {
-      campaignHtml = `
-        <div class="tr-goal setup">
-          <div class="tr-goal-setup-text">🎯 이번 달 <b>인스타 목표 업로드 개수</b>를 정해보세요</div>
-          <div class="tr-goal-setup-row">
-            <input type="number" min="1" max="99" id="tr-goal-input" class="tr-goal-input" placeholder="예: 12" />
-            <button class="tr-goal-set-btn" id="tr-goal-set">목표 설정</button>
-          </div>
-        </div>`;
-    } else {
-      const gpct = Math.min(100, Math.round(totUploaded / monthlyUploadGoal * 100));
-      const reached = totUploaded >= monthlyUploadGoal;
-      const left = Math.max(0, monthlyUploadGoal - totUploaded);
-      campaignHtml = `
-        <div class="tr-goal ${reached ? 'done' : ''}">
-          <div class="tr-campaign-top">
-            <div class="tr-campaign-title">${reached ? '🏆 이번 달 목표 달성!' : '🎯 이번 달 목표 업로드'}</div>
-            <div class="tr-campaign-meta">
-              ${streak > 0 ? `<span class="tr-streak">🔥 ${streak}주 연속</span>` : ''}
-              <span class="tr-campaign-count">${totUploaded} / ${monthlyUploadGoal} 업로드</span>
-              <button class="tr-goal-edit" id="tr-goal-edit" title="목표 수정">✎</button>
-            </div>
-          </div>
-          <div class="tr-campaign-bar"><div class="tr-campaign-bar-fill" style="width:${gpct}%"></div></div>
-          <div class="tr-goal-sub">${reached ? '이번 달 목표를 다 채웠어요. 최고예요! 🎉' : `목표까지 <b>${left}개</b> — 실제로 올린 콘텐츠는 카드의 <b>“업로드 완료”</b>를 눌러 확정해요.`}</div>
-        </div>`;
-    }
+    // 이번 달 목표 업로드 배너 (달성 = 카드 업로드 자동 집계)
+    const achieved = totUploaded;
+    _monthUploaded = achieved;
+    _monthGoalReached = monthlyUploadGoal > 0 && achieved >= monthlyUploadGoal;
+    // 이번 달 목표 배너는 제거 (목표·기간 정보는 상단 "목표·기간 설정" 버튼 + 캘린더 헤더 칩에 있음)
+    const campaignHtml = '';
 
     const rowsHtml = calc.map(c => {
       const upPct = c.slotsTotal > 0 ? Math.round(c.uploaded / c.slotsTotal * 100) : 0;
       const planPct = c.slotsTotal > 0 ? Math.round(c.filled / c.slotsTotal * 100) : 0;
-      const counterShow = Math.min(c.slotsTotal, 5);
+      const counterShow = Math.min(c.slotsTotal, 10);
       const dotCls = c.cleared ? 'cleared' : (c.isCurrent ? 'current' : '');
       return `
-        <div class="tr-week-row ${c.isCurrent ? 'current' : ''} ${c.cleared ? 'cleared' : ''}">
+        <div class="tr-week-row ${c.isCurrent ? 'current' : ''} ${c.cleared ? 'cleared' : ''}" data-week-ymd="${c.ymd}">
           <div class="tr-week-stage">
             <div class="tr-stage-dot ${dotCls}">${c.cleared ? '✓' : (c.i + 1)}</div>
             ${c.i < 3 ? '<div class="tr-stage-line"></div>' : ''}
@@ -22180,12 +22637,12 @@
             </div>
           </div>
           <div class="tr-week-row-cards-wrap">
-            <div class="tr-week-row-cards">${c.filledHtml}${c.emptyHtml}</div>
+            <div class="tr-week-row-cards" style="grid-template-columns:repeat(${Math.min(c.slotsTotal, 5)},1fr)">${c.filledHtml}${c.emptyHtml}</div>
           </div>
           <div class="ws-slot-controls tr-week-controls-mini">
             <button class="ws-slot-btn" data-trweek-minus="${c.ymd}" ${c.desired <= 1 ? 'disabled' : ''} title="슬롯 줄이기">−</button>
-            <div class="ws-slot-counter">${counterShow} / 5</div>
-            <button class="ws-slot-btn" data-trweek-plus="${c.ymd}" ${c.desired >= 5 ? 'disabled' : ''} title="슬롯 늘리기">+</button>
+            <div class="ws-slot-counter">${counterShow} / 10</div>
+            <button class="ws-slot-btn" data-trweek-plus="${c.ymd}" ${c.desired >= 10 ? 'disabled' : ''} title="슬롯 늘리기">+</button>
           </div>
         </div>`;
     }).join('');
@@ -22199,13 +22656,15 @@
 
     listEl.innerHTML = campaignHtml + '<div class="tr-cal-board">' + dowRuler + rowsHtml + '</div>';
 
-    // 카드 클릭 → 분석 요약 모달
+    // 카드 클릭 → 분석 요약 모달 (단, 드래그였으면 무시)
     listEl.querySelectorAll('.tr-mini-card').forEach(card => {
       card.onclick = () => {
-        const id = card.dataset.scriptId;
-        openTrSummaryModal(id);
+        if (_cardDragMoved) { _cardDragMoved = false; return; }
+        openTrSummaryModal(card.dataset.scriptId);
       };
     });
+    // 카드 꾹 눌러 다른 주차로 드래그 이동 (1회 바인딩)
+    initCardWeekDrag(listEl);
     // 빈 슬롯 클릭
     listEl.querySelectorAll('[data-tr-add-slot]').forEach(slot => {
       slot.onclick = () => openTrAddModal(slot.dataset.trAddSlot);
@@ -22215,7 +22674,7 @@
       btn.onclick = async (e) => {
         e.stopPropagation();
         const ymd = btn.dataset.trweekMinus;
-        const cur = Math.min(5, Math.max(1, trWeekCounts[ymd] || 3));
+        const cur = Math.min(10, Math.max(1, trWeekCounts[ymd] || 3));
         trWeekCounts[ymd] = Math.max(1, cur - 1);
         await saveTrWeekCounts();
         renderTrWeeksList();
@@ -22225,8 +22684,8 @@
       btn.onclick = async (e) => {
         e.stopPropagation();
         const ymd = btn.dataset.trweekPlus;
-        const cur = Math.min(5, Math.max(1, trWeekCounts[ymd] || 3));
-        trWeekCounts[ymd] = Math.min(5, cur + 1);
+        const cur = Math.min(10, Math.max(1, trWeekCounts[ymd] || 3));
+        trWeekCounts[ymd] = Math.min(10, cur + 1);
         await saveTrWeekCounts();
         renderTrWeeksList();
       };
@@ -22235,31 +22694,13 @@
     listEl.querySelectorAll('[data-up-script]').forEach(btn => {
       btn.onclick = (e) => { e.stopPropagation(); toggleScriptUploaded(btn.dataset.upScript); };
     });
-    // 목표 설정
-    const goalSet = document.getElementById('tr-goal-set');
-    if (goalSet) goalSet.onclick = async () => {
-      const inp = document.getElementById('tr-goal-input');
-      const v = Math.max(1, Math.min(99, parseInt((inp && inp.value) || '0', 10) || 0));
-      if (!v) { if (inp) inp.focus(); toast('숫자를 입력해주세요'); return; }
-      monthlyUploadGoal = v;
-      await saveUploadGoal();
-      renderTrWeeksList();
-      toast(`🎯 이번 달 목표: ${v}개 업로드!`);
-    };
-    const goalInput = document.getElementById('tr-goal-input');
-    if (goalInput) goalInput.onkeydown = (e) => { if (e.key === 'Enter') { e.preventDefault(); const b = document.getElementById('tr-goal-set'); if (b) b.click(); } };
-    // 목표 수정
-    const goalEdit = document.getElementById('tr-goal-edit');
-    if (goalEdit) goalEdit.onclick = async () => {
-      const cur = monthlyUploadGoal;
-      const ans = prompt('이번 달 목표 업로드 개수 (1~99, 0=해제)', String(cur));
-      if (ans === null) return;
-      const v = Math.max(0, Math.min(99, parseInt(ans, 10) || 0));
-      monthlyUploadGoal = v;
-      await saveUploadGoal();
-      renderTrWeeksList();
-      toast(v > 0 ? `🎯 목표 ${v}개로 변경` : '목표 해제됨');
-    };
+    // 목표 · 기간 통합 설정 버튼
+    const goalSettings = document.getElementById('tr-goal-settings');
+    if (goalSettings) goalSettings.onclick = openGoalModal;
+
+    // 캘린더 헤더 칩 + 요약 갱신 (목표 · 달성 · 월 D-day)
+    updateCalendarDdayChip();
+    { const c = document.getElementById('home-accordion'); const el = c && c.querySelector('.acc-panel[data-acc="calendar"] .acc-sum'); if (el) el.textContent = accSummary('calendar'); }
   }
 
   // 업로드 완료 토글 (실제 인스타 업로드 확정 — 월 목표 집계)
@@ -22310,6 +22751,79 @@
     try { renderStatsMini(); } catch (e) {}
   }
 
+  // === 카드 꾹 눌러 다른 주차로 드래그 이동 (캘린더 주차 리스트 한정) ===
+  let _cardDragMoved = false, _cardDragBound = false;
+  function initCardWeekDrag(listEl) {
+    if (_cardDragBound || !listEl) return; _cardDragBound = true;
+    listEl.addEventListener('pointerdown', (ev) => {
+      const card = ev.target.closest('.tr-mini-card[data-script-id]');
+      if (!card || ev.target.closest('.tr-up-btn')) return;
+      _cardDragMoved = false;
+      const id = card.dataset.scriptId;
+      const sx = ev.clientX, sy = ev.clientY;
+      let started = false, ghost = null;
+      const timer = setTimeout(start, 100);
+      function start() {
+        started = true; _cardDragMoved = true;
+        card.classList.add('dragging');
+        ghost = card.cloneNode(true);
+        ghost.classList.remove('dragging', 'uploaded', 'just-uploaded');
+        ghost.classList.add('tr-card-ghost');
+        // 핵심 위치/표시를 인라인으로 강제 (클래스 우선순위 충돌 방지)
+        ghost.style.cssText = 'position:fixed;z-index:6000;pointer-events:none;margin:0;width:' + card.offsetWidth + 'px;opacity:0.8;';
+        document.body.appendChild(ghost);
+        place(sx, sy);
+        if (navigator.vibrate) navigator.vibrate(12);
+      }
+      function place(x, y) { if (ghost) { ghost.style.left = x + 'px'; ghost.style.top = y + 'px'; } }
+      function onMove(e) {
+        if (!started) {
+          if (Math.abs(e.clientX - sx) > 9 || Math.abs(e.clientY - sy) > 9) { clearTimeout(timer); finish(false); }
+          return;
+        }
+        e.preventDefault();
+        place(e.clientX, e.clientY);
+        const el = document.elementFromPoint(e.clientX, e.clientY);
+        const row = el && el.closest('.tr-week-row');
+        listEl.querySelectorAll('.tr-week-row.drop-target').forEach(r => r.classList.remove('drop-target'));
+        if (row && row.dataset.weekYmd) row.classList.add('drop-target');
+      }
+      async function onUp(e) {
+        clearTimeout(timer);
+        document.removeEventListener('pointermove', onMove);
+        document.removeEventListener('pointerup', onUp);
+        if (started) {
+          const el = document.elementFromPoint(e.clientX, e.clientY);
+          const row = el && el.closest('.tr-week-row');
+          const target = row ? row.dataset.weekYmd : null;
+          finish(true);
+          if (target) await moveScriptToWeek(id, target);
+        } else finish(false);
+      }
+      function finish(wasDrag) {
+        card.classList.remove('dragging');
+        if (ghost) { ghost.remove(); ghost = null; }
+        listEl.querySelectorAll('.tr-week-row.drop-target').forEach(r => r.classList.remove('drop-target'));
+        if (!wasDrag) _cardDragMoved = false;
+      }
+      document.addEventListener('pointermove', onMove);
+      document.addEventListener('pointerup', onUp);
+    });
+  }
+  async function moveScriptToWeek(id, targetWeekYmd) {
+    const s = scripts.find(x => x.id === id); if (!s) return;
+    const origDate = ymdToDate(s.targetDate) || new Date();
+    if (dateToYMD(getMondayOf(origDate)) === targetWeekYmd) return; // 같은 주면 무시
+    const offset = Math.max(0, Math.min(6, Math.round((origDate - getMondayOf(origDate)) / 86400000)));
+    const newDate = addDays(ymdToDate(targetWeekYmd), offset);
+    s.targetDate = dateToYMD(newDate);
+    s.updatedAt = Date.now();
+    await saveScripts();
+    await renderTrWeeksList();
+    try { renderWeekSlots(); } catch (e) {}
+    toast('카드를 옮겼어요 →');
+  }
+
   // === 4주 미니 캘린더 ===
   function renderTrCalendar() {
     if (!calBaseMonday) return;
@@ -22328,6 +22842,9 @@
       } else {
         titleEl.innerHTML = `<span class="cal-mo">${firstYear}.${firstMonth + 1}</span><span class="cal-mo-sub"> – ${lastWeek.getFullYear()}.${lastWeek.getMonth() + 1}</span>`;
       }
+      titleEl.style.cursor = 'pointer';
+      titleEl.title = '클릭 → 목표 기간 설정';
+      titleEl.onclick = openPeriodModal;
     }
     const weeksEl = document.getElementById('tr-cal-weeks');
     if (!weeksEl) return; // 4주 요약 칩 줄은 제거됨
@@ -22854,6 +23371,31 @@
     if (oldAddBtn) oldAddBtn.onclick = () => openTrAddModal();
 
     document.getElementById('tr-add-modal-close').onclick = closeTrAddModal;
+
+    // 목표·기간 통합 모달 저장/리셋
+    const pSave = document.getElementById('period-save');
+    if (pSave) pSave.onclick = async () => {
+      const s = document.getElementById('period-start').value, d = document.getElementById('period-deadline').value;
+      const g = Math.max(0, Math.min(99, parseInt(document.getElementById('gm-goal').value || '0', 10) || 0));
+      if (s && d && ymdToDate(d) < ymdToDate(s)) { toast('마감일이 시작일보다 빨라요'); return; }
+      if (!g) { toast('목표 개수를 적어주세요'); document.getElementById('gm-goal').focus(); return; }
+      goalStart = s; goalDeadline = d; monthlyUploadGoal = g;
+      await saveGoalPeriod(); await saveUploadGoal();
+      await distributeGoalToWeeks(g);
+      const m = document.getElementById('goal-modal'); if (m) m.classList.remove('show');
+      renderTrWeeksList();
+      toast(`🎯 목표 ${g}개 · 4주에 분배 완료!`);
+    };
+    const pReset = document.getElementById('period-reset');
+    if (pReset) pReset.onclick = () => {
+      const now = new Date();
+      _gmStart = dateToYMD(new Date(now.getFullYear(), now.getMonth(), 1));
+      _gmEnd = dateToYMD(new Date(now.getFullYear(), now.getMonth() + 1, 0));
+      _gmMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+      document.getElementById('period-start').value = _gmStart;
+      document.getElementById('period-deadline').value = _gmEnd;
+      renderGmCal(); updateGmHint();
+    };
     document.getElementById('tr-add-modal').onclick = (e) => {
       if (e.target.id === 'tr-add-modal') closeTrAddModal();
     };
@@ -23165,7 +23707,7 @@
 
           <div class="ch-gauges">
             <div class="ch-gauge-row">
-              <div class="ch-gauge-label ana"><span class="ch-gauge-dotmark ana"></span>분석</div>
+              <div class="ch-gauge-label ana"><span class="ch-gauge-dotmark ana"></span>시트 채우기</div>
               <div class="ch-gauge-bar"><div class="ch-gauge-fill ana" style="width:${anaPct}%"></div></div>
               <div class="ch-gauge-num ana">${ana}<span class="total">/${ch.target}</span></div>
             </div>
@@ -23179,14 +23721,14 @@
           <div class="ch-dots ${cols}">${dots}</div>
 
           <div class="ch-legend">
-            <div class="ch-legend-item"><span class="ch-legend-swatch ana"></span>분석</div>
+            <div class="ch-legend-item"><span class="ch-legend-swatch ana"></span>시트 채우기</div>
             <div class="ch-legend-item"><span class="ch-legend-swatch upl"></span>업로드</div>
             <div class="ch-legend-item"><span class="ch-legend-swatch both"></span>둘 다</div>
             <div class="ch-legend-item" style="margin-left:auto;color:var(--text-mute);">점 클릭 → 업로드 토글</div>
           </div>
 
           <div class="ch-bottom">
-            <div class="ch-progress-text">${anaPct}% <span class="total">분석</span> · <span style="color:var(--neon);">${uplPct}%</span> <span class="total">업로드</span></div>
+            <div class="ch-progress-text">${anaPct}% <span class="total">시트</span> · <span style="color:var(--neon);">${uplPct}%</span> <span class="total">업로드</span></div>
             <div class="ch-actions">
               <button class="ch-act-btn" data-act="goto" data-id="${ch.id}">시트로</button>
               <button class="ch-act-btn del" data-act="del" data-id="${ch.id}">삭제</button>
@@ -24648,7 +25190,7 @@
 
     const weekScripts = getScriptsInWeek(mon);
     const filled = weekScripts.length;
-    const desired = Math.min(5, Math.max(1, trWeekCounts[ymd] || 3));
+    const desired = Math.min(10, Math.max(1, trWeekCounts[ymd] || 3));
     const slotsTotal = Math.max(desired, filled);
     const emptyCount = Math.max(0, slotsTotal - filled);
     const uploaded = weekScripts.filter(s => s.uploaded).length;
@@ -24687,6 +25229,7 @@
         </div>`;
     }
     wrap.innerHTML = html;
+    wrap.style.gridTemplateColumns = `repeat(${Math.min(slotsTotal, 5)},1fr)`; // 한 줄 최대 5개, 넘으면 두 줄
 
     // 카드 클릭 → 요약 모달 / 빈 슬롯 → 이번 주에 추가
     wrap.querySelectorAll('.ws-slot.filled').forEach(c => {
@@ -24698,11 +25241,11 @@
 
     // 카운터 (현재 주 trWeekCounts 공유)
     const counter = document.getElementById('ws-slot-counter');
-    if (counter) counter.textContent = `${Math.min(slotsTotal, 5)} / 5`;
+    if (counter) counter.textContent = `${Math.min(slotsTotal, 10)} / 10`;
     const minus = document.getElementById('ws-slot-minus');
     const plus = document.getElementById('ws-slot-plus');
     if (minus) minus.disabled = desired <= 1;
-    if (plus) plus.disabled = desired >= 5;
+    if (plus) plus.disabled = desired >= 10;
 
     // 진행바 (업로드 중심)
     const upPct = slotsTotal > 0 ? Math.round(uploaded / slotsTotal * 100) : 0;
@@ -24716,13 +25259,23 @@
     if (barText) barText.innerHTML = cleared ? `🏆 ${uploaded}/${slotsTotal} 이번 주 올업로드!` : `<span class="up">${uploaded} 업로드</span> / ${slotsTotal}칸${filled > uploaded ? ` · ${filled} 채움` : ''}`;
     const block = wrap.closest('.tr-week-block');
     if (block) block.classList.toggle('cleared', cleared);
+
+    // === D-day: 이번 주 마감(일요일)까지 + 다급함 단계 (본문 배지) ===
+    const ddayEl = document.getElementById('ws-dday');
+    if (ddayEl) {
+      const dd = getWeekDday();
+      ddayEl.className = 'ws-dday ' + dd.level;
+      ddayEl.innerHTML = `<span class="ws-dday-d">${dd.label}</span><span class="ws-dday-sub">${dd.sub}</span>`;
+    }
+    // 헤더 칩도 동기화 (접혀 있어도 보이게)
+    updateWeekDdayChip();
   }
 
   // 이번 주 슬롯 수 −/+ (현재 주 trWeekCounts 조정 — 4주 캘린더와 공유)
   async function wsCurrentWeekCount(delta) {
     const ymd = dateToYMD(getMondayOf(new Date()));
-    const cur = Math.min(5, Math.max(1, trWeekCounts[ymd] || 3));
-    trWeekCounts[ymd] = Math.min(5, Math.max(1, cur + delta));
+    const cur = Math.min(10, Math.max(1, trWeekCounts[ymd] || 3));
+    trWeekCounts[ymd] = Math.min(10, Math.max(1, cur + delta));
     await saveTrWeekCounts();
     renderWeekSlots();
     try { renderTrWeeksList(); } catch (e) {}
