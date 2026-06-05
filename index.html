@@ -11292,6 +11292,25 @@
   .idea-card.memo-only { aspect-ratio: auto; min-height: 70px; }
   .cl-collect { padding: 9px; border-radius: 8px; border: none; background: var(--emerald); color: #06140C; font-family: 'Pretendard', sans-serif; font-size: 12.5px; font-weight: 800; cursor: pointer; transition: filter .15s; }
   .cl-collect:hover { filter: brightness(1.08); }
+  /* 수식어 문구 입력란 */
+  .cl-text { width: 100%; box-sizing: border-box; background: var(--bg-input); border: 1px solid var(--line); border-radius: 8px; padding: 9px 10px; color: var(--text-main); font-family: 'Pretendard', sans-serif; font-size: 12.5px; }
+  .cl-text:focus { outline: none; border-color: var(--emerald-line); }
+  .cl-text::placeholder { color: var(--text-faint); }
+  /* 썸네일 탭 · 수식어 검색창 */
+  .tb-search-wrap { position: relative; margin: 12px auto 0; max-width: 460px; }
+  .tb-search { width: 100%; box-sizing: border-box; background: var(--bg-input); border: 1px solid var(--emerald-line); border-radius: 99px; padding: 10px 38px 10px 16px; color: var(--text-main); font-family: 'Pretendard', sans-serif; font-size: 13px; }
+  .tb-search:focus { outline: none; border-color: var(--emerald); box-shadow: 0 0 0 3px rgba(46,204,113,.12); }
+  .tb-search::placeholder { color: var(--text-faint); }
+  .tb-search-clear { position: absolute; right: 6px; top: 50%; transform: translateY(-50%); width: 26px; height: 26px; border-radius: 50%; border: none; background: var(--bg-card); color: var(--text-mute); font-size: 15px; cursor: pointer; line-height: 1; }
+  .tb-search-clear:hover { color: var(--text-main); }
+  /* 수식어 텍스트 카드 (문구만 모은 것) */
+  .tg-copytext { font-size: 13px; font-weight: 700; color: var(--text-main); line-height: 1.45; text-align: left; padding: 12px 12px 4px; word-break: break-word; }
+  .tg-copytext.mid { font-size: 12px; font-weight: 700; color: var(--text-main); padding: 8px 10px 2px; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  .tg-copytext.small { font-size: 11.5px; font-weight: 600; color: var(--text-sub); padding: 6px 9px 2px; }
+  .collect-card.copy-text-only { aspect-ratio: auto; min-height: 64px; display: flex; flex-direction: column; justify-content: center; background: linear-gradient(180deg, rgba(46,204,113,.06), rgba(46,204,113,.02)); }
+  /* 사진 + 문구 함께 — 카드 높이 자동, 사진은 9:16 유지 */
+  .collect-card.copy-with-img { aspect-ratio: auto; display: flex; flex-direction: column; }
+  .collect-card.copy-with-img .tg-thumb { aspect-ratio: 9 / 16; width: 100%; }
   .cl-edit { padding: 6px; border-radius: 7px; border: 1px solid var(--line); background: var(--bg-input); color: var(--text-sub); font-family: 'Pretendard', sans-serif; font-size: 11px; font-weight: 700; cursor: pointer; }
   .cl-edit:hover { border-color: var(--emerald-line); color: var(--emerald); }
   /* 사진 편집기 */
@@ -13163,6 +13182,26 @@
     font-size: 11px;
     color: var(--text-mute);
   }
+  .admin-item-usage {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 11px;
+    color: var(--emerald);
+    margin-top: 4px;
+    font-weight: 700;
+  }
+  /* 전체 창고 사용량 요약 */
+  .admin-usage-summary { margin: 4px 0 12px; }
+  .ausum-row { display: flex; gap: 10px; }
+  .ausum-cell { flex: 1; background: var(--bg-card); border: 1px solid var(--line); border-radius: 12px; padding: 11px 13px; }
+  .ausum-lab { font-size: 11px; color: var(--text-mute); font-weight: 700; }
+  .ausum-val { font-size: 14px; color: var(--text-main); font-weight: 800; margin: 3px 0 7px; }
+  .ausum-val .ausum-q { font-size: 10.5px; color: var(--text-faint); font-weight: 600; }
+  .ausum-bar { height: 7px; border-radius: 99px; background: var(--bg-input); overflow: hidden; }
+  .ausum-fill { height: 100%; border-radius: 99px; background: var(--emerald); transition: width .4s; }
+  .ausum-fill.hot { background: #FF5B5B; }
+  .ausum-pct { font-size: 10px; color: var(--text-faint); text-align: right; margin-top: 3px; font-family: 'JetBrains Mono', monospace; }
+  .ausum-note { font-size: 10.5px; color: var(--text-faint); margin-top: 8px; line-height: 1.5; }
+  @media (max-width: 520px) { .ausum-row { flex-direction: column; } }
   .admin-item-dates .lab {
     font-family: 'JetBrains Mono', monospace;
     font-size: 9.5px;
@@ -13464,6 +13503,7 @@
         <h2 class="admin-section-title">수강생 목록</h2>
         <div class="admin-list-count" id="admin-list-count">전체 0명</div>
       </div>
+      <div class="admin-usage-summary" id="admin-usage-summary"></div>
       <div class="admin-filters">
         <button class="admin-filter-btn on" data-filter="all">전체</button>
         <button class="admin-filter-btn" data-filter="active">사용중</button>
@@ -14028,8 +14068,9 @@
             </div>
             <div class="cl-sec" data-q="copy">
               <div class="cl-sec-title">💬 수식어</div>
-              <div class="cl-img" id="cl-img-copy"><div class="cl-img-empty"><span>+</span>이미지 드래그·클릭</div><img class="cl-img-el" id="cl-imgel-copy" alt="" style="display:none;" /><button class="cl-img-rm" data-q="copy" type="button" style="display:none;">×</button></div>
+              <div class="cl-img" id="cl-img-copy"><div class="cl-img-empty"><span>+</span>이미지 (선택)<br/>드래그·클릭</div><img class="cl-img-el" id="cl-imgel-copy" alt="" style="display:none;" /><button class="cl-img-rm" data-q="copy" type="button" style="display:none;">×</button></div>
               <button class="cl-edit" data-q="copy" type="button" style="display:none;">✏️ 형광펜·빨간펜 편집</button>
+              <input type="text" class="cl-text" data-q="copy" id="cl-text-copy" placeholder="수식어 문구 입력 (예: 이거 모르면 손해)" maxlength="80" />
               <div class="cl-types" data-q="copy"></div>
               <button class="cl-collect" data-q="copy" type="button">⚡ 수식어 수집</button>
             </div>
@@ -14423,6 +14464,10 @@
           <button class="tb-toggle-btn" data-tbmode="comment">댓글</button>
           <button class="tb-toggle-btn" data-tbmode="idea">💡 아이디어</button>
           <button class="tb-toggle-btn" data-tbmode="audio">오디오</button>
+        </div>
+        <div class="tb-search-wrap" id="tb-copy-search-wrap" style="display:none;">
+          <input type="text" class="tb-search" id="tb-copy-search" placeholder="🔍 수식어 검색 — 문구·유형으로 빠르게 찾기" />
+          <button class="tb-search-clear" id="tb-copy-search-clear" type="button" title="지우기">×</button>
         </div>
       </section>
       <div class="tb-body" id="tb-body"></div>
@@ -16682,6 +16727,9 @@
   }
   function renderThumbBoard() {
     const el = document.getElementById('tb-body'); if (!el) return;
+    // 수식어 검색창은 '수식어' 모드에서만 표시
+    const _searchWrap = document.getElementById('tb-copy-search-wrap');
+    if (_searchWrap) _searchWrap.style.display = (thumbMode === 'copy') ? '' : 'none';
     if (thumbMode === 'audio') {
       const audioRows = rows.filter(r => isFilled(r) && (r.audioType || r.audioTitle || r.audioLink));
       const groups = activeAudio().concat(['__none__']);
@@ -16776,8 +16824,23 @@
       });
       el.querySelectorAll('.tg-collect-del').forEach(b => { b.onclick = (e) => { e.stopPropagation(); deleteCollect(b.dataset.cdel); }; });
     }
-    // 빠른 수집 카드 (⚡ 표시 + 출처 + 삭제)
-    function collectCard(c) { return '<div class="tg-card collect-card" data-collect="' + c.id + '"><div class="tg-thumb" data-cimg="' + c.id + '"></div><div class="tg-cap"><span class="tg-quick-badge">⚡ 수집</span>' + (c.link ? ' <a class="tg-collect-link" href="' + esc(c.link) + '" target="_blank" rel="noopener">↗ 출처</a>' : '') + '</div><button class="tg-collect-del" data-cdel="' + c.id + '" title="삭제">×</button></div>'; }
+    // 빠른 수집 카드 (⚡ 표시 + 출처 + 삭제). 수식어는 문구·사진을 함께 표시.
+    function collectCard(c) {
+      const del = '<button class="tg-collect-del" data-cdel="' + c.id + '" title="삭제">×</button>';
+      const link = c.link ? ' <a class="tg-collect-link" href="' + esc(c.link) + '" target="_blank" rel="noopener">↗ 출처</a>' : '';
+      const badge = c.text ? '⚡ 수식어' : '⚡ 수집';
+      const hasImg = c.hasImg !== false; // 구버전 collect는 이미지 있음(undefined)
+      // ① 문구만 — 텍스트 카드
+      if (c.text && !hasImg) {
+        return '<div class="tg-card collect-card copy-text-only" data-collect="' + c.id + '"><div class="tg-copytext">“' + esc(c.text) + '”</div><div class="tg-cap"><span class="tg-quick-badge">' + badge + '</span>' + link + '</div>' + del + '</div>';
+      }
+      // ② 사진 + 문구 — 사진 위, 문구 아래 함께
+      if (c.text && hasImg) {
+        return '<div class="tg-card collect-card copy-with-img" data-collect="' + c.id + '"><div class="tg-thumb" data-cimg="' + c.id + '"></div><div class="tg-copytext mid">“' + esc(c.text) + '”</div><div class="tg-cap"><span class="tg-quick-badge">' + badge + '</span>' + link + '</div>' + del + '</div>';
+      }
+      // ③ 사진만 (기존)
+      return '<div class="tg-card collect-card" data-collect="' + c.id + '"><div class="tg-thumb" data-cimg="' + c.id + '"></div><div class="tg-cap"><span class="tg-quick-badge">' + badge + '</span>' + link + '</div>' + del + '</div>';
+    }
     // 바이럴(떡상) 모드 — 터진 이유(viralTypes)별로 컨텐츠를 핀터레스트처럼 묶어서 패턴 비교
     if (thumbMode === 'viral') {
       const vRows = rows.filter(r => isFilled(r) && (r.viralTypes || []).length);
@@ -16822,17 +16885,24 @@
     }
     const types = activeKeywords();
     const ckind = thumbMode; // 'thumb' | 'copy'
+    // 수식어 모드 전용 검색 — 단어 단위로 "두루" 매칭(한 단어라도 들어가면 노출)
+    const qWords = (thumbMode === 'copy' ? (_tbCopySearch || '').trim().toLowerCase().split(/\s+/).filter(Boolean) : []);
+    const matchAny = hay => !qWords.length || qWords.some(w => hay.indexOf(w) !== -1);
+    const matchCol = c => matchAny(((c.text || '') + ' ' + (c.type || '')).toLowerCase());
+    const matchRow = r => matchAny(((r.hook || '') + ' ' + stripHtml(r.script || '') + ' ' + (r.why || '') + ' ' + (r.copyTypes || []).join(' ')).toLowerCase());
     let html = '';
     types.forEach(t => {
-      const list = strongRows.filter(r => (r[typesKey] || []).includes(t));
-      const colList = collects.filter(c => c.kind === ckind && c.type === t);
+      const list = strongRows.filter(r => (r[typesKey] || []).includes(t)).filter(matchRow);
+      const colList = collects.filter(c => c.kind === ckind && c.type === t).filter(matchCol);
       if (!list.length && !colList.length) return;
       html += '<div class="tb-sec"><div class="tb-sec-head">' + esc(t) + ' <span class="tb-sec-cnt">' + (list.length + colList.length) + '</span></div><div class="tg-grid">' + colList.map(collectCard).join('') + list.map(renderCard).join('') + '</div></div>';
     });
-    const noneList = strongRows.filter(r => !((r[typesKey] || []).length));
-    const noneCol = collects.filter(c => c.kind === ckind && !c.type);
+    const noneList = strongRows.filter(r => !((r[typesKey] || []).length)).filter(matchRow);
+    const noneCol = collects.filter(c => c.kind === ckind && !c.type).filter(matchCol);
     if (noneList.length || noneCol.length) html += '<div class="tb-sec"><div class="tb-sec-head">유형 미지정 <span class="tb-sec-cnt">' + (noneList.length + noneCol.length) + '</span></div><div class="tg-grid">' + noneCol.map(collectCard).join('') + noneList.map(renderCard).join('') + '</div></div>';
-    el.innerHTML = html || ('<div class="tb-empty">아직 ' + (thumbMode === 'thumb' ? '썸네일' : '수식어') + '이 없어요.<br/>⚡ 소재 수집으로 좋은 소재를 모아보세요.</div>');
+    el.innerHTML = html || (qWords.length
+      ? '<div class="tb-empty">“' + esc(_tbCopySearch) + '” 검색 결과가 없어요.</div>'
+      : ('<div class="tb-empty">아직 ' + (thumbMode === 'thumb' ? '썸네일' : '수식어') + '이 없어요.<br/>⚡ 소재 수집으로 좋은 소재를 모아보세요.</div>'));
     el.querySelectorAll('.tg-card[data-row]').forEach(c => { c.onclick = () => openDetail(c.dataset.row); });
     loadCardImgs();
     bindTbToggle();
@@ -20338,8 +20408,10 @@
   let _clImg = { thumb: null, copy: null, comment: null, idea: null };
   let _clType = { thumb: '', copy: '', comment: '' };
   let _clMemo = { idea: '' };
+  let _clText = { copy: '' }; // 수식어(카피) 문구 텍스트 입력
   let _clAddOpen = { thumb: false, copy: false, comment: false };
   let _clInited = false;
+  let _tbCopySearch = ''; // 썸네일 탭 · 수식어 모드 전용 검색어
   function _clActive(q) { return q === 'comment' ? activeComment() : activeKeywords(); }
   function renderCollectSection(q) {
     // 이미지 미리보기
@@ -20368,6 +20440,9 @@
     // 아이디어 메모란 동기화 (타이핑 중 커서 안 튀게 값이 다를 때만)
     const memoEl = document.querySelector('.cl-memo[data-q="' + q + '"]');
     if (memoEl && (_clMemo[q] || '') !== memoEl.value) memoEl.value = _clMemo[q] || '';
+    // 수식어 문구 입력란 동기화
+    const textEl = document.querySelector('.cl-text[data-q="' + q + '"]');
+    if (textEl && (_clText[q] || '') !== textEl.value) textEl.value = _clText[q] || '';
   }
   function renderCollectModal() { ['thumb', 'copy', 'comment', 'idea'].forEach(renderCollectSection); }
   function initCollectModalUI() {
@@ -20376,7 +20451,14 @@
       // 이미지 드롭/클릭/붙여넣기
       const box = document.getElementById('cl-img-' + q);
       const fileInput = document.createElement('input'); fileInput.type = 'file'; fileInput.accept = 'image/*'; fileInput.style.display = 'none'; document.body.appendChild(fileInput);
-      const handle = (file) => { if (!file || !file.type.startsWith('image/')) return; const rd = new FileReader(); rd.onload = e => { _clImg[q] = e.target.result; renderCollectSection(q); }; rd.readAsDataURL(file); };
+      const handle = async (file) => {
+        if (!file || !file.type.startsWith('image/')) return;
+        // 자동 압축: 글자 있는 수식어·댓글은 또렷하게 900px, 썸네일·아이디어는 720px
+        const maxDim = (q === 'copy' || q === 'comment') ? 900 : 720;
+        try { _clImg[q] = await resizeImage(file, maxDim); }
+        catch (e) { const rd = new FileReader(); rd.onload = ev => { _clImg[q] = ev.target.result; renderCollectSection(q); }; rd.readAsDataURL(file); return; }
+        renderCollectSection(q);
+      };
       box.addEventListener('click', (e) => { if (e.target.closest('.cl-img-rm')) return; fileInput.click(); });
       const rmBtn = box.querySelector('.cl-img-rm');
       if (rmBtn) rmBtn.onclick = (e) => { e.stopPropagation(); _clImg[q] = null; renderCollectSection(q); };
@@ -20401,6 +20483,12 @@
       // 아이디어 메모란 입력
       const memoEl = sec.querySelector('.cl-memo');
       if (memoEl) memoEl.addEventListener('input', () => { _clMemo[q] = memoEl.value; });
+      // 수식어 문구 입력
+      const textEl = sec.querySelector('.cl-text');
+      if (textEl) {
+        textEl.addEventListener('input', () => { _clText[q] = textEl.value; });
+        textEl.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); doCollect(q); } });
+      }
       // 수집 버튼
       const btn = sec.querySelector('.cl-collect');
       if (btn) btn.onclick = () => doCollect(q);
@@ -20433,6 +20521,7 @@
     _clImg = { thumb: entryState.thumbDataUrl || null, copy: null, comment: entryState.commDataUrl || null, idea: null };
     _clType = { thumb: '', copy: '', comment: '' };
     _clMemo = { idea: '' };
+    _clText = { copy: '' };
     _clAddOpen = { thumb: false, copy: false, comment: false };
     renderCollectModal();
     const _cm = document.getElementById('collect-modal');
@@ -20447,6 +20536,19 @@
     document.addEventListener('click', function (e) {
       const t = e.target && e.target.closest && e.target.closest('#collect-open-btn');
       if (t) { e.preventDefault(); try { openCollectModal(); } catch (err) { console.error('openCollectModal 실패', err); } }
+    });
+  }
+  // 수식어 검색창 입력/지우기 (썸네일 탭 · 영구 요소라 위임)
+  if (!window.__tbSearchDelegated) {
+    window.__tbSearchDelegated = true;
+    document.addEventListener('input', function (e) {
+      if (e.target && e.target.id === 'tb-copy-search') { _tbCopySearch = e.target.value; try { renderThumbBoard(); } catch (err) {} }
+    });
+    document.addEventListener('click', function (e) {
+      if (e.target && e.target.id === 'tb-copy-search-clear') {
+        _tbCopySearch = ''; const inp = document.getElementById('tb-copy-search'); if (inp) inp.value = '';
+        try { renderThumbBoard(); } catch (err) {} if (inp) inp.focus();
+      }
     });
   }
   async function doCollect(q) {
@@ -20464,16 +20566,24 @@
       try { renderThumbBoard(); } catch (e) {}
       return;
     }
-    if (!_clImg[q]) { toast('이미지를 먼저 넣어주세요'); return; }
-    if (!_clType[q]) { toast('유형을 먼저 골라주세요'); return; }
+    // 수식어(copy): 문구 텍스트만으로도 수집 가능 (사진 선택). 그 외(썸네일·댓글)는 이미지 필수.
+    const copyText = q === 'copy' ? (_clText[q] || '').trim() : '';
+    if (q === 'copy') {
+      if (!_clImg[q] && !copyText) { toast('수식어 문구나 이미지를 넣어주세요'); return; }
+      if (!_clType[q]) { toast('유형을 먼저 골라주세요'); return; }
+    } else {
+      if (!_clImg[q]) { toast('이미지를 먼저 넣어주세요'); return; }
+      if (!_clType[q]) { toast('유형을 먼저 골라주세요'); return; }
+    }
     const id = 'col_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7);
-    const c = { id: id, kind: q, type: _clType[q], link: '', createdAt: Date.now() };
-    try { await saveImage(id, 'c', _clImg[q]); } catch (e) {}
+    const hasImg = !!_clImg[q];
+    const c = { id: id, kind: q, type: _clType[q], text: copyText, hasImg: hasImg, link: '', createdAt: Date.now() };
+    if (hasImg) { try { await saveImage(id, 'c', _clImg[q]); } catch (e) {} }
     collects.push(c); await saveCollects();
     const label = q === 'thumb' ? '썸네일' : q === 'copy' ? '수식어' : '댓글';
-    toast('⚡ ' + label + ' "' + c.type + '" 수집함에 저장!');
+    toast('⚡ ' + label + ' "' + (copyText || c.type) + '" 수집함에 저장!');
     // 같은 칸 초기화(연속 수집 편하게)
-    _clImg[q] = null; _clType[q] = '';
+    _clImg[q] = null; _clType[q] = ''; if (q === 'copy') _clText[q] = '';
     renderCollectSection(q);
     try { renderThumbBoard(); } catch (e) {}
   }
@@ -20611,20 +20721,21 @@
       fileInput.style.display = 'none';
       document.body.appendChild(fileInput);
 
-      const handleFile = (file) => {
+      const applyDataUrl = (dataUrl) => {
+        imgEl.src = dataUrl;
+        imgEl.style.display = '';
+        rmEl.style.display = '';
+        box.classList.add('has-img');
+        box.querySelector('.entry-thumb-empty').style.display = 'none';
+        const sk = { thumb: 'thumbDataUrl', copy: 'copyDataUrl', comm: 'commDataUrl' }[kind] || 'commDataUrl';
+        entryState[sk] = dataUrl;
+      };
+      const handleFile = async (file) => {
         if (!file || !file.type.startsWith('image/')) return;
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          const dataUrl = e.target.result;
-          imgEl.src = dataUrl;
-          imgEl.style.display = '';
-          rmEl.style.display = '';
-          box.classList.add('has-img');
-          box.querySelector('.entry-thumb-empty').style.display = 'none';
-          const sk = { thumb: 'thumbDataUrl', copy: 'copyDataUrl', comm: 'commDataUrl' }[kind] || 'commDataUrl';
-          entryState[sk] = dataUrl;
-        };
-        reader.readAsDataURL(file);
+        // 자동 압축: 글자 있는 공감댓글은 또렷하게 900px, 썸네일은 720px
+        const maxDim = (kind === 'comm' || kind === 'copy') ? 900 : 720;
+        try { applyDataUrl(await resizeImage(file, maxDim)); }
+        catch (e) { const reader = new FileReader(); reader.onload = ev => applyDataUrl(ev.target.result); reader.readAsDataURL(file); }
       };
 
       box.addEventListener('click', (e) => {
@@ -26532,6 +26643,21 @@
     _adminUsers = (res && res.ok && Array.isArray(res.users)) ? res.users : [];
     return _adminUsers;
   }
+  // 사용자별 용량(글자 DB + 사진 Storage) — step4-usage.sql 적용 후 동작. 미적용이면 조용히 빈값.
+  let _adminUsage = {};
+  async function loadAdminUsage() {
+    try {
+      const res = await cmRpc('cm_admin_usage', { p_admin_pw: _adminPw });
+      _adminUsage = (res && res.ok && res.usage && typeof res.usage === 'object') ? res.usage : {};
+    } catch (e) { _adminUsage = {}; }
+  }
+  function fmtBytes(n) {
+    n = n || 0;
+    if (n < 1024) return n + ' B';
+    if (n < 1048576) return (n / 1024).toFixed(n < 10240 ? 1 : 0) + ' KB';
+    if (n < 1073741824) return (n / 1048576).toFixed(n < 10485760 ? 1 : 0) + ' MB';
+    return (n / 1073741824).toFixed(2) + ' GB';
+  }
   // 데이터 RPC 인증용 전역 (code + pinHash) 동기화
   function syncCmAuth() {
     window.__cmAuth = (_currentUser && _currentUser.code && _currentUser.pinHash)
@@ -26769,7 +26895,14 @@
       if (goBtn) goBtn.classList.remove('loading');
       if (!res || !res.ok) {
         const reason = res && res.reason;
-        if (reason === 'badpin') errEl.textContent = '비밀번호가 틀려요.';
+        if (reason === 'badpin') {
+          const left = (res && typeof res.attemptsLeft === 'number') ? res.attemptsLeft : null;
+          errEl.textContent = (left !== null && left > 0 && left <= 3) ? ('비밀번호가 틀려요. (' + left + '번 더 틀리면 잠겨요)') : '비밀번호가 틀려요.';
+        }
+        else if (reason === 'locked') {
+          const mins = (res && res.retryMs) ? Math.max(1, Math.ceil(res.retryMs / 60000)) : 5;
+          errEl.textContent = '시도가 너무 많아요. 약 ' + mins + '분 후 다시 시도해주세요. 🔒';
+        }
         else if (reason === 'expired') errEl.textContent = '만료된 코드예요. 운영자에게 문의해주세요.';
         else if (reason === 'nosignup') errEl.textContent = '아직 가입되지 않은 코드예요.';
         else if (reason === 'notfound') errEl.textContent = '코드를 찾을 수 없어요.';
@@ -27351,6 +27484,7 @@
     const el = document.getElementById('admin-list');
     if (el) el.innerHTML = '<div class="admin-empty">불러오는 중…</div>';
     await loadAdminUsers();
+    await loadAdminUsage();
     renderAdminList();
   }
 
@@ -27366,6 +27500,37 @@
     const total = _adminUsers.length;
     const active = _adminUsers.filter(c => !isCodeExpired(c)).length;
     if (countEl) countEl.textContent = `전체 ${total}명 · 사용중 ${active}명`;
+
+    // === 전체 창고 사용량 요약 (무료 한도 대략: DB 500MB · 사진 1GB) ===
+    const sumEl = document.getElementById('admin-usage-summary');
+    if (sumEl) {
+      const keys = Object.keys(_adminUsage || {});
+      if (!keys.length) {
+        sumEl.innerHTML = '<div class="ausum-note">용량 표시를 켜려면 <b>supabase/step4-usage.sql</b>을 한 번 실행하세요. (실행 후 새로고침)</div>';
+      } else {
+        let tDb = 0, tImg = 0, tN = 0;
+        keys.forEach(k => { const u = _adminUsage[k] || {}; tDb += (u.db || 0); tImg += (u.img || 0); tN += (u.imgN || 0); });
+        const DBQ = 500 * 1048576, IMGQ = 1073741824;
+        const dbPct = Math.min(100, Math.round(tDb / DBQ * 100));
+        const imgPct = Math.min(100, Math.round(tImg / IMGQ * 100));
+        sumEl.innerHTML =
+          '<div class="ausum-row">' +
+            '<div class="ausum-cell">' +
+              '<div class="ausum-lab">📓 글자(DB)</div>' +
+              '<div class="ausum-val">' + fmtBytes(tDb) + ' <span class="ausum-q">/ ~500MB</span></div>' +
+              '<div class="ausum-bar"><div class="ausum-fill' + (dbPct > 80 ? ' hot' : '') + '" style="width:' + dbPct + '%"></div></div>' +
+              '<div class="ausum-pct">' + dbPct + '%</div>' +
+            '</div>' +
+            '<div class="ausum-cell">' +
+              '<div class="ausum-lab">📸 사진(Storage)</div>' +
+              '<div class="ausum-val">' + fmtBytes(tImg) + ' · ' + tN + '장 <span class="ausum-q">/ ~1GB</span></div>' +
+              '<div class="ausum-bar"><div class="ausum-fill' + (imgPct > 80 ? ' hot' : '') + '" style="width:' + imgPct + '%"></div></div>' +
+              '<div class="ausum-pct">' + imgPct + '%</div>' +
+            '</div>' +
+          '</div>' +
+          '<div class="ausum-note">무료 한도(대략) 기준 · 전체 사용자 합계 추정치. 정확한 값은 Supabase 대시보드 → Settings → Usage</div>';
+      }
+    }
 
     if (items.length === 0) {
       el.innerHTML = '<div class="admin-empty">해당하는 코드가 없어요.</div>';
@@ -27396,6 +27561,7 @@
               <span class="lab">시작</span><span class="val">${startStr}</span> &nbsp;→&nbsp;
               <span class="lab">만료</span><span class="val">${endStr}</span>
             </div>
+            ${(() => { const us = _adminUsage[c.code]; if (!us) return ''; return `<div class="admin-item-usage">📓 ${fmtBytes(us.db)} &nbsp;·&nbsp; 📸 ${us.imgN || 0}장${us.img ? ' (' + fmtBytes(us.img) + ')' : ''}</div>`; })()}
           </div>
           <div>
             <div class="admin-item-dleft ${dleftCls}">${dleftText}</div>
