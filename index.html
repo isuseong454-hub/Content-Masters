@@ -5297,6 +5297,18 @@
   .gf-row.reward:focus-within { border-left-color: #F5C84B; }
   .gf-row.reward .gf-q { color: #EFC85C; }
   .gf-row.reward .gf-input { color: #FFE6A8; }
+  /* 셀프이미지(정체성) 설명 + 강조 */
+  .gf-help { font-family: 'Pretendard', sans-serif; font-size: 12.5px; color: var(--text-mute); line-height: 1.6; margin: -2px 0 10px; }
+  .gf-help b { color: var(--emerald); font-weight: 800; }
+  .gf-row.identity { border-left-color: rgba(46,204,113,0.35); }
+  .gf-row.identity:focus-within { border-left-color: var(--emerald); }
+  .gf-row.identity .gf-q { color: var(--emerald); }
+  /* 🔥 가슴 뜨겁게 하는 문장 (선택) */
+  .gf-row.fire { border-left-color: rgba(255,110,50,0.4); }
+  .gf-row.fire:focus-within { border-left-color: #FF7A3C; }
+  .gf-row.fire .gf-q { color: #FFAE7A; }
+  .gf-row.fire .gf-input { color: #FFD2B5; }
+  .gf-opt { font-family: 'Pretendard', sans-serif; font-size: 10.5px; font-weight: 700; color: var(--text-faint); background: var(--bg-input); border: 1px solid var(--line); border-radius: 99px; padding: 2px 8px; margin-left: 6px; vertical-align: middle; white-space: nowrap; }
 
   /* 이번 주 뒤처질 때 "안 하면?" 찔러주기 */
   .ws-pain-nudge {
@@ -5388,6 +5400,17 @@
   }
   .home-start-btn:hover { background: var(--neon); box-shadow: 0 0 32px var(--neon-glow), 0 4px 20px rgba(0, 230, 118, 0.4); }
   .home-start-btn:active { transform: scale(0.97); }
+  /* CTA 버튼 그룹: 핵심(원클릭) + 직접설정(보조) */
+  .home-cta-btns { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .home-start-btn.ghost {
+    background: transparent;
+    color: var(--text-sub);
+    border: 1px solid var(--line);
+    box-shadow: none;
+    font-weight: 700;
+    padding: 13px 16px;
+  }
+  .home-start-btn.ghost:hover { background: rgba(255,255,255,0.04); color: var(--text-main); border-color: var(--text-faint); box-shadow: none; }
 
   /* Active challenges list */
   .ch-list { display: flex; flex-direction: column; gap: 14px; }
@@ -5467,6 +5490,75 @@
   .ch-dday.warn { color: var(--text-main); border-color: var(--text-main); background: rgba(255,255,255,0.05); }
   .ch-dday.over { color: var(--wine); border-color: var(--wine); background: var(--wine-soft); }
   .ch-dday.done { color: var(--cream); border-color: var(--cream); background: var(--cream-soft); }
+
+  /* === 챌린지 게임화: 등급 / 스트릭 / 스테이지 / CTA === */
+  .ch-hero {
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+    margin-bottom: 14px; padding-bottom: 14px;
+    border-bottom: 1px dashed var(--line);
+  }
+  .ch-rank {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 5px 11px; border-radius: 999px;
+    background: var(--bg-elev); border: 1px solid var(--line);
+  }
+  .ch-rank-emoji { font-size: 19px; line-height: 1; }
+  .ch-rank-name { font-size: 12px; font-weight: 800; color: var(--text-main); letter-spacing: -0.01em; }
+  .ch-streak {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 5px 10px; border-radius: 999px;
+    font-size: 11.5px; font-weight: 800; color: #FFB454;
+    background: rgba(255, 140, 40, 0.12); border: 1px solid rgba(255, 140, 40, 0.4);
+  }
+  .ch-mment {
+    flex: 1 1 100%; margin-top: 2px;
+    font-size: 12.5px; line-height: 1.5; color: var(--sage); font-weight: 600;
+  }
+
+  /* 5단계 시즌 패스 */
+  .ch-stages {
+    display: grid; grid-template-columns: repeat(5, 1fr); gap: 0;
+    margin: 16px 0 6px; position: relative;
+  }
+  .ch-stages::before {
+    content: ''; position: absolute; top: 15px; left: 10%; right: 10%;
+    height: 2px; background: var(--line); z-index: 0;
+  }
+  .ch-stage {
+    display: flex; flex-direction: column; align-items: center; gap: 5px;
+    position: relative; z-index: 1; text-align: center;
+  }
+  .ch-stage-node {
+    width: 30px; height: 30px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; font-size: 14px;
+    background: var(--bg-elev); border: 2px solid var(--line);
+    filter: grayscale(1) opacity(0.55); transition: all 0.3s;
+  }
+  .ch-stage.done .ch-stage-node {
+    background: var(--neon); border-color: var(--neon);
+    box-shadow: 0 0 12px var(--neon-glow); filter: none;
+    animation: dotPop 0.4s cubic-bezier(0.2, 1.5, 0.3, 1);
+  }
+  .ch-stage-title { font-size: 9px; color: var(--text-mute); line-height: 1.2; }
+  .ch-stage.done .ch-stage-title { color: var(--text-main); font-weight: 700; }
+  .ch-stage-need { font-family: 'JetBrains Mono', monospace; font-size: 8.5px; color: var(--text-faint); }
+
+  /* 다음 한 칸 CTA */
+  .ch-cta-row { margin: 14px 0 4px; }
+  .ch-cta-btn {
+    width: 100%; padding: 13px; border-radius: 10px; cursor: pointer;
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 14px; font-weight: 800; letter-spacing: -0.01em;
+    color: #06140C; background: linear-gradient(120deg, var(--emerald), var(--neon));
+    border: none; box-shadow: 0 0 16px var(--neon-glow);
+    transition: transform 0.15s, filter 0.15s;
+  }
+  .ch-cta-btn:hover { filter: brightness(1.08); transform: translateY(-1px); }
+  .ch-cta-btn:active { transform: translateY(0); }
+  .ch-cta-btn.done {
+    background: var(--cream-soft); color: var(--cream);
+    border: 1.5px solid var(--cream); box-shadow: none; cursor: default;
+  }
 
   /* Progress visualization - 100 dots */
   .ch-dots {
@@ -5745,12 +5837,23 @@
 
   .ch-empty {
     text-align: center;
-    padding: 40px 20px;
+    padding: 32px 20px;
     color: var(--text-mute);
     font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
-    
     font-size: 14px;
+    border: 1px dashed var(--line);
+    border-radius: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
   }
+  .ch-empty-title { font-size: 15px; font-weight: 800; color: var(--text-main); }
+  .ch-empty-sub { font-size: 12.5px; color: var(--text-sub); line-height: 1.55; max-width: 360px; }
+  .ch-empty-sub b { color: var(--emerald); }
+  .ch-empty-btn { margin-top: 8px; }
+  .ch-empty-custom { background: none; border: none; color: var(--text-faint); font-size: 12px; cursor: pointer; text-decoration: underline; font-family: inherit; padding: 4px; }
+  .ch-empty-custom:hover { color: var(--text-mute); }
 
   /* STATS mini-cards on home */
   @media (max-width: 720px) {
@@ -6284,6 +6387,14 @@
     line-height: 1.55;
     margin: 0 0 12px;
   }
+  /* 자동 백업 리마인더 상태 */
+  .backup-status { margin-top: 12px; font-family: 'Pretendard', sans-serif; font-size: 12px; line-height: 1.5; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--line); }
+  .backup-status:empty { display: none; }
+  .backup-status b { font-weight: 800; }
+  .backup-status.ok { color: var(--text-sub); background: var(--emerald-faint); border-color: var(--emerald-line); }
+  .backup-status.ok b { color: var(--emerald); }
+  .backup-status.warn { color: #FFD9A0; background: rgba(255,150,60,0.08); border-color: rgba(255,150,60,0.35); }
+  .backup-status.warn b { color: #FFB44D; }
   /* 유형 관리 / 휴지통 */
   .tm-toggle { width: 100%; display: flex; align-items: center; justify-content: space-between; background: var(--bg-card); border: 1px solid var(--line); border-radius: 10px; padding: 11px 13px; font-family: 'Pretendard', sans-serif; font-size: 13px; font-weight: 700; color: var(--text-sub); cursor: pointer; margin-bottom: 12px; }
   .tm-toggle:hover { border-color: var(--emerald-line); }
@@ -13202,6 +13313,12 @@
   .ausum-pct { font-size: 10px; color: var(--text-faint); text-align: right; margin-top: 3px; font-family: 'JetBrains Mono', monospace; }
   .ausum-note { font-size: 10.5px; color: var(--text-faint); margin-top: 8px; line-height: 1.5; }
   @media (max-width: 520px) { .ausum-row { flex-direction: column; } }
+  /* 플랜 한도 선택 */
+  .ausum-plan { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+  .ausum-plan-lab { font-size: 11px; color: var(--text-mute); font-weight: 700; }
+  #admin-plan-select { background: var(--bg-input); color: var(--text-main); border: 1px solid var(--emerald-line); border-radius: 8px; padding: 6px 10px; font-family: 'Pretendard', sans-serif; font-size: 12px; cursor: pointer; }
+  .ausum-plan-custom { font-size: 11.5px; color: var(--text-mute); display: flex; align-items: center; gap: 5px; }
+  .ausum-plan-custom input { width: 64px; background: var(--bg-input); color: var(--text-main); border: 1px solid var(--line); border-radius: 6px; padding: 5px 7px; font-size: 12px; }
   .admin-item-dates .lab {
     font-family: 'JetBrains Mono', monospace;
     font-size: 9.5px;
@@ -14004,6 +14121,7 @@
                   원고만 내보내기
                 </button>
               </div>
+              <div class="backup-status" id="backup-status"></div>
             </div>
 
             <!-- 가져오기 -->
@@ -14113,12 +14231,20 @@
             <div class="home-sec-label em">목표 / Why</div>
             <div class="home-why-hint">흔들릴 때 다시 보기 위해 — 짧게, 솔직하게 적어두세요.</div>
             <div class="goal-fields">
-              <div class="gf-row"><div class="gf-q">인생에서 이루고 싶은 건 뭔가요?</div><textarea class="gf-input" id="gf-vision" rows="2" placeholder="예: 내 이름을 건 브랜드, 경제적 자유, 인정받는 전문가…"></textarea></div>
-              <div class="gf-row"><div class="gf-q">그걸 위해 6개월 안에 꼭 이룰 건?</div><textarea class="gf-input" id="gf-sixmonth" rows="2" placeholder="예: 팔로워 1만, 첫 매출 목표, 콘텐츠 100개…"></textarea></div>
-              <div class="gf-row"><div class="gf-q">왜 이뤄야 하나요?</div><textarea class="gf-input" id="gf-why" rows="2" placeholder="마음 깊은 진짜 이유를 적어보세요"></textarea></div>
-              <div class="gf-row pain"><div class="gf-q">못 이루면 어떤 기분일까요?</div><textarea class="gf-input" id="gf-pain" rows="2" placeholder="솔직하게 — 흔들릴 때 이 문장이 붙잡아줘요"></textarea></div>
-              <div class="gf-row reward"><div class="gf-q">이루면 삶이 어떻게 달라질까요?</div><textarea class="gf-input" id="gf-reward" rows="2" placeholder="생생하게 그려보세요"></textarea></div>
-              <div class="gf-row"><div class="gf-q">어떤 사람이 되고 싶나요?</div><textarea class="gf-input" id="gf-identity" rows="1" placeholder="나는 ___ 하는 사람이다"></textarea></div>
+              <!-- 1) 인생에서 이루고 싶은 것 (큰 그림) -->
+              <div class="gf-row"><div class="gf-q">내가 <b>인생에서</b> 진짜 이루고 싶은 건? <span class="gf-opt">큰 그림</span></div><textarea class="gf-input" id="gf-vision" rows="2" placeholder="예: 내 이름을 건 브랜드, 경제적 자유, 인정받는 전문가…"></textarea></div>
+              <!-- 2) 6개월 목표 -->
+              <div class="gf-row"><div class="gf-q">그걸 위해 <b>6개월 안에</b> 꼭 이루고 싶은 건?</div><textarea class="gf-input" id="gf-sixmonth" rows="2" placeholder="예: 팔로워 1만, 첫 매출, 콘텐츠 100개…"></textarea></div>
+              <!-- 3) 왜 '콘텐츠'가 중요한가 -->
+              <div class="gf-row"><div class="gf-q">내 목표·가치에서 — 왜 <b>'콘텐츠'</b>가 중요한가요?</div><textarea class="gf-input" id="gf-why" rows="2" placeholder="예: 사람을 모으고, 신뢰를 쌓고, 결국 매출·기회로 이어지니까…"></textarea></div>
+              <!-- 4) 콘텐츠를 잘 모르고 살면 (pain) -->
+              <div class="gf-row pain"><div class="gf-q"><b>콘텐츠를 잘 모르고</b> 산다면, 어떤 삶이 만들어질까요?</div><textarea class="gf-input" id="gf-pain" rows="2" placeholder="솔직하게 — 흔들릴 때 이 문장이 붙잡아줘요"></textarea></div>
+              <!-- 5) 콘텐츠를 배우고 잘 활용하면 (reward) -->
+              <div class="gf-row reward"><div class="gf-q"><b>콘텐츠를 배우고 잘 활용</b>한다면, 어떤 삶이 만들어질까요?</div><textarea class="gf-input" id="gf-reward" rows="2" placeholder="생생하게 그려보세요"></textarea></div>
+              <!-- 6) 셀프이미지 / 정체성 -->
+              <div class="gf-row identity"><div class="gf-q">🪞 셀프이미지 — 나는 어떤 사람인가</div><div class="gf-help">자기 기준을 낮추지 않고 <b>높게 유지하는 사람</b>이 결국 성공해요. <b>되고 싶은 내가 이미 됐다고</b> 생각하고, 그 정체성을 적어보세요.</div><textarea class="gf-input" id="gf-identity" rows="2" placeholder="나는 ___ 한 사람이다 (예: 나는 꾸준히 콘텐츠로 사람을 모으는 크리에이터다)"></textarea></div>
+              <!-- 7) 가슴 뜨겁게 하는 문장 (선택) -->
+              <div class="gf-row fire"><div class="gf-q">🔥 목표를 위해, 나의 가슴을 가장 뜨겁게 만드는 문장은? <span class="gf-opt">선택</span></div><textarea class="gf-input" id="gf-fire" rows="2" placeholder="예: 실행하면 상위 10%다 · 나는 이미 시작했다…"></textarea></div>
             </div>
             <button class="gf-save-btn" id="gf-save">💾 목표 저장하기</button>
 
@@ -14127,10 +14253,12 @@
 
             <div class="home-cta">
               <div class="home-cta-text">
-                <div class="big">새로운 챌린지를 시작할 준비됐어요?</div>
-                <div class="small">동시에 여러 챌린지를 굴려도 괜찮아요.</div>
+                <div class="big">압도적으로 성장하는 크리에이터의 핵심 🔥</div>
+                <div class="small">이미 성공해 <b>증명된 구조를 벤치마킹</b>해서 콘텐츠를 만든다 — 그게 전부예요.</div>
               </div>
-              <button class="home-start-btn" id="home-start-ch">▶ 벤치마킹 챌린지 시작</button>
+              <div class="home-cta-btns">
+                <button class="home-start-btn primary" id="home-start-100">🔥 벤치마킹 챌린지 100 시작</button>
+              </div>
             </div>
 
             <div class="home-daily" id="home-daily" style="display:none;">
@@ -14893,24 +15021,23 @@
   <div class="cw-overlay" id="cw-overlay">
     <div class="cw-box">
       <div class="cw-step-mark">CHALLENGE · BENCHMARK 100</div>
-      <h2 class="cw-title">새로운 <span class="em">챌린지</span> 시작</h2>
+      <h2 class="cw-title"><span class="em">벤치마킹 챌린지 100</span> 설정</h2>
 
       <div class="cw-intro">
-        <strong>벤치마킹 챌린지</strong>는 한 화면에 모든 진행을 펼쳐놓는 게임입니다.
-        예시: 50만 뷰 이상 영상 100개를 벤치마킹하면 그 중 30개를 콘텐츠로 만들 수 있어요.
-        주 3개씩이면 약 100일 챌린지. 끝나면 한 발짝 다가가 있을 거예요.
+        잘 된 콘텐츠 <strong>100개를 분석(시트 채우기)</strong>하는 건 <strong>고정</strong>이에요.
+        그중 <strong>몇 개를 콘텐츠로 만들어 업로드</strong>할지만 정하면 돼요. (예: 주 3개씩 30개)
       </div>
 
       <div class="cw-field">
         <label class="cw-label">챌린지 이름</label>
-        <input type="text" class="cw-input" id="cw-name" placeholder="예: 50만 뷰 100개 분석" />
+        <input type="text" class="cw-input" id="cw-name" placeholder="벤치마킹 챌린지 100" />
       </div>
 
       <div class="cw-field">
-        <label class="cw-label">목표 개수</label>
+        <label class="cw-label">📤 업로드 목표 <span style="font-weight:500;color:var(--text-mute);font-size:11px;">— 분석(시트 채우기)은 100개 고정</span></label>
         <div class="cw-preset">
-          <button class="cw-preset-btn" data-target="30">30</button>
-          <button class="cw-preset-btn active" data-target="60">60</button>
+          <button class="cw-preset-btn active" data-target="30">30</button>
+          <button class="cw-preset-btn" data-target="60">60</button>
           <button class="cw-preset-btn" data-target="100">100</button>
           <input type="number" class="cw-preset-custom" id="cw-target-custom" placeholder="직접 입력" min="1" max="999" />
         </div>
@@ -15148,6 +15275,9 @@
   // ============================================================
   const SUPABASE_URL = 'https://azmayrzdzdeftrjzcycf.supabase.co';
   const SUPABASE_KEY = 'sb_publishable_U8UKG1E4bimFMLkZVCYlVw_8IQXZcC4';
+  // 사진(이미지) 저장을 R2로 보내는 Cloudflare Worker 주소.
+  // 비워두면(''): 지금처럼 Supabase Storage 사용(무위험). Worker 배포 후 그 URL을 넣으면 R2로 전환.
+  const R2_WORKER_URL = '';
   try {
     if (window.supabase && typeof window.supabase.createClient === 'function') {
       window.sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -15203,6 +15333,17 @@
     async function dataUrlToBlob(durl) { const r = await fetch(durl); return r.blob(); }
     function blobToDataUrl(blob) { return new Promise((res, rej) => { const fr = new FileReader(); fr.onload = () => res(fr.result); fr.onerror = rej; fr.readAsDataURL(blob); }); }
     function imgPath(k) { return window.__cmAuth.code + '/' + k; }
+
+    // ── R2 Worker 브리지 (이미지) ── R2_WORKER_URL이 있을 때만 켜짐
+    const R2_ON = typeof R2_WORKER_URL === 'string' && R2_WORKER_URL.length > 0;
+    async function r2Call(op, k, dataUrl) {
+      const a = window.__cmAuth;
+      return fetch(R2_WORKER_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ op: op, key: k, code: a.code, pinHash: a.pinHash, data: dataUrl })
+      });
+    }
 
     // ── profiles 묶음 메모리 캐시 + 디바운스 저장 ──
     let _bag = null, _bagLoading = null, _bagKeyFor = null, _flushTimer = null;
@@ -15267,6 +15408,13 @@
           catch (e) { return local.get(k); }
         }
         if (authReady() && isImage(k)) {
+          if (R2_ON) {
+            try {
+              const res = await r2Call('get', k);
+              if (res.ok) { const j = await res.json(); if (j && j.found && j.value) return { key: k, value: j.value }; }
+              // 404/실패 → 아래 Supabase 레거시 읽기로 폴백
+            } catch (e) { /* 네트워크 오류 → Supabase 폴백 */ }
+          }
           try {
             const { data, error } = await window.sb.storage.from(IMG_BUCKET).download(imgPath(k));
             if (error || !data) return local.get(k);
@@ -15292,6 +15440,14 @@
           return { key: k, value: v };
         }
         if (authReady() && isImage(k) && typeof v === 'string' && v.indexOf('data:') === 0) {
+          if (R2_ON) {
+            try {
+              const res = await r2Call('put', k, v);
+              if (res.ok) return { key: k, value: v };
+              console.error('[R2] 이미지 저장 실패(' + k + ') status=' + res.status);
+              return local.set(k, v);
+            } catch (e) { console.error('[R2] 이미지 저장 예외(' + k + ')', e); return local.set(k, v); }
+          }
           try {
             const blob = await dataUrlToBlob(v);
             const ct = (v.match(/^data:([^;]+)/) || [])[1] || 'image/png';
@@ -15316,6 +15472,7 @@
           return { key: k, deleted: true };
         }
         if (authReady() && isImage(k)) {
+          if (R2_ON) { try { await r2Call('delete', k); } catch (e) {} }
           try { await window.sb.storage.from(IMG_BUCKET).remove([imgPath(k)]); } catch (e) {}
           return { key: k, deleted: true };
         }
@@ -21833,7 +21990,7 @@
   }
   function isChallengeActive(ch) {
     // active if either analysis or upload still incomplete
-    return challengeProgress(ch) < ch.target || challengeUploaded(ch) < ch.target;
+    return challengeProgress(ch) < ch.target || challengeUploaded(ch) < (ch.uploadTarget || ch.target);
   }
   function anyActiveChallenge() {
     return challenges.some(isChallengeActive);
@@ -21851,6 +22008,65 @@
     }
     if (!ch.rowIds) ch.rowIds = [];
     if (!ch.milestonesShown) ch.milestonesShown = [];
+    if (typeof ch.uploadTarget !== 'number') ch.uploadTarget = ch.target; // 구버전 호환: 업로드 목표=분석 목표
+    if (!Array.isArray(ch.uploadLog)) ch.uploadLog = []; // 업로드한 날짜(YMD) 기록 — 연속 스트릭용
+  }
+
+  // === 챌린지 게임화 헬퍼 (등급/스트릭/스테이지/멘트) =================
+  // 업로드한 '날짜'를 기록 — 연속 스트릭 계산용 (오늘 날짜 1회만)
+  function logChallengeUpload(ch) {
+    ch.uploadLog = ch.uploadLog || [];
+    const t = dateToYMD(new Date());
+    if (!ch.uploadLog.includes(t)) ch.uploadLog.push(t);
+  }
+  // 연속 업로드 일수 (오늘 또는 어제부터 거꾸로 끊김 없이)
+  function challengeStreak(ch) {
+    const set = new Set(ch.uploadLog || []);
+    if (!set.size) return 0;
+    let d = new Date(); d.setHours(0, 0, 0, 0);
+    if (!set.has(dateToYMD(d))) { d = addDays(d, -1); if (!set.has(dateToYMD(d))) return 0; }
+    let n = 0;
+    while (set.has(dateToYMD(d))) { n++; d = addDays(d, -1); }
+    return n;
+  }
+  // 5단계 시즌 패스 (업로드 목표 기준 20/40/60/80/100%)
+  function challengeStages(ch) {
+    const uplT = ch.uploadTarget || ch.target;
+    const upl = challengeUploaded(ch);
+    const defs = [
+      { emoji: '🌱', title: '시작한 사람', frac: 0.2 },
+      { emoji: '🔥', title: '꾸준한 사람', frac: 0.4 },
+      { emoji: '⚡', title: '추진하는 사람', frac: 0.6 },
+      { emoji: '💎', title: '증명하는 사람', frac: 0.8 },
+      { emoji: '👑', title: '챌린지 마스터', frac: 1.0 }
+    ];
+    return defs.map(d => { const need = Math.max(1, Math.ceil(uplT * d.frac)); return { emoji: d.emoji, title: d.title, need, done: upl >= need }; });
+  }
+  // 통과한 스테이지 수(0~5) → 등급
+  function challengeRank(ch) {
+    const cleared = challengeStages(ch).filter(s => s.done).length;
+    const ranks = [
+      { emoji: '🥚', name: '새싹' },
+      { emoji: '🌱', name: '새싹+' },
+      { emoji: '🔥', name: '불씨' },
+      { emoji: '⚡', name: '추진' },
+      { emoji: '💎', name: '크리에이터' },
+      { emoji: '👑', name: '마스터' }
+    ];
+    return ranks[Math.max(0, Math.min(5, cleared))];
+  }
+  // 상황별 한 줄 동기부여
+  function challengeMment(ch) {
+    const upl = challengeUploaded(ch), uplT = ch.uploadTarget || ch.target;
+    const days = ch.endDate ? dateDiff(ch.endDate) : null;
+    if (upl >= uplT) return '해냈다. 너는 증명했어 👑';
+    if (days !== null && days < 0) return `마감은 지났지만 끝까지 — ${uplT - upl}개 남았어`;
+    const frac = upl / uplT;
+    if (upl === 0) return '첫 업로드가 가장 무거워. 딱 한 개만 올려봐';
+    if (frac >= 0.8) return `여기서 멈추면 아까워. ${uplT - upl}개 남았어!`;
+    if (frac >= 0.5) return '절반을 넘었어 — 이제 가속 구간이야';
+    if (days !== null && days > 0) { const pace = ((uplT - upl) / days * 7).toFixed(1); return `3개월 뒤 완전히 다른 크리에이터 · 주 ${pace}개 페이스`; }
+    return '3개월 뒤, 너는 완전히 다른 크리에이터다';
   }
 
   // Auto-add new filled rows to active challenges
@@ -21906,6 +22122,9 @@
   function renderHonorCards() {
     const stack = document.getElementById('honor-stack');
     if (!stack) return;
+    // 밖에 떠있던 챌린지 위젯 제거 — 진행 상황은 '진행 중 챌린지' 패널에서 확인(중복·지저분 방지)
+    stack.style.display = 'none';
+    return;
 
     const active = challenges.filter(isChallengeActive);
 
@@ -22070,6 +22289,13 @@
       .acc-body{display:none;padding:0 14px 16px;}
       .acc-panel.open .acc-body{display:block;}
       .acc-body > *{margin-top:0 !important;}
+      /* 순서 변경 그립 */
+      .acc-grip{flex:0 0 auto;color:var(--text-faint);font-size:15px;line-height:1;cursor:grab;padding:2px 2px;letter-spacing:-2px;user-select:none;touch-action:none;opacity:.55;transition:opacity .15s,color .15s;}
+      .acc-grip:hover{opacity:1;color:var(--emerald);}
+      .acc-grip:active{cursor:grabbing;}
+      .acc-panel.acc-dragging{opacity:.35;}
+      .acc-ghost{border:1px solid var(--emerald-line) !important;border-radius:14px;}
+      .acc-ghost .acc-body{display:none !important;}
       .home-grid:empty{display:none;}
       @media(max-width:600px){ .acc-head{padding:13px 13px;gap:8px;} .acc-body{padding:0 12px 14px;} }
       /* 여정 레일 */
@@ -22272,7 +22498,7 @@
       if (key === 'insight') { const n = (rows || []).filter(isFilled).length; return n ? ('벤치마킹 ' + n + '개') : '데이터 없음'; }
       if (key === 'week') { const dd = getWeekDday(); return dd.uploaded + ' 업로드 / ' + dd.slotsTotal + '칸'; }
       if (key === 'funnel') { const fs = funnelSlots || {}; const n = ((fs.attract || []).length) + ((fs.convert || []).length) + ((fs.retain || []).length); return n + '개 배치'; }
-      if (key === 'challenge') { const act = (challenges || []).filter(c => { try { return challengeProgress(c) < (c.target || 0); } catch (e) { return true; } }); if (!act.length) return '진행 중 없음'; const c = act[0]; return challengeProgress(c) + '/' + (c.target || 0) + (act.length > 1 ? ' 외 ' + (act.length - 1) : ''); }
+      if (key === 'challenge') { const act = (challenges || []).filter(c => { try { return isChallengeActive(c); } catch (e) { return true; } }); if (!act.length) return '진행 중 없음'; const c = act[0]; try { ensureChallengeShape(c); } catch (e) {} const ana = challengeProgress(c), upl = challengeUploaded(c), uplT = c.uploadTarget || c.target; let dd = ''; if (c.endDate) { try { const d = dateDiff(c.endDate); dd = ' · D-' + (d >= 0 ? d : ('+' + (-d))); } catch (e) {} } return '시트 ' + ana + '/' + c.target + ' · 업로드 ' + upl + '/' + uplT + dd + (act.length > 1 ? ' 외 ' + (act.length - 1) : ''); }
       if (key === 'calendar') { if (!calBaseMonday) return ''; const mo = `${calBaseMonday.getMonth() + 1}월`; const g = monthlyUploadGoal || 0; return g > 0 ? `${mo} · ${_monthUploaded || 0}/${g} 업로드` : `${calBaseMonday.getFullYear()}년 ${mo}`; }
       if (key === 'stats') { const n = (rows || []).filter(r => !!(r.why || r.idea || r.script || r.url || r.hook || r.author || r.hasThumb || r.hasComment)).length; return n + '개 분석'; }
       if (key === 'goal') { return (homeData && homeData.goal) ? '설정됨' : '미설정'; }
@@ -22461,8 +22687,16 @@
     }
     await saveTrWeekCounts();
   }
+  // 사용자 커스텀 순서 배열 보정 — 모든 패널 키 포함 (신규 패널은 뒤에 붙임)
+  function ensureAccOrder() {
+    const keys = ACC_SECTIONS.map(d => d.key);
+    if (!Array.isArray(accState.order)) { accState.order = keys.slice(); return; }
+    accState.order = accState.order.filter(k => keys.indexOf(k) !== -1);
+    keys.forEach(k => { if (accState.order.indexOf(k) === -1) accState.order.push(k); });
+  }
   function applyAccordionState() {
     const cont = document.getElementById('home-accordion'); if (!cont) return;
+    ensureAccOrder();
     const partner = accState.partner !== false;
     let pinOrder = 0;
     ACC_SECTIONS.forEach((def, idx) => {
@@ -22473,8 +22707,9 @@
       const open = pinned || !!accState.expanded[def.key];
       p.classList.toggle('pinned', pinned);
       p.classList.toggle('open', open);
-      // 순서: 고정(핀)이 맨 위, 나머지는 ACC_SECTIONS 정의 순서 그대로
-      p.style.order = String(pinned ? pinOrder++ : (1000 + idx));
+      // 순서: 고정(핀)이 맨 위, 나머지는 사용자가 드래그로 정한 순서(accState.order)대로
+      const ordPos = accState.order.indexOf(def.key);
+      p.style.order = String(pinned ? pinOrder++ : (1000 + (ordPos >= 0 ? ordPos : idx)));
       const head = p.querySelector('.acc-head'); if (head) head.setAttribute('aria-expanded', open ? 'true' : 'false');
       const pin = p.querySelector('.acc-pin'); if (pin) pin.setAttribute('aria-pressed', pinned ? 'true' : 'false');
     });
@@ -22508,7 +22743,8 @@
           accState = {
             expanded: (o.expanded && typeof o.expanded === 'object') ? o.expanded : { week: true },
             pinned: (o.pinned && typeof o.pinned === 'object') ? o.pinned : {},
-            partner: (typeof o.partner === 'boolean') ? o.partner : true
+            partner: (typeof o.partner === 'boolean') ? o.partner : true,
+            order: Array.isArray(o.order) ? o.order : undefined
           };
           // 신규 패널 — 옛 저장 레이아웃엔 없으니 기본값 보정
           if (accState.expanded.mission === undefined) accState.expanded.mission = false;
@@ -22642,6 +22878,52 @@
     }
     _weekWasFull = full;
   }
+  // 아코디언 패널 그립(⠿)을 끌어 순서 변경 — 포인터 드래그(고스트 + 실시간 재정렬)
+  let _accDrag = null;
+  function initAccDrag(grip, panel, cont) {
+    grip.style.touchAction = 'none';
+    grip.addEventListener('pointerdown', (e) => {
+      e.preventDefault(); e.stopPropagation();
+      const rect = panel.getBoundingClientRect();
+      const ghost = panel.cloneNode(true);
+      ghost.className = 'acc-panel acc-ghost' + (panel.classList.contains('open') ? ' open' : '');
+      ghost.style.cssText = 'position:fixed;left:' + rect.left + 'px;top:' + rect.top + 'px;width:' + rect.width + 'px;z-index:99999;opacity:0.9;pointer-events:none;box-shadow:0 16px 48px rgba(0,0,0,0.55);transform:scale(1.02);';
+      document.body.appendChild(ghost);
+      panel.classList.add('acc-dragging');
+      _accDrag = { key: panel.getAttribute('data-acc'), ghost: ghost, offsetY: e.clientY - rect.top, panel: panel, cont: cont };
+      try { grip.setPointerCapture(e.pointerId); } catch (err) {}
+    });
+    grip.addEventListener('pointermove', (e) => {
+      if (!_accDrag) return;
+      _accDrag.ghost.style.top = (e.clientY - _accDrag.offsetY) + 'px';
+      // 화면상 순서대로 정렬한 다른 패널들 중, 포인터가 어디에 끼는지 판정
+      const others = [...cont.querySelectorAll('.acc-panel')]
+        .filter(p => p.style.display !== 'none' && p.getAttribute('data-acc') !== _accDrag.key)
+        .sort((a, b) => a.getBoundingClientRect().top - b.getBoundingClientRect().top);
+      let targetKey = null, after = false;
+      for (const p of others) {
+        const r = p.getBoundingClientRect();
+        targetKey = p.getAttribute('data-acc');
+        if (e.clientY < r.top + r.height / 2) { after = false; break; }
+        after = true;
+      }
+      if (!targetKey) return;
+      const order = accState.order.slice();
+      const from = order.indexOf(_accDrag.key); if (from !== -1) order.splice(from, 1);
+      let ti = order.indexOf(targetKey); if (after) ti++;
+      order.splice(ti, 0, _accDrag.key);
+      if (order.join(',') !== accState.order.join(',')) { accState.order = order; applyAccordionState(); }
+    });
+    const end = () => {
+      if (!_accDrag) return;
+      try { _accDrag.ghost.remove(); } catch (err) {}
+      _accDrag.panel.classList.remove('acc-dragging');
+      _accDrag = null;
+      saveAccordionState();
+    };
+    grip.addEventListener('pointerup', end);
+    grip.addEventListener('pointercancel', end);
+  }
   function setupHomeAccordion() {
     if (_accBuilt || document.getElementById('home-accordion')) return;
     const homeView = document.getElementById('home-view'); if (!homeView) return;
@@ -22658,7 +22940,7 @@
       if (!def.gen && !els.length) return;
       const panel = document.createElement('div'); panel.className = 'acc-panel'; panel.setAttribute('data-acc', def.key);
       const head = document.createElement('div'); head.className = 'acc-head'; head.setAttribute('role', 'button'); head.setAttribute('tabindex', '0');
-      head.innerHTML = '<span class="acc-ico">' + def.ico + '</span><span class="acc-title">' + def.title + '</span><span class="acc-sum"></span><button class="acc-pin" aria-label="고정" title="고정해서 항상 펼치기">📌</button><span class="acc-chev">▾</span>';
+      head.innerHTML = '<span class="acc-grip" title="끌어서 순서 변경" aria-label="순서 변경 손잡이">⠿</span><span class="acc-ico">' + def.ico + '</span><span class="acc-title">' + def.title + '</span><span class="acc-sum"></span><button class="acc-pin" aria-label="고정" title="고정해서 항상 펼치기">📌</button><span class="acc-chev">▾</span>';
       const body = document.createElement('div'); body.className = 'acc-body';
       if (def.gen) { const mb = document.createElement('div'); mb.className = 'mission-body'; mb.id = (def.key === 'mission') ? 'mission-panel-body' : def.key + '-panel-body'; body.appendChild(mb); }
       else els.forEach(el => body.appendChild(el));
@@ -22675,6 +22957,9 @@
         if (np) accState.expanded[def.key] = true;
         applyAccordionState(); saveAccordionState();
       });
+      // 그립(⠿) 드래그로 순서 변경
+      const grip = head.querySelector('.acc-grip');
+      if (grip) initAccDrag(grip, panel, cont);
     });
     trSection.parentNode.insertBefore(cont, trSection.nextSibling);
     _accBuilt = true;
@@ -22999,7 +23284,7 @@
     document.getElementById('home-goal').value = homeData.goal || '';
     document.getElementById('home-why').value = homeData.why || '';
     // 목표 6칸 값 채우기
-    { const m = { 'gf-vision': 'goal', 'gf-sixmonth': 'sixMonth', 'gf-why': 'why', 'gf-pain': 'painIfNot', 'gf-reward': 'rewardIfDone', 'gf-identity': 'identity' };
+    { const m = { 'gf-vision': 'goal', 'gf-sixmonth': 'sixMonth', 'gf-why': 'why', 'gf-pain': 'painIfNot', 'gf-reward': 'rewardIfDone', 'gf-identity': 'identity', 'gf-fire': 'fire' };
       Object.keys(m).forEach(id => { const el = document.getElementById(id); if (el) el.value = homeData[m[id]] || ''; }); }
     renderVisionReminder();
 
@@ -23641,6 +23926,7 @@
       const i = ch.uploadedSlots.findIndex(v => !v);
       if (i < 0) return; // 이미 가득
       ch.uploadedSlots[i] = true;
+      logChallengeUpload(ch);
     } else {
       let last = -1;
       for (let i = ch.uploadedSlots.length - 1; i >= 0; i--) { if (ch.uploadedSlots[i]) { last = i; break; } }
@@ -24620,7 +24906,13 @@
   function renderChallengeList() {
     const el = document.getElementById('ch-list');
     if (challenges.length === 0) {
-      el.innerHTML = `<div class="ch-empty">아직 시작한 챌린지가 없어요. 위의 [▶ 벤치마킹 챌린지 시작] 버튼을 눌러보세요.</div>`;
+      const _nm = (typeof onboardState !== 'undefined' && onboardState && onboardState.name) ? esc(onboardState.name) : '';
+      el.innerHTML = `<div class="ch-empty">
+        <div class="ch-empty-title">🔥 벤치마킹 챌린지 100</div>
+        <div class="ch-empty-sub"><b>100일(약 3개월)</b> 동안 잘 된 콘텐츠 <b>100개를 분석</b>하고, <b>주 3개씩 업로드</b>하는 도전이에요. 이번 도전으로 ${_nm ? _nm + '님의 ' : ''}<b>콘텐츠 감각이 비약적으로</b> 높아져요!</div>
+        <button class="home-start-btn primary ch-empty-btn" id="ch-empty-start-100">🔥 벤치마킹 챌린지 100 시작</button>
+      </div>`;
+      const b = document.getElementById('ch-empty-start-100'); if (b) b.onclick = openWizard;
       return;
     }
     // sort: active first, then completed
@@ -24635,11 +24927,39 @@
       ensureChallengeShape(ch);
       const ana = challengeProgress(ch);
       const upl = challengeUploaded(ch);
+      const uplTarget = ch.uploadTarget || ch.target;
       const anaPct = Math.min(100, Math.round(ana / ch.target * 100));
-      const uplPct = Math.min(100, Math.round(upl / ch.target * 100));
+      const uplPct = Math.min(100, Math.round(upl / uplTarget * 100));
       const dd = ddayLabel(ch.endDate, Math.min(ana, upl), ch.target);
       const active = isChallengeActive(ch);
       const cols = ch.target <= 30 ? 'cols-10' : ch.target <= 60 ? 'cols-15' : '';
+      // 게임화: 등급 / 스트릭 / 스테이지 / 멘트 / 다음 한 칸
+      const rank = challengeRank(ch);
+      const streak = challengeStreak(ch);
+      const stages = challengeStages(ch);
+      const mment = challengeMment(ch);
+      const uplDone = upl >= uplTarget;
+      const heroHtml = `
+        <div class="ch-hero">
+          <span class="ch-rank"><span class="ch-rank-emoji">${rank.emoji}</span><span class="ch-rank-name">${rank.name}</span></span>
+          ${streak > 0 ? `<span class="ch-streak">🔥 ${streak}일 연속</span>` : ''}
+          <span class="ch-mment">${esc(mment)}</span>
+        </div>`;
+      const stagesHtml = `
+        <div class="ch-stages">
+          ${stages.map(s => `
+            <div class="ch-stage ${s.done ? 'done' : ''}">
+              <div class="ch-stage-node">${s.done ? s.emoji : '🔒'}</div>
+              <div class="ch-stage-title">${s.title}</div>
+              <div class="ch-stage-need">${s.need}개</div>
+            </div>`).join('')}
+        </div>`;
+      const ctaHtml = `
+        <div class="ch-cta-row">
+          <button class="ch-cta-btn ${uplDone ? 'done' : ''}" data-act="next-upload" data-id="${ch.id}" ${uplDone ? 'disabled' : ''}>
+            ${uplDone ? '🏆 챌린지 완수!' : `▶ 다음 업로드 1개 — ${upl}/${uplTarget}`}
+          </button>
+        </div>`;
 
       // Dots: 4 states + 시작일 기준 날짜 라벨(달력처럼)
       const chStart0 = ch.startDate ? ymdToDate(ch.startDate) : null;
@@ -24717,6 +25037,8 @@
             <div class="ch-dday ${dd.cls}">${dd.txt}</div>
           </div>
 
+          ${heroHtml}
+
           ${timelineHtml}
 
           <div class="ch-gauges">
@@ -24728,11 +25050,15 @@
             <div class="ch-gauge-row">
               <div class="ch-gauge-label upl"><span class="ch-gauge-dotmark upl"></span>업로드</div>
               <div class="ch-gauge-bar"><div class="ch-gauge-fill upl" style="width:${uplPct}%"></div></div>
-              <div class="ch-gauge-num upl">${upl}<span class="total">/${ch.target}</span></div>
+              <div class="ch-gauge-num upl">${upl}<span class="total">/${uplTarget}</span></div>
             </div>
           </div>
 
+          ${stagesHtml}
+
           <div class="ch-dots ${cols}">${dots}</div>
+
+          ${ctaHtml}
 
           <div class="ch-legend">
             <div class="ch-legend-item"><span class="ch-legend-swatch ana"></span>시트 채우기</div>
@@ -24759,7 +25085,7 @@
         const id = btn.dataset.id;
         const act = btn.dataset.act;
         if (act === 'del') {
-          if (confirm('이 챌린지를 삭제할까요? (시트의 행은 그대로 유지됩니다)')) {
+          if (await appConfirm('이 챌린지를 삭제할까요?\n시트의 행은 그대로 유지돼요.', { okText: '삭제', danger: true })) {
             challenges = challenges.filter(c => c.id !== id);
             await saveChallenges();
             renderHome();
@@ -24767,6 +25093,21 @@
           }
         } else if (act === 'goto') {
           switchWorkspace('sheet');
+        } else if (act === 'next-upload') {
+          const ch = challenges.find(c => c.id === id);
+          if (!ch) return;
+          ensureChallengeShape(ch);
+          const i = ch.uploadedSlots.findIndex(v => !v);
+          if (i < 0) return; // 이미 가득
+          ch.uploadedSlots[i] = true;
+          logChallengeUpload(ch);
+          await saveChallenges();
+          checkUploadMilestone(ch);
+          renderChallengeList();
+          renderDaily();
+          renderStatsMini();
+          updateAuroraIndicator();
+          toast(`업로드 ${challengeUploaded(ch)}개째 ✓`);
         }
       };
     });
@@ -24781,6 +25122,7 @@
         if (!ch) return;
         ensureChallengeShape(ch);
         ch.uploadedSlots[idx] = !ch.uploadedSlots[idx];
+        if (ch.uploadedSlots[idx]) logChallengeUpload(ch);
         await saveChallenges();
         // Check upload milestones
         checkUploadMilestone(ch);
@@ -24797,7 +25139,8 @@
 
   function checkUploadMilestone(ch) {
     const upl = challengeUploaded(ch);
-    const milestones = [10, 25, 50, 75, 100, ch.target].filter((v, i, a) => v <= ch.target && a.indexOf(v) === i);
+    const uplT = ch.uploadTarget || ch.target;
+    const milestones = [10, 25, 50, 75, 100, uplT].filter((v, i, a) => v <= uplT && a.indexOf(v) === i);
     ch.uploadMilestonesShown = ch.uploadMilestonesShown || [];
     for (const m of milestones) {
       if (upl >= m && !ch.uploadMilestonesShown.includes(m)) {
@@ -24855,7 +25198,7 @@
   function openWizard() {
     document.getElementById('cw-name').value = '';
     document.getElementById('cw-target-custom').value = '';
-    setCwTarget(60);
+    setCwTarget(30);
 
     const today = todayStr();
     const future = new Date();
@@ -24888,13 +25231,14 @@
     const s = new Date(start), e = new Date(end);
     const days = Math.round((e - s) / (24*60*60*1000));
     if (days <= 0) { el.innerHTML = '<strong>마감일이 시작일보다 빠릅니다.</strong>'; return; }
-    const perDay = (cwTarget / days).toFixed(2);
     const perWeek = (cwTarget / days * 7).toFixed(1);
-    el.innerHTML = `<strong>${cwTarget}개</strong>를 <strong>${days}일</strong> 동안 — 주 약 <strong>${perWeek}개</strong> 페이스 (하루 약 ${perDay}개).`;
+    el.innerHTML = `분석 <strong>100개</strong> + 업로드 <strong>${cwTarget}개</strong>를 <strong>${days}일</strong> 동안 — 업로드 주 약 <strong>${perWeek}개</strong> 페이스.`;
   }
 
   async function startChallenge() {
-    const name = document.getElementById('cw-name').value.trim() || `벤치마킹 ${cwTarget} 챌린지`;
+    const ANALYSIS = 100;            // 시트 채우기(분석)는 항상 100 고정
+    const uploadGoal = cwTarget;     // 위저드의 숫자 = 업로드 목표
+    const name = document.getElementById('cw-name').value.trim() || '벤치마킹 챌린지 100';
     const start = document.getElementById('cw-start').value;
     const end = document.getElementById('cw-end').value;
 
@@ -24902,24 +25246,22 @@
       const s = new Date(start), e = new Date(end);
       if (e <= s) { toast('마감일이 시작일보다 빠릅니다'); return; }
     }
-    if (cwTarget < 1) { toast('목표 개수가 잘못됨'); return; }
+    if (uploadGoal < 1) { toast('업로드 목표 개수가 잘못됨'); return; }
 
-    // 챌린지에 할당할 행 ID들 — 빈 행 우선, 부족하면 새로 만들어 추가
+    // 챌린지에 할당할 행 ID들 — 분석 100개. 빈 행 우선, 부족하면 새로 만들어 추가
     let emptyRows = rows.filter(r => !isFilled(r));
     const assignedIds = [];
-    let needed = cwTarget;
 
     // 1) 기존 빈 행을 먼저 사용
     for (const r of emptyRows) {
-      if (assignedIds.length >= cwTarget) break;
-      // 이미 다른 활성 챌린지에 할당된 행이면 스킵
+      if (assignedIds.length >= ANALYSIS) break;
       const inOtherActive = challenges.some(c => isChallengeActive(c) && (c.rowIds || []).includes(r.id));
       if (inOtherActive) continue;
       assignedIds.push(r.id);
     }
 
     // 2) 부족하면 새 행 자동 추가
-    needed = cwTarget - assignedIds.length;
+    const needed = ANALYSIS - assignedIds.length;
     if (needed > 0) {
       let nextNo = rows.length > 0 ? Math.max(...rows.map(r => r.no)) + 1 : 1;
       for (let i = 0; i < needed; i++) {
@@ -24933,12 +25275,14 @@
     const ch = {
       id: 'ch_' + Date.now() + '_' + Math.random().toString(36).slice(2,8),
       name,
-      target: cwTarget,
+      target: ANALYSIS,              // 분석(시트 채우기) 100
+      uploadTarget: uploadGoal,      // 업로드 목표(설정값)
       startDate: start || todayStr(),
       endDate: end || '',
       rowIds: assignedIds,
-      uploadedSlots: new Array(cwTarget).fill(false),
+      uploadedSlots: new Array(ANALYSIS).fill(false),
       milestonesShown: [],
+      uploadMilestonesShown: [],
       createdAt: Date.now()
     };
     challenges.push(ch);
@@ -24947,8 +25291,23 @@
     renderHome();
     renderTable();
     renderHonorCards();
-    toast(`챌린지 시작! 시트에 ${cwTarget}개 행이 할당됐어요`);
-    showBotMessage(`<strong>${esc(ch.name)}</strong> 시작!<br/><br/>시트 1~${cwTarget}번 행이 이 챌린지의 자리예요. 오로라 글로우로 표시됐어요. 우하단 명예 카드로 진행 상황을 확인할 수 있어요.`, '챌린지 시작');
+    toast(`챌린지 시작! 분석 100개 · 업로드 ${uploadGoal}개 목표`);
+    showBotMessage(`<strong>${esc(ch.name)}</strong> 시작!<br/><br/>시트 100개 행이 이 챌린지의 자리예요(분석). 그중 <strong>${uploadGoal}개를 업로드</strong>하면 클리어! 점을 클릭해 업로드를 표시해요.`, '챌린지 시작');
+  }
+
+  // 우리 핵심 챌린지 "벤치마킹 챌린지 100"을 한 번에 시작 (위저드 없이 startChallenge 재사용)
+  async function quickStart100() {
+    // 이미 진행 중이면 중복 생성 방지
+    const exists = challenges.some(c => isChallengeActive(c) && c.name === '벤치마킹 챌린지 100');
+    if (exists) { toast('이미 진행 중이에요! 아래에서 확인해보세요 👇'); return; }
+    const today = todayStr();
+    const future = new Date(); future.setDate(future.getDate() + 100);
+    const futureStr = future.getFullYear() + '-' + String(future.getMonth() + 1).padStart(2, '0') + '-' + String(future.getDate()).padStart(2, '0');
+    const nameEl = document.getElementById('cw-name'); if (nameEl) nameEl.value = '벤치마킹 챌린지 100';
+    const sEl = document.getElementById('cw-start'); if (sEl) sEl.value = today;
+    const eEl = document.getElementById('cw-end'); if (eEl) eEl.value = futureStr;
+    setCwTarget(100);
+    await startChallenge();
   }
 
   // === BOT messages ===
@@ -25002,7 +25361,7 @@
     goal.addEventListener('input', () => { homeData.goal = goal.value; saveHomeDebounced(); });
     why.addEventListener('input', () => { homeData.why = why.value; saveHomeDebounced(); });
     // 목표 6칸 바인딩 (gf-vision→goal, gf-why→why 공유)
-    [['gf-vision', 'goal'], ['gf-sixmonth', 'sixMonth'], ['gf-why', 'why'], ['gf-pain', 'painIfNot'], ['gf-reward', 'rewardIfDone'], ['gf-identity', 'identity']].forEach(([id, key]) => {
+    [['gf-vision', 'goal'], ['gf-sixmonth', 'sixMonth'], ['gf-why', 'why'], ['gf-pain', 'painIfNot'], ['gf-reward', 'rewardIfDone'], ['gf-identity', 'identity'], ['gf-fire', 'fire']].forEach(([id, key]) => {
       const el = document.getElementById(id);
       if (el) el.addEventListener('input', () => { homeData[key] = el.value; saveHomeDebounced(); });
     });
@@ -25016,8 +25375,9 @@
       setTimeout(() => { gfSave.classList.remove('saved'); gfSave.textContent = '💾 목표 저장하기'; }, 1800);
     };
 
-    // Start button
-    document.getElementById('home-start-ch').onclick = openWizard;
+    // Start button — '벤치마킹 챌린지 100 시작' = 위저드 열기(업로드 목표만 설정, 분석 100 고정)
+    { const c = document.getElementById('home-start-ch'); if (c) c.onclick = openWizard; }
+    { const b100 = document.getElementById('home-start-100'); if (b100) b100.onclick = openWizard; }
 
     // Wizard
     document.getElementById('cw-cancel').onclick = closeWizard;
@@ -25138,6 +25498,7 @@
   function openSettingsModal() {
     document.getElementById('settings-modal').classList.add('show');
     renderSettingsStats();
+    try { renderBackupStatus(); } catch (e) {}
     const result = document.getElementById('settings-import-result');
     if (result) { result.textContent = ''; result.className = 'settings-import-result'; }
   }
@@ -25212,7 +25573,28 @@
       typeTrash: typeTrash
     };
     downloadJson(data, `customer-perspective-${timestampForFilename()}.json`);
-    toast('전체 데이터 내보냄');
+    try { localStorage.setItem('hmv1-lastbackup', String(Date.now())); } catch (e) {}
+    try { renderBackupStatus(); } catch (e) {}
+    toast('전체 데이터 내보냄 — 안전하게 보관하세요!');
+  }
+  // 자동 백업 리마인더 — 마지막 백업 시점을 기억해 챙겨줌
+  function renderBackupStatus() {
+    const el = document.getElementById('backup-status'); if (!el) return;
+    let ts = 0; try { ts = parseInt(localStorage.getItem('hmv1-lastbackup') || '0', 10) || 0; } catch (e) {}
+    if (!ts) {
+      el.className = 'backup-status warn';
+      el.innerHTML = '⚠️ 아직 <b>백업한 적이 없어요.</b> 데이터가 날아가면 끝이니, 지금 한 번 <b>전체 내보내기</b> 해두세요!';
+      return;
+    }
+    const days = Math.floor((Date.now() - ts) / 86400000);
+    const when = days <= 0 ? '오늘' : (days + '일 전');
+    if (days >= 14) {
+      el.className = 'backup-status warn';
+      el.innerHTML = '⚠️ 마지막 백업이 <b>' + when + '</b>이에요. 슬슬 다시 백업할 때예요!';
+    } else {
+      el.className = 'backup-status ok';
+      el.innerHTML = '✅ 마지막 백업: <b>' + when + '</b>. 잘 챙기고 있어요!';
+    }
   }
 
   function exportRowsOnly() {
@@ -26658,6 +27040,17 @@
     if (n < 1073741824) return (n / 1048576).toFixed(n < 10485760 ? 1 : 0) + ' MB';
     return (n / 1073741824).toFixed(2) + ' GB';
   }
+  // 운영자가 고른 "내 플랜 한도" — 게이지 기준값 (기기 localStorage에 저장)
+  function getPlanLimits() {
+    let p = { mode: 'free', dbMB: 500, imgGB: 1 };
+    try { const s = localStorage.getItem('cm-admin-plan'); if (s) p = Object.assign(p, JSON.parse(s)); } catch (e) {}
+    let dbQ, imgQ;
+    if (p.mode === 'pro') { dbQ = 8192 * 1048576; imgQ = 100 * 1073741824; }
+    else if (p.mode === 'custom') { dbQ = Math.max(1, p.dbMB || 500) * 1048576; imgQ = Math.max(0.1, p.imgGB || 1) * 1073741824; }
+    else { dbQ = 500 * 1048576; imgQ = 1073741824; }
+    return { p, dbQ, imgQ };
+  }
+  function savePlanLimits(p) { try { localStorage.setItem('cm-admin-plan', JSON.stringify(p)); } catch (e) {} }
   // 데이터 RPC 인증용 전역 (code + pinHash) 동기화
   function syncCmAuth() {
     window.__cmAuth = (_currentUser && _currentUser.code && _currentUser.pinHash)
@@ -27510,25 +27903,44 @@
       } else {
         let tDb = 0, tImg = 0, tN = 0;
         keys.forEach(k => { const u = _adminUsage[k] || {}; tDb += (u.db || 0); tImg += (u.img || 0); tN += (u.imgN || 0); });
-        const DBQ = 500 * 1048576, IMGQ = 1073741824;
+        const PL = getPlanLimits(), p = PL.p, DBQ = PL.dbQ, IMGQ = PL.imgQ;
         const dbPct = Math.min(100, Math.round(tDb / DBQ * 100));
         const imgPct = Math.min(100, Math.round(tImg / IMGQ * 100));
+        const sel = m => (p.mode === m ? ' selected' : '');
         sumEl.innerHTML =
+          '<div class="ausum-plan">' +
+            '<span class="ausum-plan-lab">내 플랜 한도</span>' +
+            '<select id="admin-plan-select">' +
+              '<option value="free"' + sel('free') + '>무료 (DB 500MB · 사진 1GB)</option>' +
+              '<option value="pro"' + sel('pro') + '>Pro (DB 8GB · 사진 100GB)</option>' +
+              '<option value="custom"' + sel('custom') + '>직접 입력</option>' +
+            '</select>' +
+            (p.mode === 'custom'
+              ? '<span class="ausum-plan-custom">DB <input type="number" id="admin-plan-db" value="' + (p.dbMB || 500) + '" min="1"/>MB · 사진 <input type="number" id="admin-plan-img" value="' + (p.imgGB || 1) + '" min="0.1" step="0.1"/>GB</span>'
+              : '') +
+          '</div>' +
           '<div class="ausum-row">' +
             '<div class="ausum-cell">' +
               '<div class="ausum-lab">📓 글자(DB)</div>' +
-              '<div class="ausum-val">' + fmtBytes(tDb) + ' <span class="ausum-q">/ ~500MB</span></div>' +
+              '<div class="ausum-val">' + fmtBytes(tDb) + ' <span class="ausum-q">/ ' + fmtBytes(DBQ) + '</span></div>' +
               '<div class="ausum-bar"><div class="ausum-fill' + (dbPct > 80 ? ' hot' : '') + '" style="width:' + dbPct + '%"></div></div>' +
               '<div class="ausum-pct">' + dbPct + '%</div>' +
             '</div>' +
             '<div class="ausum-cell">' +
               '<div class="ausum-lab">📸 사진(Storage)</div>' +
-              '<div class="ausum-val">' + fmtBytes(tImg) + ' · ' + tN + '장 <span class="ausum-q">/ ~1GB</span></div>' +
+              '<div class="ausum-val">' + fmtBytes(tImg) + ' · ' + tN + '장 <span class="ausum-q">/ ' + fmtBytes(IMGQ) + '</span></div>' +
               '<div class="ausum-bar"><div class="ausum-fill' + (imgPct > 80 ? ' hot' : '') + '" style="width:' + imgPct + '%"></div></div>' +
               '<div class="ausum-pct">' + imgPct + '%</div>' +
             '</div>' +
           '</div>' +
-          '<div class="ausum-note">무료 한도(대략) 기준 · 전체 사용자 합계 추정치. 정확한 값은 Supabase 대시보드 → Settings → Usage</div>';
+          '<div class="ausum-note">' + (p.mode === 'free' ? '무료' : p.mode === 'pro' ? 'Pro' : '직접 설정') + ' 한도 기준 · 전체 사용자 합계 추정치. 정확한 값은 Supabase 대시보드 → Settings → Usage</div>';
+        // 플랜 선택/입력 → 저장 후 다시 그리기
+        const selEl = document.getElementById('admin-plan-select');
+        if (selEl) selEl.onchange = () => { p.mode = selEl.value; savePlanLimits(p); renderAdminList(); };
+        const dbIn = document.getElementById('admin-plan-db');
+        if (dbIn) dbIn.onchange = () => { p.dbMB = parseFloat(dbIn.value) || 500; savePlanLimits(p); renderAdminList(); };
+        const imgIn = document.getElementById('admin-plan-img');
+        if (imgIn) imgIn.onchange = () => { p.imgGB = parseFloat(imgIn.value) || 1; savePlanLimits(p); renderAdminList(); };
       }
     }
 
