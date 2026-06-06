@@ -30,16 +30,16 @@
 
     /* === GREEN HIERARCHY (4 tiers) === */
     /* Tier 1: Primary - 분석, 메인 액션 */
-    --emerald: #2ECC71;
-    --emerald-deep: #1F9F55;
-    --emerald-glow: rgba(46, 204, 113, 0.25);
-    --emerald-line: rgba(46, 204, 113, 0.4);
-    --emerald-faint: rgba(46, 204, 113, 0.08);
+    --emerald: #2ABF6A;
+    --emerald-deep: #1B8F4E;
+    --emerald-glow: rgba(42, 191, 106, 0.20);
+    --emerald-line: rgba(42, 191, 106, 0.38);
+    --emerald-faint: rgba(42, 191, 106, 0.08);
 
-    /* Tier 2: Neon - 업로드, 최강 강조 */
-    --neon: #00E676;
-    --neon-glow: rgba(0, 230, 118, 0.35);
-    --neon-line: rgba(0, 230, 118, 0.5);
+    /* Tier 2: Neon - 업로드, 최강 강조 (보석 에메랄드로 톤다운) */
+    --neon: #14B87A;
+    --neon-glow: rgba(20, 184, 122, 0.28);
+    --neon-line: rgba(20, 184, 122, 0.45);
 
     /* Tier 3: Sage - 보조 텍스트, 부드러운 영역 */
     --sage: #69AA89;
@@ -1533,6 +1533,7 @@
     padding: 56px 32px 36px;
     border-bottom: 1px solid var(--line);
     overflow: hidden;
+    background: radial-gradient(ellipse 640px 360px at 50% -14%, rgba(20, 184, 122, 0.14), transparent 66%);
   }
 
   /* ② 다시 보기 리마인더 — 홈 열 때 비전/왜 한 줄 슬쩍 */
@@ -1611,13 +1612,22 @@
   .home-title {
     font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 44px;
-    font-weight: 800;
+    font-weight: 900;
     line-height: 1.05;
-    letter-spacing: -0.025em;
+    letter-spacing: -0.03em;
+    text-shadow: 0 2px 18px rgba(0,0,0,.5), 0 1px 0 rgba(255,255,255,.08);
   }
   .home-title .em { color: var(--emerald); font-weight: 800; }
 
   .home-divline { width: 36px; height: 2px; background: var(--emerald); margin: 18px 0 14px; }
+
+  /* === 화면 헤더 톤 통일 (트로피 여정) — 흰색 입체 타이틀 + 단일 글로우 === */
+  .sc-title, .fb-title, .cu-title, .ns-title, .sh-topbar-title {
+    text-shadow: 0 2px 16px rgba(0,0,0,.5), 0 1px 0 rgba(255,255,255,.07);
+  }
+  .sc-header, .fb-header, .customer-hero, #customer-view > .cu-header {
+    background: radial-gradient(ellipse 580px 320px at 50% -16%, rgba(20,184,122,0.10), transparent 64%);
+  }
 
   /* ===== TRAINING ROOM ===== */
   .tr-section {
@@ -12567,7 +12577,7 @@
   .auth-overlay {
     position: fixed;
     inset: 0;
-    background: #0A0A0A;
+    background: radial-gradient(circle at 50% 26%, #0a2a1f 0%, #061009 46%, #040709 100%);
     z-index: 5000;
     display: none;
     align-items: center;
@@ -12581,20 +12591,16 @@
   /* 동심원 글로우 (배경) — 에메랄드 톤 */
   .auth-bg-glow {
     position: absolute;
-    top: 42%;
+    top: 30%;
     left: 50%;
-    width: 900px;
-    height: 900px;
+    width: 720px;
+    height: 720px;
     border-radius: 50%;
     pointer-events: none;
-    background:
-      radial-gradient(circle at center, transparent 0%, transparent 13%, rgba(46, 204, 113, 0.20) 16%, transparent 19%),
-      radial-gradient(circle at center, transparent 0%, transparent 25%, rgba(46, 204, 113, 0.16) 28%, transparent 31%),
-      radial-gradient(circle at center, transparent 0%, transparent 37%, rgba(46, 204, 113, 0.13) 40%, transparent 43%),
-      radial-gradient(circle at center, transparent 0%, transparent 49%, rgba(46, 204, 113, 0.10) 52%, transparent 55%),
-      radial-gradient(circle at center, rgba(46, 204, 113, 0.26) 0%, rgba(46, 204, 113, 0.10) 38%, transparent 64%);
+    background: radial-gradient(circle at center, rgba(46, 204, 113, 0.22) 0%, rgba(46, 204, 113, 0.07) 34%, transparent 60%);
     transform: translate(-50%, -50%);
     animation: auth-glow-breath 5.5s ease-in-out infinite;
+    opacity: 0.6;
   }
 
   /* 각 화면 */
@@ -12616,14 +12622,32 @@
     filter: drop-shadow(0 0 18px rgba(46, 204, 113, 0.4));
   }
 
+  /* 로그인 트로피 로고 (앱 아이콘) */
+  .auth-logo {
+    width: 190px; height: auto;
+    display: block; margin: -12px auto 12px;
+    filter: drop-shadow(0 16px 46px rgba(0, 200, 83, 0.5)) drop-shadow(0 0 30px rgba(46, 204, 113, 0.35));
+    animation: auth-logo-float 4.2s ease-in-out infinite;
+  }
+  @keyframes auth-logo-float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
+  .auth-wordmark {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 11px; font-weight: 800;
+    letter-spacing: 0.42em; text-indent: 0.42em;
+    color: rgba(255, 255, 255, 0.78);
+    margin-bottom: 18px; text-transform: uppercase;
+    text-shadow: 0 1px 10px rgba(0,0,0,.45);
+  }
+
   /* 타이틀 */
   .auth-h1 {
     font-family: 'Pretendard', sans-serif;
-    font-size: 30px;
-    font-weight: 800;
+    font-size: 31px;
+    font-weight: 900;
     line-height: 1.15;
-    letter-spacing: -0.025em;
+    letter-spacing: -0.03em;
     color: var(--text-main);
+    text-shadow: 0 2px 16px rgba(0,0,0,.55), 0 1px 0 rgba(255,255,255,.10);
     margin: 0 0 6px;
   }
   .auth-h1-sub {
@@ -12668,9 +12692,9 @@
     text-transform: uppercase;
   }
   .auth-big-input:focus {
-    border-color: var(--emerald);
-    box-shadow: 0 0 0 4px rgba(46, 204, 113, 0.12);
-    background: rgba(46, 204, 113, 0.03);
+    border-color: #2a8f63;
+    box-shadow: 0 0 0 3px rgba(31, 150, 99, 0.14);
+    background: rgba(31, 150, 99, 0.03);
   }
   .auth-big-input::placeholder {
     color: var(--text-faint);
@@ -12739,8 +12763,9 @@
     padding: 18px;
     border-radius: 14px;
     border: none;
-    background: var(--emerald);
-    color: #0A0A0A;
+    background: linear-gradient(135deg, #1f9663 0%, #016b45 100%);
+    color: #ffffff;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
     font-family: 'Pretendard', sans-serif;
     font-size: 16px;
     font-weight: 800;
@@ -12748,6 +12773,7 @@
     cursor: pointer;
     transition: transform 0.15s;
     margin-bottom: 18px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255,255,255,0.12);
     animation: auth-pulse 2.6s ease-in-out infinite;
   }
   .auth-big-btn:hover {
@@ -12795,7 +12821,7 @@
     font-family: 'JetBrains Mono', monospace;
     font-size: 9.5px;
     letter-spacing: 0.2em;
-    color: var(--emerald);
+    color: rgba(255, 255, 255, 0.5);
     text-transform: uppercase;
     font-weight: 700;
     margin-bottom: 4px;
@@ -13584,7 +13610,52 @@
   }
   .sh-sb-admin:hover .sh-sb-icon { color: #FFD060; }
 
+  /* === 스플래시 인트로 (CONTENT MASTERS 트로피 등장 모션) === */
+  #cm-splash {
+    position: fixed; inset: 0; z-index: 9000; overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+    background: radial-gradient(circle at 50% 46%, #11543f 0%, #0a2c20 48%, #030f0a 100%);
+    transition: opacity .6s ease, transform .6s ease;
+  }
+  #cm-splash.cm-splash-out { opacity: 0; transform: scale(1.06); pointer-events: none; }
+  .cm-splash-ring {
+    position: absolute; width: min(86vh, 86vw); height: min(86vh, 86vw); border-radius: 50%;
+    border: 1px solid rgba(46,204,113,.35); opacity: 0;
+    animation: cmRing 1.9s ease .2s forwards;
+  }
+  @keyframes cmRing { 0% { opacity:0; transform:scale(.4);} 40% { opacity:.5;} 100% { opacity:0; transform:scale(1.7);} }
+  /* 거대 트로피 — 화면 꽉 채우고 가장자리로 살짝 흘러나옴 (투명 PNG) */
+  .cm-splash-logo {
+    height: 86vh; width: auto; max-width: 124vw; object-fit: contain;
+    filter: drop-shadow(0 30px 80px rgba(0,200,83,.55)) drop-shadow(0 0 50px rgba(46,204,113,.4));
+    animation: cmLogoIn 1.3s cubic-bezier(.2,1.25,.3,1) both, cmLogoFloat 4.4s ease-in-out 1.3s infinite;
+  }
+  @keyframes cmLogoIn { 0% { opacity:0; transform:translateY(7vh) scale(.62) rotate(-6deg);} 60% { opacity:1; transform:translateY(-1.5vh) scale(1.05) rotate(2deg);} 100% { opacity:1; transform:translateY(0) scale(1) rotate(0);} }
+  @keyframes cmLogoFloat { 0%,100% { transform:translateY(0);} 50% { transform:translateY(-1.6vh);} }
+  .cm-splash-word {
+    position: absolute; bottom: 7vh; left: 0; right: 0; text-align: center;
+    font-family: 'Pretendard', sans-serif; font-size: 14px; font-weight: 800;
+    letter-spacing: .46em; text-indent: .46em; text-transform: uppercase;
+    color: rgba(255,255,255,.9); opacity: 0; text-shadow: 0 2px 16px rgba(0,0,0,.4);
+    animation: cmWordIn .8s ease .9s both;
+  }
+  @keyframes cmWordIn { from { opacity:0; transform:translateY(14px);} to { opacity:.9; transform:translateY(0);} }
 </style>
+
+<!-- ============ CONTENT MASTERS 스플래시 인트로 ============ -->
+<div id="cm-splash">
+  <div class="cm-splash-ring"></div>
+  <img class="cm-splash-logo" src="hero-trophy.png" alt="컨텐츠 마스터즈" />
+  <div class="cm-splash-word">CONTENT MASTERS</div>
+</div>
+<script>
+  (function () {
+    var sp = document.getElementById('cm-splash');
+    if (!sp) return;
+    setTimeout(function () { sp.classList.add('cm-splash-out'); }, 1700);
+    setTimeout(function () { if (sp && sp.parentNode) sp.parentNode.removeChild(sp); }, 2400);
+  })();
+</script>
 
 <!-- ============ AUTH OVERLAY (불씨 스타일) ============ -->
 <div class="auth-overlay" id="auth-overlay">
@@ -13592,9 +13663,9 @@
 
   <!-- 화면 1: 코드 입력 -->
   <div class="auth-screen" id="auth-screen-code" data-screen="code">
-    <div class="auth-emoji">🔥</div>
-    <h1 class="auth-h1">수익화 컨텐츠</h1>
-    <div class="auth-h1-sub">집중 트레이닝</div>
+    <img class="auth-logo" src="hero-trophy.png" alt="컨텐츠 마스터즈" />
+    <div class="auth-wordmark">CONTENT MASTERS</div>
+    <h1 class="auth-h1">컨텐츠 <span style="color:#ffffff;">마스터즈</span></h1>
     <p class="auth-desc">코드를 입력하고 나만의 트레이닝을 시작하세요.<br/>한 번 입력한 기록은 계속 보관됩니다.</p>
 
     <div class="auth-input-wrap">
@@ -13621,7 +13692,7 @@
   <!-- 화면 2: PIN 입력 (로그인) -->
   <div class="auth-screen" id="auth-screen-pin" data-screen="pin" style="display:none;">
     <div class="auth-emoji">🔒</div>
-    <div class="auth-pin-brand">수익화 컨텐츠 집중 트레이닝</div>
+    <div class="auth-pin-brand">컨텐츠 마스터즈</div>
     <button class="auth-code-chip" id="auth-code-chip-back">
       <span id="auth-chip-code">·</span>
       <span class="auth-code-chip-divider">·</span>
@@ -14065,6 +14136,9 @@
 
       <!-- ===== TRAINING ROOM ===== -->
       <section class="tr-section">
+        <!-- 내 트로피 진행 히어로 (여정의 상징) -->
+        <div class="cm-trophy-hero" id="cm-trophy-hero" style="display:none;"></div>
+
         <!-- 관점이 환영 영역 (첫 진입/빈 상태일 때만) -->
         <div id="tr-gj-welcome" style="display:none;"></div>
 
