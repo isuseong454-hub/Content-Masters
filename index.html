@@ -1859,6 +1859,7 @@
     letter-spacing: 0.02em;
     white-space: nowrap;
   }
+  .acc-dday.cool { color: #4ECCA3; border-color: rgba(78,204,163,0.5); background: rgba(78,204,163,0.12); }
   .acc-dday.warn { color: #FFB44D; border-color: rgba(255,170,60,0.5); background: rgba(255,170,60,0.1); }
   .acc-dday.urgent {
     color: #FF5B5B; border-color: rgba(255,80,80,0.65);
@@ -4664,6 +4665,46 @@
     display: block;
   }
 
+  /* === 퍼널의 본질 (교육 접이식 카드) === */
+  .fn-essence { margin: 4px 0 14px; }
+  .fn-essence-toggle { display:flex; align-items:center; justify-content:space-between; gap:8px; width:100%; padding:12px 15px; border-radius:11px; background:var(--bg-card); border:1px dashed var(--line); color:var(--text-mute); font-size:12.5px; font-weight:700; cursor:pointer; transition:border-color .15s, color .15s; }
+  .fn-essence-toggle:hover { border-color:var(--sage); color:var(--sage); }
+  .fn-essence-toggle.open { color:var(--neon); border-color:var(--neon); border-style:solid; }
+  .fn-essence-caret { transition:transform .25s; }
+  .fn-essence-toggle.open .fn-essence-caret { transform:rotate(180deg); }
+  .fn-essence-body { margin-top:12px; padding:18px 16px; border:1px solid var(--line); border-radius:14px; background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent); animation:scFade .25s ease; }
+  .fn-ess-title { text-align:center; font-size:16px; font-weight:800; color:var(--text-main); line-height:1.4; }
+  .fn-ess-title em { color:var(--neon); font-style:normal; }
+  .fn-ess-sub { text-align:center; font-size:11.5px; color:var(--text-mute); margin:4px 0 16px; }
+  .fn-ess-funnel { display:flex; flex-direction:column; align-items:center; gap:6px; }
+  .fn-ess-stage { width:var(--w); box-sizing:border-box; display:flex; align-items:center; gap:10px; padding:9px 14px; border-radius:9px; background:linear-gradient(135deg, var(--c1), var(--c2)); color:#fff; box-shadow:0 2px 10px rgba(0,0,0,0.25); }
+  .fn-ess-no { font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:800; background:rgba(0,0,0,0.25); border-radius:50%; width:22px; height:22px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .fn-ess-main { display:flex; flex-direction:column; line-height:1.25; min-width:0; flex:1; }
+  .fn-ess-main b { font-size:13.5px; font-weight:800; }
+  .fn-ess-main i { font-size:10.5px; font-style:normal; opacity:0.85; }
+  .fn-ess-do { font-size:10px; opacity:0.9; text-align:right; flex-shrink:0; white-space:nowrap; }
+  .fn-ess-core { margin-top:16px; padding:12px 14px; border-radius:10px; background:rgba(0,230,118,0.07); border:1px solid var(--neon); text-align:center; font-size:12px; color:var(--text-mute); line-height:1.5; }
+  .fn-ess-core b { color:var(--neon); }
+  .fn-ess-contrast { margin-top:12px; display:flex; flex-wrap:wrap; align-items:center; gap:6px 10px; justify-content:center; font-size:11px; color:var(--text-mute); }
+  .fn-ess-contrast .x { color:#FF6B6B; font-weight:700; }
+  .fn-ess-contrast .o { color:var(--neon); font-weight:700; }
+  .fn-ess-contrast i { font-style:normal; opacity:0.55; }
+  /* 단계별 콘텐츠 (확장) */
+  .fn-ess-divider { height:1px; background:var(--line); margin:18px 0 14px; }
+  .fn-ess-sec2-title { font-size:13px; font-weight:800; color:var(--text-main); margin-bottom:12px; }
+  .fn-ess-sec2-title span { font-weight:600; font-size:11px; color:var(--text-mute); }
+  .fn-ess-content { display:flex; flex-direction:column; gap:11px; }
+  .fn-ess-crow { border-left:3px solid var(--c); padding:7px 0 7px 12px; }
+  .fn-ess-crow-head { display:flex; align-items:center; gap:8px; margin-bottom:7px; }
+  .fn-ess-cbadge { font-size:12.5px; font-weight:800; color:var(--c); }
+  .fn-ess-cgoal { font-size:11px; color:var(--text-mute); }
+  .fn-ess-cmark { font-size:10px; color:#FF6B6B; font-weight:700; margin-left:auto; }
+  .fn-ess-chips { display:flex; flex-wrap:wrap; gap:6px; }
+  .fn-ess-chips span { font-size:11px; padding:4px 9px; border-radius:999px; background:var(--bg-elev); border:1px solid var(--line); color:var(--text-main); }
+  .fn-ess-tip { margin-top:14px; font-size:11px; color:var(--text-mute); line-height:1.5; text-align:center; }
+  .fn-ess-tip b { color:var(--sage); }
+  @media (max-width:520px) { .fn-ess-do { display:none; } }
+
   /* 깔때기 셀 (홀수 행) */
   .funnel-bowl-cell {
     grid-column: 1;
@@ -5559,6 +5600,100 @@
     background: var(--cream-soft); color: var(--cream);
     border: 1.5px solid var(--cream); box-shadow: none; cursor: default;
   }
+
+  /* === 완수 트로피 카드 (명예의 전당) === */
+  .ch-card.ch-trophy {
+    text-align: center; padding: 30px 22px 24px; position: relative; overflow: hidden;
+    border: 1.5px solid #F5C84B;
+    background: linear-gradient(165deg, rgba(245,200,75,0.12), var(--bg-card) 58%);
+    box-shadow: 0 0 26px rgba(245,200,75,0.18);
+  }
+  .ch-trophy-rays { position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(circle at 50% -10%, rgba(245,200,75,0.22), transparent 62%); }
+  .ch-trophy-badge { position: relative; font-size: 56px; line-height: 1;
+    filter: drop-shadow(0 0 16px rgba(245,200,75,0.55));
+    animation: chTrophyPop .65s cubic-bezier(0.2,1.6,0.3,1); }
+  @keyframes chTrophyPop { 0% { transform: scale(0) rotate(-22deg); } 60% { transform: scale(1.25) rotate(8deg); } 100% { transform: scale(1) rotate(0); } }
+  .ch-trophy-name { position: relative; margin-top: 12px; font-size: 21px; font-weight: 800; color: var(--text-main); line-height: 1.2; }
+  .ch-trophy-name span { color: #F5C84B; }
+  .ch-trophy-period { position: relative; margin-top: 7px; font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.08em; color: #F5C84B; }
+  .ch-trophy-stats { position: relative; margin-top: 8px; font-size: 12.5px; color: var(--text-mute); }
+  .ch-trophy-stamp { position: relative; display: inline-block; margin-top: 16px; padding: 8px 18px;
+    border: 2px solid #F5C84B; border-radius: 10px; color: #F5C84B; font-weight: 800; font-size: 14px;
+    transform: rotate(-6deg); background: rgba(245,200,75,0.08); box-shadow: 0 0 14px rgba(245,200,75,0.25); }
+  .ch-trophy-date { position: relative; margin-top: 16px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-faint); letter-spacing: 0.05em; }
+  .ch-trophy-actions { position: relative; display: flex; gap: 8px; justify-content: center; margin-top: 18px; }
+
+  /* === 북극성 (롤모델) === */
+  .ns-wrap { flex:1; overflow-y:auto; padding:26px 22px 90px; max-width:760px; margin:0 auto; width:100%; box-sizing:border-box; }
+  .ns-head { display:flex; justify-content:space-between; align-items:flex-start; gap:16px; margin-bottom:22px; }
+  .ns-eyebrow { font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:var(--sage); margin-bottom:6px; }
+  .ns-title { font-size:26px; font-weight:800; color:var(--text-main); line-height:1.1; }
+  .ns-title .em { color:var(--neon); }
+  .ns-sub { font-size:12.5px; line-height:1.6; color:var(--text-mute); margin-top:8px; max-width:460px; }
+  .ns-add-btn { flex-shrink:0; padding:11px 16px; border-radius:10px; cursor:pointer; font-weight:800; font-size:13px; color:#06140C; background:linear-gradient(120deg,var(--emerald),var(--neon)); border:none; box-shadow:0 0 14px var(--neon-glow); white-space:nowrap; }
+  .ns-add-btn:hover { filter:brightness(1.08); }
+  .ns-list { display:flex; flex-direction:column; gap:18px; }
+  .ns-empty { text-align:center; padding:60px 20px; border:1px dashed var(--line); border-radius:16px; }
+  .ns-empty-emoji { font-size:42px; margin-bottom:14px; }
+  .ns-empty-title { font-size:17px; font-weight:800; color:var(--text-main); margin-bottom:8px; }
+  .ns-empty-sub { font-size:13px; color:var(--text-mute); line-height:1.6; margin-bottom:20px; }
+  .ns-card { background:var(--bg-card); border:1px solid var(--line); border-radius:16px; padding:20px; }
+  .ns-card-top { display:flex; gap:14px; align-items:flex-start; }
+  .ns-photo { width:64px; height:64px; border-radius:50%; flex-shrink:0; background:var(--bg-elev); border:2px solid var(--line); background-size:cover; background-position:center; display:flex; align-items:center; justify-content:center; cursor:pointer; overflow:hidden; }
+  .ns-photo.has-img { border-color:var(--neon); box-shadow:0 0 12px var(--neon-glow); }
+  .ns-photo-ph { font-size:13px; color:var(--text-faint); text-align:center; line-height:1.2; }
+  .ns-id { flex:1; min-width:0; }
+  .ns-handle { font-size:17px; font-weight:800; color:var(--text-main); word-break:break-all; }
+  .ns-name { font-size:12px; color:var(--sage); margin-top:2px; }
+  .ns-reason { font-size:12.5px; color:var(--text-mute); font-style:italic; margin-top:6px; line-height:1.5; }
+  .ns-card-actions { display:flex; gap:6px; flex-shrink:0; }
+  .ns-icon-btn { width:30px; height:30px; border-radius:8px; background:var(--bg-elev); border:1px solid var(--line); cursor:pointer; font-size:13px; display:flex; align-items:center; justify-content:center; }
+  .ns-icon-btn:hover { border-color:var(--sage); }
+  .ns-icon-btn.del:hover { border-color:var(--wine); }
+  .ns-section { margin-top:16px; padding-top:14px; border-top:1px dashed var(--line); }
+  .ns-section-title { font-size:11px; font-weight:700; letter-spacing:0.04em; color:var(--text-mute); margin-bottom:10px; display:flex; align-items:center; gap:8px; }
+  .ns-section-hint { font-weight:400; font-size:9.5px; color:var(--text-faint); }
+  .ns-points { margin:0; padding-left:18px; display:flex; flex-direction:column; gap:5px; }
+  .ns-points li { font-size:13px; color:var(--text-main); line-height:1.5; }
+  .ns-kws { display:flex; flex-wrap:wrap; gap:8px; }
+  .ns-kw { position:relative; display:inline-flex; align-items:center; gap:6px; padding:7px 11px; border-radius:999px; background:var(--bg-elev); border:1px solid var(--line); cursor:pointer; user-select:none; transition:transform .1s, border-color .2s; }
+  .ns-kw:hover { border-color:var(--neon); transform:translateY(-1px); }
+  .ns-kw:active { transform:scale(0.96); }
+  .ns-kw.top { border-color:var(--neon); box-shadow:0 0 10px var(--neon-glow); background:rgba(0,230,118,0.08); }
+  .ns-kw-word { font-size:12.5px; font-weight:700; color:var(--text-main); }
+  .ns-kw-marks { font-size:12px; color:var(--neon); letter-spacing:1px; font-weight:700; min-width:8px; }
+  .ns-kw-num { font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--text-mute); }
+  .ns-kw-minus { width:16px; height:16px; border-radius:50%; background:var(--line); color:var(--text-mute); font-size:13px; display:flex; align-items:center; justify-content:center; line-height:1; margin-left:1px; }
+  .ns-kw-minus:hover { background:var(--wine); color:#fff; }
+  .ns-kw-empty { font-size:12px; color:var(--text-faint); }
+  .ns-kw-add { margin-top:11px; }
+  .ns-kw-input { width:100%; padding:9px 12px; border-radius:9px; background:var(--bg-elev); border:1px solid var(--line); color:var(--text-main); font-size:12.5px; box-sizing:border-box; font-family:inherit; }
+  .ns-kw-input:focus { outline:none; border-color:var(--neon); }
+  .ns-kw-quick { display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; }
+  .ns-quick-chip { font-size:11px; padding:4px 9px; border-radius:999px; background:transparent; border:1px dashed var(--line); color:var(--text-mute); cursor:pointer; }
+  .ns-quick-chip:hover { border-color:var(--sage); color:var(--sage); }
+  .ns-make-btn { width:100%; margin-top:16px; padding:12px; border-radius:10px; cursor:pointer; font-size:13px; font-weight:800; color:var(--neon); background:rgba(0,230,118,0.07); border:1px solid var(--neon); }
+  .ns-make-btn:hover { background:rgba(0,230,118,0.14); }
+  /* 북극성 모달 */
+  .ns-modal-back { position:fixed; inset:0; background:rgba(0,0,0,0.6); backdrop-filter:blur(3px); z-index:7000; display:none; align-items:center; justify-content:center; padding:18px; }
+  .ns-modal-back.show { display:flex; }
+  .ns-modal { background:var(--bg-card); border:1px solid var(--line); border-radius:18px; padding:24px; width:100%; max-width:440px; max-height:88vh; overflow-y:auto; }
+  .ns-modal-title { font-size:18px; font-weight:800; color:var(--text-main); margin-bottom:18px; }
+  .ns-modal-photo-row { display:flex; align-items:center; gap:14px; margin-bottom:18px; }
+  .ns-modal-photo { width:72px; height:72px; border-radius:50%; flex-shrink:0; background:var(--bg-elev); border:2px dashed var(--line); background-size:cover; background-position:center; display:flex; align-items:center; justify-content:center; cursor:pointer; overflow:hidden; }
+  .ns-modal-photo.has-img { border-style:solid; border-color:var(--neon); }
+  .ns-photo-ph { font-size:12px; color:var(--text-faint); text-align:center; line-height:1.2; }
+  .ns-modal-photo-help { font-size:11.5px; color:var(--text-mute); line-height:1.5; }
+  .ns-modal-label { display:block; font-size:11.5px; font-weight:700; color:var(--text-mute); margin:12px 0 6px; }
+  .ns-req { color:var(--neon); }
+  .ns-modal-input { width:100%; padding:10px 12px; border-radius:9px; background:var(--bg-elev); border:1px solid var(--line); color:var(--text-main); font-size:13px; box-sizing:border-box; font-family:inherit; }
+  .ns-modal-input:focus { outline:none; border-color:var(--neon); }
+  .ns-modal-textarea { resize:vertical; line-height:1.5; }
+  .ns-modal-actions { display:flex; gap:10px; margin-top:22px; }
+  .ns-modal-btn { flex:1; padding:12px; border-radius:10px; cursor:pointer; font-size:13px; font-weight:800; border:1px solid var(--line); }
+  .ns-modal-btn.cancel { background:transparent; color:var(--text-mute); }
+  .ns-modal-btn.save { background:linear-gradient(120deg,var(--emerald),var(--neon)); color:#06140C; border:none; box-shadow:0 0 14px var(--neon-glow); }
 
   /* Progress visualization - 100 dots */
   .ch-dots {
@@ -9080,6 +9215,45 @@
   .sc-wrap > .sc-entry-wrap { order: 1; }
   .sc-wrap > .sc-plan-wrap { order: 2; }
 
+  /* === 원고 탭 (쓰기 / 모음) === */
+  .sc-tabs { display:flex; gap:6px; padding:18px 32px 0; }
+  .sc-tab { padding:10px 20px; border-radius:11px 11px 0 0; background:transparent; border:1px solid transparent; border-bottom:none; color:var(--text-mute); font-size:13.5px; font-weight:700; cursor:pointer; transition:color .15s, background .15s; }
+  .sc-tab:hover { color:var(--text-main); }
+  .sc-tab.on { background:var(--bg-card); border-color:var(--line); color:var(--neon); }
+  .sc-tabpane { animation:scFade .25s ease; }
+  @keyframes scFade { from { opacity:0; transform:translateY(4px); } to { opacity:1; transform:none; } }
+  /* 월간 원고 적용하기 (접힘 버튼) */
+  .sc-plan-toggle { display:flex; align-items:center; gap:8px; margin:18px 32px 0; padding:13px 16px; width:calc(100% - 64px); box-sizing:border-box; border-radius:11px; background:var(--bg-card); border:1px dashed var(--line); color:var(--text-mute); font-size:13px; font-weight:700; cursor:pointer; transition:border-color .15s, color .15s; }
+  .sc-plan-toggle:hover { border-color:var(--sage); color:var(--sage); }
+  .sc-plan-toggle.open { color:var(--neon); border-color:var(--neon); border-style:solid; }
+  .sc-plan-toggle-caret { margin-left:auto; transition:transform .25s; }
+  .sc-plan-toggle.open .sc-plan-toggle-caret { transform:rotate(180deg); }
+
+  /* === 원고 모음 미니 캘린더 === */
+  .sc-mini-cal { margin:18px 32px 14px; padding:16px; background:var(--bg-card); border:1px solid var(--line); border-radius:14px; max-width:440px; box-sizing:border-box; }
+  .sc-mc-day { font-size:12px; }
+  .sc-mini-cal .sc-mc-day { aspect-ratio:auto; min-height:42px; }
+  .sc-mini-cal-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+  .sc-mini-cal-title { font-size:14px; font-weight:800; color:var(--text-main); }
+  .sc-mini-cal-nav { width:30px; height:30px; border-radius:8px; background:var(--bg-elev); border:1px solid var(--line); color:var(--text-mute); cursor:pointer; }
+  .sc-mini-cal-nav:hover { border-color:var(--sage); color:var(--sage); }
+  .sc-mini-cal-dow { display:grid; grid-template-columns:repeat(7,1fr); gap:4px; margin-bottom:6px; }
+  .sc-mini-cal-dow span { text-align:center; font-size:10px; color:var(--text-faint); }
+  .sc-mini-cal-dow .sun { color:#FF6B6B; }
+  .sc-mini-cal-dow .sat { color:#6AA9FF; }
+  .sc-mini-cal-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:4px; }
+  .sc-mc-day { position:relative; aspect-ratio:1; display:flex; align-items:center; justify-content:center; font-size:12px; color:var(--text-mute); border-radius:8px; border:1px solid transparent; cursor:pointer; transition:border-color .12s; }
+  .sc-mc-day.blank { cursor:default; }
+  .sc-mc-day:not(.blank):hover { border-color:var(--line-soft); }
+  .sc-mc-day.has { color:var(--text-main); font-weight:700; background:rgba(0,230,118,0.08); border-color:var(--emerald); }
+  .sc-mc-day.today { box-shadow:inset 0 0 0 1.5px var(--cream); }
+  .sc-mc-day.sel { background:var(--neon); color:#06140C; border-color:var(--neon); box-shadow:0 0 10px var(--neon-glow); }
+  .sc-mc-dot { position:absolute; top:1px; right:2px; font-size:8px; font-weight:800; min-width:12px; height:12px; padding:0 3px; border-radius:7px; background:var(--neon); color:#06140C; display:flex; align-items:center; justify-content:center; line-height:1; box-sizing:border-box; }
+  .sc-mc-day.sel .sc-mc-dot { background:#06140C; color:var(--neon); }
+  .sc-mc-selbar { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:12px; padding-top:11px; border-top:1px dashed var(--line); font-size:11.5px; color:var(--sage); }
+  .sc-mc-clear { background:transparent; border:1px solid var(--line); border-radius:7px; padding:5px 10px; color:var(--text-mute); font-size:11px; cursor:pointer; white-space:nowrap; }
+  .sc-mc-clear:hover { border-color:var(--wine); color:var(--wine); }
+
   .sc-header {
     padding: 32px 32px 24px;
     border-bottom: 1px solid var(--line);
@@ -11130,6 +11304,7 @@
     justify-content: space-between;
     align-items: baseline;
   }
+  .fb-col-titwrap { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
   .fb-col-title {
     font-family: 'Pretendard', sans-serif;
     font-size: 15px;
@@ -11137,6 +11312,7 @@
     color: var(--text-main);
     letter-spacing: -0.01em;
   }
+  .fb-col-sub { font-size: 10.5px; font-weight: 600; color: var(--text-mute); }
   .fb-col-count {
     font-family: 'JetBrains Mono', monospace;
     font-size: 13px;
@@ -13671,6 +13847,9 @@
       <button class="sh-sb-item" data-ws="moodboard" id="ws-moodboard">
         <span class="sh-sb-icon">◳</span><span class="sh-sb-label">무드보드</span>
       </button>
+      <button class="sh-sb-item" data-ws="northstar" id="ws-northstar">
+        <span class="sh-sb-icon">⭐</span><span class="sh-sb-label">내 북극성</span>
+      </button>
 
       <!-- 설정 (구분선 + 버튼) -->
       <div class="sh-sb-divider"></div>
@@ -14277,6 +14456,54 @@
               <div class="funnel-week-count" id="funnel-week-count"></div>
             </div>
             <div class="funnel-sub">대중 → 예비 고객 → 일반 고객 → 재구매로 이어지는 <strong>이번 주 실행 카드</strong></div>
+
+            <!-- 퍼널의 본질 (교육용 접이식 카드) -->
+            <div class="fn-essence">
+              <button class="fn-essence-toggle" onclick="window.__toggleFnEssence&&window.__toggleFnEssence(this)">
+                <span>🎯 퍼널의 본질 + 뭘 올릴지 한눈에</span>
+                <span class="fn-essence-caret">▾</span>
+              </button>
+              <div class="fn-essence-body" id="fn-essence-body" style="display:none;">
+                <div class="fn-ess-title">퍼널의 본질은 <em>'신뢰를 쌓아 문제를 해결'</em></div>
+                <div class="fn-ess-sub">사람의 마음을 움직여 행동하게 만드는 진짜 퍼널</div>
+                <div class="fn-ess-funnel">
+                  <div class="fn-ess-stage" style="--w:100%;--c1:#8E6FD6;--c2:#6E51B8;"><span class="fn-ess-no">01</span><div class="fn-ess-main"><b>문제 인식</b><i>"나에게 문제가 있다"</i></div><span class="fn-ess-do">고민·불편함을 자각</span></div>
+                  <div class="fn-ess-stage" style="--w:90%;--c1:#4C84C8;--c2:#365FA8;"><span class="fn-ess-no">02</span><div class="fn-ess-main"><b>희망</b><i>"해결 방법이 있을까?"</i></div><span class="fn-ess-do">변화된 미래를 제시</span></div>
+                  <div class="fn-ess-stage" style="--w:80%;--c1:#3FA9A0;--c2:#2C8079;"><span class="fn-ess-no">03</span><div class="fn-ess-main"><b>신뢰</b><i>"이 사람이면 믿겠다"</i></div><span class="fn-ess-do">전문성·진정성·경험</span></div>
+                  <div class="fn-ess-stage" style="--w:70%;--c1:#67B84F;--c2:#4E9438;"><span class="fn-ess-no">04</span><div class="fn-ess-main"><b>행동</b><i>"일단 해보자"</i></div><span class="fn-ess-do">구체적 행동 유도</span></div>
+                  <div class="fn-ess-stage" style="--w:62%;--c1:#D8B23E;--c2:#B08A22;"><span class="fn-ess-no">05</span><div class="fn-ess-main"><b>결과</b><i>"문제가 해결됐다!"</i></div><span class="fn-ess-do">만족·더 큰 가치</span></div>
+                </div>
+                <div class="fn-ess-core">퍼널의 본질 = <b>'사람의 문제를 해결해 주겠다는 약속을, 신뢰하게 만드는 과정'</b></div>
+                <div class="fn-ess-contrast"><span class="x">❌ 흔한 착각</span> 조회수 → 팔로우 → 구매 <i>(내 지표)</i><span class="o">✅ 진짜 퍼널</span> 마음의 단계 <i>(고객 관점)</i></div>
+
+                <div class="fn-ess-divider"></div>
+                <div class="fn-ess-sec2-title">📲 그래서, 뭘 올려요? <span>— 단계별 콘텐츠 (헤어디자이너)</span></div>
+                <div class="fn-ess-content">
+                  <div class="fn-ess-crow" style="--c:#5BAEA0;">
+                    <div class="fn-ess-crow-head"><span class="fn-ess-cbadge">유입</span><span class="fn-ess-cgoal">나를 알게 만들기</span></div>
+                    <div class="fn-ess-chips"><span>변신 릴스</span><span>트렌드 숏츠</span><span>스타일 꿀팁</span><span>광고·지역 해시태그</span></div>
+                  </div>
+                  <div class="fn-ess-crow" style="--c:#67B84F;">
+                    <div class="fn-ess-crow-head"><span class="fn-ess-cbadge">관심</span><span class="fn-ess-cgoal">더 보고 싶게 (팔로우 전환)</span></div>
+                    <div class="fn-ess-chips"><span>집 스타일링 팁</span><span>고민 공감</span><span>해결 사례 시리즈</span></div>
+                  </div>
+                  <div class="fn-ess-crow" style="--c:#D8B23E;">
+                    <div class="fn-ess-crow-head"><span class="fn-ess-cbadge">신뢰</span><span class="fn-ess-cgoal">믿게 만들기</span><span class="fn-ess-cmark">💥 여기서 갈림</span></div>
+                    <div class="fn-ess-chips"><span>고객 후기</span><span>전후 비교</span><span>시술 과정·결과</span><span>경력·자격·전문성</span></div>
+                  </div>
+                  <div class="fn-ess-crow" style="--c:#9B6DD6;">
+                    <div class="fn-ess-crow-head"><span class="fn-ess-cbadge">전환</span><span class="fn-ess-cgoal">예약하게 만들기</span></div>
+                    <div class="fn-ess-chips"><span>메뉴·가격 안내</span><span>1:1 컨설팅·클래스</span><span>예약 CTA·첫방문 혜택</span></div>
+                  </div>
+                  <div class="fn-ess-crow" style="--c:#4C84C8;">
+                    <div class="fn-ess-crow-head"><span class="fn-ess-cbadge">재구매</span><span class="fn-ess-cgoal">계속 함께 (진짜 매출)</span></div>
+                    <div class="fn-ess-chips"><span>홈케어 가이드</span><span>멤버십·정기관리</span><span>업셀 제안</span><span>단골 커뮤니티</span></div>
+                  </div>
+                </div>
+                <div class="fn-ess-tip">💡 <b>유입은 넓게 · 신뢰는 깊게 · 관계는 길게.</b> 신뢰가 전환을, 재구매가 매출을 만들어요.</div>
+              </div>
+            </div>
+
             <div class="funnel-wrap" id="funnel-wrap"></div>
             <div class="funnel-balance" id="funnel-balance"></div>
           </section>
@@ -14611,6 +14838,18 @@
         <p class="sc-sub">벤치마킹한 인사이트를 내 콘텐츠로.<br/>아이디어 → 초안 → 다듬기 → 완성 → 업로드.</p>
       </section>
 
+      <!-- 원고 탭 토글 (썸네일 탭처럼) -->
+      <div class="sc-tabs" id="sc-tabs">
+        <button class="sc-tab on" data-sctab="write">✎ 원고 쓰기</button>
+        <button class="sc-tab" data-sctab="collect">🗂 원고 모음</button>
+      </div>
+
+      <!-- 탭A: 원고 쓰기 -->
+      <div id="sc-tab-write" class="sc-tabpane">
+        <!-- 월간 원고 적용하기 (기본 접힘) -->
+        <button class="sc-plan-toggle" id="sc-plan-toggle">📅 월간 원고 적용하기 <span class="sc-plan-toggle-caret">▾</span></button>
+        <div id="sc-plan-collapse" class="sc-plan-collapse" style="display:none;">
+
       <!-- 캘린더 + 1·2·3·4주차 카드 영역 -->
       <div class="sc-plan-wrap">
         <!-- 왼쪽: 작은 캘린더 -->
@@ -14627,6 +14866,7 @@
         <!-- 오른쪽: 1·2·3·4주차 카드 (세로 리스트) -->
         <div class="sc-plan-weeks" id="sc-plan-weeks"></div>
       </div>
+        </div><!-- /sc-plan-collapse -->
 
       <!-- 메인 작성 카드 -->
       <div class="sc-entry-wrap">
@@ -14807,6 +15047,12 @@
           </div>
         </div>
       </div>
+      </div><!-- /sc-tab-write -->
+
+      <!-- 탭B: 원고 모음 -->
+      <div id="sc-tab-collect" class="sc-tabpane" style="display:none;">
+      <!-- 미니 캘린더 — 날짜별 원고 시각화 -->
+      <div class="sc-mini-cal" id="sc-mini-cal"></div>
 
       <!-- 원고 목록 -->
       <div class="sc-list-wrap">
@@ -14820,6 +15066,7 @@
         </div>
         <div class="sc-list" id="sc-list"></div>
       </div>
+      </div><!-- /sc-tab-collect -->
     </div>
 
     <!-- 벤치마킹 행 선택 모달 -->
@@ -14920,7 +15167,44 @@
         </div>
       </div>
     </div>
+
+    <!-- ===== NORTH STAR (롤모델) VIEW ===== -->
+    <div id="northstar-view" class="ns-wrap" style="display:none;">
+      <div class="ns-head">
+        <div class="ns-head-text">
+          <div class="ns-eyebrow">롤모델 · 북극성</div>
+          <h2 class="ns-title">내 <span class="em">북극성</span></h2>
+          <p class="ns-sub">내가 가고 싶은 방향의 계정 하나를 정밀 분석해서, 구체적인 느낌과 자주 쓰는 키워드를 손에 쥐는 곳이에요. 길을 잃을 때 여기로 돌아오세요.</p>
+        </div>
+        <button class="ns-add-btn" id="ns-add-btn">+ 북극성 추가</button>
+      </div>
+      <div class="ns-list" id="ns-list"></div>
+    </div>
   </main>
+
+  <!-- ===== NORTH STAR 추가/편집 모달 ===== -->
+  <div class="ns-modal-back" id="ns-modal-back">
+    <div class="ns-modal" role="dialog" aria-modal="true">
+      <div class="ns-modal-title" id="ns-modal-title">북극성 추가</div>
+      <div class="ns-modal-photo-row">
+        <div class="ns-modal-photo" id="ns-modal-photo"><span class="ns-photo-ph">＋<br/>사진</span></div>
+        <div class="ns-modal-photo-help">이 사람의 프로필 사진을 올려주세요.<br/>(자동으로 가볍게 압축돼요)</div>
+        <input type="file" id="ns-modal-photo-input" accept="image/*" style="display:none;" />
+      </div>
+      <label class="ns-modal-label">핸들 / 계정명 <span class="ns-req">*</span></label>
+      <input type="text" class="ns-modal-input" id="ns-modal-handle" placeholder="예: @hair_master_lee" maxlength="40" />
+      <label class="ns-modal-label">이름 (선택)</label>
+      <input type="text" class="ns-modal-input" id="ns-modal-name" placeholder="예: 이수성 디자이너" maxlength="40" />
+      <label class="ns-modal-label">이 사람처럼 되고 싶은 이유 (한 줄)</label>
+      <input type="text" class="ns-modal-input" id="ns-modal-reason" placeholder="예: 평범한 일상을 콘텐츠로 만드는 게 자연스럽다" maxlength="80" />
+      <label class="ns-modal-label">끌린 포인트 (줄바꿈으로 여러 개)</label>
+      <textarea class="ns-modal-input ns-modal-textarea" id="ns-modal-points" rows="4" placeholder="썸네일에 항상 숫자를 씀&#10;첫 3초 후킹이 강함&#10;댓글에 질문을 유도함"></textarea>
+      <div class="ns-modal-actions">
+        <button class="ns-modal-btn cancel" id="ns-modal-cancel">취소</button>
+        <button class="ns-modal-btn save" id="ns-modal-save">저장</button>
+      </div>
+    </div>
+  </div>
 
   <div class="mb-dropzone" id="mb-dropzone">
     <div class="mb-dropzone-txt">여기에 놓으면 추가돼요 ⟢</div>
@@ -15320,7 +15604,8 @@
       'shv4-gj-milestones',
       'mbv2-meta', 'mbv2-cards',
       'hmv1-home', 'hmv1-challenges', 'hmv1-seen',
-      'hmv1-acc', 'hmv1-ach', 'hmv1-weekcounts', 'hmv1-funnelcounts', 'hmv1-uploadgoal', 'hmv1-funnelup', 'hmv1-goalperiod', 'hmv1-uploadmanual'
+      'hmv1-acc', 'hmv1-ach', 'hmv1-weekcounts', 'hmv1-funnelcounts', 'hmv1-uploadgoal', 'hmv1-funnelup', 'hmv1-goalperiod', 'hmv1-uploadmanual',
+      'hmv1-northstars'
     ]);
     // 이미지 키(벤치마킹 시트·무드보드) → Supabase Storage 버킷
     const IMG_BUCKET = 'cm-images';
@@ -16755,12 +17040,22 @@
       cols = [...typeSet].map(t => ({ key: t, title: t, cls: 'fb-col-other', match: r => r[strongKey] && (r[typesKey] || []).includes(t) }));
       cols.push({ key: '__none__', title: '유형 미지정', cls: 'fmt-none', match: r => r[strongKey] && !((r[typesKey] || []).length) });
     } else {
+      // 유형 → 퍼널 단계 부연 설명 + 정렬 (문제 해결 = 전환 핵심, 맨 앞)
+      const FMT_FUNNEL = {
+        '문제 해결': { sub: '🎯 전환에 핵심!', ord: 0 },
+        '스토리형':  { sub: '🤝 신뢰·공감 형성', ord: 1 },
+        '욕구 충족': { sub: '✨ 희망을 보여줌', ord: 2 },
+        '꿀팁':      { sub: '🧲 유입·관심 (유용함)', ord: 3 },
+        '편집':      { sub: '🎬 몰입도 ↑ (전 단계 공통)', ord: 4 }
+      };
       const allFmts = activeFormats();
       cols = allFmts.map(f => ({
         key: f, title: f,
+        sub: (FMT_FUNNEL[f] && FMT_FUNNEL[f].sub) || '',
         cls: f === '문제 해결' ? 'fmt-prob' : f === '욕구 충족' ? 'fmt-want' : f === '꿀팁' ? 'fmt-tip' : f === '편집' ? 'fmt-edit' : (customFormats.includes(f) ? 'fmt-custom' : 'fb-col-other'),
         match: r => r.format === f
       }));
+      cols.sort((a, b) => ((FMT_FUNNEL[a.key] ? FMT_FUNNEL[a.key].ord : 50) - (FMT_FUNNEL[b.key] ? FMT_FUNNEL[b.key].ord : 50)));
       cols.push({ key: '__none__', title: '분류 안 됨', cls: 'fmt-none', match: r => !r.format });
     }
 
@@ -16794,7 +17089,10 @@
       return `
         <div class="fb-col ${col.cls}">
           <div class="fb-col-head">
-            <div class="fb-col-title">${esc(col.title)}</div>
+            <div class="fb-col-titwrap">
+              <div class="fb-col-title">${esc(col.title)}</div>
+              ${col.sub ? `<div class="fb-col-sub">${esc(col.sub)}</div>` : ''}
+            </div>
             <div class="fb-col-count">${fmtRows.length}</div>
           </div>
           ${starred.length ? `<div class="fb-col-stat">★ ${starred.length} · 기대 ${fmtNum(avgStar)}</div>` : ''}
@@ -17431,6 +17729,8 @@
     checkStructure: { proof: false, trust: false, benefit: false }
   };
   let scriptListFilter = 'all';
+  let _scCalMonth = null;   // 미니캘린더 표시 달 (1일)
+  let _scDayFilter = null;  // 선택된 날짜(YMD) — 그 날 원고만 보기
 
   function resetScriptEntryState() {
     scriptEntryState = {
@@ -17939,6 +18239,9 @@
     } else if (scriptListFilter === 'undone') {
       arr = arr.filter(s => !s.done);
     }
+    if (_scDayFilter) {
+      arr = arr.filter(s => (s.targetDate || '') === _scDayFilter);
+    }
     // 최신 업데이트 순
     arr.sort((a, b) => (b.updatedAt || b.createdAt || 0) - (a.updatedAt || a.createdAt || 0));
 
@@ -17946,6 +18249,10 @@
     if (countEl) countEl.textContent = arr.length;
 
     if (arr.length === 0) {
+      if (_scDayFilter) {
+        el.innerHTML = `<div class="sc-list-empty">${esc(_scDayFilter)}에 만든 원고가 없어요.</div>`;
+        return;
+      }
       if (scriptListFilter === 'all') {
         el.innerHTML = renderGwanjeomEmpty({ space: 'scripts', isEmpty: true });
       } else {
@@ -17981,6 +18288,7 @@
       card.onclick = (e) => {
         if (e.target.closest('[data-act="del-script"]')) return;
         loadScriptIntoEntry(card.dataset.scriptId);
+        scSwitchTab('write');
       };
     });
     el.querySelectorAll('[data-act="del-script"]').forEach(btn => {
@@ -18007,9 +18315,62 @@
   function renderScripts() {
     applyScriptEntryToUI();
     renderScriptList();
+    renderSCMiniCal();
     renderSCPlanCalendar();
     renderSCPlanWeeks();
     updateSCEntryHeader();
+  }
+
+  // === 원고 탭 전환 (쓰기 / 모음) ===
+  function scSwitchTab(tab) {
+    document.querySelectorAll('#sc-tabs .sc-tab').forEach(b => b.classList.toggle('on', b.dataset.sctab === tab));
+    const w = document.getElementById('sc-tab-write'), c = document.getElementById('sc-tab-collect');
+    if (w) w.style.display = (tab === 'write') ? 'block' : 'none';
+    if (c) c.style.display = (tab === 'collect') ? 'block' : 'none';
+    const sv = document.getElementById('sc-view'); if (sv) sv.scrollTop = 0;
+  }
+
+  // === 원고 모음 미니 캘린더 (날짜별 원고 시각화 + 클릭 필터) ===
+  function renderSCMiniCal() {
+    const el = document.getElementById('sc-mini-cal');
+    if (!el) return;
+    if (!_scCalMonth) { const t = new Date(); _scCalMonth = new Date(t.getFullYear(), t.getMonth(), 1); }
+    const year = _scCalMonth.getFullYear(), month = _scCalMonth.getMonth();
+    const startDow = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const todayY = dateToYMD(new Date());
+    const monthPrefix = `${year}-${String(month + 1).padStart(2, '0')}`;
+    const counts = {};
+    scripts.forEach(s => { if (s.targetDate && s.targetDate.indexOf(monthPrefix) === 0) counts[s.targetDate] = (counts[s.targetDate] || 0) + 1; });
+    let html = `<div class="sc-mini-cal-head">
+        <button class="sc-mini-cal-nav" data-act="scmc-prev" title="이전 달">◀</button>
+        <div class="sc-mini-cal-title">${year}년 ${month + 1}월</div>
+        <button class="sc-mini-cal-nav" data-act="scmc-next" title="다음 달">▶</button>
+      </div>
+      <div class="sc-mini-cal-dow">${['일', '월', '화', '수', '목', '금', '토'].map((d, i) => `<span class="${i === 0 ? 'sun' : i === 6 ? 'sat' : ''}">${d}</span>`).join('')}</div>
+      <div class="sc-mini-cal-grid">`;
+    for (let i = 0; i < startDow; i++) html += `<span class="sc-mc-day blank"></span>`;
+    for (let d = 1; d <= daysInMonth; d++) {
+      const ymd = `${monthPrefix}-${String(d).padStart(2, '0')}`;
+      const cnt = counts[ymd] || 0;
+      const cls = ['sc-mc-day'];
+      if (cnt > 0) cls.push('has');
+      if (ymd === todayY) cls.push('today');
+      if (ymd === _scDayFilter) cls.push('sel');
+      html += `<span class="${cls.join(' ')}" data-act="scmc-day" data-ymd="${ymd}">${d}${cnt > 0 ? `<span class="sc-mc-dot">${cnt}</span>` : ''}</span>`;
+    }
+    html += `</div>`;
+    if (_scDayFilter) html += `<div class="sc-mc-selbar"><span>📅 ${esc(_scDayFilter)} 원고만 보는 중</span><button class="sc-mc-clear" data-act="scmc-clear">전체 보기 ✕</button></div>`;
+    el.innerHTML = html;
+    el.querySelectorAll('[data-act]').forEach(b => {
+      b.onclick = () => {
+        const a = b.dataset.act;
+        if (a === 'scmc-prev') { _scCalMonth = new Date(year, month - 1, 1); renderSCMiniCal(); }
+        else if (a === 'scmc-next') { _scCalMonth = new Date(year, month + 1, 1); renderSCMiniCal(); }
+        else if (a === 'scmc-day') { _scDayFilter = (_scDayFilter === b.dataset.ymd) ? null : b.dataset.ymd; renderSCMiniCal(); renderScriptList(); }
+        else if (a === 'scmc-clear') { _scDayFilter = null; renderSCMiniCal(); renderScriptList(); }
+      };
+    });
   }
 
   // === 원고 카드 헤더 업데이트 ===
@@ -18357,6 +18718,17 @@
         renderScriptList();
       };
     });
+
+    // === 원고 탭 (쓰기 / 모음) + 월간 적용 토글 ===
+    document.querySelectorAll('#sc-tabs .sc-tab').forEach(b => { b.onclick = () => scSwitchTab(b.dataset.sctab); });
+    const scPlanToggle = document.getElementById('sc-plan-toggle');
+    if (scPlanToggle) scPlanToggle.onclick = () => {
+      const c = document.getElementById('sc-plan-collapse');
+      if (!c) return;
+      const willOpen = c.style.display === 'none';
+      c.style.display = willOpen ? 'block' : 'none';
+      scPlanToggle.classList.toggle('open', willOpen);
+    };
 
     // === 캘린더 네비 ===
     const scCalPrev = document.getElementById('sc-plan-cal-prev');
@@ -21262,6 +21634,234 @@
   // ============================================================
   // ===================== WORKSPACE SWITCH =====================
   // ============================================================
+  // ============================================================
+  // === 북극성 (롤모델 계정) — 정밀 분석 + 키워드 tally ========
+  // ============================================================
+  let _nsEditingId = null;       // 편집 중인 ns id (null=신규)
+  let _nsModalPhotoData = null;  // 모달에서 새로 올린 사진 dataURL
+  let _nsModalBound = false, _nsListBound = false;
+
+  function nsFind(id) { return northStars.find(n => n.id === id); }
+
+  // 이미지 헬퍼 (nsv1-img- 접두사, window.storage 직접)
+  async function nsLoadPhoto(ns) {
+    if (!ns.photoKey) return null;
+    if (imageCache[ns.photoKey]) return imageCache[ns.photoKey];
+    try { const r = await window.storage.get(ns.photoKey); if (r) { imageCache[ns.photoKey] = r.value; return r.value; } } catch (e) {}
+    return null;
+  }
+  async function nsSavePhoto(ns, dataUrl) {
+    const key = NS_IMG_PREFIX + ns.id + '-profile';
+    ns.photoKey = key;
+    try { await window.storage.set(key, dataUrl); imageCache[key] = dataUrl; } catch (e) { toast('사진 저장 실패'); }
+  }
+  async function nsDeletePhoto(ns) {
+    if (!ns.photoKey) return;
+    try { await window.storage.delete(ns.photoKey); delete imageCache[ns.photoKey]; } catch (e) {}
+  }
+
+  // 正(바를 정) tally 표기
+  function nsTallyMarks(n) {
+    n = Math.max(0, n | 0);
+    return '正'.repeat(Math.floor(n / 5)) + '·'.repeat(n % 5);
+  }
+
+  function renderNorthStars() {
+    const el = document.getElementById('ns-list');
+    if (!el) return;
+    const addBtn = document.getElementById('ns-add-btn');
+    if (addBtn) addBtn.onclick = () => openNsModal(null);
+    if (!northStars.length) {
+      el.innerHTML = `<div class="ns-empty">
+        <div class="ns-empty-emoji">⭐</div>
+        <div class="ns-empty-title">아직 북극성이 없어요</div>
+        <div class="ns-empty-sub">내가 닮고 싶은 계정 하나를 정해<br/>방향을 또렷하게 만들어 보세요.</div>
+        <button class="ns-add-btn" id="ns-empty-add">+ 첫 북극성 추가</button>
+      </div>`;
+      const b = document.getElementById('ns-empty-add'); if (b) b.onclick = () => openNsModal(null);
+      bindNsListEvents();
+      return;
+    }
+    el.innerHTML = northStars.map(ns => {
+      ensureNorthStarShape(ns);
+      const kws = ns.keywords.slice().sort((a, b) => b.count - a.count);
+      const topWord = kws.length && kws[0].count > 0 ? kws[0].word : null;
+      const points = (ns.points || '').split('\n').map(s => s.trim()).filter(Boolean);
+      const chips = kws.map(k => `
+        <div class="ns-kw ${topWord === k.word && k.count > 0 ? 'top' : ''}" data-ns="${ns.id}" data-kw="${esc(k.word)}" title="탭 = +1">
+          <span class="ns-kw-word">${esc(k.word)}</span>
+          <span class="ns-kw-marks">${nsTallyMarks(k.count)}</span>
+          <span class="ns-kw-num">${k.count}</span>
+          <span class="ns-kw-minus" data-act="ns-kw-minus" data-ns="${ns.id}" data-kw="${esc(k.word)}" title="−1">−</span>
+        </div>`).join('');
+      return `
+        <div class="ns-card" data-id="${ns.id}">
+          <div class="ns-card-top">
+            <div class="ns-photo" data-act="ns-edit" data-id="${ns.id}" id="ns-photo-${ns.id}"><span class="ns-photo-ph">⭐</span></div>
+            <div class="ns-id">
+              <div class="ns-handle">${esc(ns.handle || '이름 없는 계정')}</div>
+              ${ns.name ? `<div class="ns-name">${esc(ns.name)}</div>` : ''}
+              ${ns.reason ? `<div class="ns-reason">“${esc(ns.reason)}”</div>` : ''}
+            </div>
+            <div class="ns-card-actions">
+              <button class="ns-icon-btn" data-act="ns-edit" data-id="${ns.id}" title="편집">✏️</button>
+              <button class="ns-icon-btn del" data-act="ns-del" data-id="${ns.id}" title="삭제">🗑</button>
+            </div>
+          </div>
+          ${points.length ? `
+          <div class="ns-section">
+            <div class="ns-section-title">✦ 끌린 포인트</div>
+            <ul class="ns-points">${points.map(p => `<li>${esc(p)}</li>`).join('')}</ul>
+          </div>` : ''}
+          <div class="ns-section">
+            <div class="ns-section-title">🔑 키워드 tally <span class="ns-section-hint">칩 탭 = +1 · − 누르면 −1</span></div>
+            <div class="ns-kws">${chips || '<span class="ns-kw-empty">아직 키워드가 없어요 — 아래에서 추가하세요</span>'}</div>
+            <div class="ns-kw-add">
+              <input type="text" class="ns-kw-input" data-ns="${ns.id}" placeholder="키워드 입력 후 Enter (예: 1분만에)" maxlength="20" />
+              <div class="ns-kw-quick" id="ns-kw-quick-${ns.id}"></div>
+            </div>
+          </div>
+          <button class="ns-make-btn" data-act="ns-make" data-id="${ns.id}">▶ 이 키워드로 내 콘텐츠 만들기</button>
+        </div>`;
+    }).join('');
+
+    // 사진 로드 (비동기)
+    northStars.forEach(async ns => {
+      const ph = document.getElementById('ns-photo-' + ns.id);
+      if (!ph) return;
+      const data = await nsLoadPhoto(ns);
+      if (data) { ph.style.backgroundImage = `url(${data})`; ph.classList.add('has-img'); ph.innerHTML = ''; }
+    });
+    // 빠른 키워드 칩 (기존 키워드 목록 연동)
+    northStars.forEach(ns => {
+      const q = document.getElementById('ns-kw-quick-' + ns.id);
+      if (!q) return;
+      let avail = [];
+      try { avail = activeKeywords().filter(w => !ns.keywords.some(k => k.word === w)); } catch (e) {}
+      q.innerHTML = avail.slice(0, 8).map(w => `<span class="ns-quick-chip" data-act="ns-kw-quick" data-ns="${ns.id}" data-kw="${esc(w)}">+ ${esc(w)}</span>`).join('');
+    });
+
+    bindNsListEvents();
+  }
+
+  async function nsAddKeyword(nsId, word) {
+    word = (word || '').trim();
+    if (!word) return;
+    const ns = nsFind(nsId); if (!ns) return;
+    ensureNorthStarShape(ns);
+    const ex = ns.keywords.find(k => k.word === word);
+    if (ex) ex.count += 1; else ns.keywords.push({ word, count: 1 });
+    await saveNorthStars();
+    renderNorthStars();
+  }
+  async function nsBumpKeyword(nsId, word, delta) {
+    const ns = nsFind(nsId); if (!ns) return;
+    const k = ns.keywords.find(k => k.word === word); if (!k) return;
+    k.count = Math.max(0, k.count + delta);
+    if (k.count === 0) ns.keywords = ns.keywords.filter(x => x.word !== word);
+    await saveNorthStars();
+    renderNorthStars();
+  }
+
+  function bindNsListEvents() {
+    const el = document.getElementById('ns-list');
+    if (!el || _nsListBound) return; _nsListBound = true; // 위임 — innerHTML 교체돼도 유지
+    el.addEventListener('click', async (e) => {
+      const act = e.target.closest('[data-act]');
+      const chip = e.target.closest('.ns-kw');
+      if (chip && !act) { await nsBumpKeyword(chip.dataset.ns, chip.dataset.kw, +1); return; }
+      if (!act) return;
+      const a = act.dataset.act;
+      if (a === 'ns-edit') openNsModal(act.dataset.id);
+      else if (a === 'ns-del') {
+        if (await appConfirm('이 북극성을 삭제할까요?', { okText: '삭제', danger: true })) {
+          const ns = nsFind(act.dataset.id);
+          if (ns) await nsDeletePhoto(ns);
+          northStars = northStars.filter(n => n.id !== act.dataset.id);
+          await saveNorthStars();
+          renderNorthStars();
+          toast('북극성 삭제됨');
+        }
+      }
+      else if (a === 'ns-kw-minus') { await nsBumpKeyword(act.dataset.ns, act.dataset.kw, -1); }
+      else if (a === 'ns-kw-quick') { await nsAddKeyword(act.dataset.ns, act.dataset.kw); }
+      else if (a === 'ns-make') { switchWorkspace('scripts'); }
+    });
+    el.addEventListener('keydown', async (e) => {
+      if (e.key === 'Enter' && e.target.classList && e.target.classList.contains('ns-kw-input')) {
+        e.preventDefault();
+        const nsId = e.target.dataset.ns, val = e.target.value;
+        e.target.value = '';
+        await nsAddKeyword(nsId, val);
+      }
+    });
+  }
+
+  function bindNsModalOnce() {
+    if (_nsModalBound) return; _nsModalBound = true;
+    document.getElementById('ns-modal-cancel').onclick = closeNsModal;
+    document.getElementById('ns-modal-save').onclick = saveNsModal;
+    document.getElementById('ns-modal-back').addEventListener('click', (e) => { if (e.target.id === 'ns-modal-back') closeNsModal(); });
+    const photo = document.getElementById('ns-modal-photo');
+    const input = document.getElementById('ns-modal-photo-input');
+    photo.onclick = () => input.click();
+    input.onchange = async (e) => {
+      const f = e.target.files && e.target.files[0]; if (!f) return;
+      try {
+        const dataUrl = await resizeImage(f, 600);
+        _nsModalPhotoData = dataUrl;
+        photo.style.backgroundImage = `url(${dataUrl})`; photo.classList.add('has-img'); photo.innerHTML = '';
+      } catch (err) { toast('이미지 처리 실패'); }
+      input.value = '';
+    };
+  }
+  function openNsModal(id) {
+    bindNsModalOnce();
+    _nsEditingId = id || null;
+    _nsModalPhotoData = null;
+    const titleEl = document.getElementById('ns-modal-title');
+    const handle = document.getElementById('ns-modal-handle');
+    const name = document.getElementById('ns-modal-name');
+    const reason = document.getElementById('ns-modal-reason');
+    const points = document.getElementById('ns-modal-points');
+    const photo = document.getElementById('ns-modal-photo');
+    photo.style.backgroundImage = ''; photo.classList.remove('has-img');
+    photo.innerHTML = '<span class="ns-photo-ph">＋<br/>사진</span>';
+    if (_nsEditingId) {
+      const ns = nsFind(_nsEditingId); if (!ns) return;
+      titleEl.textContent = '북극성 편집';
+      handle.value = ns.handle || ''; name.value = ns.name || '';
+      reason.value = ns.reason || ''; points.value = ns.points || '';
+      nsLoadPhoto(ns).then(d => { if (d) { photo.style.backgroundImage = `url(${d})`; photo.classList.add('has-img'); photo.innerHTML = ''; } });
+    } else {
+      titleEl.textContent = '북극성 추가';
+      handle.value = ''; name.value = ''; reason.value = ''; points.value = '';
+    }
+    document.getElementById('ns-modal-back').classList.add('show');
+  }
+  function closeNsModal() {
+    document.getElementById('ns-modal-back').classList.remove('show');
+    _nsEditingId = null; _nsModalPhotoData = null;
+  }
+  async function saveNsModal() {
+    const handle = document.getElementById('ns-modal-handle').value.trim();
+    const name = document.getElementById('ns-modal-name').value.trim();
+    const reason = document.getElementById('ns-modal-reason').value.trim();
+    const points = document.getElementById('ns-modal-points').value;
+    if (!handle) { toast('핸들/계정명을 입력해주세요'); return; }
+    const isNew = !_nsEditingId;
+    let ns;
+    if (isNew) { ns = { id: 'ns_' + Date.now() + '_' + Math.floor(Math.random() * 9999), keywords: [], createdAt: Date.now() }; northStars.push(ns); }
+    else { ns = nsFind(_nsEditingId); if (!ns) { closeNsModal(); return; } }
+    ns.handle = handle; ns.name = name; ns.reason = reason; ns.points = points;
+    ensureNorthStarShape(ns);
+    if (_nsModalPhotoData) await nsSavePhoto(ns, _nsModalPhotoData);
+    await saveNorthStars();
+    closeNsModal();
+    renderNorthStars();
+    toast(isNew ? '북극성 추가됨 ⭐' : '수정됨');
+  }
+
   function switchWorkspace(ws) {
     document.querySelectorAll('[data-ws]').forEach(b => b.classList.toggle('active', b.dataset.ws === ws));
     setTimeout(function () { try { if (typeof renderTutorial === 'function') renderTutorial(); } catch (e) {} }, 80);
@@ -21274,6 +21874,7 @@
     const thumbView = document.getElementById('thumb-view');
     const scView = document.getElementById('sc-view');
     const cuView = document.getElementById('customer-view');
+    const nsView = document.getElementById('northstar-view');
     const sheetSb = document.getElementById('sb-sheet-sections');
     const mbSb = document.getElementById('sb-moodboard-sections');
     const cuSb = document.getElementById('sb-customer-sections');
@@ -21293,6 +21894,7 @@
       if (thumbView) thumbView.style.display = 'none';
       if (scView) scView.style.display = 'none';
       if (cuView) cuView.style.display = 'none';
+      if (nsView) nsView.style.display = 'none';
     };
 
     if (ws === 'home') {
@@ -21355,6 +21957,14 @@
       search.style.display = 'none';
       if (addTop) addTop.style.display = 'none';
       renderMoodboard();
+    } else if (ws === 'northstar') {
+      hideAll();
+      if (nsView) { nsView.style.display = 'flex'; nsView.style.flexDirection = 'column'; }
+      sheetSb.style.display = 'none';
+      mbSb.style.display = 'none';
+      if (cuSb) cuSb.style.display = 'none';
+      topbar.style.display = 'none';
+      renderNorthStars();
     } else {
       hideAll();
       sheetView.style.display = '';
@@ -21915,10 +22525,14 @@
   const HOME_KEY = 'hmv1-home';
   const CH_KEY = 'hmv1-challenges';
   const SEEN_KEY = 'hmv1-seen';
+  const NS_KEY = 'hmv1-northstars';
+  const NS_IMG_PREFIX = 'nsv1-img-';
 
   let homeData = { goal: '', why: '' };
   let challenges = []; // {id, name, target, startDate, endDate, rowIds: [], milestonesShown:[], createdAt}
   let seenFlags = { firstVisit: false };
+  // 북극성(롤모델): {id, handle, name, reason, points, photoKey, keywords:[{word,count}], createdAt}
+  let northStars = [];
 
   async function loadHome() {
     try {
@@ -21933,6 +22547,12 @@
       const r = await window.storage.get(SEEN_KEY);
       if (r) seenFlags = JSON.parse(r.value);
     } catch (e) {}
+    try {
+      const r = await window.storage.get(NS_KEY);
+      if (r) northStars = JSON.parse(r.value);
+    } catch (e) {}
+    if (!Array.isArray(northStars)) northStars = [];
+    northStars.forEach(ensureNorthStarShape);
     challenges.forEach(ensureChallengeShape);
   }
 
@@ -21945,6 +22565,18 @@
   }
   async function saveSeen() {
     try { await window.storage.set(SEEN_KEY, JSON.stringify(seenFlags)); } catch (e) {}
+  }
+  async function saveNorthStars() {
+    try { await window.storage.set(NS_KEY, JSON.stringify(northStars)); } catch (e) {}
+  }
+  function ensureNorthStarShape(ns) {
+    if (!ns.id) ns.id = 'ns_' + Date.now() + '_' + Math.floor(Math.random() * 9999);
+    if (typeof ns.handle !== 'string') ns.handle = '';
+    if (typeof ns.name !== 'string') ns.name = '';
+    if (typeof ns.reason !== 'string') ns.reason = '';
+    if (typeof ns.points !== 'string') ns.points = '';
+    if (!Array.isArray(ns.keywords)) ns.keywords = [];
+    ns.keywords = ns.keywords.filter(k => k && k.word).map(k => ({ word: String(k.word), count: Math.max(0, parseInt(k.count, 10) || 0) }));
   }
 
   // === D-day calc ===
@@ -22498,7 +23130,7 @@
       if (key === 'insight') { const n = (rows || []).filter(isFilled).length; return n ? ('벤치마킹 ' + n + '개') : '데이터 없음'; }
       if (key === 'week') { const dd = getWeekDday(); return dd.uploaded + ' 업로드 / ' + dd.slotsTotal + '칸'; }
       if (key === 'funnel') { const fs = funnelSlots || {}; const n = ((fs.attract || []).length) + ((fs.convert || []).length) + ((fs.retain || []).length); return n + '개 배치'; }
-      if (key === 'challenge') { const act = (challenges || []).filter(c => { try { return isChallengeActive(c); } catch (e) { return true; } }); if (!act.length) return '진행 중 없음'; const c = act[0]; try { ensureChallengeShape(c); } catch (e) {} const ana = challengeProgress(c), upl = challengeUploaded(c), uplT = c.uploadTarget || c.target; let dd = ''; if (c.endDate) { try { const d = dateDiff(c.endDate); dd = ' · D-' + (d >= 0 ? d : ('+' + (-d))); } catch (e) {} } return '시트 ' + ana + '/' + c.target + ' · 업로드 ' + upl + '/' + uplT + dd + (act.length > 1 ? ' 외 ' + (act.length - 1) : ''); }
+      if (key === 'challenge') { const act = (challenges || []).filter(c => { try { return isChallengeActive(c); } catch (e) { return true; } }); if (!act.length) return '진행 중 없음'; const c = act[0]; try { ensureChallengeShape(c); } catch (e) {} const ana = challengeProgress(c), upl = challengeUploaded(c), uplT = c.uploadTarget || c.target; return '시트 ' + ana + '/' + c.target + ' · 업로드 ' + upl + '/' + uplT + (act.length > 1 ? ' 외 ' + (act.length - 1) : ''); }
       if (key === 'calendar') { if (!calBaseMonday) return ''; const mo = `${calBaseMonday.getMonth() + 1}월`; const g = monthlyUploadGoal || 0; return g > 0 ? `${mo} · ${_monthUploaded || 0}/${g} 업로드` : `${calBaseMonday.getFullYear()}년 ${mo}`; }
       if (key === 'stats') { const n = (rows || []).filter(r => !!(r.why || r.idea || r.script || r.url || r.hook || r.author || r.hasThumb || r.hasComment)).length; return n + '개 분석'; }
       if (key === 'goal') { return (homeData && homeData.goal) ? '설정됨' : '미설정'; }
@@ -22573,6 +23205,20 @@
   }
   function updateWeekDdayChip() { setAccDdayChip('week', getWeekDday()); }
   function updateCalendarDdayChip() { setAccDdayChip('calendar', getMonthDday()); }
+  // 진행 중 챌린지 D-day 칩 (이번주·캘린더 헤더와 동일 스타일)
+  function getChallengeDday() {
+    const act = (challenges || []).filter(c => { try { return isChallengeActive(c); } catch (e) { return false; } });
+    if (!act.length) return { level: 'none', label: '', sub: '진행 중 챌린지 없음' };
+    const c = act.slice().sort((a, b) => { const da = a.endDate ? dateDiff(a.endDate) : 9999; const db = b.endDate ? dateDiff(b.endDate) : 9999; return da - db; })[0];
+    try { ensureChallengeShape(c); } catch (e) {}
+    if (!c.endDate) return { level: 'cool', label: '진행 중', sub: c.name || '' };
+    const d = dateDiff(c.endDate);
+    let level, label, sub;
+    if (d < 0) { level = 'urgent'; label = 'D+' + Math.abs(d); sub = '마감 지남'; }
+    else { level = d >= 14 ? 'cool' : d >= 5 ? 'warn' : 'urgent'; label = d === 0 ? 'D-DAY' : 'D-' + d; sub = d + '일 남음'; }
+    return { level, label, sub };
+  }
+  function updateChallengeDdayChip() { setAccDdayChip('challenge', getChallengeDday()); }
 
   // === 목표 · 기간 통합 모달 (미니 달력 드래그) ===
   let _gmStart = '', _gmEnd = '', _gmMonth = null, _gmAnchor = null, _gmDragging = false, _gmBound = false;
@@ -22782,7 +23428,7 @@
     // 여정 마일스톤 = 구체 행동 (앞 5개 = 입문 튜토리얼, 뒤 = 서서히)
     const M = [
       { ico: '🎯', t: '목표 적기',   need: '목표·Why 한 줄 적기',     done: hasGoal,              go: () => goPanel('goal'),    tut: 1 },
-      { ico: '📋', t: '첫 분석',     need: '벤치마킹 1개 분석하기',    done: c.analyzed >= 1,      go: () => goWs('sheet'),      tut: 1 },
+      { ico: '📋', t: '첫 시트',     need: '벤치마킹 시트 하나 만들기', done: c.analyzed >= 1,      go: () => goWs('sheet'),      tut: 1 },
       { ico: '🔥', t: '이번주 담기', need: '이번 주 슬롯 1개 채우기',  done: c.weekCards >= 1,     go: () => goPanel('week'),    tut: 1 },
       { ico: '✍️', t: '첫 원고',     need: '원고 1개 작성·저장',       done: c.done >= 1,          go: () => goWs('scripts'),    tut: 1 },
       { ico: '🏁', t: '입문 클리어', need: '위 4개 모두 완료하기',     done: (hasGoal && c.analyzed >= 1 && c.weekCards >= 1 && c.done >= 1), go: null, tut: 1 },
@@ -22853,6 +23499,7 @@
     ACC_SECTIONS.forEach(def => { const el = cont.querySelector('.acc-panel[data-acc="' + def.key + '"] .acc-sum'); if (el) el.textContent = accSummary(def.key); });
     updateWeekDdayChip();
     updateCalendarDdayChip();
+    updateChallengeDdayChip();
     updateWeekNudge();
   }
   // 이번 주 슬롯 = 살아있는 넛지. 안 채우면 패널이 은은히 주황으로 맥동(채워야 할 느낌),
@@ -23079,7 +23726,7 @@
           act: () => { const w = document.querySelector('.acc-panel[data-acc="week"]'); if (w) { accState.expanded.week = true; applyAccordionState(); saveAccordionState(); w.scrollIntoView({ behavior: 'smooth', block: 'center' }); } } };
       }
       const filledRows = (rows || []).filter(isFilled).length;
-      if (filledRows < 3) return { txt: '벤치마킹 1개 분석하기', sub: '잘 된 콘텐츠를 시트에 분해해두면 원고가 쉬워져요', cta: '시트로 가기', act: () => switchWorkspace('sheet') };
+      if (filledRows < 3) return { txt: '벤치마킹 시트 하나 만들기', sub: '잘 된 콘텐츠를 시트에 분해해두면 원고가 쉬워져요', cta: '시트로 가기', act: () => switchWorkspace('sheet') };
       const fs = funnelSlots || {};
       const emptyStage = !((fs.attract || []).length) ? '유입용' : !((fs.convert || []).length) ? '전환용' : !((fs.retain || []).length) ? '세일즈' : null;
       if (emptyStage) return { txt: emptyStage + ' 컨텐츠 분석하기', sub: '퍼널에서 ' + emptyStage + ' 칸이 비어 있어요', cta: '분류로 가기', act: () => switchWorkspace('formatboard') };
@@ -24923,6 +25570,7 @@
       return b.createdAt - a.createdAt;
     });
 
+    let _chStamped = false;
     el.innerHTML = sorted.map(ch => {
       ensureChallengeShape(ch);
       const ana = challengeProgress(ch);
@@ -24933,6 +25581,28 @@
       const dd = ddayLabel(ch.endDate, Math.min(ana, upl), ch.target);
       const active = isChallengeActive(ch);
       const cols = ch.target <= 30 ? 'cols-10' : ch.target <= 60 ? 'cols-15' : '';
+
+      // === 완수(달성) → 트로피 카드 변신 (명예의 전당) ===
+      const fullyDone = ana >= ch.target && upl >= uplTarget;
+      if (fullyDone) {
+        if (!ch.completedAt) { ch.completedAt = dateToYMD(new Date()); _chStamped = true; }
+        const periodDays = (ch.startDate && ch.endDate) ? Math.max(1, Math.round((ymdToDate(ch.endDate) - ymdToDate(ch.startDate)) / 86400000)) : null;
+        return `
+          <div class="ch-card ch-trophy" data-id="${ch.id}">
+            <div class="ch-trophy-rays"></div>
+            <div class="ch-trophy-badge">🏆</div>
+            <div class="ch-trophy-name">${esc(ch.name || '챌린지')} <span>완주!</span></div>
+            ${periodDays ? `<div class="ch-trophy-period">${periodDays}일 완주</div>` : ''}
+            <div class="ch-trophy-stats">시트 ${ana}/${ch.target} · 업로드 ${upl}/${uplTarget}</div>
+            <div class="ch-trophy-stamp">👑 마스터</div>
+            ${ch.completedAt ? `<div class="ch-trophy-date">${esc(ch.completedAt)} 달성 · 명예의 전당</div>` : ''}
+            <div class="ch-trophy-actions">
+              <button class="ch-act-btn" data-act="goto" data-id="${ch.id}">시트로</button>
+              <button class="ch-act-btn del" data-act="del" data-id="${ch.id}">삭제</button>
+            </div>
+          </div>`;
+      }
+
       // 게임화: 등급 / 스트릭 / 스테이지 / 멘트 / 다음 한 칸
       const rank = challengeRank(ch);
       const streak = challengeStreak(ch);
@@ -25077,6 +25747,8 @@
         </div>
       `;
     }).join('');
+
+    if (_chStamped) saveChallenges(); // 완주 달성일 박제 저장
 
     // Action buttons
     el.querySelectorAll('[data-act]').forEach(btn => {
@@ -26277,6 +26949,15 @@
       </svg>
     `;
   }
+
+  // 퍼널의 본질 교육 카드 접기/펴기
+  window.__toggleFnEssence = function (btn) {
+    const b = document.getElementById('fn-essence-body');
+    if (!b) return;
+    const willOpen = b.style.display === 'none';
+    b.style.display = willOpen ? 'block' : 'none';
+    if (btn) btn.classList.toggle('open', willOpen);
+  };
 
   function renderFunnel() {
     const wrap = document.getElementById('funnel-wrap');
