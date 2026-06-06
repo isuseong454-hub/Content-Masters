@@ -1629,6 +1629,61 @@
     background: radial-gradient(ellipse 580px 320px at 50% -16%, rgba(20,184,122,0.10), transparent 64%);
   }
 
+  /* === 트로피 여정 히어로 (여정 레일 통합) === */
+  .cm-trophy-hero { display:block; padding:18px 22px; margin-top:16px; border:1px solid var(--line); border-radius:18px; position:relative; overflow:hidden; background:radial-gradient(ellipse 440px 300px at 18% 30%, rgba(20,184,122,0.13), transparent 70%), var(--bg-card); }
+  .cm-trophy-hero.done { border-color:#F5C84B; background:radial-gradient(ellipse 480px 320px at 50% 6%, rgba(245,200,75,0.16), transparent 66%), var(--bg-card); box-shadow:0 0 26px rgba(245,200,75,0.18); }
+  .cmth-main { display:flex; align-items:center; gap:20px; }
+  .cmth-who { font-size:13px; font-weight:700; color:var(--text-sub); margin-bottom:6px; }
+  .cmth-who b { color:var(--text-main); }
+  .cmth-hall { display:inline-flex; align-items:center; gap:4px; margin-left:8px; padding:2px 8px; border-radius:999px; font-size:10px; font-weight:800; color:#F5C84B; background:rgba(245,200,75,.1); border:1px solid rgba(245,200,75,.4); cursor:pointer; vertical-align:middle; }
+  .cmth-hall:hover { background:rgba(245,200,75,.2); }
+  .cmth-flash { animation:cmthFlash 1.5s ease; }
+  @keyframes cmthFlash { 0%{filter:none;} 25%{filter:drop-shadow(0 0 34px var(--neon)) brightness(1.35);} 100%{filter:none;} }
+  .cmth-pctrow { display:flex; align-items:baseline; gap:8px; }
+  .cmth-pctlabel { font-size:11px; color:var(--text-mute); letter-spacing:.04em; }
+  .cmth-flow { display:flex; align-items:center; justify-content:center; gap:9px; margin-top:11px; padding-top:10px; border-top:1px dashed var(--line); }
+  .cmth-flow.done { color:#F5C84B; font-weight:800; font-size:13px; border-top-color:rgba(245,200,75,.3); }
+  .cmth-todo { display:inline-flex; align-items:center; gap:7px; background:rgba(255,255,255,.025); border:1px solid var(--line); border-radius:8px; padding:5px 11px; cursor:pointer; transition:border-color .15s; }
+  .cmth-todo:hover { border-color:var(--neon-line); }
+  .cmth-todo-ico { font-size:13px; flex-shrink:0; opacity:.85; }
+  .cmth-todo-meta { display:inline-flex; align-items:baseline; gap:6px; min-width:0; }
+  .cmth-todo-l { font-size:9px; font-weight:700; color:var(--text-mute); letter-spacing:.03em; flex-shrink:0; }
+  .cmth-todo-t { font-size:11.5px; font-weight:700; color:var(--text-sub); }
+  .cmth-todo-go { display:none; }
+  .cmth-arrows { color:var(--text-faint); font-weight:800; letter-spacing:1px; flex-shrink:0; font-size:9px; }
+  .cmth-next { display:inline-flex; align-items:baseline; gap:5px; flex-shrink:0; }
+  .cmth-next-l { font-size:9px; color:var(--text-faint); }
+  .cmth-next-t { font-size:10.5px; color:var(--text-mute); font-weight:600; }
+  .cmth-stage { position:relative; width:124px; height:124px; flex-shrink:0; }
+  .cmth-dim { position:absolute; inset:0; width:100%; height:100%; object-fit:contain; filter:grayscale(1) brightness(.42) opacity(.5); }
+  .cmth-fillwrap { position:absolute; left:0; right:0; bottom:0; height:0; overflow:hidden; transition:height .9s cubic-bezier(.2,1,.3,1); }
+  .cmth-fill { position:absolute; left:0; bottom:0; width:124px; height:124px; object-fit:contain; filter:drop-shadow(0 0 14px rgba(20,184,122,0.65)); }
+  .cm-trophy-hero.done .cmth-fill { filter:drop-shadow(0 0 16px rgba(245,200,75,0.7)); }
+  .cmth-info { flex:1; min-width:0; }
+  .cmth-eyebrow { font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:var(--text-mute); margin-bottom:4px; }
+  .cmth-pct { font-family:'Pretendard',sans-serif; font-size:34px; font-weight:900; line-height:1; color:var(--text-main); letter-spacing:-.02em; text-shadow:0 2px 14px rgba(0,0,0,.5); }
+  .cmth-pct span { font-size:16px; font-weight:800; color:var(--emerald); margin-left:2px; }
+  .cm-trophy-hero.done .cmth-pct span { color:#F5C84B; }
+  .cmth-bar { position:relative; height:7px; border-radius:4px; background:var(--bg-elev); overflow:visible; margin:9px 0; }
+  .cmth-bar-fill { height:100%; border-radius:4px; background:linear-gradient(90deg, var(--emerald-deep), var(--neon)); box-shadow:0 0 8px var(--neon-glow); transition:width .9s cubic-bezier(.2,1,.3,1); }
+  .cmth-tick { position:absolute; top:50%; width:3px; height:3px; border-radius:50%; background:var(--text-faint); transform:translate(-50%,-50%); z-index:1; }
+  .cmth-tick.lit { background:#dffbe9; box-shadow:0 0 5px var(--neon-glow); }
+  .cm-trophy-hero.done .cmth-bar-fill { background:linear-gradient(90deg,#D8A93C,#F5C84B); box-shadow:0 0 8px rgba(245,200,75,.5); }
+  .cm-trophy-hero.done .cmth-tick.lit { background:#fff3d6; box-shadow:0 0 5px rgba(245,200,75,.6); }
+  .cmth-msg { font-size:12.5px; font-weight:700; color:var(--text-sub); line-height:1.4; }
+  .cmth-sub { font-size:11px; color:var(--text-mute); margin-top:3px; }
+
+  /* === 카드 유리질감·깊이 통일 (톤앤매너 2차) === */
+  .ch-card, .sc-card, .fb-col, .ns-card, .cm-trophy-hero {
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 6px 22px rgba(0,0,0,0.22);
+  }
+  .ch-card::after, .sc-card::after, .ns-card::after {
+    content: ''; position: absolute; left: 0; right: 0; top: 0; height: 38%;
+    background: linear-gradient(180deg, rgba(255,255,255,0.04), transparent);
+    pointer-events: none; border-radius: inherit;
+  }
+  .sc-card, .ns-card { position: relative; }
+
   /* ===== TRAINING ROOM ===== */
   .tr-section {
     padding: 22px 24px 0;
@@ -14123,7 +14178,7 @@
         <div class="home-eyebrow">고객관점 · 수익화 컨텐츠 집중 트레이닝</div>
         <h1 class="home-title">트레이닝 <span class="em">룸</span></h1>
         <div class="home-divline"></div>
-        <div id="journey-rail"></div>
+        <div class="cm-trophy-hero" id="cm-trophy-hero" style="display:none;"></div>
         <div class="home-partner" id="home-partner">
           <span class="hp-label">🤝 파트너 모드</span>
           <button class="pb-switch" id="pb-switch" role="switch" aria-label="파트너 모드 켜기/끄기" title="채울 것을 끌어올려 안내"><span class="pb-knob"></span></button>
@@ -14136,9 +14191,6 @@
 
       <!-- ===== TRAINING ROOM ===== -->
       <section class="tr-section">
-        <!-- 내 트로피 진행 히어로 (여정의 상징) -->
-        <div class="cm-trophy-hero" id="cm-trophy-hero" style="display:none;"></div>
-
         <!-- 관점이 환영 영역 (첫 진입/빈 상태일 때만) -->
         <div id="tr-gj-welcome" style="display:none;"></div>
 
@@ -23568,6 +23620,7 @@
   }
   function refreshAccordionSummaries() {
     renderJourneyRail();
+    try { renderTrophyHero(); } catch (e) {}
     try { if (typeof renderTutorial === 'function') renderTutorial(); } catch (e) {}
     const cont = document.getElementById('home-accordion'); if (!cont) return;
     ACC_SECTIONS.forEach(def => { const el = cont.querySelector('.acc-panel[data-acc="' + def.key + '"] .acc-sum'); if (el) el.textContent = accSummary(def.key); });
@@ -23703,6 +23756,94 @@
     { t: '관찰자', xp: 0 }, { t: '분석가', xp: 150 }, { t: '실행가', xp: 500 },
     { t: '크리에이터', xp: 1200 }, { t: '마스터', xp: 3000 }
   ];
+  // === 트로피 여정 히어로 (여정 레일 통합) — 차오르는 트로피 + 레벨 + 지금 할 일 ===
+  function renderTrophyHero() {
+    const el = document.getElementById('cm-trophy-hero');
+    if (!el) return;
+    let c, li; try { c = missionCounts(); li = levelInfo(); } catch (e) { return; }
+    const name = (typeof activityName === 'function') ? activityName() : ((_currentUser && _currentUser.name) ? _currentUser.name : '');
+    const hasGoal = !!(typeof homeData !== 'undefined' && homeData && homeData.goal);
+    const goPanel = (key) => { try { accState.expanded[key] = true; applyAccordionState(); saveAccordionState(); const p = document.querySelector('.acc-panel[data-acc="' + key + '"]'); if (p) p.scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch (e) {} };
+    const goWs = (ws) => { try { switchWorkspace(ws); } catch (e) {} };
+    const M = [
+      { ico: '🎯', need: '목표·Why 한 줄 적기',     t: '목표 적기',   done: hasGoal,              go: () => goPanel('goal') },
+      { ico: '📋', need: '벤치마킹 시트 하나 만들기', t: '첫 시트',     done: c.analyzed >= 1,      go: () => goWs('sheet') },
+      { ico: '🔥', need: '이번 주 슬롯 1개 채우기',  t: '이번주 담기', done: c.weekCards >= 1,     go: () => goPanel('week') },
+      { ico: '✍️', need: '원고 1개 작성·저장',       t: '첫 원고',     done: c.done >= 1,          go: () => goWs('scripts') },
+      { ico: '🌱', need: '벤치마킹 5개까지 모으기',  t: '분석 5',      done: c.analyzed >= 5,      go: () => goWs('sheet') },
+      { ico: '🚀', need: '콘텐츠 1개 업로드하기',    t: '첫 업로드',   done: c.uploaded >= 1,      go: () => goPanel('week') },
+      { ico: '🔍', need: '벤치마킹 20개',           t: '분석 20',     done: c.analyzed >= 20,     go: () => goWs('sheet') },
+      { ico: '📤', need: '업로드 10개',             t: '업로드 10',   done: c.uploaded >= 10,     go: () => goPanel('week') },
+      { ico: '🔬', need: '벤치마킹 50개',           t: '분석 50',     done: c.analyzed >= 50,     go: () => goWs('sheet') },
+      { ico: '🎬', need: '업로드 30개',             t: '업로드 30',   done: c.uploaded >= 30,     go: () => goPanel('week') },
+      { ico: '🏆', need: '분석 100 · 업로드 30',    t: '마스터',      done: (c.analyzed >= 100 && c.uploaded >= 30), go: null }
+    ];
+    let cur = M.findIndex(m => !m.done);
+    const allDone = cur === -1; if (allDone) cur = M.length - 1;
+    const curM = M[cur];
+    const nextM = (!allDone && cur + 1 < M.length) ? M[cur + 1] : null;
+
+    const anN = c.analyzed || 0, upN = c.uploaded || 0;
+    const tutDone = M.slice(0, 5).filter(m => m.done).length;   // 튜토리얼 5단계 (각 2% = 10%)
+    const tutPct = tutDone * 2;                                  // 0~10
+    const masterPct = ((Math.min(anN, 100) / 100) * 0.5 + (Math.min(upN, 30) / 30) * 0.5) * 90; // 0~90
+    const pct = allDone ? 100 : Math.max(0, Math.min(100, Math.round(tutPct + masterPct)));
+    const done = allDone;
+    const wonCount = (challenges || []).filter(ch => { try { ensureChallengeShape(ch); return challengeProgress(ch) >= ch.target && challengeUploaded(ch) >= (ch.uploadTarget || ch.target); } catch (e) { return false; } }).length;
+    el.style.display = 'block';
+    el.classList.toggle('done', done);
+
+    const flowHtml = done
+      ? '<div class="cmth-flow done">🏆 마스터 달성 — 트로피 획득!</div>'
+      : '<div class="cmth-flow">' +
+          '<button class="cmth-todo" id="cmth-todo">' +
+            '<span class="cmth-todo-ico">' + curM.ico + '</span>' +
+            '<span class="cmth-todo-meta"><span class="cmth-todo-l">⚡ 지금 할 일</span><span class="cmth-todo-t">' + esc(curM.need) + '</span><span class="cmth-todo-go">하러 가기 →</span></span>' +
+          '</button>' +
+          (nextM ? '<span class="cmth-arrows">›››</span><span class="cmth-next"><span class="cmth-next-l">다음</span><span class="cmth-next-t">🔒 ' + esc(nextM.t) + '</span></span>' : '') +
+        '</div>';
+
+    el.innerHTML =
+      '<div class="cmth-main">' +
+        '<div class="cmth-stage">' +
+          '<img class="cmth-dim" src="hero-trophy.png" alt="" />' +
+          '<div class="cmth-fillwrap" style="height:' + pct + '%"><img class="cmth-fill" src="hero-trophy.png" alt="" /></div>' +
+        '</div>' +
+        '<div class="cmth-info">' +
+          '<div class="cmth-who">🔥 ' + (name ? '<b>' + esc(name) + '</b>님 · ' : '') + 'Lv.' + li.level + ' ' + esc(li.title) + (wonCount > 0 ? '<button class="cmth-hall" id="cmth-hall">🏆 명예의 전당 ' + wonCount + '</button>' : '') + '</div>' +
+          '<div class="cmth-pctrow"><span class="cmth-pct">' + pct + '<span>%</span></span><span class="cmth-pctlabel">마스터까지</span></div>' +
+          '<div class="cmth-bar"><div class="cmth-bar-fill" style="width:' + pct + '%"></div>' +
+            [10, 40, 70].map(function (p) { return '<span class="cmth-tick' + (pct >= p ? ' lit' : '') + '" style="left:' + p + '%"></span>'; }).join('') +
+          '</div>' +
+          '<div class="cmth-sub">분석 ' + anN + '/100 · 업로드 ' + upN + '/30</div>' +
+        '</div>' +
+      '</div>' +
+      flowHtml;
+
+    const tdb = document.getElementById('cmth-todo');
+    if (tdb && curM && typeof curM.go === 'function') tdb.onclick = curM.go;
+    const hb = document.getElementById('cmth-hall');
+    if (hb) hb.onclick = () => { try { accState.expanded['challenge'] = true; applyAccordionState(); saveAccordionState(); const p = document.querySelector('.acc-panel[data-acc="challenge"]'); if (p) p.scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch (e) {} };
+
+    // 보상 연출: 구간(10/40/70/100%) 넘으면 트로피 반짝 + 토스트 (1회)
+    try {
+      const THRESH = [10, 40, 70, 100];
+      if (seenFlags.trophyMaxPct == null) { seenFlags.trophyMaxPct = pct; saveSeen(); }
+      else if (pct > seenFlags.trophyMaxPct) {
+        const crossed = THRESH.filter(t => t > seenFlags.trophyMaxPct && t <= pct);
+        seenFlags.trophyMaxPct = pct; saveSeen();
+        if (crossed.length) {
+          const top = crossed[crossed.length - 1];
+          setTimeout(() => {
+            const stg = el.querySelector('.cmth-stage'); if (stg) { stg.classList.add('cmth-flash'); setTimeout(() => stg.classList.remove('cmth-flash'), 1500); }
+            try { toast(top >= 100 ? '🏆 마스터 달성 — 트로피를 획득했어요!' : '🏆 트로피가 더 밝아졌어요! (' + top + '%)'); } catch (e) {}
+            try { const bot = document.getElementById('bot'); if (bot) { bot.classList.add('happy'); setTimeout(() => bot.classList.remove('happy'), 2000); } } catch (e) {}
+          }, 250);
+        }
+      }
+    } catch (e) {}
+  }
+
   function missionCounts() {
     const c = { analyzed: 0, done: 0, uploaded: 0, anMonth: 0, upMonth: 0, weekDone: 0, weekCards: 0, slotsFilled: 0, slotsTotal: 0, streakDays: 0, streakWeeks: 0, chBest: null };
     try {
@@ -23710,7 +23851,7 @@
       const sameMonth = ts => { if (!ts) return false; const d = new Date(ts); return (d.getFullYear() + '-' + d.getMonth()) === ym; };
       c.analyzed = (rows || []).filter(isFilled).length;
       (rows || []).forEach(r => { if (isFilled(r) && sameMonth(r.updatedAt)) c.anMonth++; });
-      (scripts || []).forEach(s => { const up = (s.state === 'uploaded' || s.uploadUrl); if (s.done) c.done++; if (up) { c.uploaded++; if (sameMonth(s.updatedAt || s.createdAt)) c.upMonth++; } });
+      (scripts || []).forEach(s => { const up = (s.uploaded || s.state === 'uploaded' || s.uploadUrl); if (s.done) c.done++; if (up) { c.uploaded++; if (sameMonth(s.updatedAt || s.createdAt)) c.upMonth++; } });
       const w = computeThisWeekStats(); c.weekCards = w.weekCards; c.weekDone = w.weekDone;
       c.slotsTotal = (weekSlots || []).length; c.slotsFilled = (weekSlots || []).filter(Boolean).length;
       const st = computeStreak(); c.streakDays = st.daysThisWeek; c.streakWeeks = st.weeks;
