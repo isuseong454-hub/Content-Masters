@@ -11621,10 +11621,32 @@
   .collect-title { font-family: 'Pretendard', sans-serif; font-size: 20px; font-weight: 800; color: var(--text-main); margin: 4px 0 0; }
   .collect-modal-close { background: var(--bg-input); border: 1px solid var(--line); color: var(--text-mute); width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 16px; flex: 0 0 auto; }
   .collect-desc { font-size: 12px; color: var(--text-mute); line-height: 1.5; margin: 0 0 16px; }
-  .cl-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
-  @media (max-width: 820px) { .cl-grid { grid-template-columns: 1fr 1fr; } }
-  @media (max-width: 460px) { .cl-grid { grid-template-columns: 1fr; } }
-  .cl-sec { border: 1px solid var(--line); border-radius: 12px; background: var(--bg-void); padding: 12px; display: flex; flex-direction: column; gap: 10px; }
+  .cl-grid { display: block; }
+  .cl-sec { border: 1px solid var(--line); border-radius: 12px; background: var(--bg-void); padding: 14px; display: none; flex-direction: column; gap: 10px; }
+  .cl-sec.cl-active { display: flex; animation: clFade .2s ease; }
+  @keyframes clFade { from { opacity:0; transform:translateY(4px); } to { opacity:1; transform:none; } }
+  /* 유형 4버튼 선택 */
+  .cl-chooser { display: grid; grid-template-columns: 1fr 1fr; gap: 11px; margin-bottom: 4px; }
+  .cl-pick { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 9px; padding: 24px 12px; border-radius: 14px; background: var(--bg-elev); border: 1px solid var(--line); color: var(--text-main); cursor: pointer; transition: border-color .15s, background .15s; }
+  .cl-pick:hover { border-color: var(--emerald); background: var(--emerald-faint); }
+  .cl-pick-ico { font-size: 30px; line-height: 1; }
+  .cl-pick-l { font-size: 14px; font-weight: 800; }
+  .cl-back { background: none; border: 1px solid var(--line); border-radius: 9px; color: var(--text-mute); font-size: 12px; font-weight: 700; padding: 8px 14px; cursor: pointer; margin-bottom: 12px; align-self: flex-start; }
+  .cl-back:hover { border-color: var(--sage); color: var(--sage); }
+  /* 캐러셀 유형 칩 */
+  .cl-ctype { display: flex; flex-wrap: wrap; gap: 6px; }
+  .cl-ctype-chip { padding: 6px 11px; border-radius: 999px; background: var(--bg-elev); border: 1px solid var(--line); color: var(--text-mute); font-size: 12px; font-weight: 700; cursor: pointer; }
+  .cl-ctype-chip:hover { border-color: var(--emerald); }
+  .cl-ctype-chip.on { background: var(--emerald); border-color: var(--emerald); color: #06140C; }
+  /* 캐러셀 보드 카드 */
+  .cr-slides { position: absolute; top: 6px; left: 6px; font-size: 10px; font-weight: 800; color: #fff; background: rgba(0,0,0,.55); padding: 3px 7px; border-radius: 999px; }
+  .carousel-card .tg-thumb { position: relative; }
+  .cr-topic { font-size: 13px; font-weight: 800; color: var(--text-main); line-height: 1.3; margin-bottom: 5px; }
+  .cr-badge { display: inline-block; font-size: 10px; font-weight: 800; color: var(--neon); background: rgba(20,184,122,.1); border: 1px solid var(--neon-line); padding: 2px 7px; border-radius: 999px; }
+  .cr-outline { display: flex; flex-direction: column; gap: 2px; margin-top: 7px; }
+  .cr-outline span { font-size: 10.5px; color: var(--text-mute); line-height: 1.4; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  /* 전역 버튼 클릭감 (눌림 피드백) */
+  button:active:not(:disabled) { transform: scale(0.96); }
   .cl-sec-title { font-family: 'Pretendard', sans-serif; font-size: 13px; font-weight: 800; color: var(--text-main); }
   .cl-img { width: 100%; aspect-ratio: 9/16; border: 2px dashed var(--line); border-radius: 10px; background: var(--bg-input); cursor: pointer; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; transition: all .15s; }
   .cl-img:hover { border-color: var(--emerald); background: var(--emerald-faint); }
@@ -14480,7 +14502,15 @@
             </div>
             <button class="collect-modal-close" id="collect-modal-close">×</button>
           </div>
-          <p class="collect-desc">시트 행을 만들지 않고 <b>이미지 + 유형</b>만 보드에 유형별로 모아둬요. 각 칸에 이미지를 넣고 유형을 골라 <b>수집</b>!</p>
+          <p class="collect-desc">시트 행 없이 소재만 보드에 모아둬요. <b>유형을 먼저 고르고</b> 채워서 <b>수집</b>!</p>
+          <div class="cl-chooser" id="cl-chooser">
+            <button class="cl-pick" data-pick="thumb" type="button"><span class="cl-pick-ico">🖼</span><span class="cl-pick-l">썸네일</span></button>
+            <button class="cl-pick" data-pick="copy" type="button"><span class="cl-pick-ico">💬</span><span class="cl-pick-l">수식어</span></button>
+            <button class="cl-pick" data-pick="comment" type="button"><span class="cl-pick-ico">🗨</span><span class="cl-pick-l">공감댓글</span></button>
+            <button class="cl-pick" data-pick="idea" type="button"><span class="cl-pick-ico">💡</span><span class="cl-pick-l">아이디어</span></button>
+            <button class="cl-pick cl-pick-wide" data-pick="carousel" type="button"><span class="cl-pick-ico">🎠</span><span class="cl-pick-l">캐러셀</span></button>
+          </div>
+          <button class="cl-back" id="cl-back" type="button" style="display:none;">← 유형 다시 선택</button>
           <div class="cl-grid">
             <div class="cl-sec" data-q="thumb">
               <div class="cl-sec-title">🖼 썸네일</div>
@@ -14510,6 +14540,21 @@
               <button class="cl-edit" data-q="idea" type="button" style="display:none;">✏️ 형광펜·빨간펜 편집</button>
               <textarea class="cl-memo" data-q="idea" id="cl-memo-idea" placeholder="떠오른 아이디어를 메모하세요&#10;(사진만·메모만·둘 다 OK)"></textarea>
               <button class="cl-collect" data-q="idea" type="button">⚡ 아이디어 수집</button>
+            </div>
+            <div class="cl-sec" data-q="carousel">
+              <div class="cl-sec-title">🎠 캐러셀</div>
+              <div class="cl-img" id="cl-img-carousel"><div class="cl-img-empty"><span>+</span>커버(첫 장) 이미지<br/>드래그·클릭</div><img class="cl-img-el" id="cl-imgel-carousel" alt="" style="display:none;" /><button class="cl-img-rm" data-q="carousel" type="button" style="display:none;">×</button></div>
+              <button class="cl-edit" data-q="carousel" type="button" style="display:none;">✏️ 형광펜·빨간펜 편집</button>
+              <input type="text" class="cl-text" data-q="carousel" id="cl-text-carousel" placeholder="주제 (예: 둥근 얼굴 헤어 추천 5)" maxlength="60" />
+              <div class="cl-ctype" id="cl-ctype">
+                <button class="cl-ctype-chip" data-ct="리스트형" type="button">리스트형</button>
+                <button class="cl-ctype-chip" data-ct="비교형" type="button">비교형</button>
+                <button class="cl-ctype-chip" data-ct="스토리형" type="button">스토리형</button>
+                <button class="cl-ctype-chip" data-ct="정보형" type="button">정보형</button>
+                <button class="cl-ctype-chip" data-ct="Q&A형" type="button">Q&amp;A형</button>
+              </div>
+              <textarea class="cl-memo" data-q="carousel" id="cl-memo-carousel" placeholder="슬라이드 구조 — 한 줄에 하나씩&#10;1 후킹: 둥근얼굴 고민&#10;2 추천 A&#10;3 추천 B&#10;4 예약 CTA"></textarea>
+              <button class="cl-collect" data-q="carousel" type="button">⚡ 캐러셀 수집</button>
             </div>
           </div>
         </div>
@@ -14808,7 +14853,7 @@
             <div class="entry-col entry-col-main">
               <!-- 소재 수집 버튼 (전용 창 열기 · 작은 알약) -->
               <div class="collect-open-row">
-                <button type="button" class="collect-open-btn" id="collect-open-btn">⚡ 썸네일 수집</button>
+                <button type="button" class="collect-open-btn" id="collect-open-btn">⚡ 소재 수집</button>
               </div>
 
               <!-- 주제 -->
@@ -14944,6 +14989,7 @@
           <button class="tb-toggle-btn" data-tbmode="kw">키워드</button>
           <button class="tb-toggle-btn" data-tbmode="comment">댓글</button>
           <button class="tb-toggle-btn" data-tbmode="idea">💡 아이디어</button>
+          <button class="tb-toggle-btn" data-tbmode="carousel">🎠 캐러셀</button>
           <button class="tb-toggle-btn" data-tbmode="audio">오디오</button>
         </div>
         <div class="tb-search-wrap" id="tb-copy-search-wrap" style="display:none;">
@@ -17356,6 +17402,28 @@
           if (kw) { kw.gold = !kw.gold; await saveKeywordsList(); renderThumbBoard(); }
         };
       });
+      bindTbToggle();
+      return;
+    }
+    // 🎠 캐러셀 몰아보기 — 커버 + 주제 + 유형 + 슬라이드 구조
+    if (thumbMode === 'carousel') {
+      const list = collects.filter(c => c.kind === 'carousel').slice().sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+      const card = c => {
+        const slides = (c.outline || '').split('\n').map(s => s.trim()).filter(Boolean);
+        const ctype = c.type ? '<span class="cr-badge">' + esc(c.type) + '</span>' : '';
+        return '<div class="tg-card collect-card carousel-card" data-collect="' + c.id + '">' +
+          '<div class="tg-thumb" data-cimg="' + c.id + '"><span class="cr-slides">🎠 ' + (slides.length || '?') + '장</span></div>' +
+          '<div class="tg-cap"><div class="cr-topic">' + esc(c.topic || '(주제 없음)') + '</div>' + ctype +
+          (slides.length ? '<div class="cr-outline">' + slides.slice(0, 6).map((s, i) => '<span>' + (i + 1) + '. ' + esc(s) + '</span>').join('') + '</div>' : '') +
+          '</div><button class="tg-collect-del" data-cdel="' + c.id + '" title="삭제">×</button></div>';
+      };
+      el.innerHTML = list.length
+        ? '<div class="tb-sec"><div class="tb-sec-head">🎠 캐러셀 <span class="tb-sec-cnt">' + list.length + '</span></div><div class="tg-grid">' + list.map(card).join('') + '</div></div>'
+        : '<div class="tb-empty">아직 모은 캐러셀이 없어요.<br/>⚡ 소재 수집의 <b>🎠 캐러셀</b>에서 커버 + 구조를 모아보세요.</div>';
+      el.querySelectorAll('.tg-thumb[data-cimg]').forEach(async box => {
+        const id = box.dataset.cimg; try { const u = await loadImage(id, 'c'); if (u) box.insertAdjacentHTML('afterbegin', '<img src="' + u + '" alt="" />'); } catch (e) {}
+      });
+      el.querySelectorAll('.tg-collect-del').forEach(b => { b.onclick = (e) => { e.stopPropagation(); deleteCollect(b.dataset.cdel); }; });
       bindTbToggle();
       return;
     }
@@ -21099,7 +21167,7 @@
     const textEl = document.querySelector('.cl-text[data-q="' + q + '"]');
     if (textEl && (_clText[q] || '') !== textEl.value) textEl.value = _clText[q] || '';
   }
-  function renderCollectModal() { ['thumb', 'copy', 'comment', 'idea'].forEach(renderCollectSection); }
+  function renderCollectModal() { ['thumb', 'copy', 'comment', 'idea', 'carousel'].forEach(renderCollectSection); }
   function initCollectModalUI() {
     document.querySelectorAll('.collect-modal .cl-sec').forEach(sec => {
       const q = sec.dataset.q;
@@ -21155,6 +21223,27 @@
     if (closeBtn) closeBtn.onclick = closeCollectModal;
     const modal = document.getElementById('collect-modal');
     if (modal) modal.onclick = (e) => { if (e.target.id === 'collect-modal') closeCollectModal(); };
+    // 유형 4버튼 선택 → 해당 입력만 / 뒤로가기
+    document.querySelectorAll('.collect-modal .cl-pick').forEach(b => { b.onclick = () => clPickKind(b.dataset.pick); });
+    const backBtn = document.getElementById('cl-back');
+    if (backBtn) backBtn.onclick = clShowChooser;
+    // 캐러셀 유형 칩
+    document.querySelectorAll('.cl-ctype-chip').forEach(b => {
+      b.onclick = () => {
+        _clType.carousel = (_clType.carousel === b.dataset.ct) ? '' : b.dataset.ct;
+        document.querySelectorAll('.cl-ctype-chip').forEach(x => x.classList.toggle('on', x.dataset.ct === _clType.carousel));
+      };
+    });
+  }
+  function clPickKind(q) {
+    document.querySelectorAll('.collect-modal .cl-sec').forEach(s => s.classList.toggle('cl-active', s.dataset.q === q));
+    const ch = document.getElementById('cl-chooser'); if (ch) ch.style.display = 'none';
+    const bk = document.getElementById('cl-back'); if (bk) bk.style.display = '';
+  }
+  function clShowChooser() {
+    document.querySelectorAll('.collect-modal .cl-sec').forEach(s => s.classList.remove('cl-active'));
+    const ch = document.getElementById('cl-chooser'); if (ch) ch.style.display = '';
+    const bk = document.getElementById('cl-back'); if (bk) bk.style.display = 'none';
   }
   async function _clAdd(q) {
     const typesEl = document.querySelector('.cl-types[data-q="' + q + '"]'); if (!typesEl) return;
@@ -21173,12 +21262,14 @@
   function openCollectModal() {
     if (!_clInited) { initCollectModalUI(); _clInited = true; }
     // 작성 영역 이미지가 있으면 미리 채움
-    _clImg = { thumb: entryState.thumbDataUrl || null, copy: null, comment: entryState.commDataUrl || null, idea: null };
-    _clType = { thumb: '', copy: '', comment: '' };
-    _clMemo = { idea: '' };
-    _clText = { copy: '' };
+    _clImg = { thumb: entryState.thumbDataUrl || null, copy: null, comment: entryState.commDataUrl || null, idea: null, carousel: null };
+    _clType = { thumb: '', copy: '', comment: '', carousel: '' };
+    _clMemo = { idea: '', carousel: '' };
+    _clText = { copy: '', carousel: '' };
     _clAddOpen = { thumb: false, copy: false, comment: false };
+    try { document.querySelectorAll('.cl-ctype-chip').forEach(x => x.classList.remove('on')); } catch (e) {}
     renderCollectModal();
+    try { clShowChooser(); } catch (e) {}
     const _cm = document.getElementById('collect-modal');
     // 모달이 #home-view 안에 갇혀 다른 화면에서 안 뜨는 문제 방지: body 직속으로 이동
     if (_cm && _cm.parentElement !== document.body) document.body.appendChild(_cm);
@@ -21207,6 +21298,24 @@
     });
   }
   async function doCollect(q) {
+    // 캐러셀: 커버 이미지 + 주제 필수, 유형·구조 아웃라인은 선택
+    if (q === 'carousel') {
+      const topic = (_clText.carousel || '').trim();
+      if (!_clImg.carousel) { toast('커버(첫 장) 이미지를 넣어주세요'); return; }
+      if (!topic) { toast('주제를 입력해주세요'); return; }
+      const id = 'col_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7);
+      const c = { id: id, kind: 'carousel', type: _clType.carousel || '', topic: topic, outline: (_clMemo.carousel || '').trim(), hasImg: true, link: '', createdAt: Date.now() };
+      try { await saveImage(id, 'c', _clImg.carousel); } catch (e) {}
+      collects.push(c); await saveCollects();
+      toast('🎠 캐러셀 "' + topic + '" 수집함에 저장!');
+      _clImg.carousel = null; _clText.carousel = ''; _clMemo.carousel = ''; _clType.carousel = '';
+      document.querySelectorAll('.cl-ctype-chip').forEach(x => x.classList.remove('on'));
+      const ti = document.getElementById('cl-text-carousel'); if (ti) ti.value = '';
+      const mi = document.getElementById('cl-memo-carousel'); if (mi) mi.value = '';
+      renderCollectSection('carousel');
+      try { renderThumbBoard(); } catch (e) {}
+      return;
+    }
     // 아이디어: 사진·메모 중 하나만 있어도 수집
     if (q === 'idea') {
       const memo = (_clMemo.idea || '').trim();
