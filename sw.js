@@ -1,7 +1,7 @@
 // Service Worker — 컨텐츠 마스터즈
 // 오프라인 작동 + PWA 설치 트리거
 
-const CACHE_NAME = 'content-masters-v191';
+const CACHE_NAME = 'content-masters-v192';
 const FILES = [
   './',
   './index.html',
