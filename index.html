@@ -391,6 +391,7 @@
     display: flex;
     flex-direction: column;
     padding-bottom: calc(62px + env(safe-area-inset-bottom));
+    overflow-x: hidden; /* 시트가 가로로 화면 밖으로 밀리는 것 방지 (표는 .sh-sheet-wrap 내부에서 스크롤) */
   }
 
   .sh-topbar {
@@ -1884,6 +1885,11 @@
     align-items: flex-end;
     gap: 8px;
   }
+  .ws-weekstart { display: flex; align-items: center; gap: 5px; flex-wrap: wrap; margin: 2px 0 12px; }
+  .ws-ws-label { font-size: 10.5px; color: var(--text-mute); font-weight: 700; margin-right: 3px; }
+  .ws-ws-chip { width: 27px; height: 27px; border-radius: 7px; border: 1px solid var(--line); background: var(--bg-input); color: var(--text-mute); font-size: 11.5px; font-weight: 700; cursor: pointer; transition: all .12s; font-family: 'Pretendard', sans-serif; }
+  .ws-ws-chip:hover { border-color: var(--emerald-line); color: var(--text-sub); }
+  .ws-ws-chip.on { background: var(--emerald); border-color: var(--emerald); color: #06140C; }
   .ws-dday {
     display: flex;
     flex-direction: column;
@@ -11867,7 +11873,9 @@
   .entry-script-edit {
     width: 100%;
     min-height: 100px;
-    max-height: 200px;
+    height: 160px;
+    max-height: none;
+    resize: vertical; /* 하단을 끌어 자유롭게 높이 조절 */
     background: var(--bg-input);
     border: 1px solid var(--line);
     border-radius: 8px;
@@ -11940,6 +11948,9 @@
   }
 
   /* 주제 input - 제목처럼 크고 굵게 */
+  .entry-mini-input { width: 100%; margin-top: 7px; padding: 8px 10px; border-radius: 7px; border: 1px solid var(--line); background: var(--bg-input); color: var(--text-main); font-family: 'Pretendard', sans-serif; font-size: 12px; outline: none; box-sizing: border-box; transition: border-color .15s; }
+  .entry-mini-input:focus { border-color: var(--emerald); }
+  .entry-mini-input::placeholder { color: var(--text-faint); }
   .entry-input-topic {
     font-size: 17px;
     font-weight: 800;
@@ -12243,8 +12254,10 @@
     padding: 10px 12px;
     outline: none;
     overflow-y: auto;
-    transition: border-color 0.15s, max-height 0.25s;
-    max-height: 84px; /* ~3 lines collapsed */
+    transition: border-color 0.15s;
+    min-height: 60px;
+    max-height: none; /* 내용(붙여넣기)만큼 자동으로 늘어남 — 스크롤 X */
+    resize: vertical; /* 하단을 끌어 더 조절도 가능 */
     cursor: text;
     word-break: break-word;
     white-space: pre-wrap;
@@ -12258,7 +12271,7 @@
   }
 
   .sh-script-edit.expanded {
-    max-height: 600px;
+    height: 360px;
     border-color: var(--emerald-line);
     background: var(--emerald-faint);
   }
@@ -13915,7 +13928,7 @@
     <button class="auth-big-btn" id="auth-pin-go">입장하기 →</button>
 
     <label class="auth-checkbox">
-      <input type="checkbox" id="auth-autologin" checked /> <span>자동로그인</span>
+      <input type="checkbox" id="auth-autologin" checked /> <span>이 기기에 코드 저장 · 다음엔 자동 로그인</span>
     </label>
 
     <button class="auth-reset-link" id="auth-pin-back">← 코드 다시 입력</button>
@@ -14362,6 +14375,8 @@
             <div class="tr-week-bar" style="flex:1;margin:0;"><div class="tr-week-bar-plan" id="ws-week-bar-plan" style="width:0%"></div><div class="tr-week-bar-fill" id="ws-week-bar-fill" style="width:0%"></div></div>
             <span class="ws-week-progresstext" id="ws-week-progresstext">0 / 3 채움</span>
           </div>
+
+          <div class="ws-weekstart" id="ws-weekstart"></div>
 
           <div class="ws-pain-nudge" id="ws-pain-nudge" style="display:none;"></div>
 
@@ -14958,6 +14973,8 @@
                 <img class="entry-thumb-img" id="entry-thumb-img" alt="" style="display:none;" />
                 <button class="entry-thumb-rm" id="entry-thumb-rm" style="display:none;">×</button>
               </div>
+              <input type="text" class="entry-mini-input" id="entry-thumb-name" placeholder="썸네일 이름" maxlength="60" />
+              <input type="text" class="entry-mini-input" id="entry-copy-text" placeholder="수식어 (문구)" maxlength="80" />
             </div>
 
             <!-- 가운데: 공감 댓글 (세로 9:16) -->
@@ -16717,6 +16734,15 @@
     } catch (e) { trWeekCounts = {}; }
     if (!trWeekCounts || typeof trWeekCounts !== 'object') trWeekCounts = {};
   }
+  async function loadWeekStart() {
+    try {
+      const r = await window.storage.get('hmv1-weekstart');
+      if (r && r.value != null) { const v = parseInt(r.value, 10); if (v >= 0 && v <= 6) weekStartDay = v; }
+    } catch (e) {}
+  }
+  async function saveWeekStart() {
+    try { await window.storage.set('hmv1-weekstart', String(weekStartDay)); } catch (e) {}
+  }
   async function saveTrWeekCounts() {
     try { await window.storage.set(TR_WEEK_COUNTS_KEY, JSON.stringify(trWeekCounts)); } catch (e) {}
   }
@@ -17598,13 +17624,17 @@
     }
     const strongKey = thumbMode === 'thumb' ? 'thumbStrong' : 'copyStrong';
     const typesKey = thumbMode === 'thumb' ? 'thumbTypes' : 'copyTypes';
-    const strongRows = rows.filter(r => isFilled(r) && r[strongKey]);
+    // 썸네일 모드: '강함' 표시뿐 아니라 시트에 썸네일이 있는 행은 모두 자동 보관(몰아보기)
+    const strongRows = rows.filter(r => isFilled(r) && (r[strongKey] || (thumbMode === 'thumb' && r.hasThumb)));
     const imgKind = 'thumb';
     const renderCard = r => {
-      const hookText = (r.hook || stripHtml(r.script || '').slice(0, 60) || r.why || '');
+      // 수식어 모드는 수식어 문구를 캡션으로
+      const hookText = (thumbMode === 'copy')
+        ? (r.copyText || r.hook || stripHtml(r.script || '').slice(0, 60) || r.why || '')
+        : (r.hook || stripHtml(r.script || '').slice(0, 60) || r.why || '');
       const views = r.views ? fmtNum(r.views) : '';
-      const hasImg = imgKind === 'copy' ? r.hasCopy : r.hasThumb;
-      return '<div class="tg-card" data-row="' + r.id + '"><div class="tg-thumb" data-img="' + r.id + '" data-kind="' + imgKind + '">' + (hasImg ? '' : '<span class="tg-noimg">이미지 없음</span>') + '</div><div class="tg-cap">' + (esc(hookText) || '(내용 없음)') + '</div>' + (views ? '<div class="tg-views">▶ ' + views + '</div>' : '') + '</div>';
+      const hasImg = r.hasThumb; // 수식어에도 그 행의 썸네일 이미지를 함께 보여줌
+      return '<div class="tg-card" data-row="' + r.id + '"><div class="tg-thumb" data-img="' + r.id + '" data-kind="thumb">' + (hasImg ? '' : '<span class="tg-noimg">이미지 없음</span>') + '</div><div class="tg-cap">' + (esc(hookText) || '(내용 없음)') + '</div>' + (views ? '<div class="tg-views">▶ ' + views + '</div>' : '') + '</div>';
     };
     function loadCardImgs() {
       el.querySelectorAll('.tg-thumb[data-img]').forEach(async box => {
@@ -20047,7 +20077,13 @@
     renderKwPicker();
     renderFunnelStagePicker();
 
-    document.getElementById('sh-modal').classList.add('show');
+    const _shm = document.getElementById('sh-modal');
+    _shm.classList.add('show');
+    // 항상 상단부터 보이게 (아래로 스크롤된 채 열리던 것 방지)
+    const _resetTop = () => { _shm.scrollTop = 0; const box = _shm.querySelector('.sh-modal'); if (box) box.scrollTop = 0; };
+    _resetTop();
+    requestAnimationFrame(_resetTop);
+    setTimeout(_resetTop, 60);
   }
 
   // === FUNNEL STAGE PICKER (분해 모달의 퍼널 단계 영역) ===
@@ -20645,6 +20681,7 @@
     await loadKeywords();
     await loadFunnelSlots();
     await loadWeekSlots();
+    await loadWeekStart();
     await loadTrWeekCounts();
     await loadFunnelSlotCounts();
     await loadUploadGoal();
@@ -21759,6 +21796,11 @@
       entryState.url = urlInput.value.trim();
     }, 0));
     whyInput.addEventListener('input', () => entryState.idea = whyInput.value.trim());
+    // 썸네일 이름 → hook(보드 카드 라벨), 수식어 → copyText (둘 다 분석 행에 저장)
+    const thumbNameInput = document.getElementById('entry-thumb-name');
+    if (thumbNameInput) thumbNameInput.addEventListener('input', () => entryState.hook = thumbNameInput.value.trim());
+    const copyTextInput = document.getElementById('entry-copy-text');
+    if (copyTextInput) copyTextInput.addEventListener('input', () => entryState.copyText = copyTextInput.value.trim());
 
     // === Disasm button: open detail modal in entry mode ===
     disasmBtn.addEventListener('click', () => {
@@ -21902,7 +21944,8 @@
 
     // 비어있는지 체크
     const hasContent = entryState.thumbDataUrl || entryState.copyDataUrl || entryState.commDataUrl ||
-                       entryState.script || entryState.url || entryState.why ||
+                       entryState.script || entryState.url || entryState.why || entryState.idea ||
+                       entryState.hook || entryState.copyText ||
                        entryState.format || entryState.thumbStrong || entryState.copyStrong;
     if (!hasContent) {
       toast('아무 내용도 없어요');
@@ -21955,7 +21998,9 @@
     targetRow.audioArtist = entryState.audioArtist || '';
     targetRow.audioLink = entryState.audioLink || '';
     targetRow.thumbStrong = entryState.thumbStrong;
-    targetRow.copyStrong = entryState.copyStrong;
+    targetRow.copyText = entryState.copyText || '';
+    // 수식어를 적으면 수식어 보드에 그 행(+썸네일)으로 표시되게
+    targetRow.copyStrong = entryState.copyStrong || !!entryState.copyText;
     targetRow.thumbTypes = entryState.thumbStrong ? entryState.thumbTypes.slice() : [];
     targetRow.copyTypes = entryState.copyStrong ? entryState.copyTypes.slice() : [];
     targetRow.rating = entryState.rating || 0;
@@ -22044,6 +22089,9 @@
     document.getElementById('entry-script').innerHTML = '';
     document.getElementById('entry-url').value = '';
     document.getElementById('entry-why').value = '';
+    const _tn = document.getElementById('entry-thumb-name'); if (_tn) _tn.value = '';
+    const _ct = document.getElementById('entry-copy-text'); if (_ct) _ct.value = '';
+    entryState.hook = ''; entryState.copyText = '';
 
     renderEntryFormatPicker();
     renderEntryStrength();
@@ -23576,8 +23624,8 @@
     const uploaded = ws.filter(s => s.uploaded).length;
     const cleared = slotsTotal > 0 && uploaded >= slotsTotal;
     const td = new Date(); td.setHours(0, 0, 0, 0);
-    const dow = td.getDay();
-    const daysLeft = dow === 0 ? 0 : 7 - dow;
+    const lastDay = new Date(mon); lastDay.setDate(lastDay.getDate() + 6); // 이번 주 마지막 날(시작+6)
+    const daysLeft = Math.max(0, Math.round((lastDay - td) / 86400000));
     const remaining = Math.max(0, slotsTotal - uploaded);
     let level, label, sub;
     if (cleared) { level = 'done'; label = '✓ 완료'; sub = '이번 주 끝!'; }
@@ -24487,13 +24535,15 @@
   let calBaseMonday = null;
   let selectedMonday = null;
   let trAddMode = 'bench'; // 'bench' | 'free'
+  let weekStartDay = 1; // 한 주 시작 요일 (0=일 ~ 6=토), 개인 설정. 기본 월요일
 
+  // 주의 '시작일'을 설정된 요일 기준으로 반환 (함수명은 유지 — 호출부 다수)
   function getMondayOf(date) {
     const d = new Date(date);
     d.setHours(0, 0, 0, 0);
-    const day = d.getDay(); // 0 = Sun, 1 = Mon
-    const diff = day === 0 ? -6 : 1 - day;
-    d.setDate(d.getDate() + diff);
+    const day = d.getDay(); // 0 = Sun ~ 6 = Sat
+    const diff = (day - weekStartDay + 7) % 7; // 시작일로부터 며칠 지났나
+    d.setDate(d.getDate() - diff);
     return d;
   }
 
@@ -27839,9 +27889,26 @@
     });
   }
 
+  function renderWeekStartPicker() {
+    const el = document.getElementById('ws-weekstart'); if (!el) return;
+    const days = ['일', '월', '화', '수', '목', '금', '토'];
+    el.innerHTML = '<span class="ws-ws-label">주 시작</span>' +
+      days.map((d, i) => '<button class="ws-ws-chip' + (i === weekStartDay ? ' on' : '') + '" data-wsd="' + i + '">' + d + '</button>').join('');
+    el.querySelectorAll('.ws-ws-chip').forEach(b => {
+      b.onclick = () => {
+        weekStartDay = parseInt(b.dataset.wsd, 10);
+        saveWeekStart();
+        // 주 기준이 바뀌면 캘린더 기준일도 재설정 후 홈 전체 갱신
+        try { calBaseMonday = getMondayOf(new Date()); selectedMonday = getMondayOf(new Date()); } catch (e) {}
+        try { if (typeof renderHome === 'function') renderHome(); } catch (e) {}
+        try { refreshAccordionSummaries(); } catch (e) {}
+      };
+    });
+  }
   function renderWeekSlots() {
     const wrap = document.getElementById('ws-slots');
     if (!wrap) return;
+    renderWeekStartPicker();
 
     // 이번 주 = 실제 현재 주. 4주 캘린더의 현재 주(scripts)와 같은 데이터 공유.
     const mon = getMondayOf(new Date());
