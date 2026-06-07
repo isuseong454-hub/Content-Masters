@@ -12921,7 +12921,14 @@
     font-size: 11px;
     color: var(--text-faint);
     flex-shrink: 0;
+    margin-left: auto;
   }
+  .auth-suggest-del {
+    flex-shrink: 0; margin-left: 10px; width: 26px; height: 26px; border-radius: 7px;
+    background: transparent; border: 1px solid var(--line); color: var(--text-faint);
+    font-size: 12px; cursor: pointer; line-height: 1; transition: all .12s;
+  }
+  .auth-suggest-del:hover { color: var(--wine); border-color: var(--wine-line); background: var(--wine-soft); }
 
   /* 큰 버튼 */
   .auth-big-btn {
@@ -28382,6 +28389,7 @@
       if (name === 'code') {
         const inp = document.getElementById('auth-code-input');
         if (inp) inp.focus();
+        try { renderAuthSuggest(); } catch (e) {} // 내가 쓴 코드 자동 표시
       } else if (name === 'pin') {
         const first = document.querySelector('#auth-pin-row .auth-pin-box');
         if (first) first.focus();
@@ -28475,13 +28483,41 @@
     setTimeout(() => row.classList.remove('shake'), 450);
   }
 
+  // === 내가 쓴 코드 기기 저장 (자동 표시 + 삭제) ===
+  function getRecentCodes() { try { return JSON.parse(localStorage.getItem('cm-recent-codes') || '[]'); } catch (e) { return []; } }
+  function addRecentCode(code) {
+    if (!code) return; code = String(code).toUpperCase();
+    try { let a = getRecentCodes().filter(c => c !== code); a.unshift(code); a = a.slice(0, 8); localStorage.setItem('cm-recent-codes', JSON.stringify(a)); } catch (e) {}
+  }
+  function removeRecentCode(code) {
+    try { const a = getRecentCodes().filter(c => c !== String(code).toUpperCase()); localStorage.setItem('cm-recent-codes', JSON.stringify(a)); } catch (e) {}
+  }
+
   // === 자동완성 (코드만 표시, 이름·PIN 미노출) — Supabase RPC ===
   async function renderAuthSuggest() {
     const inp = document.getElementById('auth-code-input');
     const wrap = document.getElementById('auth-suggest');
     if (!inp || !wrap) return;
     const q = inp.value.trim().toUpperCase();
-    if (q.length < 2) { wrap.style.display = 'none'; return; }  // 2글자 이상 입력 시에만 제안(전체 코드 노출 방지)
+    if (q.length < 2) {
+      // 입력 전/짧을 때: 내가 쓴 코드(기기 저장)를 자동으로 표시 + 삭제
+      const recents = getRecentCodes().filter(c => !q || c.indexOf(q) === 0);
+      if (!recents.length) { wrap.style.display = 'none'; return; }
+      wrap.innerHTML = recents.map(code => `
+        <div class="auth-suggest-item" data-code="${esc(code)}">
+          <span class="auth-suggest-left"><span class="auth-suggest-code">${esc(code)}</span><span class="auth-suggest-name">최근 사용</span></span>
+          <span class="auth-suggest-cta">탭하여 입장 →</span>
+          <button class="auth-suggest-del" data-del="${esc(code)}" title="삭제">✕</button>
+        </div>`).join('');
+      wrap.style.display = 'block';
+      wrap.querySelectorAll('.auth-suggest-item').forEach(it => {
+        it.onclick = (e) => {
+          if (e.target.closest('.auth-suggest-del')) { e.stopPropagation(); removeRecentCode(e.target.closest('.auth-suggest-del').dataset.del); renderAuthSuggest(); return; }
+          inp.value = it.dataset.code; wrap.style.display = 'none'; document.getElementById('auth-code-next').click();
+        };
+      });
+      return;
+    }
     const res = await cmRpc('cm_list_hints', { p_q: q });
     const codes = Array.isArray(res) ? res : [];
     // 입력 중 다른 값으로 바뀌었으면 무시 (경쟁 방지)
@@ -28585,6 +28621,7 @@
       // 통과
       const autoLogin = document.getElementById('auth-autologin').checked;
       await setAutologin(autoLogin);
+      addRecentCode(res.user.code); // 내가 쓴 코드 기기에 저장 → 다음에 자동 표시
       await setCurrentUser({ code: res.user.code, name: res.user.name, is_master: !!res.user.is_master, pinHash: hash });
       hideAuth();
       onLoggedIn();
