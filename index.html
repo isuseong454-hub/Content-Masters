@@ -474,7 +474,7 @@
   .sh-grid {
     border-collapse: collapse;
     width: 100%;
-    min-width: 900px;
+    min-width: 640px;
     background: var(--bg-row);
   }
 
@@ -647,8 +647,9 @@
   .sh-slot img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain; /* 잘리지 않게 전체 보이기 (소재수집·보드와 통일) */
     display: block;
+    background: var(--bg-deep);
   }
 
   .sh-slot-icon {
@@ -732,8 +733,24 @@
   .sh-row-marks {
     display: flex;
     gap: 4px;
-    margin-top: 5px;
     flex-wrap: wrap;
+  }
+
+  /* 원고 칸 하단 액션바 (펼치기 · 유형태그 · 링크 · 분해) */
+  .sh-cell-bar {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px 8px;
+    margin-top: 6px;
+  }
+  .sh-cell-bar .sh-script-toggle { margin-top: 0; }
+  .sh-cell-actions {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
   }
 
   .sh-mark {
@@ -788,6 +805,29 @@
     color: var(--text-main);
   }
 
+  /* 링크 열기(↗) — 활성 링크 옆 작은 버튼 */
+  .sh-link-open {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    min-width: 24px;
+    height: 24px;
+    margin-left: 4px;
+    border: 1px solid var(--emerald-line);
+    border-radius: 3px;
+    background: var(--emerald-faint);
+    color: var(--emerald);
+    text-decoration: none;
+    font-size: 12px;
+    line-height: 1;
+    transition: all 0.15s;
+  }
+  .sh-link-open:hover {
+    background: var(--emerald-deep);
+    color: var(--text-main);
+  }
+
   /* Detail button */
   .sh-detail-btn {
     background: var(--bg-elev);
@@ -812,6 +852,20 @@
     border-color: var(--emerald-line);
     color: var(--emerald);
     background: var(--emerald-faint);
+  }
+
+  /* ===== 모바일: 가로 스크롤 없이 한 화면에 ===== */
+  @media (max-width: 600px) {
+    .sh-grid { min-width: 0; }
+    .sh-th.col-no, .sh-td.col-no { width: 30px; min-width: 30px; padding-left: 2px; padding-right: 2px; }
+    .sh-th.col-fav { width: 26px; min-width: 26px; left: 30px; }
+    .sh-td.col-fav { left: 30px; }
+    .sh-th.col-thumb, .sh-th.col-comm { width: 58px; min-width: 58px; }
+    .sh-th.col-why { min-width: 140px; }
+    .sh-td { padding: 7px 6px; }
+    .sh-slot { width: 50px; }
+    .sh-link, .sh-detail-btn { padding: 5px 7px; font-size: 9px; }
+    .sh-cell-actions { gap: 4px; }
   }
 
   /* Add row */
@@ -12253,14 +12307,19 @@
     line-height: 1.6;
     padding: 10px 12px;
     outline: none;
-    overflow-y: auto;
-    transition: border-color 0.15s;
-    min-height: 60px;
-    max-height: none; /* 내용(붙여넣기)만큼 자동으로 늘어남 — 스크롤 X */
-    resize: vertical; /* 하단을 끌어 더 조절도 가능 */
+    transition: border-color 0.15s, max-height 0.18s ease;
+    /* 기본=접힘: 약 4~5줄만 미리보기 → 100개 행이 짧게 유지됨 */
+    max-height: 118px;
+    overflow: hidden;
+    resize: none;
     cursor: text;
     word-break: break-word;
     white-space: pre-wrap;
+  }
+  /* 접힌 상태에서 내용이 넘치면 아래를 부드럽게 페이드(배경색 무관) */
+  .sh-script-cell.has-overflow:not(.expanded) .sh-script-edit {
+    -webkit-mask-image: linear-gradient(to bottom, #000 62%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 62%, transparent 100%);
   }
 
   .sh-script-edit:empty::before {
@@ -12270,17 +12329,15 @@
     pointer-events: none;
   }
 
-  .sh-script-edit.expanded {
-    height: 360px;
-    border-color: var(--emerald-line);
-    background: var(--emerald-faint);
-  }
-
+  /* 펼침(셀 expanded) 또는 편집 중(focus) → 전체 표시 + 하단 끌어 조절 가능 */
+  .sh-script-cell.expanded .sh-script-edit,
   .sh-script-edit:focus {
+    max-height: none;
+    overflow: visible;
+    resize: vertical;
     border-color: var(--emerald);
     border-style: solid;
     background: var(--emerald-faint);
-    max-height: 600px;
   }
 
   /* Inline formatted text */
@@ -12312,11 +12369,13 @@
   /* ===== INLINE LINK EDITOR ===== */
   .sh-link-wrap {
     position: relative;
-    width: 100%;
+    display: inline-flex;
+    align-items: center;
   }
 
   .sh-link-input {
-    width: 100%;
+    width: 170px;
+    max-width: 52vw;
     background: var(--bg-input);
     border: 1px solid var(--emerald);
     color: var(--text-main);
@@ -15071,13 +15130,11 @@
           <!-- Column letters A B C D E F G -->
           <thead>
             <tr class="sh-collrow">
-              <th style="width:50px;">A</th>
-              <th style="width:38px;">B</th>
-              <th style="width:100px;">C</th>
-              <th style="width:100px;">D</th>
+              <th>A</th>
+              <th>B</th>
+              <th>C</th>
+              <th>D</th>
               <th>E</th>
-              <th style="width:70px;">F</th>
-              <th style="width:60px;">G</th>
             </tr>
           </thead>
           <thead class="sh-thead">
@@ -15086,9 +15143,7 @@
               <th class="sh-th col-fav">★</th>
               <th class="sh-th col-thumb">썸네일</th>
               <th class="sh-th col-comm">공감 댓글</th>
-              <th class="sh-th col-why">원고</th>
-              <th class="sh-th col-link">링크</th>
-              <th class="sh-th col-detail">분해</th>
+              <th class="sh-th col-why">원고 · 링크 · 분해</th>
             </tr>
           </thead>
           <tbody id="sh-tbody"></tbody>
@@ -19518,7 +19573,7 @@
     renderSidebarCounts();
 
     if (visible.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="7" class="sh-empty"><div class="sh-empty-mark">∼</div><div class="sh-empty-txt">${viewMode === 'filled' ? '아직 작성된 행이 없습니다' : '조건에 맞는 항목이 없습니다'}</div></td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="5" class="sh-empty"><div class="sh-empty-mark">∼</div><div class="sh-empty-txt">${viewMode === 'filled' ? '아직 작성된 행이 없습니다' : '조건에 맞는 항목이 없습니다'}</div></td></tr>`;
       return;
     }
 
@@ -19581,25 +19636,25 @@
           </td>
           <td class="sh-td">
             <div class="sh-script-cell" data-row="${r.id}">
-              <div class="sh-script-edit" 
-                   contenteditable="true" 
-                   data-field="script" 
+              <div class="sh-script-edit"
+                   contenteditable="true"
+                   data-field="script"
                    data-row="${r.id}"
                    data-placeholder="원고 — 직접 쓰거나 벤치마킹한 글을 다듬어보세요. 드래그해서 색 적용.">${r.script || ''}</div>
-              <button class="sh-script-toggle" data-act="toggle-script" data-row="${r.id}">▼ 펼치기</button>
-              ${marks.length ? `<div class="sh-row-marks">${marks.join('')}</div>` : ''}
+              <div class="sh-cell-bar">
+                <button class="sh-script-toggle" data-act="toggle-script" data-row="${r.id}">▼ 펼치기</button>
+                ${marks.length ? `<div class="sh-row-marks">${marks.join('')}</div>` : ''}
+                <div class="sh-cell-actions">
+                  <span class="sh-link-wrap" data-link-cell data-row="${r.id}">
+                    ${r.url ?
+                      `<button class="sh-link active" data-act="editlink" data-id="${r.id}" title="클릭해서 링크 수정">🔗 링크</button><a href="${esc(r.url)}" target="_blank" rel="noopener" class="sh-link-open" title="새 탭으로 열기">↗</a>` :
+                      `<button class="sh-link empty" data-act="addlink" data-id="${r.id}">🔗 링크</button>`
+                    }
+                  </span>
+                  <button class="sh-detail-btn ${detailFilled ? 'has-detail' : ''}" data-act="detail" data-id="${r.id}">${detailFilled ? '⚙ 분해됨' : '⚙ 분해'}</button>
+                </div>
+              </div>
             </div>
-          </td>
-          <td class="sh-td" style="text-align:center;vertical-align:middle;">
-            <div class="sh-link-wrap" data-link-cell data-row="${r.id}">
-              ${r.url ? 
-                `<a href="${esc(r.url)}" target="_blank" rel="noopener" class="sh-link active" title="${esc(r.url)}">링크 O</a>` :
-                `<button class="sh-link empty" data-act="addlink" data-id="${r.id}">링크 X</button>`
-              }
-            </div>
-          </td>
-          <td class="sh-td" style="text-align:center;vertical-align:middle;">
-            <button class="sh-detail-btn ${detailFilled ? 'has-detail' : ''}" data-act="detail" data-id="${r.id}">${detailFilled ? '⚙ 분해' : '분해하기'}</button>
           </td>
         </tr>
       `;
@@ -19673,16 +19728,15 @@
           if (r) { r.favorite = !r.favorite; r.updatedAt = Date.now(); await saveRows(); renderTable(); }
         } else if (act === 'detail') {
           openDetail(id);
-        } else if (act === 'addlink') {
+        } else if (act === 'addlink' || act === 'editlink') {
           openInlineLinkEditor(id);
         } else if (act === 'toggle-script') {
           const cell = btn.closest('.sh-script-cell');
-          const ed = cell.querySelector('.sh-script-edit');
-          if (ed.classList.contains('expanded')) {
-            ed.classList.remove('expanded');
+          if (cell.classList.contains('expanded')) {
+            cell.classList.remove('expanded');
             btn.textContent = '▼ 펼치기';
           } else {
-            ed.classList.add('expanded');
+            cell.classList.add('expanded');
             btn.textContent = '▲ 접기';
           }
         }
@@ -19694,9 +19748,12 @@
   function openInlineLinkEditor(rowId) {
     const cell = document.querySelector(`[data-link-cell][data-row="${rowId}"]`);
     if (!cell) return;
-    cell.innerHTML = `<div class="sh-link-wrap"><input type="text" class="sh-link-input" placeholder="URL 붙여넣기 (Ctrl+V)" /></div>`;
+    cell.innerHTML = `<div class="sh-link-wrap"><input type="text" class="sh-link-input" placeholder="URL 붙여넣기 (비우고 저장 시 삭제)" /></div>`;
     const input = cell.querySelector('.sh-link-input');
+    const r0 = rows.find(x => x.id === rowId);
+    if (r0 && r0.url) input.value = r0.url; // 기존 링크 미리 채워 수정 가능
     input.focus();
+    input.select();
 
     const commit = async () => {
       const url = input.value.trim();
@@ -19710,6 +19767,13 @@
         await saveRows();
         renderTable();
         toast('링크 저장됨');
+      } else if (r.url) {
+        // 비우고 저장 → 링크 삭제
+        r.url = '';
+        r.updatedAt = Date.now();
+        await saveRows();
+        renderTable();
+        toast('링크 삭제됨');
       } else {
         renderTable();
       }
@@ -19738,12 +19802,24 @@
   let activeScriptEl = null; // currently focused editable
   let savedSelection = null; // saved selection range for toolbar use
 
+  // 원고 칸 오버플로우 재검사 — 표가 숨겨진 상태로 렌더되면 scrollHeight=0이라
+  // 펼치기 버튼/페이드가 안 떠서, 시트 뷰가 보일 때 다시 측정한다.
+  function recheckScriptOverflow() {
+    requestAnimationFrame(() => {
+      document.querySelectorAll('#sh-tbody .sh-script-cell').forEach(cell => {
+        const ed = cell.querySelector('.sh-script-edit');
+        if (!ed) return;
+        cell.classList.toggle('has-overflow', ed.scrollHeight > 120);
+      });
+    });
+  }
+
   function setupScriptCells() {
     document.querySelectorAll('.sh-script-edit').forEach(ed => {
-      // Check for overflow → show toggle button
+      // Check for overflow → show toggle button (접힘 높이 118px 기준 · 펼침 상태와 무관)
       requestAnimationFrame(() => {
         const cell = ed.closest('.sh-script-cell');
-        if (ed.scrollHeight > ed.clientHeight + 4) {
+        if (ed.scrollHeight > 120) {
           cell.classList.add('has-overflow');
         } else {
           cell.classList.remove('has-overflow');
@@ -19752,7 +19828,7 @@
 
       ed.addEventListener('focus', () => {
         activeScriptEl = ed;
-        ed.classList.add('expanded');
+        ed.closest('.sh-script-cell').classList.add('expanded');
         const toolbar = document.getElementById('fmt-toolbar');
         toolbar.classList.remove('disabled');
         const toggle = ed.closest('.sh-script-cell').querySelector('.sh-script-toggle');
@@ -19781,10 +19857,10 @@
           }
           // Collapse back if not overflowing significantly
           const cell = ed.closest('.sh-script-cell');
-          ed.classList.remove('expanded');
+          cell.classList.remove('expanded');
           // Re-check overflow
           requestAnimationFrame(() => {
-            if (ed.scrollHeight > ed.clientHeight + 4) cell.classList.add('has-overflow');
+            if (ed.scrollHeight > 120) cell.classList.add('has-overflow');
             else cell.classList.remove('has-overflow');
           });
           const toggle = cell.querySelector('.sh-script-toggle');
@@ -22452,6 +22528,8 @@
       if (addTop) addTop.style.display = '';
       // 관점이 환영 — 분석된 행 0개이고 원고 0개일 때
       updateSheetGjWelcome();
+      // 표가 이제 보이므로 원고 오버플로우(펼치기/페이드) 재측정
+      recheckScriptOverflow();
     }
     // Close menu drawer
     document.getElementById('sh-sidebar').classList.remove('open');
