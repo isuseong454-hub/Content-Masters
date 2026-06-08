@@ -1801,6 +1801,8 @@
   .cm-trophy-hero.done .cmth-tick.lit { background:#fff3d6; box-shadow:0 0 5px rgba(245,200,75,.6); }
   .cmth-msg { font-size:12.5px; font-weight:700; color:var(--text-sub); line-height:1.4; }
   .cmth-sub { font-size:11px; color:var(--text-mute); margin-top:3px; }
+  .cmth-master-lab { color:var(--text-faint); font-size:9.5px; }
+  .cmth-goal-now { color:#F5C84B; font-weight:800; }
 
   /* === 카드 유리질감·깊이 통일 (톤앤매너 2차) === */
   .ch-card, .sc-card, .fb-col, .ns-card, .cm-trophy-hero {
@@ -5834,6 +5836,43 @@
   .ns-add-btn:hover { filter:brightness(1.08); }
   .ns-list { display:flex; flex-direction:column; gap:18px; }
   .ns-empty { text-align:center; padding:60px 20px; border:1px dashed var(--line); border-radius:16px; }
+  /* 🩺 릴스 진단 */
+  .dg-wrap { flex:1; overflow-y:auto; padding:26px 20px 90px; max-width:720px; margin:0 auto; width:100%; box-sizing:border-box; }
+  .dg-header { margin-bottom:20px; }
+  .dg-eyebrow { font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:var(--sage); margin-bottom:6px; }
+  .dg-title { font-size:26px; font-weight:800; color:var(--text-main); line-height:1.1; }
+  .dg-title .em { color:var(--neon); }
+  .dg-sub { font-size:12.5px; line-height:1.6; color:var(--text-mute); margin-top:8px; }
+  .dg-sub b { color:var(--text-sub); }
+  .dg-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(106px,1fr)); gap:10px; }
+  .dg-card { display:flex; flex-direction:column; align-items:stretch; gap:6px; padding:10px 10px 11px; border:1px solid var(--line); border-radius:12px; background:var(--bg-card); cursor:pointer; transition:all .15s; }
+  .dg-card:hover { border-color:var(--sage-line); transform:translateY(-2px); }
+  .dg-card.on { border-color:var(--emerald); box-shadow:0 0 0 2px var(--emerald-glow); background:var(--emerald-faint); }
+  .dgc { width:100%; height:auto; display:block; background:#0d0f12; border-radius:8px; }
+  .dgc-grid { stroke:rgba(255,255,255,.10); stroke-width:1; }
+  .dgc-line { fill:none; stroke:#9AA0A6; stroke-width:2.6; stroke-linecap:round; stroke-linejoin:round; vector-effect:non-scaling-stroke; }
+  .dgc-line.good { stroke:var(--emerald); }
+  .dgc-red { fill:none; stroke:#FF4D4D; stroke-width:3.4; stroke-linecap:round; stroke-linejoin:round; vector-effect:non-scaling-stroke; filter:drop-shadow(0 0 3px rgba(255,77,77,.55)); }
+  .dgc-ylab { fill:rgba(255,255,255,.5); font-size:9px; font-family:'JetBrains Mono',monospace; text-anchor:end; }
+  .dgc-xlab { fill:rgba(255,255,255,.5); font-size:9px; font-family:'JetBrains Mono',monospace; }
+  .dgc-title { fill:rgba(255,255,255,.75); font-size:9px; font-weight:700; letter-spacing:.12em; font-family:'Pretendard',sans-serif; }
+  .dg-card-label { font-size:12px; font-weight:800; color:var(--text-main); }
+  .dg-card-sub { font-size:10px; color:var(--text-faint); font-weight:600; }
+  .dg-result { margin-top:18px; }
+  .dg-result-empty { text-align:center; font-size:12.5px; color:var(--text-faint); padding:24px 10px; border:1px dashed var(--line); border-radius:12px; }
+  .dg-diag { border:1px solid var(--line); border-radius:14px; padding:16px; background:linear-gradient(180deg, rgba(232,90,90,.06), transparent 50%), var(--bg-card); }
+  .dg-diag.good { background:linear-gradient(180deg, var(--emerald-faint), transparent 50%), var(--bg-card); border-color:var(--emerald-line); }
+  .dg-diag-chart { position:relative; max-width:340px; margin-bottom:13px; }
+  .dg-diag-chart .dgc.big { width:100%; border:1px solid var(--line); border-radius:10px; }
+  .dg-badge { position:absolute; top:9px; right:9px; font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:800; letter-spacing:.06em; padding:3px 9px; border-radius:5px; color:#fff; background:#E23636; box-shadow:0 0 10px rgba(226,54,54,.45); }
+  .dg-badge.good { background:var(--emerald); color:#06140C; box-shadow:0 0 10px var(--emerald-glow); }
+  .dg-diag-title { font-size:17px; font-weight:800; color:var(--text-main); margin-bottom:6px; }
+  .dg-diag-row { display:flex; gap:10px; padding:9px 0; border-top:1px solid var(--line); }
+  .dg-diag-k { flex:0 0 auto; width:42px; font-size:11px; font-weight:800; color:var(--text-mute); padding-top:1px; }
+  .dg-diag-v { flex:1; font-size:13px; line-height:1.55; color:var(--text-sub); }
+  .dg-diag-v.fix { color:var(--text-main); font-weight:600; }
+  .dg-tip { margin-top:18px; font-size:11.5px; line-height:1.55; color:var(--text-mute); padding:12px 14px; border:1px dashed var(--line); border-radius:12px; background:var(--bg-input); }
+  .dg-tip b { color:var(--emerald); }
   .ns-empty-emoji { font-size:42px; margin-bottom:14px; }
   .ns-empty-title { font-size:17px; font-weight:800; color:var(--text-main); margin-bottom:8px; }
   .ns-empty-sub { font-size:13px; color:var(--text-mute); line-height:1.6; margin-bottom:20px; }
@@ -9949,6 +9988,16 @@
     font-weight: 600;
     margin-bottom: 7px;
   }
+  .sc-mini-hint {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 10.5px;
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--text-faint);
+    font-weight: 600;
+    margin-left: 6px;
+  }
+  .sc-subject-cell { display: block; }
 
   /* === 상태 픽커 === */
   .sc-state-picker {
@@ -11029,7 +11078,31 @@
   @media (max-width: 720px) {
     .sc-ref-toggle-label { display: none; }
     .sc-ref-toggle { padding: 8px 11px; }
+    .sc-titleguide-toggle { padding: 8px 11px; }
   }
+  /* 📋 제목 작성 원칙 버튼 (레퍼런스 옆) + 모달 */
+  .sc-card-tools { position: absolute; top: 18px; right: 18px; z-index: 3; display: flex; gap: 8px; align-items: center; }
+  .sc-card-tools .sc-ref-toggle { position: static; top: auto; right: auto; }
+  .sc-titleguide-toggle { background: var(--bg-elev); border: 1px solid rgba(245,200,75,0.5); color: #F5C84B; padding: 8px 14px; border-radius: 100px; cursor: pointer; font-family: 'Pretendard', sans-serif; font-size: 12px; font-weight: 700; display: inline-flex; align-items: center; gap: 7px; transition: all 0.15s; box-shadow: 0 0 12px rgba(245,200,75,0.12); }
+  .sc-titleguide-toggle:hover { background: #F5C84B; color: #2a1f06; transform: translateY(-1px); box-shadow: 0 0 18px rgba(245,200,75,0.3); }
+  .tg-modal-overlay { position: fixed; inset: 0; z-index: 9000; background: rgba(0,0,0,0.62); display: none; align-items: center; justify-content: center; padding: 20px; }
+  .tg-modal-overlay.show { display: flex; }
+  .tg-modal { width: 100%; max-width: 560px; max-height: 86vh; display: flex; flex-direction: column; background: var(--bg-card); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.6); }
+  .tg-modal-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 16px 18px; border-bottom: 1px solid var(--line); }
+  .tg-modal-title { font-size: 16px; font-weight: 800; color: var(--text-main); }
+  .tg-modal-title .em { color: #F5C84B; }
+  .tg-modal-close { width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--line); background: var(--bg-input); color: var(--text-sub); font-size: 18px; cursor: pointer; line-height: 1; flex: 0 0 auto; }
+  .tg-modal-close:hover { color: var(--text-main); }
+  .tg-modal-body { overflow-y: auto; padding: 16px 18px 22px; -webkit-overflow-scrolling: touch; }
+  .tg-sec-label { font-size: 13px; font-weight: 800; color: var(--text-main); margin: 0 0 11px; }
+  .tg-sec-label.tg-sec-2 { margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--line); }
+  .tg-sec-hint { font-size: 10.5px; font-weight: 600; color: var(--text-faint); margin-left: 6px; }
+  .tg-principles { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 9px; }
+  .tg-principles li { font-size: 13px; line-height: 1.5; color: var(--text-sub); }
+  .tg-principles li b { color: var(--emerald); font-weight: 800; }
+  .tg-titles { margin: 0; padding-left: 24px; display: flex; flex-direction: column; gap: 7px; }
+  .tg-titles li { font-size: 12.5px; line-height: 1.45; color: var(--text-sub); }
+  .tg-titles li::marker { color: var(--text-faint); font-size: 11px; }
 
   /* === 레퍼런스 패널 (우측 슬라이드) === */
   .sc-ref-panel {
@@ -12769,6 +12842,33 @@
   }
   .sh-toast.show { opacity: 1; }
 
+  /* 업로드 완료 축하 스낵바 (액션 버튼 포함) */
+  .up-celebrate {
+    position: fixed;
+    bottom: 78px;
+    left: 50%;
+    transform: translateX(-50%) translateY(14px);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(135deg, rgba(245,200,75,0.16), var(--bg-elev));
+    border: 1px solid rgba(245,200,75,0.5);
+    padding: 9px 11px 9px 16px;
+    border-radius: 100px;
+    z-index: 2001;
+    opacity: 0;
+    transition: opacity 0.3s, transform 0.3s;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 22px rgba(245,200,75,0.16);
+    max-width: calc(100vw - 24px);
+  }
+  .up-celebrate.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .up-celebrate-txt { font-family: 'Pretendard', sans-serif; font-size: 12.5px; color: var(--text-main); white-space: nowrap; }
+  .up-celebrate-txt b { color: #F5C84B; }
+  .up-celebrate-btn { flex: 0 0 auto; padding: 7px 13px; border-radius: 100px; border: none; background: #F5C84B; color: #2a1f06; font-weight: 800; font-size: 12px; cursor: pointer; white-space: nowrap; }
+  .up-celebrate-btn:hover { filter: brightness(1.06); }
+  .up-celebrate-x { flex: 0 0 auto; width: 24px; height: 24px; border-radius: 50%; border: none; background: transparent; color: var(--text-mute); font-size: 16px; cursor: pointer; line-height: 1; }
+  .up-celebrate-x:hover { color: var(--text-main); }
+
   /* Mobile */
   @media (max-width: 820px) {
     .sh-sidebar {
@@ -14247,6 +14347,9 @@
       <button class="sh-sb-item" data-ws="northstar" id="ws-northstar">
         <span class="sh-sb-icon">⭐</span><span class="sh-sb-label">내 북극성</span>
       </button>
+      <button class="sh-sb-item" data-ws="diagnose" id="ws-diagnose">
+        <span class="sh-sb-icon">🩺</span><span class="sh-sb-label">릴스 진단</span>
+      </button>
 
       <!-- 설정 (구분선 + 버튼) -->
       <div class="sh-sb-divider"></div>
@@ -14659,10 +14762,16 @@
             <button class="tr-summary-modal-close" id="tr-summary-modal-close" title="닫기">×</button>
           </div>
           <div class="tr-summary-modal-body" id="tr-summary-modal-body"></div>
-          <div class="tr-summary-modal-foot">
+          <div class="tr-summary-myup" id="tr-summary-myup"></div>
+          <div class="tr-summary-perf" id="tr-summary-perf"></div>
+          <div class="tr-summary-modal-foot" id="tr-summary-normal-foot">
             <button class="tr-summary-modal-btn" id="tr-summary-modal-back">← 닫기</button>
             <button class="tr-summary-modal-btn" id="tr-summary-upload">○ 업로드 완료 표시</button>
             <button class="tr-summary-modal-btn primary" id="tr-summary-modal-write">원고 쓰러 가기 →</button>
+          </div>
+          <div class="tr-summary-modal-foot" id="tr-summary-prompt-foot" style="display:none;">
+            <button class="tr-summary-modal-btn" id="tr-prompt-skip">건너뛰기 (썸네일 없이)</button>
+            <button class="tr-summary-modal-btn primary" id="tr-prompt-done">✓ 완료</button>
           </div>
         </div>
       </div>
@@ -15285,21 +15394,31 @@
       <!-- 메인 작성 카드 -->
       <div class="sc-entry-wrap">
         <div class="sc-entry-card">
-          <button class="sc-ref-toggle" id="sc-ref-toggle" title="벤치마킹 레퍼런스 열기">
-            <span class="sc-ref-toggle-icon">📚</span>
-            <span class="sc-ref-toggle-label">벤치마킹 레퍼런스</span>
-          </button>
+          <div class="sc-card-tools">
+            <button class="sc-titleguide-toggle" id="sc-titleguide-btn" title="제목 작성 원칙 + 후킹문구 100 예시">
+              <span class="sc-ref-toggle-icon">📋</span>
+              <span class="sc-ref-toggle-label">제목 작성 원칙</span>
+            </button>
+            <button class="sc-ref-toggle" id="sc-ref-toggle" title="벤치마킹 레퍼런스 열기">
+              <span class="sc-ref-toggle-icon">📚</span>
+              <span class="sc-ref-toggle-label">벤치마킹 레퍼런스</span>
+            </button>
+          </div>
           <div class="sc-entry-head">
             <div class="sc-entry-eyebrow" id="sc-entry-eyebrow">새 원고 · NEW SCRIPT</div>
             <h2 class="sc-entry-title" id="sc-entry-card-title">원고 <span class="em">쓰기</span></h2>
           </div>
 
-          <!-- 제목 + 날짜 -->
+          <!-- 주제 + 썸네일 문구 + 날짜 -->
           <div class="sc-section">
-            <div class="sc-title-row">
+            <div class="sc-subject-cell">
+              <label class="sc-mini-label">🧭 주제 <span class="sc-mini-hint">이 콘텐츠로 뭘 말할 건지 (방향)</span></label>
+              <input type="text" class="sc-input" id="sc-entry-subject" placeholder="예: 시스루뱅이 얼굴형 따라 망하는 이유" />
+            </div>
+            <div class="sc-title-row" style="margin-top:13px;">
               <div class="sc-title-cell">
-                <label class="sc-mini-label">제목</label>
-                <input type="text" class="sc-input sc-title-input" id="sc-entry-title" placeholder="원고 제목 (예: 시스루뱅 망하는 진짜 이유)" />
+                <label class="sc-mini-label">🪝 썸네일 문구 <span class="sc-mini-hint">첫 화면에 박을, 멈추게 하는 한 줄</span></label>
+                <input type="text" class="sc-input sc-title-input" id="sc-entry-title" placeholder="예: 이런 분들 앞머리 절대 안 돼요" />
               </div>
               <div class="sc-date-cell">
                 <label class="sc-mini-label">날짜</label>
@@ -15559,6 +15678,17 @@
     <!-- 백드롭 (모바일에서 패널 외부 클릭으로 닫기) -->
     <div class="sc-ref-backdrop" id="sc-ref-backdrop"></div>
 
+    <!-- ===== 제목 작성 원칙 + 후킹문구 100 모달 ===== -->
+    <div class="tg-modal-overlay" id="titleguide-modal">
+      <div class="tg-modal">
+        <div class="tg-modal-head">
+          <h2 class="tg-modal-title">📋 제목 작성 <span class="em">원칙</span> + 후킹문구 100</h2>
+          <button class="tg-modal-close" id="titleguide-close" title="닫기">×</button>
+        </div>
+        <div class="tg-modal-body" id="titleguide-body"></div>
+      </div>
+    </div>
+
     <!-- ===== MOODBOARD VIEW (FREE CANVAS) ===== -->
     <div id="mb-view" class="mb-wrap" style="display:none;">
       <div class="mb-bar">
@@ -15593,6 +15723,18 @@
         <button class="ns-add-btn" id="ns-add-btn">+ 북극성 추가</button>
       </div>
       <div class="ns-list" id="ns-list"></div>
+    </div>
+
+    <!-- ===== 릴스 진단 (컨텐츠 분석) VIEW ===== -->
+    <div id="diagnose-view" class="dg-wrap" style="display:none;">
+      <section class="dg-header">
+        <div class="dg-eyebrow">컨텐츠 분석 · 릴스 진단</div>
+        <h1 class="dg-title">릴스 <span class="em">진단</span></h1>
+        <p class="dg-sub">인스타 인사이트의 <b>시청 지속률</b> 그래프를 보고,<br/>내 그래프와 가장 비슷한 모양을 골라보세요.</p>
+      </section>
+      <div class="dg-grid" id="dg-grid"></div>
+      <div class="dg-result" id="dg-result"></div>
+      <div class="dg-tip">💡 <b>테스트 릴스</b>로 비공개 업로드 → 그래프 보며 수정 → 만족스러우면 진짜 업로드!</div>
     </div>
   </main>
 
@@ -16895,7 +17037,8 @@
   function newScript() {
     return {
       id: 'sc_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8),
-      title: '',
+      subject: '', // 🧭 주제(방향)
+      title: '',   // 🪝 썸네일 문구(후킹)
       content: '', // HTML rich text (자유 모드용)
       state: 'idea', // legacy, 호환용 — 더 이상 사용하지 않음
       done: false, // 완료 여부 (새 단순 모델)
@@ -16927,6 +17070,10 @@
       memo: '',
       uploadUrl: '',
       uploadViews: 0,
+      uploadLikes: 0, // 업로드 성과 — 좋아요 (전당 표시용)
+      uploadSaves: 0,    // 저장
+      uploadShares: 0,   // 공유(보내기)
+      uploadAvgWatch: '', // 평균 시청 시간 (자유 텍스트, 예: "8.5초")
       createdAt: Date.now(),
       updatedAt: 0
     };
@@ -18200,6 +18347,7 @@
 
   function scriptDisplayTitle(s) {
     if (s.title && s.title.trim()) return s.title;
+    if (s.subject && s.subject.trim()) return s.subject;
     if (s.writeMode === 'basic' && s.basic?.topic) return s.basic.topic;
     if (s.writeMode === 'detailed' && s.detailed?.topic) return s.detailed.topic;
     const benchRow = s.benchmarkRowId ? rows.find(r => r.id === s.benchmarkRowId) : null;
@@ -18213,6 +18361,7 @@
   // 메인 카드 임시 상태 (가이드 모드 포함)
   let scriptEntryState = {
     id: null,
+    subject: '',
     title: '',
     content: '',
     done: false,
@@ -18237,6 +18386,7 @@
   function resetScriptEntryState() {
     scriptEntryState = {
       id: null,
+      subject: '',
       title: '',
       content: '',
       done: false,
@@ -18274,6 +18424,7 @@
 
   // === 메인 카드 → UI 반영 ===
   function applyScriptEntryToUI() {
+    { const se = document.getElementById('sc-entry-subject'); if (se) se.value = scriptEntryState.subject || ''; }
     document.getElementById('sc-entry-title').value = scriptEntryState.title || '';
     document.getElementById('sc-entry-target-date').value = scriptEntryState.targetDate || todayStr();
     document.getElementById('sc-entry-content').innerHTML = scriptEntryState.content || '';
@@ -18594,8 +18745,8 @@
     const hasDetailed = !!(scriptEntryState.detailed.guideId || scriptEntryState.detailed.topic ||
       scriptEntryState.detailed.coreMessage ||
       Object.values(scriptEntryState.detailed.steps || {}).some(v => v && v.trim()));
-    if (!scriptEntryState.title.trim() && !hasFree && !hasBasic && !hasDetailed) {
-      toast('제목이나 본문을 입력하세요');
+    if (!scriptEntryState.title.trim() && !(scriptEntryState.subject || '').trim() && !hasFree && !hasBasic && !hasDetailed) {
+      toast('주제·썸네일 문구나 본문을 입력하세요');
       return;
     }
 
@@ -18611,6 +18762,7 @@
       scripts.push(s);
     }
 
+    s.subject = (scriptEntryState.subject || '').trim();
     s.title = scriptEntryState.title.trim();
     s.content = sanitizeScriptHtml(scriptEntryState.content || '');
     s.done = !!scriptEntryState.done;
@@ -18693,6 +18845,7 @@
 
     scriptEntryState = {
       id: s.id,
+      subject: s.subject || '',
       title: s.title || '',
       content: s.content || '',
       done: !!s.done,
@@ -19081,7 +19234,8 @@
 
   // === 원고 워크스페이스 init ===
   function initScriptsWorkspace() {
-    // 제목/본문/메모 입력
+    // 주제/제목(썸네일 문구)/본문/메모 입력
+    { const se = document.getElementById('sc-entry-subject'); if (se) se.addEventListener('input', (e) => { scriptEntryState.subject = e.target.value; }); }
     document.getElementById('sc-entry-title').addEventListener('input', (e) => {
       scriptEntryState.title = e.target.value;
     });
@@ -19280,6 +19434,51 @@
     if (tab === 'target') renderRefTargets();
   }
 
+  // === 📋 제목 작성 원칙 + 후킹문구 100 (원고 쓰기 참고) ===
+  const TITLE_PRINCIPLES = [
+    '가능하면 시간·횟수·금액 등 <b>숫자 포함</b> (N=3~7, 0=1~9, 00=연령/금액/퍼센트)',
+    '나의 <b>경험·성과·직함</b>을 제목 앞·중간·뒤에 활용 (앞=신뢰 강조, 뒤=호기심 자극)',
+    "'모르면 손해', '절대 하면 안됨' 등 <b>불안감 표현은 사실 기반</b>으로",
+    '어려운 용어 대신 <b>쉬운 표현</b> 사용',
+    '문장 길이는 <b>20자 내외로 간결</b>하게',
+    '<b>문제 제기 후 해결책을 암시</b>하는 구조 가능하면 사용',
+    '보는 사람에게 <b>혜택·이득</b>이 가는 구조 가능하면 사용'
+  ];
+  const HOOK_TITLES_100 = [
+    "~~에서 당신이 몰랐던 N가지 충격적인 사실", "내가 ~~한다면 지금 당장 시작할 0가지", "~~한다면 이제 더 이상 ~~을 놓치지마세요", "와.. 이걸 몰라서 ~~했구나", "한국인이 ~~ 하면 생기는 일",
+    "우리나라 사람들은 잘 모르는 ~~의 비밀", "의외로 사람들이 모른다는 ~~", "1억 ~~ VS 10만원 ~~ (비교)", "~~ 했을 때(구체적인 상황) 꿀팁", "~~으로 소문난 ~~ BEST 0",
+    "누구나 쉽게 따라하는 ~~ 하는 법", "~~라면 모르면 안 되는 이것", "설마 아직도 ~~하고 있지는 않나요?", "경력 ~년의 ~전문가가 말하는 ~~", "~~(권위)만이 알고 있는 ~~하는 비법",
+    "~~(권이)이 알려주는 ~~하는 법", "경력 N년차 ~~이 밝히는 ~~의 불편한 진실", "~~(권위있는)는 절대로 하지 않는 0가지", "~~(권위있는)도 몰래 쓰는(하는) ~~", "~~(권위있는)도 매일 한다는 ~~ 0가지",
+    "N년 차 ~~ 해보고 느낀 ~~", "~~ N년 하고 미치도록 후회하는 이유", "~~하려면 지금 당장 시작해야 할 0가지 습관", "~~ 하려면 지금 당장 버려야 할 0가지 습관", "~~ 하는 당신이 반드시 알아야 할 ~~",
+    "만약 ~~하고 싶다면 ~~는 꼭하세요", "세상에서 가장 간단한 ~~ 공식", "한번쯤 알아두면 무조건 도움되는 ~~", "~~로 ~~할 수 있는 가장 쉬운 방법", "~~ 할 수 있는 가장 쉬운 방법",
+    "~~를 해결하는 가장 간단한 방법", "하루 0분/시간만 따라해도 ~~할 수 있는 방법", "~~에서 성공하는 사람들의 비밀", "이거 하나만 해도 ~~가 달라집니다", "~~하는 사람만 안다는 0가지",
+    "00살인 내가 ~~하게 된 방법", "00살인 내가 ~~하게 된 이유", "~~였던 내가 ~~한 이유", "~~하는 사람들은 목숨걸고 지킨다는 ~~", "00살로 돌아간다면 절대 하지 않을 0가지",
+    "~~하는 내가 00살로 돌아간다면 무조건 할 0가지", "~~하는 내가 00살로 돌아간다면 가장 먼저 할 '이것'", "00살부터 꼭 해야할 ~~", "00살이라면 무조건 알아야 할 ~~", "00살로 돌아가도 다시 선택할 것들",
+    "00살 이후 더 ~~ 하는 사람들의 0가지 공통점", "~~ 한다면 00살이 진짜 중요한 이유", "00살이라면 주목, 모르면 손해보는 ~~", "모르면 무조건 손해보는 ~~", "모르면 무조건 후회하는 ~~",
+    "내가 ~~ 하고 후회하는 것", "내가 ~~ 하고 180도 달라진 이유", "0개월 만에 ~~한(된) 비법", "0개월(년)만에 ~~ 하고 느낀점", "~~에 0개월(년) 미쳐보니 느낀점",
+    "~~에 0개월(년) 미쳐보고 달라진 점", "~~ 하다 현타올 때 BEST 0", "내가 ~~를 미친듯이 하고 나서 알게 된 0가지", "내가 ~~를 미친듯이 하고 나서 후회하는 0가지", "~~ 하고 싶다면 절대 하면 안되는 0가지",
+    "~~ 하나로 ~~한 방법 0가지", "요즘 대세, ~~하는(되는) 비법", "요즘 ~~들이 한다는 ~~하는 방법 0가지", "~~ 템플릿 무료배포", "~~ 할 수 있는 무료 사이트 0개",
+    "~~라면 꼭 알아야 할 사이트 0개", "대부분이 사람들이 잘 모르는 ~~ 하는 법", "대부분의 사람들이 잘못하고 있는 '이것'", "대부분의 사람들이 몰라서 못하는(사는) ~~ 0가지", "0분만에 ~~ 하는 꿀팁",
+    "~~ 못하는 사람들의 특징", "~~ 잘하는 사람들의 특징", "99.9% ~~ 하는 사람들의 특징", "~~하고 싶은 사람만 보세요", "~~하고 싶은 사람은 절대 보지마세요",
+    "~~, 이렇게 하면 절대 안됩니다", "~~ ,이렇게 하면 무조건 망합니다", "제발 ~~ 하지 마세요", "이런 사람은 ~~ 절대 하지 마세요", "~~할 때 모르면 금방 폭망하는 0가지",
+    "~~ 하기 전에 하지않으면 후회할 0가지", "~~ 하기 전 무조건 알아야 할 0가지", "~~은 무조건 봐야할 ~~", "평생 후회하기 전에 점검해야 할 0가지", "나만 알고 싶은 ~~ 하는 꿀팁",
+    "~~ 했더니 결국..", "~~ 해보니..", "내가 ~~ 할 수 있었던 진짜 이유", "내가 매일 ~~를 하는 진짜 이유", "내가 ~~ 달성한 비법",
+    "~~라면 하루라도 빨리 시작해야 할 0가지", "나를 변하게 해준 ~~ 0단계", "나를 180도 변하게 해준 ~~", "내가 180도 변하게 된 진짜 이유", "~~ 에서 0년만에 ~~ 되보니..",
+    "~~해도 ~~하는 방법 (반전)", "~~ 할 때 ~~ 해주는 가장 확실한 방법", "매출(연봉) 00만들어준 ~~하는 비법", "~~로 ~~고민 해결하는 0가지 방법", "~~ 일(할) 때 0초만에 해결하는 법"
+  ];
+  function openTitleGuide() {
+    const body = document.getElementById('titleguide-body');
+    if (body) {
+      body.innerHTML =
+        '<div class="tg-sec-label">✍️ 제목 작성 원칙</div>' +
+        '<ol class="tg-principles">' + TITLE_PRINCIPLES.map(p => '<li>' + p + '</li>').join('') + '</ol>' +
+        '<div class="tg-sec-label tg-sec-2">🎣 후킹문구 100 예시 <span class="tg-sec-hint">«~~» 자리에 내 주제를 넣어 활용</span></div>' +
+        '<ol class="tg-titles">' + HOOK_TITLES_100.map(t => '<li>' + esc(t) + '</li>').join('') + '</ol>';
+    }
+    const ov = document.getElementById('titleguide-modal'); if (ov) ov.classList.add('show');
+  }
+  function closeTitleGuide() { const ov = document.getElementById('titleguide-modal'); if (ov) ov.classList.remove('show'); }
+
   function initRefPanel() {
     const toggleBtn = document.getElementById('sc-ref-toggle');
     const closeBtn = document.getElementById('sc-ref-close');
@@ -19288,6 +19487,10 @@
     if (toggleBtn) toggleBtn.onclick = openRefPanel;
     if (closeBtn) closeBtn.onclick = closeRefPanel;
     if (backdrop) backdrop.onclick = closeRefPanel;
+    // 📋 제목 작성 원칙 모달
+    { const tgBtn = document.getElementById('sc-titleguide-btn'); if (tgBtn) tgBtn.onclick = openTitleGuide; }
+    { const tgClose = document.getElementById('titleguide-close'); if (tgClose) tgClose.onclick = closeTitleGuide; }
+    { const tgOv = document.getElementById('titleguide-modal'); if (tgOv) tgOv.onclick = (e) => { if (e.target === tgOv) closeTitleGuide(); }; }
 
     // 탭 전환
     document.querySelectorAll('.sc-ref-tab').forEach(b => { b.onclick = () => switchRefTab(b.dataset.rtab); });
@@ -22479,6 +22682,7 @@
     const scView = document.getElementById('sc-view');
     const cuView = document.getElementById('customer-view');
     const nsView = document.getElementById('northstar-view');
+    const dgView = document.getElementById('diagnose-view');
     const sheetSb = document.getElementById('sb-sheet-sections');
     const mbSb = document.getElementById('sb-moodboard-sections');
     const cuSb = document.getElementById('sb-customer-sections');
@@ -22499,6 +22703,7 @@
       if (scView) scView.style.display = 'none';
       if (cuView) cuView.style.display = 'none';
       if (nsView) nsView.style.display = 'none';
+      if (dgView) dgView.style.display = 'none';
     };
 
     if (ws === 'home') {
@@ -22569,6 +22774,14 @@
       if (cuSb) cuSb.style.display = 'none';
       topbar.style.display = 'none';
       renderNorthStars();
+    } else if (ws === 'diagnose') {
+      hideAll();
+      if (dgView) { dgView.style.display = 'flex'; dgView.style.flexDirection = 'column'; }
+      sheetSb.style.display = 'none';
+      mbSb.style.display = 'none';
+      if (cuSb) cuSb.style.display = 'none';
+      topbar.style.display = 'none';
+      renderDiagnose();
     } else {
       hideAll();
       sheetView.style.display = '';
@@ -23500,6 +23713,7 @@
   const ACC_SECTIONS = [
     { key: 'goal',      title: '목표 / Why',     ico: '◎', sel: ['#home-view .home-section.goal'] },
     { key: 'week',      title: '이번 주 할일!',  ico: '▦', sel: ['#home-view .tr-week-block'] },
+    { key: 'halloffame',title: '🏆 업로드 전당',  ico: '🏆', gen: true },
     { key: 'calendar',  title: '캘린더 · 주차별', ico: '▤', sel: ['#home-view .tr-cal-block', '#tr-weeks-list'] },
     { key: 'challenge', title: '진행 중 챌린지', ico: '◇',  sel: ['#ch-list'], wrap: '.home-section' },
     { key: 'insight',   title: '인사이트',       ico: '◐', gen: true },
@@ -23687,6 +23901,113 @@
       .ins-val{font-family:'Pretendard',sans-serif;font-size:15px;font-weight:800;color:var(--text-main);line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
       .ins-sub{font-size:10.5px;color:var(--text-faint);margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
       .ins-empty{font-size:12.5px;color:var(--text-mute);padding:8px 2px;line-height:1.5;}
+      .ins-empty b{color:var(--emerald);}
+      .myins-head{font-size:13px;font-weight:800;color:var(--text-main);margin:0 0 12px;}
+      .myins-sub{font-size:10.5px;font-weight:600;color:var(--text-faint);margin-left:5px;}
+      .myins-coach{margin-top:12px;font-size:12px;line-height:1.55;color:var(--text-sub);padding:11px 13px;border-radius:10px;background:var(--emerald-faint);border:1px solid var(--emerald-line);}
+      .myins-coach b{color:var(--emerald);font-weight:800;}
+      /* 🏆 업로드 명예의 전당 */
+      .hof-gauge{background:linear-gradient(180deg,var(--gold-soft),transparent 70%),var(--bg-card);border:1px solid rgba(245,230,211,.32);border-radius:12px;padding:13px 14px;margin-bottom:12px;}
+      .hof-gauge.reached{border-color:var(--gold);box-shadow:0 0 18px rgba(245,230,211,.22);}
+      .hof-gauge-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;gap:8px;}
+      .hof-gauge-title{font-size:13px;font-weight:800;color:var(--text-main);}
+      .hof-gauge-count{font-family:'Pretendard',sans-serif;font-size:18px;font-weight:900;color:var(--gold);white-space:nowrap;}
+      .hof-gauge-count .sl{font-size:13px;font-weight:700;color:var(--text-mute);}
+      .hof-gauge-bar{height:8px;border-radius:99px;background:var(--bg-input);overflow:hidden;}
+      .hof-gauge-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--flare),var(--gold));transition:width .45s ease;}
+      .hof-gauge-msg{font-size:11.5px;color:var(--text-mute);margin-top:8px;}
+      .hof-gauge-msg b{color:var(--flare);}
+      .hof-gauge-msg.done{color:var(--gold);font-weight:800;}
+      .hof-setgoal{margin-top:8px;width:100%;padding:9px;border-radius:8px;border:1px dashed rgba(245,230,211,.4);background:transparent;color:var(--gold);font-weight:700;font-size:12px;cursor:pointer;}
+      .hof-setgoal:hover{background:var(--gold-soft);}
+      .hof-scope{display:flex;gap:6px;margin-bottom:10px;}
+      .hof-scope-btn{padding:5px 11px;border-radius:99px;border:1px solid var(--line);background:var(--bg-input);color:var(--text-mute);font-size:11px;font-weight:700;cursor:pointer;transition:all .15s;}
+      .hof-scope-btn.on{border-color:rgba(245,230,211,.45);color:var(--gold);background:var(--gold-soft);}
+      .hof-stage-open{margin-left:auto;padding:5px 12px;border-radius:99px;border:1px solid rgba(245,230,211,.5);background:linear-gradient(180deg,var(--gold-soft),transparent);color:var(--gold);font-size:11px;font-weight:800;cursor:pointer;transition:all .15s;white-space:nowrap;}
+      .hof-stage-open:hover{background:var(--gold-soft);box-shadow:0 0 12px rgba(245,230,211,.25);}
+      .hof-wall{display:grid;grid-template-columns:repeat(auto-fill,minmax(70px,1fr));gap:8px;}
+      .hof-tile{position:relative;aspect-ratio:9/16;border-radius:10px;overflow:hidden;border:1px solid var(--line);background:var(--bg-input);cursor:pointer;padding:0;display:flex;align-items:center;justify-content:center;transition:transform .12s,box-shadow .15s;}
+      .hof-tile.filled{border-color:rgba(245,230,211,.38);background:linear-gradient(180deg,var(--gold-soft),transparent 60%),var(--bg-card);}
+      .hof-tile.filled:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(245,230,211,.2);}
+      .hof-tile.has-img{border-color:var(--gold);}
+      .hof-tile img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:var(--bg-deep);}
+      .hof-medal{font-size:25px;filter:drop-shadow(0 0 6px rgba(245,230,211,.5));}
+      /* 사진 위 작은 코너 메달 — 작품을 가리지 않게 */
+      .hof-badge{position:absolute;top:5px;left:5px;font-size:11px;line-height:1;background:rgba(0,0,0,.42);border-radius:6px;padding:2px 4px;filter:drop-shadow(0 0 4px rgba(245,230,211,.55));}
+      .hof-cap{position:absolute;left:0;right:0;bottom:0;padding:6px 4px 4px;background:linear-gradient(0deg,rgba(0,0,0,.74),transparent);display:flex;flex-direction:column;gap:1px;}
+      .hof-tile.has-img .hof-cap{background:linear-gradient(0deg,rgba(0,0,0,.64),transparent);}
+      .hof-cap-t{font-size:9px;font-weight:700;color:#fff;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+      .hof-cap-v{font-size:8.5px;font-weight:800;color:var(--gold);text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+      .hof-best{position:absolute;top:4px;right:4px;font-size:13px;line-height:1;filter:drop-shadow(0 0 5px rgba(245,230,211,.7));z-index:2;}
+      .hof-tile.best{border-color:var(--gold);box-shadow:inset 0 0 12px rgba(245,230,211,.28),0 4px 14px rgba(245,230,211,.18);}
+      .hof-addhint{position:absolute;top:4px;left:4px;font-size:8px;font-weight:700;color:var(--gold);background:rgba(0,0,0,.55);border-radius:6px;padding:2px 4px;}
+      .hof-tile.empty{border-style:dashed;background:transparent;cursor:pointer;opacity:.5;transition:all .15s;padding:0;}
+      .hof-tile.empty:hover{opacity:1;border-color:rgba(245,230,211,.6);background:rgba(245,230,211,.05);transform:translateY(-2px);}
+      .hof-tile.empty:hover .hof-empty-mark{color:var(--gold);}
+      .hof-empty-mark{font-size:18px;color:var(--text-faint);}
+      .hof-empty{font-size:12.5px;color:var(--text-mute);padding:14px 6px;line-height:1.55;text-align:center;border:1px dashed var(--line);border-radius:10px;}
+      .hof-empty b{color:var(--flare);}
+      /* 🎖 등급/마일스톤 한 줄 */
+      .hof-milestone{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:-2px 0 12px;font-size:11.5px;}
+      .hof-tier-badge{font-weight:800;color:var(--gold);background:var(--gold-soft);border:1px solid rgba(245,230,211,.35);border-radius:99px;padding:3px 10px;}
+      .hof-tier-next{color:var(--text-mute);font-weight:600;}
+      .hof-tier-next b{color:var(--flare);font-weight:800;}
+      /* 📈 성장 곡선 */
+      .hof-curve{border:1px solid var(--line);border-radius:12px;padding:12px 12px 10px;margin-bottom:12px;background:var(--bg-card);}
+      .hof-curve-label{font-size:11px;font-weight:800;color:var(--text-mute);letter-spacing:.06em;margin-bottom:12px;}
+      .hof-curve-bars{display:flex;align-items:flex-end;gap:8px;height:90px;}
+      .hof-cbar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;height:100%;}
+      .hof-cbar-col{flex:1;width:100%;display:flex;align-items:flex-end;justify-content:center;}
+      .hof-cbar{width:62%;max-width:30px;border-radius:5px 5px 2px 2px;background:linear-gradient(180deg,rgba(245,230,211,.5),rgba(245,230,211,.14));position:relative;min-height:2px;transition:height .4s ease;}
+      .hof-cbar.cur{background:linear-gradient(180deg,var(--flare),var(--gold));}
+      .hof-cbar-n{position:absolute;top:-15px;left:50%;transform:translateX(-50%);font-size:10px;font-weight:800;color:var(--text-sub);}
+      .hof-cbar-m{font-size:9.5px;color:var(--text-faint);font-weight:600;}
+      .hof-cbar-m.cur{color:var(--flare);font-weight:800;}
+      .hof-curve-recap{font-size:11.5px;color:var(--text-mute);margin-top:10px;text-align:center;}
+      .hof-curve-recap b{color:var(--gold);}
+      /* 🌟 비전 연결 + 다음 넛지 */
+      .hof-footer{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:space-between;margin-top:13px;padding-top:12px;border-top:1px solid var(--line);}
+      .hof-foot-vision{font-size:11px;color:var(--text-mute);font-weight:600;min-width:0;max-width:40%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+      .hof-foot-diag{flex:0 0 auto;padding:6px 12px;border-radius:99px;border:1px solid var(--line);background:var(--bg-input);color:var(--text-sub);font-size:11px;font-weight:800;cursor:pointer;transition:all .15s;}
+      .hof-foot-diag:hover{border-color:var(--sage-line);color:var(--text-main);}
+      .hof-foot-nudge{flex:0 0 auto;padding:6px 12px;border-radius:99px;border:1px solid var(--emerald-line);background:var(--emerald-faint);color:var(--emerald);font-size:11px;font-weight:800;cursor:pointer;transition:all .15s;}
+      .hof-foot-nudge:hover{background:var(--emerald);color:#fff;}
+      /* 🎉 마일스톤 축하 폭죽 */
+      .hof-confetti{position:fixed;inset:0;z-index:100060;pointer-events:none;overflow:hidden;}
+      .hof-confetti span{position:absolute;top:-16px;width:8px;height:13px;border-radius:2px;opacity:.95;animation-name:hofConfFall;animation-timing-function:cubic-bezier(.25,.6,.5,1);animation-iteration-count:1;animation-fill-mode:forwards;}
+      @keyframes hofConfFall{0%{transform:translateY(0) rotate(0);opacity:1;}100%{transform:translateY(104vh) rotate(560deg);opacity:.35;}}
+      /* 카드 모달 — 내가 올린 결과물 슬롯 */
+      .tr-summary-myup{padding:0 18px 4px;}
+      .myup-label{font-size:12px;font-weight:800;color:var(--text-main);margin:8px 0 8px;}
+      .myup-opt{font-size:10px;font-weight:600;color:var(--text-faint);margin-left:4px;}
+      .myup-prompt{font-size:12.5px;font-weight:700;line-height:1.5;color:var(--text-main);background:var(--gold-soft);border:1px solid rgba(245,230,211,.4);border-radius:10px;padding:11px 13px;margin:4px 0 12px;}
+      .myup-prompt b{color:var(--gold);}
+      /* 9:16 카드 슬롯 (시트 썸네일 올리듯) */
+      .myup-slotwrap{display:flex;justify-content:center;}
+      .myup-slot{position:relative;width:152px;aspect-ratio:9/16;border:1.5px dashed rgba(245,230,211,.45);border-radius:12px;background:var(--bg-input);overflow:hidden;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;}
+      .myup-slot:hover{border-color:var(--gold);background:rgba(245,230,211,.06);transform:translateY(-2px);}
+      .myup-slot.has-img{border-style:solid;border-color:var(--gold);box-shadow:0 0 16px rgba(245,230,211,.2);}
+      .myup-slot img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:var(--bg-deep);}
+      .myup-slot-add{text-align:center;color:var(--gold);}
+      .myup-slot-plus{font-size:30px;font-weight:300;line-height:1;}
+      .myup-slot-txt{font-size:11px;font-weight:700;margin-top:7px;line-height:1.35;}
+      .myup-slot-rm{position:absolute;top:6px;right:6px;width:22px;height:22px;border-radius:50%;background:rgba(0,0,0,.72);color:#fff;border:none;cursor:pointer;font-size:14px;line-height:1;display:flex;align-items:center;justify-content:center;z-index:2;}
+      .myup-slot-badge{position:absolute;left:0;right:0;bottom:0;padding:5px 4px;font-size:9px;font-weight:800;color:var(--gold);background:linear-gradient(0deg,rgba(0,0,0,.78),transparent);text-align:center;}
+      /* 카드 모달 — 성과(조회수·좋아요·저장·공유·시청시간) + 메모 */
+      .tr-summary-perf{padding:0 18px 8px;}
+      .perf-label{font-size:12px;font-weight:800;color:var(--text-main);margin:10px 0 7px;}
+      .perf-opt{font-size:10px;font-weight:600;color:var(--text-faint);margin-left:4px;}
+      .perf-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+      .perf-field{display:flex;flex-direction:column;gap:4px;}
+      .perf-field.perf-wide{margin-top:8px;}
+      .perf-ic{font-size:10.5px;font-weight:700;color:var(--text-mute);}
+      .perf-field input{width:100%;padding:9px 10px;border-radius:8px;border:1px solid var(--line);background:var(--bg-input);color:var(--text-main);font-size:13px;font-weight:700;outline:none;box-sizing:border-box;}
+      .perf-field input:focus{border-color:var(--gold);box-shadow:0 0 0 2px var(--gold-soft);}
+      .perf-memo{width:100%;min-height:64px;padding:10px 11px;border-radius:10px;border:1px solid var(--line);background:var(--bg-input);color:var(--text-main);font-family:'Pretendard',sans-serif;font-size:12.5px;line-height:1.5;outline:none;resize:vertical;box-sizing:border-box;}
+      .perf-memo:focus{border-color:var(--gold);box-shadow:0 0 0 2px var(--gold-soft);}
+      .perf-memo::placeholder{color:var(--text-faint);}
+      .perf-tip{font-size:10.5px;line-height:1.5;color:var(--text-mute);margin:0 0 11px;padding:8px 10px;border-radius:8px;background:var(--bg-input);border:1px dashed var(--line);}
+      .perf-tip b{color:var(--sage);}
       /* ✨ 스윗스팟 맵 */
       .ss-wrap{margin-bottom:16px;}
       .ss-head{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;margin-bottom:12px;}
@@ -24027,6 +24348,18 @@
       accState.expanded = {};
       saveAccordionState();
     }
+    // 업로드 전당 1회: 순서를 '이번 주 할일' 바로 아래로 끼워넣고, 처음 한 번 펼쳐 보여줌
+    if (!accState._hofV1) {
+      accState._hofV1 = true;
+      if (Array.isArray(accState.order)) {
+        accState.order = accState.order.filter(k => k !== 'halloffame');
+        const wi = accState.order.indexOf('week');
+        accState.order.splice(wi >= 0 ? wi + 1 : accState.order.length, 0, 'halloffame');
+      }
+      accState.expanded = accState.expanded || {};
+      accState.expanded.halloffame = true;
+      saveAccordionState();
+    }
   }
   // === 여정 레일 (기존 레벨·뱃지·카운트 재활용 / 새 시스템 아님) ===
   function renderJourneyRail() {
@@ -24237,7 +24570,7 @@
     // 동기화된 상태 비동기 로드 후 재적용
     loadAccordionState().then(() => { applyAccordionState(); applyPartnerUI(); refreshAccordionSummaries(); });
     loadAchSeen().then(() => { renderMissionPanel(); });
-    renderTodayPanel(); renderInsightPanel();
+    renderTodayPanel(); renderInsightPanel(); renderHallOfFamePanel();
   }
 
   // ============================================================
@@ -24309,7 +24642,7 @@
           '<div class="cmth-barrow"><div class="cmth-bar"><div class="cmth-bar-fill" style="width:' + pct + '%"></div>' +
             [10, 40, 70].map(function (p) { return '<span class="cmth-tick' + (pct >= p ? ' lit' : '') + '" style="left:' + p + '%"></span>'; }).join('') +
           '</div><span class="cmth-goal' + (done ? ' reached' : '') + '" title="마스터 달성 뱃지">★</span></div>' +
-          '<div class="cmth-sub">분석 ' + anN + '/100 · 업로드 ' + upN + '/30</div>' +
+          '<div class="cmth-sub">분석 ' + anN + '/100 · 업로드 ' + upN + '/30<span class="cmth-master-lab"> 마스터</span>' + (monthlyUploadGoal > 0 ? '<span class="cmth-goal-now"> · 🎯 이번 달 ' + getMonthUploadedScripts().length + '/' + monthlyUploadGoal + '</span>' : '') + '</div>' +
         '</div>' +
       '</div>' +
       flowHtml;
@@ -24373,7 +24706,7 @@
     const c = missionCounts();
     const arr = [
       { id: 'm-analyze', label: '이달 분석', cur: c.anMonth, tgt: 15, ico: '🔍' },
-      { id: 'm-upload', label: '이달 업로드', cur: c.upMonth, tgt: 30, ico: '📤' }
+      { id: 'm-upload', label: '이달 업로드', cur: c.upMonth, tgt: (monthlyUploadGoal || 30), ico: '📤' }
     ];
     if (c.chBest) arr.push({ id: 'm-ch', label: '챌린지 ' + (c.chBest.name ? '(' + c.chBest.name + ')' : ''), cur: c.chBest.p, tgt: c.chBest.t, ico: '◆' });
     return arr;
@@ -24551,13 +24884,38 @@
     });
   }
 
+  // 🔮 내 콘텐츠 인사이트 — 내가 기재한 성과(조회수·저장) + 유형으로 패턴 자동 분석
+  function renderMyInsightHtml() {
+    const ups = (scripts || []).filter(s => s.uploaded && (s.uploadViews || 0) > 0);
+    const head = '<div class="ss-divider"></div><div class="myins-head">🔮 내 콘텐츠 인사이트 <span class="myins-sub">내가 기재한 성과로 자동 분석</span></div>';
+    if (ups.length < 2) {
+      return head + '<div class="ins-empty">업로드 카드에 <b>성과(조회수·저장)를 2개 이상 기재</b>하면, 어떤 유형이 잘 되는지 자동으로 짚어드려요.<br>(카드 열기 → 📊 성과)</div>';
+    }
+    const fmtOf = s => { const r = s.benchmarkRowId ? (rows || []).find(x => x.id === s.benchmarkRowId) : null; return (r && r.format) ? r.format : '기타'; };
+    const best = ups.reduce((a, b) => (b.uploadViews || 0) > (a.uploadViews || 0) ? b : a);
+    const byFmt = {};
+    ups.forEach(s => { const f = fmtOf(s); const o = byFmt[f] = byFmt[f] || { v: 0, vn: 0, sv: 0, sn: 0, n: 0 }; o.n++; o.v += (s.uploadViews || 0); o.vn++; if ((s.uploadSaves || 0) > 0) { o.sv += s.uploadSaves; o.sn++; } });
+    let bestV = null, bestS = null;
+    Object.entries(byFmt).forEach(([f, o]) => { const av = o.v / o.vn; if (!bestV || av > bestV.av) bestV = { f: f, av: Math.round(av) }; if (o.sn > 0) { const sa = o.sv / o.sn; if (!bestS || sa > bestS.av) bestS = { f: f, av: Math.round(sa) }; } });
+    const avgV = Math.round(ups.reduce((s, x) => s + (x.uploadViews || 0), 0) / ups.length);
+    const cards = [];
+    cards.push({ ic: '🥇', lab: '내 최고 조회수', val: fmtNum(best.uploadViews || 0), sub: (isFreeEmpty(best) ? '자유' : scriptDisplayTitle(best)).slice(0, 12) + ' · ' + fmtOf(best) });
+    cards.push({ ic: '📊', lab: '내 평균 조회수', val: fmtNum(avgV), sub: ups.length + '개 기준' });
+    if (bestV) cards.push({ ic: '🔥', lab: '조회수 잘 되는 유형', val: bestV.f, sub: '평균 ' + fmtNum(bestV.av) + ' 조회' });
+    if (bestS) cards.push({ ic: '🔖', lab: '저장 잘 되는 유형', val: bestS.f, sub: '평균 ' + fmtNum(bestS.av) + ' 저장' });
+    const coach = '💬 ' + (bestV ? '조회수는 <b>「' + esc(bestV.f) + '」</b>' : '') + (bestS && (!bestV || bestS.f !== bestV.f) ? ', 저장은 <b>「' + esc(bestS.f) + '」</b>' : '') + '가 잘 나와요 — <b>다음엔 이 유형을 더 시도해보세요!</b>';
+    return head +
+      '<div class="ins-grid">' + cards.map(c => '<div class="ins-card"><div class="ins-ic">' + c.ic + '</div><div class="ins-lab">' + esc(c.lab) + '</div><div class="ins-val">' + esc(c.val) + '</div><div class="ins-sub">' + esc(c.sub) + '</div></div>').join('') + '</div>' +
+      '<div class="myins-coach">' + coach + '</div>';
+  }
   function renderInsightPanel() {
     const el = document.getElementById('insight-panel-body'); if (!el) return;
     const filled = (rows || []).filter(isFilled);
     if (!filled.length) {
       // 데이터가 없어도 스윗스팟 그래프 틀은 항상 표시 — 분석이 쌓이면 점이 자동으로 찍혀요
       el.innerHTML = buildSweetSpot() + '<div class="ss-divider"></div>' +
-        '<div class="ins-empty">시트에 벤치마킹을 분석하면 여기 그래프와 카드에 인사이트가 채워져요.</div>';
+        '<div class="ins-empty">시트에 벤치마킹을 분석하면 여기 그래프와 카드에 인사이트가 채워져요.</div>' +
+        renderMyInsightHtml();
       bindSweetSpot(el);
       return;
     }
@@ -24575,9 +24933,448 @@
     if (topViral) cards.push({ ic: '◆', lab: '자주 본 바이럴 패턴', val: topViral[0], sub: topViral[1] + '개 컨텐츠' });
     cards.push({ ic: '★', lab: '나에게 핏한 (4★+)', val: hi + '개', sub: '할 수 있고 시장성 있는 것' });
     el.innerHTML = buildSweetSpot() + '<div class="ss-divider"></div>' +
-      '<div class="ins-grid">' + cards.map(c => '<div class="ins-card"><div class="ins-ic">' + c.ic + '</div><div class="ins-lab">' + esc(c.lab) + '</div><div class="ins-val">' + esc(c.val) + '</div><div class="ins-sub">' + esc(c.sub) + '</div></div>').join('') + '</div>';
+      '<div class="ins-grid">' + cards.map(c => '<div class="ins-card"><div class="ins-ic">' + c.ic + '</div><div class="ins-lab">' + esc(c.lab) + '</div><div class="ins-val">' + esc(c.val) + '</div><div class="ins-sub">' + esc(c.sub) + '</div></div>').join('') + '</div>' +
+      renderMyInsightHtml();
     bindSweetSpot(el);
   }
+
+  // ============================================================
+  // ===== 🏆 업로드 명예의 전당 (홈 패널) =====
+  // 내가 실제로 업로드한 것을 썸네일로 쌓아 목표를 채우는 보람 대시보드.
+  // gauge=이번 달 목표(monthlyUploadGoal/_monthUploaded와 동일 집계),
+  // 벽=업로드된 카드 타일(내가 올린 썸네일 or 🏆), 남은 목표=은은한 빈 칸.
+  // ============================================================
+  let _hofScope = 'month'; // 'month' | 'all'
+  function getMonthUploadedScripts() {
+    const base = calBaseMonday || getMondayOf(new Date());
+    const out = [];
+    for (let i = 0; i < 4; i++) {
+      const monday = addDays(base, i * 7);
+      getScriptsInWeek(monday).forEach(s => { if (s.uploaded) out.push(s); });
+    }
+    return out;
+  }
+
+  // === 🎖 전당 등급(마일스톤) — 누적 업로드 기준 ===
+  const HOF_TIERS = [
+    { n: 1,   name: '첫 발',        ico: '🌱' },
+    { n: 5,   name: '브론즈 전당',  ico: '🥉' },
+    { n: 10,  name: '실버 전당',    ico: '🥈' },
+    { n: 25,  name: '골드 전당',    ico: '🥇' },
+    { n: 50,  name: '플래티넘 전당', ico: '💎' },
+    { n: 100, name: '레전드 전당',  ico: '👑' }
+  ];
+  function hofTotalUploaded() { return (scripts || []).filter(s => s.uploaded).length; }
+  function hofTierInfo() {
+    const c = hofTotalUploaded();
+    let cur = null, next = null;
+    for (const t of HOF_TIERS) { if (c >= t.n) cur = t; else { next = t; break; } }
+    return { count: c, cur, next };
+  }
+  function celebrateMilestone(tier) {
+    toast('🎉 «' + tier.name + '» 달성! ' + tier.ico);
+    try { hofConfetti(); } catch (e) {}
+  }
+  function hofConfetti() {
+    const wrap = document.createElement('div'); wrap.className = 'hof-confetti';
+    const colors = ['#F5E6D3', '#FF7A33', '#2ABF6A', '#FFFFFF', '#FFCD50'];
+    let h = '';
+    for (let i = 0; i < 38; i++) {
+      const left = Math.round(Math.random() * 100);
+      const c = colors[i % colors.length];
+      const dur = (Math.random() * 1.2 + 1.5).toFixed(2);
+      const delay = (Math.random() * 0.5).toFixed(2);
+      h += `<span style="left:${left}%;background:${c};animation-duration:${dur}s;animation-delay:${delay}s;"></span>`;
+    }
+    wrap.innerHTML = h;
+    document.body.appendChild(wrap);
+    setTimeout(() => wrap.remove(), 2800);
+  }
+
+  // === 📈 월별 업로드 추이 (전체 누적 탭) ===
+  function hofMonthlySeries(n) {
+    const now = new Date();
+    const map = {};
+    (scripts || []).filter(s => s.uploaded).forEach(s => {
+      const d = ymdToDate(s.targetDate); if (!d) return;
+      const k = d.getFullYear() + '-' + (d.getMonth() + 1);
+      map[k] = (map[k] || 0) + 1;
+    });
+    const arr = [];
+    for (let i = n - 1; i >= 0; i--) {
+      const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+      const k = d.getFullYear() + '-' + (d.getMonth() + 1);
+      arr.push({ label: (d.getMonth() + 1) + '월', count: map[k] || 0, isCur: i === 0 });
+    }
+    return arr;
+  }
+  function buildHofCurve() {
+    const series = hofMonthlySeries(6);
+    const max = Math.max(1, ...series.map(s => s.count));
+    const bars = series.map(s => {
+      const h = Math.round(s.count / max * 100);
+      return `<div class="hof-cbar-wrap"><div class="hof-cbar-col"><div class="hof-cbar ${s.isCur ? 'cur' : ''}" style="height:${s.count > 0 ? Math.max(14, h) : 2}%">${s.count > 0 ? `<span class="hof-cbar-n">${s.count}</span>` : ''}</div></div><div class="hof-cbar-m ${s.isCur ? 'cur' : ''}">${s.label}</div></div>`;
+    }).join('');
+    // 요약은 곡선과 같은 '달력 월' 기준으로 통일 (막대 숫자와 일치)
+    const now = new Date();
+    const monLabel = (now.getMonth() + 1) + '월';
+    const curMonthUps = (scripts || []).filter(s => {
+      if (!s.uploaded) return false;
+      const d = ymdToDate(s.targetDate);
+      return d && d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth();
+    });
+    let best = null; curMonthUps.forEach(s => { if (!best || (s.uploadViews || 0) > (best.uploadViews || 0)) best = s; });
+    const recap = curMonthUps.length
+      ? `${monLabel} <b>${curMonthUps.length}개</b>${best && (best.uploadViews || 0) > 0 ? ` · 베스트 「${esc((isFreeEmpty(best) ? '자유' : scriptDisplayTitle(best)).slice(0, 12))}」 👁 ${fmtNum(best.uploadViews)}` : ''}`
+      : `${monLabel}은 아직 — 첫 업로드를 올려봐요`;
+    return `<div class="hof-curve"><div class="hof-curve-label">📈 업로드 추이 · 월별</div><div class="hof-curve-bars">${bars}</div><div class="hof-curve-recap">${recap}</div></div>`;
+  }
+  async function renderHallOfFamePanel() {
+    const body = document.getElementById('halloffame-panel-body'); if (!body) return;
+    const goal = monthlyUploadGoal || 0;
+    const monthUps = getMonthUploadedScripts();
+    const achieved = monthUps.length;
+    const pct = goal > 0 ? Math.min(100, Math.round(achieved / goal * 100)) : (achieved > 0 ? 100 : 0);
+    const reached = goal > 0 && achieved >= goal;
+    const scope = _hofScope;
+    const allUps = (scripts || []).filter(s => s.uploaded);
+    const listScripts = (scope === 'all' ? allUps.slice() : monthUps.slice())
+      .sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0));
+    // 내가 올린 썸네일 이미지 로드 (있는 것만)
+    const imgs = {};
+    await Promise.all(listScripts.filter(s => s.hasUploadImg).map(async s => {
+      try { imgs[s.id] = await loadImage(s.id, 'myup'); } catch (e) {}
+    }));
+    const bestViews = Math.max(0, ...listScripts.map(s => s.uploadViews || 0));
+    const tilesHtml = listScripts.map(s => {
+      const t = isFreeEmpty(s) ? '자유' : scriptDisplayTitle(s);
+      const img = imgs[s.id];
+      const v = s.uploadViews || 0, l = s.uploadLikes || 0;
+      const isBest = v > 0 && v === bestViews;
+      const shortT = t.length > 9 ? t.slice(0, 8) + '…' : t;
+      const statHtml = v > 0 ? `<span class="hof-cap-v">👁 ${fmtNum(v)}${l > 0 ? ' · ♥ ' + fmtNum(l) : ''}</span>` : '';
+      return `<button class="hof-tile filled ${img ? 'has-img' : ''} ${isBest ? 'best' : ''}" data-hof-script="${s.id}" title="${esc(t)}">`
+        + (img ? `<img src="${esc(img)}" alt=""/><div class="hof-badge">🏆</div>` : `<div class="hof-medal">🏆</div>`)
+        + (isBest ? `<div class="hof-best" title="이번 베스트">🥇</div>` : '')
+        + `<div class="hof-cap"><span class="hof-cap-t">${esc(shortT)}</span>${statHtml}</div>`
+        + (img ? '' : `<div class="hof-addhint">＋내 사진</div>`)
+        + `</button>`;
+    }).join('');
+    let emptyHtml = '';
+    if (scope === 'month' && goal > 0) {
+      const rem = Math.max(0, goal - achieved);
+      for (let i = 0; i < rem; i++) emptyHtml += `<button class="hof-tile empty" data-hof-empty="1" title="여기 눌러 이번 업로드 등록"><div class="hof-empty-mark">＋</div></button>`;
+    }
+    const gauge = `<div class="hof-gauge ${reached ? 'reached' : ''}">
+        <div class="hof-gauge-top"><span class="hof-gauge-title">🏆 이번 달 전당</span><span class="hof-gauge-count">${achieved}<span class="sl"> / ${goal > 0 ? goal : '–'}</span></span></div>
+        <div class="hof-gauge-bar"><div class="hof-gauge-fill" style="width:${pct}%"></div></div>
+        ${goal > 0
+          ? (reached ? `<div class="hof-gauge-msg done">🏆 이번 달 전당 완성! 최고예요 🎉</div>`
+                     : `<div class="hof-gauge-msg">앞으로 <b>${goal - achieved}개</b> 더 — 비전에 한 걸음씩</div>`)
+          : `<button class="hof-setgoal" id="hof-setgoal">＋ 이번 달 업로드 목표 정하기</button>`}
+      </div>`;
+    const scopeBar = `<div class="hof-scope">
+        <button class="hof-scope-btn ${scope === 'month' ? 'on' : ''}" data-hofscope="month">이번 달</button>
+        <button class="hof-scope-btn ${scope === 'all' ? 'on' : ''}" data-hofscope="all">전체 누적 (${allUps.length})</button>
+        <button class="hof-stage-open" id="hof-stage-open" title="명예의 전당 크게 보기">🏆 크게 보기</button>
+      </div>`;
+    const wall = (tilesHtml || emptyHtml)
+      ? `<div class="hof-wall">${tilesHtml}${emptyHtml}</div>`
+      : `<div class="hof-empty">아직 업로드가 없어요.<br>이번 주 할일에서 <b>업로드 완료</b>를 누르거나 올린 썸네일을 추가하면 여기 전당에 쌓여요 🏆</div>`;
+    // 📈 성장 곡선은 '전체 누적' 탭에서만
+    const curveHtml = (scope === 'all') ? buildHofCurve() : '';
+    // 🌟 비전 연결 + 다음 작품 넛지 (하단 한 줄)
+    const vis = ((typeof homeData !== 'undefined' && homeData && (homeData.goal || homeData.sixMonth)) || '').trim().replace(/\s+/g, ' ');
+    const vShort = vis ? (vis.length > 16 ? vis.slice(0, 15) + '…' : vis) : '';
+    const footerHtml = `<div class="hof-footer"><span class="hof-foot-vision">${vShort ? `🌟 「${esc(vShort)}」에 쌓이는 중` : '🌟 한 편씩, 비전에 가까워지는 중'}</span><button class="hof-foot-diag" id="hof-diag">🩺 릴스 진단</button><button class="hof-foot-nudge" id="hof-next-plan">다음 작품 기획하기 →</button></div>`;
+    body.innerHTML = gauge + scopeBar + curveHtml + wall + footerHtml;
+    const sg = document.getElementById('hof-setgoal'); if (sg) sg.onclick = () => { try { openGoalModal(); } catch (e) {} };
+    const stageBtn = document.getElementById('hof-stage-open'); if (stageBtn) stageBtn.onclick = openHofStage;
+    const nextBtn = document.getElementById('hof-next-plan'); if (nextBtn) nextBtn.onclick = () => { try { switchWorkspace('sheet'); } catch (e) {} };
+    const diagBtn = document.getElementById('hof-diag'); if (diagBtn) diagBtn.onclick = () => { try { switchWorkspace('diagnose'); } catch (e) {} };
+    body.querySelectorAll('[data-hof-empty]').forEach(b => b.onclick = () => { try { openUploadPromptNew(); } catch (e) {} });
+    body.querySelectorAll('[data-hofscope]').forEach(b => b.onclick = () => { _hofScope = b.dataset.hofscope; renderHallOfFamePanel(); });
+    body.querySelectorAll('[data-hof-script]').forEach(b => b.onclick = () => { try { openTrSummaryModal(b.dataset.hofScript); } catch (e) {} });
+  }
+
+  // ===== 🏆 명예의 전당 — 전체화면 (시상대 + 명예의 벽) =====
+  function injectHofStageStyle() {
+    if (document.getElementById('hof-stage-style')) return;
+    const st = document.createElement('style'); st.id = 'hof-stage-style';
+    st.textContent = `
+      .hof-stage{position:fixed;inset:0;z-index:100050;overflow-y:auto;-webkit-overflow-scrolling:touch;opacity:0;transition:opacity .3s ease;
+        background:radial-gradient(ellipse 70% 45% at 50% -5%, rgba(245,230,211,.13), transparent 60%), radial-gradient(ellipse 120% 90% at 50% 120%, rgba(42,191,106,.06), transparent 60%), #06080A;}
+      .hof-stage.show{opacity:1;}
+      .hof-stage-particles{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:1;}
+      .hof-particle{position:absolute;bottom:-12px;border-radius:50%;background:rgba(245,230,211,.85);box-shadow:0 0 7px rgba(245,230,211,.7);opacity:0;
+        animation-name:hofFloat;animation-timing-function:linear;animation-iteration-count:infinite;animation-duration:11s;}
+      .hof-particle.em{background:rgba(42,191,106,.85);box-shadow:0 0 7px rgba(42,191,106,.7);}
+      @keyframes hofFloat{0%{transform:translateY(0);opacity:0;}12%{opacity:.9;}88%{opacity:.65;}100%{transform:translateY(-104vh);opacity:0;}}
+      .hof-stage-close{position:fixed;top:14px;right:16px;z-index:6;width:40px;height:40px;border-radius:50%;border:1px solid rgba(255,255,255,.16);background:rgba(0,0,0,.45);color:#fff;font-size:22px;line-height:1;cursor:pointer;}
+      .hof-stage-close:hover{background:rgba(0,0,0,.72);}
+      .hof-stage-inner{position:relative;z-index:2;max-width:680px;margin:0 auto;padding:48px 18px 64px;}
+      .hof-stage-head{text-align:center;margin-bottom:26px;}
+      .hof-stage-crown{font-size:34px;filter:drop-shadow(0 0 12px rgba(245,230,211,.6));margin-bottom:4px;}
+      .hof-stage-title{font-family:'Pretendard',sans-serif;font-size:30px;font-weight:900;letter-spacing:.14em;color:#F5E6D3;text-shadow:0 0 26px rgba(245,230,211,.35);margin:0;}
+      .hof-stage-sub{font-size:12.5px;color:var(--text-mute);margin-top:9px;letter-spacing:.02em;}
+      .hof-pedestal-wrap{position:relative;display:flex;flex-direction:column;align-items:center;margin:6px 0 40px;}
+      .hof-beam{position:absolute;top:-34px;left:50%;transform:translateX(-50%);width:220px;height:300px;background:linear-gradient(180deg, rgba(245,230,211,.22), transparent 76%);clip-path:polygon(40% 0,60% 0,100% 100%,0 100%);filter:blur(7px);pointer-events:none;}
+      .hof-top-rank{font-size:12px;font-weight:800;color:#F5E6D3;letter-spacing:.06em;margin-bottom:11px;text-shadow:0 0 10px rgba(245,230,211,.45);position:relative;}
+      .hof-top-frame{position:relative;width:150px;aspect-ratio:9/16;border-radius:14px;overflow:hidden;border:2px solid #F5E6D3;background:linear-gradient(180deg, rgba(245,230,211,.14), transparent 60%), var(--bg-card);box-shadow:0 0 32px rgba(245,230,211,.32),0 16px 44px rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;}
+      .hof-top-img{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;}
+      .hof-top-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:var(--bg-deep);}
+      .hof-medal-lg{font-size:46px;filter:drop-shadow(0 0 10px rgba(245,230,211,.6));}
+      .hof-top-title{font-size:14px;font-weight:800;color:var(--text-main);margin-top:14px;text-align:center;max-width:240px;line-height:1.4;}
+      .hof-top-stat{font-size:12.5px;font-weight:800;color:#F5E6D3;margin-top:5px;}
+      .hof-pedestal{margin-top:16px;width:212px;height:30px;border-radius:8px 8px 4px 4px;background:linear-gradient(180deg, rgba(245,230,211,.5), rgba(245,230,211,.15));box-shadow:0 12px 32px rgba(245,230,211,.16);position:relative;}
+      .hof-pedestal::after{content:'';position:absolute;left:50%;top:-1px;transform:translateX(-50%);width:58%;height:3px;background:#F5E6D3;border-radius:2px;opacity:.75;}
+      .hof-wall-label{text-align:center;font-size:12px;font-weight:800;letter-spacing:.1em;color:var(--text-mute);margin:6px 0 16px;}
+      .hof-plaques{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:12px;}
+      .hof-plaque{position:relative;border:1px solid rgba(245,230,211,.3);border-radius:10px;overflow:hidden;background:linear-gradient(180deg, rgba(245,230,211,.08), transparent 60%), var(--bg-card);padding:0;}
+      .hof-plaque-img{position:relative;aspect-ratio:9/16;display:flex;align-items:center;justify-content:center;}
+      .hof-plaque-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:var(--bg-deep);}
+      .hof-medal-sm{font-size:23px;filter:drop-shadow(0 0 6px rgba(245,230,211,.5));}
+      .hof-plaque-t{font-size:10px;font-weight:700;color:#fff;padding:6px 6px 2px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+      .hof-plaque-v{font-size:9.5px;font-weight:800;color:#F5E6D3;padding:0 6px 7px;text-align:center;}
+      .hof-stage-empty{text-align:center;color:var(--text-mute);font-size:13px;line-height:1.7;padding:30px 10px;}
+      .hof-stage-empty .hof-medal-lg{margin-bottom:14px;}
+      .hof-stage-empty b{color:#F5E6D3;}
+    `;
+    document.head.appendChild(st);
+  }
+  function openHofStage() {
+    injectHofStageStyle();
+    const allUps = (scripts || []).filter(s => s.uploaded);
+    const sorted = allUps.slice().sort((a, b) => (b.uploadViews || 0) - (a.uploadViews || 0) || (b.updatedAt || 0) - (a.updatedAt || 0));
+    const top = sorted[0] || null;
+    const rest = sorted.slice(1);
+    const name = (typeof _currentUser !== 'undefined' && _currentUser && _currentUser.name) ? _currentUser.name : '';
+    const vision = ((typeof homeData !== 'undefined' && homeData && (homeData.goal || homeData.sixMonth)) || '').trim().replace(/\s+/g, ' ');
+    const visionShort = vision.length > 18 ? vision.slice(0, 17) + '…' : vision;
+
+    let parts = '';
+    for (let i = 0; i < 18; i++) {
+      const left = Math.round(Math.random() * 100);
+      const size = (Math.random() * 3 + 2).toFixed(1);
+      const dur = (Math.random() * 8 + 8).toFixed(1);
+      const delay = (Math.random() * 10).toFixed(1);
+      parts += `<span class="hof-particle ${i % 3 === 0 ? 'em' : ''}" style="left:${left}%;width:${size}px;height:${size}px;animation-duration:${dur}s;animation-delay:-${delay}s;"></span>`;
+    }
+    let topHtml = '';
+    if (top) {
+      const tt = isFreeEmpty(top) ? '자유' : scriptDisplayTitle(top);
+      const tv = top.uploadViews || 0, tl = top.uploadLikes || 0;
+      topHtml = `<div class="hof-pedestal-wrap">
+        <div class="hof-beam"></div>
+        <div class="hof-top-rank">${tv > 0 ? '🥇 이 달의 정점' : '🏆 가장 최근의 한 편'}</div>
+        <div class="hof-top-frame"><div class="hof-top-img" data-myup="${top.id}"><div class="hof-medal-lg">🏆</div></div></div>
+        <div class="hof-top-title">${esc(tt)}</div>
+        ${tv > 0 ? `<div class="hof-top-stat">👁 ${fmtNum(tv)}${tl > 0 ? ' · ♥ ' + fmtNum(tl) : ''}</div>` : ''}
+        <div class="hof-pedestal"></div>
+      </div>`;
+    }
+    let wallHtml = '';
+    if (rest.length) {
+      wallHtml = `<div class="hof-wall-label">— 명예의 벽 · ${allUps.length}개 —</div><div class="hof-plaques">`
+        + rest.map(s => {
+          const t = isFreeEmpty(s) ? '자유' : scriptDisplayTitle(s);
+          const v = s.uploadViews || 0;
+          return `<div class="hof-plaque"><div class="hof-plaque-img" data-myup="${s.id}"><div class="hof-medal-sm">🏆</div></div>`
+            + `<div class="hof-plaque-t">${esc(t.length > 14 ? t.slice(0, 13) + '…' : t)}</div>`
+            + (v > 0 ? `<div class="hof-plaque-v">👁 ${fmtNum(v)}</div>` : '')
+            + `</div>`;
+        }).join('') + `</div>`;
+    }
+    const emptyHtml = (!top) ? `<div class="hof-stage-empty"><div class="hof-medal-lg">🏆</div><div>아직 전당의 주인공이 없어요.<br>첫 작품을 올려 <b>전당의 첫 주인공</b>이 되어보세요.</div></div>` : '';
+
+    const stage = document.createElement('div');
+    stage.id = 'hof-stage'; stage.className = 'hof-stage';
+    stage.innerHTML = `<div class="hof-stage-particles">${parts}</div>
+      <button class="hof-stage-close" id="hof-stage-close" aria-label="닫기">×</button>
+      <div class="hof-stage-inner">
+        <div class="hof-stage-head">
+          <div class="hof-stage-crown">🏆</div>
+          <h1 class="hof-stage-title">명예의 전당</h1>
+          <div class="hof-stage-sub">${name ? esc(name) + '의 ' : ''}${allUps.length}개의 작품${visionShort ? ` · 「${esc(visionShort)}」을 향해` : ''}</div>
+        </div>
+        ${topHtml}${wallHtml}${emptyHtml}
+      </div>`;
+    document.body.appendChild(stage);
+    requestAnimationFrame(() => stage.classList.add('show'));
+    // 내가 올린 썸네일 로드
+    stage.querySelectorAll('[data-myup]').forEach(async el => {
+      const sid = el.dataset.myup; const s = (scripts || []).find(x => x.id === sid);
+      if (s && s.hasUploadImg) { try { const img = await loadImage(sid, 'myup'); if (img) el.innerHTML = `<img src="${esc(img)}" alt=""/>`; } catch (e) {} }
+    });
+    const close = () => { stage.classList.remove('show'); setTimeout(() => stage.remove(), 260); };
+    document.getElementById('hof-stage-close').onclick = close;
+    stage.addEventListener('click', (e) => { if (e.target === stage || e.target.classList.contains('hof-stage-inner')) close(); });
+  }
+
+  // 카드에 "내가 올린 결과물(썸네일)" 추가 → 자동 업로드 완료 + 전당 반영
+  function pickScriptUploadImage(scriptId) {
+    const inp = document.createElement('input');
+    inp.type = 'file'; inp.accept = 'image/*';
+    inp.onchange = async () => {
+      const file = inp.files && inp.files[0]; if (!file) return;
+      try {
+        const dataUrl = await resizeImage(file, 600);
+        await saveImage(scriptId, 'myup', dataUrl);
+        const s = scripts.find(x => x.id === scriptId);
+        if (s) { s.hasUploadImg = true; s.updatedAt = Date.now(); }
+        if (s && !s.uploaded) { await toggleScriptUploaded(scriptId); } // 자동 완료 + 챌린지·월 연동
+        else { await saveScripts(); }
+        toast('🏆 전당에 올렸어요!');
+        if (s) renderSummaryMyUp(s);
+        try { renderHallOfFamePanel(); } catch (e) {}
+      } catch (e) { toast('이미지 처리 실패'); }
+    };
+    inp.click();
+  }
+  async function renderSummaryMyUp(s) {
+    const el = document.getElementById('tr-summary-myup'); if (!el) return;
+    let img = null;
+    if (s.hasUploadImg) { try { img = await loadImage(s.id, 'myup'); } catch (e) {} }
+    const banner = (_uploadPromptMode && !img) ? `<div class="myup-prompt">📸 이번에 업로드한 콘텐츠 <b>썸네일</b>을 넣어주세요 — <b>업로드 현황(전당)</b>에 올라갑니다!</div>` : '';
+    el.innerHTML = banner + `<div class="myup-label">🏆 내가 이번에 올린 썸네일 <span class="myup-opt">탭해서 추가 — 자동 완료 + 전당에 등록</span></div>
+      <div class="myup-slotwrap">
+        <div class="myup-slot ${img ? 'has-img' : ''}" id="myup-slot">
+          ${img
+            ? `<img src="${esc(img)}" alt=""/><button class="myup-slot-rm" id="myup-remove" title="제거">×</button><div class="myup-slot-badge">🏆 전당 등록됨</div>`
+            : `<div class="myup-slot-add"><div class="myup-slot-plus">＋</div><div class="myup-slot-txt">올린 썸네일<br>추가</div></div>`}
+        </div>
+      </div>`;
+    const slot = document.getElementById('myup-slot');
+    if (slot) slot.onclick = (e) => { if (e.target.id === 'myup-remove') return; pickScriptUploadImage(s.id); };
+    const rm = document.getElementById('myup-remove'); if (rm) rm.onclick = async (e) => {
+      e.stopPropagation();
+      try { await deleteImage(s.id, 'myup'); } catch (e2) {}
+      s.hasUploadImg = false; s.updatedAt = Date.now(); await saveScripts();
+      renderSummaryMyUp(s); try { renderHallOfFamePanel(); } catch (e2) {}
+    };
+  }
+
+  // "30만" / "1.2만" / "12000" 모두 숫자로
+  function parseKNum(str) {
+    str = (str || '').trim().replace(/,/g, '');
+    if (!str) return 0;
+    let m;
+    if ((m = str.match(/^([\d.]+)\s*만$/))) return Math.round(parseFloat(m[1]) * 10000);
+    if ((m = str.match(/^([\d.]+)\s*천$/))) return Math.round(parseFloat(m[1]) * 1000);
+    const n = parseFloat(str.replace(/[^\d.]/g, ''));
+    return isFinite(n) ? Math.round(n) : 0;
+  }
+  // 카드 모달 — 업로드 성과(조회수·좋아요) 입력 슬롯
+  function renderSummaryPerf(s) {
+    const el = document.getElementById('tr-summary-perf'); if (!el) return;
+    if (!s.uploaded && !_uploadPromptMode) { el.innerHTML = ''; return; } // 업로드 완료 or 업로드 프롬프트일 때만
+    const v = s.uploadViews || 0, l = s.uploadLikes || 0, sv = s.uploadSaves || 0, sh = s.uploadShares || 0;
+    const aw = s.uploadAvgWatch || '', memo = s.memo || '';
+    el.innerHTML = `<div class="perf-label">📊 성과 <span class="perf-opt">알면 입력 — 전당에 표시돼요</span></div>
+      <div class="perf-tip">💡 <b>일주일 후·한 달 후</b>에 다시 기재하면, 데이터로 <b>내 콘텐츠의 추이</b>를 정리해서 볼 수 있어요.</div>
+      <div class="perf-grid">
+        <label class="perf-field"><span class="perf-ic">👁 조회수</span><input type="text" inputmode="numeric" id="perf-views" value="${v ? fmtNum(v) : ''}" placeholder="예: 30만" /></label>
+        <label class="perf-field"><span class="perf-ic">♥ 좋아요</span><input type="text" inputmode="numeric" id="perf-likes" value="${l ? fmtNum(l) : ''}" placeholder="예: 1.2만" /></label>
+        <label class="perf-field"><span class="perf-ic">🔖 저장</span><input type="text" inputmode="numeric" id="perf-saves" value="${sv ? fmtNum(sv) : ''}" placeholder="예: 8천" /></label>
+        <label class="perf-field"><span class="perf-ic">✈ 공유(보내기)</span><input type="text" inputmode="numeric" id="perf-shares" value="${sh ? fmtNum(sh) : ''}" placeholder="예: 1.5천" /></label>
+      </div>
+      <label class="perf-field perf-wide"><span class="perf-ic">⏱ 평균 시청 시간</span><input type="text" id="perf-watch" value="${esc(aw)}" placeholder="예: 8.5초 (또는 0:08)" /></label>
+      <div class="perf-label" style="margin-top:15px;">📝 메모 <span class="perf-opt">왜 잘됐나 · 다음은 어떻게?</span></div>
+      <textarea class="perf-memo" id="perf-memo" placeholder="예) 첫 3초 훅이 강했음 → 다음엔 결론을 더 앞으로 / 저장이 많았으니 정보형 더 시도">${esc(memo)}</textarea>`;
+    const val = id => { const e = document.getElementById(id); return e ? e.value : ''; };
+    const commit = async () => {
+      const nv = parseKNum(val('perf-views')), nl = parseKNum(val('perf-likes'));
+      const nsv = parseKNum(val('perf-saves')), nsh = parseKNum(val('perf-shares'));
+      const naw = (val('perf-watch') || '').trim(), nmemo = val('perf-memo') || '';
+      if (s.uploadViews === nv && s.uploadLikes === nl && s.uploadSaves === nsv && s.uploadShares === nsh && s.uploadAvgWatch === naw && s.memo === nmemo) return;
+      const prevBest = Math.max(0, ...(scripts || []).filter(x => x.id !== s.id).map(x => x.uploadViews || 0));
+      s.uploadViews = nv; s.uploadLikes = nl; s.uploadSaves = nsv; s.uploadShares = nsh; s.uploadAvgWatch = naw; s.memo = nmemo; s.updatedAt = Date.now();
+      await saveScripts();
+      try { renderHallOfFamePanel(); } catch (e) {}
+      try { renderInsightPanel(); } catch (e) {} // 🔮 내 인사이트도 갱신
+      if (nv > 0 && nv > prevBest) toast('🥇 최고 기록 갱신! 「' + fmtNum(nv) + ' 조회」');
+    };
+    ['perf-views', 'perf-likes', 'perf-saves', 'perf-shares', 'perf-watch', 'perf-memo'].forEach(id => { const inp = document.getElementById(id); if (inp) { inp.addEventListener('change', commit); inp.addEventListener('blur', commit); } });
+  }
+
+  // ============================================================
+  // ===== 🩺 릴스 진단 (컨텐츠 분석) — 지속률 그래프 모양 → 진단·처방 =====
+  // ============================================================
+  // pts: 시청지속률 곡선 점들 [x(0~100), retention%(0~100)] · red: 문제 구간 인덱스 [from,to]
+  const DG_PATTERNS = [
+    { id: 'hook', label: '초반 급락', sub: '첫 3초', badge: 'BAD HOOK',
+      pts: [[0,100],[6,97],[14,60],[22,33],[34,26],[60,23],[100,21]], red: [1,3],
+      cause: '첫 3초 후킹 실패 — 시작하자마자 이탈해요.',
+      fix: '검증된 바이럴 후킹 구조를 참고해 첫 3초(첫 문장·첫 화면)를 다시 설계하세요.' },
+    { id: 'value_slow', label: '서서히 하락', sub: '갈수록 ↓', badge: '약한 VALUE',
+      pts: [[0,100],[16,90],[34,76],[54,60],[74,46],[100,34]], red: [2,5],
+      cause: '영상이 갈수록 지루해져 이탈해요.',
+      fix: '중간중간 작은 훅을 넣고, 컷·화면전환으로 템포를 끌어올리세요.' },
+    { id: 'value_mid', label: '중간 이후 이탈', sub: '핵심이 늦음', badge: 'BAD VALUE',
+      pts: [[0,100],[22,96],[42,91],[52,84],[64,54],[78,41],[100,37]], red: [3,5],
+      cause: '훅은 좋았지만 핵심까지 가는 시간이 길거나, 훅과 본문이 안 맞아요.',
+      fix: '핵심·결론을 더 앞으로 당기고, 후킹에서 약속한 내용과 본문을 일치시키세요.' },
+    { id: 'point', label: '특정 지점 급락', sub: '한 구간', badge: '구간 문제',
+      pts: [[0,100],[26,95],[44,92],[47,62],[52,57],[100,52]], red: [2,4],
+      cause: '그 순간의 말·내용이 흥미를 끊었어요.',
+      fix: '그 구간 문장을 삭제하거나, 더 짧고 직설적으로 바꾸세요.' },
+    { id: 'good', label: '거의 평탄', sub: '이탈 거의 없음', badge: 'GOOD', good: true,
+      pts: [[0,100],[26,97],[52,95],[78,92],[100,90]], red: null,
+      cause: '끝까지 볼 이유가 충분한 잘 만든 영상이에요! 🎉',
+      fix: '이 영상 구조를 분해해서 다음 콘텐츠에 그대로 확장·재활용하세요.' },
+    { id: 'cta', label: '마지막에 급락', sub: '엔딩', badge: 'BAD CTA',
+      pts: [[0,100],[26,96],[52,93],[70,89],[82,58],[100,44]], red: [3,5],
+      cause: '결과·보상을 너무 늦게 공개했거나 엔딩이 흥미를 끊었어요.',
+      fix: '핵심 결과를 더 앞쪽에 배치하고, 엔딩은 요약 또는 행동 유도(CTA)로 바꾸세요.' },
+    { id: 'topic', label: '전반적으로 낮음', sub: '50% 미만', badge: 'BAD VIDEO',
+      pts: [[0,100],[7,72],[18,44],[36,34],[62,30],[100,27]], red: [1,4],
+      cause: '애초에 관심 없는 주제로 만들었을 가능성이 커요.',
+      fix: '주제 자체를 바꾸세요. 인사이트(스윗스팟)에서 시장성 있는 주제를 다시 찾아보세요.' }
+  ];
+  // 사실적인 시청지속률 차트 (격자 100/50/0% + 시간축 + 회색/빨강 2색 곡선)
+  function dgChart(p, big) {
+    const good = !!p.good;
+    const W = big ? 280 : 150, H = big ? 150 : 78;
+    const padL = big ? 34 : 7, padR = big ? 12 : 7, padT = big ? 22 : 9, padB = big ? 22 : 9;
+    const x0 = padL, x1 = W - padR, y0 = padT, y1 = H - padB;
+    const sx = v => x0 + (v / 100) * (x1 - x0);
+    const sy = v => y1 - (v / 100) * (y1 - y0);
+    let grid = '';
+    [[100, '100%'], [50, '50%'], [0, '0%']].forEach(g => {
+      const y = sy(g[0]);
+      grid += `<line x1="${x0}" y1="${y.toFixed(1)}" x2="${x1}" y2="${y.toFixed(1)}" class="dgc-grid"/>`;
+      if (big) grid += `<text x="${x0 - 6}" y="${(y + 3).toFixed(1)}" class="dgc-ylab">${g[1]}</text>`;
+    });
+    const toPath = arr => arr.map((q, i) => (i ? 'L' : 'M') + sx(q[0]).toFixed(1) + ',' + sy(q[1]).toFixed(1)).join(' ');
+    const grey = `<path d="${toPath(p.pts)}" class="dgc-line ${good ? 'good' : ''}"/>`;
+    const red = (!good && p.red) ? `<path d="${toPath(p.pts.slice(p.red[0], p.red[1] + 1))}" class="dgc-red"/>` : '';
+    let extra = '';
+    if (big) {
+      extra = `<text x="${x0}" y="${(y0 - 7).toFixed(1)}" class="dgc-title">RETENTION</text>`
+        + `<text x="${sx(8).toFixed(1)}" y="${(H - 6).toFixed(1)}" class="dgc-xlab" text-anchor="middle">3초</text>`
+        + `<text x="${sx(100).toFixed(1)}" y="${(H - 6).toFixed(1)}" class="dgc-xlab" text-anchor="end">끝</text>`;
+    }
+    return `<svg viewBox="0 0 ${W} ${H}" class="dgc ${big ? 'big' : ''}">${grid}${grey}${red}${extra}</svg>`;
+  }
+  let _dgSel = null;
+  function renderDiagnose() {
+    const grid = document.getElementById('dg-grid'); if (!grid) return;
+    grid.innerHTML = DG_PATTERNS.map(p => `<button class="dg-card ${_dgSel === p.id ? 'on' : ''} ${p.good ? 'good' : ''}" data-dg="${p.id}">${dgChart(p, false)}<div class="dg-card-label">${esc(p.label)}</div><div class="dg-card-sub">${esc(p.sub)}</div></button>`).join('');
+    grid.querySelectorAll('[data-dg]').forEach(b => b.onclick = () => { _dgSel = b.dataset.dg; renderDiagnose(); const r = document.getElementById('dg-result'); if (r) r.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); });
+    renderDgResult();
+  }
+  function renderDgResult() {
+    const el = document.getElementById('dg-result'); if (!el) return;
+    if (!_dgSel) { el.innerHTML = `<div class="dg-result-empty">위에서 내 그래프 모양을 골라주세요 ↑</div>`; return; }
+    const p = DG_PATTERNS.find(x => x.id === _dgSel); if (!p) { el.innerHTML = ''; return; }
+    el.innerHTML = `<div class="dg-diag ${p.good ? 'good' : ''}">
+        <div class="dg-diag-chart">${dgChart(p, true)}<div class="dg-badge ${p.good ? 'good' : 'bad'}">${esc(p.badge)}</div></div>
+        <div class="dg-diag-title">${esc(p.label)}</div>
+        <div class="dg-diag-row"><span class="dg-diag-k">원인</span><span class="dg-diag-v">${esc(p.cause)}</span></div>
+        <div class="dg-diag-row"><span class="dg-diag-k">처방</span><span class="dg-diag-v fix">${esc(p.fix)}</span></div>
+      </div>`;
+  }
+
   function renderMissionPanel() {
     const el = document.getElementById('mission-panel-body'); if (!el) return;
     try {
@@ -24662,6 +25459,7 @@
     renderMissionPanel();
     renderTodayPanel();
     renderInsightPanel();
+    renderHallOfFamePanel();
     refreshAccordionSummaries();
   }
 
@@ -24779,11 +25577,20 @@
 
   // === 트레이닝 카드 분석 요약 모달 ===
   let _trSummaryScriptId = null;
+  let _uploadPromptMode = false;   // 업로드 직후 "썸네일 넣어주세요" 프롬프트 모드
+  let _uploadPromptTemp = null;    // 빈 슬롯에서 만든 임시 카드 id (그냥 닫으면 삭제)
+  let _suppressUploadToast = false; // 카드 업로드 시 기본 토스트 대신 축하 스낵바만
 
-  async function openTrSummaryModal(scriptId) {
+  async function openTrSummaryModal(scriptId, opts) {
     const s = scripts.find(x => x.id === scriptId);
     if (!s) return;
     _trSummaryScriptId = scriptId;
+    _uploadPromptMode = !!(opts && opts.prompt); // 프롬프트 모드는 호출 시 명시
+    // 프롬프트 모드면 footer를 [건너뛰기]/[완료]로, 아니면 기본
+    const normalFoot = document.getElementById('tr-summary-normal-foot');
+    const promptFoot = document.getElementById('tr-summary-prompt-foot');
+    if (normalFoot) normalFoot.style.display = _uploadPromptMode ? 'none' : 'flex';
+    if (promptFoot) promptFoot.style.display = _uploadPromptMode ? 'flex' : 'none';
 
     const titleEl = document.getElementById('tr-summary-modal-title');
     const eyebrowEl = document.getElementById('tr-summary-modal-eyebrow');
@@ -24794,25 +25601,32 @@
       upBtn.classList.toggle('uploaded-on', !!s.uploaded);
       upBtn.textContent = s.uploaded ? '✓ 업로드 완료됨 (해제)' : '○ 업로드 완료 표시';
     }
+    renderSummaryMyUp(s); // 🏆 내가 올린 결과물 슬롯
+    renderSummaryPerf(s); // 📊 성과(조회수·좋아요) 슬롯
 
     const isFree = isFreeCard(s);
     const freeEmpty = isFreeEmpty(s);
     const title = freeEmpty ? '자유 카드' : scriptDisplayTitle(s);
-    titleEl.textContent = title;
+    titleEl.textContent = _uploadPromptMode ? '내가 이번에 올린 썸네일 넣기' : title;
+    if (_uploadPromptMode) eyebrowEl.textContent = '📤 업로드 등록';
 
     // === 자유 카드 — 메모만 표시 ===
     if (isFree) {
-      eyebrowEl.textContent = '✎ 자유 카드';
-      const memo = (s.memo || '').trim();
-      if (memo) {
-        bodyEl.innerHTML = `
-          <div class="trs-section">
-            <div class="trs-section-label">메모</div>
-            <div class="trs-memo">${esc(memo)}</div>
-          </div>
-        `;
+      if (!_uploadPromptMode) eyebrowEl.textContent = '✎ 자유 카드';
+      if (_uploadPromptMode) {
+        bodyEl.innerHTML = ''; // 프롬프트 모드: 불필요한 안내문 없이 슬롯/성과만
       } else {
-        bodyEl.innerHTML = `<div class="trs-free-empty">자유 카드입니다. 분석 데이터나 메모가 없어요.</div>`;
+        const memo = (s.memo || '').trim();
+        if (memo) {
+          bodyEl.innerHTML = `
+            <div class="trs-section">
+              <div class="trs-section-label">메모</div>
+              <div class="trs-memo">${esc(memo)}</div>
+            </div>
+          `;
+        } else {
+          bodyEl.innerHTML = `<div class="trs-free-empty">자유 카드입니다. 분석 데이터나 메모가 없어요.</div>`;
+        }
       }
       document.getElementById('tr-summary-modal').classList.add('show');
       return;
@@ -24822,12 +25636,12 @@
     const r = rows.find(x => x.id === s.benchmarkRowId);
     if (!r) {
       bodyEl.innerHTML = `<div class="trs-free-empty">참고한 벤치마킹를 찾을 수 없어요.</div>`;
-      eyebrowEl.textContent = '⚠ 벤치마킹 없음';
+      if (!_uploadPromptMode) eyebrowEl.textContent = '⚠ 벤치마킹 없음';
       document.getElementById('tr-summary-modal').classList.add('show');
       return;
     }
 
-    eyebrowEl.textContent = `📚 벤치마킹 NO.${String(r.no).padStart(3, '0')} · 분석 요약`;
+    if (!_uploadPromptMode) eyebrowEl.textContent = `📚 벤치마킹 NO.${String(r.no).padStart(3, '0')} · 분석 요약`;
 
     // 썸네일 / 공감댓글 로드
     let thumbUrl = null, commUrl = null;
@@ -24938,15 +25752,78 @@
     document.getElementById('tr-summary-modal').classList.add('show');
   }
 
-  function closeTrSummaryModal() {
+  async function closeTrSummaryModal() {
     document.getElementById('tr-summary-modal').classList.remove('show');
+    const tempId = _uploadPromptTemp;
+    _uploadPromptMode = false; _uploadPromptTemp = null;
     _trSummaryScriptId = null;
+    // 빈 슬롯에서 만든 임시 카드인데 커밋(완료/건너뛰기) 없이 닫음 → 정리
+    if (tempId) {
+      const s = scripts.find(x => x.id === tempId);
+      if (s && !s.uploaded && !s.hasUploadImg) {
+        scripts = scripts.filter(x => x.id !== tempId);
+        await saveScripts(); renderTrainingRoom(); try { renderHallOfFamePanel(); } catch (e) {}
+      }
+    }
+  }
+  // 카드 "업로드 완료" 버튼 → 금색 + 썸네일 프롬프트 모달
+  async function markUploadedFromCard(id) {
+    const s0 = scripts.find(x => x.id === id);
+    const wasUp = !!(s0 && s0.uploaded);
+    _suppressUploadToast = true;
+    await toggleScriptUploaded(id);
+    _suppressUploadToast = false;
+    const s1 = scripts.find(x => x.id === id);
+    if (s1 && s1.uploaded && !wasUp) {
+      try { hofConfetti(); } catch (e) {} // 🎉 금색 + 축하 폭죽
+      _uploadPromptTemp = null;
+      showUploadCelebrate(id); // 창 자동 X — 가벼운 축하 + "썸네일 올리기" 권유만
+    }
+  }
+  window.__markUploadedFromCard = markUploadedFromCard;
+  // 업로드 완료 축하 스낵바 (창 강제 X) — "📸 썸네일 올리기" 누르면 그때 창
+  function showUploadCelebrate(scriptId) {
+    const old = document.getElementById('up-celebrate'); if (old) old.remove();
+    const bar = document.createElement('div');
+    bar.id = 'up-celebrate'; bar.className = 'up-celebrate';
+    bar.innerHTML = `<span class="up-celebrate-txt">🏆 <b>전당 등록!</b> 잘했어요 🎉</span><button class="up-celebrate-btn" id="up-celebrate-add">📸 썸네일 올리기</button><button class="up-celebrate-x" id="up-celebrate-x" aria-label="닫기">×</button>`;
+    document.body.appendChild(bar);
+    requestAnimationFrame(() => bar.classList.add('show'));
+    const dismiss = () => { bar.classList.remove('show'); setTimeout(() => { if (bar.parentNode) bar.remove(); }, 320); };
+    { const a = document.getElementById('up-celebrate-add'); if (a) a.onclick = () => { dismiss(); _uploadPromptTemp = null; openTrSummaryModal(scriptId, { prompt: true }); }; }
+    { const x = document.getElementById('up-celebrate-x'); if (x) x.onclick = dismiss; }
+    clearTimeout(window.__upCeleb); window.__upCeleb = setTimeout(dismiss, 6000);
+  }
+  // 빈 슬롯에서 바로 업로드 (전당·주차 빈칸) → 임시 카드 + 프롬프트
+  async function openUploadPromptNew() {
+    const s = newScript();
+    s.title = '이번 업로드'; s.benchmarkRowId = '';
+    s.targetDate = dateToYMD(getMondayOf(new Date()));
+    s.state = 'idea'; s.updatedAt = Date.now();
+    scripts.push(s);
+    await saveScripts();
+    _uploadPromptTemp = s.id;
+    openTrSummaryModal(s.id, { prompt: true });
+  }
+  window.__openUploadPromptNew = openUploadPromptNew;
+  // 프롬프트 [완료]/[건너뛰기] — 둘 다 업로드 완료 확정 후 닫기 (썸네일은 슬롯으로 추가한 만큼)
+  async function finishUploadPrompt() {
+    const id = _trSummaryScriptId;
+    const s = scripts.find(x => x.id === id);
+    const wasUp = !!(s && s.uploaded);
+    if (s && !s.uploaded) { await toggleScriptUploaded(id); } else { await saveScripts(); }
+    _uploadPromptTemp = null; // 커밋됨 — 유지
+    await closeTrSummaryModal();
+    if (!wasUp) { try { hofConfetti(); } catch (e) {} } // 🎉 축하 폭죽
+    renderTrainingRoom(); try { renderHallOfFamePanel(); } catch (e) {}
   }
 
   function initTrSummaryModal() {
     const close = document.getElementById('tr-summary-modal-close');
     const back = document.getElementById('tr-summary-modal-back');
     const write = document.getElementById('tr-summary-modal-write');
+    { const pd = document.getElementById('tr-prompt-done'); if (pd) pd.onclick = finishUploadPrompt; }
+    { const ps = document.getElementById('tr-prompt-skip'); if (ps) ps.onclick = finishUploadPrompt; }
     const upBtn = document.getElementById('tr-summary-upload');
     if (upBtn) upBtn.onclick = async () => {
       if (!_trSummaryScriptId) return;
@@ -25239,7 +26116,7 @@
     });
     // 업로드 완료 토글 (카드 클릭과 분리)
     listEl.querySelectorAll('[data-up-script]').forEach(btn => {
-      btn.onclick = (e) => { e.stopPropagation(); toggleScriptUploaded(btn.dataset.upScript); };
+      btn.onclick = (e) => { e.stopPropagation(); markUploadedFromCard(btn.dataset.upScript); };
     });
     // 목표 · 기간 통합 설정 버튼
     const goalSettings = document.getElementById('tr-goal-settings');
@@ -25263,6 +26140,10 @@
     await bumpChallengeUpload(nowUploaded ? 1 : -1); // 챌린지 업로드 자동 연동
     await renderTrWeeksList();
     try { renderWeekSlots(); } catch (e) {} // 이번 주 패널도 동기화
+    try { renderHallOfFamePanel(); } catch (e) {} // 🏆 전당도 동기화
+    try { renderTrophyHero(); } catch (e) {} // 🏆 홈 트로피(레벨) 즉시 갱신
+    try { renderJourneyRail(); } catch (e) {} // 여정 레일 즉시 갱신
+    try { renderMissionPanel(); } catch (e) {} // 미션 패널 즉시 갱신
     if (nowUploaded) {
       // 방금 업로드한 카드 "팝!" 연출 (4주 + 이번 주 양쪽)
       document.querySelectorAll(`.tr-mini-card[data-script-id="${id}"], #ws-slots .ws-slot[data-script-id="${id}"]`).forEach(card => {
@@ -25271,13 +26152,21 @@
       // ③ 다시 보기 — 업로드를 비전/목표와 연결해 "한 걸음 가까워졌어요"
       const goalTxt = ((homeData.sixMonth || homeData.goal || '').trim()).replace(/\s+/g, ' ');
       const goalShort = goalTxt.length > 28 ? goalTxt.slice(0, 26) + '…' : goalTxt;
-      if (monthlyUploadGoal > 0 && _monthGoalReached && !wasReached) {
-        toast(goalShort ? ('🏆 이번 달 목표 달성! 「' + goalShort + '」에 성큼 다가갔어요 🎉') : '🏆 이번 달 목표 달성! 최고예요! 🎉');
-      } else if (goalShort) {
-        toast('✓ 업로드! 「' + goalShort + '」에 한 걸음 더 🎉');
-      } else {
-        toast('✓ 업로드 완료! 🎉');
+      if (!_suppressUploadToast) {
+        if (monthlyUploadGoal > 0 && _monthGoalReached && !wasReached) {
+          toast(goalShort ? ('🏆 이번 달 목표 달성! 「' + goalShort + '」에 성큼 다가갔어요 🎉') : '🏆 이번 달 목표 달성! 최고예요! 🎉');
+        } else if (goalShort) {
+          toast('✓ 업로드! 「' + goalShort + '」에 한 걸음 더 🎉');
+        } else {
+          toast('✓ 업로드 완료! 🎉');
+        }
       }
+      // 🎖 전당 등급 마일스톤 — 누적이 등급 문턱에 딱 도달하면 축하
+      try {
+        const totalUp = (scripts || []).filter(x => x.uploaded).length;
+        const tier = HOF_TIERS.find(m => m.n === totalUp);
+        if (tier) setTimeout(() => celebrateMilestone(tier), 500);
+      } catch (e) {}
     }
   }
   window.__toggleScriptUploaded = toggleScriptUploaded;
@@ -25750,6 +26639,8 @@
     if (document.getElementById('trc-style')) return;
     const s = document.createElement('style'); s.id = 'trc-style';
     s.textContent = `
+      .trc-quickup{width:100%;padding:12px;margin-bottom:12px;border-radius:10px;border:1px solid rgba(245,230,211,.45);background:linear-gradient(180deg,var(--gold-soft),transparent);color:var(--gold);font-weight:800;font-size:13px;cursor:pointer;font-family:inherit;}
+      .trc-quickup:hover{filter:brightness(1.12);box-shadow:0 0 14px rgba(245,230,211,.2);}
       .trc-tabs{display:flex;gap:6px;margin-bottom:12px;}
       .trc-tab{flex:1;padding:9px;border-radius:10px;border:1px solid var(--line);background:var(--bg-input);color:var(--text-sub);font-size:12.5px;font-weight:800;cursor:pointer;font-family:inherit;}
       .trc-tab.on{border-color:var(--emerald-line);background:var(--emerald-faint);color:var(--emerald);}
@@ -25817,7 +26708,8 @@
     if (!el) return;
     const q = (query || '').trim().toLowerCase();
     const tab = _trAddTab;
-    let html = `<div class="trc-tabs">
+    let html = `<button class="trc-quickup" id="trc-quickup">📤 이미 만들어서 올렸어요 · 결과물 바로 등록</button>
+      <div class="trc-tabs">
         <button class="trc-tab ${tab === 'sheet' ? 'on' : ''}" data-trtab="sheet">📋 시트 전체</button>
         <button class="trc-tab ${tab === 'type' ? 'on' : ''}" data-trtab="type">🗂 유형별 모음</button>
       </div>`;
@@ -25847,6 +26739,7 @@
     html += `<button class="trc-free" id="trc-free-btn">✎ 자유 작성 — 직접 주제 입력</button>`;
     el.innerHTML = html;
 
+    { const qu = document.getElementById('trc-quickup'); if (qu) qu.onclick = quickUploadCard; }
     el.querySelectorAll('[data-trtab]').forEach(t => t.onclick = () => { _trAddTab = t.dataset.trtab; renderTrAddBrowse(''); });
     const si = document.getElementById('trc-search-input');
     if (si) si.addEventListener('input', debounce(e => renderTrAddBrowse(e.target.value), 200));
@@ -26028,6 +26921,23 @@
     closeTrAddModal();
     renderTrainingRoom();
     toast(memo ? `"${memo.slice(0,20)}" 추가됨` : '자유 카드 추가됨');
+  }
+
+  // 빈 슬롯에서 "이미 올렸어요" — 결과물 카드 바로 생성 + 업로드 완료(클리어) + 썸네일/성과 입력
+  async function quickUploadCard() {
+    const s = newScript();
+    s.title = '이번 업로드';
+    s.benchmarkRowId = '';
+    s.targetDate = trAddTargetMonday ? dateToYMD(trAddTargetMonday) : todayStr();
+    s.state = 'idea';
+    s.updatedAt = Date.now();
+    scripts.push(s);
+    await saveScripts();
+    closeTrAddModal();
+    await toggleScriptUploaded(s.id); // 바로 업로드 완료 → 이번 할일 클리어 + 전당·챌린지 연동
+    renderTrainingRoom();
+    _uploadPromptTemp = null;
+    openTrSummaryModal(s.id, { prompt: true }); // 썸네일·성과·메모 입력 (프롬프트)
   }
 
   // === 트레이닝 룸 init ===
@@ -28206,7 +29116,7 @@
           <div class="ws-slot-num">#${i + 1}</div>
           ${tagHtml}
           <div class="ws-slot-title">${esc(title)}</div>
-          <button class="tr-up-btn ${up ? 'done' : ''}" onclick="event.stopPropagation();if(window.__toggleScriptUploaded)window.__toggleScriptUploaded('${s.id}')">${up ? '✓ 업로드 완료!' : '업로드 완료'}</button>
+          <button class="tr-up-btn ${up ? 'done' : ''}" onclick="event.stopPropagation();if(window.__markUploadedFromCard)window.__markUploadedFromCard('${s.id}')">${up ? '✓ 업로드 완료!' : '업로드 완료'}</button>
         </div>`;
     });
     for (let e = 0; e < emptyCount; e++) {
