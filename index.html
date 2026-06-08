@@ -805,6 +805,50 @@
     color: var(--text-main);
   }
 
+  /* 🎯 이번주 기획 — 행 액션바의 강조 CTA */
+  .sh-plan-wrap { display: inline-flex; align-items: center; }
+  .sh-plan-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 5px 11px;
+    border-radius: 4px 0 0 4px;
+    font-family: 'Pretendard', sans-serif;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.01em;
+    border: 1px solid var(--flare-line);
+    color: var(--flare);
+    background: var(--flare-soft);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.15s;
+  }
+  .sh-plan-btn:hover { background: var(--flare); color: #fff; border-color: var(--flare); }
+  .sh-plan-btn.planned {
+    border-color: var(--emerald-line);
+    color: var(--emerald);
+    background: var(--emerald-faint);
+  }
+  .sh-plan-btn.planned:hover { background: var(--emerald); color: #fff; border-color: var(--emerald); }
+  .sh-plan-more {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    min-width: 22px;
+    align-self: stretch;
+    border: 1px solid var(--flare-line);
+    border-left: none;
+    border-radius: 0 4px 4px 0;
+    background: var(--flare-soft);
+    color: var(--flare);
+    cursor: pointer;
+    font-size: 10px;
+    transition: all 0.15s;
+  }
+  .sh-plan-more:hover { background: var(--flare); color: #fff; }
+
   /* 링크 열기(↗) — 활성 링크 옆 작은 버튼 */
   .sh-link-open {
     display: inline-flex;
@@ -15730,12 +15774,6 @@
       <div class="sh-modal-head">
         <h2 class="sh-modal-title">컨텐츠 <span class="em">분해</span><span class="sh-modal-no" id="sh-modal-no"></span></h2>
         <div style="display:flex;gap:8px;align-items:center;">
-          <div style="position:relative;">
-            <button class="tr-pin-btn tr-pin-btn-labeled" id="modal-tr-pin-btn" title="이번 주에 추가">
-              <span>📌</span><span class="tr-pin-btn-label">이번 주에</span><span style="font-size:8px;">▾</span>
-            </button>
-            <div class="tr-pin-menu" id="modal-tr-pin-menu"></div>
-          </div>
           <button class="sh-close sh-back" id="sh-modal-close">← 뒤로</button>
         </div>
       </div>
@@ -19582,6 +19620,7 @@
       const commUrl = r.hasComment ? await loadImage(r.id, 'comment') : null;
       const filled = isFilled(r);
       const detailFilled = isDetailFilled(r);
+      const planned = isRowPlannedThisWeek(r.id);
 
       const marks = [];
       // 컨텐츠 유형 배지 (맨 앞에)
@@ -19645,6 +19684,10 @@
                 <button class="sh-script-toggle" data-act="toggle-script" data-row="${r.id}">▼ 펼치기</button>
                 ${marks.length ? `<div class="sh-row-marks">${marks.join('')}</div>` : ''}
                 <div class="sh-cell-actions">
+                  <span class="sh-plan-wrap">
+                    <button class="sh-plan-btn ${planned ? 'planned' : ''}" data-act="planweek" data-id="${r.id}" title="${planned ? '이번주 기획됨 — 클릭하면 빼기' : '이 레퍼런스를 이번주에 만들 업로드로 기획'}">${planned ? '✓ 이번주 기획됨' : '🎯 이번주 기획'}</button>
+                    <button class="sh-plan-more" data-act="planweek-menu" data-id="${r.id}" title="다른 주차에 기획">▾</button>
+                  </span>
                   <span class="sh-link-wrap" data-link-cell data-row="${r.id}">
                     ${r.url ?
                       `<button class="sh-link active" data-act="editlink" data-id="${r.id}" title="클릭해서 링크 수정">🔗 링크</button><a href="${esc(r.url)}" target="_blank" rel="noopener" class="sh-link-open" title="새 탭으로 열기">↗</a>` :
@@ -19730,6 +19773,17 @@
           openDetail(id);
         } else if (act === 'addlink' || act === 'editlink') {
           openInlineLinkEditor(id);
+        } else if (act === 'planweek') {
+          if (isRowPlannedThisWeek(id)) {
+            await unplanRowFromWeek(id, dateToYMD(getMondayOf(new Date())));
+            toast('이번주 기획에서 뺐어요');
+          } else {
+            await planRowToWeek(id, dateToYMD(getMondayOf(new Date())));
+            toast('🎯 이번주 기획에 추가됨');
+          }
+          renderTable();
+        } else if (act === 'planweek-menu') {
+          openRowPlanMenu(id, btn);
         } else if (act === 'toggle-script') {
           const cell = btn.closest('.sh-script-cell');
           if (cell.classList.contains('expanded')) {
@@ -26191,6 +26245,125 @@
         if (typeof renderTrainingRoom === 'function') renderTrainingRoom();
       };
     });
+  }
+
+  // ============================================================
+  // ===== 시트 행에서 "이번주 기획" (업로드 기획) =====
+  // 벤치마킹 행을 골라 → 해당 주에 만들 업로드 카드(script) 생성/배치
+  // ============================================================
+  function getRowLinkedScripts(rowId) {
+    return scripts.filter(s => s.benchmarkRowId === rowId);
+  }
+  function isRowPlannedThisWeek(rowId) {
+    const tw = getMondayOf(new Date()).getTime();
+    return getRowLinkedScripts(rowId).some(s => {
+      const sd = ymdToDate(s.targetDate);
+      return sd && getMondayOf(sd).getTime() === tw;
+    });
+  }
+  async function planRowToWeek(rowId, ymd) {
+    const r = rows.find(x => x.id === rowId);
+    if (!r) return;
+    const monday = ymdToDate(ymd);
+    const existing = getRowLinkedScripts(rowId).find(s => {
+      const sd = ymdToDate(s.targetDate);
+      return sd && getMondayOf(sd).getTime() === monday.getTime();
+    });
+    if (existing) { toast('이미 그 주에 기획되어 있어요'); return; }
+    const s = newScript();
+    s.title = r.idea || r.hook || stripHtml(r.script || '').slice(0, 40) || `벤치마킹 NO.${String(r.no).padStart(3, '0')}`;
+    s.benchmarkRowId = rowId;
+    s.targetDate = ymd;
+    s.state = 'idea';
+    s.updatedAt = Date.now();
+    scripts.push(s);
+    await saveScripts();
+    if (typeof renderTrainingRoom === 'function') renderTrainingRoom();
+  }
+  async function unplanRowFromWeek(rowId, ymd) {
+    const monday = ymdToDate(ymd);
+    scripts = scripts.filter(s => {
+      if (s.benchmarkRowId !== rowId) return true;
+      const sd = ymdToDate(s.targetDate);
+      return !(sd && getMondayOf(sd).getTime() === monday.getTime());
+    });
+    await saveScripts();
+    if (typeof renderTrainingRoom === 'function') renderTrainingRoom();
+  }
+  async function unplanRowAll(rowId) {
+    scripts = scripts.filter(s => s.benchmarkRowId !== rowId);
+    await saveScripts();
+    if (typeof renderTrainingRoom === 'function') renderTrainingRoom();
+  }
+
+  function closeRowPlanMenu() {
+    const m = document.getElementById('row-plan-menu');
+    if (m) m.remove();
+    document.removeEventListener('click', closeRowPlanMenuOutside, true);
+  }
+  function closeRowPlanMenuOutside(e) {
+    const m = document.getElementById('row-plan-menu');
+    if (m && !m.contains(e.target) && !(e.target.closest && e.target.closest('[data-act="planweek-menu"]'))) {
+      closeRowPlanMenu();
+    }
+  }
+  function openRowPlanMenu(rowId, anchorEl) {
+    closeRowPlanMenu();
+    const menu = document.createElement('div');
+    menu.id = 'row-plan-menu';
+    menu.className = 'tr-pin-menu show';
+    menu.style.position = 'fixed';
+    const baseMonday = (typeof calBaseMonday !== 'undefined' && calBaseMonday) ? calBaseMonday : getMondayOf(new Date());
+    const todayMonday = getMondayOf(new Date());
+    const linked = getRowLinkedScripts(rowId);
+    const items = [];
+    items.push(`<div style="padding:6px 11px 4px;font-size:10px;letter-spacing:.1em;color:var(--text-mute);font-weight:700;">어느 주에 기획할까?</div>`);
+    for (let i = 0; i < 4; i++) {
+      const monday = addDays(baseMonday, i * 7);
+      const ymd = dateToYMD(monday);
+      const isCur = ymd === dateToYMD(todayMonday);
+      const existing = linked.find(s => {
+        const sd = ymdToDate(s.targetDate);
+        return sd && getMondayOf(sd).getTime() === monday.getTime();
+      });
+      items.push(`<button class="tr-pin-menu-item ${existing ? 'current' : ''}" data-monday="${ymd}">${i + 1}주차 ${isCur ? '· 이번 주' : ''} ${existing ? '✓' : ''}<div style="font-size:10.5px;color:var(--text-mute);font-weight:500;margin-top:2px;">${formatWeekRange(monday)}</div></button>`);
+    }
+    if (linked.length > 0) {
+      items.push(`<button class="tr-pin-menu-item danger" data-act="remove">⨯ 기획 제거 (${linked.length}개)</button>`);
+    }
+    menu.innerHTML = items.join('');
+    document.body.appendChild(menu);
+    // 위치: 버튼 아래, 화면 밖으로 안 나가게
+    const rect = anchorEl.getBoundingClientRect();
+    const mw = menu.offsetWidth || 180;
+    let left = rect.right - mw;
+    if (left < 8) left = 8;
+    if (left + mw > window.innerWidth - 8) left = window.innerWidth - mw - 8;
+    let top = rect.bottom + 4;
+    if (top + menu.offsetHeight > window.innerHeight - 8) top = Math.max(8, rect.top - menu.offsetHeight - 4);
+    menu.style.left = left + 'px';
+    menu.style.top = top + 'px';
+
+    menu.querySelectorAll('[data-monday]').forEach(it => {
+      it.onclick = async (e) => {
+        e.stopPropagation();
+        await planRowToWeek(rowId, it.dataset.monday);
+        closeRowPlanMenu();
+        toast('🎯 기획에 추가됨');
+        renderTable();
+      };
+    });
+    menu.querySelectorAll('[data-act="remove"]').forEach(it => {
+      it.onclick = async (e) => {
+        e.stopPropagation();
+        if (!confirm('이 벤치마킹으로 만든 기획 카드를 모두 제거할까요?')) return;
+        await unplanRowAll(rowId);
+        closeRowPlanMenu();
+        toast('기획 제거됨');
+        renderTable();
+      };
+    });
+    setTimeout(() => document.addEventListener('click', closeRowPlanMenuOutside, true), 0);
   }
 
   function renderStatsMini() {
