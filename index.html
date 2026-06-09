@@ -5856,6 +5856,20 @@
   .dgc-ylab { fill:rgba(255,255,255,.5); font-size:9px; font-family:'JetBrains Mono',monospace; text-anchor:end; }
   .dgc-xlab { fill:rgba(255,255,255,.5); font-size:9px; font-family:'JetBrains Mono',monospace; }
   .dgc-title { fill:rgba(255,255,255,.75); font-size:9px; font-weight:700; letter-spacing:.12em; font-family:'Pretendard',sans-serif; }
+  .dgc-chk { stroke:rgba(245,200,75,.45); stroke-width:1; stroke-dasharray:3 3; }
+  .dgc-chklab { fill:rgba(245,200,75,.85); font-size:8.5px; font-weight:700; font-family:'JetBrains Mono',monospace; }
+  /* 100만 조회수 3가지 공식 카드 */
+  .dg-criteria { margin:0 0 22px; border:1px solid rgba(245,200,75,.32); border-radius:14px; background:linear-gradient(180deg, rgba(245,200,75,.08), transparent 62%), var(--bg-card); padding:15px 16px 16px; }
+  .dg-crit-head { font-size:14px; font-weight:800; color:var(--text-main); margin-bottom:4px; }
+  .dg-crit-head .em { color:#F5C84B; }
+  .dg-crit-sub { font-size:11px; color:var(--text-faint); margin-bottom:14px; line-height:1.5; }
+  .dg-crit-list { display:flex; flex-direction:column; gap:11px; }
+  .dg-crit-item { display:flex; gap:11px; align-items:flex-start; }
+  .dg-crit-ico { flex:0 0 auto; width:30px; height:30px; border-radius:9px; background:rgba(245,200,75,.12); border:1px solid rgba(245,200,75,.25); display:flex; align-items:center; justify-content:center; font-size:15px; }
+  .dg-crit-body { flex:1; min-width:0; }
+  .dg-crit-metric { font-size:13px; font-weight:800; color:var(--text-main); line-height:1.35; }
+  .dg-crit-metric b { color:#F5C84B; }
+  .dg-crit-desc { font-size:11.5px; color:var(--text-mute); line-height:1.5; margin-top:2px; }
   .dg-card-label { font-size:12px; font-weight:800; color:var(--text-main); }
   .dg-card-sub { font-size:10px; color:var(--text-faint); font-weight:600; }
   .dg-result { margin-top:18px; }
@@ -11103,6 +11117,32 @@
   .tg-titles { margin: 0; padding-left: 24px; display: flex; flex-direction: column; gap: 7px; }
   .tg-titles li { font-size: 12.5px; line-height: 1.45; color: var(--text-sub); }
   .tg-titles li::marker { color: var(--text-faint); font-size: 11px; }
+  /* 고객 심리 원칙 모달 */
+  .tg-modal-title .em.psy-em { color: var(--emerald); }
+  .psy-lead { font-size: 14.5px; line-height: 1.6; color: var(--text-main); font-weight: 700; margin: 0 0 7px; }
+  .psy-lead b { color: var(--emerald); font-weight: 900; }
+  .psy-sub { font-size: 12.5px; line-height: 1.55; color: var(--text-sub); margin: 0; }
+  .psy-sub b { font-weight: 800; }
+  .psy-table { width: 100%; border-collapse: collapse; margin: 2px 0 0; }
+  .psy-table th { font-size: 11px; font-weight: 800; text-align: left; padding: 6px 10px; color: var(--text-faint); border-bottom: 1px solid var(--line); }
+  .psy-table td { font-size: 12.5px; line-height: 1.42; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  .psy-table tr:last-child td { border-bottom: none; }
+  .psy-table td.psy-out { color: var(--text-faint); width: 44%; }
+  .psy-table td.psy-in { color: var(--text-main); font-weight: 600; }
+  .psy-points { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 11px; }
+  .psy-points li { font-size: 12.5px; line-height: 1.5; color: var(--text-sub); padding-left: 32px; position: relative; }
+  .psy-points li b { display: block; color: var(--text-main); font-weight: 800; font-size: 13px; margin-bottom: 1px; }
+  .psy-points li .psy-num { position: absolute; left: 0; top: 1px; width: 22px; height: 22px; border-radius: 50%; background: var(--emerald); color: #04140b; font-size: 11px; font-weight: 900; display: flex; align-items: center; justify-content: center; }
+  .psy-vs { display: flex; flex-direction: column; gap: 8px; }
+  .psy-vs-row { padding: 10px 13px; border-radius: 11px; border: 1px solid var(--line); font-size: 12.5px; line-height: 1.45; }
+  .psy-vs-row.weak { background: rgba(255,255,255,0.02); color: var(--text-faint); }
+  .psy-vs-row.strong { background: rgba(42,191,106,0.09); border-color: rgba(42,191,106,0.32); color: var(--text-main); }
+  .psy-vs-tag { font-size: 10.5px; font-weight: 800; letter-spacing: .03em; display: block; margin-bottom: 3px; }
+  .psy-vs-row.weak .psy-vs-tag { color: var(--text-faint); }
+  .psy-vs-row.strong .psy-vs-tag { color: var(--emerald); }
+  .psy-listen { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 9px; }
+  .psy-listen li { font-size: 12.5px; line-height: 1.5; color: var(--text-sub); }
+  .psy-listen li b { color: var(--emerald); font-weight: 800; }
 
   /* === 레퍼런스 패널 (우측 슬라이드) === */
   .sc-ref-panel {
@@ -15395,6 +15435,10 @@
       <div class="sc-entry-wrap">
         <div class="sc-entry-card">
           <div class="sc-card-tools">
+            <button class="sc-titleguide-toggle sc-psych-toggle" id="sc-psych-btn" title="고객 심리 원칙 — 겉 욕구 vs 속 동기">
+              <span class="sc-ref-toggle-icon">🧠</span>
+              <span class="sc-ref-toggle-label">고객 심리 원칙</span>
+            </button>
             <button class="sc-titleguide-toggle" id="sc-titleguide-btn" title="제목 작성 원칙 + 후킹문구 100 예시">
               <span class="sc-ref-toggle-icon">📋</span>
               <span class="sc-ref-toggle-label">제목 작성 원칙</span>
@@ -15689,6 +15733,17 @@
       </div>
     </div>
 
+    <!-- 고객 심리 원칙 모달 -->
+    <div class="tg-modal-overlay" id="psych-modal">
+      <div class="tg-modal">
+        <div class="tg-modal-head">
+          <h2 class="tg-modal-title">🧠 고객 <span class="em psy-em">심리</span> 원칙</h2>
+          <button class="tg-modal-close" id="psych-close" title="닫기">×</button>
+        </div>
+        <div class="tg-modal-body" id="psych-body"></div>
+      </div>
+    </div>
+
     <!-- ===== MOODBOARD VIEW (FREE CANVAS) ===== -->
     <div id="mb-view" class="mb-wrap" style="display:none;">
       <div class="mb-bar">
@@ -15732,6 +15787,33 @@
         <h1 class="dg-title">릴스 <span class="em">진단</span></h1>
         <p class="dg-sub">인스타 인사이트의 <b>시청 지속률</b> 그래프를 보고,<br/>내 그래프와 가장 비슷한 모양을 골라보세요.</p>
       </section>
+      <div class="dg-criteria">
+        <div class="dg-crit-head">🏆 100만 조회수 릴스의 <span class="em">3가지 공식</span></div>
+        <div class="dg-crit-sub">이 기준을 넘기면 알고리즘이 영상을 계속 밀어줘요. 내 인사이트 수치와 비교해보세요.</div>
+        <div class="dg-crit-list">
+          <div class="dg-crit-item">
+            <div class="dg-crit-ico">🎣</div>
+            <div class="dg-crit-body">
+              <div class="dg-crit-metric">① 초반 3초 유지율 <b>60% 이상</b></div>
+              <div class="dg-crit-desc">시작 3초 안에 60%가 안 빠지고 남아야 해요. = 첫 화면·첫 문장이 사람들의 이목을 확 끌었다는 뜻.</div>
+            </div>
+          </div>
+          <div class="dg-crit-item">
+            <div class="dg-crit-ico">⏱️</div>
+            <div class="dg-crit-body">
+              <div class="dg-crit-metric">② 평균 시청 지속시간 <b>9초 이상</b></div>
+              <div class="dg-crit-desc">끝까지·반복해서 볼수록 평균 시청이 길어지고, 알고리즘이 "좋은 영상"으로 판단해 더 많이 노출시켜요.</div>
+            </div>
+          </div>
+          <div class="dg-crit-item">
+            <div class="dg-crit-ico">🔖</div>
+            <div class="dg-crit-body">
+              <div class="dg-crit-metric">③ 저장·공유 = 조회수의 <b>1% 이상</b> (100 : 1)</div>
+              <div class="dg-crit-desc">예) 조회수 100만 → 저장+공유가 1만 이상. 저장·공유가 많을수록 조회수가 계속 올라가요.</div>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="dg-grid" id="dg-grid"></div>
       <div class="dg-result" id="dg-result"></div>
       <div class="dg-tip">💡 <b>테스트 릴스</b>로 비공개 업로드 → 그래프 보며 수정 → 만족스러우면 진짜 업로드!</div>
@@ -19479,6 +19561,53 @@
   }
   function closeTitleGuide() { const ov = document.getElementById('titleguide-modal'); if (ov) ov.classList.remove('show'); }
 
+  // ===== 고객 심리 원칙 =====
+  const PSY_PAIRS = [
+    ['"이 화장품 사고 싶어요"', '거울 볼 때 자신감 · 동안 소리 듣고 싶다'],
+    ['"이 강의 들을게요"', '돈 버는 법 + "나도 뭔가 하고 있다"는 안도감'],
+    ['"펌 하러 왔어요"', '아침에 손 안 대도 단정한 사람이 되고 싶다'],
+    ['"이 운동기구요"', '기구가 아니라 달라진 내 몸과 주변 시선'],
+    ['"보험 들게요"', '가족 잃을까 하는 두려움 해소'],
+    ['스타벅스 커피', '카페인이 아니라 공간·기분·있어보임']
+  ];
+  const PSY_POINTS = [
+    ['상황 (Situation)', '이 사람 지금 어떤 처지인가? (예: 30대 직장맘, 머리 감을 시간도 없음)'],
+    ['고통·불편 (Pain)', '뭐가 제일 짜증나고 답답한가? (예: 자고 일어나면 앞머리가 떡짐)'],
+    ['욕망 (Desire)', '진짜 원하는 미래의 모습은? (예: 손질 안 해도 단정한 사람)'],
+    ['두려움 (Fear)', '뭐가 무서워서 결정을 못 하나? (예: 펌 망해서 어색해질까 봐)'],
+    ['시도했던 것 (Tried)', '뭘 해봤는데 안 됐나? (예: 셀프펌 했다가 다 상함)']
+  ];
+  const PSY_LISTEN = [
+    ['내 손님 직접 듣기', '시술 중 "왜 이 스타일 하고 싶으셨어요?" 묻고 <b>그 단어 그대로</b> 메모 → 원고가 됨'],
+    ['리뷰·댓글 채굴', '네이버 후기·경쟁자 댓글에서 <b>불평하는 문장</b> 수집 ("~해서 속상했어요")'],
+    ['DM·반복 질문', '손님이 <b>3번 이상 묻는 질문</b> = 무조건 릴스감'],
+    ['검색어 보기', '검색창 자동완성(앞머리 망함·손질·얼굴형) = 대중이 실제로 치는 니즈']
+  ];
+  function openPsychGuide() {
+    const body = document.getElementById('psych-body');
+    if (body) {
+      body.innerHTML =
+        '<p class="psy-lead">사람은 <b>"제품"</b>을 사는 게 아니라 <b>"더 나은 자기 자신"</b>을 산다.</p>' +
+        '<p class="psy-sub">겉(기능)으로 끌고, <b style="color:var(--emerald)">속(감정·정체성)</b>으로 판다. 비싼 걸 파는 사람일수록 이 \'속\'을 정확히 건드린다.</p>' +
+        '<div class="tg-sec-label tg-sec-2">👀 겉 욕구 vs 속 동기</div>' +
+        '<table class="psy-table"><thead><tr><th>겉 (말하는 것)</th><th>속 (진짜 사는 것)</th></tr></thead><tbody>' +
+          PSY_PAIRS.map(p => '<tr><td class="psy-out">' + esc(p[0]) + '</td><td class="psy-in">' + esc(p[1]) + '</td></tr>').join('') +
+        '</tbody></table>' +
+        '<div class="tg-sec-label tg-sec-2">🔍 고객의 \'속\'을 캐는 5가지</div>' +
+        '<ul class="psy-points">' + PSY_POINTS.map((p, i) => '<li><span class="psy-num">' + (i + 1) + '</span><b>' + esc(p[0]) + '</b>' + esc(p[1]) + '</li>').join('') + '</ul>' +
+        '<div class="tg-sec-label tg-sec-2">⚖️ 약한 판매 vs 강한 판매</div>' +
+        '<div class="psy-vs">' +
+          '<div class="psy-vs-row weak"><span class="psy-vs-tag">약함 · 스펙</span>"약산성이라 손상 적고 6개월 유지돼요"</div>' +
+          '<div class="psy-vs-row strong"><span class="psy-vs-tag">강함 · 정체성</span>"아침에 손 안 대도 단정한 사람, 그거 만들어 드릴게요"</div>' +
+        '</div>' +
+        '<p class="psy-sub" style="margin-top:9px">같은 제품인데 두 번째가 몇 배 비싸게 팔린다. <b style="color:var(--emerald)">스펙은 \'속 동기\'를 증명하는 근거</b>로만 깔아주는 것.</p>' +
+        '<div class="tg-sec-label tg-sec-2">🎧 니즈 파악 실전 — 추측 말고 듣기</div>' +
+        '<ol class="psy-listen">' + PSY_LISTEN.map(p => '<li><b>' + esc(p[0]) + '</b> — ' + p[1] + '</li>').join('') + '</ol>';
+    }
+    const ov = document.getElementById('psych-modal'); if (ov) ov.classList.add('show');
+  }
+  function closePsychGuide() { const ov = document.getElementById('psych-modal'); if (ov) ov.classList.remove('show'); }
+
   function initRefPanel() {
     const toggleBtn = document.getElementById('sc-ref-toggle');
     const closeBtn = document.getElementById('sc-ref-close');
@@ -19491,6 +19620,10 @@
     { const tgBtn = document.getElementById('sc-titleguide-btn'); if (tgBtn) tgBtn.onclick = openTitleGuide; }
     { const tgClose = document.getElementById('titleguide-close'); if (tgClose) tgClose.onclick = closeTitleGuide; }
     { const tgOv = document.getElementById('titleguide-modal'); if (tgOv) tgOv.onclick = (e) => { if (e.target === tgOv) closeTitleGuide(); }; }
+    // 🧠 고객 심리 원칙 모달
+    { const psyBtn = document.getElementById('sc-psych-btn'); if (psyBtn) psyBtn.onclick = openPsychGuide; }
+    { const psyClose = document.getElementById('psych-close'); if (psyClose) psyClose.onclick = closePsychGuide; }
+    { const psyOv = document.getElementById('psych-modal'); if (psyOv) psyOv.onclick = (e) => { if (e.target === psyOv) closePsychGuide(); }; }
 
     // 탭 전환
     document.querySelectorAll('.sc-ref-tab').forEach(b => { b.onclick = () => switchRefTab(b.dataset.rtab); });
@@ -23713,7 +23846,7 @@
   const ACC_SECTIONS = [
     { key: 'goal',      title: '목표 / Why',     ico: '◎', sel: ['#home-view .home-section.goal'] },
     { key: 'week',      title: '이번 주 할일!',  ico: '▦', sel: ['#home-view .tr-week-block'] },
-    { key: 'halloffame',title: '🏆 업로드 전당',  ico: '🏆', gen: true },
+    { key: 'halloffame',title: '업로드 전당',  ico: '🏆', gen: true },
     { key: 'calendar',  title: '캘린더 · 주차별', ico: '▤', sel: ['#home-view .tr-cal-block', '#tr-weeks-list'] },
     { key: 'challenge', title: '진행 중 챌린지', ico: '◇',  sel: ['#ch-list'], wrap: '.home-section' },
     { key: 'insight',   title: '인사이트',       ico: '◐', gen: true },
@@ -25331,30 +25464,36 @@
       cause: '애초에 관심 없는 주제로 만들었을 가능성이 커요.',
       fix: '주제 자체를 바꾸세요. 인사이트(스윗스팟)에서 시장성 있는 주제를 다시 찾아보세요.' }
   ];
-  // 사실적인 시청지속률 차트 (격자 100/50/0% + 시간축 + 회색/빨강 2색 곡선)
+  // 사실적인 시청지속률 차트 (세로 100/50/0% 눈금 + 가로 0:00~0:09 고정 시간축 + 회색/빨강 2색 곡선)
   function dgChart(p, big) {
     const good = !!p.good;
-    const W = big ? 280 : 150, H = big ? 150 : 78;
-    const padL = big ? 34 : 7, padR = big ? 12 : 7, padT = big ? 22 : 9, padB = big ? 22 : 9;
+    const W = big ? 300 : 158, H = big ? 172 : 96;
+    const padL = big ? 38 : 23, padR = big ? 14 : 9, padT = big ? 24 : 11, padB = big ? 22 : 16;
     const x0 = padL, x1 = W - padR, y0 = padT, y1 = H - padB;
     const sx = v => x0 + (v / 100) * (x1 - x0);
     const sy = v => y1 - (v / 100) * (y1 - y0);
+    const yfs = big ? 10 : 8, xfs = big ? 10 : 8;
     let grid = '';
     [[100, '100%'], [50, '50%'], [0, '0%']].forEach(g => {
       const y = sy(g[0]);
       grid += `<line x1="${x0}" y1="${y.toFixed(1)}" x2="${x1}" y2="${y.toFixed(1)}" class="dgc-grid"/>`;
-      if (big) grid += `<text x="${x0 - 6}" y="${(y + 3).toFixed(1)}" class="dgc-ylab">${g[1]}</text>`;
+      grid += `<text x="${(x0 - 5).toFixed(1)}" y="${(y + yfs / 3).toFixed(1)}" class="dgc-ylab" style="font-size:${yfs}px">${g[1]}</text>`;
     });
+    // 3초 체크포인트 (9초 중 3초 = 33.3%) — 큰 차트만
+    let chk = '';
+    if (big) {
+      const xc = sx(100 / 3);
+      chk = `<line x1="${xc.toFixed(1)}" y1="${y0}" x2="${xc.toFixed(1)}" y2="${y1}" class="dgc-chk"/>`
+        + `<text x="${xc.toFixed(1)}" y="${(y0 - 7).toFixed(1)}" class="dgc-chklab" text-anchor="middle">3초 체크</text>`;
+    }
     const toPath = arr => arr.map((q, i) => (i ? 'L' : 'M') + sx(q[0]).toFixed(1) + ',' + sy(q[1]).toFixed(1)).join(' ');
     const grey = `<path d="${toPath(p.pts)}" class="dgc-line ${good ? 'good' : ''}"/>`;
     const red = (!good && p.red) ? `<path d="${toPath(p.pts.slice(p.red[0], p.red[1] + 1))}" class="dgc-red"/>` : '';
-    let extra = '';
-    if (big) {
-      extra = `<text x="${x0}" y="${(y0 - 7).toFixed(1)}" class="dgc-title">RETENTION</text>`
-        + `<text x="${sx(8).toFixed(1)}" y="${(H - 6).toFixed(1)}" class="dgc-xlab" text-anchor="middle">3초</text>`
-        + `<text x="${sx(100).toFixed(1)}" y="${(H - 6).toFixed(1)}" class="dgc-xlab" text-anchor="end">끝</text>`;
-    }
-    return `<svg viewBox="0 0 ${W} ${H}" class="dgc ${big ? 'big' : ''}">${grid}${grey}${red}${extra}</svg>`;
+    // 가로 시간축 0:00 ~ 0:09 (전부 9초 고정)
+    const xlab = `<text x="${x0.toFixed(1)}" y="${(H - 5).toFixed(1)}" class="dgc-xlab" style="font-size:${xfs}px" text-anchor="start">0:00</text>`
+      + `<text x="${x1.toFixed(1)}" y="${(H - 5).toFixed(1)}" class="dgc-xlab" style="font-size:${xfs}px" text-anchor="end">0:09</text>`;
+    const title = big ? `<text x="${x0}" y="${(y0 - 9).toFixed(1)}" class="dgc-title" text-anchor="start">RETENTION</text>` : '';
+    return `<svg viewBox="0 0 ${W} ${H}" class="dgc ${big ? 'big' : ''}">${grid}${chk}${grey}${red}${xlab}${title}</svg>`;
   }
   let _dgSel = null;
   function renderDiagnose() {
