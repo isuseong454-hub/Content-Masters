@@ -1801,6 +1801,7 @@
   .cm-trophy-hero.done .cmth-tick.lit { background:#fff3d6; box-shadow:0 0 5px rgba(245,200,75,.6); }
   .cmth-msg { font-size:12.5px; font-weight:700; color:var(--text-sub); line-height:1.4; }
   .cmth-sub { font-size:11px; color:var(--text-mute); margin-top:3px; }
+  .cmth-streak { color:#FF7A33; font-weight:800; }
   .cmth-master-lab { color:var(--text-faint); font-size:9.5px; }
   .cmth-goal-now { color:#F5C84B; font-weight:800; }
 
@@ -9081,6 +9082,152 @@
     .kw-panel { width: 100%; max-width: 100%; }
   }
 
+  /* === 고객 분석 준비도 (홈 카드) === */
+  .cs-card { padding:2px 0; }
+  .cs-top { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:15px; gap:10px; }
+  .cs-eyebrow { font-size:10px; font-weight:700; letter-spacing:.05em; color:var(--text-faint); text-transform:uppercase; }
+  .cs-total { font-size:36px; font-weight:900; color:var(--emerald); line-height:1; margin-top:3px; }
+  .cs-total span { font-size:18px; margin-left:1px; }
+  .cs-formula-mini { font-size:11px; color:var(--text-faint); font-weight:700; margin-top:5px; }
+  .cs-done-badge { flex:0 0 auto; background:rgba(245,200,75,.15); border:1px solid rgba(245,200,75,.4); color:#F5C84B; font-size:11.5px; font-weight:800; padding:6px 11px; border-radius:999px; }
+  .cs-card.done .cs-total { color:#F5C84B; }
+  .cs-row { display:flex; align-items:center; gap:10px; margin-bottom:9px; }
+  .cs-row-tag { flex:0 0 auto; width:54px; font-size:12px; font-weight:800; color:var(--text-sub); }
+  .cs-bar { flex:1; height:9px; border-radius:999px; background:var(--bg-elev); overflow:hidden; }
+  .cs-bar-fill { height:100%; border-radius:999px; transition:width .45s ease; }
+  .cs-row.me .cs-bar-fill { background:var(--emerald); }
+  .cs-row.customer .cs-bar-fill { background:#E8908F; }
+  .cs-row.world .cs-bar-fill { background:#7FB2F8; }
+  .cs-row-pct { flex:0 0 auto; width:40px; text-align:right; font-size:12px; font-weight:800; color:var(--text-sub); }
+  .cs-row.weak .cs-row-tag, .cs-row.weak .cs-row-pct { color:#E8908F; }
+  .cs-msg { margin-top:12px; padding:11px 13px; border-radius:10px; background:rgba(245,200,75,.08); border:1px solid rgba(245,200,75,.3); font-size:13px; font-weight:600; color:var(--text-main); line-height:1.5; }
+  .cs-go { width:100%; margin-top:13px; padding:11px; border-radius:10px; border:1px solid var(--emerald); background:var(--emerald-faint); color:var(--emerald); font-size:13px; font-weight:800; cursor:pointer; font-family:inherit; }
+  .cs-go:hover { background:var(--emerald); color:#04140b; }
+  .cs-nudge { margin-top:9px; font-size:11.5px; line-height:1.5; color:var(--text-mute); }
+  .cs-nudge b { color:#E8908F; }
+  .cs-empty { text-align:center; padding:8px 10px 6px; color:var(--text-mute); font-size:13px; line-height:1.6; }
+  .cs-empty b { color:var(--emerald); }
+  .cs-empty .cs-go { display:inline-block; width:auto; margin-top:11px; padding:9px 18px; }
+
+  /* ====================================================
+     === 고객 분석 섹션 탭 (니즈파악/PMM/내 상품) =========
+     ==================================================== */
+  .cu-sec-tabs { display:flex; gap:8px; margin:4px 0 22px; }
+  .cu-sec-tab { flex:1; padding:12px 8px; border-radius:11px; border:1px solid var(--line); background:var(--bg-card); color:var(--text-mute); font-size:13.5px; font-weight:800; cursor:pointer; font-family:inherit; transition:all .15s; }
+  .cu-sec-tab:hover { border-color:var(--sage-line); }
+  .cu-sec-tab.on { border-color:var(--emerald); background:var(--emerald-faint); color:var(--emerald); }
+  .cu-sec-pane { display:none; }
+  .cu-sec-pane.on { display:block; }
+  /* 수익화 공식 배너 */
+  .cu-formula { background:linear-gradient(135deg, rgba(245,200,75,.06), rgba(46,204,113,.04) 60%, transparent), var(--bg-card); border:1px solid rgba(245,200,75,.25); border-radius:14px; padding:16px 18px; margin-bottom:16px; }
+  .cu-formula-eq { display:flex; flex-wrap:wrap; align-items:center; gap:8px; }
+  .cu-fx { display:inline-flex; flex-direction:column; align-items:center; line-height:1.15; font-size:14px; font-weight:800; padding:7px 12px; border-radius:10px; border:1px solid var(--line); background:var(--bg-elev); color:var(--text-main); }
+  .cu-fx small { font-size:9.5px; font-weight:700; color:var(--text-faint); margin-top:2px; letter-spacing:.02em; }
+  .cu-fx.customer { border-color:rgba(224,123,123,.4); }
+  .cu-fx.me { border-color:rgba(46,204,113,.4); }
+  .cu-fx.world { border-color:rgba(96,165,250,.4); }
+  .cu-fx.sales { border-color:rgba(245,200,75,.55); background:rgba(245,200,75,.12); color:#F5C84B; }
+  .cu-fx-op { font-size:16px; font-weight:800; color:var(--text-mute); }
+  .cu-fx-op.eq { color:#F5C84B; }
+  .cu-formula-ex { font-size:11.5px; color:var(--text-mute); margin-top:11px; line-height:1.5; }
+  .cu-formula-note { font-size:11px; color:var(--text-faint); margin-top:5px; }
+  .cu-formula-note b { color:#F5C84B; }
+  /* 3차원 코어 */
+  .cu-core { background:var(--bg-card); border:1px solid var(--line); border-radius:14px; padding:16px 18px 18px; margin-bottom:26px; }
+  .cu-core-head { font-size:13.5px; font-weight:800; color:var(--text-main); margin-bottom:13px; }
+  .cu-core-head span { font-size:11px; font-weight:600; color:var(--text-faint); margin-left:6px; }
+  .cu-core-row { display:flex; align-items:flex-start; gap:11px; padding:9px 0; border-top:1px solid var(--line); }
+  .cu-core-row:first-of-type { border-top:none; }
+  .cu-core-tag { flex:0 0 auto; width:64px; font-size:12.5px; font-weight:800; padding:7px 0; text-align:center; border-radius:8px; background:var(--bg-elev); border:1px solid var(--line); }
+  .cu-core-tag.me { color:var(--emerald); border-color:rgba(46,204,113,.35); }
+  .cu-core-tag.customer { color:#E8908F; border-color:rgba(224,123,123,.35); }
+  .cu-core-tag.world { color:#7FB2F8; border-color:rgba(96,165,250,.35); }
+  .cu-core-body { flex:1; min-width:0; }
+  .cu-core-q { font-size:11px; color:var(--text-faint); font-weight:700; margin-bottom:5px; }
+  .cu-core-in { width:100%; box-sizing:border-box; background:var(--bg-input); border:1px solid var(--line); border-radius:8px; padding:9px 11px; color:var(--text-main); font-size:13px; font-family:inherit; }
+  .cu-core-in:focus { border-color:var(--emerald); outline:none; }
+  .cu-core-in::placeholder { color:var(--text-faint); }
+  .cu-core-sum { margin-top:13px; padding-top:14px; border-top:1px dashed rgba(245,200,75,.3); }
+  .cu-core-sum-tag { display:block; font-size:12px; font-weight:800; color:#F5C84B; margin-bottom:7px; }
+  .cu-core-sum-done { font-size:11px; font-weight:700; color:var(--emerald); margin-left:4px; }
+  .cu-core-sum-in { width:100%; box-sizing:border-box; background:rgba(245,200,75,.06); border:1px solid rgba(245,200,75,.3); border-radius:9px; padding:11px 12px; color:var(--text-main); font-size:13.5px; font-weight:600; font-family:inherit; }
+  .cu-core-sum-in:focus { border-color:#F5C84B; outline:none; }
+  .cu-core-sum-in::placeholder { color:var(--text-faint); font-weight:400; }
+  .cu-core-draft { width:100%; margin-top:9px; padding:9px; border-radius:9px; border:1px solid rgba(245,200,75,.4); background:rgba(245,200,75,.08); color:#F5C84B; font-size:12.5px; font-weight:800; cursor:pointer; font-family:inherit; transition:all .15s; }
+  .cu-core-draft:hover { background:#F5C84B; color:#2a2008; }
+  @media (max-width:600px){ .cu-core-row { flex-direction:column; gap:6px; } .cu-core-tag { width:auto; align-self:flex-start; padding:5px 12px; } }
+  /* 내 상품 오퍼 시트 */
+  .cu-prod { display:flex; flex-direction:column; gap:16px; }
+  .cu-prod-intro { font-size:12.5px; line-height:1.6; color:var(--text-mute); padding:13px 15px; border:1px dashed var(--line); border-radius:12px; background:var(--bg-input); }
+  .cu-prod-intro b { color:var(--text-sub); }
+  .cu-prod-intro-sub { display:block; margin-top:3px; color:var(--text-faint); font-size:11.5px; }
+  .cu-prod-field { background:var(--bg-card); border:1px solid var(--line); border-radius:13px; padding:15px 16px; }
+  .cu-prod-label { display:flex; align-items:center; gap:8px; font-size:14px; font-weight:800; color:var(--text-main); }
+  .cu-prod-label b { color:var(--emerald); }
+  .cu-prod-ico { font-size:16px; }
+  .cu-prod-hint { font-size:11.5px; color:var(--text-faint); margin:5px 0 10px; line-height:1.5; }
+  .cu-prod-ta { width:100%; box-sizing:border-box; min-height:74px; resize:vertical; background:var(--bg-input); border:1px solid var(--line); border-radius:9px; padding:11px 12px; color:var(--text-main); font-size:13px; line-height:1.55; font-family:inherit; }
+  .cu-prod-ta::placeholder { color:var(--text-faint); }
+  .cu-prod-ta:focus { border-color:var(--emerald); outline:none; }
+
+  /* ====================================================
+     === 고객 속마음 수집함 (니즈 채집) — 시안 ===========
+     ==================================================== */
+  .cm-collect { background: linear-gradient(135deg, rgba(46,204,113,0.05), transparent 55%), var(--bg-card); border:1px solid var(--line); border-radius:16px; padding:20px 22px 22px; margin-bottom:28px; }
+  .cm-collect-head { display:flex; justify-content:space-between; align-items:flex-start; gap:14px; margin-bottom:16px; }
+  .cm-collect-eyebrow { font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:0.16em; text-transform:uppercase; color:var(--sage); margin-bottom:6px; }
+  .cm-collect-title { font-size:20px; font-weight:800; color:var(--text-main); line-height:1.1; }
+  .cm-collect-title .em { color:var(--emerald); }
+  .cm-collect-sub { font-size:12px; line-height:1.55; color:var(--text-mute); margin-top:7px; }
+  .cm-collect-sub b { color:var(--text-sub); }
+  .cm-collect-count { flex:0 0 auto; text-align:center; background:var(--bg-elev); border:1px solid var(--line); border-radius:12px; padding:9px 14px; font-size:22px; font-weight:800; color:var(--emerald); line-height:1; }
+  .cm-collect-count span { display:block; font-size:9.5px; font-weight:700; color:var(--text-faint); margin-top:4px; letter-spacing:.02em; }
+  /* 빠른 추가 바 */
+  .cm-add-bar { background:var(--bg-deep); border:1px solid var(--line); border-radius:13px; padding:13px 14px; margin-bottom:20px; display:flex; flex-direction:column; gap:11px; }
+  .cm-add-baskets { display:flex; gap:7px; }
+  .cm-add-basket { flex:1; padding:8px 6px; border-radius:9px; border:1px solid var(--line); background:var(--bg-card); color:var(--text-mute); font-size:12px; font-weight:800; cursor:pointer; font-family:inherit; transition:all .15s; }
+  .cm-add-basket.pain.on { border-color:rgba(224,123,123,.6); background:rgba(224,123,123,.12); color:#E8908F; }
+  .cm-add-basket.fear.on { border-color:rgba(245,170,70,.6); background:rgba(245,170,70,.12); color:#F0B24E; }
+  .cm-add-basket.desire.on { border-color:var(--emerald); background:var(--emerald-faint); color:var(--emerald); }
+  .cm-add-quote { width:100%; box-sizing:border-box; background:var(--bg-input); border:1px solid var(--line); border-radius:9px; padding:11px 12px; color:var(--text-main); font-size:13px; font-family:inherit; }
+  .cm-add-quote::placeholder { color:var(--text-faint); }
+  .cm-add-quote:focus, .cm-add-insight:focus { border-color:var(--emerald); outline:none; }
+  .cm-add-insight { width:100%; box-sizing:border-box; background:var(--bg-input); border:1px solid var(--line); border-radius:9px; padding:9px 12px; color:var(--text-main); font-size:12.5px; font-family:inherit; }
+  .cm-add-insight::placeholder { color:var(--text-faint); }
+  .cm-card-acts { display:inline-flex; align-items:center; gap:9px; }
+  .cm-card-write { font-size:13px; cursor:pointer; line-height:1; opacity:.85; }
+  .cm-card-write:hover { opacity:1; filter:drop-shadow(0 0 4px var(--emerald-glow)); }
+  .cm-card-del { font-size:15px; color:var(--text-faint); cursor:pointer; line-height:1; }
+  .cm-card-del:hover { color:#E07B7B; }
+  .cm-add-row2 { display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; }
+  .cm-add-sources { display:flex; gap:6px; flex-wrap:wrap; }
+  .cm-src { padding:5px 10px; border-radius:999px; border:1px solid var(--line); background:transparent; color:var(--text-faint); font-size:11px; font-weight:700; cursor:pointer; font-family:inherit; }
+  .cm-src.on { border-color:var(--sage); background:var(--bg-elev); color:var(--text-sub); }
+  .cm-add-go { padding:9px 18px; border-radius:9px; border:none; background:var(--emerald); color:#04140b; font-size:13px; font-weight:800; cursor:pointer; font-family:inherit; }
+  /* 3 바구니 */
+  .cm-baskets { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+  .cm-basket { background:var(--bg-deep); border:1px solid var(--line); border-radius:13px; padding:12px; border-top:3px solid var(--line); }
+  .cm-basket.pain { border-top-color:#E07B7B; }
+  .cm-basket.fear { border-top-color:#F0B24E; }
+  .cm-basket.desire { border-top-color:var(--emerald); }
+  .cm-basket-head { display:flex; align-items:center; gap:7px; font-size:13px; font-weight:800; color:var(--text-main); margin-bottom:11px; }
+  .cm-basket-ico { font-size:15px; }
+  .cm-basket-n { margin-left:auto; font-size:11px; font-weight:800; color:var(--text-faint); background:var(--bg-card); border-radius:999px; padding:2px 9px; }
+  .cm-basket-cards { display:flex; flex-direction:column; gap:9px; }
+  .cm-card { background:var(--bg-card); border:1px solid var(--line); border-radius:10px; padding:11px 12px; }
+  .cm-card-quote { font-size:12.5px; line-height:1.5; color:var(--text-main); font-weight:600; }
+  .cm-card-insight { font-size:11px; line-height:1.45; color:var(--text-mute); margin-top:6px; padding-top:6px; border-top:1px dashed var(--line); }
+  .cm-card-foot { display:flex; align-items:center; justify-content:space-between; margin-top:9px; }
+  .cm-card-src { font-size:10px; font-weight:700; color:var(--text-faint); background:var(--bg-elev); border-radius:999px; padding:3px 9px; }
+  .cm-card-star { font-size:14px; color:var(--text-faint); cursor:pointer; line-height:1; }
+  .cm-card-star.on { color:#F5C84B; }
+  .cm-card.gold { border-color:rgba(245,200,75,.4); background:linear-gradient(180deg, rgba(245,200,75,.06), transparent 60%), var(--bg-card); }
+  .cm-basket-empty { font-size:11px; color:var(--text-faint); text-align:center; padding:18px 6px; border:1px dashed var(--line); border-radius:9px; line-height:1.5; }
+  /* 원고로 보내기 힌트 */
+  .cm-tolink { margin-top:18px; font-size:11.5px; line-height:1.55; color:var(--text-mute); padding:11px 14px; border:1px dashed var(--line); border-radius:11px; background:var(--bg-input); }
+  .cm-tolink b { color:var(--emerald); }
+  @media (max-width:720px) { .cm-baskets { grid-template-columns:1fr; } }
+
   /* ====================================================
      === 키워드 풀 (고객 분석 페이지 안) ===================
      ==================================================== */
@@ -11131,7 +11278,8 @@
   .psy-table td.psy-in { color: var(--text-main); font-weight: 600; }
   .psy-points { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 11px; }
   .psy-points li { font-size: 12.5px; line-height: 1.5; color: var(--text-sub); padding-left: 32px; position: relative; }
-  .psy-points li b { display: block; color: var(--text-main); font-weight: 800; font-size: 13px; margin-bottom: 1px; }
+  .psy-points li b.psy-h { display: block; color: var(--text-main); font-weight: 800; font-size: 13px; margin-bottom: 1px; }
+  .psy-points li b.psy-h .psy-kw { color: var(--emerald); }
   .psy-points li .psy-num { position: absolute; left: 0; top: 1px; width: 22px; height: 22px; border-radius: 50%; background: var(--emerald); color: #04140b; font-size: 11px; font-weight: 900; display: flex; align-items: center; justify-content: center; }
   .psy-vs { display: flex; flex-direction: column; gap: 8px; }
   .psy-vs-row { padding: 10px 13px; border-radius: 11px; border: 1px solid var(--line); font-size: 12.5px; line-height: 1.45; }
@@ -11143,6 +11291,24 @@
   .psy-listen { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 9px; }
   .psy-listen li { font-size: 12.5px; line-height: 1.5; color: var(--text-sub); }
   .psy-listen li b { color: var(--emerald); font-weight: 800; }
+  /* 심리/세일즈 탭 */
+  .psy-tabs { display:flex; gap:6px; margin:0 0 16px; background:var(--bg-input); padding:4px; border-radius:11px; }
+  .psy-tab { flex:1; padding:8px 6px; border:none; background:transparent; color:var(--text-faint); font-size:12.5px; font-weight:800; border-radius:8px; cursor:pointer; transition:all .15s; font-family:inherit; }
+  .psy-tab.on { background:var(--bg-card); color:var(--text-main); box-shadow:0 1px 4px rgba(0,0,0,.3); }
+  .psy-pane { display:none; }
+  .psy-pane.on { display:block; }
+  .psy-flow { display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin:2px 0 0; }
+  .psy-flow-step { font-size:11.5px; font-weight:700; color:var(--text-main); background:rgba(42,191,106,.1); border:1px solid rgba(42,191,106,.28); border-radius:999px; padding:5px 10px; }
+  .psy-flow-arrow { color:var(--text-faint); font-size:11px; }
+  .psy-ba { margin-top:6px; display:flex; flex-direction:column; gap:3px; }
+  .psy-ba-x { font-size:11.5px; color:var(--text-faint); line-height:1.42; }
+  .psy-ba-x b { color:#E07B7B; font-weight:800; margin-right:3px; }
+  .psy-ba-o { font-size:11.5px; color:var(--text-sub); line-height:1.42; }
+  .psy-ba-o b { color:var(--emerald); font-weight:800; margin-right:3px; }
+  .psy-tail { margin-top:15px; padding:11px 13px; border-radius:11px; background:rgba(42,191,106,.08); border:1px solid rgba(42,191,106,.25); font-size:12px; line-height:1.55; color:var(--text-main); }
+  .psy-tail b { color:var(--emerald); font-weight:800; }
+  .psy-gobtn { width:100%; margin-top:15px; padding:13px; border-radius:11px; border:1px solid var(--emerald); background:var(--emerald-faint); color:var(--emerald); font-size:13.5px; font-weight:800; cursor:pointer; font-family:inherit; transition:all .15s; }
+  .psy-gobtn:hover { background:var(--emerald); color:#04140b; }
 
   /* === 레퍼런스 패널 (우측 슬라이드) === */
   .sc-ref-panel {
@@ -14844,6 +15010,7 @@
                 </button>
               </div>
               <div class="backup-status" id="backup-status"></div>
+              <button type="button" id="settings-backup-guide" onclick="if(window.__openBackupGuide)window.__openBackupGuide()" style="margin-top:9px;background:none;border:none;color:var(--emerald);font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;padding:2px 0;text-decoration:underline;">📖 백업 방법 자세히 보기</button>
             </div>
 
             <!-- 가져오기 -->
@@ -15107,7 +15274,7 @@
       <section class="cu-header">
         <div class="cu-eyebrow">◉ 고객 분석</div>
         <h1 class="cu-title">뾰족한 <span class="em">고객</span>이 강한 콘텐츠를 만듭니다</h1>
-        <p class="cu-sub">PMM(Product-Market Match) 으로 타겟을 깊이 이해하면<br/>콘텐츠가 선명해지고 메시지가 강해져요.</p>
+        <p class="cu-sub">세일즈 = <b>나 × 고객 × 세상</b>의 곱.<br/>세 차원을 맞추면 콘텐츠가 선명해지고 메시지가 강해져요.</p>
       </section>
 
       <div class="cu-content">
@@ -15124,34 +15291,164 @@
           </div>
         </div>
 
-        <!-- 1) 타겟 + 상품 (큰 박스) -->
-        <div class="cu-big-card">
-          <div class="cu-big-row">
-            <label class="cu-big-label" for="cu-target-input">
-              <span class="cu-big-icon target">👥</span>
-              누구를 위한? <span class="cu-big-sub">(타겟)</span>
-            </label>
-            <input type="text" id="cu-target-input" class="cu-big-input" placeholder="예) 둥근얼굴 30대 직장인 여성" />
+        <!-- 수익화 공식 배너 -->
+        <div class="cu-formula">
+          <div class="cu-formula-eq">
+            <span class="cu-fx customer">👥 고객<small>문제</small></span>
+            <span class="cu-fx-op">×</span>
+            <span class="cu-fx me">🙋 나<small>해결</small></span>
+            <span class="cu-fx-op">×</span>
+            <span class="cu-fx world">🌍 세상<small>타이밍·매체</small></span>
+            <span class="cu-fx-op eq">=</span>
+            <span class="cu-fx sales">💰 세일즈</span>
           </div>
-          <div class="cu-big-row">
-            <label class="cu-big-label" for="cu-product-input">
-              <span class="cu-big-icon product">🎯</span>
-              무엇을? <span class="cu-big-sub">(상품·서비스)</span>
-            </label>
-            <input type="text" id="cu-product-input" class="cu-big-input" placeholder="예) 얼굴형 맞춤 헤어 컨설팅" />
+          <div class="cu-formula-ex">↳ 예: 다이어트 고민 중인 30대 × 당일제조·저당질 빵 × '죄책감 없는 디저트' 릴스</div>
+          <div class="cu-formula-note">셋 중 하나라도 <b>0이면 전체가 0</b> — 합(+)이 아니라 곱(×)이라서요.</div>
+        </div>
+
+        <!-- 3차원 코어 -->
+        <div class="cu-core">
+          <div class="cu-core-head">🎯 3차원 코어 <span>각 차원을 한 줄로 — 아래 탭에서 더 깊이 파요</span></div>
+          <div class="cu-core-row me">
+            <span class="cu-core-tag me">🙋 나</span>
+            <div class="cu-core-body"><div class="cu-core-q">내 핵심 셀링포인트는?</div>
+            <input class="cu-core-in" id="cu-product-input" data-pmmfield="productName" placeholder="예) 당일 제조 + 저당질 빵" /></div>
+          </div>
+          <div class="cu-core-row customer">
+            <span class="cu-core-tag customer">👥 고객</span>
+            <div class="cu-core-body"><div class="cu-core-q">그들의 문제·말투·불안은?</div>
+            <input class="cu-core-in" id="cu-target-input" data-pmmfield="targetName" placeholder="예) 다이어트 고민 중인 30대" /></div>
+          </div>
+          <div class="cu-core-row world">
+            <span class="cu-core-tag world">🌍 세상</span>
+            <div class="cu-core-body"><div class="cu-core-q">어디서·어떻게·지금 왜?</div>
+            <input class="cu-core-in" data-pmmfield="worldCore" placeholder="예) '죄책감 없는 디저트' 트렌드 · 릴스" /></div>
+          </div>
+          <div class="cu-core-sum">
+            <span class="cu-core-sum-tag">✨ 합 · 메시지 <span class="cu-core-sum-done">→ 고객에게 꽂히는 메시지 완성!</span></span>
+            <input class="cu-core-sum-in" data-pmmfield="message" placeholder="예) 다이어트 중인데 빵은 포기 못 하는 분을 위한, 설탕 0g 당일 제조 빵" />
+            <button class="cu-core-draft" id="cu-core-draft" title="나·고객·세상 코어를 합쳐 초안 생성 — 다시 누르면 다른 버전">✨ 코어로 자동 초안 만들기</button>
           </div>
         </div>
 
-        <!-- 2) PMM 5가지 질문 -->
-        <div class="cu-pmm-divider">
-          <span class="cu-pmm-divider-line"></span>
-          <span class="cu-pmm-divider-text">📋 PMM 5가지 질문</span>
-          <span class="cu-pmm-divider-line"></span>
+        <!-- 섹션 탭: 나 / 고객 / 세상 (3차원) -->
+        <div class="cu-sec-tabs" id="cu-sec-tabs">
+          <button class="cu-sec-tab on" data-cusec="me">🙋 나</button>
+          <button class="cu-sec-tab" data-cusec="customer">👥 고객</button>
+          <button class="cu-sec-tab" data-cusec="world">🌍 세상</button>
         </div>
 
-        <div class="cu-q-list" id="cu-q-list">
-          <!-- 5개 질문 카드가 여기 동적 렌더 -->
+        <!-- [고객] 니즈 파악 — 속마음 수집함 + 시도했던 것 -->
+        <div class="cu-sec-pane" data-cusecpane="customer">
+        <!-- 고객 속마음 수집함 (니즈 채집) — 시안 -->
+        <div class="cm-collect" id="cm-collect">
+          <div class="cm-collect-head">
+            <div>
+              <div class="cm-collect-eyebrow">🎣 니즈 채집 · FIELD NOTES</div>
+              <h3 class="cm-collect-title">고객 속마음 <span class="em">수집함</span></h3>
+              <p class="cm-collect-sub">추측 말고 <b>실제 들은 말</b>을 그대로 모아요. 모은 카드가 곧 후킹·원고 재료가 됩니다.</p>
+            </div>
+            <div class="cm-collect-count" id="cm-count">0<span>개 수집</span></div>
+          </div>
+
+          <!-- 빠른 추가 바 -->
+          <div class="cm-add-bar">
+            <div class="cm-add-baskets" id="cm-add-baskets">
+              <button class="cm-add-basket pain on" data-basket="pain">😣 문제·불편</button>
+              <button class="cm-add-basket fear" data-basket="fear">🙅 피하고 싶은</button>
+              <button class="cm-add-basket desire" data-basket="desire">✨ 원하는 것</button>
+            </div>
+            <input class="cm-add-quote" id="cm-add-quote" placeholder='💬 고객이 실제 한 말 그대로 (예: "앞머리 자르면 폭삭 망할까 봐 무서워요")' />
+            <input class="cm-add-insight" id="cm-add-insight" placeholder="🧠 내 해석 (선택) — 이 말의 속뜻. 비워두고 나중에 달아도 OK" />
+            <div class="cm-add-row2">
+              <div class="cm-add-sources" id="cm-add-sources">
+                <span style="font-size:10.5px;color:var(--text-faint);font-weight:700;align-self:center;margin-right:2px;">어디서:</span>
+                <button class="cm-src on" data-src="상담중">상담중</button>
+                <button class="cm-src" data-src="DM">DM</button>
+                <button class="cm-src" data-src="댓글·리뷰">댓글·리뷰</button>
+                <button class="cm-src" data-src="검색어">검색어</button>
+              </div>
+              <button class="cm-add-go" id="cm-add-go">+ 담기</button>
+            </div>
+          </div>
+
+          <!-- 3 바구니 (동적 렌더) -->
+          <div class="cm-baskets" id="cm-baskets"></div>
+
+          <div class="cm-tolink">📤 모은 카드는 곧 <b>원고 쓰기</b> 재료 — 😣문제→<b>썸네일 문구</b>, ✨욕망→<b>혜택 번역</b>, 💬실제 한 말→<b>첫 문장</b> 그대로. ⭐는 가장 강한 '황금 인용'.</div>
         </div>
+        <div class="cu-prod" style="margin-top:18px">
+          <div class="cu-prod-field">
+            <label class="cu-prod-label"><span class="cu-prod-ico">🔁</span> 시도했다 <b>실패한 것</b></label>
+            <div class="cu-prod-hint">고객이 이미 해봤는데 안 됐던 것 — 여기서 '남들과 다른 이유'가 나와요</div>
+            <textarea class="cu-prod-ta" data-pmmfield="customer.tried" placeholder="예) 셀프펌 했다 다 상함 / 다른 데서 잘랐다 얼굴 커 보임 / 유튜브 따라했다 실패"></textarea>
+          </div>
+        </div>
+        </div><!-- /customer pane -->
+
+        <!-- [세상] 시장·매체·타이밍 -->
+        <div class="cu-sec-pane" data-cusecpane="world">
+          <div class="cu-prod">
+            <div class="cu-prod-intro">🌍 <b>같은 상품도 '언제·어디서'에 따라 터지거나 묻혀요.</b> <span class="cu-prod-intro-sub">고객·나가 맞아도 세상이 0이면 안 팔려요 (= 500k뷰 0예약).</span></div>
+            <div class="cu-prod-field">
+              <label class="cu-prod-label"><span class="cu-prod-ico">📱</span> <b>매체·채널</b> (어디서 만날까)</label>
+              <div class="cu-prod-hint">릴스/블로그/지역 키워드 — 이 고객이 머무는 곳</div>
+              <textarea class="cu-prod-ta" data-pmmfield="world.media" placeholder="예) 인스타 릴스 / 지역맘 카페 / '○○동 미용실' 검색"></textarea>
+            </div>
+            <div class="cu-prod-field">
+              <label class="cu-prod-label"><span class="cu-prod-ico">⏰</span> <b>타이밍·시즌·트렌드</b> (지금 왜)</label>
+              <div class="cu-prod-hint">지금 이게 먹히는 이유 — 계절·이벤트·요즘 흐름</div>
+              <textarea class="cu-prod-ta" data-pmmfield="world.timing" placeholder="예) 여름 휴가 전 / 새 학기 / '꾸안꾸' 트렌드"></textarea>
+            </div>
+            <div class="cu-prod-field">
+              <label class="cu-prod-label"><span class="cu-prod-ico">🥊</span> <b>경쟁·레퍼런스</b> (남들은 어떻게?)</label>
+              <div class="cu-prod-hint">잘 되는 콘텐츠·경쟁자 — 벤치마킹·북극성과 연결</div>
+              <textarea class="cu-prod-ta" data-pmmfield="world.competition" placeholder="예) 경쟁 디자이너는 가격만 강조 / 잘 되는 릴스는 비포애프터 3초컷"></textarea>
+            </div>
+            <div class="cu-prod-field">
+              <label class="cu-prod-label"><span class="cu-prod-ico">🌫️</span> <b>분위기·맥락</b> (요즘 민감한 정서)</label>
+              <div class="cu-prod-hint">사람들이 요즘 예민하거나 공감하는 정서</div>
+              <textarea class="cu-prod-ta" data-pmmfield="world.mood" placeholder="예) '관리 안 한 듯 관리한' 자연스러움 선호 / 과한 꾸밈 거부감"></textarea>
+            </div>
+          </div>
+        </div><!-- /world pane -->
+
+        <!-- [나] 내 상품·오퍼 -->
+        <div class="cu-sec-pane on" data-cusecpane="me">
+          <div class="cu-prod">
+            <div class="cu-prod-intro">🙋 <b>내가 가진 무기를 한 장으로.</b> <span class="cu-prod-intro-sub">기능(사실)을 혜택(고객 삶의 변화)으로 번역하고, 증거로 받쳐야 안 팔리던 게 팔려요.</span></div>
+            <div class="cu-prod-field">
+              <label class="cu-prod-label"><span class="cu-prod-ico">🎯</span> 핵심 <b>셀링포인트</b> (한마디로)</label>
+              <div class="cu-prod-hint">20초 안에 직감되게 — 핵심 특징 1~2개</div>
+              <textarea class="cu-prod-ta" data-pmmfield="me.selling" placeholder="예) 얼굴형 분석으로 안 커 보이는 앞머리 디자인"></textarea>
+            </div>
+            <div class="cu-prod-field">
+              <label class="cu-prod-label"><span class="cu-prod-ico">⚙️</span> <b>기능·장점·특징</b> (사실)</label>
+              <div class="cu-prod-hint">팩트 그대로 — 다음 칸에서 혜택으로 번역할 재료</div>
+              <textarea class="cu-prod-ta" data-pmmfield="me.features" placeholder="예) 약산성 약제 / 6개월 지속 / 얼굴형별 맞춤 설계 / 1:1 상담 30분"></textarea>
+            </div>
+            <div class="cu-prod-field">
+              <label class="cu-prod-label"><span class="cu-prod-ico">💡</span> <b>혜택 번역</b> (그래서 삶이 어떻게?)</label>
+              <div class="cu-prod-hint">기능 → '내 삶이 뭐가 바뀌나'. 고객은 기능이 아니라 바뀐 자기 모습을 산다</div>
+              <textarea class="cu-prod-ta" data-pmmfield="me.benefit" placeholder="예) 약산성 → 다음 날 두피 안 가렵고 편하게 잠 / 맞춤 설계 → 손 안 대도 단정"></textarea>
+            </div>
+            <div class="cu-prod-field">
+              <label class="cu-prod-label"><span class="cu-prod-ico">💎</span> <b>차별화</b> (왜 굳이 우리?)</label>
+              <div class="cu-prod-hint">남들이 못 하는 한 가지</div>
+              <textarea class="cu-prod-ta" data-pmmfield="me.diff" placeholder="예) 얼굴형 분석 후 디자인 / 실패 시 무료 보정 / 비포애프터 1,000케이스"></textarea>
+            </div>
+            <div class="cu-prod-field">
+              <label class="cu-prod-label"><span class="cu-prod-ico">🏅</span> <b>증거·신뢰</b> (말만으론 안 믿어요)</label>
+              <div class="cu-prod-hint">비포애프터·후기·숫자·경력 — 증명이 있어야 혜택이 먹힌다</div>
+              <textarea class="cu-prod-ta" data-pmmfield="me.proof" placeholder="예) 비포애프터 1,000장 / 재방문율 80% / 경력 12년 / 후기 500개"></textarea>
+            </div>
+            <div class="cu-prod-field">
+              <label class="cu-prod-label"><span class="cu-prod-ico">🔥</span> 지금 <b>사야 하는 이유</b></label>
+              <div class="cu-prod-hint">'나중에'를 없애는 한정·시즌·손해</div>
+              <textarea class="cu-prod-ta" data-pmmfield="me.why" placeholder="예) 이달 신규 3명 한정 / 여름 전 지금이 적기 / 잘못 자르면 6개월 고생"></textarea>
+            </div>
+          </div>
+        </div><!-- /me pane -->
 
       </div>
 
@@ -15410,7 +15707,7 @@
       <!-- 탭A: 원고 쓰기 -->
       <div id="sc-tab-write" class="sc-tabpane">
         <!-- 월간 원고 적용하기 (기본 접힘) -->
-        <button class="sc-plan-toggle" id="sc-plan-toggle">📅 월간 원고 적용하기 <span class="sc-plan-toggle-caret">▾</span></button>
+        <button class="sc-plan-toggle" id="sc-plan-toggle">📅 이번달 콘텐츠 원고 계획표 <span class="sc-plan-toggle-caret">▾</span></button>
         <div id="sc-plan-collapse" class="sc-plan-collapse" style="display:none;">
 
       <!-- 캘린더 + 1·2·3·4주차 카드 영역 -->
@@ -16237,13 +16534,15 @@
       'mbv2-meta', 'mbv2-cards',
       'hmv1-home', 'hmv1-challenges', 'hmv1-seen',
       'hmv1-acc', 'hmv1-ach', 'hmv1-weekcounts', 'hmv1-funnelcounts', 'hmv1-uploadgoal', 'hmv1-funnelup', 'hmv1-goalperiod', 'hmv1-uploadmanual',
-      'hmv1-northstars'
+      'hmv1-northstars', 'hmv1-visitdays'
     ]);
     // 이미지 키(벤치마킹 시트·무드보드) → Supabase Storage 버킷
     const IMG_BUCKET = 'cm-images';
     function isSynced(k) { return !!KIND[k]; }
     function isProfile(k) { return PROFILE_KEYS.has(k); }
     function isImage(k) { return k.indexOf('shv4-img-') === 0 || k.indexOf('mbv2-img-') === 0; }
+    // 백업 전체 내보내기용 키 목록(이미지 제외 — 텍스트/JSON 데이터 전부)
+    window.__cmExportKeys = Object.keys(KIND).concat(Array.from(PROFILE_KEYS));
     function authReady() { const a = window.__cmAuth; return !!(window.sb && a && a.code && a.pinHash); }
 
     // dataURL ↔ Blob 변환
@@ -16950,10 +17249,19 @@
       targetName: '', // 타겟 (예: 둥근얼굴 30대 직장인 여성)
       productName: '', // 상품·서비스 (예: 얼굴형 맞춤 헤어 컨설팅)
       answers: {}, // { product, customer, company, empathy, proof }
+      product: { problem: '', features: '', diff: '', why: '' }, // (구) 내 상품 — 호환용
+      worldCore: '', // 세상 코어 한 줄
+      message: '',   // 합 · 메시지
+      me: { selling: '', features: '', benefit: '', diff: '', proof: '', why: '' },   // 나 차원
+      world: { media: '', timing: '', competition: '', mood: '' },                   // 세상 차원
+      customer: { tried: '' },                                                        // 고객 차원(시도했던 것)
+      collect: [], // 고객 속마음 수집함 카드 [{id,basket,quote,insight,source,gold,createdAt}]
       createdAt: Date.now(),
       updatedAt: 0
     };
   }
+  const PROD_KEYS = ['problem', 'features', 'diff', 'why'];
+  const DIM_SHAPE = { me: ['selling', 'features', 'benefit', 'diff', 'proof', 'why'], world: ['media', 'timing', 'competition', 'mood'], customer: ['tried'] };
   function ensurePmmShape(p) {
     if (!p.id) p.id = 'pmm_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8);
     if (typeof p.targetName !== 'string') p.targetName = '';
@@ -16962,6 +17270,15 @@
     PMM_QUESTIONS.forEach(q => {
       if (typeof p.answers[q.id] !== 'string') p.answers[q.id] = '';
     });
+    if (!p.product || typeof p.product !== 'object') p.product = {};
+    PROD_KEYS.forEach(k => { if (typeof p.product[k] !== 'string') p.product[k] = ''; });
+    if (typeof p.worldCore !== 'string') p.worldCore = '';
+    if (typeof p.message !== 'string') p.message = '';
+    Object.keys(DIM_SHAPE).forEach(d => {
+      if (!p[d] || typeof p[d] !== 'object') p[d] = {};
+      DIM_SHAPE[d].forEach(k => { if (typeof p[d][k] !== 'string') p[d][k] = ''; });
+    });
+    if (!Array.isArray(p.collect)) p.collect = [];
     if (typeof p.createdAt !== 'number') p.createdAt = Date.now();
     if (typeof p.updatedAt !== 'number') p.updatedAt = 0;
   }
@@ -19583,10 +19900,24 @@
     ['DM·반복 질문', '손님이 <b>3번 이상 묻는 질문</b> = 무조건 릴스감'],
     ['검색어 보기', '검색창 자동완성(앞머리 망함·손질·얼굴형) = 대중이 실제로 치는 니즈']
   ];
+  // 세일즈 탭 — 보는 사람이 '꽂히는' 콘텐츠 (개념 키워드 + 행동 + 설명HTML, 설명은 esc 안 함)
+  const SALES_DEVICES = [
+    ['공감', "첫 1초에 '그 사람의 문제'를 콕 찌른다", '일반론 말고, 그 사람이 어제 한 고민을 그대로 꺼낸다. = 첫 순간에 "어, 내 얘긴데?"<div class="psy-ba"><div class="psy-ba-x"><b>✗</b> "헤어 잘하는 법" (누구 얘긴지 모름)</div><div class="psy-ba-o"><b>✓</b> "디자이너인데 왜 단골이 안 생길까?"</div></div>'],
+    ['"맞아, 내 이야기야"', '핵심을 찌르는 말 + 감정 묘사를 얹는다', '사람들이 평소 하는 생각의 핵심을 콕 집어 말해주고, 그때의 감정까지 묘사한다. 이미 알지만 말로 못 했던 걸 대신 정리해주면 그 콘텐츠는 자기 거가 된다.<div class="psy-ba"><div class="psy-ba-o"><b>예</b> "분명 열심히 했는데 왜 나만 제자리일까… 그 답답함, 저도 겪었어요."</div></div>'],
+    ['패턴 깨기', '통념을 한 번 뒤집는다', '뇌는 예측이 빗나갈 때 집중한다.<div class="psy-ba"><div class="psy-ba-o"><b>예</b> 150k뷰 12예약 vs 500k뷰 0예약 — "조회수=예약" 상식 깨기</div></div>'],
+    ['미완결 결말', '끝까지 다 안 닫는다', '다 알려주지 말고 다음을 궁금하게. 완결 안 된 느낌이 머릿속에 계속 남는다. <span style="color:var(--text-faint)">(자이가르닉 효과)</span>']
+  ];
+  const SALES_STEPS = [
+    ['제품 설명 말고, 고객의 문제부터', '고객은 제품에 관심 없다. 자기 문제에만 관심 있다. 셀링포인트를 <b style="color:var(--emerald)">소비자가 납득하는 언어</b>로 바꾼다.<div class="psy-ba"><div class="psy-ba-x"><b>✗</b> "이 펌제는 손상이 적어요"</div><div class="psy-ba-o"><b>✓</b> "펌하고 머리 푸석해지는 거 싫으시죠?"</div></div>'],
+    ['기능 → 혜택으로 번역', '기능=사실, 혜택=그 사실이 내 삶에서 뭘 바꾸는가. 고객은 기능이 아니라 <b style="color:var(--emerald)">바뀐 자기 모습</b>을 산다.<div class="psy-ba"><div class="psy-ba-x"><b>기능</b> 저자극 성분</div><div class="psy-ba-o"><b>혜택</b> 다음 날 두피 안 가렵고 편하게 잠</div></div>'],
+    ['증명 → 신뢰', '말만으론 안 믿는다. 비포애프터·후기·숫자·내가 직접 쓴 흔적. <b style="color:var(--emerald)">증명이 신뢰를 만들고, 신뢰가 있어야 혜택이 먹힌다.</b> 순서 바뀌면 다 광고로 보인다.'],
+    ['지금 살 이유', '"나중에"가 구매를 죽인다. 한정·시즌·지금 안 하면 생기는 손해를 자연스럽게 깔아 의도-행동 격차를 좁힌다.']
+  ];
+  const SALES_FLOW = ['이거 내 문제 맞아?', '이걸로 해결돼?', '너 믿어도 돼?', '지금 살 이유는?'];
   function openPsychGuide() {
     const body = document.getElementById('psych-body');
     if (body) {
-      body.innerHTML =
+      const psychHtml =
         '<p class="psy-lead">사람은 <b>"제품"</b>을 사는 게 아니라 <b>"더 나은 자기 자신"</b>을 산다.</p>' +
         '<p class="psy-sub">겉(기능)으로 끌고, <b style="color:var(--emerald)">속(감정·정체성)</b>으로 판다. 비싼 걸 파는 사람일수록 이 \'속\'을 정확히 건드린다.</p>' +
         '<div class="tg-sec-label tg-sec-2">👀 겉 욕구 vs 속 동기</div>' +
@@ -19594,7 +19925,7 @@
           PSY_PAIRS.map(p => '<tr><td class="psy-out">' + esc(p[0]) + '</td><td class="psy-in">' + esc(p[1]) + '</td></tr>').join('') +
         '</tbody></table>' +
         '<div class="tg-sec-label tg-sec-2">🔍 고객의 \'속\'을 캐는 5가지</div>' +
-        '<ul class="psy-points">' + PSY_POINTS.map((p, i) => '<li><span class="psy-num">' + (i + 1) + '</span><b>' + esc(p[0]) + '</b>' + esc(p[1]) + '</li>').join('') + '</ul>' +
+        '<ul class="psy-points">' + PSY_POINTS.map((p, i) => '<li><span class="psy-num">' + (i + 1) + '</span><b class="psy-h">' + esc(p[0]) + '</b>' + esc(p[1]) + '</li>').join('') + '</ul>' +
         '<div class="tg-sec-label tg-sec-2">⚖️ 약한 판매 vs 강한 판매</div>' +
         '<div class="psy-vs">' +
           '<div class="psy-vs-row weak"><span class="psy-vs-tag">약함 · 스펙</span>"약산성이라 손상 적고 6개월 유지돼요"</div>' +
@@ -19602,7 +19933,32 @@
         '</div>' +
         '<p class="psy-sub" style="margin-top:9px">같은 제품인데 두 번째가 몇 배 비싸게 팔린다. <b style="color:var(--emerald)">스펙은 \'속 동기\'를 증명하는 근거</b>로만 깔아주는 것.</p>' +
         '<div class="tg-sec-label tg-sec-2">🎧 니즈 파악 실전 — 추측 말고 듣기</div>' +
-        '<ol class="psy-listen">' + PSY_LISTEN.map(p => '<li><b>' + esc(p[0]) + '</b> — ' + p[1] + '</li>').join('') + '</ol>';
+        '<ol class="psy-listen">' + PSY_LISTEN.map(p => '<li><b>' + esc(p[0]) + '</b> — ' + p[1] + '</li>').join('') + '</ol>' +
+        '<button class="psy-gobtn" id="psy-go-customer">👥 여기서 모은 말, 「고객 분석」에 담으러 가기 →</button>';
+      const salesHtml =
+        '<p class="psy-lead">보는 사람이 꽂히는 핵심 = <b>"이건 내 얘기네"</b> 하는 순간을 만드는 것.</p>' +
+        '<p class="psy-sub">판매가 목적이면 재밌어서 퍼지는 <b>엔터형</b>이 아니라, 사고 싶어서 움직이는 <b style="color:var(--emerald)">문제해결형</b>이어야 한다.</p>' +
+        '<div class="tg-sec-label tg-sec-2">🛒 고객이 살 때 머릿속 순서 <span class="tg-sec-hint">이 순서대로 콘텐츠를 짠다</span></div>' +
+        '<div class="psy-flow">' + SALES_FLOW.map((s, i) => (i ? '<span class="psy-flow-arrow">→</span>' : '') + '<span class="psy-flow-step">' + esc(s) + '</span>').join('') + '</div>' +
+        '<ul class="psy-points" style="margin-top:14px">' + SALES_STEPS.map((d, i) => '<li><span class="psy-num">' + (i + 1) + '</span><b class="psy-h">' + esc(d[0]) + '</b>' + d[1] + '</li>').join('') + '</ul>' +
+        '<div class="tg-sec-label tg-sec-2">🎯 꽂히는 콘텐츠 4가지 장치 <span class="tg-sec-hint">멈추게 하고, 끝까지 보게 한다</span></div>' +
+        '<ul class="psy-points">' + SALES_DEVICES.map((d, i) => '<li><span class="psy-num">' + (i + 1) + '</span><b class="psy-h"><span class="psy-kw">' + esc(d[0]) + '</span> — ' + esc(d[1]) + '</b>' + d[2] + '</li>').join('') + '</ul>' +
+        '<div class="psy-tail">📌 같은 노력이면 <b>안 팔리는 바이럴</b>보다 <b>작아도 팔리는 콘텐츠</b>를. 판매가 목적이면 늘 문제해결형으로.</div>';
+      body.innerHTML =
+        '<div class="psy-tabs">' +
+          '<button class="psy-tab on" data-ptab="psych">🧠 고객 심리</button>' +
+          '<button class="psy-tab" data-ptab="sales">💰 세일즈 콘텐츠의 핵심</button>' +
+        '</div>' +
+        '<div class="psy-pane on" data-ppane="psych">' + psychHtml + '</div>' +
+        '<div class="psy-pane" data-ppane="sales">' + salesHtml + '</div>';
+      body.querySelectorAll('.psy-tab').forEach(b => b.onclick = () => {
+        const t = b.dataset.ptab;
+        body.querySelectorAll('.psy-tab').forEach(x => x.classList.toggle('on', x.dataset.ptab === t));
+        body.querySelectorAll('.psy-pane').forEach(x => x.classList.toggle('on', x.dataset.ppane === t));
+        body.scrollTop = 0;
+      });
+      const goc = body.querySelector('#psy-go-customer');
+      if (goc) goc.onclick = () => { closePsychGuide(); try { switchWorkspace('customer'); } catch (e) {} };
     }
     const ov = document.getElementById('psych-modal'); if (ov) ov.classList.add('show');
   }
@@ -23839,11 +24195,12 @@
   // === 홈 아코디언 (접이식 + 고정, Phase A) ===================
   // 기존 섹션 요소를 접이식 패널로 '이동'(비파괴). 상태는 profiles 동기화.
   // ============================================================
-  let accState = { expanded: { today: true, week: true }, pinned: {}, partner: true };
+  let accState = { expanded: { today: true, week: true, custscore: true }, pinned: {}, partner: true };
   let _accBuilt = false;
   let _accSaveTimer = null;
   const ACC_KEY = 'hmv1-acc';
   const ACC_SECTIONS = [
+    { key: 'custscore', title: '고객 니즈 파악', ico: '<svg class="acc-flower" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 7 C14.59 2.34 19.07 4.93 16.33 9.5 C21.66 9.41 21.66 14.59 16.33 14.5 C19.07 19.07 14.59 21.66 12 17 C9.41 21.66 4.93 19.07 7.67 14.5 C2.34 14.59 2.34 9.41 7.67 9.5 C4.93 4.93 9.41 2.34 12 7 Z" fill="rgba(255,122,51,0.4)" stroke="#FF7A33" stroke-width="1.1" stroke-linejoin="round"/><circle cx="12" cy="12" r="2.5" fill="rgba(255,122,51,0.62)" stroke="#FF7A33" stroke-width="0.8"/></svg>', gen: true },
     { key: 'goal',      title: '목표 / Why',     ico: '◎', sel: ['#home-view .home-section.goal'] },
     { key: 'week',      title: '이번 주 할일!',  ico: '▦', sel: ['#home-view .tr-week-block'] },
     { key: 'halloffame',title: '업로드 전당',  ico: '🏆', gen: true },
@@ -23863,6 +24220,7 @@
       .acc-panel.pinned{border-color:var(--emerald-line);box-shadow:0 0 16px var(--emerald-glow);}
       .acc-head{display:flex;align-items:center;gap:10px;padding:14px 16px;cursor:pointer;user-select:none;}
       .acc-ico{font-size:16px;line-height:1;flex:0 0 auto;}
+      .acc-flower{width:20px;height:20px;display:block;flex:0 0 auto;filter:drop-shadow(0 0 2.5px rgba(255,122,51,.45));}
       .acc-title{font-family:'Pretendard',sans-serif;font-size:14px;font-weight:700;color:var(--text-main);flex:0 0 auto;white-space:nowrap;}
       .acc-sum{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11.5px;color:var(--text-mute);text-align:right;}
       .acc-partner{display:inline-flex;align-items:center;gap:6px;flex:0 0 auto;margin-left:8px;}
@@ -23995,18 +24353,18 @@
       .mz-badge-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;}
       .mz-badge-mini{font-size:18px;width:34px;height:34px;display:flex;align-items:center;justify-content:center;border-radius:9px;background:var(--bg-void);border:1px solid var(--line);filter:grayscale(1);opacity:0.4;}
       .mz-badge-mini.on{filter:none;opacity:1;background:var(--emerald-faint);border-color:var(--emerald-line);}
-      /* 이번 주 슬롯 넛지 — 안 채우면 주황 맥동(강조), 다 채우면 멈춤 + 달성 플래시 */
-      .acc-panel.needs-fill{animation:weekNudgeGlow 2s ease-in-out infinite;}
-      .acc-panel.needs-fill .acc-sum{color:#FF8C42;font-weight:800;}
-      .acc-panel.needs-fill .acc-ico{color:var(--flare);text-shadow:var(--mark-glow-flare);}
-      .acc-panel.needs-fill .acc-title{color:#FFB37A;}
+      /* 파트너 넛지 — 안 채우면 은은한 노랑 맥동(가장 시급한 1곳만), 다 채우면 멈춤 + 달성 플래시 */
+      .acc-panel.needs-fill{animation:weekNudgeGlow 2.4s ease-in-out infinite;}
+      .acc-panel.needs-fill .acc-sum{color:#F5C84B;font-weight:800;}
+      .acc-panel.needs-fill .acc-ico{color:#F5C84B;text-shadow:0 0 8px rgba(245,200,75,0.6);}
+      .acc-panel.needs-fill .acc-title{color:#F0DA9A;}
       @keyframes weekNudgeGlow{
-        0%,100%{box-shadow:0 0 7px rgba(255,140,66,0.18); border-color:rgba(255,140,66,0.40);}
-        50%{box-shadow:0 0 26px 3px rgba(255,140,66,0.55); border-color:rgba(255,140,66,0.95);}
+        0%,100%{box-shadow:0 0 6px rgba(245,200,75,0.14); border-color:rgba(245,200,75,0.34);}
+        50%{box-shadow:0 0 20px 2px rgba(245,200,75,0.40); border-color:rgba(245,200,75,0.80);}
       }
       .acc-panel.just-filled{animation:weekFilledFlash 1.1s ease-out;}
       @keyframes weekFilledFlash{0%{box-shadow:0 0 22px var(--emerald-glow);border-color:var(--emerald);}100%{box-shadow:0 0 0 rgba(0,0,0,0);}}
-      @media(prefers-reduced-motion:reduce){.acc-panel.needs-fill{animation:none;box-shadow:0 0 10px rgba(255,140,66,0.25);}.acc-panel.just-filled{animation:none;}}
+      @media(prefers-reduced-motion:reduce){.acc-panel.needs-fill{animation:none;box-shadow:0 0 10px rgba(245,200,75,0.22);}.acc-panel.just-filled{animation:none;}}
       /* 파트너 모드 토글 — 테두리 없는 슬림 한 줄(오른쪽 정렬) */
       .mz-partner{display:flex;align-items:center;justify-content:flex-end;gap:8px;padding:0;margin:0 2px 8px;}
       .mz-partner .mz-partner-label{font-family:'Pretendard',sans-serif;font-weight:600;font-size:11px;color:var(--text-mute);flex:0 0 auto;white-space:nowrap;}
@@ -24431,9 +24789,15 @@
   // 파트너 모드에서 "채워야 할" 섹션 판별
   function sectionNeedsFill(key) {
     try {
-      if (key === 'week') { const t = (weekSlots || []).length, f = (weekSlots || []).filter(Boolean).length; return !(t > 0 && f >= t); }
-      if (key === 'funnel') { const fs = funnelSlots || {}; const n = ((fs.attract || []).length) + ((fs.convert || []).length) + ((fs.retain || []).length); return n === 0; }
       if (key === 'goal') { return !(homeData && homeData.goal); }
+      if (key === 'custscore') {
+        const p = (pmms && pmms.length) ? (pmms.find(x => x.id === _currentPmmId) || pmms[0]) : null;
+        if (!p) return true;
+        const s = cuDimScores(p);
+        return Math.min(s.me, s.customer, s.world) === 0; // 한 차원이라도 비면 채워야
+      }
+      if (key === 'week') { return !getWeekDday().cleared; } // 현재 주 업로드 미완
+      if (key === 'calendar') { const g = monthlyUploadGoal || 0; if (g <= 0) return false; return getMonthUploadedScripts().length < g; } // 월 목표 미달
     } catch (e) {}
     return false;
   }
@@ -24443,6 +24807,27 @@
     if (sw) { sw.classList.toggle('on', on); sw.setAttribute('aria-checked', on ? 'true' : 'false'); }
     const desc = document.getElementById('pb-desc');
     if (desc) desc.textContent = on ? '채울 것을 끌어올려 안내 중' : '꺼짐 — 차분한 보기';
+  }
+  // 파트너 토글 (홈/미션 공용) — 첫 클릭 시 간단 설명
+  function onPartnerToggle() {
+    accState.partner = !(accState.partner !== false);
+    applyPartnerUI(); applyAccordionState(); updateWeekNudge(); saveAccordionState();
+    if (!accState._partnerSeen) { accState._partnerSeen = true; saveAccordionState(); showPartnerIntro(); }
+  }
+  function showPartnerIntro() {
+    if (document.getElementById('partner-intro-ov')) return;
+    const ov = document.createElement('div');
+    ov.id = 'partner-intro-ov';
+    ov.style.cssText = 'position:fixed;inset:0;z-index:100060;background:rgba(0,0,0,0.6);display:flex;align-items:center;justify-content:center;padding:22px;';
+    ov.innerHTML =
+      '<div style="width:100%;max-width:360px;background:var(--bg-card);border:1px solid var(--line);border-radius:16px;padding:20px 20px 18px;box-shadow:0 20px 60px rgba(0,0,0,0.6);">' +
+        '<div style="font-size:17px;font-weight:800;color:var(--text-main);margin-bottom:8px;">🤝 파트너 모드란?</div>' +
+        '<div style="font-size:13px;line-height:1.65;color:var(--text-sub);">지금 채워야 할 <b style="color:#F5C84B">가장 중요한 한 곳</b>을 은은한 노란빛으로 콕 짚어줘요.<br/>빠뜨리지 않게 옆에서 안내하는 코치예요.</div>' +
+        '<div style="font-size:11.5px;line-height:1.6;color:var(--text-mute);margin-top:11px;padding:10px 12px;border:1px dashed var(--line);border-radius:10px;">우선순위: <b>목표 → 고객 니즈 → 이번 주 → 월 목표</b><br/>부담되면 언제든 토글을 끄면 차분한 보기로 바뀌어요.</div>' +
+        '<button id="partner-intro-ok" style="width:100%;margin-top:15px;padding:11px;border-radius:10px;border:none;background:var(--emerald);color:#04140b;font-size:13.5px;font-weight:800;cursor:pointer;font-family:inherit;">알겠어요</button>' +
+      '</div>';
+    ov.onclick = (e) => { if (e.target === ov || e.target.id === 'partner-intro-ok') ov.remove(); };
+    document.body.appendChild(ov);
   }
   function saveAccordionState() {
     if (_accSaveTimer) clearTimeout(_accSaveTimer);
@@ -24491,6 +24876,17 @@
       }
       accState.expanded = accState.expanded || {};
       accState.expanded.halloffame = true;
+      saveAccordionState();
+    }
+    // 고객 분석 준비도 1회: 맨 위로 끼워넣고 처음 한 번 펼쳐 보여줌
+    if (!accState._csV1) {
+      accState._csV1 = true;
+      if (Array.isArray(accState.order)) {
+        accState.order = accState.order.filter(k => k !== 'custscore');
+        accState.order.unshift('custscore');
+      }
+      accState.expanded = accState.expanded || {};
+      accState.expanded.custscore = true;
       saveAccordionState();
     }
   }
@@ -24586,23 +24982,29 @@
   // 이번 주 슬롯 = 살아있는 넛지. 안 채우면 패널이 은은히 주황으로 맥동(채워야 할 느낌),
   // 다 채우는 순간 멈추고 에메랄드 달성 플래시 + 축하. 유기체처럼 현재 주의 상태에 반응.
   let _weekWasFull = null;
+  // 파트너 ON: 가장 시급한 1곳만 노랑 넛지(우선순위: 목표→고객 니즈→이번주→월 목표). OFF: 전부 차분.
+  const NUDGE_PRIORITY = ['goal', 'custscore', 'week', 'calendar'];
   function updateWeekNudge() {
     const cont = document.getElementById('home-accordion'); if (!cont) return;
     const partner = accState.partner !== false;
-    // 파트너 ON: 채워야 할 섹션(이번주·퍼널·목표)에 주황 넛지. OFF: 전부 차분.
-    ['week', 'funnel', 'goal'].forEach(key => {
-      const panel = cont.querySelector('.acc-panel[data-acc="' + key + '"]'); if (!panel) return;
-      panel.classList.toggle('needs-fill', partner && sectionNeedsFill(key));
-    });
-    // 이번 주 슬롯을 막 다 채운 순간 → 달성 플래시 + 축하
+    // 먼저 전부 끄기(이전 상태/funnel 잔여 포함)
+    cont.querySelectorAll('.acc-panel.needs-fill').forEach(p => p.classList.remove('needs-fill'));
+    // 파트너 ON이면 우선순위상 첫 번째로 채워야 할 1곳만 켜기
+    if (partner) {
+      for (const key of NUDGE_PRIORITY) {
+        if (sectionNeedsFill(key)) {
+          const panel = cont.querySelector('.acc-panel[data-acc="' + key + '"]');
+          if (panel) { panel.classList.add('needs-fill'); break; }
+        }
+      }
+    }
+    // 이번 주 업로드를 막 다 채운 순간 → 달성 플래시 + 축하 (현재 데이터 기준)
     const wpanel = cont.querySelector('.acc-panel[data-acc="week"]');
-    const total = (weekSlots || []).length;
-    const filled = (weekSlots || []).filter(Boolean).length;
-    const full = total > 0 && filled >= total;
+    let full = false; try { full = getWeekDday().cleared; } catch (e) {}
     if (full && _weekWasFull === false && wpanel) {
       wpanel.classList.remove('just-filled'); void wpanel.offsetWidth; wpanel.classList.add('just-filled');
       setTimeout(() => { if (wpanel) wpanel.classList.remove('just-filled'); }, 1200);
-      try { toast('🎉 이번 주 슬롯 다 채웠어요!'); } catch (e) {}
+      try { toast('🎉 이번 주 업로드 다 채웠어요!'); } catch (e) {}
     }
     _weekWasFull = full;
   }
@@ -24699,11 +25101,11 @@
     applyAccordionState();
     applyPartnerUI();
     const _psw = document.getElementById('pb-switch');
-    if (_psw) _psw.onclick = () => { accState.partner = !(accState.partner !== false); applyPartnerUI(); applyAccordionState(); updateWeekNudge(); saveAccordionState(); };
+    if (_psw) _psw.onclick = () => onPartnerToggle();
     // 동기화된 상태 비동기 로드 후 재적용
     loadAccordionState().then(() => { applyAccordionState(); applyPartnerUI(); refreshAccordionSummaries(); });
     loadAchSeen().then(() => { renderMissionPanel(); });
-    renderTodayPanel(); renderInsightPanel(); renderHallOfFamePanel();
+    renderTodayPanel(); renderInsightPanel(); renderHallOfFamePanel(); renderCustomerScore();
   }
 
   // ============================================================
@@ -24714,6 +25116,31 @@
     { t: '관찰자', xp: 0 }, { t: '분석가', xp: 150 }, { t: '실행가', xp: 500 },
     { t: '크리에이터', xp: 1200 }, { t: '마스터', xp: 3000 }
   ];
+  // === 연속 접속일(스트릭) — 앱을 켠 날을 기록해 '며칠 연속'을 보여줌 ===
+  let _visitDays = null;
+  let _visitStreak = 0;
+  function computeVisitStreak(arr) {
+    if (!arr || !arr.length) return 0;
+    const set = new Set(arr);
+    let streak = 0;
+    let d = new Date(); d.setHours(0, 0, 0, 0);
+    while (set.has(ymdFromDate(d))) { streak++; d = addDays(d, -1); }
+    return streak;
+  }
+  function getVisitStreak() { return _visitStreak; }
+  async function recordVisitToday() {
+    try {
+      const r = await window.storage.get('hmv1-visitdays');
+      let arr = []; if (r && r.value) { try { arr = JSON.parse(r.value) || []; } catch (e) {} }
+      if (!Array.isArray(arr)) arr = [];
+      const today = ymdFromDate(new Date());
+      if (!arr.includes(today)) { arr.push(today); arr = arr.slice(-400); try { await window.storage.set('hmv1-visitdays', JSON.stringify(arr)); } catch (e) {} }
+      _visitDays = arr;
+      _visitStreak = computeVisitStreak(arr);
+    } catch (e) {}
+    try { renderTrophyHero(); } catch (e) {}
+  }
+
   // === 트로피 여정 히어로 (여정 레일 통합) — 차오르는 트로피 + 레벨 + 지금 할 일 ===
   function renderTrophyHero() {
     const el = document.getElementById('cm-trophy-hero');
@@ -24775,7 +25202,7 @@
           '<div class="cmth-barrow"><div class="cmth-bar"><div class="cmth-bar-fill" style="width:' + pct + '%"></div>' +
             [10, 40, 70].map(function (p) { return '<span class="cmth-tick' + (pct >= p ? ' lit' : '') + '" style="left:' + p + '%"></span>'; }).join('') +
           '</div><span class="cmth-goal' + (done ? ' reached' : '') + '" title="마스터 달성 뱃지">★</span></div>' +
-          '<div class="cmth-sub">분석 ' + anN + '/100 · 업로드 ' + upN + '/30<span class="cmth-master-lab"> 마스터</span>' + (monthlyUploadGoal > 0 ? '<span class="cmth-goal-now"> · 🎯 이번 달 ' + getMonthUploadedScripts().length + '/' + monthlyUploadGoal + '</span>' : '') + '</div>' +
+          '<div class="cmth-sub">분석 ' + anN + '/100 · 업로드 ' + upN + '/30<span class="cmth-master-lab"> 마스터</span>' + (monthlyUploadGoal > 0 ? '<span class="cmth-goal-now"> · 🎯 이번 달 ' + getMonthUploadedScripts().length + '/' + monthlyUploadGoal + '</span>' : '') + (getVisitStreak() >= 1 ? '<span class="cmth-streak"> · 🔥 ' + getVisitStreak() + '일 연속</span>' : '') + '</div>' +
         '</div>' +
       '</div>' +
       flowHtml;
@@ -25041,6 +25468,59 @@
       '<div class="ins-grid">' + cards.map(c => '<div class="ins-card"><div class="ins-ic">' + c.ic + '</div><div class="ins-lab">' + esc(c.lab) + '</div><div class="ins-val">' + esc(c.val) + '</div><div class="ins-sub">' + esc(c.sub) + '</div></div>').join('') + '</div>' +
       '<div class="myins-coach">' + coach + '</div>';
   }
+  // ===== 고객 분석 준비도 (홈 카드, 나×고객×세상 곱셈 게이지) =====
+  function cuDimScores(p) {
+    const f = s => ((s || '').trim().length > 0) ? 1 : 0;
+    const meArr = [p.productName, p.me && p.me.features, p.me && p.me.benefit, p.me && p.me.diff, p.me && p.me.proof];
+    const mePct = Math.round(meArr.reduce((s, v) => s + f(v), 0) / meArr.length * 100);
+    const col = Array.isArray(p.collect) ? p.collect : [];
+    const custArr = [f(p.targetName), f(p.customer && p.customer.tried), col.some(c => c.basket === 'pain') ? 1 : 0, col.some(c => c.basket === 'desire') ? 1 : 0];
+    const custPct = Math.round(custArr.reduce((s, v) => s + v, 0) / custArr.length * 100);
+    const wArr = [p.worldCore, p.world && p.world.media, p.world && p.world.timing, p.world && p.world.competition, p.world && p.world.mood];
+    const worldPct = Math.round(wArr.reduce((s, v) => s + f(v), 0) / wArr.length * 100);
+    const total = Math.round((mePct / 100) * (custPct / 100) * (worldPct / 100) * 100);
+    return { me: mePct, customer: custPct, world: worldPct, total: total };
+  }
+  function renderCustomerScore() {
+    const el = document.getElementById('custscore-panel-body'); if (!el) return;
+    const p = (pmms && pmms.length) ? (pmms.find(x => x.id === _currentPmmId) || pmms[0]) : null;
+    if (!p) {
+      el.innerHTML = '<div class="cs-empty">꽂히는 콘텐츠는 <b>고객 분석</b>에서 나와요.<br/><button class="cs-go" id="cs-go">고객 분석 시작하기 →</button></div>';
+      const g = document.getElementById('cs-go'); if (g) g.onclick = () => { try { switchWorkspace('customer'); } catch (e) {} };
+      return;
+    }
+    const s = cuDimScores(p);
+    const dims = [
+      { key: 'me', ico: '🙋', label: '나', pct: s.me, cls: 'me' },
+      { key: 'customer', ico: '👥', label: '고객', pct: s.customer, cls: 'customer' },
+      { key: 'world', ico: '🌍', label: '세상', pct: s.world, cls: 'world' }
+    ];
+    const minPct = Math.min(s.me, s.customer, s.world);
+    const weakest = dims.find(d => d.pct === minPct);
+    const done = s.total >= 100;
+    const bars = dims.map(d =>
+      '<div class="cs-row ' + d.cls + (d.key === weakest.key && !done ? ' weak' : '') + '">' +
+        '<span class="cs-row-tag">' + d.ico + ' ' + d.label + '</span>' +
+        '<div class="cs-bar"><div class="cs-bar-fill" style="width:' + d.pct + '%"></div></div>' +
+        '<span class="cs-row-pct">' + d.pct + '%</span>' +
+      '</div>'
+    ).join('');
+    el.innerHTML =
+      '<div class="cs-card ' + (done ? 'done' : '') + '">' +
+        '<div class="cs-top"><div>' +
+          '<div class="cs-eyebrow">꽂히는 콘텐츠 준비도</div>' +
+          '<div class="cs-total">' + s.total + '<span>%</span></div>' +
+          '<div class="cs-formula-mini">🙋 나 × 👥 고객 × 🌍 세상</div>' +
+        '</div>' + (done ? '<div class="cs-done-badge">✨ 메시지 완성!</div>' : '') + '</div>' +
+        bars +
+        (done && (p.message || '').trim() ? '<div class="cs-msg">“' + esc(p.message.trim()) + '”</div>' : '') +
+        '<button class="cs-go" id="cs-go">' + (done ? '고객 분석 보기 →' : "👉 가장 빈 '" + weakest.label + "' 채우러 가기 →") + '</button>' +
+        (!done ? '<div class="cs-nudge">⚠️ <b>' + weakest.label + '</b> ' + weakest.pct + '% — 곱셈이라 여기가 낮으면 전체가 안 올라가요.</div>' : '') +
+      '</div>';
+    const go = document.getElementById('cs-go');
+    if (go) go.onclick = () => { try { switchWorkspace('customer'); if (!done) setCuSection(weakest.key); } catch (e) {} };
+  }
+
   function renderInsightPanel() {
     const el = document.getElementById('insight-panel-body'); if (!el) return;
     const filled = (rows || []).filter(isFilled);
@@ -25545,7 +26025,7 @@
         }).join('') + '</div>' : '<div class="mz-nudge">모든 뱃지 획득! 🏆</div>') +
         '<div class="mz-badge-row">' + badges.map(b => '<span class="mz-badge-mini' + (b.ok ? ' on' : '') + '" title="' + esc(b.label) + (b.ok ? ' ✓' : ' (' + b.cur + '/' + b.tgt + ')') + '">' + b.ico + '</span>').join('') + '</div>';
       const sw = el.querySelector('#pb-switch');
-      if (sw) sw.addEventListener('click', () => { accState.partner = !(accState.partner !== false); applyPartnerUI(); applyAccordionState(); updateWeekNudge(); saveAccordionState(); });
+      if (sw) sw.addEventListener('click', () => onPartnerToggle());
       applyPartnerUI();
       checkAchievements();
     } catch (e) { el.innerHTML = '<div style="color:var(--text-mute);font-size:12px;padding:8px;">미션 불러오는 중…</div>'; }
@@ -25599,6 +26079,7 @@
     renderTodayPanel();
     renderInsightPanel();
     renderHallOfFamePanel();
+    renderCustomerScore();
     refreshAccordionSummaries();
   }
 
@@ -28117,8 +28598,9 @@
 
   async function exportAll() {
     const data = {
-      version: 'shv4-v30',
+      version: 'shv4-v31',
       exportedAt: new Date().toISOString(),
+      // 레거시 필드(예전 백업 파일 호환용)
       rows: rows,
       scripts: scripts,
       challenges: challenges,
@@ -28129,9 +28611,15 @@
       customViral: customViral,
       customComment: customComment,
       collects: collects,
-      typeTrash: typeTrash
+      typeTrash: typeTrash,
+      // 전체 키 스냅샷 — 고객 분석(pmms)·목표·키워드·퍼널·북극성·무드보드·설정까지 빠짐없이
+      _keys: {}
     };
-    downloadJson(data, `customer-perspective-${timestampForFilename()}.json`);
+    const keys = window.__cmExportKeys || [];
+    for (const k of keys) {
+      try { const r = await window.storage.get(k); if (r && r.value != null) data._keys[k] = r.value; } catch (e) {}
+    }
+    downloadJson(data, `컨텐츠마스터즈-백업-${timestampForFilename()}.json`);
     try { localStorage.setItem('hmv1-lastbackup', String(Date.now())); } catch (e) {}
     try { renderBackupStatus(); } catch (e) {}
     toast('전체 데이터 내보냄 — 안전하게 보관하세요!');
@@ -28155,6 +28643,75 @@
       el.innerHTML = '✅ 마지막 백업: <b>' + when + '</b>. 잘 챙기고 있어요!';
     }
   }
+
+  // ===== 백업 알림(로그인 시) + 백업 방법 가이드 =====
+  function maybeBackupReminder() {
+    let lastBackup = 0, lastShown = '';
+    try { lastBackup = parseInt(localStorage.getItem('hmv1-lastbackup') || '0', 10) || 0; } catch (e) {}
+    try { lastShown = localStorage.getItem('cm-backup-reminded') || ''; } catch (e) {}
+    const today = new Date().toISOString().slice(0, 10);
+    if (lastShown === today) return; // 하루 1회만
+    const backupDays = lastBackup ? Math.floor((Date.now() - lastBackup) / 86400000) : 999;
+    let dleft = null;
+    let exp = (_currentUser && _currentUser.expiresAt != null) ? _currentUser.expiresAt : null;
+    let expMs = null;
+    if (typeof exp === 'number') expMs = exp;
+    else if (typeof exp === 'string') { const t = Date.parse(exp); if (!isNaN(t)) expMs = t; }
+    if (expMs) dleft = Math.ceil((expMs - Date.now()) / 86400000);
+    let tier = null;
+    if (dleft !== null && dleft >= 0 && dleft <= 7) tier = 'urgent';      // 만료 1주일 전 — 매일
+    else if (dleft !== null && dleft > 7 && dleft <= 30) tier = 'soon';   // 만료 한 달 전
+    else if (backupDays >= 14) tier = 'stale';                           // 백업 오래됨/없음
+    if (!tier) return;
+    try { localStorage.setItem('cm-backup-reminded', today); } catch (e) {}
+    showBackupReminder(tier, dleft, backupDays, lastBackup);
+  }
+  function showBackupReminder(tier, dleft, backupDays, lastBackup) {
+    if (document.getElementById('backup-remind-ov')) return;
+    let head, msg, accent = '#F5C84B';
+    if (tier === 'urgent') { accent = '#E8908F'; head = '⏳ 계정 만료 D-' + dleft + '!'; msg = '만료되면 데이터에 접근하지 못할 수 있어요.<br/><b>지금 백업</b>해서 안전하게 보관하세요.'; }
+    else if (tier === 'soon') { head = '📦 계정 만료 약 ' + dleft + '일 전'; msg = '만료 전에 데이터를 미리 <b>백업</b>해두는 걸 권장해요.'; }
+    else { head = '📦 데이터 백업할 때예요'; msg = (lastBackup ? '마지막 백업이 <b>' + backupDays + '일 전</b>이에요.' : '<b>아직 백업한 적이 없어요.</b>') + '<br/>지금 한 번 내보내두면 안심돼요.'; }
+    const ov = document.createElement('div');
+    ov.id = 'backup-remind-ov';
+    ov.style.cssText = 'position:fixed;inset:0;z-index:100060;background:rgba(0,0,0,0.62);display:flex;align-items:center;justify-content:center;padding:22px;';
+    ov.innerHTML =
+      '<div style="width:100%;max-width:360px;background:var(--bg-card);border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:0 20px 60px rgba(0,0,0,0.6);">' +
+        '<div style="font-size:17px;font-weight:800;color:' + accent + ';margin-bottom:9px;">' + head + '</div>' +
+        '<div style="font-size:13px;line-height:1.65;color:var(--text-sub);">' + msg + '</div>' +
+        '<button id="backup-remind-go" style="width:100%;margin-top:15px;padding:12px;border-radius:10px;border:none;background:var(--emerald);color:#04140b;font-size:13.5px;font-weight:800;cursor:pointer;font-family:inherit;">⬇ 지금 전체 백업하기</button>' +
+        '<div style="display:flex;gap:8px;margin-top:8px;">' +
+          '<button id="backup-remind-guide" style="flex:1;padding:10px;border-radius:10px;border:1px solid var(--line);background:transparent;color:var(--text-sub);font-size:12.5px;font-weight:700;cursor:pointer;font-family:inherit;">자세히 보기</button>' +
+          '<button id="backup-remind-later" style="flex:1;padding:10px;border-radius:10px;border:1px solid var(--line);background:transparent;color:var(--text-mute);font-size:12.5px;font-weight:700;cursor:pointer;font-family:inherit;">나중에</button>' +
+        '</div>' +
+      '</div>';
+    document.body.appendChild(ov);
+    ov.onclick = (e) => { if (e.target === ov) ov.remove(); };
+    document.getElementById('backup-remind-go').onclick = () => { ov.remove(); try { exportAll(); } catch (e) {} };
+    document.getElementById('backup-remind-guide').onclick = () => { ov.remove(); openBackupGuide(); };
+    document.getElementById('backup-remind-later').onclick = () => ov.remove();
+  }
+  function openBackupGuide() {
+    if (document.getElementById('backup-guide-ov')) return;
+    const ov = document.createElement('div');
+    ov.id = 'backup-guide-ov';
+    ov.style.cssText = 'position:fixed;inset:0;z-index:100061;background:rgba(0,0,0,0.62);display:flex;align-items:center;justify-content:center;padding:22px;';
+    ov.innerHTML =
+      '<div style="width:100%;max-width:380px;max-height:84vh;overflow-y:auto;background:var(--bg-card);border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:0 20px 60px rgba(0,0,0,0.6);">' +
+        '<div style="font-size:17px;font-weight:800;color:var(--text-main);margin-bottom:6px;">📦 데이터 백업하는 법</div>' +
+        '<div style="font-size:12px;color:var(--text-faint);margin-bottom:14px;line-height:1.5;">데이터는 클라우드에 저장되지만, 계정 만료·실수에 대비해 <b>내 손에 사본 1개</b>를 두는 게 가장 안전해요.</div>' +
+        '<div style="font-size:13px;line-height:1.7;color:var(--text-sub);">' +
+          '<div style="margin-bottom:11px;"><b style="color:var(--emerald)">1. 내보내기</b><br/>⚙ 설정 → 📦 백업/내보내기 → <b>[전체 내보내기]</b> 누르면 <b>.json 파일 1개</b>가 저장돼요. (고객 분석·원고·목표·벤치마킹 전부 포함)</div>' +
+          '<div style="margin-bottom:11px;"><b style="color:var(--emerald)">2. 안전한 곳에 보관</b><br/>그 파일을 <b>카톡 \'나에게 보내기\'</b> · 이메일 · 구글 드라이브 · USB 중 한 곳에 올려두세요.</div>' +
+          '<div style="margin-bottom:11px;"><b style="color:var(--emerald)">3. 복원</b><br/>새 기기거나 데이터가 사라졌을 때 → ⚙ 설정 → 📥 가져오기 → 그 .json 파일 선택. 끝!</div>' +
+          '<div style="padding:11px 12px;border:1px dashed var(--line);border-radius:10px;background:var(--bg-input);font-size:12px;color:var(--text-mute);">💡 권장: <b>한 달에 한 번</b>, 그리고 <b>계정 만료 전엔 꼭</b> 백업하세요.</div>' +
+        '</div>' +
+        '<button id="backup-guide-ok" style="width:100%;margin-top:15px;padding:11px;border-radius:10px;border:none;background:var(--emerald);color:#04140b;font-size:13.5px;font-weight:800;cursor:pointer;font-family:inherit;">알겠어요</button>' +
+      '</div>';
+    document.body.appendChild(ov);
+    ov.onclick = (e) => { if (e.target === ov || e.target.id === 'backup-guide-ok') ov.remove(); };
+  }
+  window.__openBackupGuide = openBackupGuide;
 
   function exportRowsOnly() {
     downloadJson({
@@ -28183,6 +28740,20 @@
       const text = await file.text();
       const data = JSON.parse(text);
       const stats = { rows: 0, scripts: 0, challenges: 0 };
+
+      // 전체 키 스냅샷이 있으면 → 완전 복원(현재 데이터 덮어쓰기 후 새로고침)
+      if (data._keys && typeof data._keys === 'object' && Object.keys(data._keys).length) {
+        const ks = Object.keys(data._keys);
+        if (!confirm('백업 파일의 전체 데이터로 복원합니다.\n현재 데이터(고객 분석·원고·목표 등)는 이 파일 내용으로 덮어쓰여져요.\n\n계속할까요?')) {
+          resultEl.className = 'settings-import-result'; resultEl.textContent = '복원을 취소했어요.'; return;
+        }
+        for (const k of ks) { try { await window.storage.set(k, data._keys[k]); } catch (e) {} }
+        resultEl.className = 'settings-import-result success';
+        resultEl.textContent = `✓ 전체 복원 완료 (${ks.length}개 항목). 잠시 후 새로고침합니다…`;
+        toast('복원 완료! 새로고침합니다');
+        setTimeout(() => location.reload(), 1400);
+        return;
+      }
 
       // rows
       if (Array.isArray(data.rows)) {
@@ -28405,8 +28976,8 @@
     }
 
     renderCuTabs();
-    renderCuBigInputs();
-    renderCuQuestions();
+    renderCuFields();
+    renderCollect();
     renderKwPool();
 
     // 첫 진입 시 이벤트 핸들러 바인딩 (한 번만)
@@ -28414,6 +28985,157 @@
       bindCuEvents();
       _cuInited = true;
     }
+  }
+
+  // 섹션 탭 (나 / 고객 / 세상)
+  let _cuSection = 'me';
+  function setCuSection(sec) {
+    _cuSection = sec;
+    document.querySelectorAll('.cu-sec-tab').forEach(t => t.classList.toggle('on', t.dataset.cusec === sec));
+    document.querySelectorAll('.cu-sec-pane').forEach(p => p.classList.toggle('on', p.dataset.cusecpane === sec));
+  }
+
+  // pmm 중첩 필드 get/set ('me.selling' / 'worldCore' / 'targetName')
+  function getPmmField(p, path) {
+    const parts = path.split('.');
+    let o = p;
+    for (let i = 0; i < parts.length - 1; i++) { if (!o[parts[i]] || typeof o[parts[i]] !== 'object') return ''; o = o[parts[i]]; }
+    return o[parts[parts.length - 1]] || '';
+  }
+  function setPmmField(p, path, val) {
+    const parts = path.split('.');
+    let o = p;
+    for (let i = 0; i < parts.length - 1; i++) { if (!o[parts[i]] || typeof o[parts[i]] !== 'object') o[parts[i]] = {}; o = o[parts[i]]; }
+    o[parts[parts.length - 1]] = val;
+  }
+  // 모든 data-pmmfield 입력칸을 현재 타겟 값으로 채우기
+  function renderCuFields() {
+    const p = pmms.find(x => x.id === _currentPmmId);
+    if (!p) return;
+    document.querySelectorAll('[data-pmmfield]').forEach(el => {
+      const v = getPmmField(p, el.dataset.pmmfield);
+      if (el.value !== v) el.value = v;
+    });
+  }
+
+  // 한글 조사 선택 (받침 유무) — 비한글은 받침 없음 취급
+  function josa(word, withB, withoutB) {
+    if (!word) return withoutB;
+    const c = word.charCodeAt(word.length - 1);
+    if (c < 0xAC00 || c > 0xD7A3) return withoutB;
+    return ((c - 0xAC00) % 28 !== 0) ? withB : withoutB;
+  }
+  // ✨ 합·메시지 자동 초안 (3코어 합성, 누를 때마다 다른 버전)
+  let _msgTplIdx = 0;
+  function cuDraftMessage() {
+    const p = pmms.find(x => x.id === _currentPmmId);
+    if (!p) return;
+    const me = (p.productName || '').trim();
+    const cust = (p.targetName || '').trim();
+    const world = (p.worldCore || '').trim();
+    if (!me || !cust) { toast("'🙋 나'와 '👥 고객' 코어를 먼저 채워주세요"); return; }
+    const jo = josa(cust, '을', '를');
+    const tpls = [
+      cust + jo + ' 위한, ' + me,
+      me + ' — ' + cust + jo + ' 위한 단 하나의 선택' + (world ? ' (' + world + ')' : ''),
+      (world ? world + ' 지금, ' : '') + cust + jo + ' 위한 ' + me,
+      '아직도 ' + cust + '? ' + me + '로 끝내세요'
+    ];
+    const draft = tpls[_msgTplIdx % tpls.length];
+    _msgTplIdx++;
+    const input = document.querySelector('[data-pmmfield="message"]');
+    if (input) { input.value = draft; input.dispatchEvent(new Event('input', { bubbles: true })); input.focus(); }
+  }
+
+  // ===== 고객 속마음 수집함 (실작동) =====
+  let _cmBasket = 'pain';
+  let _cmSource = '상담중';
+  const CM_BASKETS = [
+    { key: 'pain', ico: '😣', label: '문제·불편' },
+    { key: 'fear', ico: '🙅', label: '피하고 싶은' },
+    { key: 'desire', ico: '✨', label: '원하는 것' }
+  ];
+  function renderCollect() {
+    const wrap = document.getElementById('cm-baskets');
+    if (!wrap) return;
+    const p = pmms.find(x => x.id === _currentPmmId);
+    if (!p) { wrap.innerHTML = ''; return; }
+    if (!Array.isArray(p.collect)) p.collect = [];
+    const cnt = document.getElementById('cm-count');
+    if (cnt) cnt.innerHTML = p.collect.length + '<span>개 수집</span>';
+    wrap.innerHTML = CM_BASKETS.map(b => {
+      const cards = p.collect.filter(c => c.basket === b.key)
+        .sort((a, c) => (c.gold ? 1 : 0) - (a.gold ? 1 : 0) || c.createdAt - a.createdAt);
+      const cardsHtml = cards.length ? cards.map(c =>
+        '<div class="cm-card ' + (c.gold ? 'gold' : '') + '" data-cm-id="' + c.id + '">' +
+          '<div class="cm-card-quote">' + esc(c.quote) + '</div>' +
+          (c.insight ? '<div class="cm-card-insight">🧠 ' + esc(c.insight) + '</div>' : '') +
+          '<div class="cm-card-foot"><span class="cm-card-src">' + esc(c.source || '') + '</span>' +
+            '<span class="cm-card-acts">' +
+              '<span class="cm-card-write" data-cm-write="' + c.id + '" title="이 말로 원고 쓰기 시작">✍️</span>' +
+              '<span class="cm-card-star ' + (c.gold ? 'on' : '') + '" data-cm-star="' + c.id + '" title="가장 강한 말 — 황금 인용">' + (c.gold ? '★' : '☆') + '</span>' +
+              '<span class="cm-card-del" data-cm-del="' + c.id + '" title="삭제">×</span>' +
+            '</span></div>' +
+        '</div>'
+      ).join('') : '<div class="cm-basket-empty">아직 비어 있어요<br/>고객 말을 담아보세요 🎣</div>';
+      return '<div class="cm-basket ' + b.key + '">' +
+        '<div class="cm-basket-head"><span class="cm-basket-ico">' + b.ico + '</span> ' + b.label + ' <span class="cm-basket-n">' + cards.length + '</span></div>' +
+        '<div class="cm-basket-cards">' + cardsHtml + '</div></div>';
+    }).join('');
+  }
+  async function cmAddCard() {
+    const p = pmms.find(x => x.id === _currentPmmId);
+    if (!p) return;
+    if (!Array.isArray(p.collect)) p.collect = [];
+    const qEl = document.getElementById('cm-add-quote');
+    const iEl = document.getElementById('cm-add-insight');
+    const quote = (qEl ? qEl.value : '').trim();
+    if (!quote) { toast('고객이 실제 한 말을 입력해주세요'); if (qEl) qEl.focus(); return; }
+    p.collect.push({
+      id: 'cm_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7),
+      basket: _cmBasket, quote: quote, insight: (iEl ? iEl.value : '').trim(),
+      source: _cmSource, gold: false, createdAt: Date.now()
+    });
+    p.updatedAt = Date.now();
+    await savePmms();
+    if (qEl) qEl.value = '';
+    if (iEl) iEl.value = '';
+    if (qEl) qEl.focus();
+    renderCollect();
+    setSaveStatus('saved');
+  }
+  async function cmToggleStar(id) {
+    const p = pmms.find(x => x.id === _currentPmmId);
+    if (!p || !Array.isArray(p.collect)) return;
+    const c = p.collect.find(x => x.id === id);
+    if (!c) return;
+    c.gold = !c.gold;
+    p.updatedAt = Date.now();
+    await savePmms();
+    renderCollect();
+  }
+  async function cmDelCard(id) {
+    const p = pmms.find(x => x.id === _currentPmmId);
+    if (!p || !Array.isArray(p.collect)) return;
+    p.collect = p.collect.filter(x => x.id !== id);
+    p.updatedAt = Date.now();
+    await savePmms();
+    renderCollect();
+  }
+  // 수집함 카드 → 원고 쓰기 시작 (실제 한 말=썸네일 문구·첫 문장 / 내 해석=주제)
+  function startScriptFromCollectCard(id) {
+    const p = pmms.find(x => x.id === _currentPmmId);
+    if (!p || !Array.isArray(p.collect)) return;
+    const c = p.collect.find(x => x.id === id);
+    if (!c) return;
+    try { switchWorkspace('scripts'); } catch (e) {}
+    resetScriptEntryState();
+    scriptEntryState.title = c.quote || '';                    // 🪝 썸네일 문구 = 고객이 실제 한 말(후킹)
+    if (c.insight) scriptEntryState.subject = c.insight;       // 🧭 주제 = 내 해석(방향)
+    scriptEntryState.content = '“' + esc(c.quote || '') + '”'; // 본문 첫 문장 = 실제 한 말 그대로
+    applyScriptEntryToUI();
+    setTimeout(() => { const el = document.querySelector('.sc-entry-card'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 250);
+    toast('이 고객 말로 원고 시작! ✍️');
   }
 
   function countFilledPmm(p) {
@@ -28456,8 +29178,8 @@
         if (id === _currentPmmId) return;
         _currentPmmId = id;
         renderCuTabs();
-        renderCuBigInputs();
-        renderCuQuestions();
+        renderCuFields();
+        renderCollect();
       };
     });
     // 삭제
@@ -28552,36 +29274,56 @@
     });
   }
 
-  // 타겟/상품 input 이벤트 (한 번만 바인딩)
+  // 입력 이벤트 (한 번만 바인딩)
   function bindCuEvents() {
-    const ti = document.getElementById('cu-target-input');
-    const pi = document.getElementById('cu-product-input');
+    // 섹션 탭 전환 (나 / 고객 / 세상)
+    document.querySelectorAll('.cu-sec-tab').forEach(t => {
+      t.onclick = () => setCuSection(t.dataset.cusec);
+    });
 
-    if (ti) {
-      // 입력 즉시 saving 표시
-      ti.addEventListener('input', () => setSaveStatus('saving'));
-      ti.addEventListener('input', debounce(async () => {
+    // ✨ 합·메시지 자동 초안
+    const draftBtn = document.getElementById('cu-core-draft');
+    if (draftBtn) draftBtn.onclick = cuDraftMessage;
+
+    // 수집함 — 바구니 선택
+    const basketBtns = document.querySelectorAll('#cm-add-baskets [data-basket]');
+    basketBtns.forEach(b => b.onclick = () => { _cmBasket = b.dataset.basket; basketBtns.forEach(x => x.classList.toggle('on', x === b)); });
+    // 수집함 — 출처 선택
+    const srcBtns = document.querySelectorAll('#cm-add-sources [data-src]');
+    srcBtns.forEach(b => b.onclick = () => { _cmSource = b.dataset.src; srcBtns.forEach(x => x.classList.toggle('on', x === b)); });
+    // 수집함 — 담기
+    const addGo = document.getElementById('cm-add-go');
+    if (addGo) addGo.onclick = cmAddCard;
+    const qEl = document.getElementById('cm-add-quote');
+    if (qEl) qEl.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); const i = document.getElementById('cm-add-insight'); if (i) i.focus(); } });
+    const iEl = document.getElementById('cm-add-insight');
+    if (iEl) iEl.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); cmAddCard(); } });
+    // 수집함 — 카드 별/삭제 (이벤트 위임)
+    const basketsWrap = document.getElementById('cm-baskets');
+    if (basketsWrap) basketsWrap.onclick = (e) => {
+      const write = e.target.closest('[data-cm-write]');
+      if (write) { startScriptFromCollectCard(write.dataset.cmWrite); return; }
+      const star = e.target.closest('[data-cm-star]');
+      if (star) { cmToggleStar(star.dataset.cmStar); return; }
+      const del = e.target.closest('[data-cm-del]');
+      if (del) { cmDelCard(del.dataset.cmDel); return; }
+    };
+
+    // 모든 data-pmmfield 입력 (코어/나/고객/세상 공통, debounce 저장)
+    document.querySelectorAll('[data-pmmfield]').forEach(el => {
+      el.addEventListener('input', () => setSaveStatus('saving'));
+      el.addEventListener('input', debounce(async () => {
         const p = pmms.find(x => x.id === _currentPmmId);
         if (!p) return;
-        p.targetName = ti.value;
+        const path = el.dataset.pmmfield;
+        setPmmField(p, path, el.value);
         p.updatedAt = Date.now();
         await savePmms();
         setSaveStatus('saved');
-        renderCuTabs(); // 탭 이름 갱신
+        // 타겟/상품 코어는 페르소나 탭 이름에도 쓰임
+        if (path === 'targetName' || path === 'productName') renderCuTabs();
       }, 400));
-    }
-    if (pi) {
-      pi.addEventListener('input', () => setSaveStatus('saving'));
-      pi.addEventListener('input', debounce(async () => {
-        const p = pmms.find(x => x.id === _currentPmmId);
-        if (!p) return;
-        p.productName = pi.value;
-        p.updatedAt = Date.now();
-        await savePmms();
-        setSaveStatus('saved');
-        renderCuTabs();
-      }, 400));
-    }
+    });
 
     // 저장 버튼 (즉시 저장)
     const saveBtn = document.getElementById('cu-save-btn');
@@ -29922,7 +30664,7 @@
       const autoLogin = document.getElementById('auth-autologin').checked;
       await setAutologin(autoLogin);
       addRecentCode(res.user.code); // 내가 쓴 코드 기기에 저장 → 다음에 자동 표시
-      await setCurrentUser({ code: res.user.code, name: res.user.name, is_master: !!res.user.is_master, pinHash: hash });
+      await setCurrentUser({ code: res.user.code, name: res.user.name, is_master: !!res.user.is_master, pinHash: hash, expiresAt: (res.user.expiresAt != null ? res.user.expiresAt : (res.user.expires_at != null ? res.user.expires_at : null)) });
       hideAuth();
       onLoggedIn();
     });
@@ -29992,7 +30734,7 @@
         return;
       }
       await setAutologin(true);
-      await setCurrentUser({ code: res.user.code, name: res.user.name, is_master: !!res.user.is_master, pinHash: hash });
+      await setCurrentUser({ code: res.user.code, name: res.user.name, is_master: !!res.user.is_master, pinHash: hash, expiresAt: (res.user.expiresAt != null ? res.user.expiresAt : (res.user.expires_at != null ? res.user.expires_at : null)) });
       hideAuth();
       onLoggedIn();
     };
@@ -30485,6 +31227,10 @@
     }
     // 입문 온보딩 (처음이면 환영+이름)
     setTimeout(() => { try { maybeShowOnboarding(); } catch (e) {} }, 600);
+    // 데이터 백업 알림 (만료 임박/오래된 백업 — 하루 1회)
+    setTimeout(() => { try { maybeBackupReminder(); } catch (e) {} }, 1600);
+    // 오늘 접속 기록 → 연속 접속일(스트릭) 갱신
+    setTimeout(() => { try { recordVisitToday(); } catch (e) {} }, 400);
   }
 
   // 앱 톤에 맞는 확인창 (브라우저 기본 confirm 대체) — Promise<boolean>
@@ -30776,7 +31522,7 @@
     if (_currentUser && _currentUser.code && _currentUser.pinHash && autoLogin) {
       const res = await cmRpc('cm_login', { p_code: _currentUser.code, p_pin_hash: _currentUser.pinHash });
       if (res && res.ok) {
-        await setCurrentUser({ code: res.user.code, name: res.user.name, is_master: !!res.user.is_master, pinHash: _currentUser.pinHash });
+        await setCurrentUser({ code: res.user.code, name: res.user.name, is_master: !!res.user.is_master, pinHash: _currentUser.pinHash, expiresAt: (res.user.expiresAt != null ? res.user.expiresAt : (res.user.expires_at != null ? res.user.expires_at : (_currentUser.expiresAt != null ? _currentUser.expiresAt : null))) });
         onLoggedIn();
         return true;
       }
