@@ -7524,11 +7524,14 @@
   .pp-cell span[data-c="red"] { color: #E85A5A; font-weight: 700; }
   .pp-cell span[data-c="orange"] { color: #F0A23E; font-weight: 700; }
   .pp-cell span[data-c="emerald"] { color: var(--emerald); font-weight: 700; }
-  /* 🎬 2단 셀 — 말(위) + 장면(아래) */
-  .pp-scene-zone { display: flex; gap: 5px; align-items: flex-start; margin-top: 7px; padding-top: 6px; border-top: 1px dashed rgba(47,182,160,0.32); }
-  .pp-scene-tag { color: #2FB6A0; font-size: 12px; flex: 0 0 auto; padding-top: 9px; opacity: 0.85; }
-  .pp-cell-scene { flex: 1 1 auto; color: #2FB6A0; font-size: 12px; min-height: 20px; white-space: pre-wrap; }
-  .pp-cell-scene:empty::before { content: '🎬 화면에 뭘 보여줄지'; color: var(--text-faint); opacity: 0.45; font-size: 10.5px; }
+  /* 🎬 2단 셀 — 말(위) + 장면(아래, 칸 맨 아래로 고정해 행끼리 가로 정렬) */
+  .pp-script-grid td.pp-script-td { height: 1px; }            /* 내부 stack이 행 높이를 100%로 채우게 */
+  .pp-cell-stack { display: flex; flex-direction: column; height: 100%; min-height: 60px; }
+  .pp-cell-copy { flex: 1 1 auto; }
+  .pp-scene-zone { margin-top: auto; padding: 7px 12px 9px; border-top: 1px dashed rgba(47,182,160,0.32); background: rgba(47,182,160,0.035); }
+  .pp-scene-lbl { font-size: 10px; font-weight: 800; color: #2FB6A0; opacity: 0.85; letter-spacing: 0.02em; margin-bottom: 3px; }
+  .pp-cell-scene { color: #2FB6A0; font-size: 12px; min-height: 18px; white-space: pre-wrap; padding: 0; }
+  .pp-cell-scene:empty::before { content: '✎ 화면에 뭘 보여줄지'; color: var(--text-faint); opacity: 0.45; font-size: 10.5px; }
   /* 보기 모드: 장면 보기 — 말은 흐리게, 장면 또렷 */
   .pp-script-scroll.pp-view-scene .pp-cell-copy { opacity: 0.32; }
   .pp-script-scroll.pp-view-scene .pp-scene-zone { background: rgba(47,182,160,0.06); border-radius: 6px; }
@@ -24457,7 +24460,7 @@
       const txt = tn.nodeValue; PP_SCENE_RE.lastIndex = 0; if (!PP_SCENE_RE.test(txt)) return; PP_SCENE_RE.lastIndex = 0;
       let m, out = '', last = 0;
       while ((m = PP_SCENE_RE.exec(txt))) {
-        const inner = m[0].replace(/^[\(（]\s*/, '').replace(/\s*[\)）]$/, '').replace(/^(?:화면|장면)\s*[→\-:]*\s*/, '').trim();
+        const inner = m[0].replace(/^[\(（]\s*/, '').replace(/\s*[\)）]$/, '').replace(/^(?:화면|장면)\s*[→>\-:»]*\s*/, '').trim();
         if (inner) scenes.push(inner);
         out += txt.slice(last, m.index); last = m.index + m[0].length;
       }
@@ -24502,9 +24505,13 @@
     }
   }
   // 2단 셀(말 위 + 🎬장면 아래) HTML
+  // 장면 앞 화살표/꺾쇠 잔재(예전 "(화면 -> …)"에서 남은 ">") 표시 시 정리
+  function ppCleanSceneLead(html) { return String(html || '').replace(/(^|<br\s*\/?>)\s*(?:&gt;|&#62;|[>→»])+\s*/gi, '$1'); }
   function ppCellPair(copyHtml, sceneHtml, copyCls, copyAttr, sceneAttr) {
-    return '<div class="pp-cell pp-cell-copy ' + copyCls + '" contenteditable="true" ' + copyAttr + '>' + (copyHtml || '') + '</div>'
-      + '<div class="pp-scene-zone"><span class="pp-scene-tag">🎬</span><div class="pp-cell pp-cell-scene" contenteditable="true" ' + sceneAttr + '>' + (sceneHtml || '') + '</div></div>';
+    return '<div class="pp-cell-stack">'
+      + '<div class="pp-cell pp-cell-copy ' + copyCls + '" contenteditable="true" ' + copyAttr + '>' + (copyHtml || '') + '</div>'
+      + '<div class="pp-scene-zone"><div class="pp-scene-lbl">🎬 장면</div><div class="pp-cell pp-cell-scene" contenteditable="true" ' + sceneAttr + '>' + ppCleanSceneLead(sceneHtml) + '</div></div>'
+      + '</div>';
   }
   function renderPpPart2() {
     const host = document.getElementById('pp-part2-scroll'); if (!host) return;
