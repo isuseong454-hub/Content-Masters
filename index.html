@@ -7526,14 +7526,9 @@
   .pp-cell span[data-c="emerald"] { color: var(--emerald); font-weight: 700; }
   /* 🎬 2단 셀 — 말(위) + 장면(아래, 칸 맨 아래로 고정해 행끼리 가로 정렬) */
   .pp-script-grid td.pp-script-td { height: 1px; }            /* 내부 stack이 행 높이를 100%로 채우게 */
-  .pp-cell-stack { display: flex; flex-direction: column; height: 100%; min-height: 60px; position: relative; }
+  .pp-cell-stack { display: flex; flex-direction: column; height: 100%; min-height: 60px; }
   .pp-cell-copy { flex: 1 1 auto; }
   .pp-scene-zone { margin-top: auto; min-height: 74px; padding: 7px 12px 9px; border-top: 1px dashed rgba(47,182,160,0.32); background: rgba(47,182,160,0.035); }
-  /* 🔁 공통 패턴 유령 추천 (패턴 칸 비었을 때만, 글자 쓰면 사라짐) */
-  .pp-pat-ghost { position: absolute; top: 10px; left: 12px; right: 12px; pointer-events: none; opacity: 0.5; font-size: 11px; line-height: 1.6; color: var(--text-faint); }
-  .pp-ghost-lab { font-weight: 800; color: #C58BD6; opacity: 0.9; }
-  .pp-ghost-chip { display: inline-block; background: rgba(197,139,214,0.12); border: 1px solid rgba(197,139,214,0.32); color: #C58BD6; border-radius: 6px; padding: 1px 7px; margin: 2px 2px 0 0; font-weight: 700; }
-  .pp-cell.pp-has-ghost:empty::before { content: ''; }
   .pp-scene-lbl { font-size: 10px; font-weight: 800; color: #2FB6A0; opacity: 0.85; letter-spacing: 0.02em; margin-bottom: 3px; }
   .pp-cell-scene { color: #2FB6A0; font-size: 12px; min-height: 18px; white-space: pre-wrap; padding: 0; }
   .pp-cell-scene:empty::before { content: '✎ 화면에 뭘 보여줄지'; color: var(--text-faint); opacity: 0.45; font-size: 10.5px; }
@@ -24509,50 +24504,12 @@
       else btn.textContent = '👁 둘다';
     }
   }
-  // 조사 떼기 (간단 어간 추출)
-  function ppStripJosa(w) {
-    const two = ['으로', '에서', '에게', '한테', '까지', '부터', '이라', '라고', '처럼', '보다', '마다'];
-    for (let i = 0; i < two.length; i++) { if (w.length >= two[i].length + 1 && w.slice(-2) === two[i]) return w.slice(0, -2); }
-    const one = ['을', '를', '이', '가', '은', '는', '에', '의', '도', '와', '과', '들', '로', '만', '요', '랑'];
-    if (w.length >= 2 && one.indexOf(w.slice(-1)) >= 0) return w.slice(0, -1);
-    return w;
-  }
-  const PP_STOPWORDS = { '그리고': 1, '하지만': 1, '그런데': 1, '이거': 1, '저거': 1, '그거': 1, '해서': 1, '하는': 1, '있는': 1, '되는': 1, '같은': 1, '여기': 1, '거기': 1, '그냥': 1, '진짜': 1, '바로': 1, '먼저': 1, '다시': 1, '대로': 1,
-    '이': 1, '그': 1, '저': 1, '수': 1, '것': 1, '거': 1, '더': 1, '좀': 1, '잘': 1, '안': 1, '못': 1, '또': 1, '꼭': 1, '참': 1, '막': 1, '딱': 1, '등': 1, '내': 1, '네': 1, '나': 1, '너': 1, '왜': 1, '다': 1, '때': 1, '뭐': 1, '걸': 1, '게': 1, '데': 1, '점': 1 };
-  // 한 행의 레퍼런스 칸들에서 공통 단어(조사 떼고) top3 — 2칸 이상에서 등장
-  function ppCommonWords(secId) {
-    const refs = ppBoard.refs || [];
-    if (refs.length < 2) return [];
-    const count = {};
-    refs.forEach(function (ref) {
-      const html = ppBoard.matrix[secId + '|' + ref.id] || '';
-      const text = String(html).replace(/<[^>]*>/g, ' ').replace(/&[a-z#0-9]+;/gi, ' ');
-      const seen = {};
-      text.split(/[\s,.()/·•\-—~!?'"“”‘’\[\]:;]+/).forEach(function (tok) {
-        const w = ppStripJosa((tok || '').trim());
-        if (w.length < 1 || /^\d+$/.test(w) || PP_STOPWORDS[w]) return;
-        if (seen[w]) return; seen[w] = 1;
-        count[w] = (count[w] || 0) + 1;
-      });
-    });
-    return Object.keys(count)
-      .filter(function (w) { return count[w] >= 2; })
-      .sort(function (a, b) { return count[b] - count[a] || b.length - a.length; })
-      .slice(0, 3)
-      .map(function (w) { return { word: w, n: count[w] }; });
-  }
-  function ppGhostHtml(commons) {
-    if (!commons || !commons.length) return '';
-    return '🔁 <span class="pp-ghost-lab">공통</span> ' + commons.map(function (c) { return '<span class="pp-ghost-chip">' + esc(c.word) + (c.n > 2 ? ' ×' + c.n : '') + '</span>'; }).join(' ');
-  }
   // 2단 셀(말 위 + 🎬장면 아래) HTML
   // 장면 앞 화살표/꺾쇠 잔재(예전 "(화면 -> …)"에서 남은 ">") 표시 시 정리
   function ppCleanSceneLead(html) { return String(html || '').replace(/(^|<br\s*\/?>)\s*(?:&gt;|&#62;|[>→»])+\s*/gi, '$1'); }
-  function ppCellPair(copyHtml, sceneHtml, copyCls, copyAttr, sceneAttr, ghostHtml) {
-    const hasGhost = !!ghostHtml;
+  function ppCellPair(copyHtml, sceneHtml, copyCls, copyAttr, sceneAttr) {
     return '<div class="pp-cell-stack">'
-      + '<div class="pp-cell pp-cell-copy ' + copyCls + (hasGhost ? ' pp-has-ghost' : '') + '" contenteditable="true" ' + copyAttr + '>' + (copyHtml || '') + '</div>'
-      + (hasGhost ? '<div class="pp-pat-ghost">' + ghostHtml + '</div>' : '')
+      + '<div class="pp-cell pp-cell-copy ' + copyCls + '" contenteditable="true" ' + copyAttr + '>' + (copyHtml || '') + '</div>'
       + '<div class="pp-scene-zone"><div class="pp-scene-lbl">🎬 장면</div><div class="pp-cell pp-cell-scene" contenteditable="true" ' + sceneAttr + '>' + ppCleanSceneLead(sceneHtml) + '</div></div>'
       + '</div>';
   }
@@ -24582,9 +24539,7 @@
         const key = sec.id + '|' + ref.id;
         h += '<td class="pp-script-td">' + ppCellPair(ppBoard.matrix[key] || '', ppBoard.scene[key] || '', '', 'data-cell="' + key + '"', 'data-scene-cell="' + key + '"') + '</td>';
       });
-      const patEmpty = !String(sec.pattern || '').replace(/<[^>]*>/g, '').trim();
-      const patGhost = patEmpty ? ppGhostHtml(ppCommonWords(sec.id)) : '';
-      h += '<td class="pp-script-td pp-pat-td">' + ppCellPair(sec.pattern || '', sec.patternScene || '', 'pp-pat-cell', 'data-pat="' + sec.id + '"', 'data-pat-scene="' + sec.id + '"', patGhost) + '</td>';
+      h += '<td class="pp-script-td pp-pat-td">' + ppCellPair(sec.pattern || '', sec.patternScene || '', 'pp-pat-cell', 'data-pat="' + sec.id + '"', 'data-pat-scene="' + sec.id + '"') + '</td>';
       h += '<td class="pp-script-td pp-mine-td">' + ppCellPair(ppBoard.mine[sec.id] || '', ppBoard.mineScene[sec.id] || '', 'pp-mine-cell', 'data-mine="' + sec.id + '"', 'data-mine-scene="' + sec.id + '"') + '</td>';
       h += '</tr>';
     });
@@ -24640,11 +24595,7 @@
       el.addEventListener('focus', function () { ppActiveCell = el; });
       el.addEventListener('keyup', ppSaveCellSel);
       el.addEventListener('mouseup', ppSaveCellSel);
-      el.addEventListener('input', function () {
-        ppStoreCell(el);
-        // 패턴 칸에 글자 쓰면 공통패턴 유령 추천 숨김
-        if (el.classList.contains('pp-pat-cell')) { const g = el.parentNode.querySelector('.pp-pat-ghost'); if (g) g.style.display = el.textContent.trim() ? 'none' : ''; }
-      });
+      el.addEventListener('input', function () { ppStoreCell(el); });
       el.addEventListener('blur', function () {
         // 말 칸에 '(화면 →)'을 치면 자동으로 아래 🎬장면 칸으로 옮김
         if (el.classList.contains('pp-cell-copy')) {
@@ -24653,27 +24604,12 @@
             el.innerHTML = sp.copy; ppStoreCell(el);
             const td = el.parentNode; const sceneDiv = td ? td.querySelector('.pp-cell-scene') : null;
             if (sceneDiv) { const cur = sceneDiv.innerHTML.trim(); sceneDiv.innerHTML = (cur ? cur + '<br>' : '') + sp.scene; ppStoreCell(sceneDiv); }
-          } else { ppStoreCell(el); }
-          // 레퍼런스 말 칸을 고치면 같은 행 패턴 유령 추천 갱신
-          if (el.dataset.cell != null) ppRefreshGhost(el.dataset.cell.split('|')[0]);
-          return;
+            return;
+          }
         }
         ppStoreCell(el);
       });
     });
-  }
-  // 한 섹션의 패턴 유령 추천 다시 그림 (패턴 칸이 비어 있을 때만)
-  function ppRefreshGhost(secId) {
-    const host = document.getElementById('pp-part2-scroll'); if (!host) return;
-    const patCell = host.querySelector('.pp-pat-cell[data-pat="' + secId + '"]'); if (!patCell) return;
-    const stack = patCell.parentNode; if (!stack) return;
-    let ghost = stack.querySelector('.pp-pat-ghost');
-    const empty = !patCell.textContent.trim();
-    const html = empty ? ppGhostHtml(ppCommonWords(secId)) : '';
-    if (html) {
-      if (!ghost) { ghost = document.createElement('div'); ghost.className = 'pp-pat-ghost'; patCell.insertAdjacentElement('afterend', ghost); }
-      ghost.innerHTML = html; ghost.style.display = ''; patCell.classList.add('pp-has-ghost');
-    } else if (ghost) { ghost.remove(); patCell.classList.remove('pp-has-ghost'); }
   }
 
   function ppRemoveRef(refId) {
