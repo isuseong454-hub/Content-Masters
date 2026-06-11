@@ -7500,12 +7500,16 @@
   .pp-script-cell.empty { color: var(--text-faint); }
   .pp-script-cell.empty::before { content: '✎ 여기 적기'; opacity: 0.45; font-size: 11px; font-style: normal; }
   /* PART 2 데이터 기반 — 편집 셀/섹션/레퍼런스 */
-  .pp-ref-th { background: var(--bg-elev); padding: 8px 9px; min-width: 172px; position: relative; }
-  .pp-ref-no { display: inline-block; font-size: 10px; font-weight: 900; color: #06140C; background: var(--emerald); padding: 1px 6px; border-radius: 5px; margin-bottom: 5px; }
-  .pp-ref-name { display: block; width: 100%; background: transparent; border: none; color: var(--text-main); font-family: inherit; font-size: 12.5px; font-weight: 800; padding: 0; box-sizing: border-box; }
+  .pp-ref-th { background: var(--bg-elev); padding: 12px 9px 9px; min-width: 172px; text-align: center; }
+  .pp-ref-thumb { position: relative; width: 78px; aspect-ratio: 9 / 16; margin: 0 auto 7px; border-radius: 9px; overflow: hidden; background: var(--bg-void); border: 1px solid #2A3340; box-shadow: 0 4px 14px rgba(0,0,0,0.4); }
+  .pp-ref-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .pp-ref-thumb-empty { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; color: var(--text-faint); font-size: 22px; opacity: 0.35; }
+  .pp-ref-no { position: absolute; top: 4px; left: 4px; font-size: 9.5px; font-weight: 900; color: #06140C; background: var(--emerald); padding: 1px 6px; border-radius: 5px; box-shadow: 0 1px 4px rgba(0,0,0,0.45); }
+  .pp-ref-rm { position: absolute; top: 4px; right: 4px; background: rgba(0,0,0,0.55); border: none; color: #fff; width: 18px; height: 18px; line-height: 1; border-radius: 5px; font-size: 11px; cursor: pointer; opacity: 0; transition: opacity .12s; }
+  .pp-ref-th:hover .pp-ref-rm { opacity: 1; }
+  .pp-ref-rm:hover { background: var(--wine); }
+  .pp-ref-name { display: block; width: 100%; background: transparent; border: none; color: var(--text-main); font-family: inherit; font-size: 12px; font-weight: 800; padding: 0; box-sizing: border-box; text-align: center; }
   .pp-ref-name:focus { outline: none; }
-  .pp-ref-rm { position: absolute; top: 6px; right: 7px; background: none; border: none; color: var(--text-faint); font-size: 12px; cursor: pointer; }
-  .pp-ref-rm:hover { color: var(--wine); }
   .pp-ref-empty { background: var(--bg-elev); padding: 11px 14px; font-size: 12px; color: var(--text-faint); font-weight: 600; text-align: left; }
   .pp-sec-label { display: block; width: 100%; background: transparent; border: none; color: var(--text-main); font-family: inherit; font-size: 12.5px; font-weight: 800; padding: 0; box-sizing: border-box; }
   .pp-sec-label:focus { outline: none; }
@@ -7555,11 +7559,11 @@
   @keyframes ppRowNew { 0% { background: rgba(42,191,106,0.28); } 100% { background: transparent; } }
   .pp-row-new td { animation: ppRowNew 1.1s ease-out; }
   /* 내꺼 칸 (골드) + 줄별 패턴 칸 (에메랄드) */
-  .pp-mine-th { background: rgba(245,200,75,0.13) !important; color: #F5C84B !important; min-width: 172px; }
+  .pp-mine-th { background: rgba(245,200,75,0.13) !important; color: #F5C84B !important; min-width: 172px; vertical-align: middle !important; text-align: center; }
   .pp-mine-td { background: rgba(245,200,75,0.04); }
   .pp-mine-cell { color: #F0E0B0; }
   .pp-mine-cell:empty::before { content: '✨ 내 원고'; color: rgba(245,200,75,0.5); }
-  .pp-pat-th { background: rgba(42,191,106,0.1) !important; color: var(--emerald) !important; min-width: 150px; }
+  .pp-pat-th { background: rgba(42,191,106,0.1) !important; color: var(--emerald) !important; min-width: 150px; vertical-align: middle !important; text-align: center; }
   .pp-pat-td { background: rgba(42,191,106,0.03); }
   .pp-pat-cell { color: var(--text-sub); font-size: 12px; }
   .pp-pat-cell:empty::before { content: '🧠 공통 패턴'; color: rgba(42,191,106,0.5); }
@@ -7567,7 +7571,7 @@
   .pp-thumb:hover .pp-thumb-rm { opacity: 1; }
   .pp-memo { margin-top: 14px; }
   .pp-memo label { display: block; font-size: 12.5px; font-weight: 800; color: var(--emerald); margin-bottom: 8px; }
-  .pp-memo textarea { width: 100%; min-height: 76px; background: var(--bg-void); border: 1px solid var(--emerald-line); border-radius: 10px; padding: 11px 13px; color: var(--text-main); font-family: inherit; font-size: 13px; line-height: 1.6; resize: vertical; box-sizing: border-box; }
+  .pp-memo textarea { width: 100%; min-height: 76px; background: var(--bg-void); border: 1px solid var(--emerald-line); border-radius: 10px; padding: 11px 13px; color: var(--text-main); font-family: inherit; font-size: 13px; line-height: 1.6; resize: none; overflow: hidden; box-sizing: border-box; }
   .pp-memo textarea:focus { outline: none; border-color: var(--emerald); }
 
   /* PART 3 — 작전도 (믹서기) */
@@ -16464,11 +16468,6 @@
           <button class="pp-shop-btn" type="button" id="pp-shop-btn">🛒 시트에서 레퍼런스 쇼핑</button>
         </div>
 
-        <!-- PART 1 -->
-        <section class="pp-part">
-          <div class="pp-part-head"><span class="pp-part-no">PART 1</span><h3>썸네일 나열</h3><span class="pp-part-hint">고른 레퍼런스의 첫인상 — 시트에서 쇼핑</span></div>
-          <div class="pp-thumbs" id="pp-part1-thumbs"></div>
-        </section>
 
         <!-- PART 2 -->
         <section class="pp-part">
@@ -24425,27 +24424,8 @@
   let ppBoardsLoaded = false;
 
   function renderPpTopic() { const t = document.getElementById('pp-topic'); if (t) t.value = ppBoard.topic || ''; }
-  function renderPpMemo() { const m = document.getElementById('pp-memo-ta'); if (m) m.value = ppBoard.memo || ''; }
-
-  function renderPpPart1() {
-    const host = document.getElementById('pp-part1-thumbs'); if (!host) return;
-    let html = ppBoard.refs.map(function (ref, i) {
-      const inner = ref.img ? '<img src="' + ppEsc(ref.img) + '" alt=""/>' : '▣';
-      return '<div class="pp-thumb" data-ref="' + ref.id + '"><div class="pp-thumb-img">'
-        + '<span class="pp-thumb-no">#' + (i + 1) + '</span>'
-        + '<button class="pp-thumb-rm" data-refrm="' + ref.id + '" type="button" title="빼기">✕</button>'
-        + inner + '</div><div class="pp-thumb-cap">' + ppEsc(ref.label || '') + '</div></div>';
-    }).join('');
-    if (ppBoard.refs.length < PP_MAX_REFS) html += '<button class="pp-thumb-add" type="button" id="pp-shop-card">🛒<br/>쇼핑</button><button class="pp-thumb-add pp-thumb-free" type="button" id="pp-free-card">＋<br/>자유 칸</button>';
-    host.innerHTML = html;
-    host.querySelectorAll('[data-refrm]').forEach(function (b) { b.addEventListener('click', function (e) { e.stopPropagation(); ppRemoveRef(b.dataset.refrm); }); });
-    const addc = document.getElementById('pp-shop-card'); if (addc) addc.addEventListener('click', ppShop);
-    const freec = document.getElementById('pp-free-card'); if (freec) freec.addEventListener('click', ppAddFreeRef);
-    const pending = ppBoard.refs.filter(function (r) { return !r.img && r.rowId && !r._imgChecked; });
-    if (pending.length) {
-      Promise.all(pending.map(async function (r) { r._imgChecked = true; try { const img = await loadImage(r.rowId, 'thumb'); if (img) r.img = img; } catch (e) {} })).then(function () { renderPpPart1(); });
-    }
-  }
+  function ppAutoGrow(el) { if (!el) return; el.style.height = 'auto'; el.style.height = Math.max(76, el.scrollHeight) + 'px'; }
+  function renderPpMemo() { const m = document.getElementById('pp-memo-ta'); if (m) { m.value = ppBoard.memo || ''; ppAutoGrow(m); } }
 
   // 🎬 한 칸 HTML을 {copy, scene}로 분리 — "(화면 → …)"/"(장면 …)" 괄호 지시문을 장면으로 뽑아냄
   const PP_SCENE_RE = /[\(（][^()（）]*(?:화면|장면)[^()（）]*[\)）]/g;
@@ -24519,11 +24499,13 @@
     if (!ppBoard.scene) ppBoard.scene = {}; if (!ppBoard.mineScene) ppBoard.mineScene = {};
     const refs = ppBoard.refs;
     let h = '<table class="pp-script-grid"><thead><tr><th class="pp-sec-col">섹션</th>';
-    if (!refs.length) h += '<th class="pp-ref-empty">🛒 쇼핑으로 레퍼런스를 담으면 비교 칸이 생겨요</th>';
+    if (!refs.length) h += '<th class="pp-ref-empty">🛒 위 “레퍼런스 쇼핑”으로 담으면 칸마다 썸네일이 떠요</th>';
     else refs.forEach(function (ref, i) {
-      h += '<th class="pp-ref-th"><span class="pp-ref-no">#' + (i + 1) + '</span>'
-        + '<input class="pp-ref-name" data-refname="' + ref.id + '" value="' + ppEsc(ref.label || '') + '" />'
-        + '<button class="pp-ref-rm" data-refrm2="' + ref.id + '" type="button" title="빼기">✕</button></th>';
+      const thumb = ref.img ? '<img src="' + ppEsc(ref.img) + '" alt=""/>' : '<div class="pp-ref-thumb-empty">▣</div>';
+      h += '<th class="pp-ref-th"><div class="pp-ref-thumb">' + thumb
+        + '<span class="pp-ref-no">#' + (i + 1) + '</span>'
+        + '<button class="pp-ref-rm" data-refrm2="' + ref.id + '" type="button" title="빼기">✕</button></div>'
+        + '<input class="pp-ref-name" data-refname="' + ref.id + '" value="' + ppEsc(ref.label || '') + '" /></th>';
     });
     h += '<th class="pp-pat-th">🧠 패턴</th><th class="pp-mine-th">✨ 내꺼</th>';
     h += '</tr></thead><tbody>';
@@ -24547,6 +24529,11 @@
     host.innerHTML = h;
     ppWirePart2();
     ppApplyPart2View();
+    // 헤더 썸네일 이미지 지연 로드 (시트 행과 연결된 레퍼런스)
+    const pending = ppBoard.refs.filter(function (r) { return !r.img && r.rowId && !r._imgChecked; });
+    if (pending.length) {
+      Promise.all(pending.map(async function (r) { r._imgChecked = true; try { const img = await loadImage(r.rowId, 'thumb'); if (img) r.img = img; } catch (e) {} })).then(function () { renderPpPart2(); });
+    }
   }
 
   let ppActiveCell = null;
@@ -24584,7 +24571,7 @@
     host.querySelectorAll('.pp-ref-name').forEach(function (inp) {
       inp.addEventListener('input', function () {
         const r = ppBoard.refs.find(function (x) { return x.id === inp.dataset.refname; });
-        if (r) { r.label = inp.value; const cap = document.querySelector('.pp-thumb[data-ref="' + inp.dataset.refname + '"] .pp-thumb-cap'); if (cap) cap.textContent = inp.value; }
+        if (r) r.label = inp.value;
       });
     });
     host.querySelectorAll('[data-refrm2]').forEach(function (b) { b.addEventListener('click', function () { ppRemoveRef(b.dataset.refrm2); }); });
@@ -24617,7 +24604,7 @@
     const suffix = '|' + refId;
     Object.keys(ppBoard.matrix).forEach(function (k) { if (k.indexOf(suffix) === k.length - suffix.length) delete ppBoard.matrix[k]; });
     if (ppBoard.scene) Object.keys(ppBoard.scene).forEach(function (k) { if (k.indexOf(suffix) === k.length - suffix.length) delete ppBoard.scene[k]; });
-    renderPpPart1(); renderPpPart2();
+    renderPpPart2();
   }
   function ppAddSection() {
     if (ppBoard.sections.length >= PP_MAX_SECTIONS) { toast('섹션은 최대 ' + PP_MAX_SECTIONS + '줄'); return; }
@@ -24646,7 +24633,7 @@
   function ppAddFreeRef() {
     if (ppBoard.refs.length >= PP_MAX_REFS) { toast('레퍼런스는 최대 ' + PP_MAX_REFS + '개'); return; }
     ppBoard.refs.push({ id: ppId('r'), rowId: null, label: '직접 입력', img: null, _imgChecked: true });
-    renderPpPart1(); renderPpPart2();
+    renderPpPart2();
   }
   // 패턴 메모 + 레퍼런스 칸에서 '내꺼' 초안 자동 생성 (빈 내꺼 칸만)
   function ppDraftMine() {
@@ -24684,7 +24671,7 @@
         });
         if (filled) toast('📋 기준 원고 ' + filled + '칸 자동 채움');
       }
-      renderPpPart1(); renderPpPart2();
+      renderPpPart2();
     });
   }
 
@@ -24780,7 +24767,7 @@
   }
 
   function ppRenderAll() {
-    renderPpTopic(); renderPpPart1(); renderPpPart2(); renderPpMemo();
+    renderPpTopic(); renderPpPart2(); renderPpMemo();
     renderPpTimeline(); renderPpNotes(); renderPpVault(); ppApplyZoom();
   }
 
@@ -24866,7 +24853,7 @@
         fmtBar.addEventListener('click', function (e) { const b = e.target.closest('[data-ppfmt]'); if (b) ppApplyFmt(b.dataset.ppfmt); });
       }
       const topic = document.getElementById('pp-topic'); if (topic) topic.addEventListener('input', function () { ppBoard.topic = topic.value; });
-      const memo = document.getElementById('pp-memo-ta'); if (memo) memo.addEventListener('input', function () { ppBoard.memo = memo.value; });
+      const memo = document.getElementById('pp-memo-ta'); if (memo) memo.addEventListener('input', function () { ppBoard.memo = memo.value; ppAutoGrow(memo); });
       const newb = document.getElementById('pp-new-btn'); if (newb) newb.addEventListener('click', ppNewBoardAction);
       const savep = document.querySelector('.pp-save-plan'); if (savep) savep.addEventListener('click', ppSaveCurrent);
     }
