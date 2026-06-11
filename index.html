@@ -7524,13 +7524,16 @@
   .pp-cell span[data-c="red"] { color: #E85A5A; font-weight: 700; }
   .pp-cell span[data-c="orange"] { color: #F0A23E; font-weight: 700; }
   .pp-cell span[data-c="emerald"] { color: var(--emerald); font-weight: 700; }
-  /* 🎬 장면(화면) 칩 — 말과 시각적으로 분리 */
-  .pp-cell span[data-scene] { color: #2FB6A0; background: rgba(47,182,160,0.10); border-radius: 5px; padding: 0 4px; font-size: 11.5px; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
-  /* 보기 모드: 장면만 — 말은 흐리게, 장면 칩만 또렷 */
-  .pp-script-scroll.pp-view-scene .pp-cell, .pp-script-scroll.pp-view-scene .pp-cell b, .pp-script-scroll.pp-view-scene .pp-cell span[data-c] { color: var(--text-faint) !important; opacity: 0.4; font-weight: 500 !important; }
-  .pp-script-scroll.pp-view-scene .pp-cell span[data-scene] { color: #2FB6A0 !important; opacity: 1; background: rgba(47,182,160,0.18); font-weight: 700; }
-  /* 보기 모드: 원고만 — 장면 칩은 흐리게 */
-  .pp-script-scroll.pp-view-copy .pp-cell span[data-scene] { color: var(--text-faint); opacity: 0.3; background: transparent; }
+  /* 🎬 2단 셀 — 말(위) + 장면(아래) */
+  .pp-scene-zone { display: flex; gap: 5px; align-items: flex-start; margin-top: 7px; padding-top: 6px; border-top: 1px dashed rgba(47,182,160,0.32); }
+  .pp-scene-tag { color: #2FB6A0; font-size: 12px; flex: 0 0 auto; padding-top: 9px; opacity: 0.85; }
+  .pp-cell-scene { flex: 1 1 auto; color: #2FB6A0; font-size: 12px; min-height: 20px; white-space: pre-wrap; }
+  .pp-cell-scene:empty::before { content: '🎬 화면에 뭘 보여줄지'; color: var(--text-faint); opacity: 0.45; font-size: 10.5px; }
+  /* 보기 모드: 장면 보기 — 말은 흐리게, 장면 또렷 */
+  .pp-script-scroll.pp-view-scene .pp-cell-copy { opacity: 0.32; }
+  .pp-script-scroll.pp-view-scene .pp-scene-zone { background: rgba(47,182,160,0.06); border-radius: 6px; }
+  /* 보기 모드: 장면 숨기기 — 장면 칸 접기 */
+  .pp-script-scroll.pp-view-copy .pp-scene-zone { display: none; }
   .pp-head-scene { border-color: rgba(47,182,160,0.5) !important; color: #2FB6A0 !important; }
   .pp-head-scene.act-scene { background: rgba(47,182,160,0.16) !important; }
   .pp-head-scene.act-copy { background: rgba(245,200,75,0.14) !important; border-color: rgba(245,200,75,0.5) !important; color: #F5C84B !important; }
@@ -16466,7 +16469,7 @@
 
         <!-- PART 2 -->
         <section class="pp-part">
-          <div class="pp-part-head"><span class="pp-part-no">PART 2</span><h3>원고 패턴</h3><span class="pp-part-hint">칸을 눌러 직접 적어요</span><span class="pp-head-btns"><button class="pp-head-add pp-head-scene" type="button" id="pp-scene-toggle" title="🎬 장면(화면) 보기 — 둘다 / 장면만 / 원고만">👁 둘다</button><button class="pp-head-add pp-head-piece" type="button" id="pp-piece-btn">🧩 구조 조각 ▾</button><button class="pp-head-add pp-head-draft" type="button" id="pp-draft-mine">✨ 내꺼 자동 초안</button><button class="pp-head-add" type="button" id="pp-colfree-add">＋ 자유 원고 칸</button></span></div>
+          <div class="pp-part-head"><span class="pp-part-no">PART 2</span><h3>원고 패턴</h3><span class="pp-part-hint">칸을 눌러 직접 적어요</span><span class="pp-head-btns"><button class="pp-head-add pp-head-scene" type="button" id="pp-scene-toggle" title="🎬 장면(화면) — 둘다 / 장면 보기 / 장면 숨기기">👁 둘다</button><button class="pp-head-add pp-head-piece" type="button" id="pp-piece-btn">🧩 구조 조각 ▾</button><button class="pp-head-add pp-head-draft" type="button" id="pp-draft-mine">✨ 내꺼 자동 초안</button><button class="pp-head-add" type="button" id="pp-colfree-add">＋ 자유 원고 칸</button></span></div>
           <div class="pp-piece-palette" id="pp-piece-palette" style="display:none;"></div>
           <div class="pp-fmt-bar" id="pp-fmt-bar">
             <span class="pp-fmt-label">선택 강조</span>
@@ -24412,7 +24415,7 @@
   }
   function ppId(p) { return (p || 'x') + (ppSeq++).toString(36) + Math.random().toString(36).slice(2, 5); }
   function ppNewBoard() {
-    return { id: null, topic: '', refs: [], sections: PP_DEFAULT_SECTIONS.map(function (s) { return { id: s.id, label: s.label, hint: s.hint, color: s.color, pattern: '' }; }), matrix: {}, mine: {}, memo: '' };
+    return { id: null, topic: '', refs: [], sections: PP_DEFAULT_SECTIONS.map(function (s) { return { id: s.id, label: s.label, hint: s.hint, color: s.color, pattern: '', patternScene: '' }; }), matrix: {}, scene: {}, mine: {}, mineScene: {}, memo: '', _sceneSplit: true };
   }
   let ppBoard = ppNewBoard();
   let ppBoards = [];
@@ -24441,26 +24444,47 @@
     }
   }
 
-  // 🎬 "(화면 → …)" / "(장면 …)" 같은 괄호 지시문을 장면 칩 span으로 감싼다 (idempotent)
-  function ppChipScenes(html) {
-    const tmp = document.createElement('div'); tmp.innerHTML = html || '';
-    // 기존 장면 칩 풀기 (재적용 위해)
+  // 🎬 한 칸 HTML을 {copy, scene}로 분리 — "(화면 → …)"/"(장면 …)" 괄호 지시문을 장면으로 뽑아냄
+  const PP_SCENE_RE = /[\(（][^()（）]*(?:화면|장면)[^()（）]*[\)）]/g;
+  function ppSplitCell(html) {
+    if (!html) return { copy: '', scene: '' };
+    const tmp = document.createElement('div'); tmp.innerHTML = html;
     tmp.querySelectorAll('span[data-scene]').forEach(function (s) { while (s.firstChild) s.parentNode.insertBefore(s.firstChild, s); s.remove(); });
-    const re = /[\(（][^()（）]*(?:화면|장면)[^()（）]*[\)）]/g;
+    const scenes = [];
     const walker = document.createTreeWalker(tmp, NodeFilter.SHOW_TEXT, null);
     const tns = []; let nd; while ((nd = walker.nextNode())) tns.push(nd);
     tns.forEach(function (tn) {
-      const txt = tn.nodeValue; re.lastIndex = 0; if (!re.test(txt)) return; re.lastIndex = 0;
-      const frag = document.createDocumentFragment(); let last = 0, m;
-      while ((m = re.exec(txt))) {
-        if (m.index > last) frag.appendChild(document.createTextNode(txt.slice(last, m.index)));
-        const sp = document.createElement('span'); sp.setAttribute('data-scene', '1'); sp.textContent = m[0];
-        frag.appendChild(sp); last = m.index + m[0].length;
+      const txt = tn.nodeValue; PP_SCENE_RE.lastIndex = 0; if (!PP_SCENE_RE.test(txt)) return; PP_SCENE_RE.lastIndex = 0;
+      let m, out = '', last = 0;
+      while ((m = PP_SCENE_RE.exec(txt))) {
+        const inner = m[0].replace(/^[\(（]\s*/, '').replace(/\s*[\)）]$/, '').replace(/^(?:화면|장면)\s*[→\-:]*\s*/, '').trim();
+        if (inner) scenes.push(inner);
+        out += txt.slice(last, m.index); last = m.index + m[0].length;
       }
-      if (last < txt.length) frag.appendChild(document.createTextNode(txt.slice(last)));
-      tn.parentNode.replaceChild(frag, tn);
+      out += txt.slice(last);
+      tn.nodeValue = out;
     });
-    return tmp.innerHTML;
+    // 빈 줄/잉여 공백 정리
+    let copy = tmp.innerHTML.replace(/(<br\s*\/?>\s*){2,}/gi, '<br>').replace(/^\s*(<br\s*\/?>)+/i, '').replace(/(<br\s*\/?>)+\s*$/i, '');
+    return { copy: copy, scene: scenes.map(esc).join('<br>') };
+  }
+  // 보드의 인라인 장면을 장면 칸으로 1회 이전 (마이그레이션)
+  function ppEnsureSceneSplit(board) {
+    if (!board || board._sceneSplit) return;
+    if (!board.scene) board.scene = {}; if (!board.mineScene) board.mineScene = {};
+    Object.keys(board.matrix || {}).forEach(function (k) {
+      const sp = ppSplitCell(board.matrix[k]);
+      board.matrix[k] = sp.copy; if (sp.scene) board.scene[k] = (board.scene[k] ? board.scene[k] + '<br>' : '') + sp.scene;
+    });
+    Object.keys(board.mine || {}).forEach(function (k) {
+      const sp = ppSplitCell(board.mine[k]);
+      board.mine[k] = sp.copy; if (sp.scene) board.mineScene[k] = (board.mineScene[k] ? board.mineScene[k] + '<br>' : '') + sp.scene;
+    });
+    (board.sections || []).forEach(function (s) {
+      const sp = ppSplitCell(s.pattern || '');
+      s.pattern = sp.copy; if (sp.scene) s.patternScene = (s.patternScene ? s.patternScene + '<br>' : '') + sp.scene;
+    });
+    board._sceneSplit = true;
   }
   // PART2 보기 모드: both / scene / copy
   let ppPart2View = 'both';
@@ -24472,13 +24496,20 @@
     const btn = document.getElementById('pp-scene-toggle');
     if (btn) {
       btn.classList.remove('act-scene', 'act-copy');
-      if (ppPart2View === 'scene') { btn.textContent = '🎬 장면만'; btn.classList.add('act-scene'); }
-      else if (ppPart2View === 'copy') { btn.textContent = '📝 원고만'; btn.classList.add('act-copy'); }
+      if (ppPart2View === 'scene') { btn.textContent = '🎬 장면 보기'; btn.classList.add('act-scene'); }
+      else if (ppPart2View === 'copy') { btn.textContent = '🙈 장면 숨기기'; btn.classList.add('act-copy'); }
       else btn.textContent = '👁 둘다';
     }
   }
+  // 2단 셀(말 위 + 🎬장면 아래) HTML
+  function ppCellPair(copyHtml, sceneHtml, copyCls, copyAttr, sceneAttr) {
+    return '<div class="pp-cell pp-cell-copy ' + copyCls + '" contenteditable="true" ' + copyAttr + '>' + (copyHtml || '') + '</div>'
+      + '<div class="pp-scene-zone"><span class="pp-scene-tag">🎬</span><div class="pp-cell pp-cell-scene" contenteditable="true" ' + sceneAttr + '>' + (sceneHtml || '') + '</div></div>';
+  }
   function renderPpPart2() {
     const host = document.getElementById('pp-part2-scroll'); if (!host) return;
+    ppEnsureSceneSplit(ppBoard);
+    if (!ppBoard.scene) ppBoard.scene = {}; if (!ppBoard.mineScene) ppBoard.mineScene = {};
     const refs = ppBoard.refs;
     let h = '<table class="pp-script-grid"><thead><tr><th class="pp-sec-col">섹션</th>';
     if (!refs.length) h += '<th class="pp-ref-empty">🛒 쇼핑으로 레퍼런스를 담으면 비교 칸이 생겨요</th>';
@@ -24499,10 +24530,10 @@
       if (!refs.length) h += '<td class="pp-script-cell empty"></td>';
       else refs.forEach(function (ref) {
         const key = sec.id + '|' + ref.id;
-        h += '<td class="pp-script-td"><div class="pp-cell" contenteditable="true" data-cell="' + key + '">' + ppChipScenes(ppBoard.matrix[key] || '') + '</div></td>';
+        h += '<td class="pp-script-td">' + ppCellPair(ppBoard.matrix[key] || '', ppBoard.scene[key] || '', '', 'data-cell="' + key + '"', 'data-scene-cell="' + key + '"') + '</td>';
       });
-      h += '<td class="pp-script-td pp-pat-td"><div class="pp-cell pp-pat-cell" contenteditable="true" data-pat="' + sec.id + '">' + ppChipScenes(sec.pattern || '') + '</div></td>';
-      h += '<td class="pp-script-td pp-mine-td"><div class="pp-cell pp-mine-cell" contenteditable="true" data-mine="' + sec.id + '">' + ppChipScenes(ppBoard.mine[sec.id] || '') + '</div></td>';
+      h += '<td class="pp-script-td pp-pat-td">' + ppCellPair(sec.pattern || '', sec.patternScene || '', 'pp-pat-cell', 'data-pat="' + sec.id + '"', 'data-pat-scene="' + sec.id + '"') + '</td>';
+      h += '<td class="pp-script-td pp-mine-td">' + ppCellPair(ppBoard.mine[sec.id] || '', ppBoard.mineScene[sec.id] || '', 'pp-mine-cell', 'data-mine="' + sec.id + '"', 'data-mine-scene="' + sec.id + '"') + '</td>';
       h += '</tr>';
     });
     h += '</tbody></table>';
@@ -24521,8 +24552,11 @@
     let html = '';
     try { html = sanitizeScriptHtml(el.innerHTML); } catch (e) { html = el.innerHTML; }
     if (el.dataset.cell != null) ppBoard.matrix[el.dataset.cell] = html;
+    else if (el.dataset.sceneCell != null) { if (!ppBoard.scene) ppBoard.scene = {}; ppBoard.scene[el.dataset.sceneCell] = html; }
     else if (el.dataset.mine != null) { if (!ppBoard.mine) ppBoard.mine = {}; ppBoard.mine[el.dataset.mine] = html; }
+    else if (el.dataset.mineScene != null) { if (!ppBoard.mineScene) ppBoard.mineScene = {}; ppBoard.mineScene[el.dataset.mineScene] = html; }
     else if (el.dataset.pat != null) { const s = ppBoard.sections.find(function (x) { return x.id === el.dataset.pat; }); if (s) s.pattern = html; }
+    else if (el.dataset.patScene != null) { const s = ppBoard.sections.find(function (x) { return x.id === el.dataset.patScene; }); if (s) s.patternScene = html; }
   }
   function ppApplyFmt(fmt) {
     if (!ppActiveCell) { toast('칸을 클릭한 뒤 글자를 드래그하세요'); return; }
@@ -24555,18 +24589,32 @@
       el.addEventListener('keyup', ppSaveCellSel);
       el.addEventListener('mouseup', ppSaveCellSel);
       el.addEventListener('input', function () { ppStoreCell(el); });
-      el.addEventListener('blur', function () { const c = ppChipScenes(el.innerHTML); if (c !== el.innerHTML) el.innerHTML = c; ppStoreCell(el); });
+      el.addEventListener('blur', function () {
+        // 말 칸에 '(화면 →)'을 치면 자동으로 아래 🎬장면 칸으로 옮김
+        if (el.classList.contains('pp-cell-copy')) {
+          const sp = ppSplitCell(el.innerHTML);
+          if (sp.scene) {
+            el.innerHTML = sp.copy; ppStoreCell(el);
+            const td = el.parentNode; const sceneDiv = td ? td.querySelector('.pp-cell-scene') : null;
+            if (sceneDiv) { const cur = sceneDiv.innerHTML.trim(); sceneDiv.innerHTML = (cur ? cur + '<br>' : '') + sp.scene; ppStoreCell(sceneDiv); }
+            return;
+          }
+        }
+        ppStoreCell(el);
+      });
     });
   }
 
   function ppRemoveRef(refId) {
     ppBoard.refs = ppBoard.refs.filter(function (r) { return r.id !== refId; });
-    Object.keys(ppBoard.matrix).forEach(function (k) { if (k.indexOf('|' + refId) === k.length - refId.length - 1) delete ppBoard.matrix[k]; });
+    const suffix = '|' + refId;
+    Object.keys(ppBoard.matrix).forEach(function (k) { if (k.indexOf(suffix) === k.length - suffix.length) delete ppBoard.matrix[k]; });
+    if (ppBoard.scene) Object.keys(ppBoard.scene).forEach(function (k) { if (k.indexOf(suffix) === k.length - suffix.length) delete ppBoard.scene[k]; });
     renderPpPart1(); renderPpPart2();
   }
   function ppAddSection() {
     if (ppBoard.sections.length >= PP_MAX_SECTIONS) { toast('섹션은 최대 ' + PP_MAX_SECTIONS + '줄'); return; }
-    ppBoard.sections.push({ id: ppId('s'), label: '자유', hint: '직접 입력', color: PP_SEC_COLORS[ppBoard.sections.length % PP_SEC_COLORS.length] });
+    ppBoard.sections.push({ id: ppId('s'), label: '자유', hint: '직접 입력', color: PP_SEC_COLORS[ppBoard.sections.length % PP_SEC_COLORS.length], pattern: '', patternScene: '' });
     renderPpPart2();
   }
   // 구조 조각 — 추가하면 원고 칸(PART2) + 막대(PART3)에 동시 반영 (연동)
@@ -24583,7 +24631,7 @@
     if (ppBoard.sections.length >= PP_MAX_SECTIONS) { toast('섹션은 최대 ' + PP_MAX_SECTIONS + '줄'); return; }
     if (custom) { const v = prompt('새 구조 이름 (예: 권위, 데이터)', ''); if (v == null) return; label = (v.trim() || '자유'); color = '#E091B0'; }
     const id = ppId('p');
-    ppBoard.sections.push({ id: id, label: label, hint: '', color: color, _new: true });
+    ppBoard.sections.push({ id: id, label: label, hint: '', color: color, pattern: '', patternScene: '', _new: true });
     ppSegs.push({ id: id, label: label, color: color, cap: '', flow: true });
     renderPpPart2(); renderPpTimeline();
     toast('🧩 "' + label + '" 추가 — 원고 칸 + 막대에 반영');
@@ -24595,20 +24643,20 @@
   }
   // 패턴 메모 + 레퍼런스 칸에서 '내꺼' 초안 자동 생성 (빈 내꺼 칸만)
   function ppDraftMine() {
-    if (!ppBoard.mine) ppBoard.mine = {};
+    if (!ppBoard.mine) ppBoard.mine = {}; if (!ppBoard.mineScene) ppBoard.mineScene = {}; if (!ppBoard.scene) ppBoard.scene = {};
     let n = 0;
     ppBoard.sections.forEach(function (sec) {
       if (ppBoard.mine[sec.id] && ppBoard.mine[sec.id].trim()) return; // 이미 쓴 칸은 건드리지 않음
-      let draft = '';
+      let draft = '', dscene = '';
       if (sec.pattern && sec.pattern.trim()) {
-        draft = sec.pattern.trim();
+        draft = sec.pattern.trim(); dscene = (sec.patternScene || '').trim();
       } else {
         for (let i = 0; i < ppBoard.refs.length; i++) {
-          const v = ppBoard.matrix[sec.id + '|' + ppBoard.refs[i].id];
-          if (v && v.trim()) { draft = v.trim(); break; }
+          const k = sec.id + '|' + ppBoard.refs[i].id; const v = ppBoard.matrix[k];
+          if (v && v.trim()) { draft = v.trim(); dscene = (ppBoard.scene[k] || '').trim(); break; }
         }
       }
-      if (draft) { ppBoard.mine[sec.id] = draft; n++; }
+      if (draft) { ppBoard.mine[sec.id] = draft; if (dscene && !(ppBoard.mineScene[sec.id] || '').trim()) ppBoard.mineScene[sec.id] = dscene; n++; }
     });
     renderPpPart2();
     toast(n ? '✨ 내꺼 초안 ' + n + '칸 — 내 식으로 다듬어보세요!' : '먼저 패턴 메모나 레퍼런스를 채워주세요');
@@ -24622,9 +24670,10 @@
       const row = (rows || []).find(function (r) { return r.id === sel.rowId; });
       if (row && row.scriptMode === 'sections' && row.scriptSections) {
         let filled = 0;
+        if (!ppBoard.scene) ppBoard.scene = {};
         ppBoard.sections.forEach(function (sec) {
           const val = row.scriptSections[sec.id];
-          if (val && String(val).replace(/<[^>]*>/g, '').trim()) { ppBoard.matrix[sec.id + '|' + refId] = String(val); filled++; }
+          if (val && String(val).replace(/<[^>]*>/g, '').trim()) { const key = sec.id + '|' + refId; const sp = ppSplitCell(String(val)); ppBoard.matrix[key] = sp.copy; if (sp.scene) ppBoard.scene[key] = sp.scene; filled++; }
         });
         if (filled) toast('📋 기준 원고 ' + filled + '칸 자동 채움');
       }
@@ -24644,10 +24693,13 @@
       id: ppBoard.id,
       topic: (topic != null ? topic : ppBoard.topic) || '',
       refs: ppBoard.refs.map(function (r) { return { id: r.id, rowId: r.rowId, label: r.label }; }),
-      sections: ppBoard.sections.map(function (s) { return { id: s.id, label: s.label, hint: s.hint, color: s.color, pattern: s.pattern || '' }; }),
+      sections: ppBoard.sections.map(function (s) { return { id: s.id, label: s.label, hint: s.hint, color: s.color, pattern: s.pattern || '', patternScene: s.patternScene || '' }; }),
       matrix: ppBoard.matrix,
+      scene: ppBoard.scene || {},
       mine: ppBoard.mine || {},
+      mineScene: ppBoard.mineScene || {},
       memo: (memo != null ? memo : ppBoard.memo) || '',
+      _sceneSplit: true,
       segs: ppSegs.map(function (s) { return Object.assign({}, s); }),
       notes: ppNotes.map(function (n) { return Object.assign({}, n); }),
       updatedAt: Date.now()
@@ -24673,9 +24725,12 @@
     ppBoard = {
       id: b.id, topic: b.topic || '',
       refs: (b.refs || []).map(function (r) { return { id: r.id, rowId: r.rowId, label: r.label, img: null }; }),
-      sections: (b.sections && b.sections.length ? b.sections : PP_DEFAULT_SECTIONS).map(function (s) { return { id: s.id, label: s.label, hint: s.hint, color: s.color, pattern: s.pattern || '' }; }),
-      matrix: Object.assign({}, b.matrix || {}), mine: Object.assign({}, b.mine || {}), memo: b.memo || ''
+      sections: (b.sections && b.sections.length ? b.sections : PP_DEFAULT_SECTIONS).map(function (s) { return { id: s.id, label: s.label, hint: s.hint, color: s.color, pattern: s.pattern || '', patternScene: s.patternScene || '' }; }),
+      matrix: Object.assign({}, b.matrix || {}), scene: Object.assign({}, b.scene || {}),
+      mine: Object.assign({}, b.mine || {}), mineScene: Object.assign({}, b.mineScene || {}),
+      memo: b.memo || '', _sceneSplit: !!b._sceneSplit
     };
+    ppEnsureSceneSplit(ppBoard);
     ppSegs = (b.segs && b.segs.length) ? b.segs.map(function (s) { return Object.assign({}, s); }) : ppDefaultSegs();
     ppNotes = (b.notes || []).map(function (n) { return Object.assign({}, n); });
     ppScale = 1; ppPanX = 0; ppPanY = 0;
