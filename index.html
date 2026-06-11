@@ -7524,6 +7524,16 @@
   .pp-cell span[data-c="red"] { color: #E85A5A; font-weight: 700; }
   .pp-cell span[data-c="orange"] { color: #F0A23E; font-weight: 700; }
   .pp-cell span[data-c="emerald"] { color: var(--emerald); font-weight: 700; }
+  /* 🎬 장면(화면) 칩 — 말과 시각적으로 분리 */
+  .pp-cell span[data-scene] { color: #2FB6A0; background: rgba(47,182,160,0.10); border-radius: 5px; padding: 0 4px; font-size: 11.5px; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+  /* 보기 모드: 장면만 — 말은 흐리게, 장면 칩만 또렷 */
+  .pp-script-scroll.pp-view-scene .pp-cell, .pp-script-scroll.pp-view-scene .pp-cell b, .pp-script-scroll.pp-view-scene .pp-cell span[data-c] { color: var(--text-faint) !important; opacity: 0.4; font-weight: 500 !important; }
+  .pp-script-scroll.pp-view-scene .pp-cell span[data-scene] { color: #2FB6A0 !important; opacity: 1; background: rgba(47,182,160,0.18); font-weight: 700; }
+  /* 보기 모드: 원고만 — 장면 칩은 흐리게 */
+  .pp-script-scroll.pp-view-copy .pp-cell span[data-scene] { color: var(--text-faint); opacity: 0.3; background: transparent; }
+  .pp-head-scene { border-color: rgba(47,182,160,0.5) !important; color: #2FB6A0 !important; }
+  .pp-head-scene.act-scene { background: rgba(47,182,160,0.16) !important; }
+  .pp-head-scene.act-copy { background: rgba(245,200,75,0.14) !important; border-color: rgba(245,200,75,0.5) !important; color: #F5C84B !important; }
   .pp-fmt-bar { display: flex; align-items: center; gap: 6px; margin-bottom: 10px; flex-wrap: wrap; }
   .pp-fmt-label { font-size: 11px; color: var(--text-faint); font-weight: 700; margin-right: 4px; }
   .pp-head-btns { margin-left: auto; display: flex; gap: 8px; flex-wrap: wrap; }
@@ -16456,7 +16466,7 @@
 
         <!-- PART 2 -->
         <section class="pp-part">
-          <div class="pp-part-head"><span class="pp-part-no">PART 2</span><h3>원고 패턴</h3><span class="pp-part-hint">칸을 눌러 직접 적어요</span><span class="pp-head-btns"><button class="pp-head-add pp-head-piece" type="button" id="pp-piece-btn">🧩 구조 조각 ▾</button><button class="pp-head-add pp-head-draft" type="button" id="pp-draft-mine">✨ 내꺼 자동 초안</button><button class="pp-head-add" type="button" id="pp-colfree-add">＋ 자유 원고 칸</button></span></div>
+          <div class="pp-part-head"><span class="pp-part-no">PART 2</span><h3>원고 패턴</h3><span class="pp-part-hint">칸을 눌러 직접 적어요</span><span class="pp-head-btns"><button class="pp-head-add pp-head-scene" type="button" id="pp-scene-toggle" title="🎬 장면(화면) 보기 — 둘다 / 장면만 / 원고만">👁 둘다</button><button class="pp-head-add pp-head-piece" type="button" id="pp-piece-btn">🧩 구조 조각 ▾</button><button class="pp-head-add pp-head-draft" type="button" id="pp-draft-mine">✨ 내꺼 자동 초안</button><button class="pp-head-add" type="button" id="pp-colfree-add">＋ 자유 원고 칸</button></span></div>
           <div class="pp-piece-palette" id="pp-piece-palette" style="display:none;"></div>
           <div class="pp-fmt-bar" id="pp-fmt-bar">
             <span class="pp-fmt-label">선택 강조</span>
@@ -21150,7 +21160,13 @@
             // span with bold style → convert to <b>
             const isBoldStyle = /font-weight\s*:\s*(bold|[6-9]\d{2})/i.test(style);
 
-            if (c && ['red', 'orange', 'emerald'].includes(c)) {
+            if (child.hasAttribute('data-scene')) {
+              // 🎬 장면 칩 — data-scene만 남기고 보존
+              Array.from(child.attributes).forEach(a => {
+                if (a.name !== 'data-scene') child.removeAttribute(a.name);
+              });
+              walk(child);
+            } else if (c && ['red', 'orange', 'emerald'].includes(c)) {
               // Keep color span, strip all attrs except data-c
               Array.from(child.attributes).forEach(a => {
                 if (a.name !== 'data-c') child.removeAttribute(a.name);
@@ -24425,6 +24441,42 @@
     }
   }
 
+  // 🎬 "(화면 → …)" / "(장면 …)" 같은 괄호 지시문을 장면 칩 span으로 감싼다 (idempotent)
+  function ppChipScenes(html) {
+    const tmp = document.createElement('div'); tmp.innerHTML = html || '';
+    // 기존 장면 칩 풀기 (재적용 위해)
+    tmp.querySelectorAll('span[data-scene]').forEach(function (s) { while (s.firstChild) s.parentNode.insertBefore(s.firstChild, s); s.remove(); });
+    const re = /[\(（][^()（）]*(?:화면|장면)[^()（）]*[\)）]/g;
+    const walker = document.createTreeWalker(tmp, NodeFilter.SHOW_TEXT, null);
+    const tns = []; let nd; while ((nd = walker.nextNode())) tns.push(nd);
+    tns.forEach(function (tn) {
+      const txt = tn.nodeValue; re.lastIndex = 0; if (!re.test(txt)) return; re.lastIndex = 0;
+      const frag = document.createDocumentFragment(); let last = 0, m;
+      while ((m = re.exec(txt))) {
+        if (m.index > last) frag.appendChild(document.createTextNode(txt.slice(last, m.index)));
+        const sp = document.createElement('span'); sp.setAttribute('data-scene', '1'); sp.textContent = m[0];
+        frag.appendChild(sp); last = m.index + m[0].length;
+      }
+      if (last < txt.length) frag.appendChild(document.createTextNode(txt.slice(last)));
+      tn.parentNode.replaceChild(frag, tn);
+    });
+    return tmp.innerHTML;
+  }
+  // PART2 보기 모드: both / scene / copy
+  let ppPart2View = 'both';
+  function ppApplyPart2View() {
+    const host = document.getElementById('pp-part2-scroll'); if (!host) return;
+    host.classList.remove('pp-view-scene', 'pp-view-copy');
+    if (ppPart2View === 'scene') host.classList.add('pp-view-scene');
+    else if (ppPart2View === 'copy') host.classList.add('pp-view-copy');
+    const btn = document.getElementById('pp-scene-toggle');
+    if (btn) {
+      btn.classList.remove('act-scene', 'act-copy');
+      if (ppPart2View === 'scene') { btn.textContent = '🎬 장면만'; btn.classList.add('act-scene'); }
+      else if (ppPart2View === 'copy') { btn.textContent = '📝 원고만'; btn.classList.add('act-copy'); }
+      else btn.textContent = '👁 둘다';
+    }
+  }
   function renderPpPart2() {
     const host = document.getElementById('pp-part2-scroll'); if (!host) return;
     const refs = ppBoard.refs;
@@ -24447,15 +24499,16 @@
       if (!refs.length) h += '<td class="pp-script-cell empty"></td>';
       else refs.forEach(function (ref) {
         const key = sec.id + '|' + ref.id;
-        h += '<td class="pp-script-td"><div class="pp-cell" contenteditable="true" data-cell="' + key + '">' + (ppBoard.matrix[key] || '') + '</div></td>';
+        h += '<td class="pp-script-td"><div class="pp-cell" contenteditable="true" data-cell="' + key + '">' + ppChipScenes(ppBoard.matrix[key] || '') + '</div></td>';
       });
-      h += '<td class="pp-script-td pp-pat-td"><div class="pp-cell pp-pat-cell" contenteditable="true" data-pat="' + sec.id + '">' + (sec.pattern || '') + '</div></td>';
-      h += '<td class="pp-script-td pp-mine-td"><div class="pp-cell pp-mine-cell" contenteditable="true" data-mine="' + sec.id + '">' + (ppBoard.mine[sec.id] || '') + '</div></td>';
+      h += '<td class="pp-script-td pp-pat-td"><div class="pp-cell pp-pat-cell" contenteditable="true" data-pat="' + sec.id + '">' + ppChipScenes(sec.pattern || '') + '</div></td>';
+      h += '<td class="pp-script-td pp-mine-td"><div class="pp-cell pp-mine-cell" contenteditable="true" data-mine="' + sec.id + '">' + ppChipScenes(ppBoard.mine[sec.id] || '') + '</div></td>';
       h += '</tr>';
     });
     h += '</tbody></table>';
     host.innerHTML = h;
     ppWirePart2();
+    ppApplyPart2View();
   }
 
   let ppActiveCell = null;
@@ -24502,6 +24555,7 @@
       el.addEventListener('keyup', ppSaveCellSel);
       el.addEventListener('mouseup', ppSaveCellSel);
       el.addEventListener('input', function () { ppStoreCell(el); });
+      el.addEventListener('blur', function () { const c = ppChipScenes(el.innerHTML); if (c !== el.innerHTML) el.innerHTML = c; ppStoreCell(el); });
     });
   }
 
@@ -24734,6 +24788,8 @@
       }
       const shop = document.getElementById('pp-shop-btn'); if (shop) shop.addEventListener('click', ppShop);
       const coladd = document.getElementById('pp-colfree-add'); if (coladd) coladd.addEventListener('click', ppAddFreeRef);
+      const sceneBtn = document.getElementById('pp-scene-toggle');
+      if (sceneBtn) sceneBtn.addEventListener('click', function () { ppPart2View = ppPart2View === 'both' ? 'scene' : (ppPart2View === 'scene' ? 'copy' : 'both'); ppApplyPart2View(); });
       const draftm = document.getElementById('pp-draft-mine'); if (draftm) draftm.addEventListener('click', ppDraftMine);
       const pieceBtn = document.getElementById('pp-piece-btn');
       const piecePal = document.getElementById('pp-piece-palette');
