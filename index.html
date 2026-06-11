@@ -7500,16 +7500,27 @@
   .pp-script-cell.empty { color: var(--text-faint); }
   .pp-script-cell.empty::before { content: '✎ 여기 적기'; opacity: 0.45; font-size: 11px; font-style: normal; }
   /* PART 2 데이터 기반 — 편집 셀/섹션/레퍼런스 */
-  .pp-ref-th { background: var(--bg-elev); padding: 12px 9px 9px; min-width: 172px; text-align: center; }
-  .pp-ref-thumb { position: relative; width: 78px; aspect-ratio: 9 / 16; margin: 0 auto 7px; border-radius: 9px; overflow: hidden; background: var(--bg-void); border: 1px solid #2A3340; box-shadow: 0 4px 14px rgba(0,0,0,0.4); }
+  /* 썸네일 헤더 — 표 느낌 빼고 크고 여유롭게(떠 있는 카드) */
+  .pp-ref-th { border: none !important; padding: 22px 18px 16px !important; min-width: 200px; text-align: center; vertical-align: bottom; }
+  .pp-ref-thumb { position: relative; width: 138px; aspect-ratio: 9 / 16; margin: 0 auto 11px; border-radius: 14px; overflow: hidden; background: #15171c; border: 1px solid #2A3340; box-shadow: 0 12px 30px rgba(0,0,0,0.55); transition: transform .16s, box-shadow .16s; }
+  .pp-ref-th:hover .pp-ref-thumb { transform: translateY(-3px); box-shadow: 0 16px 38px rgba(0,0,0,0.6); }
   .pp-ref-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .pp-ref-thumb-empty { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; color: var(--text-faint); font-size: 22px; opacity: 0.35; }
-  .pp-ref-no { position: absolute; top: 4px; left: 4px; font-size: 9.5px; font-weight: 900; color: #06140C; background: var(--emerald); padding: 1px 6px; border-radius: 5px; box-shadow: 0 1px 4px rgba(0,0,0,0.45); }
-  .pp-ref-rm { position: absolute; top: 4px; right: 4px; background: rgba(0,0,0,0.55); border: none; color: #fff; width: 18px; height: 18px; line-height: 1; border-radius: 5px; font-size: 11px; cursor: pointer; opacity: 0; transition: opacity .12s; }
+  .pp-ref-thumb-empty { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; color: var(--text-faint); font-size: 30px; opacity: 0.3; }
+  .pp-ref-no { position: absolute; top: 6px; left: 6px; font-size: 11px; font-weight: 900; color: #06140C; background: var(--emerald); padding: 2px 8px; border-radius: 6px; box-shadow: 0 2px 6px rgba(0,0,0,0.5); }
+  .pp-ref-rm { position: absolute; top: 6px; right: 6px; background: rgba(0,0,0,0.55); border: none; color: #fff; width: 20px; height: 20px; line-height: 1; border-radius: 6px; font-size: 12px; cursor: pointer; opacity: 0; transition: opacity .12s; }
   .pp-ref-th:hover .pp-ref-rm { opacity: 1; }
   .pp-ref-rm:hover { background: var(--wine); }
-  .pp-ref-name { display: block; width: 100%; background: transparent; border: none; color: var(--text-main); font-family: inherit; font-size: 12px; font-weight: 800; padding: 0; box-sizing: border-box; text-align: center; }
+  .pp-ref-name { display: block; width: 100%; background: transparent; border: none; color: var(--text-main); font-family: inherit; font-size: 13px; font-weight: 800; padding: 0; box-sizing: border-box; text-align: center; }
   .pp-ref-name:focus { outline: none; }
+  /* 조회수 뱃지 + 떡상(최고 조회수) 강조 */
+  .pp-ref-views { position: absolute; bottom: 6px; left: 6px; background: rgba(0,0,0,0.72); color: #fff; font-size: 10.5px; font-weight: 800; padding: 2px 7px; border-radius: 6px; backdrop-filter: blur(2px); }
+  .pp-ref-views.top { background: rgba(245,200,75,0.94); color: #1a1400; }
+  .pp-ref-th-top .pp-ref-thumb { border-color: #F5C84B; box-shadow: 0 12px 30px rgba(0,0,0,0.55), 0 0 0 2px rgba(245,200,75,0.55); }
+  .pp-ref-thumb[draggable="true"] { cursor: grab; }
+  .pp-ref-thumb.pp-dragging { opacity: 0.45; cursor: grabbing; }
+  .pp-ref-th.pp-drag-over .pp-ref-thumb { outline: 2px dashed var(--emerald); outline-offset: 3px; }
+  .pp-head-sort { border-color: rgba(255,122,51,0.5) !important; color: var(--flare) !important; }
+  .pp-head-sort:hover { background: rgba(255,122,51,0.14) !important; }
   .pp-ref-empty { background: var(--bg-elev); padding: 11px 14px; font-size: 12px; color: var(--text-faint); font-weight: 600; text-align: left; }
   .pp-sec-label { display: block; width: 100%; background: transparent; border: none; color: var(--text-main); font-family: inherit; font-size: 12.5px; font-weight: 800; padding: 0; box-sizing: border-box; }
   .pp-sec-label:focus { outline: none; }
@@ -10448,7 +10459,16 @@
     align-items: end;
   }
   @media (max-width: 600px) {
-    .sc-title-row { grid-template-columns: 1fr; }
+    .sc-title-row { grid-template-columns: 1fr; gap: 4px; }
+    /* 상단 도구 아이콘: 절대배치 해제 → 카드 맨 위 한 줄로(제목과 안 겹침) */
+    .sc-card-tools { position: static !important; top: auto !important; right: auto !important; margin: 0 0 12px; flex-wrap: wrap; gap: 7px; justify-content: flex-start; }
+    /* 후킹 자동완성 토글: 세로 블록 → 한 줄(라벨 왼쪽 · 스위치 오른쪽) */
+    .sc-ac-cell { flex-direction: row !important; align-items: center; justify-content: space-between; margin-top: 2px; padding: 7px 11px; background: var(--bg-void); border: 1px solid var(--line); border-radius: 9px; }
+    .sc-ac-cell .sc-mini-label { margin-bottom: 0; }
+    .sc-ac-toggle-wrap { height: auto; padding: 0; }
+    /* 참고 벤치마킹 + 날짜: 좁으면 줄바꿈 */
+    .sc-bench-head { flex-wrap: wrap; align-items: center; gap: 7px 10px; }
+    .sc-date-inline .sc-date-input { width: 134px; }
   }
   .sc-title-cell, .sc-date-cell, .sc-ac-cell {
     display: flex;
@@ -12757,35 +12777,52 @@
   }
 
   .entry-disasm-btn {
-    background: var(--bg-elev);
-    border: 1px solid var(--line);
-    color: var(--text-sub);
-    padding: 12px 16px;
-    border-radius: 8px;
+    position: relative;
+    background: linear-gradient(135deg, rgba(42,191,106,0.18), rgba(42,191,106,0.05));
+    border: 1.5px solid var(--emerald);
+    color: var(--emerald);
+    padding: 12px 18px;
+    border-radius: 9px;
     cursor: pointer;
     font-family: 'Pretendard', sans-serif;
-    font-size: 13px;
-    font-weight: 700;
+    font-size: 13.5px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    transition: all 0.15s;
+    gap: 9px;
+    box-shadow: 0 0 16px rgba(42,191,106,0.16), inset 0 1px 0 rgba(255,255,255,0.04);
+    transition: all 0.18s;
+    overflow: hidden;
+  }
+  .entry-disasm-btn::after {
+    content: '';
+    position: absolute; top: 0; left: -120%;
+    width: 70%; height: 100%;
+    background: linear-gradient(100deg, transparent, rgba(255,255,255,0.10), transparent);
+    transform: skewX(-18deg);
+    transition: left 0.55s ease;
   }
   .entry-disasm-btn:hover {
-    border-color: var(--emerald);
-    color: var(--emerald);
-    background: var(--emerald-faint);
+    background: linear-gradient(135deg, rgba(42,191,106,0.30), rgba(42,191,106,0.12));
+    box-shadow: 0 0 26px rgba(42,191,106,0.34), 0 4px 14px rgba(42,191,106,0.2);
+    transform: translateY(-1px);
   }
+  .entry-disasm-btn:hover::after { left: 130%; }
+  .entry-disasm-btn:active { transform: translateY(0) scale(0.99); }
   .entry-disasm-btn.has-data {
-    border-color: var(--emerald-line);
-    color: var(--emerald);
-    background: var(--emerald-faint);
+    border-color: #F5C84B;
+    color: #F5C84B;
+    background: linear-gradient(135deg, rgba(245,200,75,0.2), rgba(245,200,75,0.06));
+    box-shadow: 0 0 18px rgba(245,200,75,0.22);
   }
   .entry-disasm-icon {
-    font-size: 16px;
+    font-size: 17px;
     line-height: 1;
+    transition: transform 0.4s ease;
   }
+  .entry-disasm-btn:hover .entry-disasm-icon { transform: rotate(180deg); }
 
   .entry-save-btn {
     background: var(--emerald);
@@ -16471,7 +16508,7 @@
 
         <!-- PART 2 -->
         <section class="pp-part">
-          <div class="pp-part-head"><span class="pp-part-no">PART 2</span><h3>원고 패턴</h3><span class="pp-part-hint">칸을 눌러 직접 적어요</span><span class="pp-head-btns"><button class="pp-head-add pp-head-scene" type="button" id="pp-scene-toggle" title="🎬 장면(화면) — 둘다 / 장면 보기 / 장면 숨기기">👁 둘다</button><button class="pp-head-add pp-head-piece" type="button" id="pp-piece-btn">🧩 구조 조각 ▾</button><button class="pp-head-add pp-head-draft" type="button" id="pp-draft-mine">✨ 내꺼 자동 초안</button><button class="pp-head-add" type="button" id="pp-colfree-add">＋ 자유 원고 칸</button></span></div>
+          <div class="pp-part-head"><span class="pp-part-no">PART 2</span><h3>원고 패턴</h3><span class="pp-part-hint">칸을 눌러 직접 적어요</span><span class="pp-head-btns"><button class="pp-head-add pp-head-sort" type="button" id="pp-sort-views" title="조회수 높은 순으로 칸 정렬">🔥 조회수 순</button><button class="pp-head-add pp-head-scene" type="button" id="pp-scene-toggle" title="🎬 장면(화면) — 둘다 / 장면 보기 / 장면 숨기기">👁 둘다</button><button class="pp-head-add pp-head-piece" type="button" id="pp-piece-btn">🧩 구조 조각 ▾</button><button class="pp-head-add pp-head-draft" type="button" id="pp-draft-mine">✨ 내꺼 자동 초안</button><button class="pp-head-add" type="button" id="pp-colfree-add">＋ 자유 원고 칸</button></span></div>
           <div class="pp-piece-palette" id="pp-piece-palette" style="display:none;"></div>
           <div class="pp-fmt-bar" id="pp-fmt-bar">
             <span class="pp-fmt-label">선택 강조</span>
@@ -21710,12 +21747,12 @@
   }
 
   async function saveDetail() {
-    // === Entry 모드 ===
+    // === Entry 모드 === 분해 정보 반영 후 바로 벤치마킹 시트에 저장
     if (entryDisasmMode) {
       applyDisasmToEntry();
       entryDisasmMode = false;
       closeModal();
-      toast('분해 정보 적용됨');
+      await saveEntry();
       return;
     }
 
@@ -24493,17 +24530,44 @@
       + '<div class="pp-scene-zone"><div class="pp-scene-lbl">🎬 장면</div><div class="pp-cell pp-cell-scene" contenteditable="true" ' + sceneAttr + '>' + ppCleanSceneLead(sceneHtml) + '</div></div>'
       + '</div>';
   }
+  // 레퍼런스의 조회수 (연결된 시트 행에서)
+  function ppRefViews(ref) {
+    if (!ref || !ref.rowId) return 0;
+    const r = (rows || []).find(function (x) { return x.id === ref.rowId; });
+    return r ? (parseInt(r.views, 10) || 0) : 0;
+  }
+  function ppSortByViews() {
+    if (!ppBoard.refs || ppBoard.refs.length < 2) { toast('레퍼런스가 2개 이상이어야 정렬해요'); return; }
+    ppBoard.refs.sort(function (a, b) { return ppRefViews(b) - ppRefViews(a); });
+    renderPpPart2();
+    toast('🔥 조회수 높은 순으로 정렬');
+  }
+  function ppReorderRefs(srcId, targetId) {
+    if (!srcId || !targetId || srcId === targetId) return;
+    const arr = ppBoard.refs;
+    const si = arr.findIndex(function (r) { return r.id === srcId; });
+    if (si < 0) return;
+    const moved = arr.splice(si, 1)[0];
+    const ti = arr.findIndex(function (r) { return r.id === targetId; });
+    arr.splice(ti < 0 ? arr.length : ti, 0, moved);
+    renderPpPart2();
+  }
   function renderPpPart2() {
     const host = document.getElementById('pp-part2-scroll'); if (!host) return;
     ppEnsureSceneSplit(ppBoard);
     if (!ppBoard.scene) ppBoard.scene = {}; if (!ppBoard.mineScene) ppBoard.mineScene = {};
     const refs = ppBoard.refs;
+    const maxViews = refs.reduce(function (m, r) { return Math.max(m, ppRefViews(r)); }, 0);
     let h = '<table class="pp-script-grid"><thead><tr><th class="pp-sec-col">섹션</th>';
     if (!refs.length) h += '<th class="pp-ref-empty">🛒 위 “레퍼런스 쇼핑”으로 담으면 칸마다 썸네일이 떠요</th>';
     else refs.forEach(function (ref, i) {
       const thumb = ref.img ? '<img src="' + ppEsc(ref.img) + '" alt=""/>' : '<div class="pp-ref-thumb-empty">▣</div>';
-      h += '<th class="pp-ref-th"><div class="pp-ref-thumb">' + thumb
+      const v = ppRefViews(ref);
+      const isTop = v > 0 && v === maxViews && refs.length > 1;
+      const viewsBadge = v > 0 ? '<span class="pp-ref-views' + (isTop ? ' top' : '') + '">' + (isTop ? '🔥 ' : '👁 ') + fmtViews(v) + '</span>' : '';
+      h += '<th class="pp-ref-th' + (isTop ? ' pp-ref-th-top' : '') + '"><div class="pp-ref-thumb" draggable="true" data-refdrag="' + ref.id + '" title="드래그해서 순서 변경">' + thumb
         + '<span class="pp-ref-no">#' + (i + 1) + '</span>'
+        + viewsBadge
         + '<button class="pp-ref-rm" data-refrm2="' + ref.id + '" type="button" title="빼기">✕</button></div>'
         + '<input class="pp-ref-name" data-refname="' + ref.id + '" value="' + ppEsc(ref.label || '') + '" /></th>';
     });
@@ -24537,6 +24601,7 @@
   }
 
   let ppActiveCell = null;
+  let ppDragSrc = null;
   let ppCellSel = null;
   function ppSaveCellSel() {
     const sel = window.getSelection();
@@ -24575,6 +24640,16 @@
       });
     });
     host.querySelectorAll('[data-refrm2]').forEach(function (b) { b.addEventListener('click', function () { ppRemoveRef(b.dataset.refrm2); }); });
+    // 썸네일 드래그로 칸 순서 변경
+    host.querySelectorAll('.pp-ref-thumb[data-refdrag]').forEach(function (el) {
+      el.addEventListener('dragstart', function (e) { ppDragSrc = el.dataset.refdrag; el.classList.add('pp-dragging'); try { e.dataTransfer.effectAllowed = 'move'; e.dataTransfer.setData('text/plain', el.dataset.refdrag); } catch (_) {} });
+      el.addEventListener('dragend', function () { ppDragSrc = null; host.querySelectorAll('.pp-dragging,.pp-drag-over').forEach(function (x) { x.classList.remove('pp-dragging', 'pp-drag-over'); }); });
+    });
+    host.querySelectorAll('.pp-ref-th').forEach(function (th) {
+      th.addEventListener('dragover', function (e) { if (ppDragSrc) { e.preventDefault(); th.classList.add('pp-drag-over'); } });
+      th.addEventListener('dragleave', function () { th.classList.remove('pp-drag-over'); });
+      th.addEventListener('drop', function (e) { e.preventDefault(); const t = th.querySelector('[data-refdrag]'); const targetId = t ? t.dataset.refdrag : null; const src = ppDragSrc; ppDragSrc = null; if (src && targetId) ppReorderRefs(src, targetId); });
+    });
     host.querySelectorAll('.pp-sec-label').forEach(function (inp) { inp.addEventListener('input', function () { const s = ppBoard.sections.find(function (x) { return x.id === inp.dataset.seclabel; }); if (s) s.label = inp.value; }); });
     host.querySelectorAll('.pp-sec-hint').forEach(function (inp) { inp.addEventListener('input', function () { const s = ppBoard.sections.find(function (x) { return x.id === inp.dataset.sechint; }); if (s) s.hint = inp.value; }); });
     host.querySelectorAll('[data-secrm]').forEach(function (b) { b.addEventListener('click', function () { if (ppBoard.sections.length <= 1) { toast('최소 1줄은 필요해요'); return; } const id = b.dataset.secrm; ppBoard.sections = ppBoard.sections.filter(function (x) { return x.id !== id; }); ppSegs = ppSegs.filter(function (x) { return x.id !== id; }); renderPpPart2(); renderPpTimeline(); }); });
@@ -24837,6 +24912,7 @@
       }
       const shop = document.getElementById('pp-shop-btn'); if (shop) shop.addEventListener('click', ppShop);
       const coladd = document.getElementById('pp-colfree-add'); if (coladd) coladd.addEventListener('click', ppAddFreeRef);
+      const sortv = document.getElementById('pp-sort-views'); if (sortv) sortv.addEventListener('click', ppSortByViews);
       const sceneBtn = document.getElementById('pp-scene-toggle');
       if (sceneBtn) sceneBtn.addEventListener('click', function () { ppPart2View = ppPart2View === 'both' ? 'scene' : (ppPart2View === 'scene' ? 'copy' : 'both'); ppApplyPart2View(); });
       const draftm = document.getElementById('pp-draft-mine'); if (draftm) draftm.addEventListener('click', ppDraftMine);
