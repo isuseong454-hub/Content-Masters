@@ -12266,8 +12266,8 @@
 
   .entry-body {
     display: grid;
-    grid-template-columns: 188px 1fr;   /* 공감댓글 제거 → 썸네일 크게 + 본문 넓게 */
-    gap: 26px;
+    grid-template-columns: 280px 1fr;   /* 썸네일: 수식어 끝선이 분해하기 버튼 끝선에 대략 맞는 크기 */
+    gap: 28px;
     position: relative;
     z-index: 1;
   }
@@ -12286,16 +12286,16 @@
     .entry-body { grid-template-columns: 1fr; gap: 16px; }   /* 모바일: 썸네일 위 → 본문 아래로 세로 스택 */
     .entry-col-main { grid-column: 1 / -1; }
     /* 모바일에서 썸네일이 너무 커지지 않게 가운데 + 폭 제한 */
-    .entry-col-thumb { max-width: 220px; margin-left: auto; margin-right: auto; width: 100%; }
-    .entry-thumb-box { max-width: 200px; margin-left: auto; margin-right: auto; }
+    .entry-col-thumb { max-width: 300px; margin-left: auto; margin-right: auto; width: 100%; }
+    .entry-thumb-box { max-width: 270px; margin-left: auto; margin-right: auto; }
   }
   @media (max-width: 480px) {
     .entry-wrap { padding: 14px 14px 6px; }
     .entry-card { padding: 18px; }
     .entry-body { gap: 14px; }
     .entry-title { font-size: 22px; }
-    .entry-col-thumb { max-width: 200px; }
-    .entry-thumb-box { max-width: 180px; }
+    .entry-col-thumb { max-width: 260px; }
+    .entry-thumb-box { max-width: 240px; }
   }
   /* 조회수 티어 버튼 (카드) — 한 줄 칩 */
   .entry-views-picker { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
