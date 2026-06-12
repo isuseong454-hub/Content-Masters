@@ -12293,19 +12293,29 @@
   .entry-col-thumb .entry-mini-input::placeholder { color: var(--text-mute); font-weight: 500; }
 
   @media (max-width: 700px) {
-    /* 하이브리드: 썸네일+조회수+주제는 위에 가로로, 컨텐츠 유형부터는 전체폭 아래로 */
-    .entry-body { grid-template-columns: 108px 1fr; gap: 10px 12px; align-items: start; }
-    /* display:contents가 뒤에 오는 .entry-col{display:flex}에 명시도 동률로 밀리던 버그 → .entry-body 붙여 명시도 올림 */
-    .entry-body .entry-col-main { display: contents; }
-    /* 그리드 아이템(특히 input)의 min-width:auto 블로우아웃 방지 — 안 그러면 1fr 트랙이 안 줄어 카드 우측이 잘림 */
-    .entry-col-thumb, .entry-col-main > .entry-section, .entry-col-main > .entry-actions { min-width: 0; }
+    /* 하이브리드: 썸네일(좌) 옆에 주제·썸네일이름·수식어, 그 아래 전체폭으로 조회수→컨텐츠유형→원고→링크 */
+    .entry-body { grid-template-columns: 108px 1fr; gap: 8px 12px; align-items: start; }
+    /* 썸네일/메인 컬럼 래퍼를 해체(display:contents)해 자식들이 직접 그리드 아이템이 되게.
+       명시도를 .entry-body로 올려야 뒤에 오는 .entry-col{display:flex}에 안 밀림 */
+    .entry-body .entry-col-thumb, .entry-body .entry-col-main { display: contents; }
+    /* 그리드 아이템 min-width:auto 블로우아웃 방지(특히 input) — 안 그러면 트랙이 안 줄어 우측 잘림 */
+    .entry-col-thumb > *, .entry-col-main > * { min-width: 0; }
     .entry-body .entry-input, .entry-body .entry-script-edit { min-width: 0; }
-    .entry-col-thumb { grid-column: 1; grid-row: 1 / span 2; max-width: none; margin: 0; width: 100%; }
-    .entry-col-main > .entry-section:nth-of-type(1) { grid-column: 2; grid-row: 1; }
-    .entry-col-main > .entry-section:nth-of-type(2) { grid-column: 2; grid-row: 2; }
-    .entry-col-main > .entry-section:nth-of-type(n+3),
-    .entry-col-main > .entry-actions { grid-column: 1 / -1; }
-    .entry-col-thumb .entry-mini-input { font-size: 11.5px; padding: 8px 9px; margin-top: 7px; }
+    /* 좌측 컬럼: 썸네일 박스(라벨 숨김), 우측 3칸(주제·이름·수식어) 높이만큼 세로 span */
+    .entry-col-thumb > .entry-mini-label { display: none; }
+    .entry-col-thumb > .entry-thumb-box { grid-column: 1; grid-row: 1 / 4; width: 100%; margin: 0; }
+    /* 우측 위: 주제(section 2) → 썸네일이름 → 수식어 */
+    .entry-col-main > .entry-section:nth-of-type(2) { grid-column: 2; grid-row: 1; }
+    .entry-col-thumb > #entry-thumb-name { grid-column: 2; grid-row: 2; margin: 0; }
+    .entry-col-thumb > #entry-copy-text { grid-column: 2; grid-row: 3; margin: 0; }
+    /* 전체폭 아래: 조회수(section 1) → 컨텐츠유형 → 원고 → 링크 → 버튼 → 분해상태 */
+    .entry-col-main > .entry-section:nth-of-type(1) { grid-column: 1 / -1; grid-row: 4; }
+    .entry-col-main > .entry-section:nth-of-type(3) { grid-column: 1 / -1; grid-row: 5; }
+    .entry-col-main > .entry-section:nth-of-type(4) { grid-column: 1 / -1; grid-row: 6; }
+    .entry-col-main > .entry-section:nth-of-type(5) { grid-column: 1 / -1; grid-row: 7; }
+    .entry-col-main > .entry-actions { grid-column: 1 / -1; grid-row: 8; }
+    .entry-col-main > .entry-disasm-status { grid-column: 1 / -1; grid-row: 9; }
+    .entry-col-thumb .entry-mini-input { font-size: 11.5px; padding: 8px 9px; margin-top: 0; }
     .entry-col-thumb .entry-mini-label { font-size: 11px; }
   }
   @media (max-width: 480px) {
