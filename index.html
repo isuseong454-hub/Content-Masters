@@ -12293,19 +12293,19 @@
   .entry-col-thumb .entry-mini-input::placeholder { color: var(--text-mute); font-weight: 500; }
 
   @media (max-width: 700px) {
-    .entry-body { grid-template-columns: 1fr; gap: 16px; }   /* 모바일: 썸네일 위 → 본문 아래로 세로 스택 */
-    .entry-col-main { grid-column: 1 / -1; }
-    /* 모바일에서 썸네일이 너무 커지지 않게 가운데 + 폭 제한 */
-    .entry-col-thumb { max-width: 300px; margin-left: auto; margin-right: auto; width: 100%; }
-    .entry-thumb-box { max-width: 270px; margin-left: auto; margin-right: auto; }
+    /* 모바일도 가로모드 유지 — 썸네일 작게 왼쪽 + 본문 오른쪽 (세로 스택 X) */
+    .entry-body { grid-template-columns: 116px 1fr; gap: 13px; }
+    .entry-col-thumb { max-width: none; margin: 0; width: 100%; }
+    .entry-thumb-box { max-width: none; margin: 0; }
+    .entry-col-thumb .entry-mini-input { font-size: 11.5px; padding: 8px 9px; margin-top: 7px; }
+    .entry-col-thumb .entry-mini-label { font-size: 11px; }
   }
   @media (max-width: 480px) {
-    .entry-wrap { padding: 14px 14px 6px; }
-    .entry-card { padding: 18px; }
-    .entry-body { gap: 14px; }
-    .entry-title { font-size: 22px; }
-    .entry-col-thumb { max-width: 260px; }
-    .entry-thumb-box { max-width: 240px; }
+    .entry-wrap { padding: 14px 12px 6px; }
+    .entry-card { padding: 16px 13px; }
+    .entry-body { grid-template-columns: 96px 1fr; gap: 11px; }   /* 더 작은 폰: 썸네일 더 작게 */
+    .entry-title { font-size: 21px; }
+    .entry-col-thumb .entry-mini-input { font-size: 11px; padding: 7px 8px; }
   }
   /* 조회수 티어 버튼 (카드) — 한 줄 칩 */
   .entry-views-picker { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
@@ -30564,11 +30564,18 @@
     if (typeof exp === 'number') expMs = exp;
     else if (typeof exp === 'string') { const t = Date.parse(exp); if (!isNaN(t)) expMs = t; }
     if (expMs) dleft = Math.ceil((expMs - Date.now()) / 86400000);
-    let tier = null;
-    if (dleft !== null && dleft >= 0 && dleft <= 7) tier = 'urgent';      // 만료 1주일 전 — 매일
-    else if (dleft !== null && dleft > 7 && dleft <= 30) tier = 'soon';   // 만료 한 달 전
-    else if (backupDays >= 14) tier = 'stale';                           // 백업 오래됨/없음
+    // 만료(코드 유지기간) 기준으로만 — 백업만 오래됐다고 항상 뜨던 'stale' 제거
+    let tier = null, minGap = 1;
+    if (dleft !== null && dleft >= 0) {
+      if (dleft <= 7) { tier = 'urgent'; minGap = 1; }          // 1주 전부터 — 매일 계속
+      else if (dleft <= 14) { tier = 'twoweek'; minGap = 2; }   // 2주 전 — 이틀에 한 번
+      else if (dleft <= 30) { tier = 'soon'; minGap = 4; }      // 한 달 전 — 나흘에 한 번
+    }
     if (!tier) return;
+    // 마지막 알림 이후 minGap일 지났을 때만 (만료 가까울수록 자주)
+    let gap = 999;
+    if (lastShown) { const d = (Date.parse(today) - Date.parse(lastShown)) / 86400000; if (!isNaN(d)) gap = Math.floor(d); }
+    if (gap < minGap) return;
     try { localStorage.setItem('cm-backup-reminded', today); } catch (e) {}
     showBackupReminder(tier, dleft, backupDays, lastBackup);
   }
@@ -30576,7 +30583,8 @@
     if (document.getElementById('backup-remind-ov')) return;
     let head, msg, accent = '#F5C84B';
     if (tier === 'urgent') { accent = '#E8908F'; head = '⏳ 계정 만료 D-' + dleft + '!'; msg = '만료되면 데이터에 접근하지 못할 수 있어요.<br/><b>지금 백업</b>해서 안전하게 보관하세요.'; }
-    else if (tier === 'soon') { head = '📦 계정 만료 약 ' + dleft + '일 전'; msg = '만료 전에 데이터를 미리 <b>백업</b>해두는 걸 권장해요.'; }
+    else if (tier === 'twoweek') { accent = '#F0A23E'; head = '📦 계정 만료 약 ' + dleft + '일 전 (2주 안)'; msg = '곧 만료돼요. 데이터를 꼭 <b>백업</b>해두세요.'; }
+    else if (tier === 'soon') { head = '📦 계정 만료 약 ' + dleft + '일 전 (한 달 안)'; msg = '만료 전에 데이터를 미리 <b>백업</b>해두는 걸 권장해요.'; }
     else { head = '📦 데이터 백업할 때예요'; msg = (lastBackup ? '마지막 백업이 <b>' + backupDays + '일 전</b>이에요.' : '<b>아직 백업한 적이 없어요.</b>') + '<br/>지금 한 번 내보내두면 안심돼요.'; }
     const ov = document.createElement('div');
     ov.id = 'backup-remind-ov';
