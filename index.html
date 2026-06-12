@@ -12295,7 +12295,11 @@
   @media (max-width: 700px) {
     /* 하이브리드: 썸네일+조회수+주제는 위에 가로로, 컨텐츠 유형부터는 전체폭 아래로 */
     .entry-body { grid-template-columns: 108px 1fr; gap: 10px 12px; align-items: start; }
-    .entry-col-main { display: contents; }
+    /* display:contents가 뒤에 오는 .entry-col{display:flex}에 명시도 동률로 밀리던 버그 → .entry-body 붙여 명시도 올림 */
+    .entry-body .entry-col-main { display: contents; }
+    /* 그리드 아이템(특히 input)의 min-width:auto 블로우아웃 방지 — 안 그러면 1fr 트랙이 안 줄어 카드 우측이 잘림 */
+    .entry-col-thumb, .entry-col-main > .entry-section, .entry-col-main > .entry-actions { min-width: 0; }
+    .entry-body .entry-input, .entry-body .entry-script-edit { min-width: 0; }
     .entry-col-thumb { grid-column: 1; grid-row: 1 / span 2; max-width: none; margin: 0; width: 100%; }
     .entry-col-main > .entry-section:nth-of-type(1) { grid-column: 2; grid-row: 1; }
     .entry-col-main > .entry-section:nth-of-type(2) { grid-column: 2; grid-row: 2; }
