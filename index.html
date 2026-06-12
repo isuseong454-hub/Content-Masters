@@ -811,27 +811,36 @@
   .sh-plan-btn {
     display: inline-flex;
     align-items: center;
-    gap: 4px;
-    padding: 5px 11px;
-    border-radius: 4px 0 0 4px;
+    gap: 5px;
+    padding: 5px 12px;
+    border-radius: 7px 0 0 7px;
     font-family: 'Pretendard', sans-serif;
     font-size: 11px;
     font-weight: 800;
     letter-spacing: 0.01em;
-    border: 1px solid var(--flare-line);
+    border: 1px solid rgba(255,122,51,0.45);
     color: var(--flare);
-    background: var(--flare-soft);
+    background: linear-gradient(135deg, rgba(255,122,51,0.20), rgba(255,122,51,0.06));
+    box-shadow: 0 1px 7px rgba(255,122,51,0.14), inset 0 1px 0 rgba(255,255,255,0.05);
     cursor: pointer;
     white-space: nowrap;
-    transition: all 0.15s;
+    transition: all 0.16s;
   }
-  .sh-plan-btn:hover { background: var(--flare); color: #fff; border-color: var(--flare); }
+  .sh-plan-btn:hover {
+    background: linear-gradient(135deg, var(--flare), #FF9A5C);
+    color: #fff;
+    border-color: var(--flare);
+    box-shadow: 0 2px 13px rgba(255,122,51,0.4);
+    transform: translateY(-1px);
+  }
+  .sh-plan-btn:active { transform: translateY(0) scale(0.98); }
   .sh-plan-btn.planned {
-    border-color: var(--emerald-line);
+    border-color: rgba(42,191,106,0.5);
     color: var(--emerald);
-    background: var(--emerald-faint);
+    background: linear-gradient(135deg, rgba(42,191,106,0.20), rgba(42,191,106,0.06));
+    box-shadow: 0 1px 7px rgba(42,191,106,0.16), inset 0 1px 0 rgba(255,255,255,0.05);
   }
-  .sh-plan-btn.planned:hover { background: var(--emerald); color: #fff; border-color: var(--emerald); }
+  .sh-plan-btn.planned:hover { background: linear-gradient(135deg, var(--emerald), #34D77A); color: #fff; border-color: var(--emerald); box-shadow: 0 2px 13px rgba(42,191,106,0.4); }
   .sh-plan-more {
     display: inline-flex;
     align-items: center;
@@ -839,16 +848,17 @@
     width: 22px;
     min-width: 22px;
     align-self: stretch;
-    border: 1px solid var(--flare-line);
-    border-left: none;
-    border-radius: 0 4px 4px 0;
-    background: var(--flare-soft);
+    border: 1px solid rgba(255,122,51,0.45);
+    border-left: 1px solid rgba(255,122,51,0.28);
+    border-radius: 0 7px 7px 0;
+    background: linear-gradient(135deg, rgba(255,122,51,0.16), rgba(255,122,51,0.05));
     color: var(--flare);
     cursor: pointer;
-    font-size: 10px;
-    transition: all 0.15s;
+    font-size: 9px;
+    transition: all 0.16s;
   }
-  .sh-plan-more:hover { background: var(--flare); color: #fff; }
+  .sh-plan-more:hover { background: var(--flare); color: #fff; border-color: var(--flare); }
+  .sh-plan-wrap:hover .sh-plan-btn:not(:hover) { border-color: rgba(255,122,51,0.6); }
 
   /* 링크 열기(↗) — 활성 링크 옆 작은 버튼 */
   .sh-link-open {
@@ -3131,7 +3141,12 @@
     align-items: stretch;
   }
   @media (max-width: 720px) {
-    .tr-week-row { grid-template-columns: 30px 1fr; gap: 10px; }
+    .tr-week-row { grid-template-columns: 30px 1fr; gap: 10px 12px; }
+    /* 카드 묶음(wrap)을 풀폭으로 내려 이번주 카드처럼 크게 (30px 칸 끼임 방지) */
+    .tr-week-row-cards-wrap { grid-column: 1 / -1; margin-top: 2px; }
+    .tr-week-contr, .ws-slot-controls.tr-week-contr { grid-column: 1 / -1; justify-content: flex-end; }
+    .tr-week-row-cards { grid-template-columns: repeat(auto-fill, minmax(98px, 1fr)) !important; gap: 9px; }
+    .tr-cal-board .tr-week-row { padding: 13px 14px; }
   }
   .tr-week-row.current {
     border-color: var(--emerald);
@@ -4805,6 +4820,19 @@
     .fnc-funnel { max-width: none; }
     /* 홈 전체(아코디언)를 화면 가운데로 — 모든 섹션(목표·미션·이번주·캘린더·퍼널…) 통일 */
     #home-accordion { max-width: 880px; margin-left: auto; margin-right: auto; }
+  }
+
+  /* 모바일: 깔때기가 답답하지 않게 콘·칩·글자 키움 */
+  @media (max-width: 759px) {
+    .fnc-stage { --cone-w: 116px; min-height: 122px; }
+    .fnc-layer::before { height: 13px; }
+    .fnc-right { padding: 12px 4px 12px 18px; }
+    .fnc-tier { font-size: 14px; }
+    .fnc-tdesc { font-size: 11px; }
+    .fnc-nm { font-size: 13px; }
+    .fnc-slotrow { min-height: 42px; gap: 7px; }
+    .fnc-slotrow .fn-chip, .fnc-slotrow .fn-empty { width: 38px; height: 38px; }
+    .fn-ctrl button { width: 24px; height: 24px; font-size: 14px; }
   }
 
   /* 헤더 영역 (이번 주차 라벨 포함) */
@@ -12701,6 +12729,8 @@
     margin-bottom: 8px;
     gap: 8px;
   }
+  .entry-views-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; gap: 8px; }
+  .entry-views-conv { font-size: 12px; font-weight: 800; color: var(--emerald); opacity: 0.9; }
   .entry-format-add-btn {
     background: transparent;
     border: 1px dashed var(--line);
@@ -15945,6 +15975,15 @@
                 <div class="entry-format-picker" id="entry-format-picker"></div>
               </div>
 
+              <!-- 조회수 (반응률·떡상·자동완성 동력) -->
+              <div class="entry-section">
+                <div class="entry-views-row">
+                  <label class="entry-mini-label">👁 조회수</label>
+                  <span class="entry-views-conv" id="entry-views-conv"></span>
+                </div>
+                <input type="text" class="entry-input" id="entry-views" inputmode="numeric" placeholder="예: 196000  →  19.6만" />
+              </div>
+
               <!-- 원고 -->
               <div class="entry-section">
                 <div class="entry-script-head">
@@ -16849,8 +16888,8 @@
         </div>
       </div>
 
-      <!-- ===== 3. 컨텐츠 유형 ===== -->
-      <div class="fmt-block">
+      <!-- ===== 3. 컨텐츠 유형 (작성 카드로 이동 — 모달에선 숨김) ===== -->
+      <div class="fmt-block" style="display:none;">
         <div class="fmt-block-head">
           <label class="sh-label">컨텐츠 유형 <span class="opt">— 이 콘텐츠의 정체성</span></label>
           <button class="fmt-add-inline-btn" id="f-format-add-btn">+ 유형 추가</button>
@@ -16863,8 +16902,8 @@
         </div>
       </div>
 
-      <!-- ===== 4. 바이럴(떡상) ===== -->
-      <div class="fmt-block">
+      <!-- ===== 4. 바이럴(떡상) — 제거(제목·썸네일 검색·라이벌로 대체), 호환 위해 숨김 ===== -->
+      <div class="fmt-block" style="display:none;">
         <div class="fmt-block-head">
           <label class="sh-label">바이럴 <span class="opt">— 터진 이유로 묶기 (여러 개)</span></label>
           <button class="fmt-add-inline-btn" id="f-viral-add-btn">+ 유형 추가</button>
@@ -16880,8 +16919,8 @@
         <input type="hidden" id="f-viral" value="" />
       </div>
 
-      <!-- ===== 4-2. 키워드 ===== -->
-      <div class="fmt-block">
+      <!-- ===== 4-2. 키워드 — 제거(자유태그·라이벌로 일원화), 호환 위해 숨김 ===== -->
+      <div class="fmt-block" style="display:none;">
         <div class="fmt-block-head">
           <label class="sh-label">키워드 <span class="opt">— 이 컨텐츠가 노리는 단어</span></label>
         </div>
@@ -23471,6 +23510,16 @@
       entryState.url = urlInput.value.trim();
     }, 0));
     whyInput.addEventListener('input', () => entryState.idea = whyInput.value.trim());
+    // 조회수 (카드에서 바로 입력 — 반응률·떡상·자동완성 동력)
+    const viewsInput = document.getElementById('entry-views');
+    if (viewsInput) {
+      viewsInput.addEventListener('input', () => {
+        const n = parseNum(viewsInput.value);
+        entryState.views = n;
+        const conv = document.getElementById('entry-views-conv');
+        if (conv) conv.textContent = n > 0 ? fmtViews(n) : '';
+      });
+    }
     // 썸네일 이름 → hook(보드 카드 라벨), 수식어 → copyText (둘 다 분석 행에 저장)
     const thumbNameInput = document.getElementById('entry-thumb-name');
     if (thumbNameInput) thumbNameInput.addEventListener('input', () => entryState.hook = thumbNameInput.value.trim());
@@ -23777,6 +23826,8 @@
     setEntryScriptMode('free');
     document.getElementById('entry-url').value = '';
     document.getElementById('entry-why').value = '';
+    const _vw = document.getElementById('entry-views'); if (_vw) _vw.value = '';
+    const _vc = document.getElementById('entry-views-conv'); if (_vc) _vc.textContent = '';
     const _tn = document.getElementById('entry-thumb-name'); if (_tn) _tn.value = '';
     const _ct = document.getElementById('entry-copy-text'); if (_ct) _ct.value = '';
     entryState.hook = ''; entryState.copyText = '';
