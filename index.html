@@ -4821,6 +4821,14 @@
     /* 홈 전체(아코디언)를 화면 가운데로 — 모든 섹션(목표·미션·이번주·캘린더·퍼널…) 통일 */
     #home-accordion { max-width: 880px; margin-left: auto; margin-right: auto; }
   }
+  /* 데스크탑(넓은 화면): 홈을 넓고 여유롭게 — 880px 좁은 칸 답답함 해소 */
+  @media (min-width: 1024px) {
+    #home-accordion { max-width: 1180px !important; gap: 16px; }
+    #home-accordion .acc-head { padding: 17px 22px; }
+    #home-accordion .acc-title, #home-accordion .acc-head > b { font-size: 15.5px; }
+    #home-accordion .acc-body { padding-left: 20px; padding-right: 20px; }
+    #home-view { padding-left: 28px; padding-right: 28px; }
+  }
 
   /* 모바일: 깔때기가 답답하지 않게 콘·칩·글자 키움 */
   @media (max-width: 759px) {
@@ -26034,12 +26042,11 @@
   // === 홈 아코디언 (접이식 + 고정, Phase A) ===================
   // 기존 섹션 요소를 접이식 패널로 '이동'(비파괴). 상태는 profiles 동기화.
   // ============================================================
-  let accState = { expanded: { today: true, week: true, custscore: true }, pinned: {}, partner: true };
+  let accState = { expanded: { today: true, week: true }, pinned: {}, partner: true };
   let _accBuilt = false;
   let _accSaveTimer = null;
   const ACC_KEY = 'hmv1-acc';
   const ACC_SECTIONS = [
-    { key: 'custscore', title: '고객 니즈 파악', ico: '<svg class="acc-flower" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 7 C14.59 2.34 19.07 4.93 16.33 9.5 C21.66 9.41 21.66 14.59 16.33 14.5 C19.07 19.07 14.59 21.66 12 17 C9.41 21.66 4.93 19.07 7.67 14.5 C2.34 14.59 2.34 9.41 7.67 9.5 C4.93 4.93 9.41 2.34 12 7 Z" fill="rgba(255,122,51,0.4)" stroke="#FF7A33" stroke-width="1.1" stroke-linejoin="round"/><circle cx="12" cy="12" r="2.5" fill="rgba(255,122,51,0.62)" stroke="#FF7A33" stroke-width="0.8"/></svg>', gen: true },
     { key: 'goal',      title: '목표 / Why',     ico: '◎', sel: ['#home-view .home-section.goal'] },
     { key: 'week',      title: '이번 주 할일!',  ico: '▦', sel: ['#home-view .tr-week-block'] },
     { key: 'halloffame',title: '업로드 전당',  ico: '🏆', gen: true },
@@ -26047,6 +26054,7 @@
     { key: 'challenge', title: '진행 중 챌린지', ico: '◇',  sel: ['#ch-list'], wrap: '.home-section' },
     { key: 'insight',   title: '인사이트',       ico: '◐', gen: true },
     { key: 'funnel',    title: '컨텐츠 퍼널',    ico: '▽', sel: ['#home-view .funnel-section'] },
+    { key: 'custscore', title: '고객 니즈 파악', ico: '<svg class="acc-flower" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 7 C14.59 2.34 19.07 4.93 16.33 9.5 C21.66 9.41 21.66 14.59 16.33 14.5 C19.07 19.07 14.59 21.66 12 17 C9.41 21.66 4.93 19.07 7.67 14.5 C2.34 14.59 2.34 9.41 7.67 9.5 C4.93 4.93 9.41 2.34 12 7 Z" fill="rgba(255,122,51,0.4)" stroke="#FF7A33" stroke-width="1.1" stroke-linejoin="round"/><circle cx="12" cy="12" r="2.5" fill="rgba(255,122,51,0.62)" stroke="#FF7A33" stroke-width="0.8"/></svg>', gen: true },
     // 통계는 흡수만 하고 숨김(요소가 home-grid에 다시 안 뜨게)
     { key: 'stats',     title: '통계',          ico: '▥', sel: ['#home-stats'], wrap: '.home-section', hidden: true }
   ];
@@ -26726,6 +26734,19 @@
       }
       accState.expanded = accState.expanded || {};
       accState.expanded.custscore = true;
+      saveAccordionState();
+    }
+    // 1회: 고객 니즈 파악을 맨 아래로 + 고객니즈·업로드전당 자동펼침 끄기 (사용자 요청)
+    if (!accState._csBottomV1) {
+      accState._csBottomV1 = true;
+      if (Array.isArray(accState.order)) {
+        accState.order = accState.order.filter(k => k !== 'custscore');
+        const si = accState.order.indexOf('stats');
+        accState.order.splice(si >= 0 ? si : accState.order.length, 0, 'custscore');
+      }
+      accState.expanded = accState.expanded || {};
+      accState.expanded.custscore = false;
+      accState.expanded.halloffame = false;
       saveAccordionState();
     }
   }
