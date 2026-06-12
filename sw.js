@@ -1,7 +1,7 @@
 // Service Worker — 컨텐츠 마스터즈
 // 오프라인 작동 + PWA 설치 트리거
 
-const CACHE_NAME = 'content-masters-v325';
+const CACHE_NAME = 'content-masters-v327';
 const FILES = [
   './',
   './index.html',
@@ -34,6 +34,10 @@ self.addEventListener('activate', (e) => {
 // fetch — 네트워크 우선, 실패 시 캐시
 self.addEventListener('fetch', (e) => {
   if (e.request.method !== 'GET') return;
+  // 개인 페이지(u.html)·편집기(edit.html)는 서비스워커가 가로채지 않고 그대로 통과
+  // (안 그러면 네트워크 실패 시 index.html로 튕겨서 페이지가 안 보임)
+  const _url = new URL(e.request.url);
+  if (_url.pathname.endsWith('/u.html') || _url.pathname.endsWith('/edit.html')) return;
   e.respondWith(
     fetch(e.request)
       .then((res) => {

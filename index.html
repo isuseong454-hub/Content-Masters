@@ -12854,13 +12854,15 @@
   }
 
   .entry-actions {
-    display: grid;
-    grid-template-columns: 1fr auto;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
     gap: 10px;
     margin-top: 4px;
   }
+  /* 분해하기 버튼이 1fr로 과하게 늘어나던 것 → 내용 크기로(우측 정렬 액션바) */
   @media (max-width: 480px) {
-    .entry-actions { grid-template-columns: 1fr; }
+    .entry-actions { flex-direction: column; align-items: stretch; }
   }
 
   .entry-disasm-btn {
