@@ -1003,8 +1003,9 @@
     background: rgba(0, 0, 0, 0.85);
     z-index: 5300;   /* 로그아웃 버튼(5200)보다 위 → 분해하기 뜨면 로그아웃 가려짐 */
     display: none;
-    align-items: flex-end;
+    align-items: center;      /* 화면 중앙 (데스크탑) */
     justify-content: center;
+    padding: 20px;
     backdrop-filter: blur(8px);
   }
 
@@ -1012,20 +1013,29 @@
 
   .sh-modal {
     background: var(--bg-card);
-    border-top: 1px solid var(--emerald-line);
-    border-radius: 16px 16px 0 0;
+    border: 1px solid var(--emerald-line);
+    border-radius: 16px;
     width: 100%;
     max-width: 680px;
-    max-height: 94vh;
+    max-height: 90vh;
     overflow-y: auto;
     padding: 24px;
-    animation: slideUp 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
-    box-shadow: 0 -20px 60px rgba(0, 0, 0, 0.6);
+    animation: modalPop 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.6);
   }
 
+  @keyframes modalPop {
+    from { transform: translateY(16px) scale(0.97); opacity: 0; }
+    to { transform: translateY(0) scale(1); opacity: 1; }
+  }
   @keyframes slideUp {
     from { transform: translateY(100%); }
     to { transform: translateY(0); }
+  }
+  /* 모바일: 하단 시트 유지 (엄지 닿기 좋음) */
+  @media (max-width: 700px) {
+    .sh-modal-overlay { align-items: flex-end; padding: 0; }
+    .sh-modal { border-radius: 16px 16px 0 0; border: none; border-top: 1px solid var(--emerald-line); max-height: 94vh; animation: slideUp 0.35s cubic-bezier(0.2, 0.8, 0.2, 1); box-shadow: 0 -20px 60px rgba(0, 0, 0, 0.6); }
   }
 
   .sh-modal-head {
@@ -12309,13 +12319,12 @@
   }
 
   .entry-mini-label {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 9.5px;
-    letter-spacing: 0.2em;
-    color: var(--text-mute);
-    text-transform: uppercase;
-    font-weight: 600;
-    margin-bottom: 2px;
+    font-family: 'Pretendard', sans-serif;
+    font-size: 12.5px;
+    letter-spacing: 0.01em;
+    color: var(--text-sub);
+    font-weight: 800;
+    margin-bottom: 5px;
   }
 
   /* 9:16 비율 썸네일 박스 (세로로 긴 직사각형) */
@@ -16883,8 +16892,8 @@
 
       <!-- (썸네일/수식어 강점 분류는 작성 영역 '빠른 수집'으로 이동 — 중복 제거) -->
 
-      <!-- ===== 2. 조회수 ===== -->
-      <div class="sh-field">
+      <!-- ===== 2. 조회수 (작성 카드로 이동 — 모달에선 숨김. f-views hidden은 호환 위해 유지) ===== -->
+      <div class="sh-field" style="display:none;">
         <label class="sh-label">조회수 <span class="opt">— 알면 입력</span></label>
         <div class="views-picker" id="f-views-picker">
           <button class="views-chip" data-views="100000">10만+</button>
