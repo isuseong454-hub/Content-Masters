@@ -12266,25 +12266,41 @@
 
   .entry-body {
     display: grid;
-    grid-template-columns: 140px 140px 1fr;
-    gap: 18px;
+    grid-template-columns: 188px 1fr;   /* 공감댓글 제거 → 썸네일 크게 + 본문 넓게 */
+    gap: 26px;
     position: relative;
     z-index: 1;
   }
+  /* 공감댓글 칸 제거 — 소재수집에 있으니 숨김 (JS 호환 위해 DOM은 유지) */
+  .entry-col-comm { display: none !important; }
+  /* 간편 입력(썸네일 이름·수식어) 돋보이게 — 너무 안 보였음 */
+  .entry-col-thumb .entry-mini-input {
+    margin-top: 9px; padding: 10px 12px; font-size: 13px; font-weight: 600;
+    border: 1.5px solid var(--emerald-line); background: rgba(42,191,106,0.05);
+    border-radius: 8px;
+  }
+  .entry-col-thumb .entry-mini-input:focus { border-color: var(--emerald); background: var(--emerald-faint); }
+  .entry-col-thumb .entry-mini-input::placeholder { color: var(--text-mute); font-weight: 500; }
 
   @media (max-width: 700px) {
-    .entry-body { grid-template-columns: 1fr 1fr; }
+    .entry-body { grid-template-columns: 1fr; gap: 16px; }   /* 모바일: 썸네일 위 → 본문 아래로 세로 스택 */
     .entry-col-main { grid-column: 1 / -1; }
-    /* 좁은 화면에서 박스가 쌓일 때 9:16 박스가 너무 커지지 않게 제한 + 가운데 정렬 */
-    .entry-thumb-box { max-width: 170px; margin-left: auto; margin-right: auto; }
+    /* 모바일에서 썸네일이 너무 커지지 않게 가운데 + 폭 제한 */
+    .entry-col-thumb { max-width: 220px; margin-left: auto; margin-right: auto; width: 100%; }
+    .entry-thumb-box { max-width: 200px; margin-left: auto; margin-right: auto; }
   }
   @media (max-width: 480px) {
     .entry-wrap { padding: 14px 14px 6px; }
     .entry-card { padding: 18px; }
-    .entry-body { grid-template-columns: 1fr 1fr; gap: 12px; }
+    .entry-body { gap: 14px; }
     .entry-title { font-size: 22px; }
-    .entry-thumb-box { max-width: none; }
+    .entry-col-thumb { max-width: 200px; }
+    .entry-thumb-box { max-width: 180px; }
   }
+  /* 조회수 티어 버튼 (카드) — 한 줄 칩 */
+  .entry-views-picker { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+  .entry-views-picker .views-chip { flex: 0 0 auto; }
+  .entry-views-exact { font-size: 12.5px; }
 
   .entry-col {
     display: flex;
@@ -15974,13 +15990,20 @@
 
             <!-- 오른쪽: 주제 → 원고 → 링크 -->
             <div class="entry-col entry-col-main">
-              <!-- 조회수 (맨 앞 — 레퍼 고를 때 맨 먼저 찍음. 반응률·떡상·자동완성 동력) -->
+              <!-- 조회수 (맨 앞 — 레퍼 고를 때 맨 먼저 찍음. 버튼+정확입력. 반응률·떡상·자동완성 동력) -->
               <div class="entry-section">
                 <div class="entry-views-row">
                   <label class="entry-mini-label">👁 조회수</label>
                   <span class="entry-views-conv" id="entry-views-conv"></span>
                 </div>
-                <input type="text" class="entry-input" id="entry-views" inputmode="numeric" placeholder="예: 196000  →  19.6만" />
+                <div class="views-picker entry-views-picker" id="entry-views-picker">
+                  <button type="button" class="views-chip" data-views="100000">10만+</button>
+                  <button type="button" class="views-chip" data-views="300000">30만+</button>
+                  <button type="button" class="views-chip" data-views="500000">50만+</button>
+                  <button type="button" class="views-chip" data-views="1000000">100만+</button>
+                  <button type="button" class="views-chip" data-views="5000000">500만+</button>
+                </div>
+                <input type="text" class="entry-input entry-views-exact" id="entry-views" inputmode="numeric" placeholder="또는 정확히 — 예: 196000 → 19.6만" />
               </div>
 
               <!-- 주제 -->
@@ -23526,14 +23549,21 @@
     whyInput.addEventListener('input', () => entryState.idea = whyInput.value.trim());
     // 조회수 (카드에서 바로 입력 — 반응률·떡상·자동완성 동력)
     const viewsInput = document.getElementById('entry-views');
-    if (viewsInput) {
-      viewsInput.addEventListener('input', () => {
-        const n = parseNum(viewsInput.value);
-        entryState.views = n;
-        const conv = document.getElementById('entry-views-conv');
-        if (conv) conv.textContent = n > 0 ? fmtViews(n) : '';
-      });
+    const viewsPicker = document.getElementById('entry-views-picker');
+    function syncEntryViews(n, setInput) {
+      n = n || 0;
+      entryState.views = n;
+      const conv = document.getElementById('entry-views-conv');
+      if (conv) conv.textContent = n > 0 ? fmtViews(n) : '';
+      if (viewsPicker) viewsPicker.querySelectorAll('.views-chip').forEach(b => b.classList.toggle('on', parseInt(b.dataset.views, 10) === n));
+      if (setInput && viewsInput) viewsInput.value = n || '';
     }
+    if (viewsInput) viewsInput.addEventListener('input', () => syncEntryViews(parseNum(viewsInput.value), false));
+    if (viewsPicker) viewsPicker.addEventListener('click', (e) => {
+      const b = e.target.closest('.views-chip'); if (!b) return;
+      const v = parseInt(b.dataset.views, 10);
+      syncEntryViews(b.classList.contains('on') ? 0 : v, true); // 다시 누르면 해제
+    });
     // 썸네일 이름 → hook(보드 카드 라벨), 수식어 → copyText (둘 다 분석 행에 저장)
     const thumbNameInput = document.getElementById('entry-thumb-name');
     if (thumbNameInput) thumbNameInput.addEventListener('input', () => entryState.hook = thumbNameInput.value.trim());
@@ -23842,6 +23872,7 @@
     document.getElementById('entry-why').value = '';
     const _vw = document.getElementById('entry-views'); if (_vw) _vw.value = '';
     const _vc = document.getElementById('entry-views-conv'); if (_vc) _vc.textContent = '';
+    const _vp = document.getElementById('entry-views-picker'); if (_vp) _vp.querySelectorAll('.views-chip.on').forEach(b => b.classList.remove('on'));
     const _tn = document.getElementById('entry-thumb-name'); if (_tn) _tn.value = '';
     const _ct = document.getElementById('entry-copy-text'); if (_ct) _ct.value = '';
     entryState.hook = ''; entryState.copyText = '';
