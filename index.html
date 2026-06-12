@@ -4821,13 +4821,19 @@
     /* 홈 전체(아코디언)를 화면 가운데로 — 모든 섹션(목표·미션·이번주·캘린더·퍼널…) 통일 */
     #home-accordion { max-width: 880px; margin-left: auto; margin-right: auto; }
   }
-  /* 데스크탑(넓은 화면): 홈을 넓고 여유롭게 — 880px 좁은 칸 답답함 해소 */
+  /* 데스크탑(넓은 화면): 홈을 넓고 여유롭게 — 880px 좁은 칸 답답함 해소
+     (핵심: flex 자식이라 내용폭으로 쪼그라들던 것 → width:100%로 펴고 max-width로 캡) */
   @media (min-width: 1024px) {
-    #home-accordion { max-width: 1180px !important; gap: 16px; }
+    #home-accordion { width: 100% !important; max-width: 1180px !important; gap: 16px; }
     #home-accordion .acc-head { padding: 17px 22px; }
     #home-accordion .acc-title, #home-accordion .acc-head > b { font-size: 15.5px; }
     #home-accordion .acc-body { padding-left: 20px; padding-right: 20px; }
     #home-view { padding-left: 28px; padding-right: 28px; }
+    /* 하단 워크스페이스 메뉴 키우기 (데스크탑) — .bottom-nav 접두사로 명시도 ↑ */
+    .bottom-nav .bn-tab { padding: 14px 8px 13px; gap: 6px; }
+    .bottom-nav .bn-ico { font-size: 25px; }
+    .bottom-nav .bn-lab { font-size: 13.5px; font-weight: 700; }
+    .sh-main { padding-bottom: calc(76px + env(safe-area-inset-bottom)); }
   }
 
   /* 모바일: 깔때기가 답답하지 않게 콘·칩·글자 키움 */
@@ -12554,10 +12560,10 @@
   .entry-fmt-bar .fmt-btn { padding: 5px 9px; }
   .entry-script-edit {
     width: 100%;
-    min-height: 100px;
-    height: 160px;
+    min-height: 110px;
+    height: auto;          /* 고정 160px → auto: 작성한 만큼 자동으로 늘어남 */
     max-height: none;
-    resize: vertical; /* 하단을 끌어 자유롭게 높이 조절 */
+    resize: none;
     background: var(--bg-input);
     border: 1px solid var(--line);
     border-radius: 8px;
@@ -12567,7 +12573,7 @@
     line-height: 1.6;
     padding: 12px 14px;
     outline: none;
-    overflow-y: auto;
+    overflow-y: visible;   /* auto → visible: 안에서 스크롤 말고 칸 자체가 커짐 */
     cursor: text;
     transition: border-color 0.15s;
     word-break: break-word;
@@ -15968,6 +15974,15 @@
 
             <!-- 오른쪽: 주제 → 원고 → 링크 -->
             <div class="entry-col entry-col-main">
+              <!-- 조회수 (맨 앞 — 레퍼 고를 때 맨 먼저 찍음. 반응률·떡상·자동완성 동력) -->
+              <div class="entry-section">
+                <div class="entry-views-row">
+                  <label class="entry-mini-label">👁 조회수</label>
+                  <span class="entry-views-conv" id="entry-views-conv"></span>
+                </div>
+                <input type="text" class="entry-input" id="entry-views" inputmode="numeric" placeholder="예: 196000  →  19.6만" />
+              </div>
+
               <!-- 주제 -->
               <div class="entry-section">
                 <label class="entry-mini-label">주제</label>
@@ -15981,15 +15996,6 @@
                   <button type="button" class="entry-format-add-btn" id="entry-format-add-btn">+ 유형 추가</button>
                 </div>
                 <div class="entry-format-picker" id="entry-format-picker"></div>
-              </div>
-
-              <!-- 조회수 (반응률·떡상·자동완성 동력) -->
-              <div class="entry-section">
-                <div class="entry-views-row">
-                  <label class="entry-mini-label">👁 조회수</label>
-                  <span class="entry-views-conv" id="entry-views-conv"></span>
-                </div>
-                <input type="text" class="entry-input" id="entry-views" inputmode="numeric" placeholder="예: 196000  →  19.6만" />
               </div>
 
               <!-- 원고 -->
