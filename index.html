@@ -7646,6 +7646,43 @@
   .pp-plan-cell textarea { width: 100%; min-height: 58px; background: transparent; border: none; color: var(--text-sub); font-family: inherit; font-size: 12.5px; line-height: 1.6; resize: vertical; box-sizing: border-box; }
   .pp-plan-cell textarea:focus { outline: none; }
   .pp-plan-cell textarea::placeholder { color: var(--text-faint); }
+  /* 공통점·떡상 자동 분석 */
+  .pp-analyze-btn { margin-top: 12px; width: 100%; box-sizing: border-box; display: flex; align-items: center; justify-content: center; gap: 6px; background: rgba(76,155,230,0.09); border: 1px solid rgba(76,155,230,0.35); border-radius: 11px; padding: 12px; color: #6BB0F0; font-family: inherit; font-size: 13px; font-weight: 800; cursor: pointer; transition: border-color .15s, background .15s; }
+  .pp-analyze-btn:hover { border-color: #6BB0F0; background: rgba(76,155,230,0.14); }
+  .pp-analyze-caret { transition: transform .25s; }
+  .pp-analyze-btn.open .pp-analyze-caret { transform: rotate(180deg); }
+  .pp-analysis { margin-top: 10px; padding: 13px 14px; background: var(--bg-void); border: 1px solid var(--line); border-radius: 12px; }
+  .pp-an-note { font-size: 11px; line-height: 1.6; color: var(--text-faint); margin-bottom: 11px; }
+  .pp-an-note b { color: var(--text-mute); }
+  .pp-an-empty { font-size: 12.5px; color: var(--text-faint); text-align: center; padding: 8px; }
+  .pp-an-row { display: flex; gap: 10px; padding: 8px 0; border-top: 1px solid var(--line); align-items: baseline; }
+  .pp-an-row:first-of-type { border-top: none; }
+  .pp-an-sec { flex-shrink: 0; width: 74px; font-size: 12px; font-weight: 800; color: var(--text-main); }
+  .pp-an-bits { display: flex; flex-wrap: wrap; gap: 6px; }
+  .pp-an-bit { font-size: 11px; padding: 3px 8px; border-radius: 7px; line-height: 1.5; }
+  .pp-an-bit.rep { background: rgba(94,184,106,0.12); color: #7BD08A; }
+  .pp-an-bit.tag { background: rgba(168,123,214,0.14); color: #C29BEA; }
+  .pp-an-bit.viral { background: rgba(245,200,75,0.12); color: #F5C84B; }
+  .pp-an-bit.miss { background: rgba(226,87,76,0.12); color: #E88; }
+  .pp-an-draft { margin-top: 12px; width: 100%; box-sizing: border-box; background: rgba(94,184,106,0.12); border: 1px solid var(--emerald-line); border-radius: 10px; padding: 11px; color: var(--emerald); font-family: inherit; font-size: 12.5px; font-weight: 800; cursor: pointer; transition: filter .15s; }
+  .pp-an-draft b { font-weight: 800; }
+  .pp-an-draft:hover { background: rgba(94,184,106,0.2); }
+  .pp-finale { margin-top: 16px; padding: 14px; border: 1px solid var(--emerald-line); border-radius: 13px; background: rgba(94,184,106,0.06); }
+  .pp-finale-lbl { font-size: 12px; font-weight: 700; color: var(--emerald); margin-bottom: 10px; text-align: center; }
+  .pp-tostruct-btn { width: 100%; box-sizing: border-box; background: var(--emerald); color: #06140C; border: none; border-radius: 11px; padding: 14px; font-family: inherit; font-size: 14.5px; font-weight: 800; cursor: pointer; transition: filter .15s, transform .12s; }
+  .pp-tostruct-btn:hover { filter: brightness(1.08); transform: translateY(-1px); }
+  /* PART2 도구 접기 */
+  .pp-head-tools.on { background: rgba(94,184,106,0.14); border-color: var(--emerald); color: var(--emerald); }
+  .pp-head-more { display: inline-flex; gap: 7px; }
+  /* PART3 접기 토글 */
+  .pp-part3-toggle { width: 100%; box-sizing: border-box; display: flex; align-items: center; gap: 8px; background: var(--bg-void); border: 1px dashed var(--line); border-radius: 11px; padding: 13px 15px; color: var(--text-mute); font-family: inherit; font-size: 13.5px; font-weight: 700; cursor: pointer; transition: border-color .15s, color .15s; }
+  .pp-part3-toggle b { color: var(--text-main); }
+  .pp-part3-toggle:hover { border-color: var(--emerald); color: var(--text-main); }
+  .pp-part3-toggle.open { border-style: solid; border-color: var(--emerald); }
+  .pp-part3-opt { font-weight: 600; color: var(--text-faint); font-size: 11.5px; }
+  .pp-part3-caret { margin-left: auto; transition: transform .25s; }
+  .pp-part3-toggle.open .pp-part3-caret { transform: rotate(180deg); }
+  .pp-part3-body { margin-top: 12px; }
   .pp-save-plan { margin-top: 16px; width: 100%; background: var(--emerald); color: #06140C; border: none; border-radius: 11px; padding: 13px; font-family: inherit; font-size: 14px; font-weight: 800; cursor: pointer; transition: filter .15s; }
   .pp-save-plan:hover { filter: brightness(1.08); }
 
@@ -9905,6 +9942,122 @@
   .sc-tab.on { background:var(--bg-card); border-color:var(--line); color:var(--neon); }
   .sc-tabpane { animation:scFade .25s ease; }
   @keyframes scFade { from { opacity:0; transform:translateY(4px); } to { opacity:1; transform:none; } }
+
+  /* === 구조 모음 (공식 라이브러리) === */
+  .sl-intro { display:flex; align-items:center; gap:16px; margin:20px 32px 6px; padding:16px 18px; background:linear-gradient(135deg, rgba(94,184,106,0.08), rgba(76,155,230,0.06)); border:1px solid var(--line); border-radius:14px; }
+  .sl-intro-text { flex:1; font-size:12.5px; line-height:1.7; color:var(--text-mute); }
+  .sl-intro-text b { color:var(--text-main); font-weight:800; }
+  .sl-intro-text .em { color:var(--neon); }
+  .sl-new-btn { flex-shrink:0; padding:11px 18px; border-radius:11px; background:var(--neon); border:none; color:#08110b; font-size:13px; font-weight:800; cursor:pointer; transition:transform .12s, filter .12s; }
+  .sl-new-btn:hover { transform:translateY(-1px); filter:brightness(1.08); }
+  .sl-intro-btns { flex-shrink:0; display:flex; gap:8px; align-items:center; }
+  .sl-ex-btn { padding:11px 14px; border-radius:11px; background:var(--bg-elev); border:1px solid rgba(76,155,230,0.4); color:#6BB0F0; font-size:12.5px; font-weight:800; cursor:pointer; transition:transform .12s, border-color .12s; }
+  .sl-ex-btn:hover { transform:translateY(-1px); border-color:#6BB0F0; }
+  .sl-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(268px, 1fr)); gap:16px; padding:16px 32px 40px; }
+  /* 빈 상태 */
+  .sl-empty { grid-column:1/-1; text-align:center; padding:52px 20px; color:var(--text-faint); }
+  .sl-empty-ico { font-size:40px; opacity:.5; margin-bottom:12px; }
+  .sl-empty-msg { font-size:13.5px; line-height:1.7; color:var(--text-mute); }
+  .sl-empty-btn { margin-top:16px; padding:10px 18px; border-radius:10px; background:var(--bg-elev); border:1px solid var(--line); color:var(--text-main); font-size:12.5px; font-weight:700; cursor:pointer; }
+  .sl-empty-btn:hover { border-color:var(--neon); color:var(--neon); }
+  /* 구조 카드 */
+  .sl-card { position:relative; background:var(--bg-card); border:1px solid var(--line); border-radius:16px; overflow:hidden; display:flex; flex-direction:column; transition:transform .14s, border-color .14s, box-shadow .14s; }
+  .sl-card:hover { transform:translateY(-3px); border-color:rgba(94,184,106,0.5); box-shadow:0 10px 26px rgba(0,0,0,0.28); }
+  .sl-card-thumb { position:relative; aspect-ratio:16/10; background:var(--bg-void); overflow:hidden; }
+  .sl-card-thumb img { width:100%; height:100%; object-fit:cover; display:block; }
+  .sl-card-thumb-empty { width:100%; height:100%; display:flex; align-items:center; justify-content:center; font-size:30px; color:var(--text-faint); opacity:.4; }
+  .sl-card-name { position:absolute; left:0; right:0; bottom:0; padding:22px 14px 10px; background:linear-gradient(transparent, rgba(0,0,0,0.82)); color:#fff; font-size:15px; font-weight:800; }
+  .sl-card-body { padding:13px 14px 15px; display:flex; flex-direction:column; gap:9px; }
+  /* 세로 단계 뱃지 (사진2 스타일) */
+  .sl-steps { display:flex; flex-direction:column; gap:5px; }
+  .sl-step { display:flex; align-items:center; gap:9px; padding:7px 11px; background:var(--bg-elev); border:1px solid var(--line); border-radius:9px; font-size:12px; }
+  .sl-step-ico { flex-shrink:0; width:18px; text-align:center; }
+  .sl-step-label { font-weight:700; color:var(--text-main); }
+  .sl-step-note { color:var(--text-faint); font-size:11px; margin-left:auto; }
+  .sl-formula { margin-top:2px; padding:9px 11px; background:rgba(245,200,75,0.09); border:1px solid rgba(245,200,75,0.3); border-radius:9px; font-size:11.5px; line-height:1.6; color:var(--text-mute); }
+  .sl-formula b { color:#F5C84B; }
+  .sl-card-foot { display:flex; align-items:center; gap:8px; margin-top:3px; }
+  .sl-card-refs { font-size:10.5px; color:var(--text-faint); }
+  .sl-card-btns { margin-left:auto; display:flex; gap:6px; }
+  .sl-card-btn { padding:5px 10px; border-radius:8px; background:var(--bg-elev); border:1px solid var(--line); color:var(--text-mute); font-size:11px; font-weight:700; cursor:pointer; transition:color .12s, border-color .12s; }
+  .sl-card-btn:hover { border-color:var(--neon); color:var(--neon); }
+  .sl-card-btn.sl-use { background:rgba(94,184,106,0.12); border-color:rgba(94,184,106,0.4); color:var(--neon); }
+  .sl-card-btn.sl-detail { background:rgba(76,155,230,0.12); border-color:rgba(76,155,230,0.4); color:#6BB0F0; }
+  .sl-card-btn.sl-detail:hover { border-color:#6BB0F0; color:#6BB0F0; }
+  .sl-empty-btns { display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-top:16px; }
+  .sl-empty-btns .sl-empty-btn { margin-top:0; }
+  /* 공식형 카드 (PDF 스타일) */
+  .sl-fcard { padding:0; }
+  .sl-fcard-top { padding:15px 15px 13px; background:linear-gradient(135deg, rgba(76,155,230,0.1), rgba(94,184,106,0.06)); border-bottom:1px solid var(--line); }
+  .sl-fbadge { display:inline-block; margin-bottom:8px; padding:3px 9px; border-radius:20px; background:rgba(76,155,230,0.16); border:1px solid rgba(76,155,230,0.4); color:#6BB0F0; font-size:10.5px; font-weight:800; }
+  .sl-fcard-title { font-size:16px; font-weight:800; color:var(--text-main); line-height:1.35; }
+  .sl-fcard-formula { margin-top:5px; font-size:12px; font-weight:700; color:var(--neon); }
+  .sl-fparts { display:flex; flex-direction:column; gap:6px; }
+  .sl-fpart { display:flex; gap:8px; align-items:baseline; padding:8px 11px; background:var(--bg-elev); border:1px solid var(--line); border-radius:9px; }
+  .sl-fpart-k { flex-shrink:0; min-width:20px; font-size:12.5px; font-weight:800; color:#6BB0F0; }
+  .sl-fpart-v { font-size:12px; color:var(--text-mute); line-height:1.5; }
+  .sl-fwhy { margin-top:2px; padding:9px 11px; background:rgba(245,200,75,0.08); border:1px solid rgba(245,200,75,0.28); border-radius:9px; font-size:11.5px; line-height:1.6; color:var(--text-mute); }
+  .sl-fex-lbl { margin-top:4px; font-size:11px; font-weight:800; color:var(--text-faint); }
+  .sl-fex { margin:2px 0 0; padding-left:16px; }
+  .sl-fex li { font-size:12px; color:var(--text-mute); line-height:1.7; }
+  /* 자세히 모달 */
+  .sd-modal .sd-formula { padding:11px 13px; background:rgba(94,184,106,0.1); border:1px solid rgba(94,184,106,0.35); border-radius:10px; font-size:13.5px; font-weight:800; color:var(--neon); text-align:center; }
+  .sd-sec-lbl { margin:16px 0 7px; font-size:12px; font-weight:800; color:#6BB0F0; }
+  .sd-detail { padding:13px 14px; background:var(--bg-void); border:1px solid var(--line); border-radius:11px; font-size:13px; line-height:1.8; color:var(--text-main); white-space:normal; }
+  .sd-ex { margin:2px 0 0; padding-left:18px; }
+  .sd-ex li { font-size:12.5px; color:var(--text-mute); line-height:1.9; }
+  /* 구조 편집 모달 */
+  .se-ov { position:fixed; inset:0; z-index:9000; background:rgba(0,0,0,0.66); display:flex; align-items:center; justify-content:center; padding:20px; animation:scFade .2s ease; }
+  .se-modal { width:100%; max-width:480px; max-height:90vh; display:flex; flex-direction:column; background:var(--bg-card); border:1px solid var(--line); border-radius:18px; overflow:hidden; }
+  .se-head { display:flex; align-items:center; justify-content:space-between; padding:16px 18px; border-bottom:1px solid var(--line); }
+  .se-head b { font-size:15px; color:var(--text-main); }
+  .se-x { background:none; border:none; color:var(--text-mute); font-size:16px; cursor:pointer; }
+  .se-body { padding:16px 18px; overflow-y:auto; }
+  .se-lbl { display:block; margin:14px 0 6px; font-size:12.5px; font-weight:800; color:var(--text-main); }
+  .se-lbl:first-child { margin-top:0; }
+  .se-lbl span { font-weight:600; color:var(--text-faint); font-size:11px; margin-left:6px; }
+  .se-name, .se-formula { width:100%; box-sizing:border-box; padding:10px 12px; background:var(--bg-void); border:1px solid var(--line); border-radius:10px; color:var(--text-main); font-family:inherit; font-size:13px; }
+  .se-formula { min-height:60px; resize:vertical; line-height:1.6; }
+  .se-thumb { position:relative; border-radius:12px; overflow:hidden; cursor:pointer; border:1px dashed var(--line); aspect-ratio:16/9; }
+  .se-thumb img { width:100%; height:100%; object-fit:cover; display:block; }
+  .se-thumb-ph { width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; color:var(--text-faint); font-size:22px; text-align:center; line-height:1.5; }
+  .se-thumb-ph span { font-size:11px; }
+  .se-thumb-clear { position:absolute; top:8px; right:8px; padding:4px 10px; border-radius:8px; background:rgba(0,0,0,0.6); border:none; color:#fff; font-size:11px; cursor:pointer; }
+  .se-steps { display:flex; flex-direction:column; gap:7px; }
+  .se-step { display:flex; align-items:center; gap:6px; }
+  .se-step-ico { flex-shrink:0; padding:8px 4px; background:var(--bg-void); border:1px solid var(--line); border-radius:8px; color:var(--text-main); font-family:inherit; font-size:14px; }
+  .se-step-label { flex:1.2; min-width:0; padding:8px 10px; background:var(--bg-void); border:1px solid var(--line); border-radius:8px; color:var(--text-main); font-family:inherit; font-size:12.5px; }
+  .se-step-note { flex:1; min-width:0; padding:8px 10px; background:var(--bg-void); border:1px solid var(--line); border-radius:8px; color:var(--text-mute); font-family:inherit; font-size:12px; }
+  .se-step-del { flex-shrink:0; width:28px; background:none; border:1px solid var(--line); border-radius:8px; color:var(--text-faint); cursor:pointer; }
+  .se-step-del:hover { color:#E2574C; border-color:#E2574C; }
+  .se-step-add { margin-top:8px; padding:8px 14px; border-radius:9px; background:var(--bg-elev); border:1px dashed var(--line); color:var(--text-mute); font-size:12px; font-weight:700; cursor:pointer; }
+  .se-step-add:hover { border-color:var(--neon); color:var(--neon); }
+  .se-foot { display:flex; gap:8px; padding:14px 18px; border-top:1px solid var(--line); }
+  .se-cancel { flex:1; padding:11px; border-radius:10px; background:var(--bg-elev); border:1px solid var(--line); color:var(--text-mute); font-size:13px; font-weight:700; cursor:pointer; }
+  .se-save { flex:2; padding:11px; border-radius:10px; background:var(--neon); border:none; color:#08110b; font-size:13px; font-weight:800; cursor:pointer; }
+  /* 편집 모달 — 타입 토글 + 공식형 필드 */
+  .se-type { display:flex; gap:6px; margin-bottom:4px; }
+  .se-type-btn { flex:1; padding:10px; border-radius:10px; background:var(--bg-void); border:1px solid var(--line); color:var(--text-mute); font-family:inherit; font-size:12.5px; font-weight:800; cursor:pointer; }
+  .se-type-btn.on { background:rgba(94,184,106,0.14); border-color:rgba(94,184,106,0.5); color:var(--neon); }
+  .se-formula-in, .se-why, .se-detail { width:100%; box-sizing:border-box; padding:10px 12px; background:var(--bg-void); border:1px solid var(--line); border-radius:10px; color:var(--text-main); font-family:inherit; font-size:13px; }
+  .se-why, .se-detail { min-height:58px; resize:vertical; line-height:1.6; }
+  .se-parts, .se-exs { display:flex; flex-direction:column; gap:7px; }
+  .se-prow, .se-exrow { display:flex; align-items:center; gap:6px; }
+  .se-pk { flex-shrink:0; width:52px; padding:8px 8px; background:var(--bg-void); border:1px solid var(--line); border-radius:8px; color:#6BB0F0; font-family:inherit; font-size:12.5px; font-weight:800; text-align:center; }
+  .se-pv, .se-exv { flex:1; min-width:0; padding:8px 10px; background:var(--bg-void); border:1px solid var(--line); border-radius:8px; color:var(--text-main); font-family:inherit; font-size:12.5px; }
+  .se-prow-del, .se-exrow-del { flex-shrink:0; width:28px; padding:7px 0; background:none; border:1px solid var(--line); border-radius:8px; color:var(--text-faint); cursor:pointer; }
+  .se-prow-del:hover, .se-exrow-del:hover { color:#E2574C; border-color:#E2574C; }
+  .se-part-add, .se-ex-add { margin-top:8px; padding:8px 14px; border-radius:9px; background:var(--bg-elev); border:1px dashed var(--line); color:var(--text-mute); font-size:12px; font-weight:700; cursor:pointer; }
+  .se-part-add:hover, .se-ex-add:hover { border-color:var(--neon); color:var(--neon); }
+  .se-exths { display:flex; flex-wrap:wrap; gap:8px; }
+  .se-exth { position:relative; width:64px; height:64px; border-radius:9px; overflow:hidden; border:1px solid var(--line); }
+  .se-exth img { width:100%; height:100%; object-fit:cover; }
+  .se-exth-del { position:absolute; top:2px; right:2px; width:18px; height:18px; border-radius:50%; background:rgba(0,0,0,0.65); border:none; color:#fff; font-size:10px; line-height:1; cursor:pointer; }
+  .se-exth-add { width:64px; height:64px; border-radius:9px; background:var(--bg-void); border:1px dashed var(--line); color:var(--text-mute); font-size:11px; font-weight:700; cursor:pointer; }
+  .se-exth-add:hover { border-color:var(--neon); color:var(--neon); }
+  /* 공식 카드 예시 썸네일 */
+  .sl-fthumbs { display:flex; gap:5px; margin-top:8px; flex-wrap:wrap; }
+  .sl-fthumb { width:44px; height:44px; border-radius:7px; object-fit:cover; border:1px solid var(--line); }
   /* 월간 원고 적용하기 (접힘 버튼) */
   .sc-plan-toggle { display:flex; align-items:center; gap:8px; margin:18px 32px 0; padding:13px 16px; width:calc(100% - 64px); box-sizing:border-box; border-radius:11px; background:var(--bg-card); border:1px dashed var(--line); color:var(--text-mute); font-size:13px; font-weight:700; cursor:pointer; transition:border-color .15s, color .15s; }
   .sc-plan-toggle:hover { border-color:var(--sage); color:var(--sage); }
@@ -16199,6 +16352,7 @@
       <div class="sc-tabs" id="sc-tabs">
         <button class="sc-tab on" data-sctab="write">✎ 원고 쓰기</button>
         <button class="sc-tab" data-sctab="collect">🗂 원고 모음</button>
+        <button class="sc-tab" data-sctab="structure">📐 구조 모음</button>
       </div>
 
       <!-- 탭A: 원고 쓰기 -->
@@ -16451,6 +16605,22 @@
         <div class="sc-list" id="sc-list"></div>
       </div>
       </div><!-- /sc-tab-collect -->
+
+      <!-- 탭C: 구조 모음 (공식 라이브러리) -->
+      <div id="sc-tab-structure" class="sc-tabpane" style="display:none;">
+        <div class="sl-intro">
+          <div class="sl-intro-text">
+            <b>떡상하는 사람은 영상을 복사하지 않고 <span class="em">구조</span>를 복사합니다.</b>
+            패턴 파악에서 찾은 <b>성공 구조(공식)</b>를 대표 썸네일과 함께 모아두는 곳이에요.
+            나중에 원고 쓸 때 <b>구조는 그대로, 내용만</b> 바꿔 쓰면 됩니다.
+          </div>
+          <div class="sl-intro-btns">
+            <button class="sl-ex-btn" id="sl-ex-btn" type="button">📚 참고 예시</button>
+            <button class="sl-new-btn" id="sl-new-btn" type="button">＋ 새 구조</button>
+          </div>
+        </div>
+        <div class="sl-grid" id="sl-grid"></div>
+      </div><!-- /sc-tab-structure -->
     </div>
 
     <!-- 벤치마킹 행 선택 모달 -->
@@ -16578,9 +16748,9 @@
     <div id="pattern-view" style="display:none;">
       <header class="pp-header">
         <div class="pp-header-text">
-          <div class="pp-eyebrow">패턴 파악 · 아이디어 보드</div>
+          <div class="pp-eyebrow">패턴 파악 · 성공 공식 뽑기</div>
           <h1 class="pp-title">패턴 <span class="em">파악</span></h1>
-          <p class="pp-sub">같은 주제의 바이럴 레퍼런스를 모아 <b>#1 #2 #3 나란히</b> 비교하고, 좋은 편집점만 믹서기처럼 조합해 <b>나만의 아이디어 보드</b>를 만듭니다. 만든 보드는 보관함에 쌓여 언제든 꺼내볼 수 있어요.</p>
+          <p class="pp-sub">비슷한 레퍼런스를 <b>나란히 분해·분석</b>해서 <b>"아, 다 같은 뼈대네"</b> 하는 공통 공식을 찾는 곳이에요.<br/>찾은 공식은 <b>📐 구조 모음</b>에 저장해 다음 원고에 그대로 꺼내 씁니다.</p>
         </div>
         <button class="pp-new-btn" id="pp-new-btn">+ 새 아이디어 보드</button>
       </header>
@@ -16613,7 +16783,7 @@
 
         <!-- PART 2 -->
         <section class="pp-part">
-          <div class="pp-part-head"><span class="pp-part-no">PART 2</span><h3>원고 패턴</h3><span class="pp-part-hint">칸을 눌러 직접 적어요</span><span class="pp-head-btns"><button class="pp-head-add pp-head-sort" type="button" id="pp-sort-views" title="조회수 높은 순으로 칸 정렬">🔥 조회수 순</button><button class="pp-head-add pp-head-scene" type="button" id="pp-scene-toggle" title="🎬 장면(화면) — 둘다 / 장면 보기 / 장면 숨기기">👁 둘다</button><button class="pp-head-add pp-head-piece" type="button" id="pp-piece-btn">🧩 구조 조각 ▾</button><button class="pp-head-add pp-head-draft" type="button" id="pp-draft-mine">✨ 내꺼 자동 초안</button><button class="pp-head-add" type="button" id="pp-colfree-add">＋ 자유 원고 칸</button></span></div>
+          <div class="pp-part-head"><span class="pp-part-no">PART 2</span><h3>레퍼런스 분해·비교</h3><span class="pp-part-hint">칸을 눌러 직접 적어요</span><span class="pp-head-btns"><button class="pp-head-add pp-head-piece" type="button" id="pp-piece-btn">🧩 구조 조각 ▾</button><button class="pp-head-add" type="button" id="pp-colfree-add">＋ 자유 원고 칸</button><button class="pp-head-add pp-head-tools" type="button" id="pp-head-tools">⚙ 도구 ▾</button><span class="pp-head-more" id="pp-head-more" style="display:none;"><button class="pp-head-add pp-head-sort" type="button" id="pp-sort-views" title="조회수 높은 순으로 칸 정렬">🔥 조회수 순</button><button class="pp-head-add pp-head-scene" type="button" id="pp-scene-toggle" title="🎬 장면(화면) — 둘다 / 장면 보기 / 장면 숨기기">👁 둘다</button><button class="pp-head-add pp-head-draft" type="button" id="pp-draft-mine">✨ 내꺼 자동 초안</button></span></span></div>
           <div class="pp-piece-palette" id="pp-piece-palette" style="display:none;"></div>
           <div class="pp-fmt-bar" id="pp-fmt-bar">
             <span class="pp-fmt-label">선택 강조</span>
@@ -16624,15 +16794,22 @@
             <button class="fmt-btn clear-btn" type="button" data-ppfmt="clear" title="포맷 제거">✕</button>
           </div>
           <div class="pp-script-scroll" id="pp-part2-scroll"></div>
+          <button class="pp-analyze-btn" type="button" id="pp-analyze-btn">🔍 공통점·떡상 짚어주기 <span class="pp-analyze-caret">▾</span></button>
+          <div class="pp-analysis" id="pp-analysis" style="display:none;"></div>
           <div class="pp-memo">
-            <label>🧠 패턴 메모 — 비교하며 느낀 공통점</label>
+            <label>🧠 찾은 공식 한 줄 — 비교하며 느낀 공통 뼈대</label>
             <textarea id="pp-memo-ta" placeholder="예: 다섯 개 다 초반에 '재료는 딱 하나'처럼 호기심 → 숫자로 단순화. 방법은 전부 '갈아서 끝' 3스텝. CTA는 '저장해두고 내일 아침'으로 통일."></textarea>
+          </div>
+          <div class="pp-finale">
+            <div class="pp-finale-lbl">✅ 공식을 찾았다면 — 저장해서 다음 원고에 그대로 꺼내 쓰세요</div>
+            <button class="pp-tostruct-btn" type="button" id="pp-tostruct-btn">📐 이 패턴을 공식으로 저장 &nbsp;→&nbsp; 구조 모음</button>
           </div>
         </section>
 
-        <!-- PART 3 -->
+        <!-- PART 3 (선택 · 기본 접힘) -->
         <section class="pp-part pp-part-plan">
-          <div class="pp-part-head"><span class="pp-part-no">PART 3</span><h3>아이디어 보드 ⚙</h3><span class="pp-part-hint">좋은 것만 골라 조합 — 하나의 보드로</span></div>
+          <button class="pp-part3-toggle" type="button" id="pp-part3-toggle">🧩 <b>아이디어 보드로 조합</b> <span class="pp-part3-opt">(선택 · 포스트잇 자유 배치)</span> <span class="pp-part3-caret">▾</span></button>
+          <div class="pp-part3-body" id="pp-part3-body" style="display:none;">
           <div class="pp-canvas" id="pp-canvas">
             <div class="pp-stage" id="pp-stage">
               <div class="pp-timeline" id="pp-timeline"></div>
@@ -16653,6 +16830,7 @@
             <span class="pp-canvas-hint2">카드를 끌어서 자유 배치 — 형사 단서판처럼 이리저리 옮기며 짜보세요</span>
           </div>
           <button class="pp-save-plan" type="button">💾 아이디어 보드 저장</button>
+          </div>
         </section>
       </div>
     </div>
@@ -17127,7 +17305,7 @@
       'mbv2-meta', 'mbv2-cards',
       'hmv1-home', 'hmv1-challenges', 'hmv1-seen',
       'hmv1-acc', 'hmv1-ach', 'hmv1-weekcounts', 'hmv1-funnelcounts', 'hmv1-uploadgoal', 'hmv1-funnelup', 'hmv1-goalperiod', 'hmv1-uploadmanual',
-      'hmv1-northstars', 'hmv1-visitdays', 'hmv1-ideaboards'
+      'hmv1-northstars', 'hmv1-visitdays', 'hmv1-ideaboards', 'hmv1-structures'
     ]);
     // 이미지 키(벤치마킹 시트·무드보드) → Supabase Storage 버킷
     const IMG_BUCKET = 'cm-images';
@@ -19983,10 +20161,419 @@
   // === 원고 탭 전환 (쓰기 / 모음) ===
   function scSwitchTab(tab) {
     document.querySelectorAll('#sc-tabs .sc-tab').forEach(b => b.classList.toggle('on', b.dataset.sctab === tab));
-    const w = document.getElementById('sc-tab-write'), c = document.getElementById('sc-tab-collect');
+    const w = document.getElementById('sc-tab-write'), c = document.getElementById('sc-tab-collect'), s = document.getElementById('sc-tab-structure');
     if (w) w.style.display = (tab === 'write') ? 'block' : 'none';
     if (c) c.style.display = (tab === 'collect') ? 'block' : 'none';
+    if (s) s.style.display = (tab === 'structure') ? 'block' : 'none';
+    if (tab === 'structure') renderStructureLib();
     const sv = document.getElementById('sc-view'); if (sv) sv.scrollTop = 0;
+  }
+
+  // ============================================================
+  // === 구조 모음 (공식 라이브러리) ===========================
+  // 패턴 파악에서 찾은 성공 구조를 대표 썸네일 + 세로 단계로 저장·재사용
+  // ============================================================
+  const STRUCT_KEY = 'hmv1-structures';
+  let structures = [];
+  let _structLoaded = false;
+  function structId() { return 's' + (structures.reduce((m, s) => Math.max(m, +String(s.id).replace(/\D/g, '') || 0), 0) + 1); }
+  async function loadStructures() {
+    try { const r = await window.storage.get(STRUCT_KEY); structures = r ? JSON.parse(r) : []; }
+    catch (e) { structures = []; }
+    if (!Array.isArray(structures)) structures = [];
+    _structLoaded = true;
+  }
+  async function saveStructures() {
+    try { await window.storage.set(STRUCT_KEY, JSON.stringify(structures)); } catch (e) {}
+  }
+  // 사진2 예시 구조 (빈 상태에서 "예시로 시작")
+  function structExample() {
+    return {
+      id: structId(), name: '문제해결 · 반전형', thumb: null,
+      steps: [
+        { ico: '⏱️', label: '1초 후킹', note: '"90%가 이것 때문에 실패합니다"' },
+        { ico: '❓', label: '문제 제시', note: '' },
+        { ico: '💡', label: '왜 그런지 설명', note: '' },
+        { ico: '✅', label: '해결법 3가지', note: '' },
+        { ico: '📊', label: '결과 비교', note: '' },
+        { ico: '🎯', label: 'CTA', note: '' }
+      ],
+      formula: '초반 충격으로 이목 → 문제 공감 → 해결책 → 저장 유도',
+      refs: [], createdAt: (typeof todayStr === 'function' ? todayStr() : '')
+    };
+  }
+  // 📚 참고 공식 예시 (썸네일 구조 PDF에서) — kind:'formula' = 겉은 깔끔한 공식, 자세히=분석
+  function structExamplesFormula() {
+    var ymd = (typeof todayStr === 'function' ? todayStr() : '');
+    return [
+      {
+        id: 's', kind: 'formula', isExample: true, thumb: null,
+        name: 'A의 실제 모습', formula: 'A의 실제 모습 (근황·상황)',
+        parts: [{ k: 'A', v: '비디오로 보여줄 수 있는, 사람들이 궁금해하는 대상' }],
+        why: '채널이 추구하는 가치를 눈으로 확인할 수 있는 기회 → "그래서 실제로 어떤데?" 기대감을 만든다.',
+        examples: ['2024 청년동 실제 모습', '200억 펜트하우스 실제 모습', '손흥민 훈련하는 실제 모습', '전교 1등 공부하는 실제 모습', '4기 암환자의 실제 모습'],
+        detail: '이 공식은 "궁금하지만 직접 볼 수 없는 대상"을 카메라로 보여줄 때 통한다.\n\n[패턴]\n· 대상(A) = 부·성공·극단적 상황처럼 시청자가 직접 볼 수 없는 것\n· "실제 모습"이라는 말이 "포장 없는 날것"을 약속 → 신뢰+호기심\n· 썸네일 = 그 대상의 리얼한 한 장면 (숫자·규모 강조)\n\n[내 분야 적용]\n내 주제에서 "사람들이 궁금하지만 못 보는 것"을 A에 넣어보세요.',
+        createdAt: ymd
+      },
+      {
+        id: 's', kind: 'formula', isExample: true, thumb: null,
+        name: 'A는 당연하지만 B는 신기한 상황', formula: 'A에겐 당연 → B에겐 처음/신기',
+        parts: [{ k: 'A', v: '시청자를 포함한 무리(우리 같은 사람들)' }, { k: 'B', v: '그 무리 밖의 사람 (처음 마주치는 대상)' }],
+        why: '우리에겐 당연한 걸 처음 겪는 사람의 반응 → "저 반응 웃기다/신기하다" 하며 끝까지 본다.',
+        examples: ['부동산 처음 온 사람 특징', '엄마가 유튜브를 처음 만들었다', '태어나서 처음 OO을 먹은 반응', '초콜릿을 처음 맛본 강아지 반응'],
+        detail: '"당연함 vs 처음"의 낙차가 재미의 핵심.\n\n[패턴]\n· A = 시청자에게 익숙한 상황/문화\n· B = 그걸 처음 접하는 사람·동물·외부인\n· 썸네일 = B의 놀란/어색한 표정 클로즈업\n\n[내 분야 적용]\n내 업계에선 당연하지만 손님·초보에겐 신기한 순간을 잡아보세요.',
+        createdAt: ymd
+      },
+      {
+        id: 's', kind: 'formula', isExample: true, thumb: null,
+        name: '시청자 관심사 TOP N', formula: '(관심 주제) TOP N',
+        parts: [{ k: '주제', v: '시청층이 관심 있을 만한 것' }, { k: 'N', v: '순위 개수 (3·5·10…)' }],
+        why: '순위 = 끝까지 봐야 1등을 안다(자이가르닉) + "내 생각과 맞나" 비교 심리로 오래 본다.',
+        examples: ['인성 더러운 남자 연예인 TOP 3', '가장 어려운 인테리어 기술 TOP 5', '인기 없어 값 떨어진 수입차 TOP 4', '미분양 심각한 도시 TOP 10'],
+        detail: '순위 콘텐츠는 "궁금증 + 비교"를 동시에 건다.\n\n[패턴]\n· 주제 = 논쟁적이거나 반전 있는 소재일수록 강함\n· N = 홀수·작을수록 클릭률↑ (TOP 3, TOP 5)\n· 썸네일 = 1등을 가리고 "?"로 → 끝까지 유도\n\n[내 분야 적용]\n내 주제에서 사람들이 순위 매기고 싶어 할 것을 찾아보세요.',
+        createdAt: ymd
+      }
+    ];
+  }
+  // 예시 카드에 고유 id 부여
+  function structSeedExamples() {
+    var arr = structExamplesFormula();
+    arr.forEach(function (s) { s.id = structId(); structures.unshift(s); });
+  }
+  // 공식형 카드 (PDF 스타일: A/B 정의 + 왜 + 예시 + 자세히)
+  function renderFormulaCard(s) {
+    const badge = s.isExample ? '<span class="sl-fbadge">📚 참고 예시</span>' : '';
+    const parts = (s.parts || []).filter(p => p.k || p.v).map(function (p) {
+      return '<div class="sl-fpart"><span class="sl-fpart-k">' + esc(p.k || '') + '</span>' +
+        '<span class="sl-fpart-v">' + esc(p.v || '') + '</span></div>';
+    }).join('');
+    const why = s.why ? '<div class="sl-fwhy">💡 ' + esc(s.why) + '</div>' : '';
+    const exList = (s.examples && s.examples.length)
+      ? '<div class="sl-fex-lbl">예시</div><ul class="sl-fex">' +
+        s.examples.slice(0, 5).map(e => '<li>' + esc(e) + '</li>').join('') + '</ul>'
+      : '';
+    const exThumbs = (s.exThumbs && s.exThumbs.length)
+      ? '<div class="sl-fthumbs">' + s.exThumbs.slice(0, 6).map(t => '<img class="sl-fthumb" src="' + t + '" alt="">').join('') + '</div>'
+      : '';
+    const hasDetail = (s.detail && s.detail.trim()) ? true : false;
+    return '<div class="sl-card sl-fcard" data-sid="' + s.id + '">' +
+      '<div class="sl-fcard-top">' + badge +
+      '<div class="sl-fcard-title">' + esc(s.name || '이름 없는 공식') + '</div>' +
+      (s.formula ? '<div class="sl-fcard-formula">' + esc(s.formula) + '</div>' : '') +
+      '</div>' +
+      '<div class="sl-card-body">' +
+      (parts ? '<div class="sl-fparts">' + parts + '</div>' : '') + why + exList + exThumbs +
+      '<div class="sl-card-foot"><span class="sl-card-btns">' +
+      (hasDetail ? '<button class="sl-card-btn sl-detail" data-sl-detail="' + s.id + '" type="button">🔍 자세히</button>' : '') +
+      '<button class="sl-card-btn sl-use" data-sl-use="' + s.id + '" type="button">✍️ 이 공식으로 쓰기</button>' +
+      '<button class="sl-card-btn" data-sl-edit="' + s.id + '" type="button">편집</button>' +
+      '<button class="sl-card-btn" data-sl-del="' + s.id + '" type="button">🗑</button>' +
+      '</span></div></div></div>';
+  }
+  // 단계형 카드 (사진2 스타일: 대표 썸네일 + 세로 6단계)
+  function renderStepsCard(s) {
+    const thumb = s.thumb ? '<img src="' + s.thumb + '" alt="">' : '<div class="sl-card-thumb-empty">🖼</div>';
+    const steps = (s.steps || []).map(function (st) {
+      return '<div class="sl-step"><span class="sl-step-ico">' + (st.ico || '•') + '</span>' +
+        '<span class="sl-step-label">' + esc(st.label || '') + '</span>' +
+        (st.note ? '<span class="sl-step-note">' + esc(st.note) + '</span>' : '') + '</div>';
+    }).join('');
+    const formula = s.formula ? '<div class="sl-formula"><b>공식</b> · ' + esc(s.formula) + '</div>' : '';
+    const refN = (s.refs && s.refs.length) ? '📎 레퍼런스 ' + s.refs.length : '';
+    const hasDetail = (s.detail && s.detail.trim()) ? true : false;
+    return '<div class="sl-card" data-sid="' + s.id + '">' +
+      '<div class="sl-card-thumb">' + thumb + '<div class="sl-card-name">' + esc(s.name || '이름 없는 구조') + '</div></div>' +
+      '<div class="sl-card-body">' +
+      '<div class="sl-steps">' + steps + '</div>' + formula +
+      '<div class="sl-card-foot"><span class="sl-card-refs">' + refN + '</span>' +
+      '<span class="sl-card-btns">' +
+      (hasDetail ? '<button class="sl-card-btn sl-detail" data-sl-detail="' + s.id + '" type="button">🔍 자세히</button>' : '') +
+      '<button class="sl-card-btn sl-use" data-sl-use="' + s.id + '" type="button">✍️ 이 구조로 쓰기</button>' +
+      '<button class="sl-card-btn" data-sl-edit="' + s.id + '" type="button">편집</button>' +
+      '<button class="sl-card-btn" data-sl-del="' + s.id + '" type="button">🗑</button>' +
+      '</span></div>' +
+      '</div></div>';
+  }
+  function renderStructureLib() {
+    const grid = document.getElementById('sl-grid'); if (!grid) return;
+    if (!structures.length) {
+      grid.innerHTML =
+        '<div class="sl-empty">' +
+        '<div class="sl-empty-ico">📐</div>' +
+        '<div class="sl-empty-msg">아직 저장된 구조가 없어요.<br/>패턴 파악에서 <b>"📐 구조로 저장"</b>을 누르거나,<br/>아래 버튼으로 시작해보세요.</div>' +
+        '<div class="sl-empty-btns">' +
+        '<button class="sl-empty-btn" id="sl-formula-btn" type="button">📚 참고 공식 예시 불러오기</button>' +
+        '<button class="sl-empty-btn" id="sl-example-btn" type="button">✨ 단계형 예시 구조</button>' +
+        '</div></div>';
+      const fx = document.getElementById('sl-formula-btn');
+      if (fx) fx.onclick = async () => { structSeedExamples(); await saveStructures(); renderStructureLib(); };
+      const ex = document.getElementById('sl-example-btn');
+      if (ex) ex.onclick = async () => { structures.unshift(structExample()); await saveStructures(); renderStructureLib(); };
+      return;
+    }
+    grid.innerHTML = structures.map(function (s) {
+      return (s.kind === 'formula') ? renderFormulaCard(s) : renderStepsCard(s);
+    }).join('');
+  }
+  // 자세히 — 패턴 파악(분석) 펼쳐 보기
+  function openStructDetail(id) {
+    const s = structures.find(x => String(x.id) === String(id)); if (!s || !s.detail) return;
+    const ov = document.createElement('div');
+    ov.className = 'se-ov'; ov.id = 'sd-ov';
+    const exList = (s.examples && s.examples.length)
+      ? '<div class="sd-sec-lbl">이 공식으로 나온 예시</div><ul class="sd-ex">' +
+        s.examples.map(e => '<li>' + esc(e) + '</li>').join('') + '</ul>'
+      : '';
+    const exThumbs = (s.exThumbs && s.exThumbs.length)
+      ? '<div class="sd-sec-lbl">예시 썸네일</div><div class="sl-fthumbs">' +
+        s.exThumbs.map(t => '<img class="sl-fthumb" src="' + t + '" alt="" style="width:72px;height:72px;">').join('') + '</div>'
+      : '';
+    ov.innerHTML =
+      '<div class="se-modal sd-modal">' +
+      '<div class="se-head"><b>🔍 ' + esc(s.name || '구조') + ' — 자세히</b><button class="se-x" type="button">✕</button></div>' +
+      '<div class="se-body">' +
+      (s.formula ? '<div class="sd-formula">' + esc(s.formula) + '</div>' : '') +
+      '<div class="sd-sec-lbl">패턴 파악</div>' +
+      '<div class="sd-detail">' + esc(s.detail).replace(/\n/g, '<br>') + '</div>' +
+      exList + exThumbs +
+      '</div>' +
+      '<div class="se-foot"><button class="se-cancel" type="button">닫기</button>' +
+      '<button class="se-save sd-use" type="button">✍️ 이 공식으로 쓰기</button></div>' +
+      '</div>';
+    ov.querySelector('.se-x').onclick = ov.querySelector('.se-cancel').onclick = () => ov.remove();
+    ov.querySelector('.sd-use').onclick = () => { ov.remove(); useStructure(id); };
+    document.body.appendChild(ov);
+  }
+
+  async function deleteStructure(id) {
+    const s = structures.find(x => String(x.id) === String(id)); if (!s) return;
+    if (!confirm('"' + (s.name || '이 구조') + '" 구조를 삭제할까요?')) return;
+    structures = structures.filter(x => String(x.id) !== String(id));
+    await saveStructures(); renderStructureLib();
+    toast('구조를 삭제했어요');
+  }
+
+  // 구조 → 원고 쓰기: 단계/공식을 본문 뼈대로 깔기
+  function useStructure(id) {
+    const s = structures.find(x => String(x.id) === String(id)); if (!s) return;
+    let skeleton = '';
+    if (s.kind === 'formula') {
+      const parts = (s.parts || []).filter(p => p.k || p.v)
+        .map(p => '<b>[' + esc(p.k || '') + ']</b> ' + esc(p.v || '')).join('<br>');
+      const why = s.why ? '<i>💡 ' + esc(s.why) + '</i><br><br>' : '';
+      const ex = (s.examples && s.examples.length)
+        ? '<br>참고 예시:<br>' + s.examples.slice(0, 3).map(e => '· ' + esc(e)).join('<br>') : '';
+      skeleton = (s.formula ? '<b>공식 · ' + esc(s.formula) + '</b><br><br>' : '') + parts + '<br><br>' + why + '내 제목: <br>' + ex;
+    } else {
+      const lines = (s.steps || []).map(function (st) {
+        return '<b>[' + esc(st.label || '') + ']</b>' + (st.note ? ' ' + esc(st.note) : '') + '<br>';
+      }).join('');
+      skeleton = (s.formula ? '<i>공식 · ' + esc(s.formula) + '</i><br><br>' : '') + lines;
+    }
+    if (typeof resetScriptEntryState === 'function') resetScriptEntryState();
+    scriptEntryState.subject = s.name || '';
+    scriptEntryState.content = skeleton;
+    if (typeof applyScriptEntryToUI === 'function') applyScriptEntryToUI();
+    scSwitchTab('write');
+    toast('📐 "' + (s.name || '구조') + '" 뼈대를 원고에 깔았어요 — 내용만 채우세요');
+  }
+
+  // 이미지 다운스케일 (예시 썸네일 용량 절약)
+  function structDownscale(dataUrl, maxW) {
+    return new Promise(function (res) {
+      const img = new Image();
+      img.onload = function () {
+        const w = img.naturalWidth, h = img.naturalHeight;
+        if (w <= maxW) { res(dataUrl); return; }
+        const c = document.createElement('canvas');
+        c.width = maxW; c.height = Math.round(h * maxW / w);
+        c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+        try { res(c.toDataURL('image/jpeg', 0.82)); } catch (e) { res(dataUrl); }
+      };
+      img.onerror = function () { res(dataUrl); };
+      img.src = dataUrl;
+    });
+  }
+
+  // 구조 편집/생성 모달 (공식형 / 단계형)
+  function openStructEditor(id) {
+    const isNew = !id;
+    const s = isNew
+      ? { id: structId(), kind: 'formula', name: '', thumb: null, formula: '', parts: [{ k: 'A', v: '' }, { k: 'B', v: '' }], why: '', examples: [''], exThumbs: [], detail: '', steps: [{ ico: '⏱️', label: '', note: '' }], refs: [], createdAt: (typeof todayStr === 'function' ? todayStr() : '') }
+      : JSON.parse(JSON.stringify(structures.find(x => String(x.id) === String(id))));
+    if (!s) return;
+    // 필드 보정
+    if (!s.kind) s.kind = (s.parts || s.examples) ? 'formula' : 'steps';
+    if (!s.parts) s.parts = [{ k: 'A', v: '' }, { k: 'B', v: '' }];
+    if (!s.examples) s.examples = [''];
+    if (!s.exThumbs) s.exThumbs = [];
+    if (!s.steps) s.steps = [{ ico: '⏱️', label: '', note: '' }];
+    const ICONS = ['⏱️', '❓', '💡', '✅', '📊', '🎯', '🔥', '🎣', '⚡', '💬', '🔁', '👀', '📌', '•'];
+    const ov = document.createElement('div');
+    ov.className = 'se-ov'; ov.id = 'se-ov';
+
+    function partRows() {
+      return s.parts.map(function (p, i) {
+        return '<div class="se-prow" data-i="' + i + '">' +
+          '<input class="se-pk" placeholder="A" value="' + esc(p.k || '') + '">' +
+          '<input class="se-pv" placeholder="이게 뭔지 (예: 시청자가 궁금해하는 대상)" value="' + esc(p.v || '') + '">' +
+          '<button class="se-prow-del" type="button" title="삭제">✕</button></div>';
+      }).join('');
+    }
+    function exRows() {
+      return s.examples.map(function (e, i) {
+        return '<div class="se-exrow" data-i="' + i + '">' +
+          '<input class="se-exv" placeholder="예: 200억 펜트하우스 실제 모습" value="' + esc(e || '') + '">' +
+          '<button class="se-exrow-del" type="button" title="삭제">✕</button></div>';
+      }).join('');
+    }
+    function exThumbCells() {
+      const cells = s.exThumbs.map(function (t, i) {
+        return '<div class="se-exth" data-i="' + i + '"><img src="' + t + '"><button class="se-exth-del" type="button" title="삭제">✕</button></div>';
+      }).join('');
+      return cells + '<button class="se-exth-add" type="button">＋ 사진</button>';
+    }
+    function stepRows() {
+      return s.steps.map(function (st, i) {
+        const icoOpts = ICONS.map(ic => '<option value="' + ic + '"' + (ic === st.ico ? ' selected' : '') + '>' + ic + '</option>').join('');
+        return '<div class="se-step" data-i="' + i + '">' +
+          '<select class="se-step-ico">' + icoOpts + '</select>' +
+          '<input class="se-step-label" placeholder="단계 이름 (예: 문제 제시)" value="' + esc(st.label || '') + '">' +
+          '<input class="se-step-note" placeholder="메모 (선택)" value="' + esc(st.note || '') + '">' +
+          '<button class="se-step-del" type="button" title="삭제">✕</button></div>';
+      }).join('');
+    }
+    function render() {
+      const thumb = s.thumb
+        ? '<img src="' + s.thumb + '"><button class="se-thumb-clear" type="button">사진 제거</button>'
+        : '<div class="se-thumb-ph">🖼<br>대표 썸네일<br><span>클릭해서 사진 추가</span></div>';
+      const typeTabs =
+        '<div class="se-type">' +
+        '<button class="se-type-btn' + (s.kind === 'formula' ? ' on' : '') + '" data-kind="formula" type="button">📐 공식형 (A·B)</button>' +
+        '<button class="se-type-btn' + (s.kind === 'steps' ? ' on' : '') + '" data-kind="steps" type="button">🪜 단계형 (6단계)</button>' +
+        '</div>';
+      let body =
+        typeTabs +
+        '<label class="se-lbl">' + (s.kind === 'formula' ? '공식 이름' : '구조 이름') + ' <span>어떤 유형인지</span></label>' +
+        '<input class="se-name" placeholder="' + (s.kind === 'formula' ? '예: A의 실제 모습' : '예: 문제해결·반전형') + '" value="' + esc(s.name || '') + '">' +
+        '<label class="se-lbl">대표 썸네일 <span>대표 레퍼런스 1장</span></label>' +
+        '<div class="se-thumb" id="se-thumb">' + thumb + '</div>' +
+        '<input type="file" accept="image/*" id="se-thumb-file" style="display:none">';
+      if (s.kind === 'formula') {
+        body +=
+          '<label class="se-lbl">공식 형태 <span>한 줄로</span></label>' +
+          '<input class="se-formula-in" placeholder="예: A의 실제 모습 (근황·상황)" value="' + esc(s.formula || '') + '">' +
+          '<label class="se-lbl">A · B 정의 <span>공식의 뼈대</span></label>' +
+          '<div class="se-parts" id="se-parts">' + partRows() + '</div>' +
+          '<button class="se-part-add" type="button">＋ 항목 추가</button>' +
+          '<label class="se-lbl">왜 통하는지 <span>심리 한두 줄</span></label>' +
+          '<textarea class="se-why" placeholder="예: 궁금하지만 못 보는 걸 보여줘 기대감을 만든다">' + esc(s.why || '') + '</textarea>' +
+          '<label class="se-lbl">예시 제목 <span>이 공식으로 나온 것들</span></label>' +
+          '<div class="se-exs" id="se-exs">' + exRows() + '</div>' +
+          '<button class="se-ex-add" type="button">＋ 예시 추가</button>' +
+          '<label class="se-lbl">예시 썸네일 <span>실제 레퍼런스 사진 (선택)</span></label>' +
+          '<div class="se-exths" id="se-exths">' + exThumbCells() + '</div>' +
+          '<input type="file" accept="image/*" id="se-exth-file" style="display:none">' +
+          '<label class="se-lbl">자세히 (패턴 파악) <span>🔍 눌렀을 때 보일 분석</span></label>' +
+          '<textarea class="se-detail" placeholder="이 공식이 왜·어떻게 통하는지 분석 메모">' + esc(s.detail || '') + '</textarea>';
+      } else {
+        body +=
+          '<label class="se-lbl">단계 뼈대 <span>위→아래 순서대로</span></label>' +
+          '<div class="se-steps" id="se-steps">' + stepRows() + '</div>' +
+          '<button class="se-step-add" type="button">＋ 단계 추가</button>' +
+          '<label class="se-lbl">한 줄 공식 <span>비교하며 느낀 핵심</span></label>' +
+          '<textarea class="se-formula" placeholder="예: 초반 충격 → 문제 공감 → 해결책 → 저장 유도">' + esc(s.formula || '') + '</textarea>';
+      }
+      ov.innerHTML =
+        '<div class="se-modal">' +
+        '<div class="se-head"><b>' + (isNew ? '새 구조 만들기' : '구조 편집') + '</b><button class="se-x" type="button">✕</button></div>' +
+        '<div class="se-body">' + body + '</div>' +
+        '<div class="se-foot"><button class="se-cancel" type="button">취소</button><button class="se-save" type="button">💾 저장</button></div>' +
+        '</div>';
+      bind();
+    }
+    function pullFields() {
+      const nm = ov.querySelector('.se-name'); if (nm) s.name = nm.value.trim();
+      if (s.kind === 'formula') {
+        const fm = ov.querySelector('.se-formula-in'); if (fm) s.formula = fm.value.trim();
+        const wy = ov.querySelector('.se-why'); if (wy) s.why = wy.value.trim();
+        const dt = ov.querySelector('.se-detail'); if (dt) s.detail = dt.value.trim();
+        ov.querySelectorAll('.se-prow').forEach(function (row) {
+          const i = +row.dataset.i; if (!s.parts[i]) return;
+          s.parts[i].k = row.querySelector('.se-pk').value.trim();
+          s.parts[i].v = row.querySelector('.se-pv').value.trim();
+        });
+        ov.querySelectorAll('.se-exrow').forEach(function (row) {
+          const i = +row.dataset.i; s.examples[i] = row.querySelector('.se-exv').value.trim();
+        });
+      } else {
+        const fm = ov.querySelector('.se-formula'); if (fm) s.formula = fm.value.trim();
+        ov.querySelectorAll('.se-step').forEach(function (row) {
+          const i = +row.dataset.i; if (!s.steps[i]) return;
+          s.steps[i].ico = row.querySelector('.se-step-ico').value;
+          s.steps[i].label = row.querySelector('.se-step-label').value.trim();
+          s.steps[i].note = row.querySelector('.se-step-note').value.trim();
+        });
+      }
+    }
+    function bind() {
+      ov.querySelector('.se-x').onclick = ov.querySelector('.se-cancel').onclick = () => ov.remove();
+      ov.querySelectorAll('.se-type-btn').forEach(function (b) {
+        b.onclick = () => { pullFields(); s.kind = b.dataset.kind; render(); };
+      });
+      const thumbBox = ov.querySelector('#se-thumb');
+      const fileInput = ov.querySelector('#se-thumb-file');
+      thumbBox.onclick = (e) => { if (e.target.closest('.se-thumb-clear')) { pullFields(); s.thumb = null; render(); return; } fileInput.click(); };
+      fileInput.onchange = () => {
+        const f = fileInput.files && fileInput.files[0]; if (!f) return;
+        const fr = new FileReader();
+        fr.onload = async () => { pullFields(); s.thumb = await structDownscale(fr.result, 900); render(); };
+        fr.readAsDataURL(f);
+      };
+      if (s.kind === 'formula') {
+        ov.querySelector('.se-part-add').onclick = () => { pullFields(); s.parts.push({ k: '', v: '' }); render(); };
+        ov.querySelectorAll('.se-prow-del').forEach(function (b) {
+          b.onclick = () => { const i = +b.closest('.se-prow').dataset.i; pullFields(); s.parts.splice(i, 1); if (!s.parts.length) s.parts.push({ k: '', v: '' }); render(); };
+        });
+        ov.querySelector('.se-ex-add').onclick = () => { pullFields(); s.examples.push(''); render(); };
+        ov.querySelectorAll('.se-exrow-del').forEach(function (b) {
+          b.onclick = () => { const i = +b.closest('.se-exrow').dataset.i; pullFields(); s.examples.splice(i, 1); if (!s.examples.length) s.examples.push(''); render(); };
+        });
+        const exthFile = ov.querySelector('#se-exth-file');
+        ov.querySelector('.se-exth-add').onclick = () => exthFile.click();
+        exthFile.onchange = () => {
+          const f = exthFile.files && exthFile.files[0]; if (!f) return;
+          const fr = new FileReader();
+          fr.onload = async () => { pullFields(); s.exThumbs.push(await structDownscale(fr.result, 500)); render(); };
+          fr.readAsDataURL(f);
+        };
+        ov.querySelectorAll('.se-exth-del').forEach(function (b) {
+          b.onclick = () => { const i = +b.closest('.se-exth').dataset.i; pullFields(); s.exThumbs.splice(i, 1); render(); };
+        });
+      } else {
+        ov.querySelector('.se-step-add').onclick = () => { pullFields(); s.steps.push({ ico: '•', label: '', note: '' }); render(); };
+        ov.querySelectorAll('.se-step-del').forEach(function (b) {
+          b.onclick = () => { const i = +b.closest('.se-step').dataset.i; pullFields(); s.steps.splice(i, 1); if (!s.steps.length) s.steps.push({ ico: '•', label: '', note: '' }); render(); };
+        });
+      }
+      ov.querySelector('.se-save').onclick = async () => {
+        pullFields();
+        if (!s.name) { toast('이름을 적어주세요'); return; }
+        if (s.kind === 'formula') {
+          s.parts = s.parts.filter(p => p.k || p.v);
+          s.examples = s.examples.filter(e => e && e.trim());
+        } else {
+          s.steps = s.steps.filter(st => st.label || st.note);
+          if (!s.steps.length) s.steps = [{ ico: '•', label: '단계', note: '' }];
+        }
+        const idx = structures.findIndex(x => String(x.id) === String(s.id));
+        if (idx >= 0) structures[idx] = s; else structures.unshift(s);
+        await saveStructures(); renderStructureLib(); ov.remove();
+        toast(isNew ? '📐 구조를 저장했어요' : '구조를 수정했어요');
+      };
+    }
+    render();
+    document.body.appendChild(ov);
   }
 
   // === 원고 모음 미니 캘린더 (날짜별 원고 시각화 + 클릭 필터) ===
@@ -20381,6 +20968,26 @@
 
     // === 원고 탭 (쓰기 / 모음) + 월간 적용 토글 ===
     document.querySelectorAll('#sc-tabs .sc-tab').forEach(b => { b.onclick = () => scSwitchTab(b.dataset.sctab); });
+    // 구조 모음 — 새 구조 + 카드 액션 위임
+    const slNew = document.getElementById('sl-new-btn');
+    if (slNew) slNew.onclick = () => openStructEditor(null);
+    const slEx = document.getElementById('sl-ex-btn');
+    if (slEx) slEx.onclick = async () => {
+      if (structures.some(x => x.isExample)) { toast('참고 예시가 이미 있어요'); scSwitchTab('structure'); return; }
+      structSeedExamples(); await saveStructures(); renderStructureLib();
+      toast('📚 참고 공식 예시 3개를 넣었어요');
+    };
+    const slGrid = document.getElementById('sl-grid');
+    if (slGrid) slGrid.addEventListener('click', function (e) {
+      const use = e.target.closest('[data-sl-use]');
+      const ed = e.target.closest('[data-sl-edit]');
+      const del = e.target.closest('[data-sl-del]');
+      const dt = e.target.closest('[data-sl-detail]');
+      if (dt) { openStructDetail(dt.dataset.slDetail); return; }
+      if (use) { useStructure(use.dataset.slUse); return; }
+      if (ed) { openStructEditor(ed.dataset.slEdit); return; }
+      if (del) { deleteStructure(del.dataset.slDel); return; }
+    });
     const scPlanToggle = document.getElementById('sc-plan-toggle');
     if (scPlanToggle) scPlanToggle.onclick = () => {
       const c = document.getElementById('sc-plan-collapse');
@@ -22169,6 +22776,7 @@
     await loadGoalPeriod();
     await loadManualUpload();
     await loadFunnelUploaded();
+    await loadStructures();
 
     // Restore UI states from prefs
     document.querySelectorAll('.sh-sb-toggle').forEach(t => t.classList.toggle('active', t.dataset.view === viewMode));
@@ -24686,6 +25294,135 @@
     arr.splice(ti < 0 ? arr.length : ti, 0, moved);
     renderPpPart2();
   }
+  // ============================================================
+  // === 공통점·떡상 자동 분석 (순수 코드, AI 없음) ============
+  // 반복 단어 + 후킹 유형 사전 태그 + 떡상 상관 + 빠진 요소 + 공식 초안
+  // ============================================================
+  const PP_JOSA = ['으로써', '으로서', '이라도', '으로', '에서', '에게', '한테', '이나', '하고', '이랑', '으로', '라도', '이든', '조차', '마저', '밖에', '처럼', '만큼', '보다', '이야', '이라', '까지', '부터', '로써', '로서', '와', '과', '랑', '은', '는', '이', '가', '을', '를', '에', '의', '도', '만', '께', '고', '야', '라', '나'];
+  const PP_STOP = new Set(['그리고', '그런데', '하지만', '그래서', '정말', '진짜', '너무', '매우', '완전', '약간', '조금', '그냥', '근데', '이제', '그것', '저것', '이것', '이거', '저거', '그거', '때문', '통해', '위해', '대한', '같은', '있는', '없는', '하는', '되는', '으면', '면서', '해서', '거나', '이런', '저런', '그런', '무슨']);
+  const PP_HOOK_DICT = [
+    { tag: '충격·부정형', words: ['실패', '망함', '망하', '최악', '후회', '큰일', '위험', '절대', '안돼', '문제', '잘못', '손해', '폭망', '충격', '경고', '독', '망칠'] },
+    { tag: '궁금증형', words: ['왜', '이유', '비밀', '사실', '알고', '몰랐', '몰라', '숨겨', '정체', '무엇', '어떻게', '알아야', '진실', '알면'] },
+    { tag: '권위·전문형', words: ['의사', '전문가', '교수', '박사', '원장', '프로', '선수', '대표', '과학', '연구', '한의사', '변호사', '약사'] },
+    { tag: '손실·긴급형', words: ['놓치', '늦으', '지금', '당장', '마감', '오늘', '품절', '한정', '기회', '서두', '늦기', '마지막'] },
+    { tag: '이득·비법형', words: ['방법', '비법', '꿀팁', '공짜', '무료', '쉽게', '빠르게', '효과', '완벽', '해결', '팁'] }
+  ];
+  function ppStripTags(html) { return String(html || '').replace(/<[^>]+>/g, ' ').replace(/&[a-z]+;/gi, ' ').replace(/\s+/g, ' ').trim(); }
+  const PP_TAIL = ['합니다', '습니다', '하세요', '하는', '하기', '하고', '하며', '해서', '하면', '해야', '되는', '예요', '에요', '아요', '어요', '했다', '한다', '하다', '세요', '해요', '했', '한', '하', '해', '함', '됨'];
+  function ppStripJosa(w) { for (let i = 0; i < PP_JOSA.length; i++) { const j = PP_JOSA[i]; if (w.length > j.length + 1 && w.slice(-j.length) === j) return w.slice(0, -j.length); } return w; }
+  function ppStripTail(w) { for (let i = 0; i < PP_TAIL.length; i++) { const t = PP_TAIL[i]; if (w.length > t.length + 1 && w.slice(-t.length) === t) return w.slice(0, -t.length); } return w; }
+  function ppTokens(text) {
+    return (text || '').split(/[^가-힣A-Za-z0-9]+/).filter(Boolean)
+      .map(ppStripJosa).map(ppStripTail).filter(function (w) { return w.length >= 2 && !PP_STOP.has(w); });
+  }
+  // 이 섹션의 레퍼런스 칸 텍스트 + 조회수
+  function ppSectionCells(sec) {
+    return (ppBoard.refs || []).map(function (r, i) {
+      return { text: ppStripTags(ppBoard.matrix[sec.id + '|' + r.id] || ''), views: ppRefViews(r), no: i + 1 };
+    });
+  }
+  function ppRepeatWords(texts) {
+    const sets = texts.map(function (t) { return new Set(ppTokens(t)); });
+    const count = {};
+    sets.forEach(function (s) { s.forEach(function (w) { count[w] = (count[w] || 0) + 1; }); });
+    return Object.keys(count).filter(function (w) { return count[w] >= 2; })
+      .sort(function (a, b) { return count[b] - count[a]; }).slice(0, 3)
+      .map(function (w) { return { w: w, n: count[w] }; });
+  }
+  function ppHookTags(texts) {
+    const n = texts.length; if (!n) return [];
+    const res = [];
+    let numCells = texts.filter(function (t) { return /[0-9]|[한두세네다섯여섯일곱여덟아홉열]\s?(가지|개|명|번|위|등|초|분|살|년|시간|달|주)/.test(t); }).length;
+    if (numCells >= 2 && numCells >= Math.ceil(n / 2)) res.push({ tag: '숫자형', n: numCells });
+    PP_HOOK_DICT.forEach(function (cat) {
+      let c = 0;
+      texts.forEach(function (t) { const low = t.toLowerCase(); if (cat.words.some(function (w) { return low.indexOf(w) >= 0; })) c++; });
+      if (c >= 2 && c >= Math.ceil(n / 2)) res.push({ tag: cat.tag, n: c });
+    });
+    return res.slice(0, 2);
+  }
+  function ppViralInsight(cells) {
+    const withV = cells.filter(function (c) { return c.views > 0 && c.text; });
+    if (withV.length < 3) return '';
+    const sorted = withV.slice().sort(function (a, b) { return b.views - a.views; });
+    const half = Math.max(1, Math.floor(sorted.length / 2));
+    const high = sorted.slice(0, half), low = sorted.slice(-half);
+    const feats = [
+      { name: '숫자 포함', test: function (t) { return /[0-9]/.test(t); } },
+      { name: '물음표로 후킹', test: function (t) { return t.indexOf('?') >= 0; } },
+      { name: '따옴표(인용)', test: function (t) { return /["'“”]/.test(t); } },
+      { name: '짧고 강함(≤12자)', test: function (t) { return t.replace(/\s/g, '').length <= 12; } }
+    ];
+    for (let i = 0; i < feats.length; i++) {
+      const f = feats[i];
+      const hi = high.filter(function (c) { return f.test(c.text); }).length;
+      const lo = low.filter(function (c) { return f.test(c.text); }).length;
+      if (hi === high.length && lo === 0) return '조회수 높은 ' + high.length + '개는 다 ' + f.name + ' — 낮은 건 아님';
+    }
+    return '';
+  }
+  function ppMissing(sec) {
+    const refs = ppBoard.refs || []; if (refs.length < 2) return '';
+    const empty = [];
+    refs.forEach(function (r, i) { if (!ppStripTags(ppBoard.matrix[sec.id + '|' + r.id] || '')) empty.push('#' + (i + 1)); });
+    if (empty.length >= 1 && empty.length < refs.length && (refs.length - empty.length) >= 2) return empty.join(',') + ' 칸만 이 줄이 비었어요';
+    return '';
+  }
+  function ppAnalyzeSection(sec) {
+    const cells = ppSectionCells(sec);
+    const texts = cells.map(function (c) { return c.text; }).filter(Boolean);
+    return {
+      repeats: ppRepeatWords(texts),
+      tags: ppHookTags(texts),
+      viral: ppViralInsight(cells),
+      missing: ppMissing(sec),
+      filled: texts.length
+    };
+  }
+  // 공식 자동 초안 (C) — 섹션별 신호를 → 로 연결
+  function ppFormulaDraft() {
+    const parts = (ppBoard.sections || []).map(function (sec) {
+      const label = ppStripTags(sec.label) || '단계';
+      const a = ppAnalyzeSection(sec);
+      if (!a.filled) return '';
+      let sig = '';
+      if (a.tags.length) sig = a.tags[0].tag.replace('형', '').replace('·', '/');
+      else if (a.repeats.length) sig = "'" + a.repeats[0].w + "'";
+      return sig ? (label + '(' + sig + ')') : label;
+    }).filter(Boolean);
+    return parts.join(' → ');
+  }
+  function ppRenderAnalysis() {
+    const host = document.getElementById('pp-analysis'); if (!host) return;
+    if (!ppBoard.refs || !ppBoard.refs.length) { host.innerHTML = '<div class="pp-an-empty">먼저 🛒 레퍼런스를 담고 칸을 채워보세요.</div>'; return; }
+    let rows = '';
+    let any = false;
+    (ppBoard.sections || []).forEach(function (sec) {
+      const a = ppAnalyzeSection(sec);
+      const bits = [];
+      if (a.repeats.length) bits.push('<span class="pp-an-bit rep">🔁 ' + a.repeats.map(function (r) { return "'" + ppEsc(r.w) + "'"; }).join(' ') + '</span>');
+      if (a.tags.length) bits.push('<span class="pp-an-bit tag">🏷 ' + a.tags.map(function (t) { return ppEsc(t.tag); }).join(' · ') + '</span>');
+      if (a.viral) { bits.push('<span class="pp-an-bit viral">🔥 ' + ppEsc(a.viral) + '</span>'); }
+      if (a.missing) bits.push('<span class="pp-an-bit miss">⚠ ' + ppEsc(a.missing) + '</span>');
+      if (!bits.length) return;
+      any = true;
+      rows += '<div class="pp-an-row"><span class="pp-an-sec">' + ppEsc(ppStripTags(sec.label)) + '</span><span class="pp-an-bits">' + bits.join('') + '</span></div>';
+    });
+    if (!any) rows = '<div class="pp-an-empty">아직 겹치는 게 안 보여요. 칸을 더 채우면 코드가 반복·떡상 패턴을 짚어줄게요.</div>';
+    host.innerHTML =
+      '<div class="pp-an-note">🔍 코드가 <b>글자에서 찾은 힌트</b>예요 (뜻이 아니라 반복·표면 패턴). 진짜 통찰은 직접 찍으세요.</div>' +
+      rows +
+      '<button class="pp-an-draft" type="button" id="pp-an-draft">✨ 이 분석으로 <b>공식 초안</b> 자동 채우기</button>';
+    const draftBtn = document.getElementById('pp-an-draft');
+    if (draftBtn) draftBtn.addEventListener('click', function () {
+      const draft = ppFormulaDraft();
+      if (!draft) { toast('아직 채운 칸이 부족해요'); return; }
+      const ta = document.getElementById('pp-memo-ta');
+      if (ta) { ta.value = draft; ppBoard.memo = draft; if (typeof ppAutoGrow === 'function') ppAutoGrow(ta); ta.scrollIntoView({ block: 'center' }); }
+      toast('✨ 공식 초안을 채웠어요 — 다듬어서 저장하세요');
+    });
+  }
+
   function renderPpPart2() {
     const host = document.getElementById('pp-part2-scroll'); if (!host) return;
     ppEnsureSceneSplit(ppBoard);
@@ -25066,7 +25803,68 @@
       const memo = document.getElementById('pp-memo-ta'); if (memo) memo.addEventListener('input', function () { ppBoard.memo = memo.value; ppAutoGrow(memo); });
       const newb = document.getElementById('pp-new-btn'); if (newb) newb.addEventListener('click', ppNewBoardAction);
       const savep = document.querySelector('.pp-save-plan'); if (savep) savep.addEventListener('click', ppSaveCurrent);
+      const tostruct = document.getElementById('pp-tostruct-btn'); if (tostruct) tostruct.addEventListener('click', ppSaveAsStructure);
+      const analyzeBtn = document.getElementById('pp-analyze-btn');
+      if (analyzeBtn) analyzeBtn.addEventListener('click', function () {
+        const panel = document.getElementById('pp-analysis'); if (!panel) return;
+        const open = panel.style.display === 'none';
+        panel.style.display = open ? 'block' : 'none';
+        analyzeBtn.classList.toggle('open', open);
+        if (open) ppRenderAnalysis();
+      });
+      const headTools = document.getElementById('pp-head-tools');
+      if (headTools) headTools.addEventListener('click', function () {
+        const more = document.getElementById('pp-head-more'); if (!more) return;
+        const open = more.style.display === 'none';
+        more.style.display = open ? 'inline-flex' : 'none';
+        headTools.classList.toggle('on', open);
+      });
+      const p3toggle = document.getElementById('pp-part3-toggle');
+      if (p3toggle) p3toggle.addEventListener('click', function () {
+        const body = document.getElementById('pp-part3-body'); if (!body) return;
+        const open = body.style.display === 'none';
+        body.style.display = open ? 'block' : 'none';
+        p3toggle.classList.toggle('open', open);
+        if (open) { try { if (typeof renderPpTimeline === 'function') renderPpTimeline(); if (typeof renderPpNotes === 'function') renderPpNotes(); } catch (e) {} }
+      });
     }
+  }
+
+  // 패턴 파악 → 구조 모음 자동 정제 (구조 조각·패턴 메모 → 단계형 구조 카드)
+  async function ppSaveAsStructure() {
+    const secs = (ppBoard && ppBoard.sections) || [];
+    if (!secs.length) { toast('원고 패턴(구조 조각)이 먼저 있어야 해요'); return; }
+    const strip = h => String(h || '').replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+    const steps = secs.map(function (sec) {
+      let note = strip(sec.pattern);
+      if (!note) {
+        for (let i = 0; i < (ppBoard.refs || []).length; i++) {
+          const v = ppBoard.matrix && ppBoard.matrix[sec.id + '|' + ppBoard.refs[i].id];
+          if (v) { note = strip(v); if (note) break; }
+        }
+      }
+      return { ico: '•', label: strip(sec.label) || '단계', note: note.slice(0, 70) };
+    });
+    // 대표 썸네일 = 조회수 최고 레퍼런스(있으면), 없으면 첫 이미지
+    let thumb = null, maxV = -1;
+    (ppBoard.refs || []).forEach(function (r) {
+      const vw = (typeof ppRefViews === 'function') ? (ppRefViews(r) || 0) : 0;
+      if (r.img && vw > maxV) { maxV = vw; thumb = r.img; }
+    });
+    if (!thumb) { const f = (ppBoard.refs || []).find(r => r.img); if (f) thumb = f.img; }
+    const memo = (ppBoard.memo || '').trim();
+    const st = {
+      id: structId(), kind: 'steps',
+      name: (ppBoard.topic || '').trim() || '패턴 파악 구조',
+      thumb: thumb, steps: steps,
+      formula: memo ? memo.split('\n')[0].slice(0, 80) : '',
+      detail: memo,
+      refs: (ppBoard.refs || []).map(r => ({ label: r.label || '', rowId: r.rowId || null })),
+      createdAt: (typeof todayStr === 'function' ? todayStr() : '')
+    };
+    structures.unshift(st);
+    await saveStructures();
+    toast('📐 구조 모음에 저장했어요 — 원고 › 구조 모음에서 확인');
   }
 
   function switchWorkspace(ws) {
