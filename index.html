@@ -682,6 +682,27 @@
 
   .sh-slot.has-img .sh-slot-rm { display: flex; }
 
+  /* ===== 벤치마킹 카드 리스트 (C안 리치 카드) ===== */
+  .sh-cards { display: flex; flex-direction: column; gap: 12px; padding: 6px 2px 0; transform-origin: 0 0; }
+  .sh-card { background: var(--bg-elev); border: 1px solid var(--line); border-radius: 16px; padding: 13px; transition: border-color .15s, box-shadow .3s; }
+  .sh-card.fav { border-color: rgba(245,200,75,.42); }
+  .sh-card.sh-flash { border-color: var(--emerald); box-shadow: 0 0 0 2px rgba(46,204,113,.4); }
+  .sh-card-body { display: flex; gap: 14px; }
+  .sh-card-media { flex: 0 0 auto; width: 100px; display: flex; flex-direction: column; gap: 7px; }
+  .sh-card-media .sh-slot { width: 100px; aspect-ratio: 4/5; margin: 0; border-radius: 11px; }
+  .sh-card-media .sh-slot-sm { aspect-ratio: 1/1; }
+  .sh-slot-empty { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+  .sh-slot-lbl { font-size: 9.5px; color: var(--text-faint); font-weight: 700; }
+  .sh-card-vbadge { position: absolute; top: 6px; left: 6px; z-index: 3; background: rgba(6,10,8,.72); border-radius: 7px; padding: 2px 7px; font-size: 10px; font-weight: 800; color: #fff; }
+  .sh-card-content { flex: 1; min-width: 0; }
+  .sh-card-head { display: flex; align-items: center; gap: 7px; margin-bottom: 8px; flex-wrap: wrap; }
+  .sh-card-head .sh-no { font-size: 11px; font-weight: 800; color: var(--text-faint); font-family: 'SF Mono', monospace; }
+  .sh-card-views { font-size: 12px; font-weight: 800; color: #F5C84B; }
+  .sh-card-views.empty { color: var(--text-faint); font-weight: 600; }
+  .sh-card-hook { font-size: 15px; font-weight: 800; line-height: 1.35; margin-bottom: 9px; color: var(--text-main); word-break: keep-all; }
+  .sh-card-actions { display: flex; align-items: center; gap: 7px; margin-top: 12px; padding-top: 11px; border-top: 1px solid var(--line); flex-wrap: wrap; }
+  @media (max-width: 600px) { .sh-card-media { width: 76px; } .sh-card-media .sh-slot { width: 76px; } .sh-card-hook { font-size: 14px; } }
+
   /* Why/Idea cell */
   .sh-why-wrap {
     display: flex;
@@ -12230,6 +12251,12 @@
   .tg-noimg { font-size: 11px; color: var(--text-faint); }
   .tg-cap { font-family: 'Pretendard', sans-serif; font-size: 12px; color: var(--text-sub); line-height: 1.4; padding: 9px 10px 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
   .tg-views { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--text-mute); padding: 5px 10px 10px; }
+  /* 무드보드 카드 (썸네일·수식어 몰아보기 통일) */
+  .tg-card.tg-mood { position: relative; aspect-ratio: 4/5; background: var(--bg-void); border: 1px solid var(--line); }
+  .tg-mood .tg-thumb { position: absolute; inset: 0; width: 100%; height: 100%; aspect-ratio: auto; }
+  .tg-mood .tg-views { position: absolute; top: 8px; left: 8px; z-index: 3; padding: 3px 8px; background: rgba(6,10,8,.72); border-radius: 8px; color: #fff; font-family: 'Pretendard', sans-serif; font-size: 10.5px; font-weight: 800; }
+  .tg-mood .tg-fmt { position: absolute; top: 8px; right: 8px; z-index: 3; padding: 3px 7px; border-radius: 7px; background: var(--emerald-faint); color: var(--emerald); border: 1px solid var(--emerald-line); font-size: 9.5px; font-weight: 800; }
+  .tg-mood .tg-cap { position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; padding: 24px 10px 10px; background: linear-gradient(transparent, rgba(0,0,0,.86)); color: #fff; font-size: 12.5px; font-weight: 800; }
   /* ⚡ 빠른 수집 */
   .tb-quick-btn { margin-top: 12px; padding: 9px 16px; border-radius: 9px; border: 1px solid var(--emerald-line); background: var(--emerald-faint); color: var(--emerald); font-family: 'Pretendard', sans-serif; font-size: 13px; font-weight: 800; cursor: pointer; transition: all .15s; }
   .tb-quick-btn:hover { background: var(--emerald); color: #06140C; }
@@ -12354,6 +12381,20 @@
   }
   .fb-card-collect { border-color: var(--flare-line); }
   .fb-collect-badge { display: inline-block; font-size: 10px; font-weight: 800; color: var(--flare); background: var(--flare-soft); border: 1px solid var(--flare-line); padding: 2px 7px; border-radius: 999px; }
+  /* 분류 = 유형별 무드보드 섹션 (폴더 대신 항상 펼침) */
+  .fb-sec { margin-bottom: 22px; }
+  .fb-sec-head { display: flex; align-items: center; gap: 8px; margin-bottom: 11px; }
+  .fb-sec-title { font-size: 14px; font-weight: 800; color: var(--text-main); }
+  .fb-sec-sub { font-size: 11px; font-weight: 700; color: var(--text-faint); }
+  .fb-sec-cnt { margin-left: auto; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: var(--emerald); background: var(--emerald-faint); border: 1px solid var(--emerald-line); border-radius: 100px; padding: 1px 9px; }
+  .fb-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; }
+  @media (max-width: 600px) { .fb-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; } }
+  .fb-card { position: relative; aspect-ratio: 4/5; border-radius: 12px; overflow: hidden; background: var(--bg-void); border: 1px solid var(--line); padding: 0; cursor: pointer; transition: border-color .15s, transform .15s; }
+  .fb-card:hover { border-color: var(--emerald-line); transform: translateY(-2px); background: var(--bg-void); }
+  .fb-card-thumb { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; border-radius: 0; aspect-ratio: auto; object-fit: contain; background: var(--bg-void); }
+  .fb-card-v { position: absolute; top: 7px; left: 7px; z-index: 3; padding: 2px 7px; background: rgba(6,10,8,.72); border-radius: 7px; color: #fff; font-family: 'Pretendard', sans-serif; font-size: 10px; font-weight: 800; }
+  .fb-card-cap { position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; padding: 20px 8px 8px; background: linear-gradient(transparent, rgba(0,0,0,.86)); color: #fff; font-size: 11px; font-weight: 800; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .fb-card-badge { position: absolute; top: 7px; right: 7px; z-index: 3; padding: 2px 7px; background: var(--flare-soft); color: var(--flare); border: 1px solid var(--flare-line); border-radius: 7px; font-size: 9px; font-weight: 800; }
 
   .fb-col-empty {
     text-align: center;
@@ -12379,6 +12420,105 @@
     overflow: hidden;
     box-shadow: 0 0 32px rgba(46, 204, 113, 0.08);
   }
+
+  /* === 새 카드-슬롯 빌더 (be-*) === */
+  .be-tgs { display:flex; flex-wrap:wrap; gap:8px; margin:14px 0 10px; }
+  .be-tg { flex:1; min-width:calc(50% - 4px); text-align:center; padding:11px 8px; border-radius:12px; background:var(--bg-elev); border:1px solid var(--line); color:var(--text-mute); font-family:inherit; font-size:13px; font-weight:700; cursor:pointer; transition:.15s; }
+  .be-tdesc { text-align:center; font-size:11.5px; color:var(--text-mute); margin-bottom:16px; line-height:1.5; }
+  .be-tdesc b { color:var(--emerald); }
+  .be-row { display:flex; gap:22px; align-items:flex-start; margin-top:14px; }
+  .be-hold { flex-shrink:0; width:206px; margin:0; position:sticky; top:8px; }
+  .be-fields { flex:1; min-width:0; }
+  @media (max-width:700px){ .be-row { gap:14px; } .be-hold { width:132px; position:static; } }
+  @media (max-width:420px){ .be-hold { width:112px; } }
+  .be-slot-wrap { border-radius:17px; overflow:hidden; border:1px solid var(--line); background:var(--bg-card); box-shadow:0 12px 32px rgba(0,0,0,.42); }
+  .be-slot { position:relative; aspect-ratio:4/5; border-radius:0; border:none; background:var(--bg-void); cursor:pointer; display:flex; flex-direction:column; align-items:center; justify-content:center; overflow:hidden; }
+  .be-slot .entry-thumb-empty { position:static; display:flex; flex-direction:column; align-items:center; justify-content:center; color:var(--text-faint); }
+  .be-slot .entry-thumb-plus { width:52px; height:52px; border-radius:50%; background:var(--be-ac, var(--emerald)); color:#0a0d0b; display:flex; align-items:center; justify-content:center; font-size:26px; font-weight:800; box-shadow:0 0 22px rgba(255,255,255,.14); }
+  .be-slot .entry-thumb-hint { margin-top:10px; font-size:12.5px; font-weight:800; color:var(--be-ac, var(--emerald)); text-align:center; line-height:1.4; }
+  .be-slot .entry-thumb-img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+  .be-slot .entry-thumb-rm { position:absolute; top:9px; right:9px; z-index:5; }
+  .be-ov { position:absolute; left:0; right:0; bottom:0; z-index:3; padding:13px; pointer-events:none; }
+  .be-ov::before { content:''; position:absolute; inset:0; background:linear-gradient(transparent 30%, rgba(0,0,0,.8)); opacity:0; transition:.2s; }
+  .be-ov.show::before { opacity:1; }
+  .be-ov-copy { position:relative; z-index:2; font-size:15px; font-weight:800; color:#fff; line-height:1.3; text-shadow:0 2px 10px rgba(0,0,0,.6); }
+  .be-ov-v { position:absolute; top:-999px; left:11px; z-index:4; background:rgba(6,10,8,.6); border-radius:9px; padding:4px 9px; font-size:11px; color:#fff; font-weight:800; }
+  .be-ov-v.show { top:11px; }
+  .be-foot { padding:10px 13px; display:flex; align-items:center; justify-content:space-between; gap:8px; background:var(--bg-elev); }
+  .be-tag { padding:5px 10px; border-radius:8px; font-size:10.5px; font-weight:800; background:var(--be-soft, var(--emerald-faint)); color:var(--be-ac, var(--emerald)); border:1px solid var(--be-ac, var(--emerald-line)); }
+  .be-tag.off { background:var(--bg-card); color:var(--text-faint); border-color:var(--line); }
+  .be-foot-act { padding:6px 11px; border-radius:8px; background:#4d9ff0; border:1px solid #4d9ff0; color:#06101d; font-size:10.5px; font-weight:800; cursor:pointer; font-family:inherit; box-shadow:0 2px 12px rgba(77,159,240,.35); }
+  .be-foot-act:hover { filter:brightness(1.07); }
+  .be-hint { text-align:center; font-size:11.5px; color:var(--text-faint); margin:10px 0 16px; }
+  .be-hint b { color:var(--be-ac, var(--emerald)); }
+  .be-opt { color:var(--text-faint); font-weight:600; font-size:11px; }
+  /* 2단계 원고 (파랑) */
+  .be-more { width:100%; display:flex; align-items:center; gap:8px; padding:14px 16px; border-radius:13px; border:1.5px solid #4d9ff0; background:rgba(77,159,240,.12); color:#7bb8f5; font-size:13.5px; font-weight:800; cursor:pointer; font-family:inherit; margin:10px 0 8px; box-shadow:0 4px 18px rgba(77,159,240,.2); transition:.15s; }
+  .be-more:hover { filter:brightness(1.1); }
+  .be-more .be-step-no { color:#4d9ff0; }
+  .be-more-car { margin-left:auto; transition:.25s; }
+  .be-more.open .be-more-car { transform:rotate(180deg); }
+  /* 3단계 컨텐츠 분해 (보라) */
+  .be-cls { width:100%; display:flex; align-items:center; gap:8px; padding:14px 16px; border-radius:13px; border:1.5px solid rgba(176,123,240,.6); background:rgba(176,123,240,.1); color:#c39cf5; font-size:13.5px; font-weight:800; cursor:pointer; font-family:inherit; margin:2px 0 14px; box-shadow:0 4px 18px rgba(176,123,240,.16); transition:.15s; }
+  .be-cls:hover { filter:brightness(1.1); }
+  .be-cls .be-step-no { color:#b07bf0; }
+  .be-cls.open .be-more-car { transform:rotate(180deg); }
+  /* 1단계 간단히 담기 (초록, 메인 CTA) */
+  .be-save { width:100%; background:var(--be-ac, var(--emerald)) !important; box-shadow:0 6px 24px var(--be-soft, rgba(46,204,113,.4)) !important; }
+  .be-save-hint { text-align:center; font-size:10.5px; color:var(--text-faint); margin:-2px 0 12px; }
+  .be-save-hint b { color:#7bb8f5; }
+  /* 완성도 링 (썸네일 아래, 작게) */
+  .be-prog { display:flex; align-items:center; gap:10px; padding:10px 12px; margin-top:10px; background:var(--bg-elev); border:1px solid var(--line); border-radius:13px; }
+  .be-ring { position:relative; width:42px; height:42px; flex:0 0 auto; }
+  .be-ring svg { transform:rotate(-90deg); display:block; }
+  .be-ring-bg { fill:none; stroke:var(--line); stroke-width:4; }
+  .be-ring-fg { fill:none; stroke:var(--be-ac, var(--emerald)); stroke-width:4; stroke-linecap:round; stroke-dasharray:100.53; stroke-dashoffset:100.53; transition:stroke-dashoffset .45s cubic-bezier(.3,1.2,.5,1); }
+  .be-ring-pct { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:10.5px; font-weight:800; color:var(--be-ac, var(--emerald)); }
+  .be-ring.done .be-ring-fg { stroke:#ffd76a; }
+  .be-ring.done .be-ring-pct { color:#ffd76a; }
+  .be-prog-lbl { font-size:11px; font-weight:700; color:var(--text-faint); line-height:1.4; }
+  .be-prog-lbl b { color:var(--text-mute); font-weight:800; }
+  /* ①②③ 세로 위저드 타임라인 */
+  .be-wiz { padding-top:2px; }
+  .wz-step { display:flex; gap:13px; }
+  .wz-rail { display:flex; flex-direction:column; align-items:center; flex:0 0 30px; }
+  .wz-num { width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:900; flex:0 0 auto; border:1.5px solid; background:var(--bg-elev); transition:.25s; }
+  .wz-line { width:2px; flex:1; min-height:14px; background:var(--line); margin:3px 0; transition:.35s; }
+  .wz-body { flex:1; min-width:0; padding-bottom:18px; }
+  .wz-last .wz-body { padding-bottom:2px; }
+  .wz-title { font-size:14px; font-weight:800; margin-bottom:11px; }
+  .wz-sub { font-weight:600; font-size:11px; color:var(--text-faint); }
+  #wz-num1 { border-color:#2ec76b; color:#2ec76b; } #wz-t1 { color:#2ec76b; }
+  #wz-num2 { border-color:#4d9ff0; color:#4d9ff0; } #wz-t2 { color:#7bb8f5; }
+  #wz-num3 { border-color:#b07bf0; color:#b07bf0; } #wz-t3 { color:#cdaef7; }
+  #wz-num1.done { background:#2ec76b; color:#08110b; }
+  #wz-num2.done { background:#4d9ff0; color:#06101d; }
+  #wz-num3.done { background:#b07bf0; color:#120a1d; }
+  #wz-line1.done { background:linear-gradient(#2ec76b,#4d9ff0); }
+  #wz-line2.done { background:linear-gradient(#4d9ff0,#b07bf0); }
+  /* 유형 토글 (4종) */
+  .be-tgs { display:flex; flex-wrap:wrap; gap:8px; margin:14px 0 4px; }
+  .be-tg { flex:1; min-width:calc(25% - 6px); text-align:center; padding:11px 6px; border-radius:12px; background:var(--bg-elev); border:1px solid var(--line); color:var(--text-mute); font-family:inherit; font-size:12.5px; font-weight:700; cursor:pointer; transition:.15s; }
+  .be-tdesc { font-size:11.5px; color:var(--text-mute); margin-bottom:6px; line-height:1.5; }
+  .be-tdesc b { color:var(--be-ac, var(--emerald)); }
+  @media (max-width:480px){ .be-tg { min-width:calc(50% - 4px); font-size:12px; } }
+  /* 간단/제대로 라벨 */
+  .be-modeline { display:flex; gap:8px; margin:2px 0 10px; }
+  .be-mode { flex:1; text-align:center; padding:7px; border-radius:9px; font-size:11px; font-weight:800; background:var(--bg-elev); border:1px solid var(--line); color:var(--text-faint); }
+  .be-mode.on { background:var(--be-soft, var(--emerald-faint)); border-color:var(--be-ac, var(--emerald)); color:var(--be-ac, var(--emerald)); }
+  /* 둥둥 화살표 (제대로 담기 유도) */
+  .be-arrow { position:absolute; z-index:6; top:10px; right:10px; display:flex; flex-direction:column; align-items:center; gap:2px; pointer-events:none; animation:beFloat 1.4s ease-in-out infinite; }
+  .be-arrow-ico { font-size:19px; filter:drop-shadow(0 2px 6px rgba(0,0,0,.5)); }
+  .be-arrow-lbl { font-size:9px; font-weight:800; color:#fff; background:rgba(107,176,240,.9); border-radius:6px; padding:2px 6px; white-space:nowrap; box-shadow:0 2px 8px rgba(0,0,0,.4); }
+  @keyframes beFloat { 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-6px); } }
+  /* 아이디어 메모 / 키워드 입력 */
+  .be-memo { width:100%; min-height:80px; padding:11px 12px; background:var(--bg-void); border:1.5px solid var(--be-ac, var(--emerald)); border-radius:11px; color:var(--text-main); font-family:inherit; font-size:13px; line-height:1.6; resize:vertical; box-sizing:border-box; }
+  .be-kwbox { display:flex; flex-wrap:wrap; gap:6px; padding:10px; background:var(--bg-void); border:1px solid var(--line); border-radius:11px; min-height:44px; align-items:center; }
+  .be-kw { display:inline-flex; align-items:center; gap:4px; padding:5px 10px; border-radius:8px; background:rgba(107,176,240,.14); border:1px solid rgba(107,176,240,.4); color:#8cc3f5; font-size:11.5px; font-weight:700; }
+  .be-kw b { cursor:pointer; opacity:.7; }
+  .be-kwin { flex:1; min-width:90px; background:transparent; border:none; outline:none; color:var(--text-main); font-size:13px; font-family:inherit; }
+  .be-kwin::placeholder { color:var(--text-faint); }
+  .be-kwnote { font-size:10.5px; color:var(--text-faint); margin-top:6px; } .be-kwnote b { color:#8cc3f5; }
 
   .entry-card::before {
     content: '';
@@ -16136,120 +16276,170 @@
           <div class="entry-head">
             <div class="entry-head-text">
               <div class="entry-eyebrow">새 벤치마킹</div>
-              <h2 class="entry-title">컨텐츠 <span class="em">분해</span>하기</h2>
+              <h2 class="entry-title">컨텐츠 <span class="em">담기</span></h2>
             </div>
-            <button type="button" class="collect-open-btn" id="collect-open-btn">⚡ 소재 수집</button>
+            <button type="button" class="collect-open-btn" id="collect-open-btn" style="display:none;">⚡ 소재 수집</button>
           </div>
 
-          <div class="entry-body">
-            <!-- 왼쪽: 썸네일 (세로 9:16) -->
-            <div class="entry-col entry-col-thumb">
-              <label class="entry-mini-label">썸네일 · 9:16</label>
-              <div class="entry-thumb-box" id="entry-thumb-box">
-                <div class="entry-thumb-empty">
-                  <div class="entry-thumb-plus">+</div>
-                  <div class="entry-thumb-hint">이미지 드래그<br/>또는 클릭</div>
+          <!-- 유형 토글 (4종) — 소재 수집 흡수 -->
+          <div class="be-tgs" id="be-tgs">
+            <button type="button" class="be-tg" data-bet="thumb">🖼 썸네일</button>
+            <button type="button" class="be-tg" data-bet="copy">💬 수식어</button>
+            <button type="button" class="be-tg" data-bet="idea">💡 아이디어</button>
+            <button type="button" class="be-tg" data-bet="comment">🗨 공감댓글</button>
+          </div>
+          <div class="be-tdesc" id="be-tdesc"></div>
+
+          <!-- 위저드: 왼쪽 썸네일+완성도링 / 오른쪽 ①②③ 타임라인 -->
+          <div class="be-row">
+            <div class="be-hold">
+              <div class="be-slot-wrap" style="position:relative;">
+                <div class="entry-thumb-box be-slot" id="entry-thumb-box">
+                  <div class="entry-thumb-empty">
+                    <div class="entry-thumb-plus">+</div>
+                    <div class="entry-thumb-hint">썸네일 담기<br/>클릭·붙여넣기</div>
+                  </div>
+                  <img class="entry-thumb-img" id="entry-thumb-img" alt="" style="display:none;" />
+                  <button class="entry-thumb-rm" id="entry-thumb-rm" style="display:none;">×</button>
+                  <span class="be-ov-v" id="be-ov-v"></span>
+                  <div class="be-ov" id="be-ov"><div class="be-ov-copy" id="be-ov-copy" style="display:none;"></div></div>
                 </div>
-                <img class="entry-thumb-img" id="entry-thumb-img" alt="" style="display:none;" />
-                <button class="entry-thumb-rm" id="entry-thumb-rm" style="display:none;">×</button>
+                <div class="be-foot">
+                  <span class="be-tag off" id="be-tag">유형 미선택</span>
+                </div>
               </div>
-              <input type="text" class="entry-mini-input" id="entry-thumb-name" placeholder="썸네일 이름" maxlength="60" />
-              <input type="text" class="entry-mini-input" id="entry-copy-text" placeholder="수식어 (문구)" maxlength="80" />
+              <!-- 완성도 링 (썸네일 아래, 작게) -->
+              <div class="be-prog" id="be-prog">
+                <div class="be-ring" id="be-ring">
+                  <svg viewBox="0 0 40 40" width="42" height="42">
+                    <circle class="be-ring-bg" cx="20" cy="20" r="16"></circle>
+                    <circle class="be-ring-fg" id="be-ring-fg" cx="20" cy="20" r="16"></circle>
+                  </svg>
+                  <span class="be-ring-pct" id="be-ring-pct">0%</span>
+                </div>
+                <div class="be-prog-lbl">완성도<br/><b id="be-prog-msg">채우면 올라가요</b></div>
+              </div>
             </div>
 
-            <!-- 가운데: 공감 댓글 (세로 9:16) -->
-            <div class="entry-col entry-col-comm">
-              <label class="entry-mini-label">공감 댓글</label>
-              <div class="entry-thumb-box" id="entry-comm-box">
-                <div class="entry-thumb-empty">
-                  <div class="entry-thumb-plus">+</div>
-                  <div class="entry-thumb-hint">이미지 드래그<br/>또는 클릭</div>
-                </div>
-                <img class="entry-thumb-img" id="entry-comm-img" alt="" style="display:none;" />
-                <button class="entry-thumb-rm" id="entry-comm-rm" style="display:none;">×</button>
-              </div>
-            </div>
+            <!-- 오른쪽: ①②③ 세로 위저드 -->
+            <div class="be-fields be-wiz">
 
-            <!-- 오른쪽: 주제 → 원고 → 링크 -->
-            <div class="entry-col entry-col-main">
-              <!-- 조회수 (맨 앞 — 레퍼 고를 때 맨 먼저 찍음. 버튼+정확입력. 반응률·떡상·자동완성 동력) -->
-              <div class="entry-section">
-                <div class="entry-views-row">
-                  <label class="entry-mini-label">👁 조회수</label>
-                  <span class="entry-views-conv" id="entry-views-conv"></span>
-                </div>
-                <div class="views-picker entry-views-picker" id="entry-views-picker">
-                  <button type="button" class="views-chip" data-views="100000">10만+</button>
-                  <button type="button" class="views-chip" data-views="300000">30만+</button>
-                  <button type="button" class="views-chip" data-views="500000">50만+</button>
-                  <button type="button" class="views-chip" data-views="1000000">100만+</button>
-                  <button type="button" class="views-chip" data-views="5000000">500만+</button>
-                </div>
-                <input type="hidden" id="entry-views" /><!-- 정확입력 칸 제거(사용자 요청) — 티어 버튼만. JS 호환 위해 hidden 유지 -->
-              </div>
+              <!-- STEP 1 · 간단히 담기 -->
+              <div class="wz-step" id="wz-step1">
+                <div class="wz-rail"><span class="wz-num" id="wz-num1">1</span><span class="wz-line" id="wz-line1"></span></div>
+                <div class="wz-body">
+                  <div class="wz-title" id="wz-t1">간단히 담기 <span class="wz-sub">· 썸네일·후킹·조회수</span></div>
 
-              <!-- 주제 -->
-              <div class="entry-section">
-                <label class="entry-mini-label">주제</label>
-                <input type="text" class="entry-input entry-input-topic" id="entry-why" placeholder="얼굴형 분석 / 동기부여 영상 / 시스루뱅 망하는 이유" />
-              </div>
+                  <div class="entry-section" data-be="thumb copy">
+                    <label class="entry-mini-label" id="be-copy-label">💬 후킹 문구 <span class="be-opt">선택 · 썸네일에 박힌 말</span></label>
+                    <input type="text" class="entry-input" id="entry-copy-text" placeholder="예: 90%가 모르는 다운펌 진실" maxlength="80" />
+                  </div>
 
-              <!-- 컨텐츠 유형 (주제 아래) -->
-              <div class="entry-section">
-                <div class="entry-format-row">
-                  <label class="entry-mini-label">컨텐츠 유형</label>
-                  <button type="button" class="entry-format-add-btn" id="entry-format-add-btn">+ 유형 추가</button>
+                  <div class="entry-section" data-be="idea" style="display:none;">
+                    <label class="entry-mini-label">💡 아이디어 메모</label>
+                    <textarea class="be-memo" id="be-memo" placeholder="떠오른 아이디어를 메모하세요 (사진·메모 중 하나만 있어도 OK)"></textarea>
+                  </div>
+
+                  <div class="entry-section" data-be="comment" style="display:none;">
+                    <label class="entry-mini-label">🔑 키워드</label>
+                    <div class="be-kwbox" id="be-kwbox"><input class="be-kwin" id="be-kwin" placeholder="키워드 입력 후 Enter" /></div>
+                    <div class="be-kwnote">🔑 <b>키워드 라이브러리</b>에 연결 — 단어로 검색하면 이 댓글이 나와요</div>
+                  </div>
+
+                  <div class="entry-section" data-be="thumb copy">
+                    <div class="entry-views-row">
+                      <label class="entry-mini-label">👁 조회수</label>
+                      <span class="entry-views-conv" id="entry-views-conv"></span>
+                    </div>
+                    <div class="views-picker entry-views-picker" id="entry-views-picker">
+                      <button type="button" class="views-chip" data-views="100000">10만+</button>
+                      <button type="button" class="views-chip" data-views="300000">30만+</button>
+                      <button type="button" class="views-chip" data-views="500000">50만+</button>
+                      <button type="button" class="views-chip" data-views="1000000">100만+</button>
+                      <button type="button" class="views-chip" data-views="5000000">500만+</button>
+                    </div>
+                    <input type="hidden" id="entry-views" />
+                  </div>
+
+                  <button class="entry-save-btn be-save" id="entry-save-btn">① 간단히 담기</button>
                 </div>
-                <div class="entry-format-picker" id="entry-format-picker"></div>
               </div>
 
-              <!-- 원고 -->
-              <div class="entry-section">
-                <div class="entry-script-head">
-                  <label class="entry-mini-label">원고</label>
-                  <div class="entry-mode-toggle" id="entry-mode-toggle">
-                    <button type="button" class="entry-mode-btn on" data-smode="free">자유</button>
-                    <button type="button" class="entry-mode-btn" data-smode="sections">구조</button>
+              <!-- STEP 2 · 원고 (썸네일 전용) -->
+              <div class="wz-step" id="wz-step2" data-be="thumb">
+                <div class="wz-rail"><span class="wz-num" id="wz-num2">2</span><span class="wz-line" id="wz-line2"></span></div>
+                <div class="wz-body">
+                  <div class="wz-title" id="wz-t2">원고 <span class="wz-sub">· 제대로 수집·링크</span></div>
+
+                  <div class="entry-section">
+                    <label class="entry-mini-label">주제</label>
+                    <input type="text" class="entry-input entry-input-topic" id="entry-why" placeholder="얼굴형 분석 / 동기부여 영상 / 시스루뱅 망하는 이유" />
+                  </div>
+                  <div class="entry-section">
+                    <div class="entry-script-head">
+                      <label class="entry-mini-label">원고</label>
+                      <div class="entry-mode-toggle" id="entry-mode-toggle">
+                        <button type="button" class="entry-mode-btn on" data-smode="free">자유</button>
+                        <button type="button" class="entry-mode-btn" data-smode="sections">구조</button>
+                      </div>
+                    </div>
+                    <div class="entry-fmt-bar" id="entry-fmt-bar">
+                      <button class="fmt-btn bold-btn" data-fmt="bold" title="굵게">B</button>
+                      <button class="fmt-btn red-btn" data-fmt="color:red" title="빨강 · 핵심"><span class="swatch"></span><span class="lbl">핵심</span></button>
+                      <button class="fmt-btn orange-btn" data-fmt="color:orange" title="주황 · 참고"><span class="swatch"></span><span class="lbl">참고</span></button>
+                      <button class="fmt-btn emerald-btn" data-fmt="color:emerald" title="에메랄드 · 보조"><span class="swatch"></span><span class="lbl">보조</span></button>
+                      <button class="fmt-btn clear-btn" data-fmt="clear" title="포맷 제거">✕</button>
+                    </div>
+                    <div class="entry-script-edit"
+                         contenteditable="true"
+                         id="entry-script"
+                         data-placeholder="원고 — 벤치마킹할 글을 다듬어보세요. 드래그해서 핵심·참고·보조 색을 입혀보세요."></div>
+                    <div class="entry-struct" id="entry-struct" style="display:none;">
+                      <div class="entry-struct-preview" id="entry-struct-preview"></div>
+                      <button type="button" class="entry-struct-edit" id="entry-struct-edit">✏ 구조 편집 · 붙여넣어 나누기</button>
+                    </div>
+                  </div>
+                  <div class="entry-section">
+                    <label class="entry-mini-label">🔗 링크</label>
+                    <input type="text" class="entry-input" id="entry-url" placeholder="URL 붙여넣기 (Ctrl+V)" />
                   </div>
                 </div>
-                <div class="entry-fmt-bar" id="entry-fmt-bar">
-                  <button class="fmt-btn bold-btn" data-fmt="bold" title="굵게">B</button>
-                  <button class="fmt-btn red-btn" data-fmt="color:red" title="빨강 · 핵심"><span class="swatch"></span><span class="lbl">핵심</span></button>
-                  <button class="fmt-btn orange-btn" data-fmt="color:orange" title="주황 · 참고"><span class="swatch"></span><span class="lbl">참고</span></button>
-                  <button class="fmt-btn emerald-btn" data-fmt="color:emerald" title="에메랄드 · 보조"><span class="swatch"></span><span class="lbl">보조</span></button>
-                  <button class="fmt-btn clear-btn" data-fmt="clear" title="포맷 제거">✕</button>
+              </div>
+
+              <!-- STEP 3 · 컨텐츠 분해 -->
+              <div class="wz-step wz-last" id="wz-step3" data-be="thumb copy">
+                <div class="wz-rail"><span class="wz-num" id="wz-num3">3</span></div>
+                <div class="wz-body">
+                  <div class="wz-title" id="wz-t3">컨텐츠 분해 <span class="wz-sub">· 유형 분류·자동 분해</span></div>
+
+                  <div class="entry-section">
+                    <div class="entry-format-row">
+                      <label class="entry-mini-label">🏷 컨텐츠 유형 <span class="be-opt">추가·삭제 가능</span></label>
+                      <button type="button" class="entry-format-add-btn" id="entry-format-add-btn">+ 유형 추가</button>
+                    </div>
+                    <div class="entry-format-picker" id="entry-format-picker"></div>
+                  </div>
+                  <button class="entry-disasm-btn" id="entry-disasm-btn">
+                    <span class="entry-disasm-icon">⚙</span>
+                    <span>분해하기 (자동 유형 분류)</span>
+                  </button>
+                  <div class="entry-disasm-status" id="entry-disasm-status" style="display:none;">
+                    <span class="entry-disasm-status-label">분해 완료:</span>
+                    <span id="entry-disasm-tags"></span>
+                  </div>
                 </div>
-                <div class="entry-script-edit"
-                     contenteditable="true"
-                     id="entry-script"
-                     data-placeholder="원고 — 벤치마킹할 글을 다듬어보세요. 드래그해서 핵심·참고·보조 색을 입혀보세요."></div>
-                <div class="entry-struct" id="entry-struct" style="display:none;">
-                  <div class="entry-struct-preview" id="entry-struct-preview"></div>
-                  <button type="button" class="entry-struct-edit" id="entry-struct-edit">✏ 구조 편집 · 붙여넣어 나누기</button>
-                </div>
               </div>
 
-              <!-- 링크 -->
-              <div class="entry-section">
-                <label class="entry-mini-label">링크</label>
-                <input type="text" class="entry-input" id="entry-url" placeholder="URL 붙여넣기 (Ctrl+V)" />
-              </div>
+            </div><!-- /be-fields -->
+          </div><!-- /be-row -->
 
-              <div class="entry-actions">
-                <button class="entry-disasm-btn" id="entry-disasm-btn">
-                  <span class="entry-disasm-icon">⚙</span>
-                  <span>분해하기 (유형 분류)</span>
-                </button>
-                <button class="entry-save-btn" id="entry-save-btn">
-                  저장 →
-                </button>
-              </div>
-
-              <!-- 분해 상태 표시 -->
-              <div class="entry-disasm-status" id="entry-disasm-status" style="display:none;">
-                <span class="entry-disasm-status-label">분해 완료:</span>
-                <span id="entry-disasm-tags"></span>
-              </div>
+          <!-- 배선 보존용 (숨김): 썸네일이름·공감댓글 이미지 -->
+          <div style="display:none !important;" aria-hidden="true">
+            <input type="text" id="entry-thumb-name" maxlength="60" />
+            <div class="entry-thumb-box" id="entry-comm-box">
+              <div class="entry-thumb-empty"><div class="entry-thumb-plus">+</div><div class="entry-thumb-hint"></div></div>
+              <img class="entry-thumb-img" id="entry-comm-img" alt="" style="display:none;" />
+              <button class="entry-thumb-rm" id="entry-comm-rm" style="display:none;">×</button>
             </div>
           </div>
         </div>
@@ -16266,28 +16456,7 @@
       </div>
 
       <div class="sh-sheet-wrap">
-        <table class="sh-grid">
-          <!-- Column letters A B C D E F G -->
-          <thead>
-            <tr class="sh-collrow">
-              <th>A</th>
-              <th>B</th>
-              <th>C</th>
-              <th>D</th>
-              <th>E</th>
-            </tr>
-          </thead>
-          <thead class="sh-thead">
-            <tr>
-              <th class="sh-th col-no">No</th>
-              <th class="sh-th col-fav">★</th>
-              <th class="sh-th col-thumb">썸네일</th>
-              <th class="sh-th col-comm">공감 댓글</th>
-              <th class="sh-th col-why">원고 · 링크 · 분해</th>
-            </tr>
-          </thead>
-          <tbody id="sh-tbody"></tbody>
-        </table>
+        <div class="sh-cards" id="sh-tbody"></div>
         <div class="sh-add-row-wrap">
           <button class="sh-add-row" id="sh-add-row">+ 새 행 추가</button>
         </div>
@@ -18806,13 +18975,13 @@
       cols.push({ key: '__none__', title: '분류 안 됨', cls: 'fmt-none', match: r => !r.format });
     }
 
-    // 카드 HTML 헬퍼
+    // 카드 HTML 헬퍼 (무드보드 오버레이)
     const rowCard = (r) => {
       const hookText = r.hook || stripHtml(r.script || '').slice(0, 80) || r.why || '(내용 없음)';
       const views = r.views ? fmtNum(r.views) : '';
-      return `<div class="fb-card" data-row="${r.id}">${r.hasThumb ? `<img class="fb-card-thumb" data-thumb-row="${r.id}" alt="" style="display:none;" />` : ''}<div class="fb-card-no">NO.${String(r.no).padStart(3, '0')}</div><div class="fb-card-hook">${esc(hookText)}</div><div class="fb-card-meta">${views ? `<span class="views">${views}</span>` : ''}${r.author ? `<span>${esc(r.author)}</span>` : ''}${r.audioType ? `<span>♪ ${esc(r.audioType)}</span>` : ''}</div></div>`;
+      return `<div class="fb-card ${r.hasThumb ? 'has-img' : ''}" data-row="${r.id}">${r.hasThumb ? `<img class="fb-card-thumb" data-thumb-row="${r.id}" alt="" style="display:none;" />` : ''}${views ? `<span class="fb-card-v">👁 ${views}</span>` : ''}<div class="fb-card-cap">${esc(hookText)}</div></div>`;
     };
-    const collectCard = (c) => `<div class="fb-card fb-card-collect" data-collect="${c.id}"><img class="fb-card-thumb" data-collect-thumb="${c.id}" alt="" style="display:none;" /><div class="fb-card-hook"><span class="fb-collect-badge">⚡ 소재</span></div></div>`;
+    const collectCard = (c) => `<div class="fb-card fb-card-collect" data-collect="${c.id}"><img class="fb-card-thumb" data-collect-thumb="${c.id}" alt="" style="display:none;" /><span class="fb-card-badge">⚡ 소재</span></div>`;
 
     // 각 그룹(폴더) 데이터 계산
     const colData = cols.map(col => {
@@ -18824,28 +18993,15 @@
     });
     if (_fbOpenKey != null && !colData.some(d => d.col.key === _fbOpenKey)) _fbOpenKey = null;
 
-    if (_fbOpenKey != null) {
-      // === 폴더 열림: 해당 유형의 카드들을 그리드로 (드릴인) ===
-      const d = colData.find(x => x.col.key === _fbOpenKey);
+    // === 모든 그룹을 섹션으로 (폴더 드릴 대신 항상 펼침) ===
+    const secsHtml = colData.filter(d => d.total > 0).map(d => {
       const cardsHtml = d.fmtRows.map(rowCard).join('') + d.colCollects.map(collectCard).join('');
-      el.innerHTML =
-        `<div class="fb-open">
-          <button class="fb-back" id="fb-back">← 폴더 목록</button>
-          <div class="fb-open-head"><span class="fb-open-title ${d.col.cls}">${esc(d.col.title)}</span><span class="fb-open-cnt">${d.total}개</span>${d.col.sub ? `<span class="fb-open-sub">${esc(d.col.sub)}</span>` : ''}</div>
-          <div class="fb-open-grid">${cardsHtml || `<div class="fb-col-empty">아직 없어요. 시트·소재 수집에서 이 유형으로 모아보세요.</div>`}</div>
-        </div>`;
-      const bk = document.getElementById('fb-back'); if (bk) bk.onclick = () => { _fbOpenKey = null; renderFormatBoard(); };
-    } else {
-      // === 폴더 그리드: 유형별 폴더 타일 (한눈에, 모바일도 한 줄 여러 개) ===
-      el.innerHTML = '<div class="fb-folders">' + colData.map(d => {
-        const prevRow = d.fmtRows.find(r => r.hasThumb);
-        const prevCol = d.colCollects[0];
-        const thumbHtml = prevRow ? `<img class="fb-folder-thumb" data-thumb-row="${prevRow.id}" alt="" style="display:none;" />`
-          : (prevCol ? `<img class="fb-folder-thumb" data-collect-thumb="${prevCol.id}" alt="" style="display:none;" />` : '<div class="fb-folder-mark"></div>');
-        return `<button class="fb-folder ${d.col.cls}${d.total ? '' : ' empty'}" data-folder="${esc(d.col.key)}"><div class="fb-folder-prev">${thumbHtml}<span class="fb-folder-badge">${d.total}</span></div><div class="fb-folder-name">${esc(d.col.title)}</div>${d.col.sub ? `<div class="fb-folder-sub">${esc(d.col.sub)}</div>` : ''}</button>`;
-      }).join('') + '</div>';
-      el.querySelectorAll('.fb-folder').forEach(f => { f.onclick = () => { _fbOpenKey = f.dataset.folder; renderFormatBoard(); }; });
-    }
+      return `<div class="fb-sec">
+        <div class="fb-sec-head"><span class="fb-sec-title">${esc(d.col.title)}</span>${d.col.sub ? `<span class="fb-sec-sub">${esc(d.col.sub)}</span>` : ''}<span class="fb-sec-cnt">${d.total}</span></div>
+        <div class="fb-grid">${cardsHtml}</div>
+      </div>`;
+    }).join('');
+    el.innerHTML = secsHtml || `<div class="fb-col-empty">아직 분류할 카드가 없어요. 시트·소재 수집에서 유형을 지정해보세요.</div>`;
 
     // 썸네일 비동기 로드 (폴더 미리보기 + 열린 카드 공통)
     el.querySelectorAll('img[data-thumb-row]').forEach(img => {
@@ -19063,7 +19219,12 @@
         : (r.hook || stripHtml(r.script || '').slice(0, 60) || r.why || '');
       const views = r.views ? fmtNum(r.views) : '';
       const hasImg = r.hasThumb; // 수식어에도 그 행의 썸네일 이미지를 함께 보여줌
-      return '<div class="tg-card" data-row="' + r.id + '"><div class="tg-thumb" data-img="' + r.id + '" data-kind="thumb">' + (hasImg ? '' : '<span class="tg-noimg">이미지 없음</span>') + '</div><div class="tg-cap">' + (esc(hookText) || '(내용 없음)') + '</div>' + (views ? '<div class="tg-views">▶ ' + views + '</div>' : '') + '</div>';
+      const fmtChip = r.format ? '<span class="tg-fmt" data-fmt="' + esc(r.format) + '">' + esc(r.format) + '</span>' : '';
+      return '<div class="tg-card tg-mood" data-row="' + r.id + '">' +
+        '<div class="tg-thumb" data-img="' + r.id + '" data-kind="thumb">' + (hasImg ? '' : '<span class="tg-noimg">이미지 없음</span>') + '</div>' +
+        (views ? '<span class="tg-views">👁 ' + views + '</span>' : '') + fmtChip +
+        '<div class="tg-cap">' + (esc(hookText) || '(내용 없음)') + '</div>' +
+        '</div>';
     };
     function loadCardImgs() {
       el.querySelectorAll('.tg-thumb[data-img]').forEach(async box => {
@@ -21397,16 +21558,11 @@
         closeRefPanel();
         switchWorkspace('sheet');
         setTimeout(() => {
-          const tr = document.querySelector(`.sh-tr[data-id="${rowId}"]`);
+          const tr = document.querySelector(`.sh-card[data-id="${rowId}"]`);
           if (tr) {
             tr.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            tr.querySelectorAll('.sh-td').forEach(td => {
-              td.style.transition = 'background 0.3s';
-              td.style.background = 'rgba(46, 204, 113, 0.2)';
-            });
-            setTimeout(() => {
-              tr.querySelectorAll('.sh-td').forEach(td => { td.style.background = ''; });
-            }, 1500);
+            tr.classList.add('sh-flash');
+            setTimeout(() => { tr.classList.remove('sh-flash'); }, 1500);
           }
         }, 300);
       };
@@ -21517,7 +21673,7 @@
     renderSidebarCounts();
 
     if (visible.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="5" class="sh-empty"><div class="sh-empty-mark">∼</div><div class="sh-empty-txt">${viewMode === 'filled' ? '아직 작성된 행이 없습니다' : '조건에 맞는 항목이 없습니다'}</div></td></tr>`;
+      tbody.innerHTML = `<div class="sh-empty"><div class="sh-empty-mark">∼</div><div class="sh-empty-txt">${viewMode === 'filled' ? '아직 작성된 행이 없습니다' : '조건에 맞는 항목이 없습니다'}</div></div>`;
       return;
     }
 
@@ -21561,61 +21717,66 @@
         strengthIcons = `<span class="sh-strength-icons"><span class="sh-strength-icon copy" title="수식어 강점"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span></span>`;
       }
 
+      const cardTitle = r.hook || r.copyText || stripHtml(r.script || '').slice(0, 60) || r.why || ('No.' + String(r.no).padStart(3, '0'));
       return `
-        <tr class="sh-tr ${filled ? 'filled' : ''} ${r.favorite ? 'fav' : ''}" data-id="${r.id}" data-no="${r.no}">
-          <td class="sh-td col-no">${String(r.no).padStart(3, '0')}${strengthIcons}</td>
-          <td class="sh-td col-fav">
-            <button class="sh-fav-btn ${r.favorite ? 'on' : ''}" data-act="fav" data-id="${r.id}">${r.favorite ? '★' : '☆'}</button>
-          </td>
-          <td class="sh-td" style="text-align:center;">
-            <div class="sh-slot ${r.hasThumb ? 'has-img' : ''}" data-img-target="thumb" data-row="${r.id}">
-              ${thumbUrl ? `<img src="${esc(thumbUrl)}" alt=""/>` : `<div class="sh-slot-icon">+</div>`}
-              <button class="sh-slot-rm" data-rm-img="thumb" data-row="${r.id}">×</button>
-            </div>
-          </td>
-          <td class="sh-td" style="text-align:center;">
-            <div class="sh-slot ${r.hasComment ? 'has-img' : ''}" data-img-target="comment" data-row="${r.id}">
-              ${commUrl ? `<img src="${esc(commUrl)}" alt=""/>` : `<div class="sh-slot-icon">+</div>`}
-              <button class="sh-slot-rm" data-rm-img="comment" data-row="${r.id}">×</button>
-            </div>
-          </td>
-          <td class="sh-td">
-            <div class="sh-script-cell" data-row="${r.id}">
-              <div class="sh-smode" data-row="${r.id}">
-                <button type="button" class="sh-smode-btn ${(r.scriptMode || 'free') === 'free' ? 'on' : ''}" data-smode="free" data-row="${r.id}">자유</button>
-                <button type="button" class="sh-smode-btn ${(r.scriptMode || 'free') === 'sections' ? 'on' : ''}" data-smode="sections" data-row="${r.id}">구조</button>
+        <div class="sh-card ${filled ? 'filled' : ''} ${r.favorite ? 'fav' : ''}" data-id="${r.id}" data-no="${r.no}">
+          <div class="sh-card-body">
+            <div class="sh-card-media">
+              <div class="sh-slot ${r.hasThumb ? 'has-img' : ''}" data-img-target="thumb" data-row="${r.id}">
+                ${thumbUrl ? `<img src="${esc(thumbUrl)}" alt=""/>` : `<div class="sh-slot-empty"><div class="sh-slot-icon">+</div><div class="sh-slot-lbl">썸네일</div></div>`}
+                ${thumbUrl && r.views ? `<span class="sh-card-vbadge">👁 ${fmtViews(r.views)}</span>` : ''}
+                <button class="sh-slot-rm" data-rm-img="thumb" data-row="${r.id}">×</button>
               </div>
-              <div class="sh-script-edit"
-                   contenteditable="true"
-                   data-field="script"
-                   data-row="${r.id}"
-                   data-placeholder="원고 — 직접 쓰거나 벤치마킹한 글을 다듬어보세요. 드래그해서 색 적용."
-                   style="${(r.scriptMode || 'free') === 'sections' ? 'display:none;' : ''}">${r.script || ''}</div>
-              <div class="sh-script-secs" data-row="${r.id}" style="${(r.scriptMode || 'free') === 'sections' ? '' : 'display:none;'}">
-                <div class="sh-struct-preview">${structPreviewHtml(r.scriptSections)}</div>
-                <button type="button" class="sh-struct-edit" data-act="struct-edit" data-id="${r.id}">✏ 구조 편집 · 붙여넣어 나누기</button>
+              <div class="sh-slot sh-slot-sm ${r.hasComment ? 'has-img' : ''}" data-img-target="comment" data-row="${r.id}">
+                ${commUrl ? `<img src="${esc(commUrl)}" alt=""/>` : `<div class="sh-slot-empty"><div class="sh-slot-icon">+</div><div class="sh-slot-lbl">공감댓글</div></div>`}
+                <button class="sh-slot-rm" data-rm-img="comment" data-row="${r.id}">×</button>
               </div>
-              <div class="sh-cell-bar">
-                <button class="sh-script-toggle" data-act="toggle-script" data-row="${r.id}">▼ 펼치기</button>
-                ${marks.length ? `<div class="sh-row-marks">${marks.join('')}</div>` : ''}
-                <div class="sh-cell-actions">
-                  <span class="sh-plan-wrap">
-                    <button class="sh-plan-btn ${planned ? 'planned' : ''}" data-act="planweek" data-id="${r.id}" title="${planned ? '이번주 기획됨 — 클릭하면 빼기' : '이 레퍼런스를 이번주에 만들 업로드로 기획'}">${planned ? '✓ 이번주 기획됨' : '🎯 이번주 기획'}</button>
-                    <button class="sh-plan-more" data-act="planweek-menu" data-id="${r.id}" title="다른 주차에 기획">▾</button>
-                  </span>
-                  <span class="sh-link-wrap" data-link-cell data-row="${r.id}">
-                    ${r.url ?
-                      `<button class="sh-link active" data-act="editlink" data-id="${r.id}" title="클릭해서 링크 수정">🔗 링크</button><a href="${esc(r.url)}" target="_blank" rel="noopener" class="sh-link-open" title="새 탭으로 열기">↗</a>` :
-                      `<button class="sh-link empty" data-act="addlink" data-id="${r.id}">🔗 링크</button>`
-                    }
-                  </span>
-                  <button class="sh-detail-btn ${detailFilled ? 'has-detail' : ''}" data-act="detail" data-id="${r.id}">${detailFilled ? '⚙ 분해됨' : '⚙ 분해'}</button>
-                  <button class="sh-rival-btn ${r.rival ? 'on' : ''}" data-act="rival" data-id="${r.id}" title="라이벌 배정">${r.rival ? '🎯 ' + esc(rivalName(r.rival) || '라이벌') : '🎯 라이벌'}</button>
+            </div>
+            <div class="sh-card-content">
+              <div class="sh-card-head">
+                <span class="sh-no">${String(r.no).padStart(3, '0')}</span>${strengthIcons}
+                <button class="sh-fav-btn ${r.favorite ? 'on' : ''}" data-act="fav" data-id="${r.id}">${r.favorite ? '★' : '☆'}</button>
+                ${r.format ? `<span class="sh-row-fmt ${customFormats.includes(r.format) ? 'custom' : ''}" data-fmt="${esc(r.format)}">${esc(r.format)}</span>` : ''}
+                ${r.views ? `<span class="sh-card-views">👁 ${fmtViews(r.views)}</span>` : `<span class="sh-card-views empty">조회수 미입력</span>`}
+              </div>
+              <div class="sh-card-hook">${esc(cardTitle)}</div>
+              <div class="sh-script-cell" data-row="${r.id}">
+                <div class="sh-smode" data-row="${r.id}">
+                  <button type="button" class="sh-smode-btn ${(r.scriptMode || 'free') === 'free' ? 'on' : ''}" data-smode="free" data-row="${r.id}">자유</button>
+                  <button type="button" class="sh-smode-btn ${(r.scriptMode || 'free') === 'sections' ? 'on' : ''}" data-smode="sections" data-row="${r.id}">구조</button>
+                </div>
+                <div class="sh-script-edit"
+                     contenteditable="true"
+                     data-field="script"
+                     data-row="${r.id}"
+                     data-placeholder="원고 — 직접 쓰거나 벤치마킹한 글을 다듬어보세요. 드래그해서 색 적용."
+                     style="${(r.scriptMode || 'free') === 'sections' ? 'display:none;' : ''}">${r.script || ''}</div>
+                <div class="sh-script-secs" data-row="${r.id}" style="${(r.scriptMode || 'free') === 'sections' ? '' : 'display:none;'}">
+                  <div class="sh-struct-preview">${structPreviewHtml(r.scriptSections)}</div>
+                  <button type="button" class="sh-struct-edit" data-act="struct-edit" data-id="${r.id}">✏ 구조 편집 · 붙여넣어 나누기</button>
+                </div>
+                <div class="sh-cell-bar">
+                  <button class="sh-script-toggle" data-act="toggle-script" data-row="${r.id}">▼ 펼치기</button>
+                  ${marks.length ? `<div class="sh-row-marks">${marks.join('')}</div>` : ''}
                 </div>
               </div>
             </div>
-          </td>
-        </tr>
+          </div>
+          <div class="sh-card-actions">
+            <span class="sh-plan-wrap">
+              <button class="sh-plan-btn ${planned ? 'planned' : ''}" data-act="planweek" data-id="${r.id}" title="${planned ? '이번주 기획됨 — 클릭하면 빼기' : '이 레퍼런스를 이번주에 만들 업로드로 기획'}">${planned ? '✓ 이번주 기획됨' : '🎯 이번주 기획'}</button>
+              <button class="sh-plan-more" data-act="planweek-menu" data-id="${r.id}" title="다른 주차에 기획">▾</button>
+            </span>
+            <span class="sh-link-wrap" data-link-cell data-row="${r.id}">
+              ${r.url ?
+                `<button class="sh-link active" data-act="editlink" data-id="${r.id}" title="클릭해서 링크 수정">🔗 링크</button><a href="${esc(r.url)}" target="_blank" rel="noopener" class="sh-link-open" title="새 탭으로 열기">↗</a>` :
+                `<button class="sh-link empty" data-act="addlink" data-id="${r.id}">🔗 링크</button>`
+              }
+            </span>
+            <button class="sh-detail-btn ${detailFilled ? 'has-detail' : ''}" data-act="detail" data-id="${r.id}">${detailFilled ? '⚙ 분해됨' : '⚙ 분해'}</button>
+            <button class="sh-rival-btn ${r.rival ? 'on' : ''}" data-act="rival" data-id="${r.id}" title="라이벌 배정">${r.rival ? '🎯 ' + esc(rivalName(r.rival) || '라이벌') : '🎯 라이벌'}</button>
+          </div>
+        </div>
       `;
     }));
 
@@ -23249,7 +23410,7 @@
     // 시트 두 손가락(핀치) 줌 — CSS zoom 리플로우, 손 떼도 배율 그대로 유지. 더블탭(손가락 1개로 톡톡)=1배 리셋
     (function () {
       const sw = document.querySelector('.sh-sheet-wrap');
-      const grid = document.querySelector('.sh-grid');
+      const grid = document.querySelector('.sh-cards');
       if (!sw || !grid) return;
       let z = 1, startD = 0, startZ = 1, pinching = false, pinchedSeq = false, lastTapTime = 0;
       const dist = t => Math.hypot(t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY);
@@ -23946,6 +24107,128 @@
     _im.classList.add('show');
   }
 
+  // === 4종 유형 토글 (썸네일=행/saveEntry, 나머지=소재수집/collects) ===
+  let beType = 'thumb';
+  let beKws = [];
+  const BE_TYPES = {
+    thumb:   { ac: '#2ec76b', soft: 'rgba(46,204,113,.14)', label: '썸네일 담기', save: '① 간단히 담기', desc: '직감적으로 <b>이해시키는 이미지</b>를 모으는 곳', copyLabel: '💬 후킹 문구 <span class="be-opt">선택 · 썸네일에 박힌 말</span>' },
+    copy:    { ac: '#f0b23a', soft: 'rgba(240,178,58,.14)', label: '문구 담기', save: '⚡ 수식어 수집', desc: '말맛을 더하는 <b>후킹 문구</b>를 모으는 곳', copyLabel: '💬 수식어 (후킹 문구)' },
+    idea:    { ac: '#c8f03a', soft: 'rgba(200,240,58,.14)', label: '사진 담기', save: '⚡ 아이디어 수집', desc: '떠오른 <b>소재·기획</b>을 메모로 모으는 곳' },
+    comment: { ac: '#6bb0f0', soft: 'rgba(107,176,240,.14)', label: '댓글 캡처', save: '⚡ 공감댓글 수집', desc: '고객 <b>반응 댓글</b>을 키워드로 모으는 곳' }
+  };
+  function beUpdateArrow() {
+    const ar = document.getElementById('be-arrow'); if (!ar) return;
+    const body = document.getElementById('be-more-body');
+    const opened = body && body.style.display !== 'none';
+    ar.style.display = (beType === 'thumb' && !opened) ? 'flex' : 'none';
+  }
+  // 2단계 제대로 수집 (원고·링크) 펼치기
+  function beToggleMore(force) {
+    const bd = document.getElementById('be-more-body'); if (!bd) return;
+    const btn = document.getElementById('be-more');
+    const open = (typeof force === 'boolean') ? force : (bd.style.display === 'none');
+    bd.style.display = open ? 'block' : 'none';
+    if (btn) btn.classList.toggle('open', open);
+    beUpdateArrow();
+    if (open) { try { bd.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); } catch (e) {} }
+  }
+  // 유형 분류 하기 (컨텐츠 유형 + 자동 분해) 펼치기
+  function beToggleCls(force) {
+    const bd = document.getElementById('be-cls-body'); if (!bd) return;
+    const btn = document.getElementById('be-cls');
+    const open = (typeof force === 'boolean') ? force : (bd.style.display === 'none');
+    bd.style.display = open ? 'block' : 'none';
+    if (btn) btn.classList.toggle('open', open);
+  }
+  function beSelectType(k) {
+    const t = BE_TYPES[k]; if (!t) return;
+    beType = k;
+    const card = document.querySelector('.entry-card');
+    if (card) { card.style.setProperty('--be-ac', t.ac); card.style.setProperty('--be-soft', t.soft); }
+    document.querySelectorAll('#be-tgs .be-tg').forEach(function (b) {
+      const on = b.dataset.bet === k;
+      b.style.background = on ? t.soft : ''; b.style.borderColor = on ? t.ac : ''; b.style.color = on ? t.ac : '';
+    });
+    const d = document.getElementById('be-tdesc'); if (d) d.innerHTML = t.desc;
+    const hint = document.querySelector('.be-slot .entry-thumb-hint'); if (hint) hint.innerHTML = t.label + '<br>클릭·붙여넣기';
+    const sb = document.getElementById('entry-save-btn'); if (sb) sb.textContent = t.save;
+    const cl = document.getElementById('be-copy-label'); if (cl && t.copyLabel) cl.innerHTML = t.copyLabel;
+    document.querySelectorAll('.entry-card [data-be]').forEach(function (el) {
+      const types = (el.getAttribute('data-be') || '').split(/\s+/);
+      el.style.display = types.indexOf(k) >= 0 ? '' : 'none';
+    });
+    // 제대로 수집·유형 분류 본문은 항상 접힌 채로 시작 (유형 전환 시 리셋)
+    const _mb = document.getElementById('be-more-body'); if (_mb) _mb.style.display = 'none';
+    const _mbtn = document.getElementById('be-more'); if (_mbtn) _mbtn.classList.remove('open');
+    const _cb = document.getElementById('be-cls-body'); if (_cb) _cb.style.display = 'none';
+    const _cbtn = document.getElementById('be-cls'); if (_cbtn) _cbtn.classList.remove('open');
+    if (sb) sb.classList.remove('be-full');
+    beUpdateArrow();
+    beRenderCard();
+  }
+  async function beSaveCollect(kind) {
+    const img = entryState.thumbDataUrl || null;
+    const text = ((document.getElementById('entry-copy-text') || {}).value || '').trim();
+    const memo = ((document.getElementById('be-memo') || {}).value || '').trim();
+    if (kind === 'copy' && !text && !img) { toast('수식어 문구나 이미지를 넣어주세요'); return; }
+    if (kind === 'idea' && !memo && !img) { toast('메모나 사진을 넣어주세요'); return; }
+    if (kind === 'comment' && !beKws.length && !img) { toast('키워드나 이미지를 넣어주세요'); return; }
+    const id = 'col_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7);
+    const c = { id: id, kind: kind, type: entryState.format || '', text: (kind === 'copy' ? text : ''), memo: (kind === 'idea' ? memo : ''), keywords: (kind === 'comment' ? beKws.slice() : []), hasImg: !!img, link: '', createdAt: Date.now() };
+    if (img) { try { await saveImage(id, 'c', img); } catch (e) {} }
+    collects.push(c); await saveCollects();
+    const lbl = kind === 'copy' ? '수식어' : kind === 'idea' ? '아이디어' : '공감댓글';
+    toast('⚡ ' + lbl + ' 수집함에 저장!');
+    beKws = []; const kb = document.getElementById('be-kwbox'); if (kb) kb.querySelectorAll('.be-kw').forEach(function (x) { x.remove(); });
+    const me = document.getElementById('be-memo'); if (me) me.value = '';
+    clearEntryCard();
+    try { if (typeof renderThumbBoard === 'function') renderThumbBoard(); } catch (e) {}
+  }
+  // 라이브 카드 슬롯 오버레이 갱신 (후킹문구·조회수·유형 → 카드)
+  function beRenderCard() {
+    const img = document.getElementById('entry-thumb-img');
+    const hasImg = img && img.style.display !== 'none' && img.getAttribute('src');
+    const copy = (document.getElementById('entry-copy-text') || {}).value || '';
+    const ov = document.getElementById('be-ov'); if (ov) ov.classList.toggle('show', !!(hasImg || copy));
+    const oc = document.getElementById('be-ov-copy'); if (oc) { oc.textContent = copy; oc.style.display = copy ? 'block' : 'none'; }
+    const ovv = document.getElementById('be-ov-v');
+    if (ovv) { const vv = entryState.views || 0; if (vv) { ovv.textContent = '👁 ' + (typeof fmtViews === 'function' ? fmtViews(vv) : vv); ovv.classList.add('show'); } else ovv.classList.remove('show'); }
+    const tag = document.getElementById('be-tag');
+    if (tag) { const f = entryState.format || ''; if (f) { tag.textContent = f; tag.classList.remove('off'); } else { tag.textContent = '유형 미선택'; tag.classList.add('off'); } }
+    beRenderProgress();
+  }
+  // 완성도 링 + 3단계 (①간단히=썸네일·후킹·조회수 ②원고·링크 ③유형 분류)
+  function beRenderProgress() {
+    const prog = document.getElementById('be-prog'); if (!prog) return;
+    if (beType !== 'thumb') { prog.style.display = 'none'; return; }
+    prog.style.display = '';
+    const val = function (id) { return ((document.getElementById(id) || {}).value || '').trim(); };
+    const sEd = document.getElementById('entry-script');
+    const hasScript = !!(sEd && sEd.textContent.trim()) || !!(entryState.script && entryState.script.trim()) ||
+      !!(entryState.scriptSections && Object.keys(entryState.scriptSections).some(function (k) { return (entryState.scriptSections[k] || '').trim(); }));
+    const has = {
+      thumb: !!entryState.thumbDataUrl,
+      hook: !!val('entry-copy-text'),
+      views: !!entryState.views,
+      script: hasScript,
+      link: !!val('entry-url'),
+      type: !!entryState.format
+    };
+    const w = { thumb: 30, hook: 10, views: 10, script: 25, link: 5, type: 20 };
+    let pct = 0; Object.keys(w).forEach(function (k) { if (has[k]) pct += w[k]; });
+    const C = 2 * Math.PI * 16;
+    const fg = document.getElementById('be-ring-fg'); if (fg) fg.style.strokeDashoffset = C * (1 - pct / 100);
+    const pe = document.getElementById('be-ring-pct'); if (pe) pe.textContent = pct + '%';
+    const ring = document.getElementById('be-ring'); if (ring) ring.classList.toggle('done', pct >= 100);
+    const s1 = has.thumb || has.hook || has.views, s2 = has.script || has.link, s3 = has.type;
+    const setStep = function (n, on) {
+      const num = document.getElementById('wz-num' + n); if (num) num.classList.toggle('done', on);
+      const line = document.getElementById('wz-line' + n); if (line) line.classList.toggle('done', on);
+    };
+    setStep(1, s1); setStep(2, s2); setStep(3, s3);
+    const msgEl = document.getElementById('be-prog-msg');
+    if (msgEl) msgEl.textContent = pct >= 100 ? '완성! 🏆' : pct >= 60 ? '거의 다 왔어요' : pct > 0 ? '채우는 중' : '채우면 올라가요';
+  }
   function renderEntryFormatPicker() {
     const el = document.getElementById('entry-format-picker');
     if (!el) return;
@@ -24224,10 +24507,42 @@
       openEntryDisassembleModal();
     });
 
-    // === Save button ===
+    // === Save button (유형에 따라 행/수집함 라우팅) ===
     saveBtn.addEventListener('click', async () => {
-      await saveEntry();
+      if (beType === 'thumb') await saveEntry();
+      else await beSaveCollect(beType);
     });
+
+    // === 라이브 카드 슬롯 갱신 배선 ===
+    if (copyTextInput) copyTextInput.addEventListener('input', beRenderCard);
+    if (urlInput) urlInput.addEventListener('input', beRenderCard);
+    if (scriptEd) scriptEd.addEventListener('input', beRenderCard);
+    const _vpk = document.getElementById('entry-views-picker'); if (_vpk) _vpk.addEventListener('click', () => setTimeout(beRenderCard, 0));
+    const _fpk = document.getElementById('entry-format-picker'); if (_fpk) _fpk.addEventListener('click', () => setTimeout(beRenderCard, 0));
+    const _faddb = document.getElementById('entry-format-add-btn'); if (_faddb) _faddb.addEventListener('click', () => setTimeout(beRenderCard, 350));
+    const _timg = document.getElementById('entry-thumb-img');
+    if (_timg && window.MutationObserver) { new MutationObserver(beRenderCard).observe(_timg, { attributes: true, attributeFilter: ['src', 'style'] }); }
+    const _beMore = document.getElementById('be-more');
+    if (_beMore) _beMore.addEventListener('click', () => beToggleMore());
+    const _beFootMore = document.getElementById('be-foot-more');
+    if (_beFootMore) _beFootMore.addEventListener('click', () => beToggleMore(true));
+    const _beCls = document.getElementById('be-cls');
+    if (_beCls) _beCls.addEventListener('click', () => beToggleCls());
+
+    // === 유형 토글 4종 ===
+    document.querySelectorAll('#be-tgs .be-tg').forEach(function (b) { b.addEventListener('click', function () { beSelectType(b.dataset.bet); }); });
+    // 키워드 (공감댓글)
+    const _bekwin = document.getElementById('be-kwin');
+    if (_bekwin) _bekwin.addEventListener('keydown', function (e) {
+      if (e.key !== 'Enter') return; e.preventDefault();
+      const v = _bekwin.value.trim(); if (!v) return;
+      beKws.push(v);
+      const s = document.createElement('span'); s.className = 'be-kw'; s.innerHTML = esc(v) + ' <b>×</b>';
+      s.querySelector('b').onclick = function () { beKws = beKws.filter(function (x) { return x !== v; }); s.remove(); };
+      const kb = document.getElementById('be-kwbox'); kb.insertBefore(s, _bekwin); _bekwin.value = '';
+    });
+    beSelectType('thumb');
+    beRenderCard();
   }
 
   // 분해하기 모달을 entry 모드로 열기 (행이 아닌 entryState를 편집)
@@ -24320,6 +24635,7 @@
 
     renderEntryFormatPicker(); // 메인 카드 컨텐츠 유형 픽커 갱신
     updateEntryDisasmStatus();
+    if (typeof beRenderCard === 'function') beRenderCard(); // 완성도 링 갱신
   }
 
   function updateEntryDisasmStatus() {
@@ -24467,17 +24783,11 @@
     renderHonorCards();
 
     setTimeout(() => {
-      const tr = document.querySelector(`.sh-tr[data-id="${targetRow.id}"]`);
+      const tr = document.querySelector(`.sh-card[data-id="${targetRow.id}"]`);
       if (tr) {
         tr.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        // hightlight effect
-        tr.querySelectorAll('.sh-td').forEach(td => {
-          td.style.transition = 'background 0.4s';
-          td.style.background = 'rgba(46, 204, 113, 0.3)';
-        });
-        setTimeout(() => {
-          tr.querySelectorAll('.sh-td').forEach(td => { td.style.background = ''; });
-        }, 1200);
+        tr.classList.add('sh-flash');
+        setTimeout(() => { tr.classList.remove('sh-flash'); }, 1200);
       }
     }, 300);
 
@@ -24526,6 +24836,7 @@
     renderEntryFormatPicker();
     renderEntryStrength();
     updateEntryDisasmStatus();
+    if (typeof beRenderCard === 'function') beRenderCard();
   }
 
   // ============================================================
