@@ -1,7 +1,7 @@
 // Service Worker — 컨텐츠 마스터즈
 // 오프라인 작동 + PWA 설치 트리거
 
-const CACHE_NAME = 'content-masters-v390';
+const CACHE_NAME = 'content-masters-v395';
 const FILES = [
   './',
   './index.html',
@@ -10,7 +10,8 @@ const FILES = [
   './icon-512.png',
   './apple-touch-icon.png',
   './favicon.png',
-  './hero-trophy.png'
+  './hero-trophy.png',
+  './sorter-icon.png'
 ];
 
 // 설치 시 캐싱
