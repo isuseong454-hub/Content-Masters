@@ -15860,6 +15860,9 @@
       .cso-obj{display:none;position:relative;z-index:6}
       .cso-stage[data-theme="scan"] .o-scan,.cso-stage[data-theme="dunk"] .o-dunk,.cso-stage[data-theme="jewel"] .o-jewel,.cso-stage[data-theme="flower"] .o-flower{display:block}
       .cso-sp2{position:absolute;pointer-events:none;z-index:18;font-size:13px;color:var(--acc,#c2f24a);text-shadow:0 0 8px currentColor}
+      /* 슛 볼 — 던지면 위에서 골대로 쏙 */
+      .cso-shot{position:absolute;left:50%;top:6%;transform:translateX(-50%);font-size:34px;z-index:20;pointer-events:none;filter:drop-shadow(0 6px 10px rgba(0,0,0,.5));animation:csoShot .65s cubic-bezier(.4,0,.7,1) forwards}
+      @keyframes csoShot{0%{transform:translateX(-50%) translateY(-24px) scale(1) rotate(0);opacity:0}18%{opacity:1}62%{transform:translateX(-50%) translateY(150px) scale(.62) rotate(240deg);opacity:1}100%{transform:translateX(-50%) translateY(196px) scale(.2) rotate(360deg);opacity:0}}
       /* 슬램덩크 */
       .cso-stage[data-theme="dunk"]{--acc:var(--cso-neon);--gl:rgba(194,242,74,.15)}
       .o-dunk .board{position:relative;width:320px;height:224px;transition:transform .35s cubic-bezier(.3,1.3,.4,1)}
@@ -15906,8 +15909,36 @@
       .o-flower .blooms{position:absolute;left:50%;bottom:100px;transform:translateX(-50%);width:130px;height:118px}
       .o-flower .bloom{position:absolute;filter:drop-shadow(0 2px 6px rgba(255,158,194,.4));font-size:34px}
       .o-flower .b1{top:18px;left:6%}.o-flower .b2{top:2px;left:40%}.o-flower .b3{top:28px;left:66%;font-size:28px}
-      .cso-stage.flower-go .o-flower .bloom{animation:csoBloom .6s ease}
-      @keyframes csoBloom{40%{transform:scale(1.2) rotate(-6deg)}}
+      /* 🌸 꽃병 = 강한 개화 (확정) — 꽃이 팡 터지듯 피어남 */
+      .cso-stage.flower-go .o-flower .bloom{animation:csoBloomBig .62s .3s cubic-bezier(.2,1.6,.35,1)}
+      .cso-stage.flower-go .o-flower .b1{animation-delay:.3s}.cso-stage.flower-go .o-flower .b2{animation-delay:.26s}.cso-stage.flower-go .o-flower .b3{animation-delay:.34s}
+      @keyframes csoBloomBig{0%{transform:scale(.3) rotate(-26deg);opacity:.5}55%{transform:scale(1.4) rotate(8deg);opacity:1;filter:drop-shadow(0 0 22px rgba(255,158,194,1))}100%{transform:scale(1) rotate(0)}}
+      .cso-stage.flower-go .o-flower .vase{animation:csoVaseGlow .7s .04s ease}
+      @keyframes csoVaseGlow{40%{box-shadow:inset 0 6px 16px rgba(255,255,255,.06),0 0 46px rgba(255,158,194,.85);border-color:var(--cso-rose);transform:translateX(-50%) scale(1.06)}}
+      /* ═══ 골인 모션 강화 (v401) — 이펙트 엘리먼트 + 테마별 흡수/폭발 ═══ */
+      .cso-flash{position:absolute;border-radius:50%;transform:translate(-50%,-50%);pointer-events:none;z-index:9;opacity:0}
+      .cso-ring{position:absolute;border-radius:50%;transform:translate(-50%,-50%);pointer-events:none;z-index:8}
+      .cso-ray{position:absolute;transform-origin:0 0;pointer-events:none;z-index:12}
+      .cso-spark{position:absolute;pointer-events:none;z-index:15}
+      /* 🏀 슬램덩크 = 파워덩크 + 블랙홀 흡입 */
+      .cso-vortex{position:absolute;width:210px;height:210px;border-radius:50%;transform:translate(-50%,-50%);pointer-events:none;z-index:8;
+        background:conic-gradient(from 0deg,transparent,rgba(230,251,98,.55),transparent 40%,rgba(230,251,98,.4),transparent 80%);
+        -webkit-mask:radial-gradient(transparent 28%,#000 52%,transparent 78%);mask:radial-gradient(transparent 28%,#000 52%,transparent 78%);
+        animation:csoVortex .62s cubic-bezier(.5,0,.82,1) forwards}
+      @keyframes csoVortex{0%{opacity:0;transform:translate(-50%,-50%) scale(1.6) rotate(0)}26%{opacity:.95}100%{opacity:0;transform:translate(-50%,-50%) scale(.12) rotate(340deg)}}
+      .cso-stage.dunk-go .o-dunk .rim{animation:csoRimPop .6s ease}
+      @keyframes csoRimPop{28%{box-shadow:0 0 66px rgba(230,251,98,1);border-color:#fff;width:272px}}
+      /* 🛰 스캔 = 화려 흡수 + 시안 폭발 (글리치·글로우) */
+      .cso-stage.scan-go .o-scan .holo{animation:csoScanGlitch .38s .26s steps(3),csoScanGlow .72s .3s ease}
+      @keyframes csoScanGlitch{33%{transform:translateX(-3px) scale(1.03)}66%{transform:translateX(3px) scale(1.03)}}
+      @keyframes csoScanGlow{40%{box-shadow:inset 0 0 44px rgba(67,224,230,.75),0 0 44px rgba(67,224,230,.65)}}
+      .cso-stage.scan-go .o-scan .obj{animation:csoScanObj .6s .06s ease}
+      @keyframes csoScanObj{50%{transform:translate(-50%,-50%) scale(1.4);filter:drop-shadow(0 0 26px rgba(67,224,230,1))}}
+      /* 💎 보석함 = 골드 화려 반짝 + 뚜껑 열림 */
+      .cso-stage.jewel-go .o-jewel .lid{animation:csoLidOpen .6s ease}
+      @keyframes csoLidOpen{45%{transform:rotateX(76deg) translateY(-17px)}}
+      .cso-stage.jewel-go .o-jewel .box{animation:csoJewelPop .6s .04s ease}
+      @keyframes csoJewelPop{35%{filter:drop-shadow(0 0 32px rgba(240,207,126,.95))}}
       /* 반짝이 배경 */
       .cso-tw{position:absolute;pointer-events:none;z-index:4;color:var(--acc,#c2f24a);font-size:11px;text-shadow:0 0 6px currentColor;animation:csoTwinkle 2.6s ease-in-out infinite}
       @keyframes csoTwinkle{0%,100%{opacity:.2;transform:scale(.7)}50%{opacity:.9;transform:scale(1.1)}}
@@ -16028,7 +16059,7 @@
         <div class="cso-gstep" style="--c:#c2f24a"><div class="num">1</div><div><div class="gh">프롬프트 복사 (최초 1번)</div><div class="gd">위 <b>프롬프트</b> → 챗GPT·클로드에 붙여 <b>내 분해봇</b> 만들기</div></div></div>
         <div class="cso-gstep" style="--c:#3fd0c0"><div class="num">2</div><div><div class="gh">낮 동안 캡처 던지기 (앱 밖)</div><div class="gd">좋은 릴스 보면 <b>캡처 → 봇에 툭</b>. 이 앱 안 들어와도 돼요</div></div></div>
         <div class="cso-gstep" style="--c:#e87ab0"><div class="num">3</div><div><div class="gh">"정리해줘" → 무대에 붓기</div><div class="gd">봇에게 <b>"오늘 것 정리해줘"</b> → 답 복사 → <b>무대에 붙여넣고 사진 던지기</b></div></div></div>
-        <div class="cso-gstep" style="--c:#34d77a"><div class="num">4</div><div><div class="gh">검수 → 한번에 저장</div><div class="gd">카드가 <b>게이지로 채워짐</b>. 완성된 것만 골라 <b>한번에 저장</b></div></div></div>
+        <div class="cso-gstep" style="--c:#34d77a"><div class="num">4</div><div><div class="gh">검수 → 한번에 저장</div><div class="gd">카드 밑 <b>점 3개</b>가 재료 신호 — <span style="color:#a7e3c4">●썸네일</span> <span style="color:#9fd0e8">●내용</span> <span style="color:#f0b8a0">●원고</span>. 다 켜질수록 카드가 밝아져요. 완성된 것만 골라 <b>한번에 저장</b></div></div></div>
         <button class="cso-gclose" id="cso-gclose">알겠어요 — 정리하러 가기 ✨</button>
       </div>
 
@@ -16581,6 +16612,81 @@
       body.cm-ov-open #home-sorter-btn{display:none}
       @media(max-width:420px){#home-sorter-btn .hs-t{display:none}#home-sorter-btn{padding:9px}}
       </style>
+      <!-- 🪞 홈 디렉터스 컷 (dch-) — 3막 여정 · 온도 · 스파인 -->
+      <style>
+      #cm-trophy-hero.dch-host{padding:0;border:none;background:none;overflow:visible;max-width:560px;margin:8px auto 0;box-shadow:none}
+      .dch{--dvoid:#0B0C0A;--dink:#EEF0E4;--dsub:#9BA08C;--dfaint:#5A5E4E;--dlime:#d7f34b;--dneon:#e6fb62;--dgold:#F5C84B;--dline:rgba(255,255,255,.08);--dmono:'JetBrains Mono',ui-monospace,Menlo,Consolas,monospace}
+      #cm-trophy-hero.dch-host *{box-sizing:border-box}
+      .dch-hero{position:relative;overflow:hidden;border-radius:22px;padding:42px 20px 38px;text-align:center;border:1px solid rgba(255,255,255,.08);
+        background:radial-gradient(90% 60% at 50% 6%,rgba(215,243,75,.10),transparent 60%),radial-gradient(80% 50% at 78% 98%,rgba(78,138,172,.14),transparent 66%),#0B0C0A}
+      .dch-hero .dch-grid{position:absolute;inset:0;z-index:0;pointer-events:none;opacity:.5;background-image:radial-gradient(rgba(255,255,255,.04) 1px,transparent 1.3px);background-size:15px 15px}
+      .dch-hero .dch-vig{position:absolute;inset:0;z-index:1;pointer-events:none;box-shadow:inset 0 0 120px 36px rgba(0,0,0,.66)}
+      .dch-hero .dch-in{position:relative;z-index:2}
+      .dch-hi{font-size:13px;color:#9BA08C;font-weight:600}.dch-hi b{color:#EEF0E4;font-weight:800}
+      .dch-eyebrow{font-size:10.5px;font-weight:800;letter-spacing:.2em;color:rgba(215,243,75,.62);text-transform:uppercase;margin-top:18px}
+      .dch-num{font-family:'JetBrains Mono',ui-monospace,Menlo,Consolas,monospace;font-size:60px;font-weight:800;letter-spacing:-3px;line-height:.98;margin:6px 0 2px;color:#e6fb62;text-shadow:0 0 40px rgba(230,251,98,.3),0 3px 20px rgba(0,0,0,.5);font-variant-numeric:tabular-nums}
+      .dch-num .u{font-size:22px;font-weight:800;color:#EEF0E4;font-family:'Pretendard','Apple SD Gothic Neo',sans-serif}
+      .dch-cap{font-size:14px;font-weight:700;margin-top:6px;color:#EEF0E4}.dch-cap b{color:#d7f34b}
+      .dch-whisper2{font-size:12px;color:#9BA08C;margin-top:12px;line-height:1.6}.dch-whisper2 b{color:#d7f34b;font-weight:800}
+      /* 여정 스파인 */
+      .dch-journey{position:relative;margin-top:16px}
+      .dch-journey::before{content:'';position:absolute;left:23px;top:30px;bottom:150px;width:2px;z-index:0;border-radius:2px;background:linear-gradient(180deg,transparent,rgba(215,243,75,.4) 6%,rgba(215,243,75,.4) 94%,transparent)}
+      .dch-journey::after{content:'';position:absolute;left:20px;top:30px;width:8px;height:44px;z-index:1;border-radius:5px;pointer-events:none;background:linear-gradient(180deg,transparent,#e6fb62 45%,transparent);box-shadow:0 0 16px #e6fb62;animation:dchFlow 3.8s cubic-bezier(.45,0,.55,1) infinite}
+      @keyframes dchFlow{0%{top:26px;opacity:0}12%{opacity:.9}86%{opacity:.9}100%{top:calc(100% - 150px);opacity:0}}
+      .dch-act{position:relative;padding-left:46px}
+      .dch-act + .dch-act{margin-top:42px}
+      .dch-ab{display:flex;align-items:center;gap:9px;margin:0 2px 12px;position:relative;min-height:26px}
+      .dch-ab .no{position:absolute;left:11px;top:0;width:25px;height:25px;border-radius:50%;display:grid;place-items:center;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:800;color:#0B0C0A;background:#d7f34b;box-shadow:0 0 0 4px #0B0C0A,0 0 14px rgba(215,243,75,.55);z-index:2}
+      .dch-act:last-child .dch-ab .no{background:#e6fb62;box-shadow:0 0 0 4px #0B0C0A,0 0 22px rgba(230,251,98,.8)}
+      .dch-ab .tt{font-size:15px;font-weight:800;margin-left:2px}.dch-ab .tt .d{color:#5A5E4E;font-weight:700;font-size:12px;margin-left:4px}
+      .dch-ab .ln{flex:1;height:1px;background:rgba(255,255,255,.08)}
+      .dch-card{border-radius:22px;overflow:hidden;position:relative;box-shadow:0 22px 48px -26px rgba(0,0,0,.8),inset 0 1px 0 rgba(255,255,255,.055)}
+      /* ① 담다 = 차가운 블루 */
+      .dch-a1 .dch-card{background:radial-gradient(130% 66% at 50% -8%,rgba(78,138,172,.24),transparent 54%),#0B1116;border:1px solid rgba(120,162,190,.18)}
+      .dch-wall{position:relative;overflow:hidden;height:290px;background-image:radial-gradient(rgba(255,255,255,.045) 1px,transparent 1.3px);background-size:14px 14px}
+      .dch-wall::before,.dch-wall::after{content:'';position:absolute;top:0;bottom:0;width:38px;z-index:4;pointer-events:none}
+      .dch-wall::before{left:0;background:linear-gradient(90deg,#0B1116,transparent)}
+      .dch-wall::after{right:0;background:linear-gradient(270deg,#0B1116,transparent)}
+      .dch-wrow{display:flex;gap:6px;width:max-content}
+      .dch-wrow.a{animation:dchSL 36s linear infinite;padding-top:9px}
+      .dch-wrow.b{animation:dchSR 42s linear infinite;margin-top:6px}
+      .dch-wrow.c{animation:dchSL 31s linear infinite;margin-top:6px}
+      @keyframes dchSL{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+      @keyframes dchSR{from{transform:translateX(-50%)}to{transform:translateX(0)}}
+      .dch-wt{flex:0 0 auto;width:72px;aspect-ratio:4/5;border-radius:9px;overflow:hidden;position:relative;border:1px solid rgba(255,255,255,.06);background-size:cover;background-position:center}
+      .dch-wt img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+      .dch-wt::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(0,0,0,.4))}
+      .dch-scrim{position:absolute;left:0;right:0;bottom:0;height:200px;z-index:5;pointer-events:none;background:linear-gradient(180deg,transparent,rgba(11,17,22,.74) 44%,#0B1116 90%)}
+      .dch-slog{position:absolute;top:16px;left:16px;right:40%;z-index:6;font-size:10.5px;color:rgba(214,224,217,.6);line-height:1.55;font-weight:600}.dch-slog b{color:rgba(215,243,75,.72);font-weight:800}
+      .dch-cnt{position:absolute;right:16px;bottom:15px;z-index:7;text-align:right}
+      .dch-cnt .l1{font-size:11px;color:#9BA08C;font-weight:600}
+      .dch-cnt .l2{font-size:15px;font-weight:800;line-height:1;margin:1px 0;color:#EEF0E4}
+      .dch-cnt .big{font-family:'JetBrains Mono',monospace;font-size:50px;font-weight:800;letter-spacing:-2px;color:#e6fb62;text-shadow:0 0 28px rgba(230,251,98,.5),0 2px 10px rgba(0,0,0,.6);vertical-align:-6px;margin-right:2px}
+      .dch-cnt .l3{font-size:12.5px;color:#d7f34b;font-weight:800;margin-top:3px}
+      .dch-whisper{display:flex;align-items:center;gap:9px;margin:12px 0 0;padding:12px 14px;border:1px solid rgba(255,255,255,.08);border-radius:15px;background:linear-gradient(180deg,rgba(215,243,75,.05),transparent);cursor:pointer}
+      .dch-whisper .w1{font-size:12px;font-weight:700;color:#EEF0E4}.dch-whisper .w1 b{color:#d7f34b}
+      .dch-whisper .go{margin-left:auto;font-size:11px;font-weight:800;color:#d7f34b;white-space:nowrap}
+      /* ② 만들다 = 슬레이트 */
+      .dch-a2 .dch-card{background:radial-gradient(130% 66% at 50% -8%,rgba(150,166,186,.14),transparent 52%),#12151A;border:1px solid rgba(150,166,186,.18);padding-bottom:18px}
+      .dch-mhd{text-align:center;padding:22px 16px 2px}
+      .dch-mhd .k{font-size:11px;color:#9BA08C;font-weight:600}
+      .dch-mhd .n{font-size:14px;font-weight:800;margin-top:5px;color:#EEF0E4}
+      .dch-mhd .n b{font-family:'JetBrains Mono',monospace;font-size:27px;font-weight:800;color:#EEF0E4;letter-spacing:-1.5px;vertical-align:-3px;margin:0 2px}
+      .dch-a2 .th2n-mq{margin-top:14px}
+      .dch-a2 .th2n-mq-fade{background:linear-gradient(90deg,#12151A 0%,transparent 8%,transparent 92%,#12151A 100%)}
+      .dch-board-wrap{padding:20px 16px 0}
+      .dch-board-hd{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}
+      .dch-board-ti{font-size:11px;font-weight:800;color:#9BA08C}.dch-board-ti b{color:#F5C84B}
+      .dch-board-vb{flex:0 0 auto;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);color:#d7f34b;font-weight:800;font-size:10px;padding:6px 11px;border-radius:999px;font-family:inherit;cursor:pointer;white-space:nowrap}
+      .dch-shop{width:calc(100% - 32px);margin:14px 16px 0;padding:14px;border:1.5px solid #d7f34b;border-radius:15px;background:linear-gradient(180deg,rgba(215,243,75,.14),rgba(215,243,75,.03));color:#e8ffa0;font-weight:900;font-size:14px;font-family:inherit;cursor:pointer;box-shadow:0 0 18px rgba(215,243,75,.16),inset 0 0 22px rgba(215,243,75,.05)}
+      /* ③ 도착 = 라임 · 기존 미래 대시보드 통째로 */
+      .dch-a3 .dch-card{background:radial-gradient(130% 68% at 50% 112%,rgba(198,232,72,.20),transparent 58%),#0E1109;border:1px solid rgba(215,243,75,.24);padding:18px 15px 16px}
+      .dch-a3 .future-dash{margin:0;border:none;background:none;box-shadow:none;padding:0;max-width:none;display:block}
+      .dch-a3 .future-dash .fd-eb,.dch-a3 .future-dash .fd-t,.dch-a3 .future-dash .fd-bignum,.dch-a3 .future-dash .fd-crowd,.dch-a3 .future-dash .fd-sub,.dch-a3 .future-dash .fd-viewsbtn{display:none}
+      /* 이번 주 카드 홈에서 제거 (제작소 편성보드엔 유지) */
+      #home-view .tr-week-block{display:none!important}
+      @media(prefers-reduced-motion:reduce){.dch-journey::after,.dch-wrow{animation:none}}
+      </style>
       <button id="home-sorter-btn" title="AI 컨텐츠 정리" onclick="if(window.__openSorter)window.__openSorter()"><span class="hs-ic">🤖</span><span class="hs-t">AI 정리</span><span class="hs-dot"></span></button>
       <section class="home-hero">
         <div class="home-hero-page"><span class="em">01</span> / 03</div>
@@ -16588,7 +16694,6 @@
         <h1 class="home-title">트레이닝 <span class="em">룸</span></h1>
         <div class="home-divline"></div>
         <div class="cm-trophy-hero" id="cm-trophy-hero" style="display:none;"></div>
-        <div class="future-dash" id="future-dash" style="display:none;"></div>
       </section>
 
       <!-- ② 다시 보기 — 홈 열 때 비전/왜 한 줄 슬쩍 -->
@@ -29861,39 +29966,81 @@
     '</div>';
     var b = document.getElementById('shop-go'); if (b) b.onclick = function () { try { switchWorkspace('sheet'); } catch (e) {} };
   }
+  // 🪞 디렉터스 컷 레퍼런스 벽 (가로 3줄)
+  var DCH_GRADS = ['radial-gradient(120% 90% at 30% 15%,#35485a,#10171c)', 'radial-gradient(120% 90% at 70% 20%,#3e4650,#141821)', 'radial-gradient(120% 90% at 40% 25%,#2f4a3a,#101a14)', 'radial-gradient(120% 90% at 60% 30%,#2f4a48,#101a19)', 'radial-gradient(120% 90% at 35% 20%,#3a5063,#0d1418)', 'radial-gradient(120% 90% at 55% 15%,#44505c,#131820)', 'radial-gradient(120% 90% at 45% 25%,#2f3a5a,#0e1220)', 'radial-gradient(120% 90% at 50% 20%,#354a45,#101a18)'];
+  function dchBuildWall() {
+    var host = document.getElementById('cm-trophy-hero'); if (!host) return;
+    var rowsEl = [document.getElementById('dch-wrow-a'), document.getElementById('dch-wrow-b'), document.getElementById('dch-wrow-c')];
+    if (!rowsEl[0]) return;
+    var withThumb = (rows || []).filter(function (r) { return r.hasThumb; });
+    var favs = withThumb.filter(function (r) { return r.favorite; });
+    var rest = withThumb.filter(function (r) { return !r.favorite; });
+    var sample = favs.concat(rest).slice(0, 18);
+    var per = 6;
+    rowsEl.forEach(function (row, ri) {
+      if (!row) return; var seg = '';
+      for (var pass = 0; pass < 2; pass++) { for (var i = 0; i < per; i++) { var idx = ri * per + i; var item = sample.length ? sample[idx % sample.length] : null; var g = DCH_GRADS[idx % DCH_GRADS.length]; seg += '<div class="dch-wt" data-img="' + ((item && item.id) || '') + '" style="background:' + g + '"></div>'; } }
+      row.innerHTML = seg;
+    });
+    host.querySelectorAll('.dch-wt[data-img]').forEach(function (box) { var id = box.getAttribute('data-img'); if (!id) return; (async function () { try { var u = await loadImage(id, 'thumb'); if (u) box.innerHTML = '<img src="' + u + '" alt="" />'; } catch (e) {} })(); });
+  }
+  // 🪞 홈 = 되어가는 나를 비추는 거울 (3막: 담다·만들다·도착) — 기존 렌더/데이터 100% 재사용
   function renderTrophyHero() {
     var el = document.getElementById('cm-trophy-hero'); if (!el) return;
     var c; try { c = missionCounts(); } catch (e) { return; }
     var name = (typeof activityName === 'function') ? activityName() : ((_currentUser && _currentUser.name) ? _currentUser.name : '');
-    var streak = (typeof getVisitStreak === 'function') ? getVisitStreak() : 0;
     ['.home-hero-page', '.home-eyebrow', '.home-title', '.home-divline'].forEach(function (sel) { try { var e = document.querySelector('#home-view ' + sel); if (e) e.style.display = 'none'; } catch (_) {} });
-    el.classList.add('th2'); el.style.display = 'block';
-    var step = computeNextStep(c);
-    if (!_th2ModeRolled) {
-      _th2ModeRolled = true;
-      try {
-        var _hasMine = (scripts || []).some(function (s) { return s.uploaded || s.uploadUrl || (s.uploadViews > 0); });
-        if (_hasMine) _th2Mode = (Math.random() < 0.5) ? 'mine' : 'ref'; // 로그인마다 시작 모드 랜덤 (올린 게 있을 때만 mine 후보)
-      } catch (_) {}
-    }
-    if (_th2Mode === 'mine') { renderMineHero(el, c, name, streak, step); return; }
-    el.classList.remove('mine');
+    el.classList.remove('th2', 'mine'); el.classList.add('dch-host', 'dch'); el.style.display = 'block';
     var analyzed = c.analyzed || 0;
-    el.innerHTML = th2Toggle() +
-      '<div class="th2-wall" id="th2-wall"></div>' +
-      '<div class="th2-scrim"></div><div class="th2-glow"></div>' +
-      '<div class="th2-slogan">' + ((typeof homeData !== 'undefined' && homeData && (homeData.why || '').trim().length >= 6) ? '“<b>' + esc(homeData.why.trim()) + '</b>”' : '내 분야에서 <b>이미 성공한 구조</b>를<br>벤치마킹하며 <b>감각</b>을 키운다') + '</div>' +
-      '<div class="th2-body">' +
-        '<div class="th2-numblock">' +
-          '<div class="th2-l1">' + (name ? esc(name) + '님이 ' : '') + '지금까지</div>' +
-          '<div class="th2-l2"><span class="th2-num" id="th2-num">0</span><span class="th2-x">개의</span></div>' +
-          '<div class="th2-l3"><b>성공 레퍼런스</b>를 모았어요</div>' +
+    var step = computeNextStep(c);
+    var all = (scripts || []).filter(function (s) { return s.uploaded || s.uploadUrl || (s.uploadViews > 0); });
+    all.sort(function (a, b) { return (b.uploadViews || 0) - (a.uploadViews || 0); });
+    var totalViews = all.reduce(function (a, s) { return a + (s.uploadViews || 0); }, 0);
+    var nUp = all.length;
+    var nowD = new Date(); var curYM = nowD.getFullYear() + '-' + String(nowD.getMonth() + 1).padStart(2, '0'); var mLabel = (nowD.getMonth() + 1) + '월';
+    var monthUps = all.filter(function (s) { try { return th2ScriptYM(s) === curYM; } catch (e) { return false; } });
+    var reach = totalViews;
+    var heroCap = reach > 0 ? '이만큼의 사람이 이미 당신을 봤어요' : '첫 콘텐츠를 올리면 여기가 <b>당신을 본 사람들</b>로 차오릅니다';
+    var heroWhisper = reach > 0 ? '이 사람들 속에서 <b>예약</b>이 나옵니다 — 계정은 당신을 향해 자라는 중' : '오늘 하나만 올리면 여정이 시작돼요';
+    var heroHi = name ? ('반가워요, <b>' + esc(name) + '</b>님') : '오늘도 좋은 하루예요';
+    var mineHead = totalViews > 0 ? ('누적 <b>' + fmtViews(totalViews) + '</b> 번 재생됐어요') : ('<b>' + nUp + '</b>편 올렸어요');
+    el.innerHTML =
+      '<div class="dch-hero"><div class="dch-grid"></div><div class="dch-vig"></div><div class="dch-in">' +
+        '<div class="dch-hi">' + heroHi + '</div>' +
+        '<div class="dch-eyebrow">당신의 콘텐츠를 본 사람</div>' +
+        '<div class="dch-num"><span id="dch-num-v">0</span><span class="u"> 명</span></div>' +
+        '<div class="dch-cap">' + heroCap + '</div>' +
+        '<div class="dch-whisper2">' + heroWhisper + '</div>' +
+      '</div></div>' +
+      '<div class="dch-journey">' +
+        '<div class="dch-act dch-a1"><div class="dch-ab"><span class="no">01</span><span class="tt">담다<span class="d">— 이미 성공한 것을 흡수</span></span><span class="ln"></span></div>' +
+          '<div class="dch-card"><div class="dch-wall"><div class="dch-wrow a" id="dch-wrow-a"></div><div class="dch-wrow b" id="dch-wrow-b"></div><div class="dch-wrow c" id="dch-wrow-c"></div>' +
+            '<div class="dch-scrim"></div>' +
+            '<div class="dch-slog">내 분야에서 <b>이미 성공한 구조</b>를<br>벤치마킹하며 <b>감각</b>을 키운다</div>' +
+            '<div class="dch-cnt"><div class="l1">' + (name ? esc(name) + '님이 ' : '') + '지금까지</div><div class="l2"><span class="big" id="dch-refnum">0</span>개의</div><div class="l3">성공 레퍼런스를 모았어요</div></div>' +
+          '</div></div>' +
+          '<div class="dch-whisper" id="dch-whisper"><span>💡</span><span class="w1">' + (step.text || '').replace(/<br\/?>/g, ' ') + '</span><span class="go">' + esc(step.btn || '') + '</span></div>' +
         '</div>' +
-        th2TodayHtml(step) +
+        '<div class="dch-act dch-a2"><div class="dch-ab"><span class="no">02</span><span class="tt">만들다<span class="d">— 내가 실제로 한 것</span></span><span class="ln"></span></div>' +
+          '<div class="dch-card"><div class="dch-mhd"><div class="k">내가 올린 콘텐츠, 지금까지</div><div class="n">' + mineHead + '</div></div>' +
+            (nUp > 0 ? '<div class="th2n-mq"><div class="th2n-track" id="th2n-track"></div><div class="th2n-mq-fade"></div></div>' : '<div class="th2n-empty">첫 콘텐츠를 올리면 여기에 흐르기 시작해요 🎞</div>') +
+            '<div class="dch-board-wrap"><div class="dch-board-hd"><div class="dch-board-ti">📤 <b>' + mLabel + '</b> 업로드 판 · <b>' + Math.min(monthUps.length, 12) + '</b>/12 — 빈칸을 채워봐요</div><button class="dch-board-vb" id="dch-views-btn">👀 조회수</button></div><div class="th2m-grid" id="th2m-grid"></div></div>' +
+            '<button class="dch-shop" id="dch-shop">🛍 레퍼런스 쇼핑하러 가기 →</button>' +
+          '</div>' +
+        '</div>' +
+        '<div class="dch-act dch-a3"><div class="dch-ab"><span class="no">03</span><span class="tt">도착하다<span class="d">— 예약이 알아서 들어오는 계정</span></span><span class="ln"></span></div>' +
+          '<div class="dch-card"><div class="future-dash" id="future-dash"></div></div>' +
+        '</div>' +
       '</div>';
-    th2WireCommon(step);
-    th2CountUp(document.getElementById('th2-num'), analyzed);
-    try { th2BuildWall(); } catch (e) {}
+    try { th2CountUp(document.getElementById('dch-refnum'), analyzed); } catch (e) { var rn = document.getElementById('dch-refnum'); if (rn) rn.textContent = analyzed; }
+    (function () { var nv = document.getElementById('dch-num-v'); if (!nv) return; if (reach <= 0) { nv.textContent = '0'; return; } if (window.__dchReachAnim) { nv.textContent = fmtViews(reach); return; } window.__dchReachAnim = true; var cur = 0, sv = Math.max(1, Math.round(reach / 40)); var iv = setInterval(function () { cur += sv; if (cur >= reach) { cur = reach; clearInterval(iv); } nv.textContent = fmtViews(cur); }, 26); })();
+    try { dchBuildWall(); } catch (e) {}
+    if (nUp > 0) { try { th2Marquee(all); } catch (e) {} }
+    try { th2MineGrid(monthUps, Math.min(monthUps.length, 12), 12); } catch (e) {}
+    var wh = document.getElementById('dch-whisper'); if (wh && typeof step.go === 'function') wh.onclick = step.go;
+    var sh = document.getElementById('dch-shop'); if (sh) sh.onclick = function () { try { switchWorkspace('sheet'); } catch (e) {} };
+    var vb = document.getElementById('dch-views-btn'); if (vb) vb.onclick = function () { try { openViewsInput(); } catch (e) {} };
+    try { renderFutureDash(); } catch (e) {}
     try { if (!window.__cmWelcomed && name) { window.__cmWelcomed = true; setTimeout(function () { try { toast('다시 오셨네요, ' + name + '님 · 성공 레퍼런스 ' + analyzed + '개 🏆'); } catch (e) {} }, 1400); } } catch (e) {}
   }
   function renderTrophyHeroOld() {
@@ -31340,6 +31487,7 @@
   }
 
   function renderHome() {
+    try { renderTrophyHero(); } catch (e) {} // 🪞 디렉터스 컷 셸(3막) 먼저 — act3 안 미래 대시보드 홀더 확보
     setupHomeAccordion();
     document.getElementById('home-goal').value = homeData.goal || '';
     document.getElementById('home-why').value = homeData.why || '';
@@ -36669,7 +36817,7 @@
   // ============================================================
   // ✨ 원페이지 정리 무대 (cso) — 기존 파서/저장 재사용, UI만 새로
   // ============================================================
-  var _csoTheme = 'scan', _csoInited = false, _csoSpread = false;
+  var _csoTheme = 'dunk', _csoInited = false, _csoSpread = false;
   function csoQ(id){ return document.getElementById(id); }
   function csoSetTheme(t){
     _csoTheme = t;
@@ -36679,24 +36827,87 @@
     csoSpreadStars();
   }
   function csoSpreadStars(){
-    // 반짝이 제거 (사용자 요청) — 기존 것 정리만
+    // 보석함·꽃병만 반짝이 ON, 슬램덩크·스캔은 OFF (사용자 지정)
     var st = csoQ('cso-stage'); if (!st) return;
     st.querySelectorAll('.cso-tw').forEach(function(x){ x.remove(); });
+    if (_csoTheme !== 'jewel' && _csoTheme !== 'flower') return;
+    for (var i = 0; i < 7; i++){
+      var t = document.createElement('span'); t.className = 'cso-tw'; t.textContent = '✦';
+      t.style.left = (7 + Math.random()*86) + '%'; t.style.top = (7 + Math.random()*72) + '%';
+      t.style.animationDelay = (Math.random()*2.4) + 's'; t.style.fontSize = (7 + Math.random()*7) + 'px';
+      st.appendChild(t);
+    }
   }
+  var CSO_FX = {
+    dunk:  {col:['#ffffff','#e6fb62','#c2f24a','#a9c437'], acc:'#e6fb62', cy:.50, sparks:16, rays:0,  inward:true,  ring:false},
+    scan:  {col:['#ffffff','#43e0e6','#a0f0f2','#2ba8ad'], acc:'#43e0e6', cy:.48, sparks:28, rays:12, inward:false, ring:true, pixel:true},
+    jewel: {col:['#ffffff','#f0cf7e','#fbe9b8','#c9a45a'], acc:'#f0cf7e', cy:.52, sparks:24, rays:10, inward:false, ring:true},
+    flower:{col:['#ffffff','#ff9ec2','#ffd9e6','#e0729d'], acc:'#ff9ec2', cy:.56, sparks:16, rays:0,  inward:false, ring:false}
+  };
   function csoThrowFx(){
     var st = csoQ('cso-stage'); if (!st) return;
-    var cls = _csoTheme + '-go';
+    var theme = _csoTheme;
+    // 슛 볼 — 재료가 위에서 골대(중앙)로 쏙 들어감
+    var shot = document.createElement('div'); shot.className = 'cso-shot'; shot.textContent = '🏀';
+    st.appendChild(shot); setTimeout(function(){ shot.remove(); }, 680);
+    var cls = theme + '-go';
     st.classList.add(cls);
-    // 반짝 파티클
-    var cr = st.getBoundingClientRect(), cx = cr.width/2, cy = cr.height*0.42;
-    for (var k = 0; k < 12; k++){ (function(){
-      var sp = document.createElement('span'); sp.className = 'cso-sp2'; sp.textContent = '✦'; st.appendChild(sp);
-      sp.style.left = cx + 'px'; sp.style.top = cy + 'px'; sp.style.fontSize = (8 + Math.random()*7) + 'px';
-      var ang = Math.random()*6.28, d = 22 + Math.random()*46;
-      try{ sp.animate([{transform:'translate(-50%,-50%) scale(1)',opacity:1},{transform:'translate('+(Math.cos(ang)*d)+'px,'+(Math.sin(ang)*d)+'px) scale(0)',opacity:0}],{duration:560,easing:'ease-out'}); }catch(e){}
-      setTimeout(function(){ sp.remove(); }, 580);
-    })(); }
-    setTimeout(function(){ st.classList.remove(cls); }, 700);
+    // 착지 순간(≈330ms) 흡수·폭발 연출
+    setTimeout(function(){ try{ csoBurst(st, theme); }catch(e){} }, 330);
+    setTimeout(function(){ st.classList.remove(cls); }, 1200);
+  }
+  function csoFlash(st, cx, cy, col){
+    var fl = document.createElement('span'); fl.className = 'cso-flash';
+    fl.style.left = cx + 'px'; fl.style.top = cy + 'px'; fl.style.width = '20px'; fl.style.height = '20px';
+    fl.style.background = 'radial-gradient(circle,#fff,' + col + ' 42%,transparent 72%)';
+    st.appendChild(fl);
+    try{ fl.animate([{opacity:0,width:'20px',height:'20px'},{opacity:1,width:'150px',height:'150px',offset:.3},{opacity:0,width:'250px',height:'250px'}],{duration:600,easing:'ease-out'}); }catch(e){}
+    setTimeout(function(){ fl.remove(); }, 620);
+  }
+  function csoRingFx(st, cx, cy, col){
+    var rg = document.createElement('span'); rg.className = 'cso-ring';
+    rg.style.left = cx + 'px'; rg.style.top = cy + 'px'; rg.style.width = '20px'; rg.style.height = '20px';
+    rg.style.border = '2px solid ' + col; st.appendChild(rg);
+    try{ rg.animate([{opacity:.9,width:'20px',height:'20px'},{opacity:0,width:'230px',height:'230px'}],{duration:700,easing:'ease-out'}); }catch(e){}
+    setTimeout(function(){ rg.remove(); }, 720);
+  }
+  function csoBurst(st, theme){
+    var f = CSO_FX[theme] || CSO_FX.dunk;
+    var cr = st.getBoundingClientRect(), cx = cr.width/2, cy = cr.height * f.cy;
+    // 블랙홀 소용돌이 (슬램덩크 = 압도적 흡입)
+    if (f.inward){
+      var v = document.createElement('span'); v.className = 'cso-vortex';
+      st.appendChild(v); v.style.left = cx + 'px'; v.style.top = cy + 'px';
+      setTimeout(function(){ v.remove(); }, 640);
+    }
+    csoFlash(st, cx, cy, f.acc);
+    if (f.ring) csoRingFx(st, cx, cy, f.acc);
+    // 광선 (스캔·보석함)
+    for (var r = 0; r < f.rays; r++){ (function(r){
+      var ray = document.createElement('span'); ray.className = 'cso-ray';
+      ray.style.left = cx + 'px'; ray.style.top = cy + 'px'; ray.style.width = '2px'; ray.style.height = '60px';
+      ray.style.background = 'linear-gradient(' + f.acc + ',transparent)';
+      ray.style.transform = 'rotate(' + (r * (360 / f.rays)) + 'deg)'; st.appendChild(ray);
+      try{ ray.animate([{opacity:0,height:'8px'},{opacity:.85,height:'70px',offset:.3},{opacity:0,height:'90px'}],{duration:500,easing:'ease-out'}); }catch(e){}
+      setTimeout(function(){ ray.remove(); }, 520);
+    })(r); }
+    // 스파크 (블랙홀=안으로 빨림 / 나머지=밖으로 폭발)
+    for (var k = 0; k < f.sparks; k++){ (function(k){
+      var sp = document.createElement('span'); sp.className = 'cso-spark';
+      var sz = 3 + Math.random()*4; sp.style.width = sz + 'px'; sp.style.height = sz + 'px';
+      sp.style.borderRadius = (f.pixel && k % 3 === 0) ? '1px' : '50%';
+      var col = f.col[k % f.col.length]; sp.style.background = col; sp.style.boxShadow = '0 0 8px ' + col;
+      st.appendChild(sp);
+      var ang = Math.random()*6.28, d = 28 + Math.random()*70;
+      if (f.inward){
+        sp.style.left = (cx + Math.cos(ang)*d) + 'px'; sp.style.top = (cy + Math.sin(ang)*d) + 'px';
+        try{ sp.animate([{transform:'translate(-50%,-50%) scale(1.2)',opacity:1},{transform:'translate(-50%,-50%) translate('+(-Math.cos(ang)*d)+'px,'+(-Math.sin(ang)*d)+'px) scale(0)',opacity:.2}],{duration:560,easing:'cubic-bezier(.6,0,.9,.4)'}); }catch(e){}
+      } else {
+        sp.style.left = cx + 'px'; sp.style.top = cy + 'px';
+        try{ sp.animate([{transform:'translate(-50%,-50%) scale(1.3)',opacity:1},{transform:'translate('+(Math.cos(ang)*d)+'px,'+(Math.sin(ang)*d-14)+'px) scale(0)',opacity:0}],{duration:700,easing:'cubic-bezier(.2,.7,.3,1)'}); }catch(e){}
+      }
+      setTimeout(function(){ sp.remove(); }, 720);
+    })(k); }
   }
   function csoDupCheck(b){
     return rows.some(function(r){ return (b.url && r.url && r.url.trim() === b.url.trim()) || (b.hook && b.hook.length > 6 && (r.hook || '').trim() === b.hook.trim()); });
@@ -36784,16 +36995,42 @@
   }
   function csoInit(){
     if (_csoInited) return; _csoInited = true;
-    // 저장된 테마
+    // 저장된 테마 (기본=슬램덩크)
     var saved; try{ saved = localStorage.getItem('cso-theme'); }catch(e){}
-    csoSetTheme(saved || 'scan');
+    csoSetTheme(saved || 'dunk');
     // 무대 클릭 = 붓기 시트
     var st = csoQ('cso-stage');
     if (st){
       st.addEventListener('click', csoOpenFeed);
       st.addEventListener('mouseenter', function(){ st.classList.add('hot'); });
       st.addEventListener('mouseleave', function(){ st.classList.remove('hot'); });
+      // ── 골대에 직접 끌어다 놓기 (드래그 앤 드롭) ──
+      st.addEventListener('dragover', function(e){ e.preventDefault(); st.classList.add('hot'); });
+      st.addEventListener('dragleave', function(e){ if (e.target === st) st.classList.remove('hot'); });
+      st.addEventListener('drop', function(e){
+        e.preventDefault(); st.classList.remove('hot');
+        var dt = e.dataTransfer; if (!dt) return;
+        var imgs = Array.prototype.slice.call(dt.files || []).filter(function(f){ return f.type && f.type.indexOf('image/') === 0; });
+        if (imgs.length){ csHandlePhotos(imgs).then(function(){ csoRenderStrip(); if (_csBlocks.length) csoRenderCards(); csoUpdateStatusbar(); csoThrowFx(); }); return; }
+        var tf = Array.prototype.slice.call(dt.files || []).filter(function(f){ return f.type === 'text/plain'; })[0];
+        if (tf){ var rd = new FileReader(); rd.onload = function(){ csoQ('cso-paste').value = rd.result; csoTryParse(); }; rd.readAsText(tf); return; }
+        var txt = dt.getData && dt.getData('text/plain');
+        if (txt){ csoQ('cso-paste').value = txt; csoTryParse(); }
+      });
     }
+    // ── 무대 열려 있을 때 어디서든 붙여넣기(Ctrl+V) → 바로 던지기 ──
+    document.addEventListener('paste', function(e){
+      var room = document.getElementById('cs-room');
+      if (!room || !room.classList.contains('show')) return;
+      var tag = e.target && e.target.tagName;
+      if (tag === 'TEXTAREA' || tag === 'INPUT') return;   // 입력칸 붙여넣기는 그 칸이 처리
+      var cd = e.clipboardData; if (!cd) return;
+      var imgFiles = [];
+      if (cd.items){ for (var i = 0; i < cd.items.length; i++){ if (cd.items[i].type && cd.items[i].type.indexOf('image/') === 0){ var f = cd.items[i].getAsFile(); if (f) imgFiles.push(f); } } }
+      if (imgFiles.length){ e.preventDefault(); csHandlePhotos(imgFiles).then(function(){ csoRenderStrip(); if (_csBlocks.length) csoRenderCards(); csoUpdateStatusbar(); csoThrowFx(); }); return; }
+      var txt = cd.getData && cd.getData('text/plain');
+      if (txt && txt.trim().length > 15){ csoQ('cso-paste').value = txt; if (csoTryParse(true)) e.preventDefault(); }
+    });
     // 프롬프트 / 설명서
     var pb = csoQ('cso-prompt'); if (pb) pb.onclick = function(){ csCopyText(csBuildPrompt()); };
     var hb = csoQ('cso-help'); if (hb) hb.onclick = function(){ csoQ('cso-guide').classList.add('on'); csoQ('cso-gov').classList.add('on'); };
