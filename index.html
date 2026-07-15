@@ -15266,6 +15266,8 @@
   .cs-chip.sorter:hover { border-color:rgba(46,199,107,.7); box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 0 34px rgba(46,199,107,.32),0 16px 40px rgba(0,0,0,.5); }
   .cs-chip.master:hover { border-color:rgba(168,116,255,.55); box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 0 30px rgba(168,116,255,.24),0 16px 40px rgba(0,0,0,.5); }
   .cs-chip.prod { grid-column:1 / -1; flex-direction:row; text-align:left; padding:14px 18px; gap:14px; }
+  .cs-chip .ic-fb { display:flex; align-items:center; justify-content:center; font-size:44px;
+    background:linear-gradient(160deg,rgba(230,251,98,.12),rgba(255,255,255,.02)); border:1px solid rgba(255,255,255,.1); border-radius:22px; }
   .cs-chip.prod .ic2 { width:52px; height:52px; min-width:52px; border-radius:15px; display:flex; align-items:center; justify-content:center; font-size:26px;
     background:linear-gradient(140deg, rgba(245,200,75,.2), rgba(232,122,176,.12)); border:1px solid rgba(245,200,75,.4); position:relative; z-index:1; }
   .cs-chip.prod:hover { border-color:rgba(245,200,75,.55); box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 0 26px rgba(245,200,75,.2),0 16px 40px rgba(0,0,0,.5); }
@@ -15484,7 +15486,7 @@
       <div class="cs-chips" id="cs-chips">
         <div class="cs-chip sorter" data-cs-go="sorter">
           <div class="glow"></div>
-          <img class="ic" src="sorter-icon.png" alt="AI 컨텐츠 정리"/>
+          <img class="ic" src="sorter-icon.png" alt="AI 컨텐츠 정리" onerror="this.outerHTML='<div class=&quot;ic ic-fb&quot;>🤖</div>'"/>
           <div class="tx">
             <div class="eb">🤖 정리·분해</div>
             <div class="nm">AI 컨텐츠 정리</div>
@@ -15494,7 +15496,7 @@
         </div>
         <div class="cs-chip master" data-cs-go="ware">
           <div class="glow"></div>
-          <img class="ic" src="icon-512.png" alt="컨텐츠 마스터즈"/>
+          <img class="ic" src="icon-512.png" alt="컨텐츠 마스터즈" onerror="this.outerHTML='<div class=&quot;ic ic-fb&quot;>🏆</div>'"/>
           <div class="tx">
             <div class="eb">🏛 내 창고</div>
             <div class="nm">컨텐츠 마스터즈</div>
@@ -15584,7 +15586,7 @@
       .cso-stage.hot .o-dunk .rim{box-shadow:0 0 50px rgba(230,251,98,1);width:262px}
       .o-dunk .net{position:absolute;left:50%;top:136px;transform:translateX(-50%);width:176px;height:92px;z-index:2;background:repeating-linear-gradient(74deg,rgba(230,251,98,.32) 0 1px,transparent 1px 16px),repeating-linear-gradient(-74deg,rgba(230,251,98,.32) 0 1px,transparent 1px 16px);-webkit-mask:linear-gradient(#000,transparent 90%);mask:linear-gradient(#000,transparent 90%);clip-path:polygon(6% 0,94% 0,74% 100%,26% 100%);transform-origin:top}
       .cso-stage.dunk-go .o-dunk .net{animation:csoSwish .6s ease-out}
-      @keyframes csoSwish{0%{transform:translateX(-50%) scaleY(1)}30%{transform:translateX(-50%) scaleY(1.4)}62%{transform:translateX(-50%) scaleY(.9)}100%{transform:translateX(-50%) scaleY(1)}}
+      @keyframes csoSwish{0%{transform:translateX(-50%) scaleY(1)}25%{transform:translateX(-50%) scaleY(1.6)}55%{transform:translateX(-50%) scaleY(.82)}100%{transform:translateX(-50%) scaleY(1)}}
       .o-dunk .cutie{position:absolute;left:50%;top:108px;transform:translateX(-50%);font-size:38px;z-index:5;filter:drop-shadow(0 6px 9px rgba(0,0,0,.5));animation:csoBob 2.2s ease-in-out infinite}
       @keyframes csoBob{50%{transform:translateX(-50%) translateY(-6px)}}
       .cso-stage.dunk-go .o-dunk .cutie{animation:csoDunk .6s cubic-bezier(.4,0,.6,1)}
@@ -15637,8 +15639,14 @@
         -webkit-mask:radial-gradient(transparent 28%,#000 52%,transparent 78%);mask:radial-gradient(transparent 28%,#000 52%,transparent 78%);
         animation:csoVortex .62s cubic-bezier(.5,0,.82,1) forwards}
       @keyframes csoVortex{0%{opacity:0;transform:translate(-50%,-50%) scale(1.6) rotate(0)}26%{opacity:.95}100%{opacity:0;transform:translate(-50%,-50%) scale(.12) rotate(340deg)}}
-      .cso-stage.dunk-go .o-dunk .rim{animation:csoRimPop .6s ease}
+      .cso-stage.dunk-go .o-dunk .rim{animation:csoRimPop .6s ease,csoRimHit .4s .26s ease}
       @keyframes csoRimPop{28%{box-shadow:0 0 66px rgba(230,251,98,1);border-color:#fff;width:272px}}
+      /* 덩크 임팩트 — 백보드가 흔들리고 코트가 울림 (목업 boardShake/courtShake 복원) */
+      @keyframes csoRimHit{40%{transform:translateX(-50%) scaleY(.86)}100%{transform:translateX(-50%) scaleY(1)}}
+      .cso-stage.dunk-go .o-dunk .bb{animation:csoBoardShake .55s .28s cubic-bezier(.36,.07,.19,.97)}
+      @keyframes csoBoardShake{10%{transform:translateX(-50%) rotate(-2.5deg)}30%{transform:translateX(-50%) rotate(2.5deg)}50%{transform:translateX(-50%) rotate(-1.6deg)}70%{transform:translateX(-50%) rotate(1.2deg)}100%{transform:translateX(-50%) rotate(0)}}
+      .cso-stage.dunk-go{animation:csoCourtShake .42s .3s ease}
+      @keyframes csoCourtShake{25%{transform:translateX(-3px)}50%{transform:translateX(4px)}75%{transform:translateX(-2px)}100%{transform:none}}
       /* 🛰 스캔 = 화려 흡수 + 시안 폭발 (글리치·글로우) */
       .cso-stage.scan-go .o-scan .holo{animation:csoScanGlitch .38s .26s steps(3),csoScanGlow .72s .3s ease}
       @keyframes csoScanGlitch{33%{transform:translateX(-3px) scale(1.03)}66%{transform:translateX(3px) scale(1.03)}}
