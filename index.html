@@ -18927,7 +18927,7 @@
   let rows = [];
   let imageCache = {};
   let viewMode = 'all';   // 'all' | 'filled'
-  let sortBy = 'no';
+  let sortBy = 'newest'; // v407: 기본=최신순 (새로 담은 게 바로 위에 보이게)
   let filterBy = 'all';
   let editingRowId = null;
   let activeImgTarget = null;
@@ -19519,14 +19519,16 @@
       if (r) {
         const p = JSON.parse(r.value);
         viewMode = p.viewMode || 'all';
-        sortBy = p.sortBy || 'no';
+        sortBy = p.sortBy || 'newest';
+        // v407 1회 마이그레이션: 옛 기본값 'no'(직접 고른 적 없는 값)면 최신순으로. 이후 직접 번호순 고르면 sortV2가 지켜줌.
+        if (!p.sortV2 && sortBy === 'no') sortBy = 'newest';
         filterBy = p.filterBy || 'all';
       }
     } catch (e) {}
   }
 
   async function savePrefs() {
-    try { await window.storage.set(PREFS_KEY, JSON.stringify({ viewMode, sortBy, filterBy })); }
+    try { await window.storage.set(PREFS_KEY, JSON.stringify({ viewMode, sortBy, filterBy, sortV2: 1 })); }
     catch (e) {}
   }
 
@@ -36467,7 +36469,7 @@
       b.hook = f['후킹문구'] || f['후킹'] || '';
       b.author = (f['계정명'] || '').replace(/^@/, '');
       b.views = csParseViews(f['조회수']);
-      let lk = (f['링크'] || '').trim();
+      let lk = (f['링크'] || '').trim().split(/\s+/)[0].replace(/[↗›»…»]+$/g, ''); // GPT 화면 복사 시 딸려오는 ↗ 등 꼬리 제거
       if (lk && !/^https?:\/\//.test(lk) && /^[\w.-]+\.[a-z]{2,}(\/|$)/i.test(lk)) lk = 'https://' + lk; // GPT가 프로토콜 없이 줘도 살리기
       b.url = /^https?:\/\//.test(lk) ? lk : '';
       b.format = CS_FORMAT_MAP[(f['유형'] || '').replace(/\s/g, '')] || '';
@@ -36710,7 +36712,12 @@
     setTimeout(csoRenderCards, 360);
     return true;
   }
+  var _csoSaving = false;
   async function csoSave(){
+    if (_csoSaving) return;        // 🛡 연타 방지 — 두 번 저장(중복 행) 원천 차단
+    var sb = csoQ('cso-save');
+    _csoSaving = true; if (sb){ sb.disabled = true; sb.textContent = '⏳ 저장 중…'; }
+    try {
     // 카드 선택상태(off 아님)를 hidden checkbox에 반영
     csoQ('cso-row').querySelectorAll('.cso-card').forEach(function(c){
       var chk = c.querySelector('[data-cs-chk]'); if (chk) chk.checked = !c.classList.contains('off');
@@ -36721,6 +36728,10 @@
     csoRenderStrip();
     csoRenderCards();
     csoUpdateStatusbar();          // 상태바도 리셋
+    } finally {
+      _csoSaving = false; if (sb){ sb.disabled = true; sb.textContent = '💾 한번에 저장'; } // 리셋 후엔 선택 0 → 비활성 유지 (csoRefresh가 재계산)
+      try { csoRefresh(); } catch (e) {}
+    }
   }
   function csoInit(){
     if (_csoInited) return; _csoInited = true;
@@ -36900,7 +36911,9 @@
     for (const i of checked) {
       const b = _csBlocks[i];
       const r = newRow(++maxNo);
-      r.hook = b.hook; r.author = b.author; r.views = b.views; r.url = b.url;
+      // 후킹문구가 비면(릴스앱서 후킹칸 미입력 등) 주제로 제목 폴백 — 시트에 유령 행 방지
+      r.hook = b.hook || [b.topicMain, b.topicSub].filter(Boolean).join(' · ');
+      r.author = b.author; r.views = b.views; r.url = b.url;
       if (b.url) r.platform = detectPlatform(b.url);
       r.format = b.format;
       r.funnelStage = b.funnelStage;
