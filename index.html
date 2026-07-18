@@ -16356,6 +16356,36 @@
       @keyframes hsDot{50%{opacity:.4}}
       body.cm-ov-open #home-sorter-btn{display:none}
       @media(max-width:420px){#home-sorter-btn .hs-t{display:none}#home-sorter-btn{padding:9px}}
+      /* v410 방 스위처 — 좌우 코너 */
+      #room-switch{position:sticky;top:0;z-index:60;display:flex;align-items:center;
+        padding:calc(10px + env(safe-area-inset-top)) 14px 10px;background:linear-gradient(180deg,rgba(10,11,8,.92),rgba(10,11,8,.55) 70%,transparent);backdrop-filter:blur(10px);pointer-events:none}
+      #room-switch > *{pointer-events:auto}
+      #room-switch .rs-btn{position:relative;display:inline-flex;align-items:center;gap:5px;border:1px solid rgba(255,255,255,.13);
+        background:rgba(255,255,255,.035);color:#9aa08a;border-radius:999px;padding:7px 13px;font-family:inherit;font-size:11px;font-weight:800;cursor:pointer;
+        transition:.16s;-webkit-tap-highlight-color:transparent}
+      #room-switch .rs-g{font-size:13px;line-height:1;opacity:.95;display:inline-block}
+      #room-switch .rs-btn:active{transform:scale(.94)}
+      #room-switch .rs-ai{color:#43e0e6;border-color:rgba(67,224,230,.28)}
+      #room-switch .rs-ai:hover{background:rgba(67,224,230,.1);border-color:rgba(67,224,230,.55)}
+      /* 🤖 정리 로봇 — 대기 중 숨쉬기 */
+      #room-switch .rs-ai .rs-g{font-size:14px;animation:rsBot 4.2s ease-in-out infinite;transform-origin:50% 80%}
+      #room-switch .rs-ai::before{content:'';position:absolute;inset:-1px;border-radius:999px;pointer-events:none;
+        box-shadow:0 0 0 0 rgba(67,224,230,.34);animation:rsHalo 4.2s ease-in-out infinite}
+      #room-switch .rs-ai:active .rs-g{animation:rsBotGo .5s cubic-bezier(.34,1.56,.64,1)}
+      @keyframes rsBot{0%,72%,100%{transform:translateY(0) rotate(0)}80%{transform:translateY(-1.6px) rotate(-6deg)}88%{transform:translateY(-1.6px) rotate(6deg)}94%{transform:translateY(0) rotate(0)}}
+      @keyframes rsBotGo{0%{transform:scale(1)}45%{transform:scale(1.22) rotate(-9deg)}100%{transform:scale(1)}}
+      @keyframes rsHalo{0%,70%,100%{box-shadow:0 0 0 0 rgba(67,224,230,0)}82%{box-shadow:0 0 0 4px rgba(67,224,230,.13)}}
+      #room-switch .rs-mk{margin-left:auto;color:#d7f34b;border-color:rgba(215,243,75,.28)}
+      #room-switch .rs-mk:hover{background:rgba(215,243,75,.1);border-color:rgba(215,243,75,.55)}
+      #room-switch .rs-mk:active .rs-g{animation:rsPen .45s ease}
+      @keyframes rsPen{0%{transform:rotate(0)}40%{transform:rotate(-16deg) translateX(-1px)}100%{transform:rotate(0)}}
+      @media(prefers-reduced-motion:reduce){#room-switch .rs-ai .rs-g,#room-switch .rs-ai::before{animation:none}}
+      #room-switch .rs-mid{position:absolute;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:5px;
+        font-size:12.5px;font-weight:900;color:#f3f4ee;letter-spacing:-.01em}
+      #room-switch .rs-dot{position:absolute;right:-2px;top:-2px;width:7px;height:7px;border-radius:50%;background:#43e0e6;box-shadow:0 0 8px #43e0e6;display:none}
+      #room-switch .rs-dot.on{display:block;animation:hsDot 1.8s ease-in-out infinite}
+      body.cm-ov-open #room-switch{display:none}
+      @media(max-width:400px){#room-switch .rs-t{display:none}#room-switch .rs-btn{padding:8px 11px}}
       </style>
       <!-- 🪞 홈 디렉터스 컷 (dch-) — 3막 여정 · 온도 · 스파인 -->
       <style>
@@ -16369,7 +16399,7 @@
       .dch-hero .dch-in{position:relative;z-index:2}
       .dch-hi{font-size:13px;color:#9BA08C;font-weight:600}.dch-hi b{color:#EEF0E4;font-weight:800}
       .dch-eyebrow{font-size:10.5px;font-weight:800;letter-spacing:.2em;color:rgba(215,243,75,.62);text-transform:uppercase;margin-top:18px}
-      .dch-num{font-family:'JetBrains Mono',ui-monospace,Menlo,Consolas,monospace;font-size:60px;font-weight:800;letter-spacing:-3px;line-height:.98;margin:6px 0 2px;color:#e6fb62;text-shadow:0 0 40px rgba(230,251,98,.3),0 3px 20px rgba(0,0,0,.5);font-variant-numeric:tabular-nums}
+      .dch-num{font-family:'Pretendard','Apple SD Gothic Neo',sans-serif;font-size:60px;font-weight:900;letter-spacing:-2px;line-height:.98;margin:6px 0 2px;color:#e6fb62;text-shadow:0 0 40px rgba(230,251,98,.3),0 3px 20px rgba(0,0,0,.5);font-variant-numeric:tabular-nums}
       .dch-num .u{font-size:22px;font-weight:800;color:#EEF0E4;font-family:'Pretendard','Apple SD Gothic Neo',sans-serif}
       .dch-cap{font-size:14px;font-weight:700;margin-top:6px;color:#EEF0E4}.dch-cap b{color:#d7f34b}
       .dch-whisper2{font-size:12px;color:#9BA08C;margin-top:12px;line-height:1.6}.dch-whisper2 b{color:#d7f34b;font-weight:800}
@@ -16406,7 +16436,7 @@
       .dch-cnt{position:absolute;right:16px;bottom:15px;z-index:7;text-align:right}
       .dch-cnt .l1{font-size:11px;color:#9BA08C;font-weight:600}
       .dch-cnt .l2{font-size:15px;font-weight:800;line-height:1;margin:1px 0;color:#EEF0E4}
-      .dch-cnt .big{font-family:'JetBrains Mono',monospace;font-size:50px;font-weight:800;letter-spacing:-2px;color:#e6fb62;text-shadow:0 0 28px rgba(230,251,98,.5),0 2px 10px rgba(0,0,0,.6);vertical-align:-6px;margin-right:2px}
+      .dch-cnt .big{font-family:'Pretendard','Apple SD Gothic Neo',sans-serif;font-size:50px;font-weight:900;letter-spacing:-1.5px;color:#e6fb62;text-shadow:0 0 28px rgba(230,251,98,.5),0 2px 10px rgba(0,0,0,.6);vertical-align:-6px;margin-right:2px;font-variant-numeric:tabular-nums}
       .dch-cnt .l3{font-size:12.5px;color:#d7f34b;font-weight:800;margin-top:3px}
       .dch-whisper{display:flex;align-items:center;gap:9px;margin:12px 0 0;padding:12px 14px;border:1px solid rgba(255,255,255,.08);border-radius:15px;background:linear-gradient(180deg,rgba(215,243,75,.05),transparent);cursor:pointer}
       .dch-whisper .w1{font-size:12px;font-weight:700;color:#EEF0E4}.dch-whisper .w1 b{color:#d7f34b}
@@ -16416,7 +16446,7 @@
       .dch-mhd{text-align:center;padding:22px 16px 2px}
       .dch-mhd .k{font-size:11px;color:#9BA08C;font-weight:600}
       .dch-mhd .n{font-size:14px;font-weight:800;margin-top:5px;color:#EEF0E4}
-      .dch-mhd .n b{font-family:'JetBrains Mono',monospace;font-size:27px;font-weight:800;color:#EEF0E4;letter-spacing:-1.5px;vertical-align:-3px;margin:0 2px}
+      .dch-mhd .n b{font-family:'Pretendard','Apple SD Gothic Neo',sans-serif;font-size:27px;font-weight:900;color:#EEF0E4;letter-spacing:-1px;vertical-align:-3px;margin:0 2px;font-variant-numeric:tabular-nums}
       .dch-a2 .th2n-mq{margin-top:14px}
       .dch-a2 .th2n-mq-fade{background:linear-gradient(90deg,#12151A 0%,transparent 8%,transparent 92%,#12151A 100%)}
       .dch-board-wrap{padding:20px 16px 0}
@@ -16437,7 +16467,12 @@
       #home-view .tr-week-block{display:none!important}
       @media(prefers-reduced-motion:reduce){.dch-journey::after,.dch-wrow{animation:none}}
       </style>
-      <button id="home-sorter-btn" title="AI 컨텐츠 정리" onclick="if(window.__openSorter)window.__openSorter()"><span class="hs-ic">🤖</span><span class="hs-t">AI 정리</span><span class="hs-dot"></span></button>
+      <!-- v410 방 스위처 — 좌우 코너 (⌗ 정리 · ⌂ 홈 · ✎ 제작소) -->
+      <div id="room-switch" role="navigation" aria-label="방 이동">
+        <button class="rs-btn rs-ai" title="AI 컨텐츠 정리" onclick="if(window.__openSorter)window.__openSorter()"><span class="rs-g">🤖</span><span class="rs-t">정리</span><span class="rs-dot" id="rs-dot"></span></button>
+        <span class="rs-mid"><span class="rs-g">⌂</span>홈</span>
+        <button class="rs-btn rs-mk" title="컨텐츠 제작소" onclick="try{switchWorkspace('scripts')}catch(e){}"><span class="rs-g">✎</span><span class="rs-t">제작소</span></button>
+      </div>
       <section class="home-hero">
         <div class="home-hero-page"><span class="em">01</span> / 03</div>
         <div class="home-eyebrow">고객관점 · 수익화 컨텐츠 집중 트레이닝</div>
@@ -28668,14 +28703,14 @@
   const ACC_SECTIONS = [
     // v405: 업로드 채우는 판·이번 주 컨텐츠 = 홈에서 제거(사용자 요청). 쇼핑은 막2 하단 칩 하나로 통합 → 아코디언 중복 숨김
     { key: 'mineboard', title: '내 업로드 · 채우는 판', ico: '🏆', gen: true, hidden: true },
-    { key: 'goal',      title: '목표 / Why',     ico: '🎯', sel: ['#home-view .home-section.goal'], tool: true },
+    { key: 'goal',      title: '목표 / Why',     ico: '🎯', sel: ['#home-view .home-section.goal'], tool: true, hidden: true }, // v410 해체 — 숫자=🏁 골대, Why=비전 리마인더로 일원화
     { key: 'week',      title: '이번 주 컨텐츠',  ico: '🎬', gen: true, link: 'plan', hidden: true },
     { key: 'shopping',  title: '콘텐츠 쇼핑',    ico: '🛍', gen: true, hidden: true },
     // calendar(한 달)도 제작소 편성 보드로 이사 (v396)
-    { key: 'challenge', title: '진행 중 챌린지', ico: '🏁',  sel: ['#ch-list'], wrap: '.home-section', tool: true },
-    { key: 'insight',   title: '인사이트',       ico: '💡', gen: true, tool: true },
-    { key: 'growth',    title: '나의 성장 스토리', ico: '📈', gen: true },
-    { key: 'funnel',    title: '컨텐츠 퍼널',    ico: '🧲', sel: ['#home-view .funnel-section'], tool: true },
+    { key: 'challenge', title: '진행 중 챌린지', ico: '🏁',  sel: ['#ch-list'], wrap: '.home-section', tool: true, hidden: true }, // v410 홈 최소화 — 기능은 보존, 홈에서만 숨김
+    { key: 'insight',   title: '인사이트',       ico: '💡', gen: true, tool: true, hidden: true }, // v410 제작소로 이사 예정 — 홈에서 숨김
+    { key: 'growth',    title: '나의 성장 스토리', ico: '📈', gen: true, hidden: true }, // 도착하다 카드로 이사 (스크롤 연출)
+    { key: 'funnel',    title: '컨텐츠 퍼널',    ico: '🧲', sel: ['#home-view .funnel-section'], tool: true, hidden: true }, // v410 제작소로 이사 예정 — 홈에서 숨김
     // custscore(고객 니즈 파악)는 고객 분석 워크스페이스로 이사 (v394) — cu-score-host에 렌더
     // 통계는 흡수만 하고 숨김(요소가 home-grid에 다시 안 뜨게)
     { key: 'stats',     title: '통계',          ico: '▥', sel: ['#home-stats'], wrap: '.home-section', hidden: true }
@@ -29708,10 +29743,14 @@
         + '.acc-tool-hidden{display:none !important;}';
       document.head.appendChild(_ts);
     }
-    const _tt = document.createElement('div'); _tt.className = 'acc-tools-toggle'; _tt.id = 'acc-tools-toggle';
-    _tt.innerHTML = '<span class="att-ico">🧰</span><span class="att-t">도구함</span><span class="att-sub">필요할 때 펼쳐보기</span><span class="att-chev">▾</span>';
-    _tt.addEventListener('click', () => { accState.toolsOpen = !accState.toolsOpen; applyAccordionState(); saveAccordionState(); });
-    cont.appendChild(_tt);
+    // v410 홈 최소화 — 보이는 패널이 하나도 없으면 도구함 바 자체를 만들지 않음
+    var _visibleTools = ACC_SECTIONS.filter(function (d) { return !d.hidden; }).length;
+    if (_visibleTools > 0) {
+      const _tt = document.createElement('div'); _tt.className = 'acc-tools-toggle'; _tt.id = 'acc-tools-toggle';
+      _tt.innerHTML = '<span class="att-ico">🧰</span><span class="att-t">도구함</span><span class="att-sub">필요할 때 펼쳐보기</span><span class="att-chev">▾</span>';
+      _tt.addEventListener('click', () => { accState.toolsOpen = !accState.toolsOpen; applyAccordionState(); saveAccordionState(); });
+      cont.appendChild(_tt);
+    }
     trSection.parentNode.insertBefore(cont, trSection.nextSibling);
     // week는 링크칩 — 혹시 펼쳐져도 안내만
     try { const wpb = document.getElementById('week-panel-body'); if (wpb) wpb.innerHTML = '<div style="font-size:12px;color:var(--text-sub);padding:2px 2px 4px;">📅 편성 보드는 <b>컨텐츠 제작소</b>로 이사했어요 — 이 줄을 누르면 바로 이동해요 →</div>'; } catch (e) {}
@@ -30001,6 +30040,53 @@
     });
     host.querySelectorAll('.dch-wt[data-img]').forEach(function (box) { var id = box.getAttribute('data-img'); if (!id) return; (async function () { try { var u = await loadImage(id, 'thumb'); if (u) box.innerHTML = '<img src="' + u + '" alt="" />'; } catch (e) {} })(); });
   }
+  // 💥 히어로 숫자 폭주 — 볼 때마다 다시 (스크롤 리플레이 + 착지 임팩트)
+  function dchArmReach(reach) {
+    var nv = document.getElementById('dch-num-v'); if (!nv) return;
+    if (reach <= 0) { nv.textContent = '0'; return; }
+    var hero = nv.closest ? nv.closest('.dch-hero') : null;
+    var num = nv.parentElement; // .dch-num
+    var reduce = false;
+    try { reduce = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion:reduce)').matches); } catch (e) {}
+    if (reduce || !hero) { nv.textContent = fmtViews(reach); return; }
+    if (!document.getElementById('dch-reach-style')) {
+      var st = document.createElement('style'); st.id = 'dch-reach-style';
+      st.textContent = '@keyframes dchLand{0%{transform:scale(1.14);filter:brightness(1.5)}55%{transform:scale(.985)}100%{transform:scale(1);filter:brightness(1)}}' +
+        '.dch-num.landing{animation:dchLand .62s cubic-bezier(.34,1.4,.5,1)}';
+      document.head.appendChild(st);
+    }
+    var running = null;
+    var play = function () {
+      if (running) cancelAnimationFrame(running);
+      if (num) num.classList.remove('landing');
+      var DUR = 1500, t0 = 0;
+      var step = function (ts) {
+        if (!t0) t0 = ts;
+        var p = Math.min(1, (ts - t0) / DUR);
+        var e = 1 - Math.pow(1 - p, 3); // ease-out cubic = 폭주 후 감속
+        nv.textContent = fmtViews(Math.round(reach * e));
+        if (p < 1) { running = requestAnimationFrame(step); }
+        else {
+          running = null; nv.textContent = fmtViews(reach);
+          if (num) { num.classList.remove('landing'); void num.offsetWidth; num.classList.add('landing'); }
+        }
+      };
+      nv.textContent = '0';
+      running = requestAnimationFrame(step);
+    };
+    var fired = false;
+    try {
+      var io = new IntersectionObserver(function (es) {
+        es.forEach(function (e) { if (e.isIntersecting) { fired = true; play(); } });
+      }, { threshold: 0.45 });
+      io.observe(hero);
+    } catch (e) {}
+    setTimeout(function () {
+      if (fired) return;
+      var r = hero.getBoundingClientRect();
+      if (r.top < (window.innerHeight || 800) && r.bottom > 0) play(); else nv.textContent = '0';
+    }, 260);
+  }
   // 🪞 홈 = 되어가는 나를 비추는 거울 (3막: 담다·만들다·도착) — 기존 렌더/데이터 100% 재사용
   function renderTrophyHero() {
     var el = document.getElementById('cm-trophy-hero'); if (!el) return;
@@ -30038,9 +30124,10 @@
           '</div></div>' +
         '</div>' +
         '<div class="dch-act dch-a2"><div class="dch-ab"><span class="no">02</span><span class="tt">만들다<span class="d">— 내가 실제로 한 것</span></span><span class="ln"></span></div>' +
-          '<div class="dch-card"><div class="dch-mhd"><div class="k">내가 올린 콘텐츠, 지금까지</div><div class="n">' + mineHead + '</div></div>' +
+          '<div class="dch-card"><div class="gl-toprow"><button type="button" class="gl-topbtn" id="gl-open"><span class="gl-dot" id="gl-due"></span>성장 기록 <span class="ch">›</span></button></div>' +
+            '<div class="dch-mhd"><div class="k">내가 올린 콘텐츠, 지금까지</div><div class="n">' + mineHead + '</div></div>' +
             (nUp > 0 ? '<div class="th2n-mq"><div class="th2n-track" id="th2n-track"></div><div class="th2n-mq-fade"></div></div>' : '<div class="th2n-empty">첫 콘텐츠를 올리면 여기에 흐르기 시작해요 🎞</div>') +
-            '<div class="dch-a2acts"><button class="dch-chip" id="dch-views-btn">👀 조회수</button><button class="dch-chip shop" id="dch-shop">🛍 콘텐츠 쇼핑 →</button></div>' +
+            '<div class="dch-a2acts"><button class="dch-chip shop" id="dch-shop">🛍 콘텐츠 쇼핑 →</button></div>' +
           '</div>' +
         '</div>' +
         '<div class="dch-act dch-a3"><div class="dch-ab"><span class="no">03</span><span class="tt">도착하다<span class="d">— 예약이 알아서 들어오는 계정</span></span><span class="ln"></span></div>' +
@@ -30048,11 +30135,17 @@
         '</div>' +
       '</div>';
     try { th2CountUp(document.getElementById('dch-refnum'), analyzed); } catch (e) { var rn = document.getElementById('dch-refnum'); if (rn) rn.textContent = analyzed; }
-    (function () { var nv = document.getElementById('dch-num-v'); if (!nv) return; if (reach <= 0) { nv.textContent = '0'; return; } if (window.__dchReachAnim) { nv.textContent = fmtViews(reach); return; } window.__dchReachAnim = true; var cur = 0, sv = Math.max(1, Math.round(reach / 40)); var iv = setInterval(function () { cur += sv; if (cur >= reach) { cur = reach; clearInterval(iv); } nv.textContent = fmtViews(cur); }, 26); })();
+    try { dchArmReach(reach); } catch (e) { var nv0 = document.getElementById('dch-num-v'); if (nv0) nv0.textContent = reach > 0 ? fmtViews(reach) : '0'; }
     try { dchBuildWall(); } catch (e) {}
     if (nUp > 0) { try { th2Marquee(all); } catch (e) {} }
     var sh = document.getElementById('dch-shop'); if (sh) sh.onclick = function () { try { switchWorkspace('sheet'); } catch (e) {} };
-    var vb = document.getElementById('dch-views-btn'); if (vb) vb.onclick = function () { try { openViewsInput(); } catch (e) {} };
+    // 📈 성장 기록 한 줄 (통합 시트)
+    try {
+      glCss();
+      var gro = document.getElementById('gl-open'); if (gro) gro.onclick = glOpen;
+      var glMark = function () { var dd = document.getElementById('gl-due'); if (dd) dd.classList.toggle('on', glDue()); };
+      if (!_glLoaded) glLoad().then(glMark); else glMark();
+    } catch (e) {}
     try { renderFutureDash(); } catch (e) {}
     try { if (!window.__cmWelcomed && name) { window.__cmWelcomed = true; setTimeout(function () { try { toast('다시 오셨네요, ' + name + '님 · 성공 레퍼런스 ' + analyzed + '개 🏆'); } catch (e) {} }, 1400); } } catch (e) {}
   }
@@ -30527,8 +30620,8 @@
     g += '<path d="' + pp.trim() + '" fill="none" stroke="#F5C84B" stroke-width="2.3" stroke-dasharray="5 4" stroke-linecap="round" opacity=".85"/><text x="' + px(totalPts - 1).toFixed(1) + '" y="' + (py(proj[proj.length - 1]) + 3).toFixed(1) + '" fill="#F5C84B" font-size="9" text-anchor="end" font-weight="800">예상 ' + growthFmt(proj[proj.length - 1]) + '</text>';
     svg.innerHTML = g;
   }
-  function renderGrowthPanel() {
-    var el = document.getElementById('growth-panel-body'); if (!el) return;
+  function renderGrowthPanelCore() {
+    var el = document.getElementById('dch-growth') || document.getElementById('growth-panel-body'); if (!el) return;
     growthInjectCss(); el.classList.add('gr-panel');
     if (!_growthLoaded) { loadGrowth().then(renderGrowthPanel); return; }
     var pts = growthData.points || [];
@@ -30642,6 +30735,320 @@
     var ov = document.getElementById('vi-modal');
     if (!ov) { ov = document.createElement('div'); ov.id = 'vi-modal'; ov.className = 'vi-ov'; document.body.appendChild(ov); ov.addEventListener('click', function (e) { if (e.target === ov) ov.classList.remove('show'); }); }
     _viMode = 'week'; viRender(ov); ov.classList.add('show');
+  }
+  // ===== 📈 성장 기록 (통합) — 홈 라임 한 줄 → 스텝 칩 바텀시트 + 지표 그래프 =====
+  const GL_KEY = 'hmv1-growthlog';
+  let glLog = [], _glLoaded = false, _glMode = 'rec', _glMet = 'f', _glState = null;
+  async function glLoad() { try { const r = await window.storage.get(GL_KEY); if (r) { const v = JSON.parse(r.value !== undefined ? r.value : r); if (Array.isArray(v)) glLog = v; } } catch (e) {} _glLoaded = true; }
+  async function glSaveLog() { try { await window.storage.set(GL_KEY, JSON.stringify(glLog)); } catch (e) {} }
+  function glLast() { return glLog.length ? glLog[glLog.length - 1] : null; }
+  function glDue() { const l = glLast(); return !l || (Date.now() - (l.ts || 0)) > 6 * 86400000; }
+  function glCss() {
+    if (document.getElementById('gl-style')) return;
+    const s = document.createElement('style'); s.id = 'gl-style';
+    s.textContent =
+      '.gl-row{display:flex;align-items:center;gap:9px;width:100%;padding:13px 14px;margin:10px 0 0;border:1px solid rgba(255,255,255,.1);border-radius:14px;background:rgba(255,255,255,.02);font-family:inherit;cursor:pointer;color:var(--text-main,#eee);transition:.15s}' +
+      '.gl-row:hover{border-color:rgba(215,243,75,.35)}' +
+      '.gl-row .gl-t{font-size:13.5px;font-weight:800}.gl-row .gl-chev{margin-left:auto;color:rgba(255,255,255,.35);font-size:14px}' +
+      '.gl-dot{width:6px;height:6px;border-radius:50%;background:transparent;flex:none}.gl-dot.on{background:#d7f34b;box-shadow:0 0 6px rgba(215,243,75,.5)}' +
+      '.gl-toprow{display:flex;justify-content:flex-end;margin:4px 6px 10px 0}' +
+      '.gl-topbtn{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:800;color:#9aa08a;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.12);border-radius:99px;padding:8px 14px;cursor:pointer;font-family:inherit;transition:.15s}' +
+      '.gl-topbtn:hover{color:#d7f34b;border-color:rgba(215,243,75,.35)}' +
+      '.gl-topbtn .ch{color:#5d6350}' +
+      '.fd-growth{margin-top:14px}' +
+      '.fd-growth.pre{opacity:0;transform:translateY(16px);transition:opacity .7s ease,transform .7s ease}' +
+      '.fd-growth.pre.on{opacity:1;transform:none}' +
+      '.fd-fold{display:flex;align-items:center;gap:8px;padding:12px 4px;margin-top:12px;border-top:1px solid rgba(255,255,255,.07);font-size:11.5px;font-weight:700;color:#9aa08a;cursor:pointer}' +
+      '.fd-fold .ch{margin-left:auto;font-size:10.5px;color:#5d6350}' +
+      '.fd-fold:hover{color:#d7f34b}' +
+      '.gl-ov{position:fixed;inset:0;z-index:100050;background:rgba(6,7,7,.82);backdrop-filter:blur(6px);display:none;align-items:flex-end;justify-content:center}' +
+      '.gl-ov.show{display:flex}' +
+      '.gl-box{width:100%;max-width:460px;max-height:90vh;background:#0b0d08;border:1px solid rgba(255,255,255,.12);border-radius:20px 20px 0 0;display:flex;flex-direction:column;overflow:hidden}' +
+      '@media(min-width:520px){.gl-ov{align-items:center}.gl-box{border-radius:20px;max-height:84vh}}' +
+      '.gl-top{padding:11px 16px 11px;border-bottom:1px solid rgba(255,255,255,.07)}' +
+      '.gl-grip{width:36px;height:4px;border-radius:2px;background:rgba(255,255,255,.14);margin:0 auto 11px}' +
+      '.gl-th{display:flex;align-items:center;gap:8px}' +
+      '.gl-seg{display:flex;gap:5px;flex:1}' +
+      '.gl-seg button{flex:1;font-size:12px;font-weight:800;color:#9aa08a;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:9px;cursor:pointer;font-family:inherit}' +
+      '.gl-seg button.on{color:#0b0c06;background:#d7f34b;border-color:#d7f34b}' +
+      '.gl-x{font-size:20px;color:#9aa08a;background:none;border:none;cursor:pointer;padding:2px 6px}' +
+      '.gl-body{flex:1;overflow-y:auto;padding:14px 16px 18px}' +
+      '.gl-date{font-family:\'JetBrains Mono\',monospace;font-size:9.5px;color:#5d6350;margin-bottom:12px}' +
+      '.gl-fline{display:flex;align-items:baseline;gap:10px;margin-bottom:9px}' +
+      '.gl-fline .ic{font-size:14px}' +
+      '.gl-num{font-family:\'JetBrains Mono\',monospace;font-size:24px;font-weight:700;font-variant-numeric:tabular-nums;color:#f2f2ed;cursor:pointer}' +
+      '.gl-fline em{font-style:normal;font-family:\'JetBrains Mono\',monospace;font-size:10px;color:#37d67a}' +
+      '.gl-fline .last{margin-left:auto;font-family:\'JetBrains Mono\',monospace;font-size:9px;color:#5d6350}' +
+      '.gl-chips{display:flex;gap:6px}' +
+      '.gl-chip{flex:1;text-align:center;font-family:\'JetBrains Mono\',monospace;font-size:11.5px;font-weight:700;color:#9aa08a;border:1px solid rgba(255,255,255,.14);border-radius:10px;padding:10px 0;cursor:pointer;user-select:none;background:none;transition:.12s}' +
+      '.gl-chip:active{color:#0b0c06;background:#d7f34b;border-color:#d7f34b;transform:scale(.96)}' +
+      '.gl-chip.ghost{border-style:dashed;color:#5d6350}' +
+      '.gl-sect{display:flex;align-items:baseline;gap:8px;font-size:10.5px;font-weight:700;color:#9aa08a;margin:16px 0 8px}' +
+      '.gl-vrow{display:flex;align-items:center;gap:10px;padding:10px 2px}' +
+      '.gl-vrow+.gl-vrow{border-top:1px solid rgba(255,255,255,.07)}' +
+      '.gl-vth{width:34px;height:44px;border-radius:8px;flex:none;border:1px solid rgba(255,255,255,.1)}' +
+      '.gl-vmid{flex:1;min-width:0}' +
+      '.gl-vmid .t{font-size:11px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#f2f2ed}' +
+      '.gl-vmid .p{font-family:\'JetBrains Mono\',monospace;font-size:9px;color:#5d6350;margin-top:2px}' +
+      '.gl-vnum{flex:none;text-align:right;cursor:pointer;min-width:52px}' +
+      '.gl-vnum .now{font-family:\'JetBrains Mono\',monospace;font-size:15px;font-weight:700;font-variant-numeric:tabular-nums;color:#f2f2ed}' +
+      '.gl-vnum .dl{font-family:\'JetBrains Mono\',monospace;font-size:9px;color:#37d67a;height:12px}' +
+      '.gl-vchips{flex:none;display:flex;gap:4px}' +
+      '.gl-vchips button{font-family:\'JetBrains Mono\',monospace;font-size:9.5px;font-weight:700;color:#9aa08a;border:1px solid rgba(255,255,255,.14);border-radius:8px;padding:8px 8px;background:none;cursor:pointer;transition:.12s}' +
+      '.gl-vchips button:active{color:#0b0c06;background:#d7f34b;border-color:#d7f34b;transform:scale(.95)}' +
+      '.gl-vrow.done .gl-vth{border-color:rgba(55,214,122,.45)}' +
+      '.gl-vrow.done .gl-vnum .now{color:#37d67a}' +
+      '.gl-prog{display:flex;align-items:center;gap:8px;margin-top:10px}' +
+      '.gl-prog .bar{flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,.06);overflow:hidden}' +
+      '.gl-prog .bar i{display:block;height:100%;width:0;border-radius:2px;background:#d7f34b;transition:width .4s ease}' +
+      '.gl-prog .tx{font-family:\'JetBrains Mono\',monospace;font-size:9px;color:#5d6350}' +
+      '.gl-fold{display:flex;align-items:center;gap:8px;padding:12px 2px;border-top:1px solid rgba(255,255,255,.07);font-size:11.5px;color:#9aa08a;cursor:pointer;margin-top:14px}' +
+      '.gl-fold .ch{margin-left:auto;color:#5d6350;font-size:11px}' +
+      '.gl-save{width:100%;margin-top:12px;padding:13px;border:none;border-radius:13px;font-family:inherit;font-size:13px;font-weight:800;background:#d7f34b;color:#0b0c06;cursor:pointer}' +
+      '.gl-tabs{display:flex;gap:5px;margin-bottom:12px;flex-wrap:wrap}' +
+      '.gl-tabs button{font-size:10.5px;font-weight:700;color:#5d6350;border:none;background:none;border-radius:99px;padding:6px 11px;cursor:pointer;font-family:inherit}' +
+      '.gl-tabs button.on{color:#0b0c06;background:#d7f34b}' +
+      '.gl-gnum{font-family:\'JetBrains Mono\',monospace;font-size:26px;font-weight:700;color:#f2f2ed;font-variant-numeric:tabular-nums}' +
+      '.gl-gsub{font-family:\'JetBrains Mono\',monospace;font-size:10.5px;color:#37d67a;margin-bottom:12px}' +
+      '.gl-gsub i{font-style:normal;color:#5d6350}' +
+      '.gl-empty{padding:30px 10px;text-align:center;font-size:11.5px;color:#9aa08a;line-height:1.7}' +
+      '.gl-g svg{display:block;width:100%;overflow:visible}' +
+      '.gl-hair{stroke:rgba(255,255,255,.08);stroke-width:1}' +
+      '.gl-lab{font-family:\'JetBrains Mono\',monospace;font-size:8px;fill:#5d6350}' +
+      '.gl-line{fill:none;stroke:#d7f34b;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 6px rgba(215,243,75,.35));stroke-dasharray:600;stroke-dashoffset:600;animation:glDraw 1.6s cubic-bezier(.4,0,.2,1) .1s forwards}' +
+      '@keyframes glDraw{to{stroke-dashoffset:0}}' +
+      '.gl-area{opacity:0;animation:glFade .9s ease .9s forwards}' +
+      '.gl-lastd{fill:#d7f34b;opacity:0;animation:glFade .4s ease 1.5s forwards}' +
+      '.gl-lastl{font-family:\'JetBrains Mono\',monospace;font-size:9px;font-weight:700;fill:#d7f34b;opacity:0;animation:glFade .4s ease 1.6s forwards}' +
+      '@keyframes glFade{to{opacity:1}}' +
+      '.gl-bar{fill:rgba(255,255,255,.13)}.gl-bar.hl{fill:#d7f34b}' +
+      '.gl-act{display:flex;gap:6px;margin-top:12px}' +
+      '.gl-act button{flex:1;font-size:11px;font-weight:800;color:#9aa08a;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:9px;cursor:pointer;font-family:inherit}';
+    document.head.appendChild(s);
+  }
+  function glInitState() {
+    const l = glLast();
+    const ups = viUploads(); // 올린 것 전부 — 세로 리스트로 쭉 (최신순)
+    _glState = {
+      f: (l && l.f) || dashData.followers || 0, fBase: (l && l.f) || dashData.followers || 0,
+      dm: 0, buy: 0, foldOpen: false,
+      clips: ups.map(s => ({ id: s.id, nm: (s.title || s.subject || s.hook || '제목 없음'), base: s.uploadViews || 0, v: s.uploadViews || 0 }))
+    };
+  }
+  function glOpen() {
+    glCss();
+    let ov = document.getElementById('gl-ov');
+    if (!ov) {
+      ov = document.createElement('div'); ov.id = 'gl-ov'; ov.className = 'gl-ov';
+      document.body.appendChild(ov);
+      ov.addEventListener('click', e => { if (e.target === ov) ov.classList.remove('show'); });
+    }
+    _glMode = 'rec'; _glMet = 'f';
+    const go = () => { glInitState(); glRender(ov); ov.classList.add('show'); };
+    if (!_glLoaded) glLoad().then(go); else go();
+  }
+  function glRender(ov) {
+    const seg = '<div class="gl-th"><div class="gl-seg">' +
+      '<button class="' + (_glMode === 'rec' ? 'on' : '') + '" data-gm="rec">기록</button>' +
+      '<button class="' + (_glMode === 'graph' ? 'on' : '') + '" data-gm="graph">그래프</button></div>' +
+      '<button class="gl-x" id="gl-x">×</button></div>';
+    ov.innerHTML = '<div class="gl-box"><div class="gl-top"><div class="gl-grip"></div>' + seg + '</div>' +
+      '<div class="gl-body" id="gl-body">' + (_glMode === 'rec' ? glRecHtml() : glGraphHtml()) + '</div></div>';
+    ov.querySelector('#gl-x').onclick = () => ov.classList.remove('show');
+    ov.querySelectorAll('.gl-seg button').forEach(b => { b.onclick = () => { _glMode = b.dataset.gm; glRender(ov); }; });
+    if (_glMode === 'rec') glWireRec(ov); else glWireGraph(ov);
+  }
+  // ---- 기록 모드 ----
+  function glRecHtml() {
+    const st = _glState, d = new Date();
+    const days = ['일', '월', '화', '수', '목', '금', '토'];
+    const delta = st.f - st.fBase;
+    let h = '<div class="gl-date">' + (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + days[d.getDay()] + '요일 · 날짜 자동</div>';
+    h += '<div class="gl-fline"><span class="ic">👥</span><span class="gl-num" id="gl-fn" title="누르면 직접 입력">' + (st.f || 0).toLocaleString() + '</span><em id="gl-fd">' + (delta > 0 ? '▲' + delta.toLocaleString() : '') + '</em><span class="last">' + (st.fBase ? '지난 기록 ' + st.fBase.toLocaleString() : '첫 기록') + '</span></div>';
+    h += '<div class="gl-chips"><button class="gl-chip" data-fa="10">+10</button><button class="gl-chip" data-fa="50">+50</button><button class="gl-chip" data-fa="100">+100</button><button class="gl-chip ghost" id="gl-fdirect">직접</button></div>';
+    if (st.clips.length) {
+      const doneN = st.clips.filter(c => c.v !== c.base).length;
+      h += '<div class="gl-sect">내가 올린 릴스 — 현재 조회수만 톡톡<span style="margin-left:auto;font-family:\'JetBrains Mono\',monospace;font-size:9px;color:#5d6350;font-weight:500" id="gl-vn">' + doneN + ' / ' + st.clips.length + ' 입력</span></div>';
+      st.clips.forEach((c, i) => {
+        const grad = (typeof SLV_GRADS !== 'undefined') ? SLV_GRADS[i % 6] : '#1a1d14';
+        const chg = c.v !== c.base;
+        h += '<div class="gl-vrow' + (chg ? ' done' : '') + '" data-ri="' + i + '">' +
+          '<div class="gl-vth" style="background:' + grad + '"></div>' +
+          '<div class="gl-vmid"><div class="t">' + esc(c.nm) + '</div><div class="p">' + (c.base ? '지난 ' + fmtViews(c.base) : '미입력') + '</div></div>' +
+          '<div class="gl-vnum" data-cv="' + i + '" title="누르면 직접 입력"><div class="now">' + (c.v ? fmtViews(c.v) : '—') + '</div><div class="dl">' + (chg && c.v > c.base ? '▲' + fmtViews(c.v - c.base) : '') + '</div></div>' +
+          '<div class="gl-vchips"><button data-ca="' + i + ':10000">+1만</button><button data-ca="' + i + ':50000">+5만</button></div></div>';
+      });
+      h += '<div class="gl-prog"><div class="bar"><i id="gl-pbar" style="width:' + Math.round(doneN / st.clips.length * 100) + '%"></i></div><span class="tx" id="gl-ptx">' + doneN + '/' + st.clips.length + '</span></div>';
+    } else h += '<div class="gl-sect">내가 올린 릴스</div><div class="gl-empty">아직 업로드한 콘텐츠가 없어요 — 원고를 업로드 완료로 표시하면 여기 떠요</div>';
+    h += '<div class="gl-fold" id="gl-fold"><span>✉ DM · 🛍 구매 전환</span><span class="ch">' + (st.foldOpen ? '접기' : '펼치면 그때만 ›') + '</span></div>';
+    if (st.foldOpen) {
+      h += '<div class="gl-fline"><span class="ic">✉</span><span class="gl-num" id="gl-dmn">' + st.dm + '</span><span class="last">이번 기록의 DM 수</span></div>' +
+        '<div class="gl-chips"><button class="gl-chip" data-da="1">+1</button><button class="gl-chip" data-da="5">+5</button><button class="gl-chip" data-da="-1">−1</button></div>' +
+        '<div class="gl-fline" style="margin-top:10px"><span class="ic">🛍</span><span class="gl-num" id="gl-byn">' + st.buy + '</span><span class="last">이번 기록의 구매 수</span></div>' +
+        '<div class="gl-chips"><button class="gl-chip" data-ba="1">+1</button><button class="gl-chip" data-ba="5">+5</button><button class="gl-chip" data-ba="-1">−1</button></div>';
+    }
+    h += '<button class="gl-save" id="gl-save">저장</button>';
+    return h;
+  }
+  function glWireRec(ov) {
+    const st = _glState;
+    const updF = () => {
+      const el = ov.querySelector('#gl-fn'); if (el) el.textContent = (st.f || 0).toLocaleString();
+      const d = st.f - st.fBase; const de = ov.querySelector('#gl-fd'); if (de) de.textContent = d > 0 ? '▲' + d.toLocaleString() : '';
+    };
+    ov.querySelectorAll('[data-fa]').forEach(b => { b.onclick = () => { st.f += parseInt(b.dataset.fa, 10); updF(); }; });
+    const fd = ov.querySelector('#gl-fdirect'); if (fd) fd.onclick = () => {
+      const v = prompt('팔로워 수 (숫자)', st.f || ''); const n = parseInt(String(v || '').replace(/[^0-9]/g, ''), 10);
+      if (n > 0) { st.f = n; updF(); }
+    };
+    const fn = ov.querySelector('#gl-fn'); if (fn) fn.onclick = () => { const b = ov.querySelector('#gl-fdirect'); if (b) b.click(); };
+    const updClip = i => { // 행 상태 + 진행바 갱신
+      const c = st.clips[i], row = ov.querySelector('.gl-vrow[data-ri="' + i + '"]'); if (!row) return;
+      const chg = c.v !== c.base;
+      row.classList.toggle('done', chg);
+      row.querySelector('.now').textContent = c.v ? fmtViews(c.v) : '—';
+      row.querySelector('.dl').textContent = (chg && c.v > c.base) ? '▲' + fmtViews(c.v - c.base) : '';
+      const doneN = st.clips.filter(x => x.v !== x.base).length;
+      const vn = ov.querySelector('#gl-vn'); if (vn) vn.textContent = doneN + ' / ' + st.clips.length + ' 입력';
+      const pb = ov.querySelector('#gl-pbar'); if (pb) pb.style.width = Math.round(doneN / st.clips.length * 100) + '%';
+      const pt = ov.querySelector('#gl-ptx'); if (pt) pt.textContent = doneN + '/' + st.clips.length;
+    };
+    ov.querySelectorAll('[data-ca]').forEach(b => {
+      b.onclick = () => {
+        const p = b.dataset.ca.split(':'), i = parseInt(p[0], 10), add = parseInt(p[1], 10);
+        st.clips[i].v = (st.clips[i].v || 0) + add;
+        updClip(i);
+      };
+    });
+    ov.querySelectorAll('[data-cv]').forEach(cv => {
+      cv.onclick = () => {
+        const i = parseInt(cv.dataset.cv, 10), c = st.clips[i];
+        const v = prompt('현재 조회수 (예: 32만 또는 320000)', c.v ? fmtViews(c.v) : '');
+        const n = viParseViews(v); if (n != null) { c.v = n; updClip(i); }
+      };
+    });
+    const fold = ov.querySelector('#gl-fold'); if (fold) fold.onclick = () => { st.foldOpen = !st.foldOpen; glRender(ov); };
+    ov.querySelectorAll('[data-da]').forEach(b => { b.onclick = () => { st.dm = Math.max(0, st.dm + parseInt(b.dataset.da, 10)); const e = ov.querySelector('#gl-dmn'); if (e) e.textContent = st.dm; }; });
+    ov.querySelectorAll('[data-ba]').forEach(b => { b.onclick = () => { st.buy = Math.max(0, st.buy + parseInt(b.dataset.ba, 10)); const e = ov.querySelector('#gl-byn'); if (e) e.textContent = st.buy; }; });
+    const sv = ov.querySelector('#gl-save'); if (sv) sv.onclick = () => glCommit(ov);
+  }
+  async function glCommit(ov) {
+    const st = _glState, now = Date.now(), d = growthYmd(new Date());
+    const l = glLast();
+    if (l && l.d === d) { l.f = st.f; l.dm = st.dm; l.buy = st.buy; l.ts = now; }
+    else glLog.push({ d: d, ts: now, f: st.f, dm: st.dm, buy: st.buy });
+    if (glLog.length > 200) glLog = glLog.slice(-200);
+    await glSaveLog();
+    dashData.followers = st.f; try { await saveDash(); } catch (e) {}
+    let changed = 0;
+    st.clips.forEach(c => {
+      if (c.v !== c.base) { const s = (scripts || []).find(x => x.id === c.id); if (s) { s.uploadViews = c.v; s.updatedAt = now; changed++; } }
+    });
+    if (changed) { try { await saveScripts(); } catch (e) {} try { recordGrowthSnapshot(); } catch (e) {} }
+    ov.classList.remove('show');
+    try { renderGrowthPanel(); } catch (e) {}
+    try { renderFutureDash(); } catch (e) {}
+    try { toast('📈 성장 기록 저장!' + (changed ? ' · 조회수 ' + changed + '개 반영' : '')); } catch (e) {}
+  }
+  // ---- 그래프 모드 ----
+  function glGraphHtml() {
+    const tabs = [{ k: 'f', n: '👥 팔로워' }, { k: 'v', n: '▶ 조회수' }, { k: 'dm', n: '✉ DM' }, { k: 'buy', n: '🛍 구매' }];
+    let h = '<div class="gl-tabs">' + tabs.map(t => '<button class="' + (_glMet === t.k ? 'on' : '') + '" data-gt="' + t.k + '">' + t.n + '</button>').join('') + '</div><div class="gl-g">';
+    if (_glMet === 'f') {
+      const vals = glLog.map(x => x.f || 0).filter(v => v > 0).slice(-12);
+      const labs = glLog.filter(x => (x.f || 0) > 0).slice(-12).map(x => (x.d || '').slice(5).replace('-', '/'));
+      if (vals.length < 2) h += '<div class="gl-empty">팔로워 기록이 2번 쌓이면<br>곡선이 그려져요 — [기록]에서 툭!</div>';
+      else {
+        const nw = vals[vals.length - 1], df = nw - vals[0];
+        h += '<div class="gl-gnum">' + nw.toLocaleString() + '</div><div class="gl-gsub">' + (df >= 0 ? '▲' + df.toLocaleString() : '▼' + Math.abs(df).toLocaleString()) + ' <i>· 최근 ' + vals.length + '회</i></div>';
+        h += glLineSvg(vals, labs, v => v.toLocaleString());
+      }
+    } else if (_glMet === 'v') {
+      const wk = (growthData.weekly || []).slice(-8);
+      if (wk.length < 1) h += '<div class="gl-empty">조회수를 갱신하면 주간 스냅샷이<br>자동으로 쌓여요</div>';
+      else {
+        const nw = wk[wk.length - 1].avg || 0;
+        h += '<div class="gl-gnum">' + fmtViews(nw) + '</div><div class="gl-gsub"><i>주간 평균 (최근 9개 자동 스냅샷)</i></div>';
+        h += glBarSvg(wk.map(w => w.avg || 0), wk.map(w => (w.ymd || '').slice(5).replace('-', '/')), fmtViews);
+      }
+      h += '<div class="gl-act"><button id="gl-vi">🧹 조회수 몰아 입력</button><button id="gl-share">📸 성장 카드 공유</button></div>';
+    } else {
+      const key = _glMet, ico = key === 'dm' ? '✉' : '🛍';
+      const rows = glLog.slice(-8);
+      const vals = rows.map(x => x[key] || 0);
+      if (!vals.some(v => v > 0)) h += '<div class="gl-empty">' + ico + ' 기록이 쌓이면 막대가 자라요<br>[기록] 아래 펼침에서 툭!</div>';
+      else {
+        h += '<div class="gl-gnum">' + vals[vals.length - 1] + '</div><div class="gl-gsub"><i>회차별 건수</i></div>';
+        h += glBarSvg(vals, rows.map(x => (x.d || '').slice(5).replace('-', '/')), v => String(v));
+      }
+    }
+    return h + '</div>';
+  }
+  function glWireGraph(ov) {
+    ov.querySelectorAll('[data-gt]').forEach(b => { b.onclick = () => { _glMet = b.dataset.gt; glRender(ov); }; });
+    const vi = ov.querySelector('#gl-vi'); if (vi) vi.onclick = () => openViewsInput();
+    const sh = ov.querySelector('#gl-share'); if (sh) sh.onclick = () => { try { shareGrowthCard(); } catch (e) {} };
+  }
+  function glLineSvg(vals, labs, fmt) {
+    const W = 320, H = 150, mT = 14, mB = 20, mL = 6, mR = 40;
+    const max = Math.max.apply(null, vals), min = Math.min.apply(null, vals);
+    const top = max, bot = Math.max(0, min - (max - min) * .25 || min * .9), span = (top - bot) || 1;
+    const X = i => mL + (W - mL - mR) * (vals.length === 1 ? .5 : i / (vals.length - 1));
+    const Y = v => mT + (H - mT - mB) * (1 - (v - bot) / span);
+    const pts = vals.map((v, i) => X(i).toFixed(1) + ',' + Y(v).toFixed(1)).join(' ');
+    const area = 'M' + pts.split(' ').join(' L') + ' L' + X(vals.length - 1).toFixed(1) + ',' + (H - mB) + ' L' + X(0).toFixed(1) + ',' + (H - mB) + ' Z';
+    const mid = (top + bot) / 2;
+    let h = '<svg viewBox="0 0 320 150">';
+    h += '<defs><linearGradient id="glag" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d7f34b" stop-opacity=".2"/><stop offset="1" stop-color="#d7f34b" stop-opacity="0"/></linearGradient></defs>';
+    [[mT, top], [(mT + H - mB) / 2, mid], [H - mB, bot]].forEach(g => {
+      h += '<line class="gl-hair" x1="0" y1="' + g[0] + '" x2="320" y2="' + g[0] + '"/><text class="gl-lab" x="320" y="' + (g[0] - 3) + '" text-anchor="end">' + fmt(Math.round(g[1])) + '</text>';
+    });
+    h += '<path class="gl-area" fill="url(#glag)" d="' + area + '"/>';
+    h += '<polyline class="gl-line" points="' + pts + '"/>';
+    h += '<circle class="gl-lastd" cx="' + X(vals.length - 1) + '" cy="' + Y(vals[vals.length - 1]) + '" r="3.5"/>';
+    h += '<text class="gl-lastl" x="' + X(vals.length - 1) + '" y="' + (Y(vals[vals.length - 1]) - 8) + '" text-anchor="end">' + fmt(vals[vals.length - 1]) + '</text>';
+    if (labs && labs.length) { h += '<text class="gl-lab" x="' + mL + '" y="148">' + labs[0] + '</text><text class="gl-lab" x="' + (W - mR) + '" y="148" text-anchor="end">' + labs[labs.length - 1] + '</text>'; }
+    return h + '</svg>';
+  }
+  function glBarSvg(vals, labs, fmt) {
+    const W = 320, H = 130, mB = 18, top = 16;
+    const max = Math.max.apply(null, vals) || 1;
+    const n = vals.length, gap = 10, bw = Math.min(30, (W - gap * (n + 1)) / n);
+    let h = '<svg viewBox="0 0 320 130"><line class="gl-hair" x1="0" y1="' + (H - mB) + '" x2="320" y2="' + (H - mB) + '"/>';
+    h += '<text class="gl-lab" x="320" y="' + (top - 4) + '" text-anchor="end">' + fmt(max) + '</text>';
+    vals.forEach((v, i) => {
+      const bh = Math.max(2, (H - mB - top) * (v / max));
+      const x = gap + i * ((W - gap * 2 - bw) / Math.max(1, n - 1) || 0);
+      h += '<rect class="gl-bar' + (i === n - 1 ? ' hl' : '') + '" x="' + (n === 1 ? (W - bw) / 2 : x) + '" y="' + (H - mB - bh) + '" width="' + bw + '" height="' + bh + '" rx="4"/>';
+    });
+    if (labs && labs.length) { h += '<text class="gl-lab" x="' + gap + '" y="128">' + labs[0] + '</text><text class="gl-lab" x="' + (W - gap) + '" y="128" text-anchor="end">' + labs[labs.length - 1] + '</text>'; }
+    return h + '</svg>';
+  }
+  function renderGrowthPanel() {
+    renderGrowthPanelCore();
+    var el = document.getElementById('dch-growth') || document.getElementById('growth-panel-body'); if (!el) return;
+    try {
+      glCss();
+      if (!document.getElementById('gl-open')) { // 홈 히어로에 없을 때만 폴백으로 여기 삽입
+        el.insertAdjacentHTML('afterbegin', '<button type="button" class="gl-row" id="gl-open"><span class="gl-dot" id="gl-due"></span><span class="gl-t">성장 기록</span><span class="gl-chev">›</span></button>');
+        el.querySelector('#gl-open').onclick = glOpen;
+      }
+      const mark = () => { var dd = document.getElementById('gl-due'); if (dd) dd.classList.toggle('on', glDue()); };
+      if (!_glLoaded) glLoad().then(mark); else mark();
+      // 📜 스크롤 연출: 도착 카드의 성장 스토리가 화면에 들어올 때 스르륵 떠오름
+      const fg = document.getElementById('dch-growth');
+      if (fg && !fg.__glObs) {
+        fg.__glObs = true; fg.classList.add('pre');
+        const fire = () => { if (!fg.classList.contains('on')) fg.classList.add('on'); };
+        try {
+          const io = new IntersectionObserver(es => { es.forEach(en => { if (en.isIntersecting) { fire(); io.disconnect(); } }); }, { threshold: .2 });
+          io.observe(fg);
+        } catch (e) { fire(); }
+        // 안전망: IO가 못 잡아도 뷰포트 안이면 발화 (절대 영구 숨김 없게)
+        const chk = () => { try { const r = fg.getBoundingClientRect(); if (r.top < innerHeight && r.bottom > 0) fire(); } catch (e) { fire(); } };
+        setTimeout(chk, 1500); setTimeout(chk, 4000); setTimeout(fire, 8000);
+      }
+    } catch (e) {}
   }
   // ===== 성장 카드 공유 (이미지 PNG) =====
   function growthDrawShareCurve(x, pts, ox, oy, w, h) {
@@ -30828,7 +31235,230 @@
     document.getElementById('crio-go').onclick = function () { close(true); };
     document.getElementById('crio-x').onclick = function () { close(false); };
   }
+  // ===== 🎯 도착하다 — 찐팬 팔로워 그래프 (실크 곡선·🏁 목표·양끝 여백) =====
+  function fdArriveCss() {
+    if (document.getElementById('fda-style')) return;
+    var s = document.createElement('style'); s.id = 'fda-style';
+    s.textContent =
+      '.fda-cv{position:relative}' +
+      '.fda-cv svg{display:block;width:100%;overflow:visible}' +
+      '.fda-ov{position:absolute;left:18px;top:15px;z-index:2}' +
+      '.fda-ov .k{font-size:10.5px;font-weight:700;color:#9aa08a}' +
+      '.fda-ov .v{font-size:34px;font-weight:900;letter-spacing:-.03em;font-variant-numeric:tabular-nums;line-height:1.12;color:#f3f4ee}' +
+      '.fda-ov .c{font-family:"JetBrains Mono",monospace;font-size:10.5px;font-weight:600;color:#37d67a;margin-top:3px}' +
+      '.fda-ov .c i{font-style:normal;color:#5d6350;font-weight:500}' +
+      '.fda-glab{font-family:"JetBrains Mono",monospace;font-size:8.5px;fill:#9aa08a;cursor:pointer}' +
+      '.fda-xl{font-family:"JetBrains Mono",monospace;font-size:8px;fill:#5d6350}' +
+      '@keyframes fdaDraw{to{stroke-dashoffset:0}}@keyframes fdaFade{to{opacity:1}}@keyframes fdaHalo{0%{opacity:.6;r:5}100%{opacity:0;r:15}}' +
+      '@keyframes fdaDot{to{stroke-dashoffset:var(--fdl,-300px)}}' +
+      '.fda-pers{display:flex;gap:4px;padding:0 16px 12px}' +
+      '.fda-pers button{flex:1;text-align:center;font-size:10px;font-weight:700;color:#5d6350;border-radius:9px;padding:6px 0;background:none;border:none;font-family:inherit;cursor:pointer}' +
+      '.fda-pers button.on{color:#f3f4ee;background:rgba(255,255,255,.055)}' +
+      '.fda-pop{position:absolute;right:12px;top:34px;z-index:9;border:1px solid rgba(255,255,255,.14);border-radius:14px;background:#12150c;padding:11px 12px;box-shadow:0 14px 34px rgba(0,0,0,.6);display:none;width:220px}' +
+      '.fda-pop.on{display:block}' +
+      '.fda-pop .pt{font-size:11px;font-weight:700;color:#9aa08a;margin-bottom:9px}' +
+      '.fda-pop .chips{display:flex;gap:6px}' +
+      '.fda-pop .chips button{flex:1;font-family:"JetBrains Mono",monospace;font-size:11px;font-weight:700;color:#9aa08a;border:1px solid rgba(255,255,255,.14);border-radius:9px;padding:9px 0;background:none;cursor:pointer;font-family:inherit}' +
+      '.fda-pop .chips button.ghost{border-style:dashed;color:#5d6350}' +
+      '.fda-pop .auto{font-size:9.5px;color:#37d67a;margin-top:8px}' +
+      '.fda-why{margin-top:11px;padding-top:10px;border-top:1px solid rgba(255,255,255,.08)}' +
+      '.fda-why .wl{font-size:10.5px;font-weight:700;color:#9aa08a;margin-bottom:7px}' +
+      '.fda-why .wl span{display:block;font-size:9px;font-weight:500;color:#5d6350;margin-top:2px}' +
+      '.fda-why input{width:100%;background:#0a0c06;border:1px solid rgba(255,255,255,.13);border-radius:9px;color:#f3f4ee;padding:9px 10px;font-size:11.5px;font-family:inherit;outline:none}' +
+      '.fda-why input:focus{border-color:rgba(215,243,75,.45)}' +
+      '.fda-ch2fold{display:flex;align-items:center;gap:8px;padding:12px 16px;border-top:1px solid rgba(255,255,255,.07);font-size:11px;font-weight:700;color:#9aa08a;cursor:pointer}' +
+      '.fda-ch2fold .ch{margin-left:auto;font-size:10.5px;color:#5d6350}' +
+      '.fda-ch2{padding:2px 4px 4px}' +
+      '.fda-ch2 .head{padding:12px 14px 2px}' +
+      '.fda-ch2 .eb{font-family:"JetBrains Mono",monospace;font-size:8.5px;font-weight:700;color:#5d6350;letter-spacing:.14em}' +
+      '.fda-ch2 .t{font-size:14px;font-weight:900;margin-top:5px}' +
+      '.fda-ch2 .s{font-size:11px;color:#9aa08a;margin-top:4px;line-height:1.6}.fda-ch2 .s b{color:#f3f4ee}' +
+      '.fda-ch2 .tg{display:flex;gap:6px;margin:10px 14px 2px}' +
+      '.fda-ch2 .tg button{flex:1;font-size:11px;font-weight:800;border-radius:11px;padding:8px;cursor:pointer;font-family:inherit;border:1px solid rgba(255,255,255,.13);background:rgba(255,255,255,.02);color:#9aa08a}' +
+      '.fda-ch2 .tg button.on{color:#0b0c06;background:#d7f34b;border-color:#d7f34b}' +
+      '.fda-ml{font-family:"JetBrains Mono",monospace;font-size:8px;fill:#9aa08a;font-weight:700}' +
+      '.fda-mv{font-family:"JetBrains Mono",monospace;font-size:8px;fill:#d7f34b;font-weight:700}' +
+      '.fda-ch2 .verdict{padding:12px 16px 4px;font-size:11.5px;line-height:1.7;color:#9aa08a}.fda-ch2 .verdict b{color:#f3f4ee;font-weight:700}.fda-ch2 .verdict .big{color:#d7f34b;font-weight:800;font-family:"JetBrains Mono",monospace}' +
+      '.fda-basein{display:flex;align-items:center;gap:8px;margin:4px 16px 10px;border:1px dashed rgba(255,255,255,.13);border-radius:12px;padding:9px 12px;font-size:11px;color:#9aa08a}.fda-basein b{font-family:"JetBrains Mono",monospace;color:#d7f34b;margin-left:auto;cursor:pointer}';
+    document.head.appendChild(s);
+  }
+  // 📜 스크롤 리플레이 — 화면에 들어올 때마다 그래프 모션 처음부터 (v410)
+  function fdArmScrollAnim(root) {
+    if (!root) return;
+    var nodes = [].slice.call(root.querySelectorAll('[style*="animation"]'));
+    if (!nodes.length) return;
+    try {
+      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+    } catch (e) {}
+    nodes.forEach(function (n) {
+      if (n.__fdAnim == null) n.__fdAnim = n.style.animation || '';
+      n.style.animation = 'none';
+    });
+    var playing = false;
+    var play = function () {
+      if (playing) return; playing = true;
+      nodes.forEach(function (n) { n.style.animation = 'none'; });
+      void root.offsetWidth; // 리플로우 = 애니 리셋
+      nodes.forEach(function (n) { n.style.animation = n.__fdAnim; });
+      setTimeout(function () { playing = false; }, 400);
+    };
+    var fired = false;
+    try {
+      var io = new IntersectionObserver(function (es) {
+        es.forEach(function (e) {
+          if (e.isIntersecting) { fired = true; play(); }
+        });
+      }, { threshold: 0.25 });
+      io.observe(root);
+      root.__fdIO = io;
+    } catch (e) {}
+    // 안전망: IO 미지원이거나 이미 화면 안이면 바로 재생
+    setTimeout(function () {
+      if (fired) return;
+      var r = root.getBoundingClientRect();
+      if (r.top < (window.innerHeight || 800) && r.bottom > 0) play();
+    }, 240);
+  }
+  function fdSmoothPath(pts) {
+    if (pts.length < 2) return '';
+    var d = 'M' + pts[0].x.toFixed(1) + ',' + pts[0].y.toFixed(1);
+    for (var i = 0; i < pts.length - 1; i++) {
+      var p0 = pts[i - 1] || pts[i], p1 = pts[i], p2 = pts[i + 1], p3 = pts[i + 2] || p2;
+      var c1x = p1.x + (p2.x - p0.x) / 6, c1y = p1.y + (p2.y - p0.y) / 6;
+      var c2x = p2.x - (p3.x - p1.x) / 6, c2y = p2.y - (p3.y - p1.y) / 6;
+      d += ' C' + c1x.toFixed(1) + ',' + c1y.toFixed(1) + ' ' + c2x.toFixed(1) + ',' + c2y.toFixed(1) + ' ' + p2.x.toFixed(1) + ',' + p2.y.toFixed(1);
+    }
+    return d;
+  }
+  function fdFolSeries() {
+    // glLog의 팔로워 시계열(최근 12개). 2개 미만이면 현재값으로 상승 곡선 합성
+    var fol = dashData.followers || 0;
+    var arr = [];
+    try { arr = (glLog || []).map(function (x) { return x.f || 0; }).filter(function (v) { return v > 0; }).slice(-12); } catch (e) {}
+    if (arr.length >= 2) { if (arr[arr.length - 1] !== fol && fol > 0) arr[arr.length - 1] = fol; return arr; }
+    var base = Math.max(1, Math.round((fol || 1000) * 0.5));
+    return [base, Math.round(base * 1.25), Math.round(base * 1.55), Math.max(fol, Math.round(base * 1.9))];
+  }
+  function fdGoal(fol) {
+    if (dashData.folGoal && dashData.folGoal > fol) return dashData.folGoal;
+    var w = fdWindowOf(FD_FOL_MS, fol); return w.next || Math.max(fol * 2, 1000);
+  }
+  function fdArriveGraph(fol) {
+    var series = fdFolSeries(), goal = fdGoal(fol);
+    var W = 340, padL = 22, padR = 22, top = 18, bot = 24;
+    var lo = Math.min.apply(null, series), hi = Math.max(goal, Math.max.apply(null, series));
+    var span = (hi - lo * 0.9) || 1, y0 = lo * 0.9;
+    var n = series.length;
+    var X = function (i) { return padL + (W - padL - padR) * (n === 1 ? .5 : i / (n - 1)); };
+    var Y = function (v) { return top + (172 - top - bot) * (1 - (v - y0) / span); };
+    var pts = series.map(function (v, i) { return { x: X(i), y: Y(v) }; });
+    var line = fdSmoothPath(pts);
+    var area = line + ' L' + pts[n - 1].x.toFixed(1) + ',168 L' + pts[0].x.toFixed(1) + ',168 Z';
+    var goalY = Y(goal).toFixed(1);
+    var lastX = pts[n - 1].x.toFixed(1), lastY = pts[n - 1].y.toFixed(1);
+    return '<div class="fda-cv"><svg viewBox="0 0 340 172">' +
+      '<defs><linearGradient id="fdasg" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#37d67a"/><stop offset=".55" stop-color="#a9e84a"/><stop offset="1" stop-color="#e6fb62"/></linearGradient>' +
+      '<linearGradient id="fdaag" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d7f34b" stop-opacity=".24"/><stop offset=".55" stop-color="#37d67a" stop-opacity=".06"/><stop offset="1" stop-color="#37d67a" stop-opacity="0"/></linearGradient></defs>' +
+      '<line stroke="rgba(255,255,255,.28)" stroke-width="1.1" stroke-dasharray="4 5" x1="22" y1="' + goalY + '" x2="318" y2="' + goalY + '"/>' +
+      '<text class="fda-glab" id="fda-goal" x="318" y="' + (parseFloat(goalY) - 6) + '" text-anchor="end">🏁 ' + fol0(goal) + ' ✏</text>' +
+      '<path fill="url(#fdaag)" opacity="0" style="animation:fdaFade 1s ease .9s forwards" d="' + area + '"/>' +
+      '<path fill="none" stroke="url(#fdasg)" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round" filter="drop-shadow(0 0 7px rgba(215,243,75,.4))" d="' + line + '" style="stroke-dasharray:480;stroke-dashoffset:480;animation:fdaDraw 1.8s cubic-bezier(.4,0,.2,1) .2s forwards"/>' +
+      // 🔵 선을 타고 올라가는 점 (그리기와 완전 동기) — 링 + 코어
+      '<path class="fda-dot" fill="none" stroke="#d7f34b" stroke-width="9.5" stroke-linecap="round" opacity=".5" d="' + line + '" style="stroke-dasharray:.01 4000;stroke-dashoffset:0;animation:fdaDot 1.8s cubic-bezier(.4,0,.2,1) .2s forwards"/>' +
+      '<path class="fda-dot" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" filter="drop-shadow(0 0 5px rgba(215,243,75,.9))" d="' + line + '" style="stroke-dasharray:.01 4000;stroke-dashoffset:0;animation:fdaDot 1.8s cubic-bezier(.4,0,.2,1) .2s forwards"/>' +
+      '<circle cx="' + lastX + '" cy="' + lastY + '" r="7" fill="none" stroke="#d7f34b" stroke-width="1.5" opacity="0" style="animation:fdaHalo 1.8s ease 1.9s 2"/>' +
+      '<text class="fda-xl" x="22" y="166">지난</text><text class="fda-xl" x="318" y="166" text-anchor="end">오늘</text>' +
+      '</svg>' +
+      '<div class="fda-ov"><div class="k">💚 찐팬 팔로워</div><div class="v">' + fol.toLocaleString('ko-KR') + '</div>' +
+        '<div class="c">' + fdArriveDelta(series, fol, goal) + '</div></div>' +
+      '<div class="fda-pop" id="fda-pop"></div></div>';
+  }
+  function fol0(n) { return (n || 0).toLocaleString('ko-KR'); }
+  function fdArriveDelta(series, fol, goal) {
+    var d = fol - (series[0] || 0), rem = goal - fol;
+    var h = d > 0 ? '▲' + d.toLocaleString('ko-KR') : '기록 시작';
+    if (rem > 0) h += ' <i>· ' + fol0(goal) + '까지 ' + rem.toLocaleString('ko-KR') + '</i>';
+    return h;
+  }
+  function fdBindArrive() {
+    var gl = document.getElementById('fda-goal'); var pop = document.getElementById('fda-pop');
+    if (gl && pop) gl.onclick = function () {
+      var fol = dashData.followers || 0, w = fdWindowOf(FD_FOL_MS, fol);
+      var opts = [w.next || fol * 2, (w.next ? (w.peak || w.next * 3) : fol * 5), 10000].filter(function (v) { return v > fol; });
+      opts = opts.slice(0, 3);
+      var curWhy = '';
+      try { curWhy = (dashData.goalWhy || homeData.why || homeData.sixMonth || '').trim(); } catch (e) {}
+      pop.innerHTML = '<div class="pt">🏁 다음 목표를 정해요</div><div class="chips">' +
+        opts.map(function (v) { return '<button data-g="' + v + '">' + fdFmt(v) + '</button>'; }).join('') +
+        '<button class="ghost" id="fda-gcustom">직접</button></div>' +
+        '<div class="auto">✓ 자동 추천: ' + fdFmt(w.next || fol * 2) + ' (지금 ' + fol.toLocaleString('ko-KR') + ')</div>' +
+        '<div class="fda-why"><div class="wl">왜 이 목표인가요? <span>흔들릴 때 이 한 줄이 잡아줘요</span></div>' +
+        '<input id="fda-whyin" type="text" maxlength="60" placeholder="예: 예약이 꽉 찬 디자이너가 되려고" value="' + esc(curWhy) + '"/></div>';
+      pop.classList.add('on');
+      var saveWhy = function () {
+        var wi = document.getElementById('fda-whyin'); if (!wi) return;
+        var t = (wi.value || '').trim();
+        dashData.goalWhy = t; saveDash();
+        try { homeData.why = t; saveHomeDebounced(); } catch (e) {}
+      };
+      pop.querySelectorAll('[data-g]').forEach(function (b) { b.onclick = function () { saveWhy(); dashData.folGoal = parseInt(b.dataset.g, 10); saveDash(); pop.classList.remove('on'); renderFutureDash(); try { renderVisionReminder(); } catch (e) {} }; });
+      var wi = document.getElementById('fda-whyin');
+      if (wi) { wi.onkeydown = function (ev) { if (ev.key === 'Enter') { saveWhy(); pop.classList.remove('on'); renderFutureDash(); try { renderVisionReminder(); } catch (e) {} } }; wi.onblur = saveWhy; }
+      var gc = document.getElementById('fda-gcustom'); if (gc) gc.onclick = function () {
+        saveWhy();
+        var v = prompt('목표 팔로워 수', dashData.folGoal || (fol * 2)); var n = parseInt(String(v || '').replace(/[^0-9]/g, ''), 10);
+        if (n > fol) { dashData.folGoal = n; saveDash(); } pop.classList.remove('on'); renderFutureDash(); try { renderVisionReminder(); } catch (e) {}
+      };
+    };
+    if (pop) document.addEventListener('click', function (e) { if (pop.classList.contains('on') && !pop.contains(e.target) && e.target.id !== 'fda-goal') pop.classList.remove('on'); }, { once: true });
+  }
+  // 챕터2 — 조회수 시작 전 평균 vs 지금 (구불구불 원래 흐름 기준선)
+  function fdCh2Html() {
+    var base = (dashData.viewBase || 8000);
+    var wk = []; try { wk = (growthData.weekly || []).map(function (w) { return w.avg || 0; }).filter(function (v) { return v > 0; }); } catch (e) {}
+    var now = wk.length ? wk[wk.length - 1] : (growthCurrent9Avg() || base);
+    var mult = base > 0 ? (now / base) : 1;
+    // 로그 스케일 투영 (지금→10년), 원래 흐름은 완만 상승
+    var proj = 'M68,154 C110,140 150,120 200,96 C250,72 290,50 318,26';
+    var projA = proj + ' L318,182 L68,182 Z';
+    var basel = 'M22,168 C34,167 40,170 52,166 C64,162 66,170 80,164 C96,157 104,166 120,158 C138,149 150,159 168,150 C188,140 200,151 222,141 C244,131 258,143 282,133 C300,125 308,136 330,127';
+    var gap = basel + ' L318,26 C290,50 250,72 200,96 C150,120 110,140 68,154 L22,168 Z';
+    var on = window.__fdBaseOn !== false;
+    return '<div class="fda-ch2">' +
+      '<div class="head"><div class="eb">CHAPTER 2 — IF YOU KEEP GOING</div><div class="t">이 흐름이 계속되면</div>' +
+      '<div class="s">시작 전 <b>' + fol0(base) + '</b> → 지금 <b>' + growthFmt(now) + '</b>. 두 미래를 겹쳐 보면 차이가 보여요.</div></div>' +
+      '<div class="tg"><button class="' + (on ? 'on' : '') + '" id="fda-baseon">📉 원래 흐름 겹치기</button><button class="' + (on ? '' : 'on') + '" id="fda-baseoff">내 곡선만</button></div>' +
+      '<svg viewBox="0 0 340 210" style="margin-top:6px">' +
+      '<defs><linearGradient id="fdapg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d7f34b" stop-opacity=".18"/><stop offset="1" stop-color="#37d67a" stop-opacity="0"/></linearGradient>' +
+      '<linearGradient id="fdagap" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d7f34b" stop-opacity=".1"/><stop offset="1" stop-color="#d7f34b" stop-opacity=".01"/></linearGradient></defs>' +
+      (on ? '<path fill="url(#fdagap)" d="' + gap + '"/>' +
+        '<path fill="none" stroke="rgba(255,255,255,.42)" stroke-width="1.7" stroke-linecap="round" stroke-dasharray="5 5" d="' + basel + '" style="opacity:0;animation:fdaFade .7s ease 1.5s forwards"/>' +
+        '<text class="fda-ml" x="330" y="123" text-anchor="end" style="fill:#9aa08a;opacity:0;animation:fdaFade .5s ease 1.9s forwards">원래 흐름</text>' : '') +
+      '<path fill="none" stroke="url(#fdasg)" stroke-width="2.6" stroke-linecap="round" filter="drop-shadow(0 0 6px rgba(215,243,75,.4))" d="M22,168 C40,166 52,162 68,154" style="stroke-dasharray:80;stroke-dashoffset:80;animation:fdaDraw 1s ease .2s forwards"/>' +
+      '<path fill="url(#fdapg)" opacity="0" style="animation:fdaFade 1s ease 1.4s forwards" d="' + projA + '"/>' +
+      '<path fill="none" stroke="rgba(215,243,75,.8)" stroke-width="2" stroke-dasharray="2 5" stroke-linecap="round" d="' + proj + '" opacity="0" style="animation:fdaFade .8s ease 1s forwards"/>' +
+      '<circle cx="68" cy="154" r="4" fill="#0f1207" stroke="#d7f34b" stroke-width="2"/><text class="fda-ml" x="68" y="200" text-anchor="middle">지금</text><text class="fda-mv" x="68" y="146" text-anchor="middle">' + growthFmt(now) + '</text>' +
+      '<circle cx="120" cy="136" r="3" fill="#0f1207" stroke="#d7f34b" stroke-width="2" style="opacity:0;animation:fdaFade .3s ease 1.5s forwards"/><text class="fda-ml" x="120" y="200" text-anchor="middle">반년</text>' +
+      '<circle cx="172" cy="112" r="3" fill="#0f1207" stroke="#d7f34b" stroke-width="2" style="opacity:0;animation:fdaFade .3s ease 1.7s forwards"/><text class="fda-ml" x="172" y="200" text-anchor="middle">1년</text>' +
+      '<circle cx="234" cy="80" r="3" fill="#0f1207" stroke="#d7f34b" stroke-width="2" style="opacity:0;animation:fdaFade .3s ease 1.9s forwards"/><text class="fda-ml" x="234" y="200" text-anchor="middle">3년</text>' +
+      '<circle cx="286" cy="50" r="3" fill="#0f1207" stroke="#d7f34b" stroke-width="2" style="opacity:0;animation:fdaFade .3s ease 2.1s forwards"/><text class="fda-ml" x="286" y="200" text-anchor="middle">5년</text>' +
+      '<circle cx="318" cy="26" r="4.5" fill="#fff" stroke="#d7f34b" stroke-width="2.4" style="opacity:0;animation:fdaFade .4s ease 2.3s forwards"/><text class="fda-ml" x="318" y="200" text-anchor="end">10년</text><text class="fda-mv" x="318" y="18" text-anchor="end">🔭</text>' +
+      '</svg>' +
+      '<div class="verdict">지금 흐름이면 — 시작 전보다 <span class="big">×' + (mult >= 10 ? Math.round(mult) : (Math.round(mult * 10) / 10)) + '</span>. 이 벌어짐이 <b>계속한 결과</b>예요.</div>' +
+      '<div class="fda-basein"><span>📍 시작 전 평균 조회수 (최초 1번)</span><b id="fda-baseedit">' + fol0(base) + ' ✏</b></div>' +
+      '</div>';
+  }
+  function fdBindCh2() {
+    var on = document.getElementById('fda-baseon'), off = document.getElementById('fda-baseoff');
+    if (on) on.onclick = function () { window.__fdBaseOn = true; renderFutureDash(); };
+    if (off) off.onclick = function () { window.__fdBaseOn = false; renderFutureDash(); };
+    var be = document.getElementById('fda-baseedit'); if (be) be.onclick = function () {
+      var v = prompt('시작 전 평균 조회수 (예: 8000)', dashData.viewBase || 8000);
+      var n = parseInt(String(v || '').replace(/[^0-9]/g, ''), 10); if (n > 0) { dashData.viewBase = n; saveDash(); renderFutureDash(); }
+    };
+  }
   function renderFutureDash() {
+    fdArriveCss();
     var el = document.getElementById('future-dash'); if (!el) return;
     if (!_dashLoaded) { loadDash().then(function () { try { renderFutureDash(); } catch (e) {} }); return; }
     var views = fdTotalViews(), fol = dashData.followers || 0, dm = dashData.dm || 0;
@@ -30850,21 +31480,18 @@
       folMsH += ' <span class="n2">●' + fdFmt(fw.next) + ' (앞으로 ' + frTxt + ')</span>';
       if (fw.peak) folMsH += ' → ' + fdFmt(fw.peak);
     }
+    var weekAvg = 0; try { weekAvg = growthCurrent9Avg() || 0; } catch (e) {}
     el.style.display = 'block';
     el.innerHTML =
-      '<div class="fd-eb">YOUR DESTINATION — 예약이 알아서 들어오는 계정</div>' +
-      '<div class="fd-t">당신의 콘텐츠를 본 사람</div>' +
-      '<div class="fd-bignum' + ((!animate && views > 0) ? ' hot' : '') + '"><b id="fd-num">' + (animate ? '0' : views.toLocaleString('ko-KR')) + '</b><span class="u"> 명</span></div>' +
-      (crowdN ? '<div class="fd-crowd' + (animate ? '' : ' still') + '">' + crowdH + '</div>' : '') +
-      '<div class="fd-sub">' + subH + '</div>' +
-      (views <= 0 ? '<button class="fd-viewsbtn" id="fd-views-btn">👀 조회수 업데이트하고 시작하기 →</button>' : '') +
-      crRoomHtml(views) +
+      // 🎯 그래프 우선 — 찐팬 팔로워 실크 곡선 (본 사람 수는 홈 히어로에만)
+      fdArriveGraph(fol) +
+      '<div class="fda-pers"><button>1주</button><button class="on">8주</button><button>3달</button><button>전체</button></div>' +
       '<div class="fd-duo">' +
         '<div class="fd-kpi">' +
-          '<div class="fd-kl">팔로워 <button class="fd-edit" id="fd-fol-edit">✏ 입력</button></div>' +
-          '<div class="fd-kv" id="fd-fol-kv"><b>' + fol.toLocaleString('ko-KR') + '</b>' + (fw.next ? ' <span class="of">/ ' + fdFmt(fw.next) + '</span>' : '') + '</div>' +
-          '<div class="fd-kbar"><i style="width:' + folBar + '%"></i></div>' +
-          '<div class="fd-kms">' + folMsH + '</div>' +
+          '<div class="fd-kl">▶ 조회수 (주간)</div>' +
+          '<div class="fd-kv"><b>' + (weekAvg ? growthFmt(weekAvg) : (views ? fdFmt(views) : '0')) + '</b></div>' +
+          '<div class="fd-kms"><span class="n2">' + (views ? '누적 ' + views.toLocaleString('ko-KR') : '조회수 업데이트로 시작') + '</span></div>' +
+          (views <= 0 ? '<button class="fd-viewsbtn" id="fd-views-btn" style="margin-top:8px">👀 조회수 업데이트 →</button>' : '') +
         '</div>' +
         '<div class="fd-kpi fd-dmbox">' +
           '<div>' +
@@ -30873,10 +31500,39 @@
           '</div>' +
           '<button class="fd-plus1" id="fd-dm-plus">＋1</button>' +
         '</div>' +
-      '</div>';
+      '</div>' +
+      // 📈 챕터2 — 이 흐름이 계속되면 (접힘)
+      '<div class="fda-ch2fold" id="fda-ch2fold"><span>📈 이 흐름이 계속되면</span><span class="ch">' + (window.__fdCh2Open ? '접기' : '펼치기 ›') + '</span></div>' +
+      (window.__fdCh2Open ? fdCh2Html() : '') +
+      // 💎 눈높이 기준 — 하단 접힘 (펼칠 때만)
+      '<div class="fd-fold" id="fd-eye-fold"><span>💎 눈높이 기준</span><span class="ch">' + (window.__fdEyeOpen ? '접기' : '펼치기 ›') + '</span></div>' +
+      '<div id="fd-eye-body" style="display:' + (window.__fdEyeOpen ? 'block' : 'none') + '">' + crRoomHtml(views) + '</div>';
     // 배선
+    fdBindArrive();
+    // 🔵 이동 점 = 실제 경로 길이만큼만 (dasharray 트릭)
+    try {
+      var _lp = el.querySelector('.fda-cv path[stroke^="url"]');
+      var _len = _lp ? _lp.getTotalLength() : 0;
+      if (_len > 0) el.querySelectorAll('.fda-dot').forEach(function (d) { d.style.setProperty('--fdl', (-_len) + 'px'); });
+    } catch (e) {}
+    // 📜 스크롤 리플레이 (메인 그래프 + 챕터2)
+    try { fdArmScrollAnim(el.querySelector('.fda-cv')); } catch (e) {}
+    try { fdArmScrollAnim(el.querySelector('.fda-ch2')); } catch (e) {}
+    var folNum = el.querySelector('.fda-ov .v'); // 찐팬 팔로워 숫자 탭 = 입력
+    if (folNum) { folNum.style.cursor = 'pointer'; folNum.title = '눌러서 입력'; folNum.onclick = function () {
+      var v = prompt('찐팬 팔로워 수', dashData.followers || ''); var raw = String(v || '').trim().replace(/,/g, ''); var n = 0, m;
+      if ((m = raw.match(/^([\d.]+)\s*만$/))) n = Math.round(parseFloat(m[1]) * 10000);
+      else if ((m = raw.match(/^([\d.]+)\s*천$/))) n = Math.round(parseFloat(m[1]) * 1000);
+      else n = parseInt(raw, 10) || 0;
+      if (n >= 0 && raw) { dashData.followers = n; saveDash(); renderFutureDash(); }
+    }; }
+    var c2f = document.getElementById('fda-ch2fold'); if (c2f) c2f.onclick = function () { window.__fdCh2Open = !window.__fdCh2Open; renderFutureDash(); };
+    if (window.__fdCh2Open) { try { fdBindCh2(); } catch (e) {} }
     var vb = document.getElementById('fd-views-btn');
     if (vb) vb.onclick = function () { try { openViewsInput(); } catch (e) {} };
+    // 눈높이 접기/펼치기
+    var ef = document.getElementById('fd-eye-fold');
+    if (ef) ef.onclick = function () { window.__fdEyeOpen = !window.__fdEyeOpen; try { renderFutureDash(); } catch (e) {} };
     var dp = document.getElementById('fd-dm-plus');
     if (dp) dp.onclick = function () {
       dashData.dm = (dashData.dm || 0) + 1; saveDash();
@@ -31477,7 +32133,23 @@
     const box = document.getElementById('home-vision-reminder');
     if (!box) return;
     if (_visionReminderDismissed) { box.style.display = 'none'; return; }
-    // 긍정·동기 위주 칸들에서 채워진 것만 후보로
+    // 🏁 일원화 — 골대에서 정한 목표 + Why를 홈 한 줄로 (목표 숫자는 여기서만 표시)
+    try {
+      const g = dashData.folGoal, fol = dashData.followers || 0;
+      const why = (dashData.goalWhy || '').trim();
+      if (g > 0) {
+        const rem = Math.max(0, g - fol);
+        box.innerHTML =
+          '<span class="hvr-ico">🏁</span>' +
+          '<div class="hvr-body"><div class="hvr-label">내 목표 · 찐팬 ' + g.toLocaleString('ko-KR') + (rem ? ' (앞으로 ' + rem.toLocaleString('ko-KR') + ')' : ' 달성!') + '</div>' +
+          '<div class="hvr-text">' + esc(why || '왜 이 목표인지 한 줄 — 🏁를 눌러 적어보세요') + '</div></div>' +
+          '<button class="hvr-close" title="오늘은 닫기" aria-label="닫기">×</button>';
+        box.querySelector('.hvr-close').onclick = () => { _visionReminderDismissed = true; box.style.display = 'none'; };
+        box.style.display = 'flex';
+        return;
+      }
+    } catch (e) {}
+    // (폴백) 예전 목표 패널에 적어둔 값이 있으면 그대로 보여줌
     const pool = [
       { key: 'goal',         label: '나의 비전',   ico: '🌟' },
       { key: 'sixMonth',     label: '6개월 목표',  ico: '🎯' },
@@ -36876,6 +37548,7 @@
     if (fb) { fb.classList.toggle('show', n > 0); const b = document.getElementById('fb-sl-n'); if (b) b.textContent = n; }
     const sb = document.getElementById('sh-slbadge');
     if (sb) { sb.classList.toggle('show', n > 0); const bb = sb.querySelector('b'); if (bb) bb.textContent = n; }
+    const rd = document.getElementById('rs-dot'); if (rd) rd.classList.toggle('on', n > 0); // 방 스위처 알림 점
     // 🧊 자산 큐브 카운터 (채워진 행 = 자산)
     try {
       const as = document.getElementById('sh-asset');
