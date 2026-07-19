@@ -1,7 +1,7 @@
 // Service Worker — 컨텐츠 마스터즈
 // 오프라인 작동 + PWA 설치 트리거
 
-const CACHE_NAME = 'content-masters-v411';
+const CACHE_NAME = 'content-masters-v426';
 const FILES = [
   './',
   './index.html',
@@ -33,16 +33,34 @@ self.addEventListener('activate', (e) => {
 });
 
 // fetch — 네트워크 우선, 실패 시 캐시
+// v412: 같은 출처의 정적 파일만 캐시한다.
+//   기존엔 모든 GET을 캐시에 넣어서 Supabase 등 API 응답까지 저장됐고,
+//   오프라인/네트워크 오류일 때 낡은 API 데이터가 되살아날 수 있었다.
 self.addEventListener('fetch', (e) => {
-  if (e.request.method !== 'GET') return;
+  const req = e.request;
+  if (req.method !== 'GET') return;
+
+  let sameOrigin = false;
+  try { sameOrigin = new URL(req.url).origin === self.location.origin; } catch (_) { return; }
+  if (!sameOrigin) return; // 외부(API·CDN)는 SW가 손대지 않음 — 브라우저에 맡김
+
   e.respondWith(
-    fetch(e.request)
+    fetch(req)
       .then((res) => {
-        // 새 응답을 캐시에 저장
-        const copy = res.clone();
-        caches.open(CACHE_NAME).then((cache) => cache.put(e.request, copy));
+        // 정상 응답만 저장 (에러 페이지·부분 응답이 캐시에 박히는 것 방지)
+        if (res && res.ok && res.type === 'basic') {
+          const copy = res.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(req, copy));
+        }
         return res;
       })
-      .catch(() => caches.match(e.request).then((cached) => cached || caches.match('./index.html')))
+      .catch(() =>
+        caches.match(req).then((cached) => {
+          if (cached) return cached;
+          // 페이지 이동 요청일 때만 앱 껍데기로 폴백
+          if (req.mode === 'navigate') return caches.match('./index.html');
+          return Response.error();
+        })
+      )
   );
 });
