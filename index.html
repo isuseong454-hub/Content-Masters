@@ -491,6 +491,9 @@
     flex-direction: column;
     padding-bottom: calc(62px + env(safe-area-inset-bottom));
     overflow-x: hidden; /* 시트가 가로로 화면 밖으로 밀리는 것 방지 (표는 .sh-sheet-wrap 내부에서 스크롤) */
+    /* ⚠️ hidden은 «스크롤 컨테이너»를 만들어 자식의 position:sticky를 무력화한다(상단바가 안 붙던 원인).
+       clip은 같은 잘림 효과인데 스크롤 컨테이너를 만들지 않는다 → sticky가 살아난다. 미지원 브라우저는 위 hidden 유지. */
+    overflow-x: clip;
   }
 
   .sh-topbar {
@@ -13255,6 +13258,181 @@
   .hook-ac-col .hook-ac-txt { white-space: normal; line-height: 1.4; }
   .hook-ac-none { padding: 9px 10px; font-size: 11px; color: var(--text-faint); opacity: 0.55; }
 
+
+  /* 🔦 참고 도구 v431 — Top Hit + 세그먼트 (3열 폐기, 폰 우선) */
+  .hook-ac{ padding:0; border-color:rgba(255,255,255,.1);
+    background:linear-gradient(180deg,#13140d,#0c0d09); border-radius:15px; }
+  .ac-top{ padding:12px 13px; border-bottom:1px solid rgba(255,255,255,.07);
+    background:linear-gradient(180deg,rgba(215,243,75,.07),transparent); cursor:pointer; }
+  .ac-top:hover{ background:linear-gradient(180deg,rgba(215,243,75,.11),transparent); }
+  .ac-top .k{ font-size:8.5px; font-weight:800; letter-spacing:.18em; color:var(--acid,#e6fb62); }
+  .ac-top .t{ font-size:13.5px; font-weight:800; color:#f3f4ee; margin-top:5px; line-height:1.4; }
+  .ac-top .t b{ color:#e6fb62; }
+  .ac-top .why{ font-size:10px; color:var(--text-sub,#9aa08a); margin-top:5px; }
+  .ac-top .why b{ color:#F5C84B; }
+  .ac-seg{ display:flex; gap:2px; padding:6px; }
+  .ac-seg button{ flex:1; font-family:inherit; font-size:10.5px; font-weight:700; padding:7px 4px; border:none;
+    border-radius:8px; cursor:pointer; background:none; color:var(--text-faint,#5d6350); }
+  .ac-seg button.on{ background:rgba(255,255,255,.11); color:#f3f4ee; font-weight:800;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.14); }
+  .ac-seg button s{ text-decoration:none; font-family:'JetBrains Mono',monospace; font-size:8px; opacity:.7; margin-left:3px; }
+  .ac-list{ max-height:230px; overflow-y:auto; padding:0 0 6px; }
+  .ac-it{ display:flex; align-items:center; gap:10px; padding:10px 13px; cursor:pointer;
+    border-top:1px solid rgba(255,255,255,.04); }
+  .ac-it:hover{ background:rgba(255,255,255,.045); }
+  .ac-it .tx{ font-size:12px; color:#f1f2ec; line-height:1.4; min-width:0;
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .ac-it .tx b{ color:#e6fb62; font-weight:800; }
+  .ac-it .v{ margin-left:auto; font-family:'JetBrains Mono',monospace; font-size:9px; color:#F5C84B; flex:0 0 auto; }
+  .ac-it .v.tpl{ color:var(--text-faint,#5d6350); }
+  .ac-none2{ padding:14px 13px; font-size:11px; color:var(--text-faint,#5d6350); }
+
+
+  /* 🧠 통찰 (ins) — 내 데이터가 말하는 것 */
+  /* ⚖️ 헌법 제1조 — 통찰은 «내 자산이 말하는 것»이므로 라임 한 색.
+     TODAY(할 일)와의 위계는 색이 아니라 채도·면적으로 나눈다: 저쪽은 채운 CTA, 이쪽은 테두리뿐. */
+  .iw-line{ display:flex; align-items:center; gap:9px; width:100%; margin:14px 0 0;
+    padding:12px 13px; border-radius:15px; cursor:pointer; text-align:left; font-family:inherit;
+    border:1px solid rgba(215,243,75,.11); background:rgba(215,243,75,.035);
+    transition:transform .18s ease, box-shadow .18s ease, background .18s ease; }
+  .iw-line:hover{ background:rgba(215,243,75,.07); }
+  .iw-line:hover{ transform:translateY(-2px); box-shadow:0 14px 30px rgba(0,0,0,.4); }
+  .iw-line:active{ transform:scale(.985); }
+  .iw-line .ic{ font-size:16px; flex:0 0 auto; }
+  .iw-line .bd{ min-width:0; flex:1; }
+  .iw-line .t{ font-size:12.5px; font-weight:800; color:#f3f4ee; line-height:1.45; }
+  .iw-line .t b{ color:var(--law-asset-hi,#e6fb62); }
+  .iw-line .d{ font-size:10px; color:var(--text-sub,#9aa08a); margin-top:3px; }
+  .iw-line .ar{ font-size:12px; color:var(--text-faint,#5d6350); flex:0 0 auto; }
+  /* 식상함 경보만 «침묵» — 헌법에 경고색이 없으므로 중립 회색(미분류 규칙 준용) */
+  .iw-line.k-stale{ border-color:rgba(139,145,132,.22); background:rgba(139,145,132,.05); }
+  .iw-line.k-stale .t b{ color:#8b9184; }
+
+  .iw-ov{ position:fixed; inset:0; z-index:5200; display:none; background:rgba(4,6,4,.62);
+    backdrop-filter:blur(7px); -webkit-backdrop-filter:blur(7px); }
+  .iw-ov.on{ display:block; }
+  .iw-sh{ position:absolute; left:0; right:0; bottom:0; max-height:88vh; overflow-y:auto;
+    background:linear-gradient(180deg,#14160e,#0a0b07); border-top:1px solid rgba(255,255,255,.11);
+    border-radius:26px 26px 0 0; box-shadow:0 -24px 60px rgba(0,0,0,.6);
+    animation:insUp .42s cubic-bezier(.2,1.2,.3,1) both; padding:0 0 34px; }
+  @keyframes insUp{ from{ transform:translateY(30px); opacity:0; } to{ transform:none; opacity:1; } }
+  .iw-hd{ position:sticky; top:0; z-index:2; display:flex; align-items:center; gap:10px;
+    padding:15px 18px 12px; background:linear-gradient(180deg,#14160e 76%,transparent);
+    border-bottom:1px solid rgba(255,255,255,.06); }
+  .iw-hd b{ font-size:14px; font-weight:800; color:#f3f4ee; }
+  .iw-hd s{ text-decoration:none; font-size:10px; color:var(--text-faint,#5d6350); }
+  .iw-hd .x{ margin-left:auto; width:30px; height:30px; border-radius:50%; border:none; cursor:pointer;
+    background:rgba(255,255,255,.07); color:#9aa08a; font-size:16px; font-family:inherit; }
+  .iw-hd .x:active{ transform:scale(.92); }
+  .iw-sec{ padding:17px 18px 4px; }
+  .iw-sec > h4{ font-size:10px; font-weight:800; letter-spacing:.13em; color:var(--text-faint,#5d6350);
+    margin:0 0 10px; display:flex; align-items:center; gap:6px; }
+  .iw-card{ border:1px solid rgba(255,255,255,.08); border-radius:15px; padding:13px 14px; margin-bottom:9px;
+    background:linear-gradient(160deg,rgba(255,255,255,.045),rgba(255,255,255,.012));
+    transition:transform .18s ease, border-color .18s ease; }
+  .iw-card:hover{ transform:translateY(-1px); border-color:rgba(255,255,255,.15); }
+  .iw-card .pt{ font-size:14px; font-weight:800; color:#f3f4ee; line-height:1.4; }
+  .iw-card .pt em{ font-style:normal; color:var(--text-faint,#5d6350); }
+  .iw-card .pt b{ color:var(--law-asset-hi,#e6fb62); }
+  .iw-meta{ display:flex; align-items:center; gap:8px; margin-top:9px; }
+  .iw-bar{ flex:1; height:5px; border-radius:3px; background:rgba(255,255,255,.07); overflow:hidden; }
+  .iw-bar i{ display:block; height:100%; border-radius:3px; background:var(--law-asset,#d7f34b);
+    transition:transform .6s cubic-bezier(.2,.9,.3,1); transform-origin:left; }
+  .iw-rate{ font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:800;
+    color:var(--law-asset,#d7f34b); flex:0 0 auto; }
+  .iw-n{ font-size:10px; color:var(--text-sub,#9aa08a); flex:0 0 auto; }
+  .iw-ex{ margin-top:9px; padding-top:9px; border-top:1px solid rgba(255,255,255,.055); }
+  .iw-ex div{ font-size:10.5px; color:var(--text-sub,#9aa08a); line-height:1.65;
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .iw-ex div:before{ content:'· '; color:var(--text-faint,#5d6350); }
+  .iw-vein{ border-color:rgba(215,243,75,.18); }
+  .iw-vein .pt b{ color:var(--law-asset-hi,#e6fb62); }
+  .iw-gapbar{ display:flex; gap:3px; margin-top:10px; align-items:center; }
+  .iw-gapbar u{ text-decoration:none; font-size:9px; color:var(--text-faint,#5d6350); margin-right:4px; flex:0 0 auto; }
+  .iw-gapbar i{ width:9px; height:9px; border-radius:3px; background:rgba(255,255,255,.1); flex:0 0 auto; }
+  .iw-gapbar i.f{ background:#8b9184; }              /* 표본 = 남의 콘텐츠 → 중립 */
+  .iw-gapbar i.m{ background:var(--law-asset,#d7f34b); }  /* 원고 = 내 자산 → 라임 */
+  .iw-warn{ border-color:rgba(139,145,132,.22); background:rgba(139,145,132,.045); }
+  .iw-warn .pt b{ color:#8b9184; }
+  .iw-rule{ font-size:13px; font-weight:700; color:#f3f4ee; line-height:1.6; }
+  .iw-rule b{ color:var(--law-asset,#d7f34b); font-weight:800; }
+  .iw-empty{ padding:15px 14px; border-radius:14px; border:1px dashed rgba(255,255,255,.1);
+    font-size:11px; color:var(--text-faint,#5d6350); line-height:1.7; }
+  .iw-foot{ padding:16px 18px 0; font-size:9.5px; color:var(--text-faint,#5d6350); line-height:1.75; }
+
+
+  /* 참고 도구 v433 — 근거 줄 · 역주행 · 공식 항목 */
+  .ac-why{ padding:8px 13px; font-size:10px; color:var(--text-sub,#9aa08a);
+    border-bottom:1px solid rgba(255,255,255,.06); background:rgba(255,255,255,.02); }
+  .ac-why b{ color:var(--law-asset-hi,#e6fb62); font-weight:800; }
+  .ac-back{ padding:11px 13px; cursor:pointer; border-bottom:1px solid rgba(255,255,255,.06);
+    background:rgba(255,255,255,.045); }
+  .ac-back:hover{ background:rgba(255,255,255,.075); }
+  .ac-back .k{ font-size:8.5px; font-weight:800; letter-spacing:.16em; color:var(--law-focus,#f3f4ee); }
+  .ac-back .t{ font-size:12px; font-weight:700; color:#f1f2ec; margin-top:4px; line-height:1.45; }
+  .ac-back .w{ font-size:9.5px; color:var(--text-faint,#5d6350); margin-top:3px; }
+  .ac-fx{ display:block; padding:10px 13px; cursor:pointer; border-top:1px solid rgba(255,255,255,.04); }
+  .ac-fx:hover{ background:rgba(255,255,255,.045); }
+  .ac-fx .p{ display:flex; align-items:center; gap:8px; }
+  .ac-fx .p span{ font-size:12px; font-weight:800; color:#f1f2ec; }
+  .ac-fx .p em{ font-style:normal; color:var(--text-faint,#5d6350); font-weight:400; }
+  .ac-fx .p u{ text-decoration:none; margin-left:auto; font-family:'JetBrains Mono',monospace;
+    font-size:9px; font-weight:800; color:var(--law-asset,#d7f34b); flex:0 0 auto; }
+  .ac-fx .e{ font-size:10px; color:var(--text-sub,#9aa08a); margin-top:4px;
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+
+
+  /* 🎬 A안(v434) — 제작소 탭 줄을 «방 레일 아래»로 옮겨, 원고·패턴 화면까지 들고 다닌다.
+     이러면 «제작소를 나갔다»는 느낌이 없어져 「← 홈」·「‹ 제작소로」 봉합 버튼이 필요 없다. */
+  #st2-ws{ display:none; }
+  body.in-studio #st2-ws{
+    /* #st2-view 밖으로 나왔으므로 스코프 변수를 다시 물려준다 (없으면 활성 탭이 검정으로 사라짐) */
+    --st2-lime:#d7f34b; --st2-faint:#6b715c; --st2-line:rgba(255,255,255,.08);
+    display:flex; gap:6px; position:sticky; top:0; z-index:60;
+    width:100%; align-self:stretch; justify-content:center; padding:9px 16px 10px;
+    background:#0B0C09; border-bottom:1px solid rgba(255,255,255,.055); box-sizing:border-box; }
+  body.in-studio #st2-ws button{ flex:1 1 0; max-width:130px; padding:8px 2px; font-size:11.5px;
+    white-space:nowrap; }
+  body.in-studio .bottom-nav{ display:none !important; }   /* 위 탭 줄이 곧 이동 수단 */
+  .sc-backhome{ display:none !important; }                  /* 「← 홈」 폐기 (마크업 보존) */
+  #rr-back{ display:none !important; }                      /* 「‹ 제작소로」 폐기 (마크업 보존) */
+
+
+  /* 🪟 v435 — 상단이 스크롤에 반응한다 (모션 위계 2층: 전환).
+     내리면 방 레일이 걷히고, 탭 줄만 위로 올라붙어 남는다 → 이동 수단은 잃지 않으면서 두께가 절반. */
+  /* ⚠️ will-change:transform 금지 — sticky 요소에 붙이면 이 브라우저에서 전환이 «시작값에 붙잡혀» 안 움직인다(v435에서 겪음) */
+  #room-rail{ transition:transform .3s cubic-bezier(.2,.9,.3,1), opacity .2s ease; }
+  body.hdr-hide #room-rail{ transform:translateY(-108%); opacity:0; pointer-events:none; }
+  body.in-studio #st2-ws{ transition:transform .3s cubic-bezier(.2,.9,.3,1), padding .3s ease; }
+  body.hdr-hide.in-studio #st2-ws{ transform:translateY(calc(-1 * var(--rr-h, 52px))); padding-top:calc(9px + env(safe-area-inset-top)); }
+  @media (prefers-reduced-motion: reduce){
+    #room-rail, body.in-studio #st2-ws{ transition:none !important; }
+  }
+
+
+  /* 🏠 v436 — 홈 순서 바로잡기.
+     ① 임팩트(150만 히어로)가 최상단 ② 3막은 스크롤 리빌 ③ 7월 캘린더는 제작소로 이사했으므로 홈에서 내림 */
+  #home-view .tr-section{ display:none !important; }   /* 편성보드·달력 = 제작소 소속 (마크업·로직 보존) */
+  #hm2 .hm2-big, #hm2 .hm2-sub{ display:none; }        /* 150만 문구는 히어로가 크게 말한다 — 중복 제거 */
+  #hm2 .hm2-today{ display:none !important; }          /* v437 — TODAY 카드 폐기(사용자 결정). 로직·함수는 보존 */
+  /* v438 — 홈 정리(사용자 결정): 통찰 한 줄·담기·제작소 줄 전부 폐기 → hm2 자체가 빈다 */
+  #hm2{ display:none !important; }
+  /* 화면에 «고정»된 초록 오브 층 — 스크롤해도 따라와 이끼처럼 번져 보이던 것. 폐기 */
+  #hm2-amb{ display:none !important; }
+  /* v443 — 홈 맨 아래 「레퍼런스가 쌓이면 감각이 된다」 TAKEAWAY 폐기(사용자: 소음이다) */
+  #home-view .home-grid{ display:none !important; }
+  /* v444 — 목표는 「도착하다」의 북극성으로 이사. 닫기 버튼 달린 홈 배너는 폐기 */
+  #home-vision-reminder{ display:none !important; }
+  #hm2{ margin-top:10px; }
+  #hm2-more{ display:none !important; }                /* 여정은 항상 보인다 — 접기 버튼 폐기 */
+  /* 3막 스크롤 리빌 — 화면에 들어오면 떠오른다 (모션 위계 2층) */
+  .dch-act{ opacity:0; transform:translateY(24px);
+    transition:opacity .65s ease, transform .65s cubic-bezier(.2,.9,.3,1); }
+  .dch-act.rv-on{ opacity:1; transform:none; }
+  @media (prefers-reduced-motion: reduce){
+    .dch-act{ opacity:1 !important; transform:none !important; transition:none !important; }
+  }
+
   /* 구조 편집 모달 (2-pane) */
   .sm-ov { display: none; position: fixed; inset: 0; z-index: 4200; background: rgba(0,0,0,0.66); align-items: center; justify-content: center; padding: 20px; }
   .sm-box { width: min(980px, 96vw); max-height: 92vh; display: flex; flex-direction: column; background: var(--bg-elev); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
@@ -17738,10 +17916,22 @@
       .dch-cap{font-size:14px;font-weight:700;margin-top:6px;color:#EEF0E4}.dch-cap b{color:#d7f34b}
       .dch-whisper2{font-size:12px;color:#9BA08C;margin-top:12px;line-height:1.6}.dch-whisper2 b{color:#d7f34b;font-weight:800}
       /* 여정 스파인 */
-      .dch-journey{position:relative;margin-top:16px}
-      .dch-journey::before{content:'';position:absolute;left:23px;top:30px;bottom:150px;width:2px;z-index:0;border-radius:2px;background:linear-gradient(180deg,transparent,rgba(215,243,75,.4) 6%,rgba(215,243,75,.4) 94%,transparent)}
+      .dch-journey{position:relative;margin-top:16px;padding-bottom:62px}
+      /* 끝으로 갈수록 밝아진다 — 여정이 «도착»에 가까워지는 것 */
+      .dch-journey::before{content:'';position:absolute;left:23px;top:30px;bottom:56px;width:2px;z-index:0;border-radius:2px;background:linear-gradient(180deg,transparent,rgba(215,243,75,.4) 6%,rgba(215,243,75,.4) 82%,rgba(230,251,98,.85) 97%,rgba(230,251,98,.95))}
       .dch-journey::after{content:'';position:absolute;left:20px;top:30px;width:8px;height:44px;z-index:1;border-radius:5px;pointer-events:none;background:linear-gradient(180deg,transparent,#e6fb62 45%,transparent);box-shadow:0 0 16px #e6fb62;animation:dchFlow 3.8s cubic-bezier(.45,0,.55,1) infinite}
-      @keyframes dchFlow{0%{top:26px;opacity:0}12%{opacity:.9}86%{opacity:.9}100%{top:calc(100% - 150px);opacity:0}}
+      @keyframes dchFlow{0%{top:26px;opacity:0}12%{opacity:.9}88%{opacity:.9}100%{top:calc(100% - 70px);opacity:0}}
+      /* 🎯 종착점 — 빛이 닿아 퍼지고, 한 단어로 마침표를 찍는다 */
+      .dch-arrive{position:absolute;left:0;bottom:0;height:56px;width:100%;z-index:2;pointer-events:none}
+      .dch-arrive .core{position:absolute;left:18px;top:0;width:12px;height:12px;border-radius:50%;
+        background:radial-gradient(circle at 40% 35%,#fff,#e6fb62 55%,#d7f34b);
+        box-shadow:0 0 14px #e6fb62,0 0 40px rgba(215,243,75,.55)}
+      .dch-arrive .halo{position:absolute;left:6px;top:-12px;width:36px;height:36px;border-radius:50%;
+        border:1px solid rgba(230,251,98,.5);animation:dchArrive 3.2s cubic-bezier(.2,.6,.4,1) infinite}
+      @keyframes dchArrive{0%{transform:scale(.42);opacity:.85}70%{transform:scale(1.5);opacity:0}100%{transform:scale(1.5);opacity:0}}
+      .dch-arrive .t{position:absolute;left:44px;top:-3px;font-size:10.5px;font-weight:800;letter-spacing:.22em;
+        color:rgba(230,251,98,.62)}
+      @media(prefers-reduced-motion:reduce){.dch-arrive .halo{animation:none}}
       .dch-act{position:relative;padding-left:46px}
       .dch-act + .dch-act{margin-top:42px}
       .dch-ab{display:flex;align-items:center;gap:9px;margin:0 2px 12px;min-height:26px}
@@ -21100,6 +21290,7 @@
   }
 
   async function saveScripts() {
+    try { insInvalidate(); } catch (e) {}
     try { await window.storage.set(SCRIPTS_KEY, JSON.stringify(scripts)); } catch (e) {}
   }
 
@@ -21176,6 +21367,7 @@
   }
 
   async function saveRows() {
+    try { insInvalidate(); } catch (e) {}   // 통찰 인덱스 재계산 예약
     try { await window.storage.set(ROWS_KEY, JSON.stringify(rows)); }
     catch (e) { toast('저장 실패'); }
   }
@@ -26491,6 +26683,349 @@
     }, { title: '원고 구조 — ' + (row.why || row.hook || ('No.' + row.no)) });
   }
 
+
+  // ═════════════════════════════════════════════════════════════════
+  // 🧠 통찰 엔진 (ins) — 내 데이터에서 «내 공식»을 찾는다. AI 0원, 전부 로컬 계산.
+  //  · 규칙 1: 표본 3편 미만은 «공식»이라 부르지 않는다 (우연과 구별 불가)
+  //  · 규칙 2: 조회수가 아니라 «적중률»로 말한다 (생존자 편향 방지)
+  // ═════════════════════════════════════════════════════════════════
+  const INS_STOP = ('그리고 그런데 하지만 그래서 이런 저런 그런 있는 없는 하는 되는 같은 진짜 정말 너무 아주 매우 제가 저는 내가 나는 우리 여러분 요즘 오늘 이거 그거 저거 것이 수가 때문 경우 하나 정도 이렇게 그렇게 어떻게 무엇 대해 통해 위해 관련 영상 컨텐츠 콘텐츠 릴스 사진 사람 부분 이것 그것 자기 자신 생각 얘기 이야기').split(' ');
+  const INS_STOPM = {}; INS_STOP.forEach(function (w) { INS_STOPM[w] = 1; });
+  const INS_JOSA = /(으로써|으로서|이라는|에서는|에게서|이라고|라는|으로|에서|에게|한테|까지|부터|처럼|보다|이나|든지|만큼|같이|이랑|밖에|조차|마저|라도|이며|하고|께서|은|는|이|가|을|를|의|에|와|과|도|만|랑|로|야|아|여|께)$/;
+
+  function insTok(text) {
+    const out = [];
+    String(text || '').toLowerCase().replace(/[^0-9a-z가-힣\s]/g, ' ').split(/\s+/).forEach(function (w) {
+      if (!w) return;
+      let t = w;
+      if (/[가-힣]/.test(t) && t.length > 2) t = t.replace(INS_JOSA, '');
+      if (t.length < 2 || INS_STOPM[t] || /^[0-9]+$/.test(t)) return;
+      out.push(t);
+    });
+    return out;
+  }
+  function insNorm(t) {
+    return String(t || '').toLowerCase().replace(/[0-9]+/g, 'N')
+      .replace(/[^0-9a-zN가-힣\s]/g, ' ').replace(/\s+/g, ' ').trim();
+  }
+  function insRowText(r) {
+    return [r.hook, r.copyText, r.why, r.topicMain, r.topicSub,
+      (r.keywords || []).join(' '), (r.tags || []).join(' '), (r.custMind || []).join(' ')].join(' ');
+  }
+  // ── 인덱스 캐시 (행 저장 시 insInvalidate) ──
+  let _insCache = null;
+  function insInvalidate() { _insCache = null; }
+  window.insInvalidate = insInvalidate;
+  function insIdx() {
+    if (_insCache) return _insCache;
+    const list = ((typeof rows !== 'undefined' && rows) ? rows : []).filter(function (r) { return r && r.id; });
+    const df = {}, rowKw = {}, tokMap = {};
+    list.forEach(function (r) {
+      const uniq = {};
+      insTok(insRowText(r)).forEach(function (t) { uniq[t] = (uniq[t] || 0) + 1; });
+      tokMap[r.id] = uniq;
+      Object.keys(uniq).forEach(function (t) { df[t] = (df[t] || 0) + 1; });
+    });
+    const N = Math.max(1, list.length);
+    list.forEach(function (r) {
+      const uniq = tokMap[r.id] || {};
+      rowKw[r.id] = Object.keys(uniq).map(function (t) {
+        return { t: t, s: uniq[t] * Math.log(1 + N / (df[t] || 1)) };
+      }).sort(function (a, b) { return b.s - a.s; }).slice(0, 8).map(function (x) { return x.t; });
+    });
+    const vs = list.map(function (r) { return parseInt(r.views, 10) || 0; })
+      .filter(function (v) { return v > 0; }).sort(function (a, b) { return a - b; });
+    _insCache = { df: df, N: N, rowKw: rowKw, list: list,
+      med: vs.length ? vs[Math.floor(vs.length / 2)] : 0, withViews: vs.length };
+    return _insCache;
+  }
+
+  // ── ① 내 공식 발견 — 반복되는 뼈대 + 적중률 ──
+  function insFormulas(minN) {
+    const idx = insIdx(); minN = minN || 3;
+    // ★ 같은 문구가 여러 행에 중복 저장돼 있으면 «1편»으로 센다 (중복은 반복이 아니다)
+    const dedup = {}, list = [];
+    idx.list.forEach(function (r) {
+      const h = (r.hook || '').trim(); if (h.length < 4) return;
+      const k = insNorm(h); if (dedup[k]) return; dedup[k] = 1; list.push(r);
+    });
+    if (list.length < 5) return [];
+    const map = {};
+    list.forEach(function (r, ri) {
+      const t = insNorm(r.hook), seen = {};
+      for (let L = 3; L <= 9; L++) {
+        for (let i = 0; i + L <= t.length; i++) {
+          // 시작 = 어절 첫 글자 or 어절 마지막 글자(어미 뼈대) / 끝 = 어절 끝
+          const prev = i === 0 ? ' ' : t[i - 1], nx = (i + L >= t.length) ? ' ' : t[i + L];
+          if (nx !== ' ') continue;
+          if (prev !== ' ') { const after = t[i + 1]; if (after !== ' ' && after !== undefined) continue; }
+          const g = t.slice(i, i + L);
+          if (/^\s|\s$/.test(g) || !/[가-힣]/.test(g) || seen[g]) continue;
+          seen[g] = 1; (map[g] || (map[g] = [])).push(ri);
+        }
+      }
+    });
+    const med = idx.med, cand = [];
+    Object.keys(map).forEach(function (g) {
+      const ids = map[g]; if (ids.length < minN) return;
+      const rs = ids.map(function (i) { return list[i]; });
+      const wv = rs.filter(function (r) { return (parseInt(r.views, 10) || 0) > 0; });
+      const hit = wv.filter(function (r) { return (parseInt(r.views, 10) || 0) >= med; }).length;
+      const rate = wv.length ? hit / wv.length : 0;
+      const exSeen = {}, ex = [];
+      rs.slice().sort(function (a, b) { return (b.views || 0) - (a.views || 0); }).forEach(function (r) {
+        const h = (r.hook || '').trim(); if (exSeen[h] || ex.length >= 3) return; exSeen[h] = 1; ex.push(h);
+      });
+      cand.push({ pat: g, n: ids.length, vn: wv.length, hit: hit, rate: rate, ids: ids,
+        score: (rate + .12) * Math.log(1 + ids.length) * Math.min(g.length, 8), ex: ex });
+    });
+    cand.sort(function (a, b) { return b.score - a.score; });
+    // 겹침 정리 — 문자열 포함 + «같은 행들에서 나온 조각»(자카드 .5 이상)이면 하나만
+    const out = [];
+    cand.forEach(function (c) {
+      if (out.length >= 6) return;
+      const dup = out.some(function (o) {
+        if (o.pat.indexOf(c.pat) >= 0 || c.pat.indexOf(o.pat) >= 0) return true;
+        const a = {}; o.ids.forEach(function (i) { a[i] = 1; });
+        let inter = 0; c.ids.forEach(function (i) { if (a[i]) inter++; });
+        return inter / (o.ids.length + c.ids.length - inter) >= 0.5;
+      });
+      if (!dup) out.push(c);
+    });
+    return out;
+  }
+  function insPatLabel(p) {   // 「~~ + 뼈대」 표시용 — 어미형(한 글자로 시작)은 붙여 쓴다
+    const t = String(p).trim();
+    return (/^[가-힣][\s]/.test(t) ? '~~' : '~~ ') + t;
+  }
+  function insPatGlue(p) { return /^[가-힣][\s]/.test(String(p).trim()) ? '' : ' '; }
+
+  // ── ② 주제 무리 + 빈 광맥 ──
+  function insClusters() {
+    const idx = insIdx();
+    if (idx.list.length < 6) return [];
+    const g = {};
+    idx.list.forEach(function (r) {
+      (idx.rowKw[r.id] || []).slice(0, 4).forEach(function (k) { (g[k] || (g[k] = [])).push(r); });
+    });
+    const scTxt = ((typeof scripts !== 'undefined' && scripts) ? scripts : []).map(function (x) {
+      let c = ''; try { c = stripHtml(x.content || ''); } catch (e) { c = ''; }
+      return ((x.subject || '') + ' ' + (x.title || '') + ' ' + c).toLowerCase();
+    });
+    const out = [];
+    Object.keys(g).forEach(function (k) {
+      const rs = g[k]; if (rs.length < 3) return;
+      const vs = rs.map(function (r) { return parseInt(r.views, 10) || 0; }).filter(function (v) { return v > 0; });
+      const avg = vs.length ? Math.round(vs.reduce(function (a, b) { return a + b; }, 0) / vs.length) : 0;
+      const mine = scTxt.filter(function (t) { return t.indexOf(k) >= 0; }).length;
+      out.push({ kw: k, n: rs.length, avg: avg, mine: mine, rows: rs,
+        hot: idx.med > 0 && avg >= idx.med, gap: rs.length - mine * 2 });
+    });
+    out.sort(function (a, b) { return (b.hot - a.hot) || (b.gap - a.gap) || (b.avg - a.avg); });
+    return out;
+  }
+  function insVein() {   // 가장 확실한 빈 광맥 하나
+    const c = insClusters().filter(function (x) { return x.hot && x.n >= 3 && x.mine <= 1; });
+    return c.length ? c[0] : null;
+  }
+
+  // ── ③ 내 계정 실측 길이 규칙 ──
+  function insLenRule() {
+    const list = insIdx().list.filter(function (r) {
+      return (r.hook || '').trim() && (parseInt(r.views, 10) || 0) > 0; });
+    if (list.length < 8) return null;
+    const bins = [[0, 12], [13, 18], [19, 24], [25, 99]];
+    const st = bins.map(function (b) {
+      const inb = list.filter(function (r) { const L = (r.hook || '').trim().length; return L >= b[0] && L <= b[1]; });
+      return { b: b, n: inb.length,
+        avg: inb.length ? inb.reduce(function (a, r) { return a + (parseInt(r.views, 10) || 0); }, 0) / inb.length : 0 };
+    }).filter(function (x) { return x.n >= 3; });
+    if (st.length < 2) return null;
+    st.sort(function (a, b) { return b.avg - a.avg; });
+    const best = st[0], rest = st.slice(1);
+    const rn = rest.reduce(function (a, x) { return a + x.n; }, 0);
+    const ra = rest.reduce(function (a, x) { return a + x.avg * x.n; }, 0) / Math.max(1, rn);
+    if (!ra || best.avg / ra < 1.3) return null;
+    return { lo: best.b[0], hi: best.b[1], n: best.n, mult: (best.avg / ra).toFixed(1),
+      label: best.b[0] === 0 ? (best.b[1] + '자 이하') : (best.b[1] >= 99 ? (best.b[0] + '자 이상') : (best.b[0] + '~' + best.b[1] + '자')) };
+  }
+
+  // ── ④ 식상함 경보 — 최근 내 원고에서 닳은 표현 ──
+  function insStale() {
+    const sc = ((typeof scripts !== 'undefined' && scripts) ? scripts : []).slice()
+      .sort(function (a, b) { return (b.createdAt || 0) - (a.createdAt || 0); }).slice(0, 10)
+      .map(function (x) { return insNorm(x.title || ''); }).filter(function (t) { return t.length >= 4; });
+    if (sc.length < 5) return null;
+    const map = {};
+    sc.forEach(function (t) {
+      const seen = {};
+      for (let L = 3; L <= 8; L++) for (let i = 0; i + L <= t.length; i++) {
+        const g = t.slice(i, i + L);
+        if (/^\s|\s$/.test(g) || !/[가-힣]/.test(g) || seen[g]) continue;
+        seen[g] = 1; map[g] = (map[g] || 0) + 1;
+      }
+    });
+    const need = Math.max(3, Math.ceil(sc.length * 0.5));
+    let best = null;
+    Object.keys(map).forEach(function (g) {
+      if (map[g] < need) return;
+      if (!best || map[g] > best.n || (map[g] === best.n && g.length > best.pat.length)) best = { pat: g, n: map[g], tot: sc.length };
+    });
+    return best;
+  }
+
+  // ── ⑤ 지금 작업의 컨텍스트 키워드 (추천 1순위) ──
+  function insCtxKw() {
+    // 1순위 — 지금 담아둔 표본이 공유하는 키워드
+    try {
+      if (typeof _pxPicked !== 'undefined' && _pxPicked && _pxPicked.length >= 2) {
+        const cnt = {};
+        _pxPicked.forEach(function (o) {
+          const bt = (o.blocks || []).map(function (b) { return (b.lb || '') + ' ' + (b.tx || b.t || b.text || ''); }).join(' ');
+          const u = {}; insTok((o.title || '') + ' ' + bt).forEach(function (t) { u[t] = 1; });
+          Object.keys(u).forEach(function (t) { cnt[t] = (cnt[t] || 0) + 1; });
+        });
+        const need = Math.max(2, Math.ceil(_pxPicked.length * 0.5));
+        const common = Object.keys(cnt).filter(function (t) { return cnt[t] >= need; })
+          .sort(function (a, b) { return cnt[b] - cnt[a]; });
+        if (common.length) return { kws: common.slice(0, 5), src: '담은 표본 ' + _pxPicked.length + '편이 공유하는 키워드' };
+      }
+    } catch (e) {}
+    // 2순위 — 지금 쓰는 원고의 주제 · 연결한 표본
+    try {
+      const sub = (scriptEntryState.subject || '').trim();
+      if (sub.length >= 2) {
+        const k = insTok(sub); if (k.length) return { kws: k.slice(0, 4), src: '지금 원고 주제' };
+      }
+      const bid = scriptEntryState.benchmarkRowId;
+      if (bid) {
+        const r = (rows || []).find(function (x) { return x.id === bid; });
+        if (r) { const k = insIdx().rowKw[r.id] || []; if (k.length) return { kws: k.slice(0, 4), src: '연결한 참고 표본' }; }
+      }
+    } catch (e) {}
+    return null;
+  }
+  // ── 원고 본문에서 가장 센 한 문장 (후킹 역주행) ──
+  function insStrongLine() {
+    let body = '';
+    try {
+      const st = scriptEntryState;
+      if (st.writeMode !== 'free' && st.basic && st.basic.steps) body = Object.values(st.basic.steps).join('\n');
+      if (!body) body = stripHtml(st.content || '');
+    } catch (e) { return null; }
+    const cur = (function () { try { return (scriptEntryState.title || '').trim(); } catch (e) { return ''; } })();
+    const lines = String(body).split(/[\n.!?。]+/).map(function (x) { return x.trim(); })
+      .filter(function (x) { return x.length >= 6 && x.length <= 34 && x !== cur; });
+    if (!lines.length) return null;
+    const idx = insIdx();
+    let best = null;
+    lines.forEach(function (L) {
+      let sc = 0;
+      if (/[0-9０-９]/.test(L)) sc += 12;                       // 숫자
+      if (/(왜|어떻게|하는 법|비결|이유|사실|진짜|절대|반드시|아무도|모르는|하지 마|안 하는)/.test(L)) sc += 14;
+      if (L.length >= 10 && L.length <= 20) sc += 10;            // 후킹 길이대
+      insTok(L).forEach(function (t) { if ((idx.df[t] || 0) >= 2) sc += 3; });  // 내가 자주 다루는 말
+      if (/(요$|다$|죠$)/.test(L)) sc += 2;
+      if (!best || sc > best.sc) best = { line: L, sc: sc };
+    });
+    return best && best.sc >= 14 ? best.line : null;
+  }
+
+  // ── 오늘의 통찰 한 줄 (앱이 «먼저» 말한다 — 딱 한 문장) ──
+  function insTop() {
+    try {
+      const v = insVein();
+      if (v) return { ic: '💎', t: '「<b>' + esc(v.kw) + '</b>」 표본이 ' + v.n + '편 · 평균 조회 상위<br>그런데 내 원고는 ' + v.mine + '편뿐이에요',
+        d: '여기 광맥이 있습니다 — 눌러서 보기', kind: 'vein' };
+      const f = insFormulas()[0];
+      if (f && f.vn >= 3) return { ic: '🧬', t: '내 공식 발견 — 「<b>' + esc(insPatLabel(f.pat)) + '</b>」<br>' + f.vn + '편 중 ' + f.hit + '편 적중',
+        d: '사장님 계정에서 통하는 뼈대예요 — 눌러서 보기', kind: 'formula' };
+      const st = insStale();
+      if (st) return { ic: '⚠️', t: '「<b>' + esc(st.pat.trim()) + '</b>」 — 최근 ' + st.tot + '편 중 <b>' + st.n + '편</b>에서 쓰셨어요',
+        d: '좀 쉬어갈까요? — 눌러서 보기', kind: 'stale' };
+      const L = insLenRule();
+      if (L) return { ic: '📏', t: '사장님 계정은 <b>' + esc(L.label) + '</b>가<br>다른 길이보다 평균 <b>' + L.mult + '배</b> 잘 나갔어요',
+        d: '내 데이터 실측 — 눌러서 보기', kind: 'len' };
+    } catch (e) {}
+    return null;
+  }
+  function insLineHtml() {
+    const t = insTop(); if (!t) return '';
+    return '<button type="button" class="iw-line k-' + t.kind + '" id="iw-line"><span class="ic">' + t.ic + '</span>' +
+      '<span class="bd"><span class="t" style="display:block">' + t.t + '</span>' +
+      '<span class="d" style="display:block">' + t.d + '</span></span><span class="ar">›</span></button>';
+  }
+
+  // ── 「내 데이터가 말하는 것」 시트 ──
+  function insSheet() {
+    let ov = document.getElementById('iw-ov');
+    if (!ov) {
+      ov = document.createElement('div'); ov.id = 'iw-ov'; ov.className = 'iw-ov';
+      ov.innerHTML = '<div class="iw-sh" id="iw-sh"></div>';
+      document.body.appendChild(ov);
+      ov.addEventListener('click', function (e) { if (e.target === ov) ov.classList.remove('on'); });
+    }
+    const idx = insIdx();
+    const F = insFormulas(), C = insClusters(), L = insLenRule(), S = insStale();
+    let h = '<div class="iw-hd"><b>내 데이터가 말하는 것</b><s>표본 ' + idx.list.length + '편' +
+      (idx.withViews ? ' · 조회수 있는 ' + idx.withViews + '편' : '') + '</s>' +
+      '<button type="button" class="x" id="iw-x">×</button></div>';
+
+    // 🧬 내 공식
+    h += '<div class="iw-sec"><h4>🧬 내 공식 — 반복해서 통한 뼈대</h4>';
+    if (F.length) {
+      h += F.slice(0, 4).map(function (f) {
+        const pct = Math.round(f.rate * 100);
+        return '<div class="iw-card"><div class="pt"><em>~~</em>' + insPatGlue(f.pat) + '<b>' + esc(f.pat.trim()) + '</b></div>' +
+          '<div class="iw-meta"><span class="iw-n">' + (f.vn ? f.vn + '편 중 ' + f.hit + '편 적중' : f.n + '편 사용 · 조회수 미입력') + '</span>' +
+          '<span class="iw-bar"><i style="transform:scaleX(' + (f.vn ? (f.rate || 0) : 0) + ')"></i></span>' +
+          '<span class="iw-rate">' + (f.vn ? pct + '%' : '—') + '</span></div>' +
+          '<div class="iw-ex">' + f.ex.map(function (x) { return '<div>' + esc(x) + '</div>'; }).join('') + '</div></div>';
+      }).join('');
+    } else {
+      h += '<div class="iw-empty">아직 공식이라 부를 만한 반복이 없어요.<br>같은 뼈대가 <b>3편</b> 이상 쌓이면 여기 나타납니다 — 우연과 구별하려면 그만큼은 필요해요.</div>';
+    }
+    h += '</div>';
+
+    // 💎 빈 광맥
+    const veins = C.filter(function (x) { return x.hot && x.n >= 3 && x.mine <= 1; }).slice(0, 3);
+    h += '<div class="iw-sec"><h4>💎 빈 광맥 — 표본은 많은데 내 원고가 없는 곳</h4>';
+    if (veins.length) {
+      h += veins.map(function (v) {
+        return '<div class="iw-card iw-vein"><div class="pt">「<b>' + esc(v.kw) + '</b>」</div>' +
+          '<div class="iw-meta"><span class="iw-n">표본 ' + v.n + '편' + (v.avg ? ' · 평균 ' + fmtViews(v.avg) : '') +
+          ' · 내 원고 ' + v.mine + '편</span></div>' +
+          '<div class="iw-gapbar"><u>표본</u>' + Array.from({ length: Math.min(v.n, 12) }).map(function () { return '<i class="f"></i>'; }).join('') + '</div>' +
+          '<div class="iw-gapbar"><u>원고</u>' + (v.mine ? Array.from({ length: Math.min(v.mine, 12) }).map(function () { return '<i class="m"></i>'; }).join('') : '<i></i><i></i><i></i>') + '</div>' +
+          '</div>';
+      }).join('');
+    } else {
+      h += '<div class="iw-empty">아직 광맥을 짚을 만큼 표본이 모이지 않았어요.<br>한 주제에 <b>3편</b> 이상 담기면 «여기를 파세요»라고 말해드릴게요.</div>';
+    }
+    h += '</div>';
+
+    // 📏 내 계정 규칙 + ⚠️ 식상함
+    h += '<div class="iw-sec"><h4>📏 내 계정 실측 규칙</h4>';
+    h += '<div class="iw-card"><div class="iw-rule">' + (L
+      ? '후킹은 <b>' + esc(L.label) + '</b>일 때 다른 길이보다 평균 <b>' + L.mult + '배</b> 잘 나갔어요. <span style="color:#5d6350;font-size:11px">(' + L.n + '편 기준)</span>'
+      : '<span style="color:#9aa08a;font-weight:400">조회수가 입력된 표본이 <b style="color:var(--law-asset,#d7f34b)">8편</b> 이상 모이면, 사장님 계정에서 실제로 통한 길이를 알려드릴게요.</span>') + '</div></div>';
+    if (S) {
+      h += '<div class="iw-card iw-warn"><div class="pt">⚠️ 「<b>' + esc(S.pat.trim()) + '</b>」</div>' +
+        '<div class="iw-meta"><span class="iw-n">최근 원고 ' + S.tot + '편 중 <b>' + S.n + '편</b>에서 사용 — 좀 쉬어갈까요?</span></div></div>';
+    }
+    h += '</div>';
+
+    h += '<div class="iw-foot">※ 조회수는 후킹만의 결과가 아닙니다 — 발행 시간·계정 성장·알고리즘이 함께 섞여 있어요.<br>' +
+      '그래서 여기선 «가장 높은 조회수»가 아니라 <b style="color:#9aa08a">적중률</b>(중앙값 이상으로 간 비율)로 말합니다.</div>';
+
+    document.getElementById('iw-sh').innerHTML = h;
+    ov.classList.add('on');
+    const x = document.getElementById('iw-x'); if (x) x.onclick = function () { ov.classList.remove('on'); };
+  }
+  window.insSheet = insSheet;
+  window.__ins = { formulas: insFormulas, clusters: insClusters, vein: insVein,
+    len: insLenRule, stale: insStale, ctx: insCtxKw, strong: insStrongLine, top: insTop, idx: insIdx };
+
   // 후킹 문구 자동완성 — 내 벤치마킹(조회수순) + 후킹 100 템플릿
   // 후킹 자동완성 on/off (입력칸 옆 토글, localStorage 기억)
   let hookAcEnabled = (function () { try { return localStorage.getItem('cm-hook-ac-off') !== '1'; } catch (e) { return true; } })();
@@ -26531,46 +27066,164 @@
       });
     }
     _syncHookAcToggles();
+    let _acSeg = 0;
+    // 이미 내가 쓴 문구 (원고 제목) — 다시 권할 이유가 적다
+    function acUsedSet() {
+      const m = {};
+      try { (scripts || []).forEach(function (sc) {
+        const t = (sc.title || '').trim(); if (t) m[t] = 1; }); } catch (e) {}
+      return m;
+    }
+    // 최근 Top Hit으로 뽑혔던 것 (피로도) — 같은 게 계속 1등 하지 않게
+    const AC_FATIGUE_KEY = 'cm-ac-recent';
+    function acRecent() {
+      try { return JSON.parse(localStorage.getItem(AC_FATIGUE_KEY) || '[]'); } catch (e) { return []; }
+    }
+    function acPushRecent(t) {
+      try { const a = acRecent().filter(function (x) { return x !== t; });
+        a.unshift(t); localStorage.setItem(AC_FATIGUE_KEY, JSON.stringify(a.slice(0, 6))); } catch (e) {}
+    }
+    function acScore(text, views, dateStr, q) {
+      const t = String(text || ''), lower = t.toLowerCase();
+      let sc = 0;
+      if (!q) sc += 10;
+      else if (lower.indexOf(q) === 0) sc += 100;                       // 입력어로 «시작»
+      else if (new RegExp('(^|\\s)' + q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).test(lower)) sc += 60; // 단어 경계
+      else if (lower.indexOf(q) >= 0) sc += 30;                          // 단순 포함
+      else return -1;
+      if (views > 0) sc += Math.log10(views + 1) * 10;                    // 성과 (124만≈61)
+      if (t.length <= 20) sc += 5;                                        // 제목 원칙
+      try {
+        if (dateStr) { const d = new Date(dateStr);
+          if (!isNaN(d) && (Date.now() - d.getTime()) < 30 * 864e5) sc += 8; }   // 최근 30일
+      } catch (e) {}
+      // ★ 1순위 — 지금 작업의 컨텍스트(담은 표본·주제)와 겹치면 크게 가산
+      const ctx = acScore._ctx;
+      if (ctx && ctx.kws && ctx.kws.length) {
+        let hitN = 0;
+        for (let ci = 0; ci < ctx.kws.length; ci++) {
+          if (lower.indexOf(ctx.kws[ci]) >= 0) { sc += (ci === 0 ? 55 : 40) - ci * 4; hitN++; }
+        }
+        if (hitN >= 2) sc += 25;                               // 여러 키워드가 겹치면 더
+      }
+      const used = acScore._used || (acScore._used = acUsedSet());
+      if (used[String(text).trim()]) sc -= 70;                 // 이미 쓴 문구 — 뒤로
+      const rec = acScore._rec || (acScore._rec = acRecent());
+      const ri = rec.indexOf(String(text).trim());
+      if (ri >= 0) sc -= (30 - ri * 4);                        // 최근 추천된 것 — 피로도 감점
+      return sc;
+    }
     function render() {
       if (!hookAcEnabled) { close(); return; }
+      acScore._used = acUsedSet(); acScore._rec = acRecent();   // 매 렌더 갱신
+      try { acScore._ctx = insCtxKw(); } catch (e) { acScore._ctx = null; }
       const q = (input.value || '').trim().toLowerCase();
-      // 벤치마킹 행에서 필드별 수집(조회수순) — hook=썸네일 문구, copyText=수식어
-      function bmList(field) {
+      // ── 후보 수집 (내 데이터 2 + 템플릿) ──
+      function mine(field) {
         const seen = {}, arr = [];
         (rows || []).forEach(function (r) {
-          const txt = (r[field] || '').trim(); if (!txt) return;
-          if (q && txt.toLowerCase().indexOf(q) < 0) return;
-          if (seen[txt]) return; seen[txt] = 1;
-          arr.push({ text: txt, views: parseInt(r.views, 10) || 0 });
+          const txt = (r[field] || '').trim(); if (!txt || seen[txt]) return; seen[txt] = 1;
+          const v = parseInt(r.views, 10) || 0;
+          const sc = acScore(txt, v, r.date || r.createdAt || '', q);
+          if (sc >= 0) arr.push({ text: txt, views: v, score: sc });
         });
-        arr.sort(function (a, b) { return b.views - a.views; });
-        return arr.slice(0, 8);
+        arr.sort(function (a, b) { return b.score - a.score; });
+        return arr.slice(0, 10);
       }
-      const thumbs = bmList('hook');     // 1순위
-      const copies = bmList('copyText'); // 2순위
-      const tpl = (typeof HOOK_TITLES_100 !== 'undefined' ? HOOK_TITLES_100 : []).filter(function (t) { return !q || t.toLowerCase().indexOf(q) >= 0; }).slice(0, 8); // 3순위
+      const thumbs = mine('hook'), copies = mine('copyText');
+      const tplAll = (typeof HOOK_TITLES_100 !== 'undefined' ? HOOK_TITLES_100 : []);
+      const tpl = tplAll.map(function (t) { return { text: t, views: 0, score: acScore(t, 0, '', q) }; })
+        .filter(function (x) { return x.score >= 0; })
+        .sort(function (a, b) { return b.score - a.score; }).slice(0, 10);
       if (!thumbs.length && !copies.length && !tpl.length) { close(); return; }
+      // ── Top Hit = 내 데이터 중 최고점만 (템플릿은 실적이 없어 «가장 잘 터진»이라 할 수 없음) ──
+      const pool = thumbs.map(function (x) { return { x: x, src: '내 썸네일 문구' }; })
+        .concat(copies.map(function (x) { return { x: x, src: '수식어' }; }))
+        .sort(function (a, b) { return b.x.score - a.x.score; });
+      const top = pool.length ? pool[0] : (tpl.length ? { x: tpl[0], src: '후킹문구 100' } : null);
+      const topIsMine = !!pool.length;
       const d = ensureDd();
-      function itemRow(text, views, withViews) {
-        return '<div class="hook-ac-item" data-v="' + esc(text) + '"><span class="hook-ac-txt">' + esc(text) + '</span>'
-          + (withViews ? '<span class="hook-ac-views">' + (views ? fmtViews(views) : '-') + '</span>' : '') + '</div>';
+      function hl(t) {
+        const e = esc(t);
+        if (!q) return e;
+        try { return e.replace(new RegExp('(' + q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'ig'), '<b>$1</b>'); }
+        catch (er) { return e; }
       }
-      function col(title, items, withViews, isTpl) {
-        const inner = items.length
-          ? items.map(function (x) { return isTpl ? itemRow(x, 0, false) : itemRow(x.text, x.views, withViews); }).join('')
-          : '<div class="hook-ac-none">관련 없음</div>';
-        return '<div class="hook-ac-col"><div class="hook-ac-h">' + title + '</div><div class="hook-ac-col-list">' + inner + '</div></div>';
+      function itemRow(x, isTpl) {
+        const usedNow = !!(acScore._used || {})[String(x.text).trim()];
+        return '<div class="ac-it" data-v="' + esc(x.text) + '"><span class="tx">' + hl(x.text) + '</span>' +
+          (usedNow ? '<span class="v tpl" style="color:#5d6350">이미 씀</span>' : '') +
+          '<span class="v' + (isTpl ? ' tpl' : '') + '">' + (isTpl ? '템플릿' : (x.views ? fmtViews(x.views) : '-')) + '</span></div>';
       }
-      d.innerHTML = '<div class="hook-ac-cols">'
-        + col('🖼 썸네일 문구', thumbs, true, false)
-        + col('✨ 수식어', copies, true, false)
-        + col('📋 후킹문구 100', tpl, false, true)
-        + '</div>';
-      d.querySelectorAll('.hook-ac-item').forEach(function (it) { it.addEventListener('click', function () { input.value = it.dataset.v; input.dispatchEvent(new Event('input', { bubbles: true })); close(); try { input.focus(); } catch (e) {} }); });
+      // 🧬 내 공식 — 내 데이터에서 반복 검증된 뼈대
+      let fx = [];
+      try {
+        fx = insFormulas().filter(function (f) {
+          if (!q) return true;
+          return f.pat.indexOf(q) >= 0 || (f.ex[0] || '').toLowerCase().indexOf(q) >= 0;
+        }).slice(0, 5);
+      } catch (e) { fx = []; }
+      const cols = [fx, thumbs, copies, tpl];
+      if (!cols[_acSeg].length) { const fi = cols.findIndex(function (c) { return c.length; }); _acSeg = fi < 0 ? 0 : fi; }
+      const names = ['🧬 공식', '🖼 썸네일', '✨ 수식어', '📋 템플릿'];
+      let html = '';
+      // 근거 한 줄 — «왜 이게 떴는지» (알고리즘은 안 보인다)
+      const ctxNow = acScore._ctx;
+      if (ctxNow) html += '<div class="ac-why">' + esc(ctxNow.src) + ' — <b>' +
+        ctxNow.kws.slice(0, 3).map(esc).join(' · ') + '</b></div>';
+      // ✍ 본문 역주행 — 이미 쓴 글에서 가장 센 한 줄
+      if (!q) {
+        let sl = null; try { sl = insStrongLine(); } catch (e) {}
+        if (sl) html += '<div class="ac-back" data-v="' + esc(sl) + '"><div class="k">✍ 내 본문에서</div>' +
+          '<div class="t">' + esc(sl) + '</div><div class="w">이 문장이 제일 셌어요 — 썸네일로 올려볼까요?</div></div>';
+      }
+      if (top) {
+        acPushRecent(String(top.x.text).trim());   // 다음엔 다른 게 뜨도록 기록
+        // 왜 이게 떴는가 — 컨텍스트로 올라온 것이면 그 이유를 그대로 말한다
+        const ctxHit = (ctxNow ? ctxNow.kws.filter(function (k) {
+          return String(top.x.text).toLowerCase().indexOf(k) >= 0; }) : []);
+        html += '<div class="ac-top" data-v="' + esc(top.x.text) + '">' +
+          '<div class="k">' + (ctxHit.length ? '지금 주제와 겹치는 것' : '오늘의 참고') + '</div>' +
+          '<div class="t">' + hl(top.x.text) + '</div>' +
+          '<div class="why">' + (topIsMine
+            ? (ctxHit.length
+                ? ('「<b>' + ctxHit.map(esc).join('·') + '</b>」가 겹쳐요 · ' + top.src +
+                   (top.x.views ? ' <b>' + fmtViews(top.x.views) + '</b>' : '') +
+                   ' — <b style="color:#e6fb62">뼈대만 빌려</b> 새로 쓰세요')
+                : (top.src + ' · <b>' + (top.x.views ? fmtViews(top.x.views) : '조회수 미입력') + '</b>' +
+                   ' — 그대로 쓰지 말고 <b style="color:#e6fb62">이 뼈대만 빌려</b> 새 주제로 바꿔보세요'))
+            : '아직 내 기록이 없어 템플릿에서 골랐어요 — 「~~」에 주제를 넣어 쓰세요') + '</div></div>';
+      }
+      html += '<div class="ac-seg">' + names.map(function (n, k) {
+        return '<button type="button" data-acs="' + k + '"' + (k === _acSeg ? ' class="on"' : '') +
+          (cols[k].length ? '' : ' disabled style="opacity:.35"') + '>' + n + '<s>' + cols[k].length + '</s></button>';
+      }).join('') + '</div>';
+      function fxRow(f) {
+        const pct = f.vn ? Math.round(f.rate * 100) + '%' : '—';
+        return '<div class="ac-fx" data-v="' + esc(f.ex[0] || '') + '"><div class="p"><em>~~</em>' +
+          '<span style="margin-left:' + (insPatGlue(f.pat) ? '4px' : '-6px') + '">' + esc(f.pat.trim()) + '</span><u>' + (f.vn ? f.vn + '편 중 ' + f.hit + ' · ' + pct : f.n + '편') + '</u></div>' +
+          '<div class="e">예 · ' + esc(f.ex[0] || '') + '</div></div>';
+      }
+      html += '<div class="ac-list">' + (cols[_acSeg].length
+        ? (_acSeg === 0 ? cols[0].map(fxRow).join('') : cols[_acSeg].map(function (x) { return itemRow(x, _acSeg === 3); }).join(''))
+        : '<div class="ac-none2">' + (_acSeg === 0
+            ? '아직 공식이 없어요 — 같은 뼈대가 3편 쌓이면 나타납니다'
+            : '여기엔 관련된 게 없어요') + '</div>') + '</div>';
+      d.innerHTML = html;
+      d.querySelectorAll('[data-acs]').forEach(function (b) {
+        b.addEventListener('mousedown', function (e) { e.preventDefault(); });
+        b.addEventListener('click', function () { _acSeg = +b.dataset.acs; render(); });
+      });
+      d.querySelectorAll('[data-v]').forEach(function (it) {
+        it.addEventListener('click', function () {
+          input.value = it.dataset.v; input.dispatchEvent(new Event('input', { bubbles: true }));
+          close(); try { input.focus(); } catch (e) {}
+        });
+      });
       const r = input.getBoundingClientRect();
-      const w = Math.min(Math.max(r.width, 660), window.innerWidth - 24);
+      const w = Math.min(Math.max(r.width, 300), window.innerWidth - 24);
       d.style.left = Math.max(12, Math.min(r.left, window.innerWidth - w - 12)) + 'px';
-      d.style.top = (r.bottom + 4) + 'px'; d.style.width = w + 'px'; d.style.display = 'block';
+      d.style.top = (r.bottom + 6) + 'px'; d.style.width = w + 'px'; d.style.display = 'block';
     }
     input.addEventListener('focus', render);
     input.addEventListener('input', render);
@@ -29098,12 +29751,9 @@
     rail.querySelectorAll('.rr-btn').forEach(b => b.classList.toggle('here', b.dataset.room === room));
     const w = document.getElementById('rr-where');
     if (w) w.textContent = (room === 'studio' ? '제작소' : '내 창고') + (RR_LABELS[ws] && ws !== 'studio' ? ' · ' + RR_LABELS[ws] : '');
-    // ‹ 제작소 — 온 길로 되돌아가기
-    const back = document.getElementById('rr-back');
-    if (back) {
-      const show = from === 'studio' && ws !== 'studio';
-      back.style.display = show ? 'inline-flex' : 'none';
-    }
+    // 제작소 소속이면 탭 줄이 따라온다 (A안 v434) — 되돌아가기 버튼은 필요 없어짐
+    document.body.classList.toggle('in-studio', room === 'studio');
+    try { st2SyncBar(ws); } catch (e) {}
     rrSlide();
   }
   // 새로 열린 화면이 옆에서 밀려 들어오게 (뒤로 갈 땐 반대 방향)
@@ -29128,6 +29778,11 @@
   function rrWire() {
     const rail = document.getElementById('room-rail'); if (!rail || rail._wired) return;
     rail._wired = true;
+    // 제작소 탭 줄을 st2-view 안에서 꺼내 레일 바로 아래로 — 모든 제작소 화면이 한 줄을 공유
+    try {
+      const bar = document.getElementById('st2-ws');
+      if (bar && bar.parentNode !== rail.parentNode) rail.parentNode.insertBefore(bar, rail.nextSibling);
+    } catch (e) {}
     rail.querySelectorAll('.rr-btn').forEach(b => b.onclick = () => {
       const r = b.dataset.room;
       if (r === 'sorter') { if (window.__openSorter) window.__openSorter(); return; }
@@ -31604,6 +32259,8 @@
         '<div class="dch-act dch-a3"><div class="dch-ab"><span class="no">03</span><span class="tt">도착하다<span class="d">— 예약이 알아서 들어오는 계정</span></span><span class="ln"></span></div>' +
           '<div class="dch-card"><div class="future-dash" id="future-dash"></div></div>' +
         '</div>' +
+        // 🎯 v446 여정의 마감 — 흘러온 빛이 종착점에 «닿아» 퍼진다
+        '<div class="dch-arrive" aria-hidden="true"><i class="halo"></i><i class="core"></i><span class="t">도착</span></div>' +
       '</div>';
     try { th2CountUp(document.getElementById('dch-refnum'), analyzed); } catch (e) { var rn = document.getElementById('dch-refnum'); if (rn) rn.textContent = analyzed; }
     try { dchArmReach(reach); } catch (e) { var nv0 = document.getElementById('dch-num-v'); if (nv0) nv0.textContent = reach > 0 ? fmtViews(reach) : '0'; }
@@ -32654,7 +33311,20 @@
       '.fda-why .wl span{display:block;font-size:9px;font-weight:500;color:#5d6350;margin-top:2px}' +
       '.fda-why input{width:100%;background:#0a0c06;border:1px solid rgba(255,255,255,.13);border-radius:9px;color:#f3f4ee;padding:9px 10px;font-size:11.5px;font-family:inherit;outline:none}' +
       '.fda-why input:focus{border-color:rgba(215,243,75,.45)}' +
-      '.fda-ch2fold{display:flex;align-items:center;gap:8px;padding:12px 16px;border-top:1px solid rgba(255,255,255,.07);font-size:11px;font-weight:700;color:#9aa08a;cursor:pointer}' +
+      /* 🌊 지평선 — 접힌 상태에선 윗부분만 보이고 아래는 어둠에 잠긴다 */
+      '.fda-horizon{position:relative;border-top:1px solid rgba(255,255,255,.07);max-height:118px;overflow:hidden;cursor:pointer;transition:max-height .55s cubic-bezier(.2,.9,.3,1)}' +
+      '.fda-horizon.open{max-height:1400px;cursor:default}' +
+      '.fda-veil{position:absolute;inset:auto 0 0 0;height:74px;pointer-events:none;' +
+      'background:linear-gradient(180deg,rgba(11,12,9,0),rgba(11,12,9,.82) 55%,#0B0C09 96%)}' +
+      '.fda-pull{position:absolute;left:0;right:0;bottom:9px;text-align:center;font-size:10.5px;font-weight:700;color:#d7f34b;pointer-events:none}' +
+      '.fda-pull b{display:block;font-size:13px;line-height:1;margin-bottom:2px;animation:fdaBob 2.4s ease-in-out infinite}' +
+      '@keyframes fdaBob{0%,100%{transform:translateY(0)}50%{transform:translateY(3px)}}' +
+      '.fda-horizon:hover .fda-pull{color:#e6fb62}' +
+      '.fda-hzclose{display:block;width:100%;margin-top:12px;padding:9px;font-family:inherit;font-size:10.5px;' +
+      'font-weight:700;color:#5d6350;background:none;border:none;cursor:pointer}' +
+      '.fda-hzclose:hover{color:#9aa08a}' +
+      '.fda-ch2fold{display:none}' +
+      '.fda-ch2fold-old{display:flex;align-items:center;gap:8px;padding:12px 16px;border-top:1px solid rgba(255,255,255,.07);font-size:11px;font-weight:700;color:#9aa08a;cursor:pointer}' +
       '.fda-ch2fold .ch{margin-left:auto;font-size:10.5px;color:#5d6350}' +
       '.fda-ch2{padding:2px 4px 4px}' +
       '.fda-ch2 .head{padding:12px 14px 2px}' +
@@ -32666,6 +33336,82 @@
       '.fda-ch2 .tg button.on{color:#0b0c06;background:#d7f34b;border-color:#d7f34b}' +
       '.fda-ml{font-family:"JetBrains Mono",monospace;font-size:8px;fill:#9aa08a;font-weight:700}' +
       '.fda-mv{font-family:"JetBrains Mono",monospace;font-size:8px;fill:#d7f34b;font-weight:700}' +
+      '.fda-vs{display:flex;gap:9px;padding:12px 16px 0}' +
+      '.fda-vs .side{flex:1;padding:11px 12px;border-radius:14px;border:1px solid rgba(255,255,255,.08)}' +
+      '.fda-vs .side.stop{background:rgba(139,145,132,.05)}' +
+      '.fda-vs .side.go{background:rgba(215,243,75,.06);border-color:rgba(215,243,75,.22)}' +
+      '.fda-vs .k{font-size:9.5px;font-weight:800;letter-spacing:.05em}' +
+      '.fda-vs .stop .k{color:#8b9184}.fda-vs .go .k{color:#d7f34b}' +
+      '.fda-vs .n{font-family:"JetBrains Mono",monospace;font-size:21px;font-weight:800;margin-top:6px;letter-spacing:-.02em}' +
+      '.fda-vs .stop .n{color:#8b9184}.fda-vs .go .n{color:#e6fb62}' +
+      '.fda-gapbar{margin:10px 16px 0;padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.03);font-size:11px;color:#9aa08a}' +
+      '.fda-gapbar b{font-family:"JetBrains Mono",monospace;font-size:15px;color:#e6fb62;font-weight:800;margin-left:4px}' +
+      '#fd-eye-fold,#fd-eye-body{display:none !important}' +   /* v442 — 「눈높이 기준」 폐기(사용자 결정) */
+      '@keyframes fdaBeat{0%{r:5;opacity:.85}70%{r:17;opacity:0}100%{r:17;opacity:0}}' +
+      '.fda-beat{animation:fdaBeat 2.6s cubic-bezier(.2,.6,.4,1) 1.6s infinite}' +
+      '.fda-ov{position:absolute;left:17px;top:11px;pointer-events:none;z-index:2}' +
+      '.fda-ov .k{font-size:13px;color:#f3f4ee;font-weight:800;letter-spacing:-.01em}' +
+      '.fda-ov .k .hrt{font-size:13.5px;margin-right:2px;vertical-align:-1px}' +
+      '.fda-ov .v{font-family:"JetBrains Mono",monospace;font-size:40px;font-weight:800;line-height:1;' +
+      'letter-spacing:-.045em;margin-top:5px;color:#f3f4ee;font-variant-numeric:tabular-nums}' +
+      '.fda-ov .v em{font-style:normal;font-size:15px;color:#9aa08a;font-weight:700;margin-left:4px;letter-spacing:0}' +
+      '.fda-ov .c{font-size:10px;color:#5d6350;line-height:1.5;margin-top:7px}.fda-ov .c b{color:#d7f34b}' +
+      /* ⭐ v444 북극성 — 목표 한 줄 */
+      '.fda-star{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;padding:0 2px 14px;border-bottom:1px solid rgba(255,255,255,.07)}' +
+      '.fda-star .k{font-size:9.5px;letter-spacing:.15em;color:#5d6350;font-weight:800}' +
+      '.fda-star .v{font-size:15px;font-weight:800;color:#e6fb62;letter-spacing:-.01em}' +
+      '.fda-star .v.set{border:1px solid rgba(215,243,75,.3);background:rgba(215,243,75,.06);border-radius:10px;padding:6px 12px;font-size:12px;cursor:pointer;font-family:inherit}' +
+      '.fda-star .d{margin-left:auto;font-family:"JetBrains Mono",monospace;font-size:10px;color:#5d6350}' +
+      '.fda-star .w{flex:0 0 100%;font-size:10.5px;color:#9aa08a;margin-top:6px;line-height:1.5}' +
+      /* 👑 주인공 */
+      '.fda-hero{padding:20px 2px 2px}' +
+      /* 라벨도 당당하게 — 숫자에 눌리지 않되 넘어서지도 않는 크기 */
+      '.fda-hero .lab{font-size:13.5px;color:#f3f4ee;font-weight:800;letter-spacing:-.01em}' +
+      '.fda-hero .lab .hrt{font-size:14px;margin-right:2px;vertical-align:-1px}' +
+      '.fda-hero .big{font-family:"JetBrains Mono",monospace;font-size:50px;font-weight:800;line-height:.95;' +
+      'letter-spacing:-.045em;margin-top:8px;color:#f3f4ee;font-variant-numeric:tabular-nums}' +
+      '.fda-hero .big em{font-style:normal;font-size:19px;color:#9aa08a;font-weight:700;margin-left:5px;letter-spacing:0}' +
+      '.fda-hbar{height:3px;border-radius:2px;background:rgba(255,255,255,.07);margin-top:16px;overflow:hidden}' +
+      '.fda-hbar i{display:block;height:100%;border-radius:2px;background:linear-gradient(90deg,#37d67a,#d7f34b);' +
+      'transition:width .9s cubic-bezier(.2,.9,.3,1)}' +
+      '.fda-hsub{font-size:10px;color:#5d6350;margin-top:9px;line-height:1.6}' +
+      '.fda-hsub .n2{color:#9aa08a}.fda-hsub .d2{color:#37d67a}' +
+      /* 발치의 셋 — 중앙 정렬, 균등 */
+      '.fda-trio{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:24px;padding-top:17px;' +
+      'border-top:1px solid rgba(255,255,255,.07);text-align:center}' +
+      '.fda-trio .k{font-size:9.5px;color:#5d6350;font-weight:700}' +
+      '.fda-trio .v{font-family:"JetBrains Mono",monospace;font-size:18px;font-weight:800;margin-top:6px;' +
+      'letter-spacing:-.02em;color:#eef0e4;font-variant-numeric:tabular-nums}' +
+      '.fda-trio .d{font-size:9px;color:#5d6350;margin-top:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}' +
+      '.fda-trio .dmbtns{display:flex;gap:5px;justify-content:center;margin-top:7px}' +
+      '.fda-trio .dmbtns button{font-family:inherit;font-size:10px;font-weight:800;padding:4px 9px;border-radius:8px;cursor:pointer}' +
+      '.fda-trio .fd-minus{border:1px solid rgba(255,255,255,.12);background:none;color:#5d6350}' +
+      '.fda-trio .fd-plus1{border:1px solid rgba(215,243,75,.32);background:rgba(215,243,75,.08);color:#d7f34b}' +
+      '.fda-trio .fd-plus1:active,.fda-trio .fd-minus:active{transform:scale(.94)}' +
+      '.fda-tb{font-family:"JetBrains Mono",monospace;font-size:7.5px;font-weight:700}' +
+      '.fda-plot{transform-origin:0px 158px}' +
+      '.fda-ring{animation:fdaRing 2.4s ease-out .9s infinite}' +
+      '@keyframes fdaRing{0%{r:5;opacity:.9}70%{r:15;opacity:0}100%{r:15;opacity:0}}' +
+      '.fda-ch2 .tg{display:none}' +
+      '.fda-num{display:flex;align-items:baseline;gap:8px;padding:12px 16px 0;flex-wrap:wrap}' +
+      '.fda-num .l{font-size:10.5px;color:#9aa08a;font-weight:700}' +
+      '.fda-num .v{font-family:"JetBrains Mono",monospace;font-size:27px;font-weight:800;color:#d7f34b;line-height:1;letter-spacing:-.02em}' +
+      '.fda-num .g{font-size:10px;color:#5d6350;margin-left:auto}.fda-num .g b{color:#e6fb62}' +
+      '.fda-svg{margin-top:2px;overflow:visible}' +
+      '.fda-my{stroke-dasharray:900;stroke-dashoffset:900;animation:fdaDraw 1.1s cubic-bezier(.3,.9,.3,1) .05s forwards}' +
+      '.fda-area{opacity:0;animation:fdaFade .8s ease .5s forwards}' +
+      '.fda-dot{opacity:0;animation:fdaPop .45s cubic-bezier(.2,1.6,.4,1) forwards}' +
+      '@keyframes fdaPop{from{opacity:0;transform:scale(0)}to{opacity:1;transform:none}}' +
+      '.fda-dot{transform-box:fill-box;transform-origin:center}' +
+      '.fda-more{display:flex;align-items:center;gap:8px;width:calc(100% - 32px);margin:10px 16px 0;padding:11px 14px;cursor:pointer;' +
+      'font-family:inherit;font-size:11.5px;font-weight:700;color:#9aa08a;text-align:left;' +
+      'border:1px solid rgba(215,243,75,.22);border-radius:13px;background:rgba(215,243,75,.05);transition:transform .18s ease,background .18s ease}' +
+      '.fda-more b{color:#e6fb62}' +
+      '.fda-more i{margin-left:auto;font-style:normal;font-size:14px;color:#d7f34b}' +
+      '.fda-more:hover{background:rgba(215,243,75,.1);transform:translateY(-1px)}' +
+      '.fda-more:active{transform:scale(.985)}' +
+      '.fda-more.done{border-color:rgba(255,255,255,.1);background:rgba(255,255,255,.03)}' +
+      '.fda-more.done i{color:#5d6350}' +
       '.fda-ch2 .verdict{padding:12px 16px 4px;font-size:11.5px;line-height:1.7;color:#9aa08a}.fda-ch2 .verdict b{color:#f3f4ee;font-weight:700}.fda-ch2 .verdict .big{color:#d7f34b;font-weight:800;font-family:"JetBrains Mono",monospace}' +
       '.fda-basein{display:flex;align-items:center;gap:8px;margin:4px 16px 10px;border:1px dashed rgba(255,255,255,.13);border-radius:12px;padding:9px 12px;font-size:11px;color:#9aa08a}.fda-basein b{font-family:"JetBrains Mono",monospace;color:#d7f34b;margin-left:auto;cursor:pointer}';
     document.head.appendChild(s);
@@ -32734,9 +33480,13 @@
     var fol = dashData.followers || 0;
     var arr = [];
     try { arr = (glLog || []).map(function (x) { return x.f || 0; }).filter(function (v) { return v > 0; }).slice(-12); } catch (e) {}
-    if (arr.length >= 2) { if (arr[arr.length - 1] !== fol && fol > 0) arr[arr.length - 1] = fol; return arr; }
-    var base = Math.max(1, Math.round((fol || 1000) * 0.5));
-    return [base, Math.round(base * 1.25), Math.round(base * 1.55), Math.max(fol, Math.round(base * 1.9))];
+    if (arr.length >= 2) { if (arr[arr.length - 1] !== fol && fol > 0) arr[arr.length - 1] = fol; arr._real = true; return arr; }
+    // ★ 기록이 2개 미만이면 «아직 선이 없다». 예전엔 가짜 상승 곡선을 합성했는데(base×1.25×1.55×1.9)
+    //   ①거의 직선이라 «성장한 느낌»이 없고 ②없는 성장을 있는 것처럼 보여주는 거짓말이었다.
+    var goalNow = (dashData.folGoal && dashData.folGoal > fol) ? dashData.folGoal : Math.max(fol * 2, 1000);
+    var out = [Math.max(0, fol), Math.round(goalNow * 0.28), Math.round(goalNow * 0.6), goalNow];
+    out._real = false;
+    return out;
   }
   function fdGoal(fol) {
     if (dashData.folGoal && dashData.folGoal > fol) return dashData.folGoal;
@@ -32757,22 +33507,37 @@
     var area = line + ' L' + pts[n - 1].x.toFixed(1) + ',146 L' + pts[0].x.toFixed(1) + ',146 Z';
     var goalY = Y(goal).toFixed(1);
     var lastX = pts[n - 1].x.toFixed(1), lastY = pts[n - 1].y.toFixed(1);
+    var real = series._real !== false;
+    // 기록 전이면 «출발점»이, 기록이 있으면 «오늘»이 맥동한다
+    var tipX = real ? lastX : pts[0].x.toFixed(1), tipY = real ? lastY : pts[0].y.toFixed(1);
     return '<div class="fda-cv"><svg viewBox="0 0 340 172">' +
       '<defs><linearGradient id="fdasg" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#37d67a"/><stop offset=".55" stop-color="#a9e84a"/><stop offset="1" stop-color="#e6fb62"/></linearGradient>' +
       '<linearGradient id="fdaag" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d7f34b" stop-opacity=".24"/><stop offset=".55" stop-color="#37d67a" stop-opacity=".06"/><stop offset="1" stop-color="#37d67a" stop-opacity="0"/></linearGradient></defs>' +
       '<line stroke="rgba(255,255,255,.28)" stroke-width="1.1" stroke-dasharray="4 5" x1="' + gx1 + '" y1="' + goalY + '" x2="' + gx2 + '" y2="' + goalY + '"/>' +
       '<text class="fda-glab" id="fda-goal" x="' + gx2 + '" y="' + (parseFloat(goalY) - 8) + '" text-anchor="end">🏁 ' + fol0(goal) + ' ✏</text>' +
-      '<path fill="url(#fdaag)" opacity="0" style="animation:fdaFade 1s ease .9s forwards" d="' + area + '"/>' +
-      '<path fill="none" stroke="url(#fdasg)" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round" filter="drop-shadow(0 0 7px rgba(215,243,75,.4))" d="' + line + '" style="stroke-dasharray:480;stroke-dashoffset:480;animation:fdaDraw 1.8s cubic-bezier(.4,0,.2,1) .2s forwards"/>' +
+      (real ? '<path fill="url(#fdaag)" opacity="0" style="animation:fdaFade 1s ease .9s forwards" d="' + area + '"/>' : '') +
+      (real
+        ? '<path fill="none" stroke="url(#fdasg)" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round" filter="drop-shadow(0 0 7px rgba(215,243,75,.4))" d="' + line + '" style="stroke-dasharray:480;stroke-dashoffset:480;animation:fdaDraw 1.8s cubic-bezier(.4,0,.2,1) .2s forwards"/>'
+        // 기록 전 — «걸어갈 길»을 점선으로만. 없는 성장을 그리지 않는다
+        : '<path fill="none" stroke="url(#fdasg)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="1 7" opacity=".5" d="' + line + '"/>') +
       // 🔵 선을 타고 올라가는 점 (그리기와 완전 동기) — 링 + 코어
-      '<path class="fda-dot" fill="none" stroke="#d7f34b" stroke-width="17" stroke-linecap="round" opacity=".28" d="' + line + '" style="stroke-dasharray:.01 4000;stroke-dashoffset:0;animation:fdaDot 1.8s cubic-bezier(.4,0,.2,1) .2s forwards"/>' +
-      '<path class="fda-dot" fill="none" stroke="#d7f34b" stroke-width="13" stroke-linecap="round" opacity=".55" d="' + line + '" style="stroke-dasharray:.01 4000;stroke-dashoffset:0;animation:fdaDot 1.8s cubic-bezier(.4,0,.2,1) .2s forwards"/>' +
-      '<path class="fda-dot" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" filter="drop-shadow(0 0 8px rgba(215,243,75,.95))" d="' + line + '" style="stroke-dasharray:.01 4000;stroke-dashoffset:0;animation:fdaDot 1.8s cubic-bezier(.4,0,.2,1) .2s forwards"/>' +
-      '<circle cx="' + lastX + '" cy="' + lastY + '" r="10" fill="none" stroke="#d7f34b" stroke-width="1.6" opacity="0" style="animation:fdaHalo 1.8s ease 1.9s 2"/>' +
+      (real
+        ? '<path class="fda-dot" fill="none" stroke="#d7f34b" stroke-width="17" stroke-linecap="round" opacity=".28" d="' + line + '" style="stroke-dasharray:.01 4000;stroke-dashoffset:0;animation:fdaDot 1.8s cubic-bezier(.4,0,.2,1) .2s forwards"/>' +
+          '<path class="fda-dot" fill="none" stroke="#d7f34b" stroke-width="13" stroke-linecap="round" opacity=".55" d="' + line + '" style="stroke-dasharray:.01 4000;stroke-dashoffset:0;animation:fdaDot 1.8s cubic-bezier(.4,0,.2,1) .2s forwards"/>' +
+          '<path class="fda-dot" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" filter="drop-shadow(0 0 8px rgba(215,243,75,.95))" d="' + line + '" style="stroke-dasharray:.01 4000;stroke-dashoffset:0;animation:fdaDot 1.8s cubic-bezier(.4,0,.2,1) .2s forwards"/>'
+        : '') +
+      // 🫧 끝점 맥동 — 늘 숨 쉰다 (기록 전엔 «목표 지점»이 부른다)
+      '<circle class="fda-beat" cx="' + tipX + '" cy="' + tipY + '" r="5" fill="none" stroke="' + (real ? '#e6fb62' : '#d7f34b') + '" stroke-width="1.6"/>' +
+      '<circle cx="' + tipX + '" cy="' + tipY + '" r="' + (real ? 4.6 : 4) + '" fill="#0f1207" stroke="' + (real ? '#fff' : '#d7f34b') + '" stroke-width="' + (real ? 2.3 : 2) + '"' +
+      (real ? ' style="opacity:0;animation:fdaFade .4s ease 1.9s forwards"' : '') + '/>' +
       '<text class="fda-xl" x="' + padL + '" y="164">지난</text><text class="fda-xl" x="' + (W - padR) + '" y="164" text-anchor="end">오늘</text>' +
       '</svg>' +
-      '<div class="fda-ov"><div class="k">💚 찐팬 팔로워</div><div class="v">' + fol.toLocaleString('ko-KR') + '</div>' +
-        '<div class="c">' + fdArriveDelta(series, fol, goal) + '</div></div>' +
+      // v445 — 숫자는 그래프 «위»의 주인공 블록이 말한다. 여기선 한 줄 상태만
+      '<div class="fda-ov">' +
+        '<div class="k"><span class="hrt">💚</span> 찐팬 팔로워</div>' +
+        '<div class="v"><b id="fda-folnum" data-to="' + fol + '">' + fol.toLocaleString('ko-KR') + '</b><em>명</em></div>' +
+        '<div class="c">' + (real ? fdArriveDelta(series, fol, goal) : '첫 기록을 남기면 <b>당신의 선</b>이 그려져요') + '</div>' +
+      '</div>' +
       '<div class="fda-pop" id="fda-pop"></div></div>';
   }
   function fol0(n) { return (n || 0).toLocaleString('ko-KR'); }
@@ -32814,50 +33579,212 @@
     };
     if (pop) document.addEventListener('click', function (e) { if (pop.classList.contains('on') && !pop.contains(e.target) && e.target.id !== 'fda-goal') pop.classList.remove('on'); }, { once: true });
   }
-  // 챕터2 — 조회수 시작 전 평균 vs 지금 (구불구불 원래 흐름 기준선)
+  // 챕터2 — 「이 흐름이 계속되면」 (v437 단계별 전개)
+  //  · 한 번에 10년을 다 보여주지 않는다. 지금~1년만 자세히 → 눌러야 3년 → 5년 → 10년.
+  //  · 미래 «예측»이 아니라 «지금 흐름이 이어진다는 가정». 그래서 성장률에 상한과 감쇠를 건다.
+  var FD_MARKS = [
+    { w: 0,   lab: '지금' },
+    { w: 26,  lab: '반년' },
+    { w: 52,  lab: '1년' },
+    { w: 156, lab: '3년' },
+    { w: 260, lab: '5년' },
+    { w: 520, lab: '10년' }
+  ];
+  var FD_STAGE_END = [2, 3, 4, 5];        // 단계별 «마지막으로 보여줄» 마크 인덱스
+  // ⚖️ 조회수 사다리 «온도계» — 색의 헌법 그대로. 새 색을 만들지 않는다
+  // 이 화면은 «편당 평균»이 아니라 «쌓여가는 규모»를 말하므로 시트 사다리보다 100배 높게 잡는다.
+  // (시트의 카드별 조회수 티어 --law-tier1~5 는 건드리지 않는다 — 거긴 기존 카드 색이 걸려 있다)
+  var FD_TIERS = [
+    { v: 10000000,  c: '#4C9BE6', n: '1000만' },
+    { v: 30000000,  c: '#43e0e6', n: '3000만' },
+    { v: 50000000,  c: '#37D67A', n: '5000만' },
+    { v: 100000000, c: '#d7f34b', n: '1억' },
+    { v: 500000000, c: '#E0788C', n: '5억' }
+  ];
+  function fdTier(v) {
+    var t = null;
+    FD_TIERS.forEach(function (x) { if (v >= x.v) t = x; });
+    return t || { c: '#37d67a', n: '' };
+  }
+  var FD_NEXT_LAB  = ['3년', '5년', '10년'];
+  function fdWeeksElapsed() {
+    try {
+      var wk = growthData.weekly || [];
+      if (wk.length >= 2) return Math.max(4, wk.length);
+    } catch (e) {}
+    return 12;                             // 기록이 짧으면 «석 달쯤 해왔다»고 본다
+  }
+  function fdGrowthRate(base, now) {
+    var w = fdWeeksElapsed();
+    var g = Math.pow(Math.max(1, now) / Math.max(1, base), 1 / w) - 1;
+    if (!isFinite(g) || g <= 0) g = 0.004;  // 아직 성장이 안 잡히면 아주 완만하게
+    return Math.min(g, 0.02);               // 주 2% 상한 — 연 ×2.8. 이보다 크게 말하면 거짓말이 된다
+  }
+  function fdProject(now, g, weeks) {       // 반년마다 성장률 감쇠 (현실의 둔화)
+    var v = now, cur = g;
+    for (var i = 0; i < weeks; i++) { v *= (1 + cur); if (i % 26 === 25) cur *= 0.82; }
+    return Math.round(v);
+  }
   function fdCh2Html() {
     var base = (dashData.viewBase || 8000);
-    var wk = []; try { wk = (growthData.weekly || []).map(function (w) { return w.avg || 0; }).filter(function (v) { return v > 0; }); } catch (e) {}
-    var now = wk.length ? wk[wk.length - 1] : (growthCurrent9Avg() || base);
-    var mult = base > 0 ? (now / base) : 1;
-    // 로그 스케일 투영 (지금→10년), 원래 흐름은 완만 상승
-    var proj = 'M68,154 C110,140 150,120 200,96 C250,72 290,50 318,26';
-    var projA = proj + ' L318,182 L68,182 Z';
-    var basel = 'M22,168 C34,167 40,170 52,166 C64,162 66,170 80,164 C96,157 104,166 120,158 C138,149 150,159 168,150 C188,140 200,151 222,141 C244,131 258,143 282,133 C300,125 308,136 330,127';
-    var gap = basel + ' L318,26 C290,50 250,72 200,96 C150,120 110,140 68,154 L22,168 Z';
-    var on = window.__fdBaseOn !== false;
-    return '<div class="fda-ch2">' +
-      '<div class="head"><div class="eb">CHAPTER 2 — IF YOU KEEP GOING</div><div class="t">이 흐름이 계속되면</div>' +
-      '<div class="s">시작 전 <b>' + fol0(base) + '</b> → 지금 <b>' + growthFmt(now) + '</b>. 두 미래를 겹쳐 보면 차이가 보여요.</div></div>' +
-      '<div class="tg"><button class="' + (on ? 'on' : '') + '" id="fda-baseon">📉 원래 흐름 겹치기</button><button class="' + (on ? '' : 'on') + '" id="fda-baseoff">내 곡선만</button></div>' +
-      '<svg viewBox="0 0 340 210" style="margin-top:6px">' +
-      '<defs><linearGradient id="fdapg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d7f34b" stop-opacity=".18"/><stop offset="1" stop-color="#37d67a" stop-opacity="0"/></linearGradient>' +
-      '<linearGradient id="fdagap" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d7f34b" stop-opacity=".1"/><stop offset="1" stop-color="#d7f34b" stop-opacity=".01"/></linearGradient></defs>' +
-      (on ? '<path fill="url(#fdagap)" d="' + gap + '"/>' +
-        '<path fill="none" stroke="rgba(255,255,255,.42)" stroke-width="1.7" stroke-linecap="round" stroke-dasharray="5 5" d="' + basel + '" style="opacity:0;animation:fdaFade .7s ease 1.5s forwards"/>' +
-        '<text class="fda-ml" x="330" y="123" text-anchor="end" style="fill:#9aa08a;opacity:0;animation:fdaFade .5s ease 1.9s forwards">원래 흐름</text>' : '') +
-      '<path fill="none" stroke="url(#fdasg)" stroke-width="2.6" stroke-linecap="round" filter="drop-shadow(0 0 6px rgba(215,243,75,.4))" d="M22,168 C40,166 52,162 68,154" style="stroke-dasharray:80;stroke-dashoffset:80;animation:fdaDraw 1s ease .2s forwards"/>' +
-      '<path fill="url(#fdapg)" opacity="0" style="animation:fdaFade 1s ease 1.4s forwards" d="' + projA + '"/>' +
-      '<path fill="none" stroke="rgba(215,243,75,.8)" stroke-width="2" stroke-dasharray="2 5" stroke-linecap="round" d="' + proj + '" opacity="0" style="animation:fdaFade .8s ease 1s forwards"/>' +
-      '<circle cx="68" cy="154" r="4" fill="#0f1207" stroke="#d7f34b" stroke-width="2"/><text class="fda-ml" x="68" y="200" text-anchor="middle">지금</text><text class="fda-mv" x="68" y="146" text-anchor="middle">' + growthFmt(now) + '</text>' +
-      '<circle cx="120" cy="136" r="3" fill="#0f1207" stroke="#d7f34b" stroke-width="2" style="opacity:0;animation:fdaFade .3s ease 1.5s forwards"/><text class="fda-ml" x="120" y="200" text-anchor="middle">반년</text>' +
-      '<circle cx="172" cy="112" r="3" fill="#0f1207" stroke="#d7f34b" stroke-width="2" style="opacity:0;animation:fdaFade .3s ease 1.7s forwards"/><text class="fda-ml" x="172" y="200" text-anchor="middle">1년</text>' +
-      '<circle cx="234" cy="80" r="3" fill="#0f1207" stroke="#d7f34b" stroke-width="2" style="opacity:0;animation:fdaFade .3s ease 1.9s forwards"/><text class="fda-ml" x="234" y="200" text-anchor="middle">3년</text>' +
-      '<circle cx="286" cy="50" r="3" fill="#0f1207" stroke="#d7f34b" stroke-width="2" style="opacity:0;animation:fdaFade .3s ease 2.1s forwards"/><text class="fda-ml" x="286" y="200" text-anchor="middle">5년</text>' +
-      '<circle cx="318" cy="26" r="4.5" fill="#fff" stroke="#d7f34b" stroke-width="2.4" style="opacity:0;animation:fdaFade .4s ease 2.3s forwards"/><text class="fda-ml" x="318" y="200" text-anchor="end">10년</text><text class="fda-mv" x="318" y="18" text-anchor="end">🔭</text>' +
-      '</svg>' +
-      '<div class="verdict">지금 흐름이면 — 시작 전보다 <span class="big">×' + (mult >= 10 ? Math.round(mult) : (Math.round(mult * 10) / 10)) + '</span>. 이 벌어짐이 <b>계속한 결과</b>예요.</div>' +
-      '<div class="fda-basein"><span>📍 시작 전 평균 조회수 (최초 1번)</span><b id="fda-baseedit">' + fol0(base) + ' ✏</b></div>' +
+    var wkArr = []; try { wkArr = (growthData.weekly || []).map(function (w) { return w.avg || 0; }).filter(function (v) { return v > 0; }); } catch (e) {}
+    var now = wkArr.length ? wkArr[wkArr.length - 1] : (growthCurrent9Avg() || base);
+    var g = fdGrowthRate(base, now);
+    var stage = window.__fdStage || 0; if (stage > 3) stage = 3;
+    var endI = FD_STAGE_END[stage];
+    var wPast = fdWeeksElapsed();                      // 시작 전 → 지금 까지 걸린 주
+    // ★ 두 선은 «같은 점»에서 갈라진다 — 시작 전(base)이 원점
+    var pts = [{ lab: '시작', w: -wPast, mine: base, stop: base }];
+    FD_MARKS.slice(0, endI + 1).forEach(function (m) {
+      pts.push({
+        lab: m.lab, w: m.w,
+        mine: m.w === 0 ? now : fdProject(now, g, m.w),
+        // 멈춘 세계 = 연 2%. 새 콘텐츠가 없으면 알고리즘이 노출을 주지 않는다 —
+        // 예전 글에 남는 잔류 유입 정도만 본다. (연 8%로 잡았더니 10년째엔 격차가 «좁아지는» 거짓이 나왔다)
+        stop: base * Math.pow(1.02, (wPast + m.w) / 52)
+      });
+    });
+    // ── 좌표: y는 «선형»(지수 성장이 실제로 휘어야 한다) · x는 제곱근(뒤로 갈수록 멀어진다) ──
+    var X0 = 30, X1 = 300, Y0 = 26, Y1 = 158;
+    var maxV = pts[pts.length - 1].mine * 1.1;
+    var tSpan = pts[pts.length - 1].w + wPast;
+    var xOf = function (i) {
+      var t = (pts[i].w + wPast) / Math.max(1, tSpan);
+      return Math.round((X0 + (X1 - X0) * Math.sqrt(t)) * 10) / 10;
+    };
+    var yOf = function (v) { return Math.round((Y1 - (v / maxV) * (Y1 - Y0)) * 10) / 10; };
+    var line = function (key) {
+      return pts.map(function (p, i) {
+        var x = xOf(i), y = yOf(p[key]);
+        if (i === 0) return 'M' + x + ',' + y;
+        var px = xOf(i - 1), py = yOf(pts[i - 1][key]), cx = (px + x) / 2;
+        return 'C' + cx + ',' + py + ' ' + cx + ',' + y + ' ' + x + ',' + y;
+      }).join(' ');
+    };
+    var myLine = line('mine'), stopLine = line('stop');
+    // 두 선 사이 = «격차» 그 자체
+    var gapArea = myLine + ' L' + xOf(pts.length - 1) + ',' + yOf(pts[pts.length - 1].stop) + ' ' +
+      pts.slice().reverse().map(function (p, i) { return 'L' + xOf(pts.length - 1 - i) + ',' + yOf(p.stop); }).join(' ') + ' Z';
+    var last = pts[pts.length - 1];
+    var gapX = last.mine / Math.max(1, last.stop);
+    var topTier = fdTier(last.mine);
+
+    var h = '<div class="fda-ch2">' +
+      '<div class="head"><div class="eb">CHAPTER 2 — TWO FUTURES</div><div class="t">계속한 나 · 멈춘 나</div>' +
+      '<div class="s">같은 <b>' + fol0(base) + '</b>에서 출발했어요. 지금은 <b>' + growthFmt(now) + '</b>.<br>' +
+      '<span style="color:#5d6350;font-size:10px">예측이 아니라 가정이에요 — 갈수록 완만해지는 걸 감안했습니다.</span></div></div>' +
+      '<svg viewBox="0 0 340 176" class="fda-svg">' +
+      // 곡선 색 = «지금 몇 층인가». 낮으면 그린, 층을 넘을 때마다 그 층의 색으로 물든다
+      '<defs><linearGradient id="fdaline" gradientUnits="userSpaceOnUse" x1="0" y1="' + Y1 + '" x2="0" y2="' + Y0 + '">' +
+      '<stop offset="0" stop-color="#37d67a"/>' +
+      FD_TIERS.filter(function (t) { return t.v < maxV; }).map(function (t) {
+        return '<stop offset="' + Math.min(0.99, t.v / maxV).toFixed(3) + '" stop-color="' + t.c + '"/>';
+      }).join('') +
+      '<stop offset="1" stop-color="' + topTier.c + '"/></linearGradient>' +
+      '<linearGradient id="fdagap2" gradientUnits="userSpaceOnUse" x1="0" y1="' + Y0 + '" x2="0" y2="' + Y1 + '">' +
+      '<stop offset="0" stop-color="' + topTier.c + '" stop-opacity=".15"/><stop offset="1" stop-color="' + topTier.c + '" stop-opacity=".01"/></linearGradient></defs>' +
+      // 사다리 — 내가 어느 층에 있는지 눈금 없이 읽힌다
+      FD_TIERS.filter(function (t) { return t.v < maxV * 0.97; }).map(function (t) {
+        var ty = yOf(t.v);
+        return '<line x1="' + X0 + '" y1="' + ty + '" x2="' + X1 + '" y2="' + ty + '" stroke="' + t.c +
+          '" stroke-opacity=".2" stroke-width="1" stroke-dasharray="2 4"/>' +
+          '<text class="fda-tb" x="' + (X0 - 5) + '" y="' + (ty + 2.6) + '" text-anchor="end" fill="' + t.c + '" fill-opacity=".62">' + t.n + '</text>';
+      }).join('') +
+      '<g class="fda-plot" id="fda-plot">' +
+      '<path fill="url(#fdagap2)" d="' + gapArea + '" class="fda-area"/>' +
+      '<path fill="none" stroke="rgba(139,145,132,.7)" stroke-width="1.8" stroke-dasharray="4 4" stroke-linecap="round" d="' + stopLine + '"/>' +
+      '<path fill="none" stroke="url(#fdaline)" stroke-width="3.1" stroke-linecap="round" stroke-linejoin="round" class="fda-my" d="' + myLine + '" filter="drop-shadow(0 0 9px ' + topTier.c + '70)"/>';
+    // 눈금 — 라벨은 아래, 값은 끝점에만
+    pts.forEach(function (p, i) {
+      var x = xOf(i), lastOne = (i === pts.length - 1);
+      // 중간 점 폐기(v442) — 선 하나와 끝점 하나면 충분하다
+    });
+    h += '</g>';   // ← 곡선 그룹 끝 (축이 커질 때 이 그룹만 눌린다)
+    pts.forEach(function (p, i) {
+      h += '<text class="fda-ml" x="' + xOf(i) + '" y="172" text-anchor="middle">' + esc(p.lab) + '</text>';
+    });
+    window.__fdPrevMax = window.__fdMaxV || 0;   // 직전 축 최댓값 (전환 연출용)
+    window.__fdMaxV = maxV;
+    var lx = xOf(pts.length - 1), ly = yOf(last.mine);
+    h += '<circle class="fda-ring" cx="' + lx + '" cy="' + ly + '" r="5" fill="none" stroke="' + topTier.c + '" stroke-width="1.7"/>' +
+      '<circle cx="' + lx + '" cy="' + ly + '" r="4.6" fill="#0f1207" stroke="' + topTier.c + '" stroke-width="2.5" class="fda-dot" style="animation-delay:.85s"/>' +
+      '<text class="fda-mv" x="' + lx + '" y="' + (ly - 12) + '" text-anchor="end" style="fill:' + topTier.c + '">' + growthFmt(last.mine) + '</text>' +
+      '<text class="fda-ml" x="' + lx + '" y="' + (yOf(last.stop) - 7) + '" text-anchor="end" style="fill:#8b9184">' + growthFmt(Math.round(last.stop)) + '</text>' +
+      '</svg>';
+    // 두 숫자 + 벌어짐
+    h += '<div class="fda-vs">' +
+      '<div class="side stop"><div class="k">멈췄다면</div><div class="n">' + growthFmt(Math.round(last.stop)) + '</div></div>' +
+      '<div class="side go" style="border-color:' + topTier.c + '3d;background:' + topTier.c + '12">' +
+      '<div class="k" style="color:' + topTier.c + '">계속하면' +
+      ((topTier.v || 0) >= 500000000 ? ' · 👑 왕좌' : (topTier.n ? ' · ' + topTier.n + ' 층' : '')) + '</div>' +
+      '<div class="n" id="fda-bignum" data-to="' + last.mine + '" style="color:' + topTier.c + '">' + growthFmt(last.mine) + '</div></div>' +
+      '</div>' +
+      '<div class="fda-gapbar">' + esc(last.lab) + ' 뒤, 두 미래의 거리 <b>×' + (gapX >= 10 ? Math.round(gapX) : Math.round(gapX * 10) / 10) + '</b></div>';
+    if (stage < 3) {
+      h += '<button class="fda-more" id="fda-more"><span>그럼 <b>' + FD_NEXT_LAB[stage] + ' 뒤</b>엔 얼마나 벌어질까요</span><i>›</i></button>';
+    } else {
+      h += '<button class="fda-more done" id="fda-reset"><span>🔭 10년까지 봤어요 — 처음부터 다시</span><i>↺</i></button>';
+    }
+    h += '<div class="fda-basein"><span>📍 시작 전 평균 조회수 (최초 1번)</span><b id="fda-baseedit">' + fol0(base) + ' ✏</b></div>' +
+      (window.__fdCh2Open ? '<button type="button" class="fda-hzclose" id="fda-hzclose">⌃ 접기</button>' : '') +
       '</div>';
+    return h;
   }
   function fdBindCh2() {
     var on = document.getElementById('fda-baseon'), off = document.getElementById('fda-baseoff');
     if (on) on.onclick = function () { window.__fdBaseOn = true; renderFutureDash(); };
     if (off) off.onclick = function () { window.__fdBaseOn = false; renderFutureDash(); };
+    var more = document.getElementById('fda-more');
+    if (more) more.onclick = function () { window.__fdStage = (window.__fdStage || 0) + 1; renderFutureDash(); };
+    var rst = document.getElementById('fda-reset');
+    if (rst) rst.onclick = function () { window.__fdStage = 0; renderFutureDash(); };
+    try { fdCountUp(); } catch (e) {}
+    // 축이 커졌으면: 이전 크기로 그렸다가 → 새 크기로 «눌리며» 전환. 이게 «훨씬 멀리 왔다»는 체감을 만든다
+    try {
+      var plot = document.getElementById('fda-plot');
+      var pm = window.__fdPrevMax || 0, nm = window.__fdMaxV || 0;
+      if (plot && pm > 0 && nm > pm * 1.05) {
+        var k = nm / pm;
+        plot.style.transition = 'none';
+        plot.style.transform = 'scaleY(' + k.toFixed(3) + ')';
+        requestAnimationFrame(function () {
+          requestAnimationFrame(function () {
+            plot.style.transition = 'transform .8s cubic-bezier(.2,.9,.3,1)';
+            plot.style.transform = 'scaleY(1)';
+          });
+        });
+      }
+    } catch (e) {}
     var be = document.getElementById('fda-baseedit'); if (be) be.onclick = function () {
       var v = prompt('시작 전 평균 조회수 (예: 8000)', dashData.viewBase || 8000);
       var n = parseInt(String(v || '').replace(/[^0-9]/g, ''), 10); if (n > 0) { dashData.viewBase = n; saveDash(); renderFutureDash(); }
     };
+  }
+  // 숫자가 «자라는» 느낌 — 값이 실제로 있을 때만 (0은 굴릴 게 없다)
+  function fdRoll(el) {
+    if (!el) return;
+    var to = parseInt(el.dataset.to, 10) || 0; if (to <= 0) return;
+    var from = Math.round(to * 0.35), t0 = null;
+    function tick(ts) {
+      if (!t0) t0 = ts;
+      var p = Math.min(1, (ts - t0) / 780), e = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.round(from + (to - from) * e).toLocaleString('ko-KR');
+      if (p < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+  // 큰 숫자 카운트업 — 단계가 바뀔 때 «값이 자란다»는 느낌
+  function fdCountUp() {
+    var el = document.getElementById('fda-bignum'); if (!el) return;
+    var to = parseInt(el.dataset.to, 10) || 0; if (to <= 0) return;
+    var from = Math.round(to * 0.42), t0 = null, dur = 700;
+    function tick(ts) {
+      if (!t0) t0 = ts;
+      var p = Math.min(1, (ts - t0) / dur), e = 1 - Math.pow(1 - p, 3);
+      el.textContent = growthFmt(Math.round(from + (to - from) * e));
+      if (p < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
   }
   function renderFutureDash() {
     fdArriveCss();
@@ -32886,31 +33813,45 @@
     el.style.display = 'block';
     el.innerHTML =
       // 🎯 그래프 우선 — 찐팬 팔로워 실크 곡선 (본 사람 수는 홈 히어로에만)
+      // ⭐ 북극성 — 어디로 가는 중인지 먼저 못 박는다 (홈 배너에서 이사)
+      (function () {
+        var g = dashData.folGoal || 0;
+        if (!g) return '<div class="fda-star"><span class="k">내 목표</span>' +
+          '<button type="button" class="v set" id="fda-setgoal">🏁 목표 정하기</button></div>';
+        var rem = Math.max(0, g - fol);
+        var why = (dashData.goalWhy || '').trim();
+        return '<div class="fda-star"><span class="k">내 목표</span>' +
+          '<span class="v">찐팬 ' + g.toLocaleString('ko-KR') + '</span>' +
+          '<span class="d">' + (rem ? '앞으로 ' + rem.toLocaleString('ko-KR') : '달성!') + '</span>' +
+          (why ? '<span class="w">' + esc(why) + '</span>' : '') + '</div>';
+      })() +
+      // v447 — 숫자는 그래프 «왼쪽 위»에 얹는다. 별도 블록·진행바·눈금 줄은 폐기(공간 낭비)
       fdArriveGraph(fol) +
       '<div class="fda-pers"><button>1주</button><button class="on">8주</button><button>3달</button><button>전체</button></div>' +
-      '<div class="fd-duo">' +
-        '<div class="fd-kpi">' +
-          '<div class="fd-kl">▶ 조회수 (주간)</div>' +
-          '<div class="fd-kv"><b>' + (weekAvg ? growthFmt(weekAvg) : (views ? fdFmt(views) : '0')) + '</b></div>' +
-          '<div class="fd-kms"><span class="n2">' + (views ? '누적 ' + views.toLocaleString('ko-KR') : '조회수 업데이트로 시작') + '</span></div>' +
-          (views <= 0 ? '<button class="fd-viewsbtn" id="fd-views-btn" style="margin-top:8px">👀 조회수 업데이트 →</button>' : '') +
-        '</div>' +
-        '<div class="fd-kpi fd-dmbox">' +
-          '<div>' +
-            '<div class="fd-kl">예약 문의 DM <button class="fd-minus" id="fd-dm-minus" title="잘못 눌렀을 때">−</button></div>' +
-            '<div class="fd-dmv"><b id="fd-dm-num">' + dm.toLocaleString('ko-KR') + '</b>건</div>' +
-          '</div>' +
-          '<button class="fd-plus1" id="fd-dm-plus">＋1</button>' +
-        '</div>' +
+      // 발치에 조용히 — 셋을 균등하게 (v444: 왼쪽 몰림 → 중앙 정렬)
+      '<div class="fda-trio">' +
+        '<div><div class="k">주간 조회수</div><div class="v">' + (weekAvg ? growthFmt(weekAvg) : (views ? fdFmt(views) : '0')) + '</div>' +
+          (views <= 0 ? '<button class="fd-viewsbtn" id="fd-views-btn" style="margin-top:7px">👀 업데이트</button>' : '<div class="d">최근 9편 평균</div>') + '</div>' +
+        '<div><div class="k">누적</div><div class="v">' + (views ? fdFmt(views) : '0') + '</div>' +
+          '<div class="d">' + (views ? views.toLocaleString('ko-KR') : '아직 없어요') + '</div></div>' +
+        '<div><div class="k">예약 문의</div><div class="v"><b id="fd-dm-num">' + dm.toLocaleString('ko-KR') + '</b></div>' +
+          '<div class="dmbtns"><button class="fd-minus" id="fd-dm-minus" title="잘못 눌렀을 때">−</button>' +
+          '<button class="fd-plus1" id="fd-dm-plus">＋1</button></div></div>' +
       '</div>' +
       // 📈 챕터2 — 이 흐름이 계속되면 (접힘)
-      '<div class="fda-ch2fold" id="fda-ch2fold"><span>📈 이 흐름이 계속되면</span><span class="ch">' + (window.__fdCh2Open ? '접기' : '펼치기 ›') + '</span></div>' +
-      (window.__fdCh2Open ? fdCh2Html() : '') +
+      // v443 «지평선» — 문패를 버리고 카드 윗부분만 수면 위로 내놓는다. 아래는 어둠에 잠긴 채.
+      '<div class="fda-horizon' + (window.__fdCh2Open ? ' open' : '') + '" id="fda-horizon">' +
+      fdCh2Html() +
+      (window.__fdCh2Open ? '' : '<div class="fda-veil"></div><div class="fda-pull"><b>⌄</b>끌어올려 보기</div>') +
+      '</div>' +
       // 💎 눈높이 기준 — 하단 접힘 (펼칠 때만)
       '<div class="fd-fold" id="fd-eye-fold"><span>💎 눈높이 기준</span><span class="ch">' + (window.__fdEyeOpen ? '접기' : '펼치기 ›') + '</span></div>' +
       '<div id="fd-eye-body" style="display:' + (window.__fdEyeOpen ? 'block' : 'none') + '">' + crRoomHtml(views) + '</div>';
     // 배선
     fdBindArrive();
+    var sg = document.getElementById('fda-setgoal');
+    if (sg) sg.onclick = function () { var gl = document.getElementById('fda-goal'); if (gl) gl.dispatchEvent(new Event('click', { bubbles: true })); };
+    try { fdRoll(document.getElementById('fda-folnum')); } catch (e) {}
     // 🔵 이동 점 = 실제 경로 길이만큼만 (dasharray 트릭)
     try {
       var _lp = el.querySelector('.fda-cv path[stroke^="url"]');
@@ -32928,7 +33869,12 @@
       else n = parseInt(raw, 10) || 0;
       if (n >= 0 && raw) { dashData.followers = n; saveDash(); renderFutureDash(); }
     }; }
-    var c2f = document.getElementById('fda-ch2fold'); if (c2f) c2f.onclick = function () { window.__fdCh2Open = !window.__fdCh2Open; renderFutureDash(); };
+    var hz = document.getElementById('fda-horizon');
+    if (hz && !window.__fdCh2Open) {
+      hz.onclick = function () { window.__fdCh2Open = true; renderFutureDash(); };
+    }
+    var hzc = document.getElementById('fda-hzclose');
+    if (hzc) hzc.onclick = function (e) { e.stopPropagation(); window.__fdCh2Open = false; renderFutureDash(); };
     if (window.__fdCh2Open) { try { fdBindCh2(); } catch (e) {} }
     var vb = document.getElementById('fd-views-btn');
     if (vb) vb.onclick = function () { try { openViewsInput(); } catch (e) {} };
@@ -33575,7 +34521,8 @@
 
   function renderHome() {
     try { renderTrophyHero(); } catch (e) {} // 🪞 디렉터스 컷 셸(3막) 먼저 — act3 안 미래 대시보드 홀더 확보
-    try { hm2Render(); } catch (e) {}   // 🏠 v430 빛의 방 + 오늘 하나
+    try { hm2Render(); } catch (e) {}
+    setTimeout(function () { try { dchReveal(); } catch (e) {} }, 60);   // 🏠 v430 빛의 방 + 오늘 하나
     setupHomeAccordion();
     document.getElementById('home-goal').value = homeData.goal || '';
     document.getElementById('home-why').value = homeData.why || '';
@@ -40181,6 +41128,11 @@
     if (hk) hk.oninput = function () { scriptEntryState.title = hk.value; rwPaint(); };
     // 후보
     const pt = document.getElementById('rw-pick-topic'); if (pt) pt.onclick = rwTopicSheet;
+    // 🎣 후킹 3열 자동완성 (썸네일 문구 | 수식어 | 후킹문구 100) — 옛 제목칸에만 있던 것을 기찻길로 (v430)
+    try {
+      const hkIn = document.getElementById('rw-hook');
+      if (hkIn && typeof attachHookAutocomplete === 'function') attachHookAutocomplete(hkIn, {});
+    } catch (e) {}
     const ph = document.getElementById('rw-pick-hook');
     if (ph) ph.onclick = function () { try { hkOpenSheet(); } catch (e) { if (typeof openTitleGuide === 'function') openTitleGuide(); } };
     // 사진 (자동 압축 — resizeImage 재사용)
@@ -41460,10 +42412,21 @@
   }
 
   // ── 진입점 + 탭 ──
+  // 지금 보고 있는 화면에 맞춰 탭 줄의 활성 표시를 맞춘다 (화면이 바뀌어도 탭은 제자리)
+  function st2SyncBar(ws) {
+    const map = { pattern: 'pattern', scripts: 'scripts' };
+    const cur = map[ws] || _st2Tab;
+    document.querySelectorAll('#st2-ws button').forEach(b => b.classList.toggle('on', b.dataset.st2tab === cur));
+  }
   function st2SetTab(tab) {
-    // 제작소를 벗어나지만 소속은 유지 — 레일·되돌아가기가 이어줌
-    if (tab === 'pattern') { window.__rrFrom = 'studio'; try { switchWorkspace('pattern'); } catch (e) {} return; }
-    if (tab === 'scripts') { window.__rrFrom = 'studio'; try { switchWorkspace('scripts'); } catch (e) {} return; }
+    // 패턴·원고는 제작소의 탭이면서 화면은 워크스페이스를 쓴다 — 탭 줄이 따라가므로 나간 티가 없다
+    if (tab === 'pattern') { _st2Tab = tab; window.__rrFrom = 'studio'; try { switchWorkspace('pattern'); } catch (e) {} return; }
+    if (tab === 'scripts') { _st2Tab = tab; window.__rrFrom = 'studio'; try { switchWorkspace('scripts'); } catch (e) {} return; }
+    // 워크스페이스 화면(원고·패턴)에 있다가 제작소 자체 탭으로 돌아올 때는 st2-view를 먼저 되살린다
+    try {
+      const sv = document.getElementById('st2-view');
+      if (sv && sv.style.display === 'none') { _st2Tab = tab; switchWorkspace('studio'); }
+    } catch (e) {}
     _st2Tab = tab;
     document.querySelectorAll('#st2-ws button').forEach(b => b.classList.toggle('on', b.dataset.st2tab === tab));
     document.getElementById('st2-home').style.display = (tab === 'home') ? 'block' : 'none';
@@ -41477,6 +42440,7 @@
     if (!_st2Inited) {
       _st2Inited = true;
       document.querySelectorAll('#st2-ws button').forEach(b => b.onclick = () => st2SetTab(b.dataset.st2tab));
+      try { st2SyncBar('studio'); } catch (e) {}
     }
     if (!_st2KwLoaded || !_st2FLoaded || !_st2PLoaded || !_st2OLoaded) {
       Promise.all([
@@ -42347,12 +43311,16 @@
     let el = document.getElementById('hm2');
     if (!el) {
       el = document.createElement('div'); el.className = 'hm2'; el.id = 'hm2';
-      host.insertBefore(el, host.firstChild);
+      // v436 — 임팩트(150만 히어로)가 먼저, 오늘 할 일은 그 다음
+      const heroEl = host.querySelector('.home-hero');
+      if (heroEl) host.insertBefore(el, heroEl.nextSibling);
+      else host.insertBefore(el, host.firstChild);
       const amb = document.createElement('div'); amb.className = 'hm2-amb'; amb.id = 'hm2-amb';
       amb.innerHTML = "<i class='a1'></i><i class='a2'></i>";
       document.body.appendChild(amb);
     }
-    document.body.classList.toggle('hm2-journey-off', !_hm2Journey);
+    _hm2Journey = true;   // v436 — 여정(3막)은 항상 보인다
+    document.body.classList.toggle('hm2-journey-off', false);
     const amb2 = document.getElementById('hm2-amb'); if (amb2) amb2.style.display = '';
     const name = (typeof activityName === 'function') ? activityName() : '';
     const up = (scripts || []).filter(s2 => s2.uploaded || s2.uploadUrl || (s2.uploadViews > 0));
@@ -42372,20 +43340,21 @@
       '<div class="hm2-today"><div class="k">' + t.k + '</div><div class="t">' + t.t + '</div>' +
       '<div class="d">' + t.d + '</div>' +
       '<button class="hm2-cta" id="hm2-go">' + t.b + '</button></div>' +
+      (function () { try { return insLineHtml(); } catch (e) { return ''; } })() +
       '<div class="hm2-rows">' +
         '<div class="hm2-row" data-hm2go="sheet"><span class="ic">🧺</span>' +
           '<span><div class="t">담기</div><div class="d">쓸 만한 레퍼런스</div></span><span class="n">' + nRef + '</span></div>' +
-        '<div class="hm2-row" data-hm2go="pattern"><span class="ic">🔍</span>' +
-          '<span><div class="t">패턴 파악</div><div class="d">내 분석 기록</div></span><span class="n">' + nAna + '</span></div>' +
-        '<div class="hm2-row" data-hm2go="pattern-lib"><span class="ic">📐</span>' +
-          '<span><div class="t">구조 모음</div><div class="d">공식화된 자산</div></span><span class="n">' + nStruct + '</span></div>' +
-        '<div class="hm2-row" data-hm2go="scripts"><span class="ic">✎</span>' +
-          '<span><div class="t">내 원고</div><div class="d">올린 ' + up.length + '편</div></span><span class="n">' + (scripts || []).length + '</span></div>' +
+        // 만들기는 전부 제작소 소속 (v434) — 홈은 «보는 곳», 제작소는 «하는 곳»
+        '<div class="hm2-row" data-hm2go="studio"><span class="ic">✎</span>' +
+          '<span><div class="t">컨텐츠 제작소</div><div class="d">원고 ' + (scripts || []).length +
+          ' · 구조 ' + nStruct + ' · 분석 ' + nAna + '</div></span><span class="n">›</span></div>' +
       '</div>' +
       '<button class="hm2-more" id="hm2-more"><span class="cv">' + (_hm2Journey ? '▾' : '▸') + '</span>' +
         (_hm2Journey ? '내 여정 접기' : '내 여정 보기 — 담다 · 만들다 · 도착') + '</button>';
     const go = document.getElementById('hm2-go');
     if (go) go.onclick = () => hm2Go(t.go);
+    const insL = document.getElementById('iw-line');
+    if (insL) insL.onclick = () => { try { insSheet(); } catch (e) {} };
     el.querySelectorAll('[data-hm2go]').forEach(r => r.onclick = () => hm2Go(r.dataset.hm2go));
     const more = document.getElementById('hm2-more');
     if (more) more.onclick = () => { _hm2Journey = !_hm2Journey; hm2Render();
@@ -42394,16 +43363,76 @@
   }
   function hm2Go(where) {
     try {
-      if (where === 'scripts') { const b = document.querySelector('.bn-tab[data-ws="scripts"]'); if (b) b.click(); return; }
+      if (where === 'studio') { switchWorkspace('studio'); return; }
+      // 원고·패턴은 제작소 탭을 거쳐 연다 — 도착하면 제작소 탭 줄을 입고 있다
+      if (where === 'scripts') { switchWorkspace('studio'); setTimeout(() => { try { st2SetTab('scripts'); } catch (e) {} }, 30); return; }
       if (where === 'sheet') { const b = document.querySelector('.bn-tab[data-ws="sheet"]'); if (b) b.click(); return; }
       if (where === 'pattern' || where === 'pattern-lib') {
-        if (typeof window.__goWs === 'function') window.__goWs('pattern');
-        else { const b = document.getElementById('ws-pattern'); if (b) b.click(); }
-        if (where === 'pattern-lib') setTimeout(() => { try { _pxFolder = 'lib'; pxRender(); } catch (e) {} }, 60);
+        switchWorkspace('studio');
+        setTimeout(() => { try { st2SetTab('pattern'); } catch (e) {} }, 30);
+        if (where === 'pattern-lib') setTimeout(() => { try { _pxFolder = 'lib'; pxRender(); } catch (e) {} }, 120);
         return;
       }
     } catch (e) {}
   }
+
+  // ── 🪟 상단 자동 숨김 (v435) — 내리면 걷히고, 올리면 바로 돌아온다 ──
+  //   이 앱은 body가 스크롤 컨테이너라 scroll 이벤트가 window로 안 온다.
+  //   컨테이너를 가리지 않도록 scrollingElement를 가볍게 읽는 방식(120ms)으로 간다.
+  (function () {
+    let last = -1, hidden = false;
+    function top() {
+      const se = document.scrollingElement || document.documentElement;
+      return se.scrollTop || document.body.scrollTop || window.scrollY || 0;
+    }
+    function measure() {
+      const r = document.getElementById('room-rail');
+      if (r && !hidden) document.documentElement.style.setProperty('--rr-h', Math.round(r.getBoundingClientRect().height) + 'px');
+    }
+    function step() {
+      const y = top();
+      if (y !== last) {
+        const dy = last < 0 ? 0 : y - last;
+        last = y;
+        let next = hidden;
+        if (y < 56) next = false;              // 맨 위에서는 항상 보인다
+        else if (dy > 7) next = true;          // 내리는 중 — 걷는다
+        else if (dy < -7) next = false;        // 올리는 중 — 즉시 복귀
+        if (next !== hidden) {
+          if (next) measure();
+          hidden = next;
+          document.body.classList.toggle('hdr-hide', hidden);
+        }
+      }
+    }
+    setInterval(step, 120);
+    window.addEventListener('resize', measure);
+    setTimeout(measure, 400);
+    window.__hdrStep = step;   // 검증용
+  })();
+
+  // ── 3막(담다·만들다·도착) 스크롤 리빌 — 화면에 들어올 때 한 번만 ──
+  function dchReveal() {
+    const acts = document.querySelectorAll('.dch-act:not([data-rv])');
+    if (!acts.length) return;
+    try {
+      const io = new IntersectionObserver(function (es) {
+        es.forEach(function (e) {
+          if (e.isIntersecting) { e.target.classList.add('rv-on'); io.unobserve(e.target); }
+        });
+      }, { threshold: 0.18 });
+      acts.forEach(function (a, i) {
+        a.setAttribute('data-rv', '1');
+        a.style.transitionDelay = (i * 0.09) + 's';   // 순차 등장
+        io.observe(a);
+        const r = a.getBoundingClientRect();          // 이미 화면 안이면 바로
+        if (r.top < (window.innerHeight || 800) && r.bottom > 0) a.classList.add('rv-on');
+      });
+    } catch (e) {
+      acts.forEach(function (a) { a.setAttribute('data-rv', '1'); a.classList.add('rv-on'); });
+    }
+  }
+  window.__dchReveal = dchReveal;
   window.__hm2Render = hm2Render;
   // === init은 authGate 통과 후 ===
   (async () => {
