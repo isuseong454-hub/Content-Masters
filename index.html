@@ -16122,8 +16122,51 @@
   .st2-rv.on{ opacity:1; transform:none; }
   /* ── 골대 (EXECUTED) ── */
   /* 1막 — 한 화면을 다 쓴다 (숫자가 정중앙에 오도록) */
-  .st2-scene1{ position:relative; min-height:calc(100vh - 168px); min-height:calc(100dvh - 168px);
-    display:flex; flex-direction:column; justify-content:center; }
+  /* v471 — 1막의 주인은 «알고리즘»으로 바뀌었다. 한 화면 채우기는 .hcore가 맡고,
+     올린 횟수(.st2-exec.mini)는 그 아래로 내려가 작아진다. */
+  .st2-scene1{ position:relative; display:block; }
+
+  /* ════ v471 · 제작소 홈 1막 — 알고리즘이 맞아준다 ════ */
+  .hcore{ position:relative; min-height:calc(100vh - 168px); min-height:calc(100dvh - 168px);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; gap:0; }
+  .hcore-cv{ display:block; width:min(232px,58vw); aspect-ratio:1/1; margin:0 auto; }
+  .hcore-t{ margin-top:6px; font-size:clamp(23px,6.4vw,34px); font-weight:800; letter-spacing:-.045em; line-height:1.14; }
+  .hcore-t em{ font-style:normal; background:linear-gradient(96deg,#43e0e6,#d7f34b 62%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    filter:drop-shadow(0 0 22px rgba(215,243,75,.28)); }
+  .hcore-l{ margin-top:11px; font-size:12.5px; color:var(--st2-sub); }
+  .hcore-l b{ color:var(--st2-txt,#e8e9e6); font-weight:800; font-variant-numeric:tabular-nums; }
+  /* LV 줄 — 눌러서 알고리즘 화면 열기 */
+  .hcore-lv{ display:flex; align-items:center; gap:10px; margin-top:20px;
+    width:min(268px,74vw); cursor:pointer; }
+  .hcore-b{ display:inline-flex; align-items:baseline; gap:4px; padding:4px 11px 4px 10px; border-radius:999px;
+    border:1px solid color-mix(in srgb,var(--hk,#d7f34b) 42%,transparent);
+    background:color-mix(in srgb,var(--hk,#d7f34b) 12%,transparent);
+    box-shadow:0 0 16px color-mix(in srgb,var(--hk,#d7f34b) 18%,transparent), inset 0 1px 0 rgba(255,255,255,.14);
+    transition:transform .2s ease,box-shadow .5s ease,background .9s ease,border-color .9s ease; }
+  .hcore-lv:hover .hcore-b{ transform:translateY(-1px);
+    box-shadow:0 0 26px color-mix(in srgb,var(--hk,#d7f34b) 30%,transparent); }
+  .hcore-lv:active .hcore-b{ transform:scale(.97); }
+  .hcore-b .l{ font-size:9.5px; font-weight:800; letter-spacing:.12em; color:color-mix(in srgb,var(--hk,#d7f34b) 72%,#fff); }
+  .hcore-b .v{ font-size:14px; font-weight:800; letter-spacing:-.02em; font-variant-numeric:tabular-nums;
+    color:color-mix(in srgb,var(--hk,#d7f34b) 55%,#fff); }
+  .hcore-trk{ position:relative; flex:1; min-width:56px; height:2px; border-radius:99px; background:rgba(255,255,255,.09); }
+  .hcore-trk > i{ display:block; height:100%; border-radius:99px; background:var(--hk,#d7f34b);
+    box-shadow:0 0 10px color-mix(in srgb,var(--hk,#d7f34b) 72%,transparent);
+    transition:width 1.1s cubic-bezier(.2,.9,.3,1),background .9s ease; }
+  .hcore-hd{ position:absolute; top:50%; width:4px; height:4px; border-radius:50%; background:#fff;
+    transform:translate(-50%,-50%); box-shadow:0 0 8px 2px color-mix(in srgb,var(--hk,#d7f34b) 90%,transparent);
+    transition:left 1.1s cubic-bezier(.2,.9,.3,1); animation:hcoreBr 3.4s ease-in-out infinite; }
+  @keyframes hcoreBr{ 0%,100%{opacity:.95} 50%{opacity:.5} }
+  .hcore-rest{ font-size:10.5px; color:var(--st2-faint); white-space:nowrap; font-variant-numeric:tabular-nums; }
+
+  /* 올린 횟수 — 작아져서 아래로 (지우지 않는다) */
+  .st2-exec.mini{ border-top:1px solid rgba(255,255,255,.08); padding-top:34px; margin-top:8px; }
+  .st2-exec.mini .bignum{ font-size:40px; margin:5px 0 2px; }
+  .st2-exec.mini .bignum .u{ font-size:15px; }
+  .st2-exec.mini svg{ max-width:280px; margin:12px auto 0; }
+  .st2-exec.mini .cap{ font-size:10.5px; }
   /* 막 구분 «헤어라인 + 큰 여백» — 가는 선 하나와 공기로만 나눈다 */
   .st2-act{ border-top:1px solid rgba(255,255,255,.09); margin-top:64px; padding-top:54px; margin-bottom:30px; }
   .st2-act .n{ display:block; font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:.3em;
@@ -40328,6 +40371,100 @@
     setTimeout(showAll, 3000);
   }
 
+  // ════ v471 · 제작소 홈 1막 코어 — 레벨을 따라 자란다 ════
+  //   담은 게 없으면 거의 깜깜하다. 담을수록 밝아지고 궤도가 한 겹씩 늘어난다.
+  let _hcRaf = null;
+  function hcoreDraw() {
+    const cv = document.getElementById('hcore-cv'); if (!cv) return;
+    const ctx = cv.getContext('2d');
+    const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const S = egStats(), LV = Math.max(0, Math.min(7, S.lv));
+    const IN = [0.04, 0.16, 0.30, 0.46, 0.63, 0.80, 0.92, 1][LV];
+    const RINGS = [0, 0, 1, 2, 3, 3, 3, 5][LV];
+    const RAYS = LV >= 7;
+    const HEX = (EG_LV[LV] || {}).col || '#d7f34b';
+    const RGB = [1, 3, 5].map(function (i) { return parseInt(HEX.substr(i, 2), 16); });
+    const C = RGB.join(',');
+    const DPR = Math.min(2, window.devicePixelRatio || 1);
+    let W = 0, H = 0, t = 0, P = [];
+    const AXS = [-Math.PI * 0.62, Math.PI * 0.06, Math.PI * 0.72];
+    function mk(R) {
+      return { ang: AXS[(Math.random() * 3) | 0] + (Math.random() - 0.5) * 0.5,
+               d: R * (0.25 + Math.random() * 1.5), sp: 0.0026 + Math.random() * 0.004,
+               r: 0.7 + Math.random() * 1.1, sd: Math.random() * 6.28 };
+    }
+    function size() {
+      W = cv.clientWidth || 220; H = cv.clientHeight || 220;
+      cv.width = W * DPR; cv.height = H * DPR; ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+      const R = Math.min(W, H) * 0.42, n = Math.max(5, Math.round(56 * IN));
+      P = []; for (let i = 0; i < n; i++) P.push(mk(R));
+    }
+    function draw() {
+      t += 0.016; ctx.clearRect(0, 0, W, H);
+      const CX = W / 2, CY = H / 2, R = Math.min(W, H) * 0.42;
+      // 세 축 — 트렌드 · 고객 · 나
+      AXS.forEach(function (a) {
+        const g = ctx.createLinearGradient(CX, CY, CX + Math.cos(a) * R * 1.6, CY + Math.sin(a) * R * 1.6);
+        g.addColorStop(0, 'rgba(' + C + ',' + (0.16 * IN + 0.03).toFixed(3) + ')');
+        g.addColorStop(1, 'rgba(' + C + ',0)');
+        ctx.strokeStyle = g; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(CX, CY);
+        ctx.lineTo(CX + Math.cos(a) * R * 1.6, CY + Math.sin(a) * R * 1.6); ctx.stroke();
+      });
+      // 빨려드는 신호
+      for (let i = 0; i < P.length; i++) {
+        const p = P[i];
+        p.d -= p.sp * R * (0.9 + 0.5 * Math.sin(t * 0.7 + p.sd));
+        if (p.d < R * 0.16) { P[i] = mk(R); continue; }
+        const ang = p.ang + Math.sin(t * 1.1 + p.sd) * 0.035;
+        const x = CX + Math.cos(ang) * p.d, y = CY + Math.sin(ang) * p.d;
+        const near = 1 - Math.min(1, (p.d - R * 0.16) / (R * 1.5));
+        const al = (0.14 + near * 0.66) * (0.45 + 0.55 * IN);
+        const tx = CX + Math.cos(ang) * (p.d + R * 0.1), ty = CY + Math.sin(ang) * (p.d + R * 0.1);
+        const tg = ctx.createLinearGradient(x, y, tx, ty);
+        tg.addColorStop(0, 'rgba(' + C + ',' + al.toFixed(3) + ')');
+        tg.addColorStop(1, 'rgba(' + C + ',0)');
+        ctx.strokeStyle = tg; ctx.lineWidth = p.r * 0.85;
+        ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(tx, ty); ctx.stroke();
+        ctx.fillStyle = 'rgba(' + C + ',' + Math.min(1, al + 0.14).toFixed(3) + ')';
+        ctx.beginPath(); ctx.arc(x, y, p.r, 0, 6.2832); ctx.fill();
+      }
+      // 궤도 — 레벨마다 한 겹씩
+      for (let g = 0; g < RINGS; g++) {
+        const rr = R * (0.36 + g * 0.16), tilt = 0.42 + g * 0.11, sp = 0.28 + g * 0.13;
+        ctx.strokeStyle = 'rgba(' + C + ',' + (0.11 * IN + 0.03).toFixed(3) + ')';
+        ctx.lineWidth = 1; ctx.beginPath();
+        ctx.ellipse(CX, CY, rr, rr * tilt, g * 0.7 + t * 0.05, 0, 6.2832); ctx.stroke();
+        const oa = t * sp + g * 2.1;
+        ctx.fillStyle = 'rgba(255,255,255,' + (0.45 * IN + 0.18).toFixed(3) + ')';
+        ctx.beginPath(); ctx.arc(CX + Math.cos(oa) * rr, CY + Math.sin(oa) * rr * tilt, 1.5, 0, 6.2832); ctx.fill();
+      }
+      // 방사 광선 — 최종 단계만
+      if (RAYS) {
+        for (let s = 0; s < 12; s++) {
+          const a2 = s * 0.5236 + t * 0.06, len = R * (1.0 + 0.12 * Math.sin(t * 1.3 + s));
+          const rg = ctx.createLinearGradient(CX, CY, CX + Math.cos(a2) * len, CY + Math.sin(a2) * len);
+          rg.addColorStop(0, 'rgba(' + C + ',0.24)'); rg.addColorStop(1, 'rgba(' + C + ',0)');
+          ctx.strokeStyle = rg; ctx.lineWidth = 1.1; ctx.beginPath();
+          ctx.moveTo(CX + Math.cos(a2) * R * 0.22, CY + Math.sin(a2) * R * 0.22);
+          ctx.lineTo(CX + Math.cos(a2) * len, CY + Math.sin(a2) * len); ctx.stroke();
+        }
+      }
+      // 코어
+      const cr = R * (0.07 + 0.1 * IN) * (1 + Math.sin(t * 1.5) * 0.07);
+      const cg = ctx.createRadialGradient(CX, CY, 0, CX, CY, cr * 3);
+      cg.addColorStop(0, 'rgba(255,255,255,' + (0.3 + 0.58 * IN).toFixed(3) + ')');
+      cg.addColorStop(0.18, 'rgba(' + C + ',' + (0.5 * IN).toFixed(3) + ')');
+      cg.addColorStop(1, 'rgba(' + C + ',0)');
+      ctx.fillStyle = cg; ctx.beginPath(); ctx.arc(CX, CY, cr * 3, 0, 6.2832); ctx.fill();
+      ctx.fillStyle = 'rgba(255,255,255,' + ((0.4 + 0.4 * IN) + Math.sin(t * 1.5) * 0.1).toFixed(3) + ')';
+      ctx.beginPath(); ctx.arc(CX, CY, cr * 0.42, 0, 6.2832); ctx.fill();
+      _hcRaf = requestAnimationFrame(draw);
+    }
+    size();
+    cancelAnimationFrame(_hcRaf);
+    if (reduce) { t = 1.4; draw(); cancelAnimationFrame(_hcRaf); } else draw();
+  }
+
   // === 사용설명서 풀 매뉴얼 빌드 (최초 1회) — v467에서 «알고리즘 소개»로 대체. 함수는 보존 ===
   let _guideBuilt = false;
   function renderGuideManual() {
@@ -43161,9 +43298,22 @@
     v.classList.toggle('lens-cnv', mode !== 'att');
     const monthUps = (typeof getMonthUploadedScripts === 'function') ? getMonthUploadedScripts() : st2Ups();
     const goal = monthlyUploadGoal || 0, done = monthUps.length;
+    // v471 · 1막 = 알고리즘이 맞아준다. 만들러 들어왔을 때 먼저 만나는 건 «점수»가 아니라 «동료».
+    const HS = egStats();
     let h = '<div class="st2-scene1">' +
       '<button class="st2-diag" id="st2-diag">🩺 릴스 진단</button>' +
-      '<div class="st2-exec">' +
+      '<div class="hcore" style="--hk:' + HS.col + '">' +
+        '<canvas class="hcore-cv" id="hcore-cv"></canvas>' +
+        '<div class="hcore-t">당신만의<br><em>컨텐츠 알고리즘</em></div>' +
+        '<div class="hcore-l"><b>' + HS.saved.toLocaleString() + '개</b>를 보고 학습하는 중</div>' +
+        '<div class="hcore-lv" id="hcore-lv" role="button" tabindex="0" title="눌러서 알고리즘 열기">' +
+          '<span class="hcore-b"><span class="l">LV</span><span class="v">' + HS.lv + '</span></span>' +
+          '<span class="hcore-trk"><i style="width:' + (HS.prog * 100).toFixed(1) + '%"></i>' +
+            '<b class="hcore-hd" style="left:' + (HS.prog * 100).toFixed(1) + '%"></b></span>' +
+          '<span class="hcore-rest">' + (HS.next ? (HS.rest.toLocaleString() + '개') : '끝') + '</span>' +
+        '</div>' +
+      '</div>' +
+      '<div class="st2-exec mini">' +
         '<div class="k">올린 횟수</div>' +
         '<div class="bignum"><span id="st2-xn">0</span><span class="u">회</span></div>' +
         (goal > 0
@@ -43360,6 +43510,16 @@
       document.getElementById('st2-gok').onclick = async () => { monthlyUploadGoal = n; await saveUploadGoal(); toast('🏁 이번 달 목표 ' + n + '회'); st2RenderHome(); };
     }
     const dg = document.getElementById('st2-diag'); if (dg) dg.onclick = () => { try { switchWorkspace('diagnose'); } catch (e) {} };
+    // v471 · 1막 코어 — 그리기 + 눌러서 알고리즘 화면 열기
+    try { hcoreDraw(); } catch (e) {}
+    const hlv = document.getElementById('hcore-lv');
+    if (hlv) {
+      const go = () => { try { window.__openEngine(); } catch (e) {} };
+      hlv.onclick = go;
+      hlv.onkeydown = (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } };
+    }
+    const hcv = document.getElementById('hcore-cv');
+    if (hcv) { hcv.style.cursor = 'pointer'; hcv.onclick = () => { try { window.__openEngine(); } catch (e) {} }; }
     // 성장기록 기간 토글
     document.querySelectorAll('#st2-ptg button').forEach(b => b.onclick = () => {
       document.querySelectorAll('#st2-ptg button').forEach(x => x.classList.remove('on'));
