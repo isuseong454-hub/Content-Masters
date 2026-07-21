@@ -7868,6 +7868,20 @@
   .pp-ref-views { position: absolute; bottom: 6px; left: 6px; background: rgba(0,0,0,0.72); color: #fff; font-size: 10.5px; font-weight: 800; padding: 2px 7px; border-radius: 6px; backdrop-filter: blur(2px); }
   .pp-ref-views.top { background: rgba(245,200,75,0.94); color: #1a1400; }
   .pp-ref-th-top .pp-ref-thumb { border-color: #F5C84B; box-shadow: 0 12px 30px rgba(0,0,0,0.55), 0 0 0 2px rgba(245,200,75,0.55); }
+  /* ════ v477 · 엑스레이 — 썸네일에 구조를 투시한다 ════
+     왼쪽 척추 = 섹션 순서. 채워진 칸은 그 섹션 색으로 빛나고, 빈 칸은 어둡다.
+     여러 표본을 나란히 놓으면 «전부 켜진 줄»이 보인다 — 그게 공통 공식이다. */
+  .pp-xray { position: absolute; left: 0; top: 0; bottom: 0; width: 8px; z-index: 3;
+    display: flex; flex-direction: column; gap: 1.5px; padding: 3px 2px; pointer-events: none;
+    background: linear-gradient(90deg, rgba(0,0,0,.5), transparent); }
+  .pp-xray i { flex: 1; border-radius: 2px; background: var(--xc, #888); opacity: .14; transition: opacity .3s ease; }
+  .pp-xray i.on { opacity: .95; box-shadow: 0 0 7px var(--xc, #888); }
+  .pp-xray-cap { display: block; margin-top: 5px; font-size: 10px; font-weight: 800;
+    color: var(--text-faint); font-variant-numeric: tabular-nums; }
+  .pp-xray-cap b { color: var(--emerald); }
+  .pp-xray-cap.full b { color: #F5C84B; }
+  .pp-xray-legend { font-size: 10.5px; color: var(--text-faint); line-height: 1.6; margin: 2px 0 10px; }
+  .pp-xray-legend b { color: var(--text-sub); }
   .pp-ref-thumb[draggable="true"] { cursor: grab; }
   .pp-ref-thumb.pp-dragging { opacity: 0.45; cursor: grabbing; }
   .pp-ref-th.pp-drag-over .pp-ref-thumb { outline: 2px dashed var(--emerald); outline-offset: 3px; }
@@ -10279,10 +10293,19 @@
   .sl-card-body { padding:13px 14px 15px; display:flex; flex-direction:column; gap:9px; }
   /* 세로 단계 뱃지 (사진2 스타일) */
   .sl-steps { display:flex; flex-direction:column; gap:5px; }
-  .sl-step { display:flex; align-items:center; gap:9px; padding:7px 11px; background:var(--bg-elev); border:1px solid var(--line); border-radius:9px; font-size:12px; }
+  /* v476 · 구조 5색 헌법을 카드에도 입힌다 (겉모습만 — 로직 무변경).
+     --sk = 그 단계의 색. 원고 화면의 침목 5색과 같은 혈통이라 한눈에 이어진다. */
+  .sl-step { position:relative; display:flex; align-items:center; gap:9px; padding:7px 11px 7px 15px;
+    background:var(--bg-elev); border:1px solid var(--line); border-radius:9px; font-size:12px;
+    overflow:hidden; }
+  .sl-step::before { content:''; position:absolute; left:0; top:0; bottom:0; width:3px;
+    background:var(--sk,transparent); opacity:.85; }
+  .sl-step.k::after { content:''; position:absolute; left:0; top:0; bottom:0; width:44px; pointer-events:none;
+    background:linear-gradient(90deg,color-mix(in srgb,var(--sk) 14%,transparent),transparent); }
   .sl-step-ico { flex-shrink:0; width:18px; text-align:center; }
-  .sl-step-label { font-weight:700; color:var(--text-main); }
-  .sl-step-note { color:var(--text-faint); font-size:11px; margin-left:auto; }
+  .sl-step-label { font-weight:700; color:var(--text-main); position:relative; z-index:1; }
+  .sl-step.k .sl-step-label { color:color-mix(in srgb,var(--sk) 55%,#fff); }
+  .sl-step-note { color:var(--text-faint); font-size:11px; margin-left:auto; position:relative; z-index:1; }
   .sl-formula { margin-top:2px; padding:9px 11px; background:rgba(245,200,75,0.09); border:1px solid rgba(245,200,75,0.3); border-radius:9px; font-size:11.5px; line-height:1.6; color:var(--text-mute); }
   .sl-formula b { color:#F5C84B; }
   .sl-card-foot { display:flex; align-items:center; gap:8px; margin-top:3px; }
@@ -16161,6 +16184,157 @@
   @keyframes hcoreBr{ 0%,100%{opacity:.95} 50%{opacity:.5} }
   .hcore-rest{ font-size:10.5px; color:var(--st2-faint); white-space:nowrap; font-variant-numeric:tabular-nums; }
 
+  /* ════ v472 · 내 성적표 — 성과 되먹임 ════ */
+  /*  담은 건 남의 성적, 올린 건 내 성적. 둘을 같은 잣대(나눔률 5%)로 본다. */
+  .fbk{ border:1px solid rgba(255,255,255,.09); border-radius:20px;
+    background:rgba(255,255,255,.035); padding:20px; margin-top:14px; }
+  /* 제목 줄 = 여닫이 손잡이 (v473 — 평소엔 접어둔다) */
+  .fbk-hd{ display:flex; align-items:center; gap:9px; flex-wrap:wrap;
+    cursor:pointer; user-select:none; margin:-4px -4px 0; padding:4px; border-radius:12px;
+    transition:background .18s ease; }
+  .fbk-hd:hover{ background:rgba(255,255,255,.03); }
+  .fbk-hd h4{ margin:0; font-size:15.5px; font-weight:800; letter-spacing:-.02em; color:var(--st2-txt,#e8e9e6); }
+  .fbk-hd .t{ font-size:10.5px; color:var(--st2-faint); margin-left:auto; }
+  .fbk-hd .cv{ flex:0 0 auto; font-size:11px; color:var(--st2-faint);
+    transition:transform .4s cubic-bezier(.2,.9,.3,1); }
+  .fbk.open .fbk-hd .cv{ transform:rotate(180deg); }
+  /* 접힘 — 제목만 보인다 */
+  .fbk-body{ max-height:0; overflow:hidden; opacity:0;
+    transition:max-height .55s cubic-bezier(.2,.9,.3,1), opacity .3s ease; }
+  .fbk.open .fbk-body{ max-height:1600px; opacity:1; }
+  /* 접혀 있을 때 한 줄 요약 — 눌러볼 이유를 준다 */
+  .fbk-peek{ font-size:11.5px; color:var(--st2-sub); line-height:1.6; margin-top:8px; }
+  .fbk-peek b{ color:var(--st2-txt,#e8e9e6); font-weight:800; }
+  .fbk.open .fbk-peek{ display:none; }
+  .fbk-lead{ font-size:11.5px; color:var(--st2-sub); line-height:1.65; margin:0 0 4px; }
+  .fbk-lead b{ color:var(--st2-txt,#e8e9e6); }
+  /* 나눔률 */
+  .fbk-rate{ display:flex; align-items:baseline; gap:9px; margin-top:14px; flex-wrap:wrap; }
+  .fbk-rate .v{ font-size:32px; font-weight:900; letter-spacing:-.045em; color:var(--law-viral,#B07BF0);
+    font-variant-numeric:tabular-nums; }
+  .fbk-rate .v.on{ text-shadow:0 0 22px rgba(176,123,240,.55); }
+  .fbk-rate .d{ font-size:11px; color:var(--st2-sub); line-height:1.5; }
+  .fbk-rate .d b{ color:var(--st2-txt,#e8e9e6); }
+  .fbk-g{ position:relative; height:8px; border-radius:99px; background:rgba(255,255,255,.07); margin-top:17px; }
+  .fbk-g > i{ display:block; height:100%; border-radius:99px;
+    background:linear-gradient(90deg,rgba(176,123,240,.42),#B07BF0);
+    box-shadow:0 0 14px rgba(176,123,240,.5); transition:width .9s cubic-bezier(.2,.9,.3,1); }
+  .fbk-g .mk{ position:absolute; top:-6px; bottom:-6px; left:50%; width:1.5px; background:rgba(255,255,255,.32); }
+  .fbk-g .mk::after{ content:'5%'; position:absolute; top:-16px; left:50%; transform:translateX(-50%);
+    font-size:9px; color:var(--st2-faint); }
+  /* 축 탭 */
+  .fbk-ax{ display:flex; gap:6px; flex-wrap:wrap; margin:22px 0 14px; }
+  .fbk-ax button{ font-family:inherit; font-size:11px; color:var(--st2-sub);
+    background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.1); border-radius:99px;
+    padding:6px 12px; cursor:pointer; transition:.18s; }
+  .fbk-ax button.on{ color:#0b0c06; background:var(--law-asset,#d7f34b); border-color:var(--law-asset,#d7f34b); font-weight:800; }
+  /* v479 · 잣대 스위치 — 유입/전환은 각자 자기 색으로 켜진다 */
+  .fbk-lens{ margin:12px 0 0; }
+  .fbk-lens button.on{ color:#0b0c06; background:var(--lc,#d7f34b); border-color:var(--lc,#d7f34b);
+    box-shadow:0 0 16px color-mix(in srgb,var(--lc,#d7f34b) 28%,transparent); }
+  /* 막대 */
+  .fbk-rows{ display:flex; flex-direction:column; gap:2px; }
+  .fbk-r{ display:grid; grid-template-columns:76px 1fr auto; align-items:center; gap:10px;
+    padding:8px 6px; border-radius:11px; }
+  .fbk-r .nm{ font-size:12px; font-weight:700; letter-spacing:-.01em;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .fbk-r .bar{ position:relative; height:19px; border-radius:6px; background:rgba(255,255,255,.045); overflow:hidden; }
+  .fbk-r .bar i{ position:absolute; left:0; top:0; bottom:0; border-radius:6px;
+    background:linear-gradient(90deg,color-mix(in srgb,var(--fc) 28%,transparent),color-mix(in srgb,var(--fc) 76%,transparent));
+    transition:width .8s cubic-bezier(.2,.9,.3,1); }
+  .fbk-r .bar b{ position:absolute; left:9px; top:50%; transform:translateY(-50%); font-size:10px; font-weight:800;
+    color:#fff; text-shadow:0 1px 4px rgba(0,0,0,.6); }
+  .fbk-r .sh{ font-size:10.5px; font-weight:800; white-space:nowrap; min-width:48px; text-align:right;
+    color:var(--st2-sub); font-variant-numeric:tabular-nums; }
+  .fbk-r .sh.hit{ color:var(--law-viral,#B07BF0); text-shadow:0 0 12px rgba(176,123,240,.45); }
+  .fbk-r .sh small{ display:block; font-size:8.5px; font-weight:600; color:var(--st2-faint); margin-top:1px; }
+  .fbk-r.thin{ opacity:.42; }
+  .fbk-note{ font-size:10.5px; color:var(--st2-faint); margin-top:12px; line-height:1.6;
+    padding-top:12px; border-top:1px solid rgba(255,255,255,.08); }
+  .fbk-note b{ color:var(--st2-sub); }
+  /* 되먹임 한 마디 */
+  .fbk-say{ display:flex; gap:11px; align-items:flex-start; margin-top:16px; padding:14px 15px; border-radius:15px;
+    background:rgba(215,243,75,.05); border:1px solid rgba(215,243,75,.18); }
+  .fbk-say .ic{ flex:0 0 auto; font-size:14px; line-height:1.55; }
+  .fbk-say .tx{ font-size:12px; line-height:1.75; color:var(--st2-sub); }
+  .fbk-say .tx b{ color:var(--st2-txt,#e8e9e6); font-weight:700; }
+  .fbk-say .tx em{ font-style:normal; color:var(--law-asset,#d7f34b); font-weight:700; }
+  @media (max-width:520px){ .fbk-r{ grid-template-columns:64px 1fr auto; gap:8px; } }
+
+  /* ════ v480 · 트렌드 방 — 시장이 지금 쓰는 말 (세 번째 축) ════
+     4인 검토 결과: 수명 단계로 나누되 «앱이 단정하지 않는 이름»으로(애플),
+     칩마다 미니 곡선을 넣어 되살아나는 트렌드를 놓치지 않게(인스타),
+     내 고객도 한 말이면 🎯를 켠다(세일즈) — 시장 × 고객 둘 다 켜진 게 진짜. */
+  .trd{ border:1px solid rgba(255,255,255,.09); border-radius:20px;
+    background:rgba(255,255,255,.035); padding:20px; margin-top:14px; }
+  .trd-hd{ display:flex; align-items:center; gap:9px; flex-wrap:wrap; cursor:pointer; user-select:none;
+    margin:-4px -4px 0; padding:4px; border-radius:12px; transition:background .18s ease; }
+  .trd-hd:hover{ background:rgba(255,255,255,.03); }
+  .trd-hd h4{ margin:0; font-size:15.5px; font-weight:800; letter-spacing:-.02em; color:var(--st2-txt,#e8e9e6); }
+  .trd-hd .t{ font-size:10.5px; color:var(--st2-faint); margin-left:auto; }
+  .trd-hd .cv{ flex:0 0 auto; font-size:11px; color:var(--st2-faint);
+    transition:transform .4s cubic-bezier(.2,.9,.3,1); }
+  .trd.open .trd-hd .cv{ transform:rotate(180deg); }
+  .trd-body{ max-height:0; overflow:hidden; opacity:0;
+    transition:max-height .55s cubic-bezier(.2,.9,.3,1), opacity .3s ease; }
+  .trd.open .trd-body{ max-height:1400px; opacity:1; }
+  .trd-peek{ font-size:11.5px; color:var(--st2-sub); line-height:1.6; margin-top:8px; }
+  .trd-peek b{ color:var(--st2-txt,#e8e9e6); font-weight:800; }
+  .trd.open .trd-peek{ display:none; }
+  .trd-lead{ font-size:11.5px; color:var(--st2-sub); line-height:1.65; margin:14px 0 16px; }
+  .trd-lead b{ color:var(--st2-txt,#e8e9e6); }
+  /* 3단 레인 */
+  .trd-lanes{ display:flex; flex-direction:column; gap:11px; }
+  .trd-lane{ border:1px solid rgba(255,255,255,.09); border-radius:15px; padding:13px 14px;
+    position:relative; overflow:hidden; }
+  .trd-lane::before{ content:''; position:absolute; left:0; top:0; bottom:0; width:3px; background:var(--lc); }
+  .trd-lane .lb{ font-size:11.5px; font-weight:800; color:var(--lc); display:flex; align-items:baseline;
+    gap:7px; flex-wrap:wrap; }
+  .trd-lane .lb span{ font-size:10px; color:var(--st2-faint); font-weight:600; }
+  .trd-chips{ display:flex; flex-wrap:wrap; gap:6px; margin-top:10px; }
+  .trd-chip{ display:inline-flex; align-items:center; gap:5px; font-size:11.5px; font-weight:700;
+    padding:5px 11px; border-radius:99px; cursor:pointer;
+    border:1px solid color-mix(in srgb,var(--lc) 32%,transparent);
+    background:color-mix(in srgb,var(--lc) 10%,transparent);
+    color:color-mix(in srgb,var(--lc) 62%,#fff); transition:transform .18s ease,box-shadow .3s ease; }
+  .trd-chip:hover{ transform:translateY(-1px); box-shadow:0 0 16px color-mix(in srgb,var(--lc) 22%,transparent); }
+  .trd-chip.both{ border-color:rgba(215,243,75,.5); box-shadow:inset 0 0 0 1px rgba(215,243,75,.12); }
+  .trd-chip svg{ opacity:.75; }
+  .trd-chip small{ font-weight:600; opacity:.65; font-variant-numeric:tabular-nums; }
+  .trd-empty{ font-size:10.5px; color:var(--st2-faint); margin-top:9px; }
+  .trd-note{ font-size:10.5px; color:var(--st2-faint); margin-top:14px; line-height:1.65;
+    padding-top:12px; border-top:1px solid rgba(255,255,255,.08); }
+  .trd-note b{ color:var(--st2-sub); }
+
+  /* ════ v481 · 마법 — 「먼저 말을 겁니다」 ════
+     묻기 전에 알고리즘이 알아낸 것만 카드로 올린다. 계산이 안 되면 «왜 조용한지»를 말한다. */
+  .mag{ margin-top:16px; }
+  .mag-hd{ display:flex; align-items:baseline; gap:9px; margin-bottom:11px; flex-wrap:wrap; }
+  .mag-hd h4{ margin:0; font-size:15.5px; font-weight:800; letter-spacing:-.02em; color:var(--st2-txt,#e8e9e6); }
+  .mag-hd .t{ font-size:10.5px; color:var(--st2-faint); margin-left:auto; }
+  .mag-list{ display:flex; flex-direction:column; gap:9px; }
+  .mag-c{ position:relative; border:1px solid rgba(255,255,255,.09); border-radius:16px;
+    padding:14px 15px 14px 16px; background:rgba(255,255,255,.028); overflow:hidden;
+    transition:transform .2s ease, border-color .3s ease; }
+  .mag-c::before{ content:''; position:absolute; left:0; top:0; bottom:0; width:3px; background:var(--mc); }
+  .mag-c::after{ content:''; position:absolute; left:0; top:0; bottom:0; width:60px; pointer-events:none;
+    background:linear-gradient(90deg,color-mix(in srgb,var(--mc) 11%,transparent),transparent); }
+  .mag-c.act{ cursor:pointer; }
+  .mag-c.act:hover{ transform:translateY(-1px); border-color:color-mix(in srgb,var(--mc) 34%,transparent); }
+  .mag-c > *{ position:relative; z-index:1; }
+  .mag-k{ font-size:10px; font-weight:800; letter-spacing:.12em; color:var(--mc); text-transform:uppercase; }
+  .mag-t{ font-size:13px; font-weight:700; letter-spacing:-.012em; line-height:1.6; margin-top:6px;
+    color:var(--st2-txt,#e8e9e6); }
+  .mag-t b{ color:var(--mc); font-weight:800; }
+  .mag-s{ font-size:11.5px; color:var(--st2-sub); line-height:1.65; margin-top:6px; }
+  .mag-s b{ color:var(--st2-txt,#e8e9e6); }
+  .mag-go{ display:inline-block; margin-top:9px; font-size:11px; font-weight:800; color:var(--mc); }
+  .mag-c.quiet{ opacity:.5; }
+  .mag-c.quiet .mag-t{ font-weight:600; font-size:12px; color:var(--st2-sub); }
+  .mag-none{ font-size:11.5px; color:var(--st2-faint); line-height:1.7; padding:16px;
+    border:1px dashed rgba(255,255,255,.14); border-radius:16px; text-align:center; }
+  .mag-none b{ color:var(--st2-sub); }
+
   /* 올린 횟수 — 작아져서 아래로 (지우지 않는다) */
   .st2-exec.mini{ border-top:1px solid rgba(255,255,255,.08); padding-top:34px; margin-top:8px; }
   .st2-exec.mini .bignum{ font-size:40px; margin:5px 0 2px; }
@@ -16317,15 +16491,17 @@
   .st2-paper .src{ font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:.2em; color:var(--st2-faint); margin-bottom:8px; }
   .st2-paper .tx{ font-size:12.5px; line-height:1.95; color:#cfd4c0; word-break:keep-all; user-select:text; -webkit-user-select:text; cursor:text; }
   .st2-paper mark{ border-radius:4px; padding:1px 3px; }
+  /* v475 · 「핵심」 = 로즈(고객의 색). 검증돼 🥇로 올라가면 금색이 된다 — 색이 승급을 말한다. */
   .st2-paper mark.g{ background:rgba(216,178,58,.24); color:var(--st2-acid); box-shadow:0 0 0 1px rgba(216,178,58,.25); }
-  .st2-paper mark.n{ background:rgba(255,255,255,.1); color:#e5e9d9; }
+  .st2-paper mark.n{ background:rgba(224,120,140,.16); color:#F0A8B6;
+    box-shadow:inset 0 -2px 0 rgba(224,120,140,.55); }
   .st2-paper .pnote{ font-size:9px; color:var(--st2-faint); margin-top:9px; line-height:1.6; }
   .st2-paper .pnote b{ color:var(--st2-sub); }
   .st2-hlpop{ position:fixed; z-index:5700; display:none; transform:translate(-50%,-115%);
-    background:#191b12; border:1px solid rgba(216,178,58,.45); border-radius:999px; padding:6px;
+    background:#1b1214; border:1px solid rgba(224,120,140,.45); border-radius:999px; padding:6px;
     box-shadow:0 10px 30px rgba(0,0,0,.6); white-space:nowrap; }
   .st2-hlpop.show{ display:block; }
-  .st2-hlpop button{ font-family:inherit; font-size:11px; font-weight:800; color:#0b0c06; background:var(--st2-gold);
+  .st2-hlpop button{ font-family:inherit; font-size:11px; font-weight:800; color:#2a0f14; background:#E0788C;
     border:none; border-radius:999px; padding:8px 14px; cursor:pointer; }
   /* ═══ 🌈 배포 (원소스 멀티유즈) — 프리즘 ═══ */
   .st2o-hd{ padding:6px 2px 2px; }
@@ -21799,6 +21975,7 @@
       uploadLikes: 0, // 업로드 성과 — 좋아요 (전당 표시용)
       uploadSaves: 0,    // 저장
       uploadShares: 0,   // 공유(보내기)
+      uploadDms: 0,      // v479 · 이걸 보고 «온 문의·DM» — 전환용 컨텐츠의 진짜 성적
       uploadAvgWatch: '', // 평균 시청 시간 (자유 텍스트, 예: "8.5초")
       createdAt: Date.now(),
       updatedAt: 0
@@ -21846,6 +22023,7 @@
     if (typeof s.memo !== 'string') s.memo = '';
     if (typeof s.uploadUrl !== 'string') s.uploadUrl = '';
     if (typeof s.uploadViews !== 'number') s.uploadViews = 0;
+    if (typeof s.uploadDms !== 'number') s.uploadDms = 0;   // v479
   }
 
   async function loadScripts() {
@@ -22045,8 +22223,9 @@
     clearTimeout(window.__shToast);
     window.__shToast = setTimeout(() => el.classList.remove('show'), 1800);
   }
-  window.toast = toast; /* 썸네일 스튜디오 등 IIFE 밖 청크에서도 사용 */
-  window.__cmGetRows = function () { return rows; }; /* 썸네일 스튜디오 문구 컬렉션 연동 */
+  window.toast = toast; /* 바깥 청크·콘솔에서도 쓸 수 있게 */
+  /* v474 — __cmGetRows 삭제. 썸네일 스튜디오(제작소 5번째 탭)가 사라져 쓰는 곳이 없어졌다.
+     썸네일 편집은 «편집 스튜디오» 독립 앱으로 이관됨. 창고의 ▣썸네일(몰아보기)은 별개로 살아있다. */
 
   function debounce(fn, ms) {
     let t;
@@ -24003,11 +24182,27 @@
       '<button class="sl-card-btn" data-sl-del="' + s.id + '" type="button">🗑</button>' +
       '</span></div></div></div>';
   }
+  // v476 · 단계 이름 → 구조 5색 헌법의 색. 「이유·방법=노랑」「해결책·소구=라임」 규칙 그대로.
+  //   원고 화면(침목 5색)과 같은 색을 쓰므로, 카드만 봐도 어느 칸인지 바로 읽힌다.
+  const SL_STEP_COLOR = [
+    { re: /후킹|이득|손해|도입|첫\s*마디|훅/,        c: '#E25C5C' },  // sec1
+    { re: /공감|상황|내\s*얘기/,                     c: '#5B8DEF' },  // sec2
+    { re: /이유|방법|원리|과정|근거|어떻게/,          c: '#D8B23A' },  // sec3
+    { re: /해결|소구|혜택|변화|결과/,                c: '#A9C437' },  // sec4
+    { re: /CTA|행동|유도|마무리|클로징/i,            c: '#2FD07B' }   // sec5
+  ];
+  function slStepColor(label) {
+    const t = String(label || '');
+    for (let i = 0; i < SL_STEP_COLOR.length; i++) if (SL_STEP_COLOR[i].re.test(t)) return SL_STEP_COLOR[i].c;
+    return '';   // 못 맞추면 색 없이 — 억지로 칠하지 않는다
+  }
   // 단계형 카드 (사진2 스타일: 대표 썸네일 + 세로 6단계)
   function renderStepsCard(s) {
     const thumb = s.thumb ? '<img src="' + s.thumb + '" alt="">' : '<div class="sl-card-thumb-empty">🖼</div>';
     const steps = (s.steps || []).map(function (st) {
-      return '<div class="sl-step"><span class="sl-step-ico">' + (st.ico || '•') + '</span>' +
+      const k = slStepColor(st.label);
+      return '<div class="sl-step' + (k ? ' k' : '') + '"' + (k ? ' style="--sk:' + k + '"' : '') + '>' +
+        '<span class="sl-step-ico">' + (st.ico || '•') + '</span>' +
         '<span class="sl-step-label">' + esc(st.label || '') + '</span>' +
         (st.note ? '<span class="sl-step-note">' + esc(st.note) + '</span>' : '') + '</div>';
     }).join('');
@@ -30167,18 +30362,36 @@
     if (!ppBoard.scene) ppBoard.scene = {}; if (!ppBoard.mineScene) ppBoard.mineScene = {};
     const refs = ppBoard.refs;
     const maxViews = refs.reduce(function (m, r) { return Math.max(m, ppRefViews(r)); }, 0);
-    let h = '<table class="pp-script-grid"><thead><tr><th class="pp-sec-col">섹션</th>';
+    // v477 · 엑스레이 범례 — 척추가 뭘 말하는지 한 줄로
+    let h = refs.length
+      ? '<div class="pp-xray-legend">🩻 썸네일 왼쪽 <b>척추</b>는 그 표본이 채운 구조예요 — ' +
+        '<b>빛나면 있음, 어두우면 없음.</b> 나란히 놓고 <b>전부 켜진 줄</b>을 찾으면 그게 공통 공식입니다.</div>'
+      : '';
+    h += '<table class="pp-script-grid"><thead><tr><th class="pp-sec-col">섹션</th>';
     if (!refs.length) h += '<th class="pp-ref-empty">🛒 위 “레퍼런스 쇼핑”으로 담으면 칸마다 썸네일이 떠요</th>';
     else refs.forEach(function (ref, i) {
       const thumb = ref.img ? '<img src="' + ppEsc(ref.img) + '" alt=""/>' : '<div class="pp-ref-thumb-empty">▣</div>';
       const v = ppRefViews(ref);
       const isTop = v > 0 && v === maxViews && refs.length > 1;
       const viewsBadge = v > 0 ? '<span class="pp-ref-views' + (isTop ? ' top' : '') + '">' + (isTop ? '🔥 ' : '👁 ') + fmtViews(v) + '</span>' : '';
+      // v477 · 엑스레이 — 이 표본이 어느 구조 칸을 채웠는지 왼쪽 척추로 투시
+      let xn = 0;
+      const xray = '<div class="pp-xray">' + ppBoard.sections.map(function (sec) {
+        const filled = String(ppBoard.matrix[sec.id + '|' + ref.id] || '').trim().length > 0;
+        if (filled) xn++;
+        return '<i class="' + (filled ? 'on' : '') + '" style="--xc:' + (sec.color || 'var(--emerald)') +
+          '" title="' + ppEsc(sec.label || '') + (filled ? ' — 있음' : ' — 없음') + '"></i>';
+      }).join('') + '</div>';
+      const total = ppBoard.sections.length;
+      const xcap = total ? '<span class="pp-xray-cap' + (xn === total ? ' full' : '') + '">구조 <b>' +
+        xn + '</b>/' + total + (xn === total ? ' · 다 갖춤' : '') + '</span>' : '';
       h += '<th class="pp-ref-th' + (isTop ? ' pp-ref-th-top' : '') + '"><div class="pp-ref-thumb" draggable="true" data-refdrag="' + ref.id + '" title="드래그해서 순서 변경">' + thumb
+        + xray
         + '<span class="pp-ref-no">#' + (i + 1) + '</span>'
         + viewsBadge
         + '<button class="pp-ref-rm" data-refrm2="' + ref.id + '" type="button" title="빼기">✕</button></div>'
-        + '<input class="pp-ref-name" data-refname="' + ref.id + '" value="' + ppEsc(ref.label || '') + '" /></th>';
+        + '<input class="pp-ref-name" data-refname="' + ref.id + '" value="' + ppEsc(ref.label || '') + '" />'
+        + xcap + '</th>';
     });
     h += '<th class="pp-pat-th">🧠 패턴</th><th class="pp-mine-th">✨ 내꺼</th>';
     h += '</tr></thead><tbody>';
@@ -33362,6 +33575,535 @@
     });
   }
 
+  // ════ v472 · 내 성적표 — 성과 되먹임 ════
+  //   담은 건 «남의 성적», 올린 건 «내 성적». 둘을 같은 잣대(나눔률 5%)로 본다.
+  //   ①나눔률 ②축 4개별 성적 ③되먹임 한 마디. (④적중률은 추천 기록이 쌓여야 하므로 2단계)
+  let _fbkAx = 'format', _fbkOpen = false;   // 평소엔 접혀 있다 (사장님 확정)
+  // v479 · 잣대 — 유입과 전환은 같은 자로 재면 안 된다.
+  //   유입 = 모르는 사람에게 «닿았는가» → 조회 · 나눔률
+  //   전환 = 내 사람으로 «바뀌었는가» → 문의 수 (조회 2천에 문의 5건 > 조회 20만에 문의 0건)
+  let _fbkLens = 'all';
+  const FBK_LENS = [
+    { k: 'all',     n: '전체',   c: '#d7f34b' },
+    { k: 'attract', n: '유입',   c: '#E0B27A' },
+    { k: 'convert', n: '전환',   c: '#2FD07B' }
+  ];
+  function fbkFunnelOf(s) {
+    const t = fbkTagsOf(s, 'funnel');
+    return t.length ? t[0] : '';        // '유입' | '전환' | '재구매' | ''
+  }
+  function fbkLensFilter(ups) {
+    if (_fbkLens === 'attract') return ups.filter(function (s) { return fbkFunnelOf(s) === '유입'; });
+    if (_fbkLens === 'convert') return ups.filter(function (s) { return fbkFunnelOf(s) === '전환'; });
+    return ups;
+  }
+  function fbkHasDm(s) { return (s.uploadDms || 0) > 0; }
+  const FBK_AX = [
+    { k: 'format', n: '컨텐츠 유형', c: '#d7f34b' },
+    { k: 'thumb',  n: '썸네일 유형', c: '#43e0e6' },
+    { k: 'copy',   n: '수식어 유형', c: '#E0788C' },
+    { k: 'funnel', n: '퍼널',       c: '#E0B27A' }
+  ];
+  const FBK_FUNNEL = { attract: '유입', convert: '전환', retain: '재구매' };
+  // 원고 한 편이 어떤 유형을 썼나 — 연결된 벤치마킹 행에서 읽는다 (복수 가능)
+  function fbkTagsOf(s, ax) {
+    const r = s.benchmarkRowId ? (rows || []).find(function (x) { return x.id === s.benchmarkRowId; }) : null;
+    if (!r) return [];
+    if (ax === 'format') return r.format ? [r.format] : [];
+    if (ax === 'thumb')  return Array.isArray(r.thumbTypes) ? r.thumbTypes.filter(Boolean) : [];
+    if (ax === 'copy')   return Array.isArray(r.copyTypes)  ? r.copyTypes.filter(Boolean)  : [];
+    if (ax === 'funnel') return r.funnelStage ? [FBK_FUNNEL[r.funnelStage] || r.funnelStage] : [];
+    return [];
+  }
+  function fbkUps() {
+    return (scripts || []).filter(function (s) { return (s.uploadViews || 0) > 0; });
+  }
+  // 나눔률 = (공유 + 저장) ÷ 조회. 100만 조회수 공식의 첫 조건.
+  //  ⚠️ v473 — 인스타에선 공유·저장을 매번 알 수 없다(사장님 확인). 그래서 «있으면 얹는 것»이다.
+  //     넣지 않은 편의 조회수를 분모에 넣으면 안 된다 — 그러면 안 넣을수록 나눔률이 떨어진다.
+  //     주인공은 «조회수», 나눔은 «넣은 편끼리만» 따로 센다.
+  function fbkRate(v, sh, sv) { return v > 0 ? ((sh + sv) / v * 100) : 0; }
+  function fbkHasShare(s) { return ((s.uploadShares || 0) + (s.uploadSaves || 0)) > 0; }
+  function fbkGroup(ups, ax) {
+    const m = {};
+    ups.forEach(function (s) {
+      const hs = fbkHasShare(s);
+      fbkTagsOf(s, ax).forEach(function (t) {
+        const o = m[t] = m[t] || { n: 0, v: 0, sn: 0, sv2: 0, sh: 0, sv: 0, dm: 0, dn: 0, dv: 0 };
+        o.n++; o.v += (s.uploadViews || 0);
+        if (hs) { o.sn++; o.sv2 += (s.uploadViews || 0);       // 나눔을 «넣은» 편의 조회수만
+                  o.sh += (s.uploadShares || 0); o.sv += (s.uploadSaves || 0); }
+        if (fbkHasDm(s)) { o.dn++; o.dm += (s.uploadDms || 0); o.dv += (s.uploadViews || 0); }
+      });
+    });
+    return Object.keys(m).map(function (t) {
+      const o = m[t];
+      return { t: t, n: o.n, avg: Math.round(o.v / o.n),
+               sn: o.sn, rate: o.sn ? fbkRate(o.sv2, o.sh, o.sv) : null,
+               // v479 · 전환 잣대 — 평균 문의 수 / 문의율(문의÷조회)
+               dn: o.dn, dmAvg: o.dn ? (o.dm / o.dn) : null,
+               dmRate: (o.dn && o.dv) ? (o.dm / o.dv * 100) : null };
+    }).sort(function (a, b) { return b.avg - a.avg; });
+  }
+  function renderScorecardHtml() {
+    const upsAll = fbkUps();
+    const ups = fbkLensFilter(upsAll);
+    const isCnv = _fbkLens === 'convert';
+    // 잣대 스위치 — 렌즈마다 «좋은 컨텐츠»의 뜻이 달라진다
+    const lensBar = '<div class="fbk-ax fbk-lens">' + FBK_LENS.map(function (L) {
+      const cnt = L.k === 'all' ? upsAll.length
+        : upsAll.filter(function (s) { return fbkFunnelOf(s) === (L.k === 'attract' ? '유입' : '전환'); }).length;
+      return '<button data-fbklens="' + L.k + '"' + (L.k === _fbkLens ? ' class="on"' : '') +
+        ' style="--lc:' + L.c + '">' + L.n + (cnt ? ' ' + cnt : '') + '</button>';
+    }).join('') + '</div>';
+    // v473 · 평소엔 접혀 있다. 제목 줄을 누르면 펼쳐진다.
+    const mkHead = function (peek) {
+      return '<div class="fbk' + (_fbkOpen ? ' open' : '') + '" id="fbk-box">' +
+        '<div class="fbk-hd" id="fbk-toggle" role="button" tabindex="0" aria-expanded="' + (_fbkOpen ? 'true' : 'false') + '">' +
+          '<h4>내 성적표</h4><span class="t">올린 것의 성과</span><span class="cv">⌄</span></div>' +
+        (peek ? '<div class="fbk-peek">' + peek + '</div>' : '') +
+        '<div class="fbk-body">';
+    };
+    if (!ups.length) {
+      const empty = upsAll.length
+        ? '<p class="fbk-lead" style="margin-top:14px">이 잣대에 해당하는 원고가 아직 없어요.<br>' +
+          '담은 컨텐츠에 <b>퍼널(유입/전환)</b>을 붙이면 여기로 들어옵니다.</p>'
+        : '<p class="fbk-lead" style="margin-top:14px">아직 성과를 넣은 원고가 없어요.<br>' +
+          '<b>원고 카드 → 📊 성과</b>에 <b>조회수만</b> 넣으면 여기가 채워집니다.</p>';
+      return mkHead(upsAll.length ? '이 잣대엔 아직 없어요' : '아직 성과를 넣은 원고가 없어요 — <b>조회수만</b> 넣으면 채워집니다') +
+        lensBar + empty + '</div></div>';
+    }
+    // ① 평균 조회수 — 이게 기본이다. 나눔은 넣은 편이 있을 때만 얹는다.
+    const avgAll = Math.round(ups.reduce(function (a, s) { return a + (s.uploadViews || 0); }, 0) / ups.length);
+    const shUps = ups.filter(fbkHasShare);
+    const rate = shUps.length
+      ? fbkRate(shUps.reduce(function (a, s) { return a + (s.uploadViews || 0); }, 0),
+                shUps.reduce(function (a, s) { return a + (s.uploadShares || 0); }, 0),
+                shUps.reduce(function (a, s) { return a + (s.uploadSaves || 0); }, 0))
+      : null;
+    const hasShare = shUps.length > 0;
+    // v479 · 전환 잣대 — 주인공이 «조회수»가 아니라 «문의»가 된다
+    const dmUps = ups.filter(fbkHasDm);
+    const dmTotal = dmUps.reduce(function (a, s) { return a + (s.uploadDms || 0); }, 0);
+    const dmViews = dmUps.reduce(function (a, s) { return a + (s.uploadViews || 0); }, 0);
+    const dmRate = (dmUps.length && dmViews) ? (dmTotal / dmViews * 100) : null;
+    // 접혀 있을 때 보이는 한 줄 — 눌러볼 이유를 준다
+    const peek = isCnv
+      ? (ups.length + '편 · 문의 <b>' + (dmUps.length ? dmTotal + '건' : '미입력') + '</b>')
+      : (ups.length + '편 · 평균 <b>' + fmtViews(avgAll) + '</b>' +
+         (hasShare ? ' · 나눔 <b>' + rate.toFixed(1) + '%</b>' : ''));
+    let h = mkHead(peek) + lensBar +
+      '<p class="fbk-lead" style="margin-top:12px">' + (isCnv
+        ? '전환용은 <b>조회수로 재면 안 됩니다.</b> 모르는 사람 20만 명보다 <b>문의 5건</b>이 낫습니다.'
+        : (_fbkLens === 'attract'
+          ? '유입용은 <b>모르는 사람에게 닿았는가</b>로 봅니다 — 조회수와 나눔률.'
+          : '올린 것의 성과가 다시 재료가 됩니다. <b>어떤 유형이 나한테 되는지</b>를 여기서 봅니다.')) + '</p>';
+    if (isCnv) {
+      // 전환 잣대 — 문의가 주인공, 조회수는 보조
+      h += '<div class="fbk-rate"><span class="v" style="color:var(--law-cnv,#2FD07B);text-shadow:0 0 22px rgba(47,208,123,.35)">' +
+        (dmUps.length ? dmTotal + '<span style="font-size:15px">건</span>' : '—') + '</span>' +
+        '<span class="d">' + (dmUps.length
+          ? dmUps.length + '편에서 온 <b>문의</b> · 평균 ' + (dmTotal / dmUps.length).toFixed(1) + '건<br>' +
+            (dmRate !== null ? '조회 대비 <b>' + dmRate.toFixed(2) + '%</b>' : '')
+          : '아직 문의를 안 넣으셨어요<br>원고 카드 → 📊 성과 → <b>💬 이걸 보고 온 문의·DM</b>') + '</span></div>' +
+        '<div class="fbk-note" style="margin-top:14px">참고 · 이 ' + ups.length + '편의 평균 조회수는 <b>' +
+          fmtViews(avgAll) + '</b>입니다 — <b>전환에선 등수가 아닙니다.</b></div>';
+    } else {
+    h += '<div class="fbk-rate"><span class="v" style="color:var(--law-asset,#d7f34b);text-shadow:0 0 22px rgba(215,243,75,.35)">' +
+        fmtViews(avgAll) + '</span>' +
+      '<span class="d">' + ups.length + '편 평균 조회수</span></div>';
+    // 나눔률 — «넣은 편끼리만». 안 넣었다고 성적이 깎이지 않는다.
+    if (hasShare) {
+      h += '<div class="fbk-rate" style="margin-top:16px"><span class="v' + (rate >= 5 ? ' on' : '') +
+        '" style="font-size:24px">' + rate.toFixed(1) + '%</span>' +
+        '<span class="d">나눔률 · <b>' + shUps.length + '편</b>에 넣으신 것만 기준<br>' +
+        (rate >= 5 ? '<b>5% 선을 넘었습니다</b> — 나눠지는 컨텐츠' : '5%를 넘으면 알고리즘이 밀어줍니다') + '</span></div>' +
+        '<div class="fbk-g"><i style="width:' + Math.min(100, rate / 10 * 100).toFixed(1) + '%"></i><span class="mk"></span></div>';
+    }
+    }   // ← 잣대 분기 끝
+    // ② 축별
+    const ax = FBK_AX.find(function (a) { return a.k === _fbkAx; }) || FBK_AX[0];
+    const g = fbkGroup(ups, ax.k);
+    h += '<div class="fbk-ax">' + FBK_AX.map(function (a) {
+      return '<button data-fbkax="' + a.k + '"' + (a.k === _fbkAx ? ' class="on"' : '') + '>' + a.n + '</button>';
+    }).join('') + '</div>';
+    if (!g.length) {
+      h += '<div class="fbk-note" style="border-top:0;padding-top:0">이 축은 아직 비어 있어요 — ' +
+        '원고를 <b>담은 컨텐츠와 연결</b>하면 유형이 따라옵니다.</div>';
+    } else {
+      // 전환 잣대면 막대가 «평균 문의»가 된다. 문의를 안 넣었으면 조회수로 폴백.
+      const useDm = isCnv && g.some(function (x) { return x.dmAvg !== null; });
+      const barOf = function (x) { return useDm ? (x.dmAvg || 0) : x.avg; };
+      const mx = Math.max.apply(null, g.map(barOf)) || 1;
+      const gs = useDm ? g.slice().sort(function (a, b) { return barOf(b) - barOf(a); }) : g;
+      h += '<div class="fbk-rows">' + gs.map(function (x) {
+        const thin = x.n < 3;
+        const bv = barOf(x);
+        const right = useDm
+          ? (x.dmRate === null ? '<span style="opacity:.35">·</span>' : x.dmRate.toFixed(2) + '%')
+          : (x.rate === null ? '<span style="opacity:.35">·</span>' : x.rate.toFixed(1) + '%');
+        const sub = useDm
+          ? (x.n + '편' + (x.dn < x.n ? ' · 문의 ' + x.dn : ''))
+          : (x.n + '편' + (x.rate !== null && x.sn < x.n ? ' · 나눔 ' + x.sn : ''));
+        const hit = useDm ? (x.dmAvg !== null && x.dmAvg >= 1 && !thin)
+                          : (x.rate !== null && x.rate >= 5 && !thin);
+        return '<div class="fbk-r' + (thin ? ' thin' : '') + '" style="--fc:' +
+            (useDm ? 'var(--law-cnv,#2FD07B)' : ax.c) + '">' +
+          '<span class="nm">' + esc(x.t) + '</span>' +
+          '<span class="bar"><i style="width:' + (bv / mx * 100).toFixed(1) + '%"></i>' +
+            '<b>' + (useDm ? (x.dmAvg === null ? '—' : x.dmAvg.toFixed(1) + '건') : fmtViews(x.avg)) + '</b></span>' +
+          '<span class="sh' + (hit ? ' hit' : '') + '">' + right + '<small>' + sub + '</small></span>' +
+        '</div>';
+      }).join('') + '</div>' +
+      '<div class="fbk-note">막대 = <b>' + (useDm ? '평균 문의 수' : '평균 조회수') + '</b>' +
+        (useDm ? ' · 오른쪽 = 조회 대비 문의율' : (hasShare ? ' · 오른쪽 = 나눔률(넣은 편만)' : '')) + '. ' +
+        '3편 미만은 흐리게 — <b>3편이 안 되면 공식이 아닙니다.</b></div>';
+    }
+    // ③ 되먹임 한 마디 — 3편 이상인 것들만 가지고 말한다
+    h += '<div class="fbk-say">' + (isCnv ? fbkSayCnv(ups, g, dmUps) : fbkSay(ups, g, hasShare)) + '</div>';
+    // 나눔은 «있으면 좋고», 없어도 성적표는 온전하다 — 재촉하지 않는다
+    if (!hasShare && !isCnv) {
+      h += '<div class="fbk-note" style="margin-top:14px">' +
+        '공유·저장은 <b>아는 것만</b> 넣으시면 됩니다 — 인스타에선 매번 알기 어려우니까요. ' +
+        '넣은 편끼리만 따로 세기 때문에 <b>안 넣어도 성적이 깎이지 않습니다.</b></div>';
+    }
+    return h + '</div></div>';
+  }
+  // v479 · 전환 잣대의 되먹임 — 조회수 얘기를 꺼내지 않는다
+  function fbkSayCnv(ups, g, dmUps) {
+    if (!dmUps.length) {
+      return '<span class="ic">💬</span><span class="tx">전환용 <b>' + ups.length + '편</b>이 있는데 ' +
+        '<b>문의 수가 비어 있어요.</b><br>' +
+        '<em>이 컨텐츠 보고 몇 명이 문의했는지</em>만 넣으시면, 그때부터 «어떤 게 사람을 데려오는지»를 말해드릴 수 있습니다.</span>';
+    }
+    const solid = g.filter(function (x) { return x.dn >= 2 && x.dmAvg !== null; });
+    if (!solid.length) {
+      return '<span class="ic">🌱</span><span class="tx">문의를 넣은 게 <b>' + dmUps.length + '편</b>뿐이라 ' +
+        '유형별로 가르기엔 일러요.<br><em>같은 유형으로 2편만 더 쌓이면 갈라 보여드릴게요.</em></span>';
+    }
+    const top = solid.reduce(function (a, b) { return b.dmAvg > a.dmAvg ? b : a; });
+    const bot = solid.length > 1 ? solid.reduce(function (a, b) { return b.dmAvg < a.dmAvg ? b : a; }) : null;
+    let s = '<span class="ic">💬</span><span class="tx"><b>「' + esc(top.t) + '」</b>이 ' +
+      '평균 <b>' + top.dmAvg.toFixed(1) + '건</b>으로 문의를 제일 많이 데려옵니다';
+    if (top.dmRate !== null) s += ' (조회 대비 ' + top.dmRate.toFixed(2) + '%)';
+    s += '.';
+    if (bot && bot.t !== top.t && top.dmAvg >= bot.dmAvg * 2) {
+      s += '<br><b>「' + esc(bot.t) + '」</b>은 ' + bot.dmAvg.toFixed(1) + '건 — <b>절반도 안 됩니다.</b>';
+    }
+    s += '<br><em>전환용을 만들 땐 「' + esc(top.t) + '」에서 시작하세요.</em> 조회수가 낮아도 괜찮습니다.</span>';
+    return s;
+  }
+  function fbkSay(ups, g, hasShare) {
+    if (ups.length < 3) {
+      return '<span class="ic">🌱</span><span class="tx">아직 <b>' + ups.length + '편</b>뿐이라 말할 게 없습니다. ' +
+        '<b>3편부터</b> 유형별로 갈라 보여드릴게요 —<br><em>지금은 그냥 만들 때입니다.</em></span>';
+    }
+    const solid = g.filter(function (x) { return x.n >= 3; });
+    if (!solid.length) {
+      return '<span class="ic">🌱</span><span class="tx">같은 유형으로 <b>3편</b>을 넘긴 게 아직 없어요. ' +
+        '<em>한 유형을 세 번 해보면 그때부터 «내 공식»이 됩니다.</em></span>';
+    }
+    const topV = solid.reduce(function (a, b) { return b.avg > a.avg ? b : a; });
+    const bot = solid.length > 1 ? solid.reduce(function (a, b) { return b.avg < a.avg ? b : a; }) : null;
+    // 나눔률로 말하려면 «나눔을 넣은 편이 3편 이상인» 유형이 둘은 있어야 한다.
+    // v473 — 인스타에선 공유·저장을 매번 알 수 없다. 없으면 조회수만으로도 충분히 말한다.
+    const rated = solid.filter(function (x) { return x.rate !== null && x.sn >= 3; });
+    if (rated.length < 2) {
+      let s = '<span class="ic">💬</span><span class="tx"><b>「' + esc(topV.t) + '」</b>이 평균 ' +
+        fmtViews(topV.avg) + '로 제일 높습니다 — <b>' + topV.n + '편</b>으로 검증됐어요.';
+      if (bot && bot.t !== topV.t && topV.avg >= bot.avg * 1.8) {
+        s += '<br><b>「' + esc(bot.t) + '」</b>은 ' + fmtViews(bot.avg) + '로 그 절반도 안 됩니다 — ' +
+          '<b>같은 힘을 써도 결과가 다릅니다.</b>';
+      }
+      s += '<br><em>다음 것도 「' + esc(topV.t) + '」에서 시작하세요.</em></span>';
+      return s;
+    }
+    const topR = rated.reduce(function (a, b) { return b.rate > a.rate ? b : a; });
+    if (topV.t === topR.t) {
+      return '<span class="ic">💬</span><span class="tx"><b>「' + esc(topV.t) + '」</b>이 조회(' + fmtViews(topV.avg) +
+        ')도 나눔(' + topV.rate.toFixed(1) + '%)도 제일 높습니다 — <b>둘 다 이긴 유형</b>이에요.<br>' +
+        '<em>다음 것도 여기서 시작하세요.</em> ' + topV.n + '편으로 검증됐습니다.</span>';
+    }
+    return '<span class="ic">💬</span><span class="tx"><b>「' + esc(topV.t) + '」</b>이 조회수는 제일 높은데(' +
+      fmtViews(topV.avg) + ') 나눔률은 <b>' + topV.rate.toFixed(1) + '%</b>입니다 — <b>많이 봤지만 덜 나눠졌어요.</b><br>' +
+      '<b>「' + esc(topR.t) + '」</b>은 반대입니다. 조회는 ' + fmtViews(topR.avg) + '인데 나눔률 <b>' +
+      topR.rate.toFixed(1) + '%</b> — <b>나눠지는 유형</b>이에요.<br>' +
+      '<em>다음엔 「' + esc(topR.t) + '」 뼈대에 「' + esc(topV.t) + '」 도입부를 붙여보세요.</em> ' +
+      '둘 다 3편 이상 해본 것입니다.</span>';
+  }
+
+  // ════ v480 · 트렌드 방 — 시장이 지금 쓰는 말 ════
+  //   재료는 이미 있다: 담은 행의 keywords + 담은 날짜(updatedAt).
+  //   최근 4주 vs 그 전 4주를 비교해 세 칸으로 나눈다. 이름은 «단정하지 않는» 말로.
+  let _trdOpen = false;
+  const TRD_LANES = [
+    { k: 'rise', n: '지금 들어갈 만한 것', s: '최근에 부쩍 늘어난 말', c: '#43E0E6' },
+    { k: 'peak', n: '이미 많이 쓰인 말',   s: '꾸준하지만 새롭진 않아요', c: '#D8B23A' },
+    { k: 'fade', n: '요즘 안 보이는 말',   s: '다시 뜰 수도 있어요 — 버리진 마세요', c: '#6B7A70' }
+  ];
+  const TRD_WEEK = 7 * 24 * 3600 * 1000;
+  // 내 고객도 이 말을 했나 — 고객 방(황금·후보 키워드 + 수집함 인용)과 겹치면 🎯
+  function trdCustomerWords() {
+    const set = new Set();
+    try { ((st2Kw || {}).gold || []).forEach(function (k) { if (k) set.add(String(k)); }); } catch (e) {}
+    try { ((st2Kw || {}).normal || []).forEach(function (k) { if (k) set.add(String(k)); }); } catch (e) {}
+    return set;
+  }
+  function trdCustomerQuotes() {
+    let q = '';
+    try {
+      const p = (pmms || []).find(function (x) { return x.id === _currentPmmId; });
+      if (p && Array.isArray(p.collect)) q = p.collect.map(function (c) { return c.quote || ''; }).join(' ');
+      if (p && p.customer && p.customer.tried) q += ' ' + p.customer.tried;
+    } catch (e) {}
+    return q;
+  }
+  function trdData() {
+    const now = Date.now();
+    const cw = trdCustomerWords(), cq = trdCustomerQuotes();
+    const map = {};
+    (rows || []).forEach(function (r) {
+      if (!isFilled(r)) return;
+      const t = r.updatedAt || r.createdAt || 0; if (!t) return;
+      const wk = Math.floor((now - t) / TRD_WEEK);          // 0 = 이번 주, 11 = 12주 전
+      if (wk < 0 || wk > 11) return;
+      const words = (Array.isArray(r.keywords) ? r.keywords : []).filter(Boolean);
+      words.forEach(function (w) {
+        const key = String(w).trim(); if (!key) return;
+        const o = map[key] = map[key] || { k: key, wks: new Array(12).fill(0) };
+        o.wks[11 - wk]++;                                    // 배열 끝 = 최근
+      });
+    });
+    const out = Object.keys(map).map(function (k) {
+      const o = map[k];
+      const recent = o.wks.slice(8).reduce(function (a, b) { return a + b; }, 0);
+      const prev   = o.wks.slice(4, 8).reduce(function (a, b) { return a + b; }, 0);
+      const delta  = prev === 0 ? (recent ? 999 : 0) : Math.round((recent - prev) / prev * 100);
+      const total  = o.wks.reduce(function (a, b) { return a + b; }, 0);
+      const cust   = cw.has(k) || (cq && cq.indexOf(k) >= 0);
+      // ⚠️ 한 번 담은 말은 «트렌드»가 아니다. 1회짜리를 «오르는 중»이라 하면 신뢰를 잃는다.
+      //    최소 2회 + 변화 40% 이상이어야 오름/식음으로 판정한다.
+      let lane;
+      if (total < 2) lane = null;                          // 아예 안 보여준다
+      else if (recent >= 2 && delta > 40) lane = 'rise';
+      else if (delta < -40) lane = 'fade';
+      else lane = 'peak';
+      return { k: k, wks: o.wks, recent: recent, prev: prev, delta: delta, total: total, cust: cust, lane: lane };
+    }).filter(function (x) { return x.lane; });
+    out.sort(function (a, b) { return b.recent - a.recent || b.total - a.total; });
+    return out;
+  }
+  function trdSpark(wks, n) {
+    const seg = wks.slice(6), mx = Math.max.apply(null, seg) || 1;
+    const pts = seg.map(function (v, i) { return (i / (seg.length - 1) * 34).toFixed(1) + ',' + (11 - (v / mx) * 9).toFixed(1); }).join(' ');
+    return '<svg width="36" height="12" aria-hidden="true"><polyline points="' + pts +
+      '" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>';
+  }
+  function renderTrendRoomHtml() {
+    const d = trdData();
+    const mk = function (peek) {
+      return '<div class="trd' + (_trdOpen ? ' open' : '') + '" id="trd-box">' +
+        '<div class="trd-hd" id="trd-toggle" role="button" tabindex="0" aria-expanded="' + (_trdOpen ? 'true' : 'false') + '">' +
+          '<h4>트렌드 방</h4><span class="t">시장이 지금 쓰는 말</span><span class="cv">⌄</span></div>' +
+        (peek ? '<div class="trd-peek">' + peek + '</div>' : '') + '<div class="trd-body">';
+    };
+    if (!d.length) {
+      return mk('담은 것에 <b>키워드</b>를 붙이면 여기가 채워집니다') +
+        '<p class="trd-lead">아직 볼 게 없어요.<br>담을 때 <b>키워드</b>를 붙이면 — ' +
+        '<b>어떤 말이 오르고 어떤 말이 식는지</b>를 날짜로 계산해 보여드립니다.</p></div></div>';
+    }
+    const rise = d.filter(function (x) { return x.lane === 'rise'; });
+    const both = d.filter(function (x) { return x.cust && x.lane === 'rise'; });
+    const peek = (both.length
+      ? '🎯 <b>' + both[0].k + '</b> — 시장도 고객도 이 말을 해요'
+      : (rise.length ? '<b>' + rise[0].k + '</b>이 오르는 중' : d.length + '개 말을 보는 중'));
+    let h = mk(peek) +
+      '<p class="trd-lead">세 번째 축입니다. <b>나</b>는 성적표가, <b>고객</b>은 고객 방이 봅니다 — 여기는 <b>시장</b>이에요.<br>' +
+      '담은 것들의 <b>키워드에 날짜가 붙어 있어서</b>, 최근 4주와 그 전 4주를 비교합니다.</p>' +
+      '<div class="trd-lanes">';
+    TRD_LANES.forEach(function (L) {
+      const items = d.filter(function (x) { return x.lane === L.k; }).slice(0, 12);
+      h += '<div class="trd-lane" style="--lc:' + L.c + '"><div class="lb">' + L.n +
+        ' <span>' + L.s + '</span></div><div class="trd-chips">';
+      h += items.length ? items.map(function (x) {
+        return '<span class="trd-chip' + (x.cust ? ' both' : '') + '" data-trdkw="' + esc(x.k) + '" ' +
+          'title="' + esc(x.k) + ' · 최근 4주 ' + x.recent + '회' +
+          (x.cust ? ' · 내 고객도 한 말' : '') + '">' +
+          (x.cust ? '🎯 ' : '') + esc(x.k) + trdSpark(x.wks) +
+          '<small>' + x.recent + '</small></span>';
+      }).join('') : '<div class="trd-empty">지금은 비어 있어요</div>';
+      h += '</div></div>';
+    });
+    h += '</div>';
+    h += '<div class="trd-note">🎯 = <b>내 고객도 이 말을 했어요</b> — 고객 방 키워드·수집함과 겹친 말.<br>' +
+      '<b>시장 × 고객 둘 다 켜진 게 진짜 만들 것</b>이고, 시장만 켜진 건 남의 유행입니다. ' +
+      '작은 곡선은 최근 6주 흐름 — <b>식었어도 다시 뜰 수 있으니 버리지 마세요.</b></div>';
+    return h + '</div></div>';
+  }
+
+  // ════ v481 · 마법 — LV7 「묻기 전에 먼저 말을 겁니다」 ════
+  //   설계도의 마법 6종 중 «지금 데이터로 실제 계산되는 것»만 카드로 올린다.
+  //   계산이 안 되면 숨기지 않고 «왜 조용한지»를 말한다 — 없는 걸 지어내지 않는다.
+  //   각 함수는 { k, t, s, go, c } 또는 null(조용) 또는 { quiet:true, t } 를 돌려준다.
+
+  // 한글 조사 — 받침 있으면 «은/이», 없으면 «는/가». 「앞머리은」 같은 게 안 나오게.
+  function magJosa(w, withBat, noBat) {
+    const c = String(w || '').trim().slice(-1);
+    const code = c.charCodeAt(0);
+    if (!(code >= 0xAC00 && code <= 0xD7A3)) return noBat;   // 한글이 아니면 기본형
+    return ((code - 0xAC00) % 28) ? withBat : noBat;
+  }
+  // ① 키워드 수명 곡선 — “언제가 정점이었나”
+  function magLife(trd) {
+    const cand = trd.filter(function (x) { return x.total >= 3; });
+    if (!cand.length) return { quiet: true, t: '키워드 수명 — 같은 말을 <b>3번</b> 담으면 정점이 언제였는지 알려드려요' };
+    // 정점 주 = 가장 많이 담은 주
+    let best = null;
+    cand.forEach(function (x) {
+      let pi = 0, pv = -1;
+      x.wks.forEach(function (v, i) { if (v > pv) { pv = v; pi = i; } });
+      const wksAgo = 11 - pi;
+      const sc = pv * (x.lane === 'fade' ? 1.4 : 1);   // 식은 것부터 알려주는 게 더 쓸모 있다
+      if (!best || sc > best.sc) best = { x: x, wksAgo: wksAgo, peak: pv, sc: sc };
+    });
+    if (!best) return null;
+    const b = best;
+    const when = b.wksAgo <= 1 ? '지금이 정점' : b.wksAgo + '주 전이 정점';
+    return { c: '#43E0E6', k: '키워드 수명',
+      t: '<b>「' + esc(b.x.k) + '」</b>' + magJosa(b.x.k, '은', '는') + ' ' + when + '이었어요',
+      kw: b.x.k,
+      s: b.x.lane === 'fade'
+        ? '그 뒤로 줄었습니다 — <b>지금 만들면 늦을 수 있어요.</b> 다만 인스타는 되살아나니 버리진 마세요.'
+        : '최근 4주에 <b>' + b.x.recent + '번</b> 담으셨습니다. <b>아직 살아있는 말</b>이에요.',
+      go: '트렌드 방에서 보기' };
+  }
+
+  // ② 쌍둥이 찾기 — “이 유형 몇 번 해봤고 평균 얼마”
+  function magTwin(ups) {
+    if (ups.length < 3) return { quiet: true, t: '쌍둥이 찾기 — 성과를 <b>3편</b> 넣으면 “이 유형 해봤어요”를 말해드려요' };
+    const g = fbkGroup(ups, 'format').filter(function (x) { return x.n >= 3; });
+    if (!g.length) return { quiet: true, t: '쌍둥이 찾기 — 같은 유형으로 <b>3편</b>이 모이면 켜집니다' };
+    const top = g.reduce(function (a, b) { return b.avg > a.avg ? b : a; });
+    return { c: '#D7F34B', k: '쌍둥이 찾기',
+      t: '<b>「' + esc(top.t) + '」</b>은 이미 <b>' + top.n + '번</b> 해보셨어요',
+      s: '평균 <b>' + fmtViews(top.avg) + '</b>' +
+         (top.rate !== null ? ' · 나눔 <b>' + top.rate.toFixed(1) + '%</b>' : '') +
+         ' — <b>검증된 유형</b>입니다. 새 걸 시도하기 전에 여기서 한 편 더 뽑는 게 안전해요.',
+      go: '내 성적표 보기' };
+  }
+
+  // ⑦ 숨은 보석 — 조회는 하위인데 나눔은 상위 = 알고리즘이 아직 안 밀어준 것
+  function magGem(ups) {
+    const withShare = ups.filter(fbkHasShare);
+    if (withShare.length < 4) return { quiet: true, t: '숨은 보석 — 공유·저장을 <b>4편</b>에 넣으면 “다시 만들 것”을 찾아드려요' };
+    const byV = withShare.slice().sort(function (a, b) { return (a.uploadViews || 0) - (b.uploadViews || 0); });
+    const lowHalf = byV.slice(0, Math.max(1, Math.floor(byV.length / 2)));
+    let gem = null;
+    lowHalf.forEach(function (s) {
+      const r = fbkRate(s.uploadViews || 0, s.uploadShares || 0, s.uploadSaves || 0);
+      if (!gem || r > gem.r) gem = { s: s, r: r };
+    });
+    if (!gem || gem.r < 3) return null;   // 나눔률이 낮으면 보석이 아니다
+    const nm = (function () { try { return scriptDisplayTitle(gem.s) || '제목 없음'; } catch (e) { return '제목 없음'; } })();
+    return { c: '#B07BF0', k: '숨은 보석',
+      t: '<b>「' + esc(String(nm).slice(0, 18)) + '」</b> — 조회는 낮은데 <b>나눔 ' + gem.r.toFixed(1) + '%</b>예요',
+      s: '<b>좋은데 알고리즘이 아직 안 밀어준 것</b>입니다. 다시 만들면 터질 확률이 제일 높아요.',
+      go: '이 원고 열기', id: gem.s.id };
+  }
+
+  // ④ 금광 — 트렌드 키워드 ∩ 고객 키워드 (구조는 시장, 단어는 고객)
+  function magGold(trd) {
+    const both = trd.filter(function (x) { return x.cust && x.lane === 'rise'; });
+    if (!both.length) {
+      const anyCust = trd.some(function (x) { return x.cust; });
+      return { quiet: true, t: anyCust
+        ? '금광 — 지금은 <b>시장에서 오르는 말</b> 중에 고객이 한 말이 없어요'
+        : '금광 — 고객 방에서 <b>🖍 핵심</b>을 짚어두면, 시장과 겹치는 말을 찾아드려요' };
+    }
+    const g = both[0];
+    return { c: '#D7F34B', k: '금광',
+      t: '<b>「' + esc(g.k) + '」</b> — 시장도 오르고, <b>내 고객도 한 말</b>이에요',
+      s: '최근 4주에 <b>' + g.recent + '번</b> 담으셨고, 고객 방에도 있습니다.<br>' +
+         '<b>구조는 시장에서, 단어는 고객에게서</b> — 지어낸 말이 하나도 없는 후킹이 됩니다.',
+      go: '이 말로 담은 것 보기', kw: g.k };
+  }
+
+  // ③ 안 팔릴 걸 미리 경고 — 전환용을 만드는데 구매저항을 안 지웠다
+  function magWarn(ups) {
+    const cnv = ups.filter(function (s) { return fbkFunnelOf(s) === '전환'; });
+    if (cnv.length < 2) return null;
+    let resist = 0;
+    try {
+      const p = (pmms || []).find(function (x) { return x.id === _currentPmmId; });
+      if (p && Array.isArray(p.collect)) resist = p.collect.filter(function (c) { return c.basket === 'resist'; }).length;
+    } catch (e) {}
+    if (resist > 0) return null;   // 이미 채웠으면 경고할 게 없다
+    return { c: '#E0B27A', k: '미리 경고',
+      t: '전환용을 <b>' + cnv.length + '편</b> 만드셨는데 <b>구매저항이 비어 있어요</b>',
+      s: '“비싸다”, “나한텐 안 어울릴 것 같다” — <b>안 산 이유를 모르면 그걸 지우는 컨텐츠도 못 만듭니다.</b><br>' +
+         '고객 방 🧱 칸에 한 줄만 적어보세요.',
+      go: '고객 방 열기' };
+  }
+
+  // ⑤ 빈 광맥 — 이미 있는 엔진(insVein) 재사용
+  function magVein() {
+    let v = null;
+    // insVein()은 클러스터 «객체 하나» 또는 null을 돌려준다 (배열 아님)
+    try { v = (typeof insVein === 'function') ? insVein() : null; } catch (e) { v = null; }
+    if (!v || !v.kw) return null;
+    return { c: '#43E0E6', k: '빈 광맥',
+      t: '<b>「' + esc(String(v.kw).slice(0, 18)) + '」</b> — <b>' + v.n + '개</b> 담았는데 ' +
+         (v.mine ? '원고는 <b>' + v.mine + '편</b>뿐이에요' : '<b>아직 안 만드셨어요</b>'),
+      s: '평균 <b>' + fmtViews(v.avg) + '</b>로 잘 되는 말인데 재료만 쌓여 있습니다. ' +
+         '<b>남이 안 판 자리</b>일 수 있어요.',
+      go: '이 말로 담은 것 보기', kw: v.kw };
+  }
+
+  function renderMagicHtml() {
+    const ups = fbkUps(), trd = trdData();
+    // 순서 = 쓸모 순. 같은 키워드가 두 번 나오면 앞의 것만 남긴다(같은 말 반복 금지).
+    const seen = new Set();
+    const cards = [magGold(trd), magVein(), magGem(ups), magTwin(ups), magLife(trd), magWarn(ups)]
+      .filter(Boolean)
+      .filter(function (c) {
+        if (c.quiet || !c.kw) return true;
+        if (seen.has(c.kw)) return false;
+        seen.add(c.kw); return true;
+      });
+    const live = cards.filter(function (c) { return !c.quiet; });
+    const quiet = cards.filter(function (c) { return c.quiet; });
+    let h = '<div class="mag"><div class="mag-hd"><h4>알고리즘이 알아낸 것</h4>' +
+      '<span class="t">' + (live.length ? live.length + '개' : '아직 조용해요') + '</span></div>';
+    if (!live.length) {
+      h += '<div class="mag-none">아직 말할 만큼 쌓이지 않았어요.<br>' +
+        '<b>담고, 만들고, 결과를 넣으면</b> 여기서 먼저 말을 겁니다.</div>';
+    }
+    h += '<div class="mag-list">';
+    h += live.map(function (c) {
+      return '<div class="mag-c act" style="--mc:' + c.c + '"' +
+        (c.kw ? ' data-magkw="' + esc(c.kw) + '"' : '') +
+        (c.id ? ' data-magid="' + esc(c.id) + '"' : '') +
+        ' data-maggo="' + esc(c.k) + '">' +
+        '<div class="mag-k">' + c.k + '</div><div class="mag-t">' + c.t + '</div>' +
+        '<div class="mag-s">' + c.s + '</div>' +
+        (c.go ? '<span class="mag-go">' + c.go + ' →</span>' : '') + '</div>';
+    }).join('');
+    // 조용한 것도 숨기지 않는다 — 무엇이 더 있으면 켜지는지 보여준다
+    h += quiet.map(function (c) {
+      return '<div class="mag-c quiet" style="--mc:#6B7A70"><div class="mag-t">🔒 ' + c.t + '</div></div>';
+    }).join('');
+    return h + '</div></div>';
+  }
+
+  // 검증 훅 — window.__ins와 같은 용도(내부 배열이 window에서 안 보이므로)
+  window.__fbk = function () { return { ups: fbkUps(), group: fbkGroup, scripts: scripts, rows: rows }; };
+  window.__sl = function (label) { return slStepColor(label); };   // 구조 카드 5색 매핑 검증용
+  window.__pp = function () { return (typeof ppBoard !== 'undefined') ? ppBoard : null; };  // 엑스레이 검증용
+  window.__trd = function () { return trdData(); };   // 트렌드 방 검증용
+  window.__mag = function () { return { html: renderMagicHtml(),
+    life: magLife(trdData()), twin: magTwin(fbkUps()), gem: magGem(fbkUps()),
+    gold: magGold(trdData()), warn: magWarn(fbkUps()), vein: magVein() }; };
+
   // 🔮 내 콘텐츠 인사이트 — 내가 기재한 성과(조회수·저장) + 유형으로 패턴 자동 분석
   function renderMyInsightHtml() {
     const ups = (scripts || []).filter(s => s.uploaded && (s.uploadViews || 0) > 0);
@@ -35192,6 +35934,7 @@
     const el = document.getElementById('tr-summary-perf'); if (!el) return;
     if (!s.uploaded && !_uploadPromptMode) { el.innerHTML = ''; return; } // 업로드 완료 or 업로드 프롬프트일 때만
     const v = s.uploadViews || 0, l = s.uploadLikes || 0, sv = s.uploadSaves || 0, sh = s.uploadShares || 0;
+    const dm = s.uploadDms || 0;   // v479 · 전환용의 진짜 성적
     const aw = s.uploadAvgWatch || '', memo = s.memo || '';
     el.innerHTML = `<div class="perf-label">📊 성과 <span class="perf-opt">알면 입력 — 전당에 표시돼요</span></div>
       <div class="perf-tip">💡 <b>일주일 후·한 달 후</b>에 다시 기재하면, 데이터로 <b>내 콘텐츠의 추이</b>를 정리해서 볼 수 있어요.</div>
@@ -35201,6 +35944,9 @@
         <label class="perf-field"><span class="perf-ic">🔖 저장</span><input type="text" inputmode="numeric" id="perf-saves" value="${sv ? fmtNum(sv) : ''}" placeholder="예: 8천" /></label>
         <label class="perf-field"><span class="perf-ic">✈ 공유(보내기)</span><input type="text" inputmode="numeric" id="perf-shares" value="${sh ? fmtNum(sh) : ''}" placeholder="예: 1.5천" /></label>
       </div>
+      <label class="perf-field perf-wide"><span class="perf-ic">💬 이걸 보고 온 문의·DM</span><input type="text" inputmode="numeric" id="perf-dms" value="${dm ? fmtNum(dm) : ''}" placeholder="예: 3" /></label>
+      <div class="perf-tip" style="margin-top:7px">💡 <b>전환용</b> 컨텐츠는 조회수로 재면 안 돼요 — <b>이 숫자가 진짜 성적</b>입니다.
+        조회 2천에 문의 5건이면, 조회 20만에 문의 0건보다 훨씬 잘한 겁니다.</div>
       <label class="perf-field perf-wide"><span class="perf-ic">⏱ 평균 시청 시간</span><input type="text" id="perf-watch" value="${esc(aw)}" placeholder="예: 8.5초 (또는 0:08)" /></label>
       <div class="perf-label" style="margin-top:15px;">📝 메모 <span class="perf-opt">왜 잘됐나 · 다음은 어떻게?</span></div>
       <textarea class="perf-memo" id="perf-memo" placeholder="예) 첫 3초 훅이 강했음 → 다음엔 결론을 더 앞으로 / 저장이 많았으니 정보형 더 시도">${esc(memo)}</textarea>`;
@@ -35208,16 +35954,17 @@
     const commit = async () => {
       const nv = parseKNum(val('perf-views')), nl = parseKNum(val('perf-likes'));
       const nsv = parseKNum(val('perf-saves')), nsh = parseKNum(val('perf-shares'));
+      const ndm = parseKNum(val('perf-dms'));
       const naw = (val('perf-watch') || '').trim(), nmemo = val('perf-memo') || '';
-      if (s.uploadViews === nv && s.uploadLikes === nl && s.uploadSaves === nsv && s.uploadShares === nsh && s.uploadAvgWatch === naw && s.memo === nmemo) return;
+      if (s.uploadViews === nv && s.uploadLikes === nl && s.uploadSaves === nsv && s.uploadShares === nsh && s.uploadDms === ndm && s.uploadAvgWatch === naw && s.memo === nmemo) return;
       const prevBest = Math.max(0, ...(scripts || []).filter(x => x.id !== s.id).map(x => x.uploadViews || 0));
-      s.uploadViews = nv; s.uploadLikes = nl; s.uploadSaves = nsv; s.uploadShares = nsh; s.uploadAvgWatch = naw; s.memo = nmemo; s.updatedAt = Date.now();
+      s.uploadViews = nv; s.uploadLikes = nl; s.uploadSaves = nsv; s.uploadShares = nsh; s.uploadDms = ndm; s.uploadAvgWatch = naw; s.memo = nmemo; s.updatedAt = Date.now();
       await saveScripts();
       try { renderHallOfFamePanel(); } catch (e) {}
       try { renderInsightPanel(); } catch (e) {} // 🔮 내 인사이트도 갱신
       if (nv > 0 && nv > prevBest) toast('🥇 최고 기록 갱신! 「' + fmtNum(nv) + ' 조회」');
     };
-    ['perf-views', 'perf-likes', 'perf-saves', 'perf-shares', 'perf-watch', 'perf-memo'].forEach(id => { const inp = document.getElementById(id); if (inp) { inp.addEventListener('change', commit); inp.addEventListener('blur', commit); } });
+    ['perf-views', 'perf-likes', 'perf-saves', 'perf-shares', 'perf-dms', 'perf-watch', 'perf-memo'].forEach(id => { const inp = document.getElementById(id); if (inp) { inp.addEventListener('change', commit); inp.addEventListener('blur', commit); } });
   }
 
   // ============================================================
@@ -40933,14 +41680,15 @@
       '링크: (내가 준 링크. 없으면 비움)',
       '유형: (문제해결/꿀팁/스토리/욕구충족 중 1개)',
       '주제: (대표주제 1개 / 보조주제 1개. 예: 앞머리 / 상담)',
-      '썸네일유형: (첫 화면이 사람을 멈춘 방식 1~3개, 쉼표 — ' + BASE_THUMB_TYPES.join('/') + ')',
+      // ⚠️ 구분자를 «/»로 쓰면 안 된다 — 「위협/금지」 안에 /가 있어 AI가 둘로 쪼개 읽는다(v474 수정)
+      '썸네일유형: (첫 화면이 사람을 멈춘 방식 1~3개, 쉼표 — ' + BASE_THUMB_TYPES.join(' · ') + ')',
       '오래보기: (오래 보게 만든 기법 최대 3개, 쉼표 — ' + CS_TAGS.tech.join('/') + ')',
       '고객: (건드린 고객 마음, 쉼표 — ' + CS_TAGS.mind.join('/') + ')',
       '퍼널: (만든 목적 1개 — 유입/전환)',
       '왜터졌나: (반응 유형 최대 2개, 쉼표 — ' + CS_TAGS.viral.join('/') + ')',
       '키워드: (주제 키워드 2~4개, 쉼표)',
       '수식어: (눈길 끄는 표현 1~3개, 쉼표)',
-      '수식어유형: (그 표현이 쓴 무기 1~3개, 쉼표 — ' + BASE_COPY_TYPES.join('/') + ')',
+      '수식어유형: (그 표현이 쓴 무기 1~3개, 쉼표 — ' + BASE_COPY_TYPES.join(' · ') + ')',
       '원고구조: (캡션·자막에 원고가 보일 때만. 안 보이면 "없음" 한 단어만)',
       '(구조판정 — 기본형 / 기본형·확장 / 라이브러리 구조 이름 중 1개)',
       '후킹> (첫 문장)',
@@ -40955,7 +41703,7 @@
       '1. 안 보이거나 모르는 항목은 비워두거나 0. 절대 지어내지 마.',
       '2. 판단 항목(유형·썸네일유형·수식어유형·오래보기·고객·퍼널·왜터졌나)은 반드시 위 보기 중에서만 골라.',
       '2-1. ★썸네일유형·수식어유형은 «복수»가 정상이야. 무의식 트리거는 겹쳐서 작동해 —',
-      '     예: "20년차가 말하는 90%가 모르는 3가지" → 수식어유형: 권위, 숫자, 호기심.',
+      '     예: "20년차가 말하는 90%가 모르는 3가지" → 수식어유형: 권위, 숫자, 문제 제시.',
       '     억지로 하나만 고르지 말고, 실제로 작동한 걸 1~3개 골라.',
       '3. 원고가 캡션/자막에 없으면(말로만 하는 영상) 원고구조: 없음 — 이라고만 써.',
       '4. 블록 사이에 빈 줄 하나. [분해 N]과 [끝] 표기는 정확히.',
@@ -43341,7 +44089,13 @@
         '<div class="st2-mapmini" id="st2-mapmini"><span class="mv"></span>' +
         '<span><div class="m1" id="st2-mapm1"></div><div class="m2">탭해서 크게 — 3차원·스윗스팟 토글은 안에</div></span><span class="go">›</span></div>' +
       '</div>' +
-      '<div class="st2-focap st2-rv" id="st2-focap"></div>';
+      '<div class="st2-focap st2-rv" id="st2-focap"></div>' +
+      // v472 · 내 성적표 — 올린 것의 성과가 다시 재료가 된다
+      '<div class="st2-rv" id="st2-fbk">' + renderScorecardHtml() + '</div>' +
+      // v480 · 세 번째 축 — 시장. 성적표(나) 바로 아래.
+      '<div class="st2-rv" id="st2-trd">' + renderTrendRoomHtml() + '</div>' +
+      // v481 · 마법 — 세 축(나·고객·시장)이 모이면 먼저 말을 건다
+      '<div class="st2-rv" id="st2-mag">' + renderMagicHtml() + '</div>';
     // ── 3막 · 실행 — 그래서 뭘 할까 (달력 + 쇼핑) ──
     h += '<div class="st2-act st2-rv"><span class="n">02</span><span class="t">실행</span>' +
       '<span class="d">알아본 걸 <b>이번 달 어느 주에</b> 놓을지 정해요. 오른쪽 쇼핑에서 골라 담습니다.</span></div>';
@@ -43510,6 +44264,90 @@
       document.getElementById('st2-gok').onclick = async () => { monthlyUploadGoal = n; await saveUploadGoal(); toast('🏁 이번 달 목표 ' + n + '회'); st2RenderHome(); };
     }
     const dg = document.getElementById('st2-diag'); if (dg) dg.onclick = () => { try { switchWorkspace('diagnose'); } catch (e) {} };
+    // v472 · 성적표 축 탭 — 그 자리에서만 다시 그린다 (홈 전체 재렌더 금지)
+    const fbkWrap = document.getElementById('st2-fbk');
+    if (fbkWrap) {
+      fbkWrap.addEventListener('click', function (e) {
+        // 제목 줄 = 여닫이
+        if (e.target.closest('#fbk-toggle')) {
+          _fbkOpen = !_fbkOpen;
+          const box = document.getElementById('fbk-box'), tg = document.getElementById('fbk-toggle');
+          if (box) box.classList.toggle('open', _fbkOpen);
+          if (tg) tg.setAttribute('aria-expanded', _fbkOpen ? 'true' : 'false');
+          return;
+        }
+        // v479 · 잣대(유입/전환) 전환
+        const L = e.target.closest('[data-fbklens]');
+        if (L) { _fbkLens = L.dataset.fbklens; fbkWrap.innerHTML = renderScorecardHtml(); return; }
+        const b = e.target.closest('[data-fbkax]'); if (!b) return;
+        _fbkAx = b.dataset.fbkax;
+        fbkWrap.innerHTML = renderScorecardHtml();   // _fbkOpen이 유지되므로 펼친 상태 그대로
+      });
+      fbkWrap.addEventListener('keydown', function (e) {
+        if ((e.key === 'Enter' || e.key === ' ') && e.target.closest('#fbk-toggle')) {
+          e.preventDefault(); e.target.closest('#fbk-toggle').click();
+        }
+      });
+    }
+    // v481 · 마법 카드 — 누르면 그 자리로 데려간다
+    const magWrap = document.getElementById('st2-mag');
+    if (magWrap) magWrap.addEventListener('click', function (e) {
+      const c = e.target.closest('.mag-c.act'); if (!c) return;
+      const kw = c.dataset.magkw, id = c.dataset.magid, k = c.dataset.maggo;
+      try {
+        if (kw) {                       // 키워드 → 시트 검색
+          switchWorkspace('sheet');
+          setTimeout(function () {
+            const s = document.getElementById('sh-search');
+            if (s) { s.value = kw; s.dispatchEvent(new Event('input', { bubbles: true })); }
+          }, 260);
+          toast('🔍 「' + kw + '」로 담은 것 보기');
+        } else if (id) {                // 원고 카드 열기
+          switchWorkspace('scripts');
+          setTimeout(function () { try { openScript(id); } catch (err) {} }, 300);
+        } else if (k === '미리 경고') {
+          switchWorkspace('customer');
+        } else if (k === '쌍둥이 찾기') {
+          _fbkOpen = true;
+          const box = document.getElementById('fbk-box');
+          if (box) { box.classList.add('open'); box.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+        } else if (k === '키워드 수명') {
+          _trdOpen = true;
+          const box = document.getElementById('trd-box');
+          if (box) { box.classList.add('open'); box.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+        }
+      } catch (err) {}
+    });
+    // v480 · 트렌드 방 — 여닫이 + 칩 누르면 그 키워드로 검색
+    const trdWrap = document.getElementById('st2-trd');
+    if (trdWrap) {
+      trdWrap.addEventListener('click', function (e) {
+        if (e.target.closest('#trd-toggle')) {
+          _trdOpen = !_trdOpen;
+          const box = document.getElementById('trd-box'), tg = document.getElementById('trd-toggle');
+          if (box) box.classList.toggle('open', _trdOpen);
+          if (tg) tg.setAttribute('aria-expanded', _trdOpen ? 'true' : 'false');
+          return;
+        }
+        const c = e.target.closest('[data-trdkw]');
+        if (c) {
+          const kw = c.dataset.trdkw;
+          try {
+            switchWorkspace('sheet');
+            setTimeout(function () {
+              const s = document.getElementById('sh-search');
+              if (s) { s.value = kw; s.dispatchEvent(new Event('input', { bubbles: true })); s.focus(); }
+            }, 260);
+          } catch (err) {}
+          toast('🔍 「' + kw + '」로 담은 것 보기');
+        }
+      });
+      trdWrap.addEventListener('keydown', function (e) {
+        if ((e.key === 'Enter' || e.key === ' ') && e.target.closest('#trd-toggle')) {
+          e.preventDefault(); e.target.closest('#trd-toggle').click();
+        }
+      });
+    }
     // v471 · 1막 코어 — 그리기 + 눌러서 알고리즘 화면 열기
     try { hcoreDraw(); } catch (e) {}
     const hlv = document.getElementById('hcore-lv');
@@ -43614,7 +44452,7 @@
       '<div class="st2-gks">' + (goldChips + normChips || '<span style="font-size:11px;color:var(--st2-faint)">아직 키워드가 없어요 — 아래에서 등록하세요</span>') + '</div>' +
       '<div class="st2-kwadd"><input id="st2-kwin" placeholder="고객이 실제 쓰는 말 (예: 어색해요)" maxlength="14">' +
         '<button class="g" id="st2-kwg">🥇 황금</button><button class="n" id="st2-kwn">💬 일반</button></div>' +
-      '<div class="st2-cusnote">🥇 황금 키워드(최대 3)가 <b>맵의 \'내 고객\' 축 점수</b>가 돼요. 사다리: <b>적는다(가설) → 형광펜(💬 후보) → 실제로 들리면(수집함) → 🥇 검증</b>.</div>' +
+      '<div class="st2-cusnote">🥇 황금 키워드(최대 3)가 <b>맵의 \'내 고객\' 축 점수</b>가 돼요. 사다리: <b>적는다(가설) → 🖍 핵심 짚기 → 실제로 들리면(수집함) → 🥇 검증</b>.</div>' +
     '</div>';
     // 내 고객 이야기 — 고객분석 글 읽기 전용 + 드래그 형광펜
     const tried = p ? String((p.customer && p.customer.tried) || '') : '';
@@ -43627,8 +44465,8 @@
     h += '<div class="st2-sechd" style="margin-top:26px"><span class="t" style="font-size:13px">내 고객 이야기</span><span class="r" id="st2-cuslink2" style="cursor:pointer">고객분석에서 이어서 쓰기 →</span></div>';
     h += tried.trim()
       ? '<div class="st2-paper"><div class="src">👥 고객분석 · 고객이 시도했던 것</div><div class="tx" id="st2-paper-tx">' + hlAll(tried) + '</div>' +
-        '<div class="pnote">✍️ 문장을 <b>드래그하면 형광펜</b>이 떠요 — 칠하면 💬 후보 키워드로 등록됩니다.</div></div>'
-      : '<div class="st2-insempty" style="margin-bottom:4px">고객분석의 <b>"고객이 시도했던 것"</b>을 적어두면<br>여기서 드래그 형광펜으로 키워드를 캘 수 있어요.</div>';
+        '<div class="pnote">🖍 문장을 <b>드래그하면 「이게 핵심」</b>이 떠요 — 짚으면 <b>핵심</b>으로 표시되고, 실제로 들리면 🥇 황금으로 올라갑니다.</div></div>'
+      : '<div class="st2-insempty" style="margin-bottom:4px">고객분석의 <b>"고객이 시도했던 것"</b>을 적어두면<br>여기서 드래그해 <b>핵심</b>을 짚을 수 있어요.</div>';
     h += '<div class="st2-sechd" style="margin-top:30px"><span class="t" style="font-size:13px">속마음 수집함</span><span class="r">' + collect.length + '개</span></div>';
     if (collect.length) {
       const hl = txt => {
@@ -43693,7 +44531,7 @@
       let pop = document.getElementById('st2-hlpop');
       if (!pop) {
         pop = document.createElement('div'); pop.id = 'st2-hlpop'; pop.className = 'st2-hlpop';
-        pop.innerHTML = '<button id="st2-hlbtn">🖊 형광펜 — 후보 등록</button>';
+        pop.innerHTML = '<button id="st2-hlbtn">🖍 이게 핵심</button>';   // v475 · 「형광펜」→「핵심」
         document.body.appendChild(pop);
       }
       const hidePop = () => pop.classList.remove('show');
@@ -43714,7 +44552,7 @@
             window.getSelection().removeAllRanges(); hidePop();
             if ((st2Kw.gold || []).indexOf(kw) !== -1 || (st2Kw.normal || []).indexOf(kw) !== -1) { toast('이미 있는 키워드예요'); return; }
             st2Kw.normal.push(kw); st2KwSave();
-            toast('💬 「' + kw + '」 후보 등록 — 실제로 들리면 🥇 승급');
+            toast('🖍 「' + kw + '」 핵심으로 표시 — 실제로 들리면 🥇 승급');
             st2RenderCus();
           };
         }, 10);
