@@ -14493,6 +14493,46 @@
   }
   .sh-toast.show { opacity: 1; }
 
+  /* ▣ 담기 완료 골인 세리머니 (애플식 오버슈트 — 자산 라임) — window.goalDone() */
+  .goal-ov {
+    position: fixed; inset: 0; z-index: 5600;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 18px; pointer-events: none;
+    background: rgba(8, 10, 7, 0);
+    transition: background .34s ease;
+  }
+  .goal-ov.show { background: rgba(8, 10, 7, .42); }
+  .goal-card {
+    display: flex; flex-direction: column; align-items: center; gap: 16px;
+    opacity: 0; transform: scale(.6);
+  }
+  .goal-ov.show .goal-card {
+    opacity: 1; transform: scale(1);
+    transition: transform .52s cubic-bezier(.34, 1.56, .64, 1), opacity .3s ease;
+  }
+  .goal-ring { stroke: var(--law-asset, #d7f34b); stroke-width: 5; fill: none;
+    stroke-linecap: round; stroke-dasharray: 226; stroke-dashoffset: 226; }
+  .goal-ov.show .goal-ring {
+    stroke-dashoffset: 0; transition: stroke-dashoffset .46s cubic-bezier(.23, 1, .32, 1); }
+  .goal-check { stroke: var(--law-asset, #d7f34b); stroke-width: 6; fill: none;
+    stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 48; stroke-dashoffset: 48; }
+  .goal-ov.show .goal-check {
+    stroke-dashoffset: 0; transition: stroke-dashoffset .3s cubic-bezier(.23, 1, .32, 1) .38s; }
+  .goal-msg {
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 15px; font-weight: 500; color: #eef4de; text-align: center;
+    max-width: 78vw; opacity: 0; transform: translateY(8px);
+    text-shadow: 0 2px 12px rgba(0, 0, 0, .6);
+  }
+  .goal-ov.show .goal-msg {
+    opacity: 1; transform: none;
+    transition: opacity .34s ease .2s, transform .44s cubic-bezier(.23, 1, .32, 1) .2s; }
+  @media (prefers-reduced-motion: reduce) {
+    .goal-ov.show .goal-card { transition: opacity .3s ease; transform: none; }
+    .goal-ov.show .goal-ring, .goal-ov.show .goal-check { transition: none; stroke-dashoffset: 0; }
+    .goal-ov.show .goal-msg { transition: opacity .3s ease; transform: none; }
+  }
+
   /* 업로드 완료 축하 스낵바 (액션 버튼 포함) */
   .up-celebrate {
     position: fixed;
@@ -22224,6 +22264,142 @@
     window.__shToast = setTimeout(() => el.classList.remove('show'), 1800);
   }
   window.toast = toast; /* 바깥 청크·콘솔에서도 쓸 수 있게 */
+
+  /* ▣ 담기 완료 골인 세리머니 — 애플식 오버슈트. 저장의 심장 순간(창고 담기)에만.
+     한 번 터지고 사라짐. rAF 아닌 CSS 전환이라 프리뷰 hidden에서도 안전. */
+  function goalDone(msg) {
+    let ov = document.getElementById('goal-ov');
+    if (!ov) {
+      ov = document.createElement('div');
+      ov.id = 'goal-ov'; ov.className = 'goal-ov';
+      ov.innerHTML =
+        '<div class="goal-card">' +
+        '<svg width="84" height="84" viewBox="0 0 84 84" aria-hidden="true">' +
+        '<circle class="goal-ring" cx="42" cy="42" r="36"/>' +
+        '<path class="goal-check" d="M26 43 L38 54 L59 30"/>' +
+        '</svg><div class="goal-msg"></div></div>';
+      document.body.appendChild(ov);
+    }
+    ov.querySelector('.goal-msg').textContent = msg || '담았어요';
+    ov.classList.remove('show');
+    void ov.offsetWidth;            /* 리플로우 — 재생 재시작 */
+    ov.classList.add('show');
+    clearTimeout(window.__goalT);
+    window.__goalT = setTimeout(() => ov.classList.remove('show'), 1250);
+  }
+  window.goalDone = goalDone;
+
+  /* ▣ 시트 스와이프 투 클로즈 — 애플식 스프링+속도 인계. 추가형(기존 ×·배경 닫기 유지).
+     attachSheetDrag(시트엘리먼트, 닫기함수, {scroller}). reduced-motion이면 자동 비활성.
+     프로토타입 5시나리오 검증 완료(느린끌기·플릭·제자리복귀·스크롤양보·맨위닫기). */
+  function attachSheetDrag(sheet, closeFn, opts) {
+    if (!sheet || sheet._dragBound) return; sheet._dragBound = true;
+    opts = opts || {};
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var scroller = opts.scroller || sheet.querySelector('[data-sheet-scroll],.px-plist,.hk-list,.sb2,.bx') || sheet;
+    var y = 0, dragging = false, startY = 0, lastY = 0, lastT = 0, vel = 0, active = false, pid = null;
+    var st = { x: 0, v: 0, raf: 0 };
+    function set(v) { y = v; sheet.style.transform = v ? 'translateY(' + v + 'px)' : ''; }
+    function spring(target, onEnd) {
+      cancelAnimationFrame(st.raf); var last = performance.now();
+      (function step(now) {
+        var dt = Math.min((now - last) / 1000, .032); last = now;
+        var a = -190 * (st.x - target) - 26 * st.v; st.v += a * dt; st.x += st.v * dt; set(st.x);
+        if (Math.abs(st.x - target) < .4 && Math.abs(st.v) < 8) { set(target); if (onEnd) onEnd(); return; }
+        st.raf = requestAnimationFrame(step);
+      })(last);
+    }
+    sheet.addEventListener('pointerdown', function (e) {
+      if (e.button && e.button !== 0) return;
+      if (e.target.closest('button,a,input,textarea,select,[contenteditable]')) return;
+      active = true; pid = e.pointerId; startY = e.clientY; lastY = e.clientY; lastT = performance.now(); vel = 0; dragging = false;
+    }, { passive: true });
+    sheet.addEventListener('pointermove', function (e) {
+      if (!active) return;
+      var dy = e.clientY - startY;
+      if (!dragging) {
+        var sc = opts.scroller || sheet.querySelector('[data-sheet-scroll],.px-plist,.hk-list,.sb2,.bx') || sheet;
+        scroller = sc;
+        if (dy > 6 && scroller.scrollTop <= 0) {
+          dragging = true; try { sheet.setPointerCapture(pid); } catch (err) {}
+          sheet.style.transition = 'none'; cancelAnimationFrame(st.raf);
+        } else if (dy < -6 || scroller.scrollTop > 0) { active = false; return; }
+        else return;
+      }
+      var now = performance.now(), dt = now - lastT;
+      if (dt > 0) { vel = (e.clientY - lastY) / dt * 1000; lastY = e.clientY; lastT = now; }
+      var raw = e.clientY - startY;
+      if (raw < 0) raw = -Math.pow(-raw, .72);
+      set(raw); e.preventDefault();
+    });
+    function end() {
+      if (!active) return; active = false;
+      if (!dragging) return;
+      var H = sheet.getBoundingClientRect().height;
+      var proj = y + vel * 0.15; st.x = y; st.v = vel;
+      if (proj > H * 0.4) {
+        cancelAnimationFrame(st.raf);
+        sheet.style.transition = 'transform .3s cubic-bezier(.32,.72,0,1)'; set(H + 40);
+        var done = function () { sheet.style.transition = ''; sheet.style.transform = ''; sheet.removeEventListener('transitionend', done); try { closeFn(); } catch (e) {} };
+        sheet.addEventListener('transitionend', done);
+      } else { spring(0); }
+    }
+    sheet.addEventListener('pointerup', end);
+    sheet.addEventListener('pointercancel', end);
+  }
+  window.attachSheetDrag = attachSheetDrag;
+
+  /* ▣ FLIP 재정렬 — 재렌더 전 위치 기록 → 새 위치에서 역변환 → 풀면 미끄러짐.
+     정렬처럼 «같은 카드가 자리만 바뀔 때»만 감쌈. data-id로 매칭. reduced-motion·대량행 자동 스킵.
+     읽기/쓰기 패스 분리로 레이아웃 스래싱 방지. 프로토타입 실측 검증(delta 정확). */
+  async function flipRender(container, renderFn) {
+    if (!container) { await renderFn(); return; }
+    var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var first = null;
+    if (!reduce) {
+      var olds = container.querySelectorAll('[data-id]');
+      if (olds.length && olds.length <= 120) {   /* 행 너무 많으면 FLIP 스킵(잔파도 방지) */
+        first = {};
+        olds.forEach(function (el) { first[el.dataset.id] = el.getBoundingClientRect(); }); /* 읽기 패스 */
+      }
+    }
+    await renderFn();
+    if (!first) return;
+    var news = [].slice.call(container.querySelectorAll('[data-id]'));
+    var lasts = news.map(function (el) { return el.getBoundingClientRect(); }); /* 읽기 패스(일괄) */
+    var moved = [];
+    news.forEach(function (el, i) {                                            /* 쓰기 패스 */
+      var f = first[el.dataset.id]; if (!f) return;
+      var dx = f.left - lasts[i].left, dy = f.top - lasts[i].top;
+      if (!dx && !dy) return;
+      el.style.transition = 'none';
+      el.style.transform = 'translate(' + dx + 'px,' + dy + 'px)';
+      moved.push(el);
+    });
+    if (!moved.length) return;
+    requestAnimationFrame(function () { requestAnimationFrame(function () {
+      moved.forEach(function (el) { el.style.transition = 'transform .44s cubic-bezier(.23,1,.32,1)'; el.style.transform = ''; });
+    }); });
+    setTimeout(function () { moved.forEach(function (el) { el.style.transition = ''; el.style.transform = ''; }); }, 520);
+  }
+  window.flipRender = flipRender;
+
+  /* ▣ 숫자 카운트업 — 애플식 큐빅 이즈아웃(기존 st2-xn/fdSurge와 같은 곡선). 포맷 함수 주입형.
+     reduced-motion·비유한값이면 즉시 최종값. rAF 멈춰도 setTimeout 안전망으로 최종값 보장. */
+  function countUp(el, to, opts) {
+    if (!el) return; opts = opts || {};
+    var fmt = opts.format || function (n) { return String(Math.round(n)); };
+    var dur = opts.duration || 900, from = opts.from || 0;
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches || typeof to !== 'number' || !isFinite(to)) { el.textContent = fmt(to); return; }
+    var t0 = performance.now();
+    (function tick(now) {
+      var t = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - t, 3);
+      el.textContent = fmt(from + (to - from) * e);
+      if (t < 1) requestAnimationFrame(tick);
+    })(t0);
+    clearTimeout(el._cuT); el._cuT = setTimeout(function () { el.textContent = fmt(to); }, dur + 140); /* 안전망 */
+  }
+  window.countUp = countUp;
   /* v474 — __cmGetRows 삭제. 썸네일 스튜디오(제작소 5번째 탭)가 사라져 쓰는 곳이 없어졌다.
      썸네일 편집은 «편집 스튜디오» 독립 앱으로 이관됨. 창고의 ▣썸네일(몰아보기)은 별개로 살아있다. */
 
@@ -25347,7 +25523,8 @@
     sortBy = s;
     document.querySelectorAll('[data-sort]').forEach(t => t.classList.toggle('active', t.dataset.sort === s));
     await savePrefs();
-    renderTable();
+    if (typeof flipRender === 'function') await flipRender(document.getElementById('sh-tbody'), renderTable); // ▣ 정렬 미끄러짐(FLIP)
+    else renderTable();
   }
 
   async function setFilter(f) {
@@ -42697,7 +42874,7 @@
     try { if (typeof renderTable === 'function') renderTable(); } catch (e) {}
     try { if (typeof renderSidebarCounts === 'function') renderSidebarCounts(); } catch (e) {}
     if (btn) { btn.disabled = false; btn.textContent = '🏛 선택한 항목 창고에 저장'; }
-    csToast('🏛 ' + checked.length + '개가 창고(시트)에 쌓였어요!');
+    if (typeof goalDone === 'function') goalDone('🏛 ' + checked.length + '개가 창고에 쌓였어요'); else csToast('🏛 ' + checked.length + '개가 창고(시트)에 쌓였어요!');
     // 리셋 + 시트로 안내
     _csBlocks = []; _csPhotos = []; _csStep = 1;
     const pa = document.getElementById('cs-paste'); if (pa) pa.value = '';
@@ -43141,6 +43318,7 @@
       ov.innerHTML = '<div class="sh2"><b id="rw-sh-t"></b><button type="button" class="x2" id="rw-sh-x">×</button></div><div class="sb2" id="rw-sh-b"></div>';
       document.body.appendChild(ov);
       ov.querySelector('#rw-sh-x').onclick = function () { ov.classList.remove('on'); };
+      if (typeof attachSheetDrag === 'function') attachSheetDrag(ov, function () { ov.classList.remove('on'); }); // ▣ 스와이프 닫기(추가형)
     }
     ov.querySelector('#rw-sh-t').textContent = title;
     ov.querySelector('#rw-sh-b').innerHTML = html;
@@ -43786,6 +43964,22 @@
         '<div class="st2g-c"><em>🛍 예약</em><b>' + fmtW(d.cur.buy) + '</b><s class="' + buyT.cls + '">' + buyT.tx + '</s></div>' +
       '</div>' +
       '<div class="st2g-ratio">' + ratio + '</div>';
+    // ▣ 4지표 숫자 카운트업(값 바뀔 때만 1회) — 부호·"만"·"/주" 접미 유지, "—"는 스킵
+    try {
+      if (typeof countUp === 'function') {
+        const fmtN = x => fmtNum(Math.round(x));
+        const tg = [
+          { n: d.cur.f, fmt: fmtW }, { n: v.cur ? v.cur : null, fmt: fmtN },
+          { n: d.cur.dm, fmt: fmtW }, { n: d.cur.buy, fmt: fmtW }
+        ];
+        const sig = tg.map(t => t.n).join('|');
+        if (host._growSig !== sig) {
+          host._growSig = sig;
+          const bs = host.querySelectorAll('.st2g-c b');
+          bs.forEach((b, i) => { const t = tg[i]; if (t && t.n != null) countUp(b, t.n, { format: t.fmt, duration: 900 }); });
+        }
+      }
+    } catch (e) {}
   }
   function st2RenderFocap() {
     const el = document.getElementById('st2-focap'); if (!el) return;
@@ -44408,6 +44602,8 @@
       });
       const sh = document.getElementById('st2-sheet');
       if (sh) sh.onclick = ev => { if (ev.target === sh) sh.classList.remove('show'); };
+      const st2bx = document.getElementById('st2-sheet-bx'); // ▣ 스와이프 닫기(추가형) — 카드는 .bx
+      if (sh && st2bx && typeof attachSheetDrag === 'function') attachSheetDrag(st2bx, () => sh.classList.remove('show'), { scroller: st2bx });
     }
     // 달력 네비 + 쇼핑
     const mp = document.getElementById('st2-moprev'), mn = document.getElementById('st2-monext');
@@ -45182,6 +45378,7 @@
       pxLoadThumbs(_pxPicked); pxRenderPick(); pxRender();
     };
     document.getElementById('px-pcta').onclick = () => { pxClosePick(); pxRender(); };
+    if (typeof attachSheetDrag === 'function') attachSheetDrag(sh, pxClosePick); // ▣ 스와이프 닫기(추가형)
   }
   function pxOpenPick() {
     pxEnsureSheets();
@@ -45475,6 +45672,7 @@
       if (!sc) { sc = document.createElement('div'); sc.className = 'px-scrim'; sc.id = 'px-scrim'; document.body.appendChild(sc); }
       document.getElementById('hk-close').onclick = hkCloseSheet;
       sc.addEventListener('click', hkCloseSheet);
+      if (typeof attachSheetDrag === 'function') attachSheetDrag(sh, hkCloseSheet); // ▣ 스와이프 닫기(추가형)
     }
     sh.classList.add('on');
     const sc2 = document.getElementById('px-scrim'); if (sc2) sc2.classList.add('on');
