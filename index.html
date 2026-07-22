@@ -16198,8 +16198,34 @@
   .hcore-t em{ font-style:normal; background:linear-gradient(96deg,#43e0e6,#d7f34b 62%);
     -webkit-background-clip:text; background-clip:text; color:transparent;
     filter:drop-shadow(0 0 22px rgba(215,243,75,.28)); }
-  .hcore-l{ margin-top:11px; font-size:12.5px; color:var(--st2-sub); }
+  /* v483 · 학습 줄 = 알고리즘 분석 여닫이 손잡이 (버튼) */
+  .hcore-l{ margin-top:11px; font-family:inherit; font-size:12.5px; color:var(--st2-sub);
+    display:inline-flex; align-items:center; gap:6px; padding:6px 14px; border-radius:999px; cursor:pointer;
+    background:rgba(255,255,255,.035); border:1px solid var(--st2-line);
+    transition:background .18s ease, transform .14s ease; -webkit-tap-highlight-color:transparent; }
+  .hcore-l:hover{ background:rgba(255,255,255,.08); }
+  .hcore-l:active{ transform:scale(.97); }
   .hcore-l b{ color:var(--st2-txt,#e8e9e6); font-weight:800; font-variant-numeric:tabular-nums; }
+  .hcore-l .cv{ font-size:10px; color:var(--st2-faint); transition:transform .4s cubic-bezier(.2,.9,.3,1); }
+  .hcore-l.open .cv{ transform:rotate(180deg); }
+  /* v487 · 학습 줄 = 정체+상태 한 줄. 숫자 「N개」만 시안(=알고리즘) 틴트 */
+  .hcore .hcore-l{ max-width:88vw; justify-content:center; }
+  .hcore .hcore-l .cyn{ color:#43e0e6; font-weight:800; font-variant-numeric:tabular-nums; }
+  /* ════ v487 · 알고리즘 분석 = 애플식 바텀 시트 (작은 손잡이 → 아래에서 큰 판이 올라옴) ════ */
+  /* 시트 바탕/스크림/슬라이드는 기존 .st2-sheet 공법 재사용 — 여기선 내용만 손본다 */
+  .st2-ansheet .bx{ max-height:84vh; padding:8px 18px 30px; background:#0d100c; }
+  .an-grab{ width:38px; height:4px; border-radius:99px; background:rgba(255,255,255,.22); margin:4px auto 8px; }
+  .an-hd{ display:flex; align-items:center; gap:8px; margin:2px 2px 10px; }
+  .an-hd .ttl{ font-size:15px; font-weight:800; letter-spacing:-.02em; color:var(--st2-txt,#e8e9e6); }
+  .an-hd .x{ margin-left:auto; width:30px; height:30px; border-radius:50%; border:1px solid var(--st2-line);
+    background:rgba(255,255,255,.04); color:var(--st2-sub); font-size:15px; cursor:pointer;
+    -webkit-tap-highlight-color:transparent; }
+  /* 시트 안에선 분석의 자체 헤더/요약은 숨기고(시트 헤더가 대신) 본문은 항상 펼침 */
+  .st2-ansheet #st2-fbk .fbk-hd, .st2-ansheet #st2-fbk .fbk-peek{ display:none; }
+  .st2-ansheet #st2-fbk .fbk{ border:none; background:none; padding:0; margin:0; }
+  .st2-ansheet #st2-fbk .fbk-body{ max-height:none; opacity:1; overflow:visible; }
+  .st2-ansheet #st2-mag{ margin-top:20px; }
+  .st2-ansheet #st2-mag .mag-hd h4{ font-size:13px; }
   /* LV 줄 — 눌러서 알고리즘 화면 열기 */
   .hcore-lv{ display:flex; align-items:center; gap:10px; margin-top:20px;
     width:min(268px,74vw); cursor:pointer; }
@@ -33837,7 +33863,7 @@
     const mkHead = function (peek) {
       return '<div class="fbk' + (_fbkOpen ? ' open' : '') + '" id="fbk-box">' +
         '<div class="fbk-hd" id="fbk-toggle" role="button" tabindex="0" aria-expanded="' + (_fbkOpen ? 'true' : 'false') + '">' +
-          '<h4>내 성적표</h4><span class="t">올린 것의 성과</span><span class="cv">⌄</span></div>' +
+          '<h4>알고리즘 분석</h4><span class="t">올린 것에서 알아낸 것</span><span class="cv">⌄</span></div>' +
         (peek ? '<div class="fbk-peek">' + peek + '</div>' : '') +
         '<div class="fbk-body">';
     };
@@ -34095,7 +34121,7 @@
       ? '🎯 <b>' + both[0].k + '</b> — 시장도 고객도 이 말을 해요'
       : (rise.length ? '<b>' + rise[0].k + '</b>이 오르는 중' : d.length + '개 말을 보는 중'));
     let h = mk(peek) +
-      '<p class="trd-lead">세 번째 축입니다. <b>나</b>는 성적표가, <b>고객</b>은 고객 방이 봅니다 — 여기는 <b>시장</b>이에요.<br>' +
+      '<p class="trd-lead">세 번째 축입니다. <b>나</b>는 알고리즘 분석이, <b>고객</b>은 고객 방이 봅니다 — 여기는 <b>시장</b>이에요.<br>' +
       '담은 것들의 <b>키워드에 날짜가 붙어 있어서</b>, 최근 4주와 그 전 4주를 비교합니다.</p>' +
       '<div class="trd-lanes">';
     TRD_LANES.forEach(function (L) {
@@ -34166,7 +34192,7 @@
       s: '평균 <b>' + fmtViews(top.avg) + '</b>' +
          (top.rate !== null ? ' · 나눔 <b>' + top.rate.toFixed(1) + '%</b>' : '') +
          ' — <b>검증된 유형</b>입니다. 새 걸 시도하기 전에 여기서 한 편 더 뽑는 게 안전해요.',
-      go: '내 성적표 보기' };
+      go: '알고리즘 분석 보기' };
   }
 
   // ⑦ 숨은 보석 — 조회는 하위인데 나눔은 상위 = 알고리즘이 아직 안 밀어준 것
@@ -41201,8 +41227,10 @@
     const IN = [0.04, 0.16, 0.30, 0.46, 0.63, 0.80, 0.92, 1][LV];   // 밝기·양
     const RINGS = [0, 0, 1, 2, 3, 3, 3, 5][LV];                     // 궤도 개수
     const RAYS = LV >= 7;                                            // 방사 광선(최종)
+    const GROW = LV < 4 ? 0 : (LV - 4) * 0.05;                       // v482 · 중심 오브가 LV4부터 자란다
     const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     let W = 0, H = 0, t = 0;
+    const pt = { x: 0, y: 0 }, ptg = { x: 0, y: 0 };                 // v482 · 마우스 시차
     const DPR = Math.min(2, window.devicePixelRatio || 1);
     const AXS = [{ a: -Math.PI * 0.62, c: [67,224,230] }, { a: Math.PI * 0.06, c: [224,120,140] }, { a: Math.PI * 0.72, c: [215,243,75] }];
     let P2 = [];
@@ -41220,7 +41248,9 @@
     }
     function draw() {
       t += 0.016; ctx.clearRect(0, 0, W, H);
-      const CX = W / 2, CY = H / 2, R = Math.min(W, H) * 0.42;
+      pt.x += (ptg.x - pt.x) * 0.08; pt.y += (ptg.y - pt.y) * 0.08;   // v482 · 시차 스프링
+      const R = Math.min(W, H) * 0.42;
+      const CX = W / 2 + pt.x * 26, CY = H / 2 + pt.y * 16;           // 마우스 따라 통째로 이동
       AXS.forEach(function (a) {
         const g = ctx.createLinearGradient(CX, CY, CX + Math.cos(a.a) * R * 1.8, CY + Math.sin(a.a) * R * 1.8);
         g.addColorStop(0, 'rgba(' + a.c.join(',') + ',0.18)'); g.addColorStop(1, 'rgba(' + a.c.join(',') + ',0)');
@@ -41265,7 +41295,7 @@
           ctx.lineTo(CX + Math.cos(a2) * len, CY + Math.sin(a2) * len); ctx.stroke();
         }
       }
-      const cr = R * (0.06 + 0.09 * IN) * (1 + Math.sin(t * 1.5) * 0.07);
+      const cr = R * (0.06 + 0.09 * IN + GROW) * (1 + Math.sin(t * 1.5) * 0.07);   // v482 · 중심 성장
       const cg = ctx.createRadialGradient(CX, CY, 0, CX, CY, cr * 3);
       cg.addColorStop(0, 'rgba(255,255,255,' + (0.35 + 0.53 * IN).toFixed(3) + ')');
       cg.addColorStop(0.16, 'rgba(215,243,75,' + (0.46 * IN).toFixed(3) + ')');
@@ -41278,6 +41308,13 @@
     }
     size();
     window.addEventListener('resize', size);
+    // v482 · 마우스로 통째로 기울이기 (시차)
+    cv.addEventListener('pointermove', function (e) {
+      const r = cv.getBoundingClientRect();
+      ptg.x = ((e.clientX - r.left) / r.width - 0.5) * 2;
+      ptg.y = ((e.clientY - r.top) / r.height - 0.5) * 2;
+    }, { passive: true });
+    cv.addEventListener('pointerleave', function () { ptg.x = 0; ptg.y = 0; });
     cancelAnimationFrame(_egRaf);
     if (reduce) { t = 1.4; draw(); cancelAnimationFrame(_egRaf); } else draw();
   }
@@ -41306,14 +41343,15 @@
     const IN = [0.04, 0.16, 0.30, 0.46, 0.63, 0.80, 0.92, 1][LV];
     const RINGS = [0, 0, 1, 2, 3, 3, 3, 5][LV];
     const RAYS = LV >= 7;
-    const HEX = (EG_LV[LV] || {}).col || '#d7f34b';
-    const RGB = [1, 3, 5].map(function (i) { return parseInt(HEX.substr(i, 2), 16); });
-    const C = RGB.join(',');
+    const GROW = LV < 4 ? 0 : (LV - 4) * 0.05;   // v482 · 중심 오브가 LV4부터 자란다
     const DPR = Math.min(2, window.devicePixelRatio || 1);
     let W = 0, H = 0, t = 0, P = [];
-    const AXS = [-Math.PI * 0.62, Math.PI * 0.06, Math.PI * 0.72];
+    const tilt = { x: 0, y: 0 }, tgt = { x: 0, y: 0 };   // v482 · 마우스로 기울이기
+    // v482 · 소개 화면과 같은 3색 축 — 시장 시안 · 고객 로즈 · 나 라임
+    const AXS = [{ a: -Math.PI * 0.62, c: [67,224,230] }, { a: Math.PI * 0.06, c: [224,120,140] }, { a: Math.PI * 0.72, c: [215,243,75] }];
     function mk(R) {
-      return { ang: AXS[(Math.random() * 3) | 0] + (Math.random() - 0.5) * 0.5,
+      const k = (Math.random() * 3) | 0;
+      return { k: k, ang: AXS[k].a + (Math.random() - 0.5) * 0.5,
                d: R * (0.25 + Math.random() * 1.5), sp: 0.0026 + Math.random() * 0.004,
                r: 0.7 + Math.random() * 1.1, sd: Math.random() * 6.28 };
     }
@@ -41325,25 +41363,30 @@
     }
     function draw() {
       t += 0.016; ctx.clearRect(0, 0, W, H);
-      const CX = W / 2, CY = H / 2, R = Math.min(W, H) * 0.42;
-      // 세 축 — 트렌드 · 고객 · 나
+      tilt.x += (tgt.x - tilt.x) * 0.08; tilt.y += (tgt.y - tilt.y) * 0.08;   // 시차 스프링
+      const R = Math.min(W, H) * 0.42;
+      const shx = tilt.x * 16, shy = tilt.y * 8, skew = Math.max(0.12, 0.5 + tilt.y * 0.5);
+      const CX = W / 2 + shx, CY = H / 2 + shy;
+      // 세 축 (색별) — 기운 평면
       AXS.forEach(function (a) {
-        const g = ctx.createLinearGradient(CX, CY, CX + Math.cos(a) * R * 1.6, CY + Math.sin(a) * R * 1.6);
+        const C = a.c.join(',');
+        const ex = Math.cos(a.a) * R * 1.6, ey = Math.sin(a.a) * R * 1.6 * (skew / 0.42);
+        const g = ctx.createLinearGradient(CX, CY, CX + ex, CY + ey);
         g.addColorStop(0, 'rgba(' + C + ',' + (0.16 * IN + 0.03).toFixed(3) + ')');
         g.addColorStop(1, 'rgba(' + C + ',0)');
         ctx.strokeStyle = g; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(CX, CY);
-        ctx.lineTo(CX + Math.cos(a) * R * 1.6, CY + Math.sin(a) * R * 1.6); ctx.stroke();
+        ctx.lineTo(CX + ex, CY + ey); ctx.stroke();
       });
-      // 빨려드는 신호
+      // 빨려드는 신호 (각 축색)
       for (let i = 0; i < P.length; i++) {
-        const p = P[i];
+        const p = P[i], C = AXS[p.k].c.join(',');
         p.d -= p.sp * R * (0.9 + 0.5 * Math.sin(t * 0.7 + p.sd));
         if (p.d < R * 0.16) { P[i] = mk(R); continue; }
         const ang = p.ang + Math.sin(t * 1.1 + p.sd) * 0.035;
-        const x = CX + Math.cos(ang) * p.d, y = CY + Math.sin(ang) * p.d;
+        const x = CX + Math.cos(ang) * p.d, y = CY + Math.sin(ang) * p.d * (skew / 0.42);
         const near = 1 - Math.min(1, (p.d - R * 0.16) / (R * 1.5));
         const al = (0.14 + near * 0.66) * (0.45 + 0.55 * IN);
-        const tx = CX + Math.cos(ang) * (p.d + R * 0.1), ty = CY + Math.sin(ang) * (p.d + R * 0.1);
+        const tx = CX + Math.cos(ang) * (p.d + R * 0.1), ty = CY + Math.sin(ang) * (p.d + R * 0.1) * (skew / 0.42);
         const tg = ctx.createLinearGradient(x, y, tx, ty);
         tg.addColorStop(0, 'rgba(' + C + ',' + al.toFixed(3) + ')');
         tg.addColorStop(1, 'rgba(' + C + ',0)');
@@ -41352,40 +41395,54 @@
         ctx.fillStyle = 'rgba(' + C + ',' + Math.min(1, al + 0.14).toFixed(3) + ')';
         ctx.beginPath(); ctx.arc(x, y, p.r, 0, 6.2832); ctx.fill();
       }
-      // 궤도 — 레벨마다 한 겹씩
+      // 궤도 (라임) — 앞은 크게 뒤는 흐리게 + 잔상
       for (let g = 0; g < RINGS; g++) {
-        const rr = R * (0.36 + g * 0.16), tilt = 0.42 + g * 0.11, sp = 0.28 + g * 0.13;
-        ctx.strokeStyle = 'rgba(' + C + ',' + (0.11 * IN + 0.03).toFixed(3) + ')';
+        const rr = R * (0.36 + g * 0.16), depth = (g + 1) / RINGS, tY = Math.max(0.12, skew * (0.9 - g * 0.04));
+        ctx.strokeStyle = 'rgba(215,243,75,' + ((0.09 * IN + 0.03) * (0.5 + depth * 0.6)).toFixed(3) + ')';
         ctx.lineWidth = 1; ctx.beginPath();
-        ctx.ellipse(CX, CY, rr, rr * tilt, g * 0.7 + t * 0.05, 0, 6.2832); ctx.stroke();
-        const oa = t * sp + g * 2.1;
-        ctx.fillStyle = 'rgba(255,255,255,' + (0.45 * IN + 0.18).toFixed(3) + ')';
-        ctx.beginPath(); ctx.arc(CX + Math.cos(oa) * rr, CY + Math.sin(oa) * rr * tilt, 1.5, 0, 6.2832); ctx.fill();
+        ctx.ellipse(CX, CY, rr, rr * tY, g * 0.6 + t * 0.05, 0, 6.2832); ctx.stroke();
+        const oa = t * (0.28 + g * 0.13) + g * 2.1;
+        const ox = CX + Math.cos(oa) * rr, oy = CY + Math.sin(oa) * rr * tY;
+        const oa2 = oa - 0.16, ox2 = CX + Math.cos(oa2) * rr, oy2 = CY + Math.sin(oa2) * rr * tY;
+        const tr = ctx.createLinearGradient(ox2, oy2, ox, oy);
+        tr.addColorStop(0, 'rgba(255,255,255,0)'); tr.addColorStop(1, 'rgba(255,255,255,' + (0.45 * IN + 0.2).toFixed(3) + ')');
+        ctx.strokeStyle = tr; ctx.lineWidth = 2.2 * depth; ctx.beginPath(); ctx.moveTo(ox2, oy2); ctx.lineTo(ox, oy); ctx.stroke();
+        ctx.fillStyle = 'rgba(255,255,255,' + (0.5 * IN * depth + 0.2).toFixed(3) + ')';
+        ctx.beginPath(); ctx.arc(ox, oy, 1.5 * depth + 0.4, 0, 6.2832); ctx.fill();
       }
       // 방사 광선 — 최종 단계만
       if (RAYS) {
         for (let s = 0; s < 12; s++) {
           const a2 = s * 0.5236 + t * 0.06, len = R * (1.0 + 0.12 * Math.sin(t * 1.3 + s));
           const rg = ctx.createLinearGradient(CX, CY, CX + Math.cos(a2) * len, CY + Math.sin(a2) * len);
-          rg.addColorStop(0, 'rgba(' + C + ',0.24)'); rg.addColorStop(1, 'rgba(' + C + ',0)');
+          rg.addColorStop(0, 'rgba(244,255,208,0.24)'); rg.addColorStop(1, 'rgba(244,255,208,0)');
           ctx.strokeStyle = rg; ctx.lineWidth = 1.1; ctx.beginPath();
           ctx.moveTo(CX + Math.cos(a2) * R * 0.22, CY + Math.sin(a2) * R * 0.22);
           ctx.lineTo(CX + Math.cos(a2) * len, CY + Math.sin(a2) * len); ctx.stroke();
         }
       }
-      // 코어
-      const cr = R * (0.07 + 0.1 * IN) * (1 + Math.sin(t * 1.5) * 0.07);
+      // 코어 — v482 중심만 LV4부터 자란다 (+GROW). 심장색은 흰→라임→시안
+      const cr = R * (0.07 + 0.1 * IN + GROW) * (1 + Math.sin(t * 1.5) * 0.07);
       const cg = ctx.createRadialGradient(CX, CY, 0, CX, CY, cr * 3);
       cg.addColorStop(0, 'rgba(255,255,255,' + (0.3 + 0.58 * IN).toFixed(3) + ')');
-      cg.addColorStop(0.18, 'rgba(' + C + ',' + (0.5 * IN).toFixed(3) + ')');
-      cg.addColorStop(1, 'rgba(' + C + ',0)');
+      cg.addColorStop(0.16, 'rgba(215,243,75,' + (0.46 * IN).toFixed(3) + ')');
+      cg.addColorStop(0.44, 'rgba(67,224,230,' + (0.15 * IN).toFixed(3) + ')');
+      cg.addColorStop(1, 'rgba(67,224,230,0)');
       ctx.fillStyle = cg; ctx.beginPath(); ctx.arc(CX, CY, cr * 3, 0, 6.2832); ctx.fill();
       ctx.fillStyle = 'rgba(255,255,255,' + ((0.4 + 0.4 * IN) + Math.sin(t * 1.5) * 0.1).toFixed(3) + ')';
       ctx.beginPath(); ctx.arc(CX, CY, cr * 0.42, 0, 6.2832); ctx.fill();
       _hcRaf = requestAnimationFrame(draw);
     }
     size();
+    window.addEventListener('resize', size);
     cancelAnimationFrame(_hcRaf);
+    // v482 · 마우스로 기울이기 (폰은 터치 안 하면 그냥 정면)
+    cv.addEventListener('pointermove', function (e) {
+      const r = cv.getBoundingClientRect();
+      tgt.x = ((e.clientX - r.left) / r.width - 0.5) * 2;
+      tgt.y = ((e.clientY - r.top) / r.height - 0.5) * 2;
+    }, { passive: true });
+    cv.addEventListener('pointerleave', function () { tgt.x = 0; tgt.y = 0; });
     if (reduce) { t = 1.4; draw(); cancelAnimationFrame(_hcRaf); } else draw();
   }
 
@@ -44246,13 +44303,24 @@
       '<button class="st2-diag" id="st2-diag">🩺 릴스 진단</button>' +
       '<div class="hcore" style="--hk:' + HS.col + '">' +
         '<canvas class="hcore-cv" id="hcore-cv"></canvas>' +
-        '<div class="hcore-t">당신만의<br><em>컨텐츠 알고리즘</em></div>' +
-        '<div class="hcore-l"><b>' + HS.saved.toLocaleString() + '개</b>를 보고 학습하는 중</div>' +
-        '<div class="hcore-lv" id="hcore-lv" role="button" tabindex="0" title="눌러서 알고리즘 열기">' +
+        // v487 · 큰 글로우 제목 삭제 — 정체(컨텐츠 알고리즘)를 학습 줄에 흡수시킨다 (매번 반복돼 과했음)
+        '<div class="hcore-lv" id="hcore-lv">' +
           '<span class="hcore-b"><span class="l">LV</span><span class="v">' + HS.lv + '</span></span>' +
           '<span class="hcore-trk"><i style="width:' + (HS.prog * 100).toFixed(1) + '%"></i>' +
             '<b class="hcore-hd" style="left:' + (HS.prog * 100).toFixed(1) + '%"></b></span>' +
           '<span class="hcore-rest">' + (HS.next ? (HS.rest.toLocaleString() + '개') : '끝') + '</span>' +
+        '</div>' +
+        // v487 · 학습 줄 = 정체+상태 한 줄 + 알고리즘 분석 여는 손잡이 (누르면 바텀 시트가 크게 올라옴)
+        '<button class="hcore-l" id="hcore-l" aria-haspopup="dialog" aria-controls="st2-ansheet">' +
+          '컨텐츠 알고리즘 · <b class="cyn">' + HS.saved.toLocaleString() + '개</b> 학습 중 <span class="cv">⌄</span></button>' +
+      '</div>' +
+      // v487 · 알고리즘 분석 = 애플식 바텀 시트 (작은 손잡이 → 아래에서 큰 판이 올라옴, 홈은 안 길어짐)
+      '<div class="st2-sheet st2-ansheet" id="st2-ansheet">' +
+        '<div class="bx" id="st2-anbx">' +
+          '<div class="an-grab"></div>' +
+          '<div class="an-hd"><span class="ttl">알고리즘 분석</span><button class="x" id="st2-anx" aria-label="닫기">×</button></div>' +
+          '<div id="st2-fbk">' + renderScorecardHtml() + '</div>' +
+          '<div id="st2-mag">' + renderMagicHtml() + '</div>' +
         '</div>' +
       '</div>' +
       '<div class="st2-exec mini">' +
@@ -44284,12 +44352,10 @@
         '<span><div class="m1" id="st2-mapm1"></div><div class="m2">탭해서 크게 — 3차원·스윗스팟 토글은 안에</div></span><span class="go">›</span></div>' +
       '</div>' +
       '<div class="st2-focap st2-rv" id="st2-focap"></div>' +
-      // v472 · 내 성적표 — 올린 것의 성과가 다시 재료가 된다
-      '<div class="st2-rv" id="st2-fbk">' + renderScorecardHtml() + '</div>' +
-      // v480 · 세 번째 축 — 시장. 성적표(나) 바로 아래.
-      '<div class="st2-rv" id="st2-trd">' + renderTrendRoomHtml() + '</div>' +
-      // v481 · 마법 — 세 축(나·고객·시장)이 모이면 먼저 말을 건다
-      '<div class="st2-rv" id="st2-mag">' + renderMagicHtml() + '</div>';
+      // v483 · 알고리즘 분석(구 성적표)은 1막 코어 아래로 이사함
+      // v480 · 세 번째 축 — 시장.
+      '<div class="st2-rv" id="st2-trd">' + renderTrendRoomHtml() + '</div>';
+      // v485 · 마법(알고리즘이 알아낸 것)은 1막 알고리즘 분석 안으로 이사함
     // ── 3막 · 실행 — 그래서 뭘 할까 (달력 + 쇼핑) ──
     h += '<div class="st2-act st2-rv"><span class="n">02</span><span class="t">실행</span>' +
       '<span class="d">알아본 걸 <b>이번 달 어느 주에</b> 놓을지 정해요. 오른쪽 쇼핑에서 골라 담습니다.</span></div>';
@@ -44544,14 +44610,25 @@
     }
     // v471 · 1막 코어 — 그리기 + 눌러서 알고리즘 화면 열기
     try { hcoreDraw(); } catch (e) {}
-    const hlv = document.getElementById('hcore-lv');
-    if (hlv) {
-      const go = () => { try { window.__openEngine(); } catch (e) {} };
-      hlv.onclick = go;
-      hlv.onkeydown = (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } };
+    // v485 · 코어·LV 클릭으로 소개 화면 이동 제거 — 소개는 로그인창(사용설명서)·더보기에만 있으면 됨 (사장님 결정)
+    // v487 · 「학습 중」 줄 = 알고리즘 분석 바텀 시트 손잡이 (작은 손잡이 → 아래에서 큰 판)
+    const hl = document.getElementById('hcore-l');
+    const ansheet = document.getElementById('st2-ansheet');
+    const anbx = document.getElementById('st2-anbx');
+    if (hl && ansheet) {
+      const closeAn = () => { ansheet.classList.remove('show'); hl.setAttribute('aria-expanded', 'false'); };
+      const openAn = () => {
+        _fbkOpen = true;                                   // 시트 안 분석은 항상 펼침
+        const box = document.getElementById('fbk-box'); if (box) box.classList.add('open');
+        ansheet.classList.add('show');
+        hl.setAttribute('aria-expanded', 'true');
+        if (anbx) anbx.scrollTop = 0;
+      };
+      hl.onclick = openAn;
+      const anx = document.getElementById('st2-anx'); if (anx) anx.onclick = closeAn;
+      ansheet.onclick = (ev) => { if (ev.target === ansheet) closeAn(); };   // 스크림 탭 = 닫기
+      if (anbx && typeof attachSheetDrag === 'function') attachSheetDrag(anbx, closeAn, { scroller: anbx });  // 스와이프 닫기
     }
-    const hcv = document.getElementById('hcore-cv');
-    if (hcv) { hcv.style.cursor = 'pointer'; hcv.onclick = () => { try { window.__openEngine(); } catch (e) {} }; }
     // 성장기록 기간 토글
     document.querySelectorAll('#st2-ptg button').forEach(b => b.onclick = () => {
       document.querySelectorAll('#st2-ptg button').forEach(x => x.classList.remove('on'));
