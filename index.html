@@ -16646,6 +16646,32 @@
     box-shadow:0 0 12px rgba(67,224,230,.4); }
   .st2o-beam::after{ content:''; position:absolute; left:12%; right:12%; bottom:0; height:1px;
     background:linear-gradient(90deg,transparent,#e6fb62 20%,#43e0e6 50%,#8a63f0 80%,transparent); opacity:.55; }
+  /* ✨ 캡션 생성 카드 (배포탭 별) */
+  .st2cap{ margin-top:16px; border:1px solid rgba(67,224,230,.22); border-radius:20px; padding:16px 15px 15px;
+    background:radial-gradient(130% 70% at 50% 0%,rgba(67,224,230,.07),rgba(215,243,75,.03) 55%,rgba(255,255,255,.012)); position:relative; overflow:hidden; }
+  .st2cap-hd{ display:flex; align-items:flex-start; gap:11px; }
+  .st2cap-hd .ic{ font-size:20px; line-height:1; margin-top:1px; filter:drop-shadow(0 0 12px rgba(67,224,230,.5)); }
+  .st2cap-hd .t{ font-size:15.5px; font-weight:800; letter-spacing:-.02em; }
+  .st2cap-hd .s{ font-size:10.5px; color:var(--st2-sub); margin-top:4px; line-height:1.5; }
+  .st2cap-mat{ font-size:9.5px; font-weight:800; color:#43e0e6; letter-spacing:.02em; margin:14px 0 8px; }
+  .st2cap-chips{ display:flex; flex-wrap:wrap; gap:6px; }
+  .st2cap-chips span{ font-size:10.5px; font-weight:700; color:#c9cdc2; padding:5px 10px; border-radius:999px;
+    background:rgba(255,255,255,.045); border:1px solid var(--st2-line); }
+  .st2cap-chips span b{ color:var(--st2-txt); }
+  .st2cap-vp{ margin-top:13px; }
+  .st2cap-vp .r{ display:flex; justify-content:space-between; font-size:10.5px; color:var(--st2-sub); margin-bottom:5px; }
+  .st2cap-vp .r b{ color:var(--st2-lime); }
+  .st2cap-vp .trk{ height:6px; border-radius:999px; background:rgba(255,255,255,.06); overflow:hidden; }
+  .st2cap-vp .trk i{ display:block; height:100%; border-radius:999px;
+    background:linear-gradient(90deg,rgba(215,243,75,.4),var(--st2-lime)); box-shadow:0 0 10px rgba(215,243,75,.4); transition:width .5s cubic-bezier(.2,.8,.3,1); }
+  .st2cap-go{ display:block; width:100%; margin-top:16px; border:none; border-radius:14px; padding:14px; font-family:inherit;
+    font-size:14px; font-weight:800; color:#0b0c06; cursor:pointer; transition:transform .18s, box-shadow .18s;
+    background:linear-gradient(96deg,#43e0e6,#d7f34b); box-shadow:0 10px 28px -8px rgba(215,243,75,.35); }
+  .st2cap-go span{ display:block; font-size:9.5px; font-weight:700; color:rgba(11,12,6,.72); margin-top:2px; }
+  .st2cap-go:active{ transform:scale(.97); }
+  .st2cap-go.flash{ background:var(--st2-lime); }
+  .st2cap-ft{ font-size:10px; color:var(--st2-faint); line-height:1.6; margin-top:11px; }
+  .st2cap-ft b{ color:var(--st2-sub); }
   .st2o-ch{ border:1px solid var(--st2-line); border-radius:16px; margin-top:10px; overflow:hidden;
     background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.01));
     opacity:0; transform:translateY(12px); animation:st2orise .5s cubic-bezier(.2,.8,.3,1) forwards; animation-delay:var(--d,0s); }
@@ -44945,6 +44971,66 @@
     const words = t.split(/[\s·,\/]/).filter(w => w.length >= 2 && w.length <= 6).slice(0, 3);
     return [...new Set(ks.concat(words))].slice(0, 6).map(k => '#' + String(k).replace(/\s/g, '')).join(' ');
   }
+  // ===== ✨ 캡션 생성 (내 재료 + 내 말투로 프롬프트 조립, 0원 BYO) =====
+  function st2ActivePmm() {
+    try { if (typeof pmms !== 'undefined' && pmms && pmms.length) return pmms.find(x => x.id === _currentPmmId) || pmms[0]; } catch (e) {}
+    return null;
+  }
+  function st2VoiceSamples(exceptId) {
+    return (scripts || [])
+      .filter(s => (s.done || st2SrcText(s).length > 40) && String(s.id) !== String(exceptId))
+      .sort((a, b) => (b.updatedAt || b.createdAt || 0) - (a.updatedAt || a.createdAt || 0))
+      .map(s => st2SrcText(s)).filter(t => t.length > 40).slice(0, 3);
+  }
+  function st2CaptionMat(s) {
+    const p = st2ActivePmm();
+    const gold = (st2Kw.gold || []).filter(Boolean);
+    const collect = (p && Array.isArray(p.collect)) ? p.collect.filter(c => c && (c.quote || c.insight)) : [];
+    let target = p ? (p.targetName || ((p.answers && p.answers.customer) || '').split('\n')[0]) : '';
+    let product = p ? (p.productName || ((p.answers && p.answers.product) || '').split('\n')[0]) : '';
+    return { target: (target || '').trim(), product: (product || '').trim(), gold: gold, collect: collect, voices: st2VoiceSamples(s.id) };
+  }
+  function buildCaptionPrompt(s) {
+    const m = st2CaptionMat(s);
+    const p = st2ActivePmm();
+    const title = scriptDisplayTitle(s);
+    const body = st2SrcText(s);
+    const pain = (p && p.answers) ? (p.answers.empathy || '').trim() : '';
+    const proof = (p && p.answers) ? (p.answers.proof || '').trim() : '';
+    const quotes = m.collect.slice().sort((a, b) => (b.gold ? 1 : 0) - (a.gold ? 1 : 0)).slice(0, 6)
+      .map(c => '· ' + String(c.quote || '').trim() + (c.insight ? ' → ' + String(c.insight).trim() : ''))
+      .filter(x => x.length > 4);
+    const L = [];
+    L.push('너는 내 전속 SNS 카피라이터야. 아래 [내 원고]를 각 채널 형식에 맞게 다시 써줘.');
+    L.push('규칙: ① 없는 사실을 지어내지 마 — 오직 [내 재료]와 [내 원고] 안의 내용만 써. ② [말투 샘플]의 어투·리듬을 그대로 흉내 내. 뻔한 AI 문체(“~습니다” 남발, 교과서식 마무리) 금지. ③ 각 블록은 바로 복사해 올릴 수 있게 완성형으로.');
+    L.push('');
+    L.push('=== [내 원고] (이걸 채널별로 변환) ===');
+    L.push('제목: ' + title);
+    L.push(body || '(본문 없음 — 제목만으로 써줘)');
+    L.push('');
+    L.push('=== [내 재료] — 나만 가진 것, 최대한 녹여줘 ===');
+    if (m.target) L.push('· 타겟 고객: ' + m.target);
+    if (m.product) L.push('· 내 상품(고정댓글 CTA에 쓸 것): ' + m.product);
+    if (pain) L.push('· 고객이 밤잠 설치는 고민/상황:\n' + pain);
+    if (proof) L.push('· 의심을 없앨 증거: ' + proof.split('\n').slice(0, 3).join(' '));
+    if (m.gold.length) L.push('· 꼭 넣을 핵심 키워드: ' + m.gold.join(', '));
+    if (quotes.length) { L.push('· 고객이 실제로 한 말(공감 포인트):'); quotes.forEach(q => L.push('  ' + q)); }
+    L.push('');
+    if (m.voices.length) {
+      L.push('=== [말투 샘플] — 이 어투를 그대로 흉내 내 (내가 예전에 쓴 글) ===');
+      m.voices.forEach((v, i) => L.push('(' + (i + 1) + ') ' + v.slice(0, 300)));
+      L.push('');
+    }
+    L.push('=== 출력 형식 (아래 라벨 그대로, 각 블록 사이 한 줄 띄우기) ===');
+    L.push('[📸 인스타 캡션]  ← 첫 줄은 스크롤 멈추는 «훅» 한 문장. 이후 공감→핵심→저장/팔로우 유도. 이모지 적당히.');
+    L.push('[▶️ 유튜브 설명]  ← 2~3문장 요약 + 타임스탬프(00:00 …) 3~4개.');
+    L.push('[#️⃣ 해시태그]  ← 내 분야 태그 8~12개, 핵심 키워드 포함.');
+    L.push('[📌 유튜브 고정댓글]  ← 위 [내 상품]으로 자연스럽게 유도. 밀어붙이지 말고 도움 주듯. 링크 자리는 (프로필 링크)로.');
+    L.push('[🧵 스레드]  ← 짧고 대화체로, 한 가지 인사이트만.');
+    L.push('');
+    L.push('마지막에 [🌐 번역]으로 인스타 캡션의 영어·일본어 버전도 붙여줘.');
+    return L.join('\n');
+  }
   function st2Transform(s, ch) {
     const title = scriptDisplayTitle(s), body = st2SrcText(s);
     const lines = body.split('\n').map(l => l.trim()).filter(Boolean);
@@ -44980,6 +45066,26 @@
     const sel = srcs.find(s => String(s.id) === String(_st2OsmuSel)) || srcs[0];
     const st = st2Osmu[sel.id] || {};
     const doneN = ST2_CH.filter(c => st[c.k]).length;
+    // ✨ 캡션 생성 카드 (별 — 내 말투로 프롬프트 조립)
+    {
+      const cm = st2CaptionMat(sel);
+      const chips = [];
+      if (cm.target) chips.push('🎯 타겟 <b>' + esc(cm.target.slice(0, 14)) + '</b>');
+      chips.push('💬 공감 <b>' + cm.collect.length + '</b>');
+      chips.push('🔑 황금 <b>' + cm.gold.length + '</b>');
+      if (cm.product) chips.push('🛍 상품 <b>' + esc(cm.product.slice(0, 10)) + '</b>');
+      const vpct = Math.max(8, Math.round((cm.voices.length / 3) * 100));
+      h += '<div class="st2cap">' +
+        '<div class="st2cap-hd"><span class="ic">✨</span><div><div class="t">내 말투로 캡션·해시태그·고정댓글</div>' +
+        '<div class="s">인스타·유튜브·해시태그·고정댓글·스레드 + 번역까지 한 번에</div></div></div>' +
+        '<div class="st2cap-mat">이 재료로 씁니다 — 나만 가진 것</div>' +
+        '<div class="st2cap-chips">' + chips.map(c => '<span>' + c + '</span>').join('') + '</div>' +
+        '<div class="st2cap-vp"><div class="r"><span>✍️ 내 말투 학습</span><span><b>' + cm.voices.length + '편</b> 반영</span></div>' +
+        '<div class="trk"><i style="width:' + vpct + '%"></i></div></div>' +
+        '<button class="st2cap-go" id="st2capGo">✨ 캡션 프롬프트 복사<span>0원 · 내 챗GPT에 붙여넣기</span></button>' +
+        '<div class="st2cap-ft">버튼 → <b>내 재료가 다 박힌 프롬프트</b>가 복사돼요 → 챗GPT에 붙여넣기 → 내 말투로 다 써줍니다. <b>챗GPT 혼자선 이 글 못 써요.</b></div>' +
+        '</div>';
+    }
     h += '<div class="st2o-beam"></div>';
     if (st2SrcText(sel).length < 20) h += '<div class="st2g-ratio" style="text-align:center;margin-top:0">이 원고는 <b>본문이 비어 있어요</b> — 제목만으로 재단했어요. 원고에서 본문을 채우면 결과가 살아나요.</div>';
     h += ST2_CH.map((c, i) => {
@@ -44994,6 +45100,13 @@
     if (doneN >= 5) h += '<div class="st2o-full">🌈 <b>풀 배포!</b> — 「' + esc(scriptDisplayTitle(sel).slice(0, 16)) + '」이 다섯 곳에서 일하는 중</div>';
     el.innerHTML = h;
     // 배선
+    const capGo = document.getElementById('st2capGo');
+    if (capGo) capGo.onclick = () => {
+      const txt = buildCaptionPrompt(sel);
+      const flash = () => { capGo.classList.add('flash'); capGo.firstChild.textContent = '✓ 복사됨 — 챗GPT에 붙여넣으세요'; setTimeout(() => { capGo.classList.remove('flash'); capGo.firstChild.textContent = '✨ 캡션 프롬프트 복사'; }, 1800); };
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(flash).catch(() => { st2CopyFallback(txt); flash(); });
+      else { st2CopyFallback(txt); flash(); }
+    };
     el.querySelectorAll('[data-st2os]').forEach(c => c.onclick = () => { _st2OsmuSel = c.dataset.st2os; st2RenderOsmu(); });
     el.querySelectorAll('[data-st2cp]').forEach(b => b.onclick = () => {
       const txt = st2Transform(sel, b.dataset.st2cp);
