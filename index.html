@@ -12715,7 +12715,13 @@
   /* v410 카드 새 스펙: 조회수=좌하단 모노(애플풍) · 유형 칩=우하단 · 썸네일 있으면 제목 없음 */
   .fb-card-v { position: absolute; left: 8px; bottom: 7px; z-index: 3; padding: 0; background: none; color: rgba(255,255,255,.94); font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 10px; font-weight: 600; letter-spacing: .02em; font-variant-numeric: tabular-nums; text-shadow: 0 1px 3px rgba(0,0,0,.7); }
   .fb-card-v i { font-style: normal; font-size: 8px; opacity: .55; margin-right: 3px; }
-  .fb-card-type { position: absolute; right: 7px; bottom: 7px; z-index: 3; font-size: 8.5px; font-weight: 800; border-radius: 99px; padding: 2.5px 7px; backdrop-filter: blur(4px); white-space: nowrap; }
+  /* v495 · 조회수 = 티어 컬러 (에메랄드→라임→골드→로즈 발광) — 딱 봐도 급이 보인다 */
+  .fb-card-v.vt1 { color: #34d77a; }
+  .fb-card-v.vt2 { color: #d7f34b; }
+  .fb-card-v.vt3 { color: #F5C84B; text-shadow: 0 1px 3px rgba(0,0,0,.7), 0 0 9px rgba(245,200,75,.55); }
+  .fb-card-v.vt4 { color: #E87AB0; text-shadow: 0 1px 3px rgba(0,0,0,.7), 0 0 10px rgba(232,122,176,.65); font-weight: 800; }
+  /* v495 · 유형 칩 = 왼쪽 «상단» 이동 (인스타식) — 딱 봐도 무슨 유형 카드인지 */
+  .fb-card-type { position: absolute; left: 7px; top: 7px; right: auto; bottom: auto; z-index: 3; font-size: 8.5px; font-weight: 800; border-radius: 99px; padding: 3px 8px; backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); white-space: nowrap; background-color: rgba(6,7,4,.55) !important; }
   .fb-card-grad { position: absolute; left: 0; right: 0; bottom: 0; height: 46%; background: linear-gradient(transparent, rgba(0,0,0,.8)); z-index: 1; pointer-events: none; }
   .fb-sec-dot { width: 8px; height: 8px; border-radius: 50%; flex: none; }
   .fb-card-cap { position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; padding: 20px 8px 26px; background: linear-gradient(transparent, rgba(0,0,0,.86)); color: #fff; font-size: 11px; font-weight: 800; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
@@ -16029,6 +16035,44 @@
   .cs-chip.sorter:hover { box-shadow:0 0 32px rgba(46,224,138,.6),0 0 74px rgba(46,224,138,.16),inset 0 0 26px var(--nin),inset 0 1px 0 rgba(255,255,255,.28); }
   .cs-chip.master:hover { box-shadow:0 0 32px rgba(140,120,255,.6),0 0 74px rgba(140,120,255,.18),inset 0 0 26px var(--nin),inset 0 1px 0 rgba(255,255,255,.28); }
   .cs-chip.prod:hover { box-shadow:0 0 32px rgba(215,243,75,.6),0 0 74px rgba(215,243,75,.16),inset 0 0 26px var(--nin),inset 0 1px 0 rgba(255,255,255,.28); }
+  /* ⚡ 빠른 담기 칩 = 블루 네온 (담다=블루 헌법) */
+  .cs-chip.qc { grid-column:1 / -1; flex-direction:row; text-align:left; padding:14px 18px; gap:14px;
+    --nc:rgba(90,170,255,.72); --nglow:rgba(90,170,255,.28); --nin:rgba(90,170,255,.1); --nk:#8fc6ff;
+    border:1.5px solid var(--nc); box-shadow:0 0 20px var(--nglow),0 0 48px rgba(90,170,255,.12),inset 0 0 22px var(--nin),inset 0 1px 0 rgba(255,255,255,.2); }
+  .cs-chip.qc:hover { box-shadow:0 0 32px rgba(90,170,255,.6),0 0 74px rgba(90,170,255,.16),inset 0 0 26px var(--nin),inset 0 1px 0 rgba(255,255,255,.28); }
+  .cs-chip.qc .ic2 { width:66px; height:66px; min-width:66px; border-radius:18px; display:flex; align-items:center; justify-content:center; font-size:0;
+    border:1.5px solid var(--nc); background:rgba(0,0,0,.28); box-shadow:inset 0 0 16px var(--nin),0 0 18px var(--nglow); color:var(--nk); position:relative; z-index:1; }
+  .cs-chip.qc .ic2 svg { width:32px; height:32px; }
+  .cs-chip.qc .ic2 .g { stroke:currentColor; fill:none; stroke-width:2; stroke-linejoin:round; }
+  .cs-chip.qc .arrow { margin-left:auto; }
+  /* ⚡ 빠른 담기 방 타일 */
+  .qc-tiles { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:22px; }
+  .qc-tile { position:relative; border-radius:20px; padding:18px 14px 16px; cursor:pointer; font-family:inherit; text-align:center;
+    display:flex; flex-direction:column; align-items:center; gap:7px;
+    background:linear-gradient(160deg,rgba(255,255,255,.07),rgba(255,255,255,.02)); color:var(--cs-ink);
+    border:1.5px solid var(--qcc,rgba(255,255,255,.16)); box-shadow:0 0 18px var(--qcg,transparent),inset 0 0 18px var(--qci,transparent),inset 0 1px 0 rgba(255,255,255,.16);
+    transition:transform .2s, box-shadow .2s; }
+  .qc-tile:hover { transform:translateY(-3px); box-shadow:0 0 30px var(--qcg,rgba(255,255,255,.1)),inset 0 0 22px var(--qci,transparent),inset 0 1px 0 rgba(255,255,255,.24); }
+  .qc-tile:active { transform:scale(.97); }
+  .qc-tile .qi { font-size:26px; }
+  .qc-tile .qn { font-size:14px; font-weight:900; }
+  .qc-tile .qd { font-size:10px; color:var(--cs-sub); line-height:1.5; }
+  .qc-tile.wide { grid-column:1 / -1; flex-direction:row; text-align:left; padding:14px 16px; gap:12px; }
+  .qc-tile.wide .qd { margin-left:auto; text-align:right; }
+  .qc-tile.t-bm { --qcc:rgba(215,243,75,.55); --qcg:rgba(215,243,75,.16); --qci:rgba(215,243,75,.07); }
+  .qc-tile.t-cp { --qcc:rgba(240,178,58,.5); --qcg:rgba(240,178,58,.14); --qci:rgba(240,178,58,.07); }
+  .qc-tile.t-id { --qcc:rgba(200,240,58,.45); --qcg:rgba(200,240,58,.12); --qci:rgba(200,240,58,.06); }
+  .qc-tile.t-cm { --qcc:rgba(107,176,240,.55); --qcg:rgba(107,176,240,.16); --qci:rgba(107,176,240,.07); }
+  .qc-tile.t-ai { --qcc:rgba(46,224,138,.55); --qcg:rgba(46,224,138,.16); --qci:rgba(46,224,138,.07); }
+  /* 빠른 담기 → 시트 도착 시 담기 카드 반짝 안내 */
+  .entry-card.qc-glow { box-shadow:0 0 0 2px rgba(90,170,255,.6), 0 0 34px rgba(90,170,255,.25) !important; transition:box-shadow .4s; }
+  /* 🤖 AI 정리 — 파일 끌고 들어오면 방 전체가 드롭존 */
+  .cso-dz { position:fixed; inset:10px; z-index:60; display:none; align-items:center; justify-content:center; flex-direction:column; gap:10px;
+    border:2.5px dashed rgba(194,242,74,.75); border-radius:26px; background:rgba(8,14,9,.72); backdrop-filter:blur(4px); -webkit-backdrop-filter:blur(4px);
+    pointer-events:none; color:#e6fb62; font-size:16px; font-weight:900; text-align:center; }
+  .cso-dz .s { font-size:11.5px; color:var(--cs-sub); font-weight:700; }
+  #cs-room.dzon .cso-dz { display:flex; animation:qdzpop .3s cubic-bezier(.2,1.6,.4,1) both; }
+  @keyframes qdzpop { from{ opacity:0; transform:scale(.96); } to{ opacity:1; transform:scale(1); } }
   .cs-chip .nm { color:#FBFCF7; }
   .cs-chip .arrow, .cs-chip:hover .arrow { color:var(--nk); }
   .cs-flowmini { text-align:center; font-size:10.5px; color:var(--cs-faint); margin-top:18px; letter-spacing:.02em; }
@@ -17712,10 +17756,40 @@
           </div>
           <div class="arrow">→</div>
         </div>
+        <div class="cs-chip qc" data-cs-go="qc">
+          <div class="ic2"><svg viewBox="0 0 24 24"><path class="g" d="M13 2L5 13.5h6L11 22l8-11.5h-6L13 2z"/></svg></div>
+          <div class="tx">
+            <div class="eb">⚡ 담기</div>
+            <div class="nm">빠른 담기</div>
+            <div class="ds">본 순간, 3초 안에 저장하는 문</div>
+          </div>
+          <div class="arrow">→</div>
+        </div>
       </div>
       <div class="cs-flowmini">담고 <b>→</b> 이해하고 <b>→</b> 만든다 · 그 성과가 다시 창고로 <b>↻</b></div>
       <div class="cs-oneapp">✦ 사이트 3개 아니에요 — 하나의 앱에서 방만 바꿔요.</div>
       <button class="cs-skip" data-cs-go="ware">그냥 하던 화면으로 →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ⚡ 빠른 담기 방 (4번째 갈림길) — 본 순간 3초 저장 라우터 -->
+<div class="cs-ov" id="qc-room">
+  <div class="cs-air">
+    <div class="cs-wrap">
+      <div class="cs-top"><button class="cs-back" id="qc-back">‹ 갈림길로</button></div>
+      <div class="cs-greet">
+        <div class="q">뭘 <span class="em">담을까요</span>?</div>
+        <div class="s">인스타에서 좋은 걸 본 <b>그 순간</b> — 3초 안에 저장.</div>
+      </div>
+      <div class="qc-tiles">
+        <button type="button" class="qc-tile t-bm" data-qc="thumb"><span class="qi">🛍</span><span class="qn">벤치마킹 담기</span><span class="qd">사진+후킹+조회수 — 간단히</span></button>
+        <button type="button" class="qc-tile t-cp" data-qc="copy"><span class="qi">💬</span><span class="qn">수식어·문구</span><span class="qd">말맛 나는 후킹 문구</span></button>
+        <button type="button" class="qc-tile t-id" data-qc="idea"><span class="qi">💡</span><span class="qn">아이디어</span><span class="qd">떠오른 소재·기획 메모</span></button>
+        <button type="button" class="qc-tile t-cm" data-qc="comment"><span class="qi">🗨</span><span class="qn">공감댓글</span><span class="qd">고객 반응 댓글 캡처</span></button>
+        <button type="button" class="qc-tile t-ai wide" data-qc="ai"><span class="qi">🤖</span><span class="qn">제대로 분해</span><span class="qd">캡처 여러 장 → AI 분해로 꽉 채워 담기</span></button>
+      </div>
+      <div class="cs-oneapp">✦ 누르면 바로 그 담기 칸으로 데려다 드려요.</div>
     </div>
   </div>
 </div>
@@ -19890,6 +19964,11 @@
     .slv-chip.on{color:#0B0C0A;font-weight:800}
     .slv-axis[data-ax="thumb"] .slv-chip.on{background:#a7e3c4;border-color:#a7e3c4}
     .slv-axis[data-ax="copy"] .slv-chip.on{background:#9fd0e8;border-color:#9fd0e8}
+    /* v495 · 사람-판단 축 — 퍼널(유입 캔들·전환 초록)·핏(골드)·조회수(라임) */
+    .slv-axis[data-ax="funnel"] .slv-chip.on[data-fn="attract"]{background:#E0B27A;border-color:#E0B27A}
+    .slv-axis[data-ax="funnel"] .slv-chip.on[data-fn="convert"]{background:#34d77a;border-color:#34d77a}
+    .slv-axis[data-ax="fit"] .slv-chip.on{background:#F5C84B;border-color:#F5C84B}
+    .slv-axis[data-ax="views"] .slv-chip.on{background:#d7f34b;border-color:#d7f34b}
     .slv-chip.addc{border-style:dashed;color:var(--sfaint)}
     /* ✦ 추론으로 미리 켜둔 것 — 내가 고른 것과 구분되게 점선 */
     .slv-chip.gsd{border-style:dashed;box-shadow:none}
@@ -22880,14 +22959,15 @@
       cols.push({ key: '__none__', title: '분류 안 됨', cls: 'fmt-none', match: r => !r.format });
     }
 
-    // 카드 HTML 헬퍼 — v410 새 스펙: 썸네일=제목, 조회수 좌하단, 유형 칩 우하단(유형 컬러)
+    // 카드 HTML 헬퍼 — v495 스펙: 썸네일=제목, 조회수 좌하단(티어 컬러), 유형 칩 좌상단(유형 컬러)
     const rowCard = (r) => {
       const views = r.views ? fmtNum(r.views) : '';
+      const vt = r.views >= 1000000 ? ' vt4' : r.views >= 500000 ? ' vt3' : r.views >= 100000 ? ' vt2' : r.views >= 10000 ? ' vt1' : '';
       // 썸네일 있으면 제목 생략(썸네일이 곧 제목), 없으면 제목 유지(안 그러면 익명 카드)
       const cap = r.hasThumb ? '' : `<div class="fb-card-cap">${esc(r.hook || stripHtml(r.script || '').slice(0, 80) || r.why || '(내용 없음)')}</div>`;
       const tc = r.format ? fbTypeColor(r.format) : '';
-      const chip = r.format ? `<span class="fb-card-type" style="color:${tc};background:${fbHexA(tc, .14)};border:1px solid ${fbHexA(tc, .36)}">${esc(r.format)}</span>` : '';
-      return `<div class="fb-card ${r.hasThumb ? 'has-img' : ''}" data-row="${r.id}">${r.hasThumb ? `<img class="fb-card-thumb" data-thumb-row="${r.id}" alt="" style="display:none;" /><span class="fb-card-grad"></span>` : ''}${cap}${views ? `<span class="fb-card-v"><i>▶</i>${views}</span>` : ''}${chip}</div>`;
+      const chip = r.format ? `<span class="fb-card-type" style="color:${tc};border:1px solid ${fbHexA(tc, .5)}">${esc(r.format)}</span>` : '';
+      return `<div class="fb-card ${r.hasThumb ? 'has-img' : ''}" data-row="${r.id}">${r.hasThumb ? `<img class="fb-card-thumb" data-thumb-row="${r.id}" alt="" style="display:none;" /><span class="fb-card-grad"></span>` : ''}${cap}${views ? `<span class="fb-card-v${vt}"><i>▶</i>${views}</span>` : ''}${chip}</div>`;
     };
     const collectCard = (c) => `<div class="fb-card fb-card-collect" data-collect="${c.id}"><img class="fb-card-thumb" data-collect-thumb="${c.id}" alt="" style="display:none;" /><span class="fb-card-badge">⚡ 소재</span></div>`;
 
@@ -33600,25 +33680,8 @@
             '<div class="dch-num"><span id="dch-num-v">0</span><span class="u"> 명</span></div>' +
             '<div class="dch-cap">' + heroCap + '</div>' +
             '<div class="dch-whisper2">' + heroWhisper + '</div>'
-          // ▸ 0의 상태 — 실패가 아니라 초대. 0에도 두 단계가 있다.
-          //   ① 아직 안 담음 → 담기로 초대   ② 담았는데 안 올림 → 올리기로 초대
-          : (function () {
-              var got = Math.min(3, analyzed), need = Math.max(0, 3 - got);
-              var stage2 = need === 0; // 레퍼런스는 모았고, 이제 올릴 차례
-              return '<div class="dch-seed"><div class="ring"></div><div class="core"></div></div>' +
-                '<div class="dch-eyebrow">' + (stage2 ? '다음 걸음' : '첫 걸음') + '</div>' +
-                '<div class="dch-invite">' + (stage2
-                  ? '감각은 열렸어요<br><b>이제 하나 올릴 차례</b>'
-                  : '레퍼런스 <b>' + need + '개</b>면<br>감각이 열려요') + '</div>' +
-                '<div class="dch-slots">' +
-                  [0, 1, 2].map(function (i) { return '<i class="' + (stage2 || i < got ? 'f' : '') + '"></i>'; }).join('') +
-                '</div>' +
-                '<div class="dch-prog">' + (stage2
-                  ? '레퍼런스 <b>' + analyzed + '개</b> 모았어요 · 첫 콘텐츠를 기다리는 중'
-                  : '<b>' + got + '</b> / 3 담았어요') + '</div>' +
-                '<button class="dch-zcta" id="dch-zero-cta">' +
-                  (stage2 ? '✍️ 원고 쓰러 가기' : '🛍 레퍼런스 담으러 가기') + '</button>';
-            })()) +
+          // ▸ 0의 상태 — v494: 안내 문구·버튼 삭제(원고와 무관한 내용, 사장님 지시). 씨앗 비주얼만.
+          : '<div class="dch-seed"><div class="ring"></div><div class="core"></div></div>') +
       '</div>' +
       '<div class="dch-scroll">당신이 어떻게 여기까지 왔는지<span class="ar">↓</span></div>' +
       '</div>' +
@@ -42366,6 +42429,32 @@
         btn.disabled = !host.querySelector('.slv-chip.on'); }; });
       ax.querySelector('.slv-axedit').onclick = () => slvOpenEdit(a);
     });
+    // ── v495 · 사람-판단 축 3종 (AI가 못 정하는 것 — «분류는 AI가, 판단은 사람이») ──
+    //   퍼널(애매하면 사람 확정) · 나에게 핏(별점=쓸 건가) · 조회수(그래프·적합도 엔진의 연료)
+    (function () {
+      const btn = document.getElementById('slv-assign');
+      function addSpecial(axKey, dot, name, hint, chipsHtml) {
+        const ax = document.createElement('div'); ax.className = 'slv-axis'; ax.dataset.ax = axKey;
+        ax.innerHTML = '<div class="slv-axh"><span class="d" style="background:' + dot + '"></span><span class="n">' + name + '</span>' +
+          '<span class="hint">' + hint + '</span></div><div class="slv-chips">' + chipsHtml + '</div>';
+        host.appendChild(ax);
+        // 단일 선택 (라디오) — 하나 켜면 형제는 꺼짐
+        ax.querySelectorAll('.slv-chip').forEach(ch => { ch.onclick = () => {
+          const was = ch.classList.contains('on');
+          ax.querySelectorAll('.slv-chip').forEach(x => x.classList.remove('on'));
+          if (!was) ch.classList.add('on');
+          btn.disabled = !host.querySelector('.slv-chip.on');
+        }; });
+      }
+      if (!r.funnelStage) addSpecial('funnel', '#E0B27A', '🚪 퍼널', '처음 본 사람도 끝까지 볼까? 예=유입 · 아니오=전환',
+        '<button type="button" class="slv-chip" data-fn="attract">🚪 유입 — 누구나 볼 것</button>' +
+        '<button type="button" class="slv-chip" data-fn="convert">🌱 전환 — 내 고객용 (CTA·예약·DM)</button>');
+      if (!(r.rating > 0)) addSpecial('fit', '#F5C84B', '⭐ 나에게 핏', '내 고객·내 방향에 맞나 — 쓸 건가',
+        [1, 2, 3, 4, 5].map(n => '<button type="button" class="slv-chip" data-fit="' + n + '">' + '★'.repeat(n) + '</button>').join(''));
+      if (!(r.views > 0)) addSpecial('views', '#a9b4c0', '▶ 조회수', '대략이면 충분 — 나중에 고칠 수 있어요',
+        [['1만+', 10000], ['10만+', 100000], ['50만+', 500000], ['100만+', 1000000], ['500만+', 5000000]]
+          .map(v => '<button type="button" class="slv-chip" data-vw="' + v[1] + '">' + v[0] + '</button>').join(''));
+    })();
     // 미리 골라둔 게 있으면 바로 「배정」할 수 있게
     try {
       const b2 = document.getElementById('slv-assign');
@@ -42458,6 +42547,13 @@
       const sel = [...host.querySelectorAll('.slv-axis[data-ax="' + a.ax + '"] .slv-chip.on')].map(x => x.dataset.c);
       if (sel.length) { r[a.key] = [...new Set((r[a.key] || []).concat(sel))]; picked += sel.length; }
     });
+    // v495 · 사람-판단 축 3종 저장 (퍼널·핏 별점·조회수)
+    const _fn = host.querySelector('.slv-axis[data-ax="funnel"] .slv-chip.on');
+    if (_fn) { r.funnelStage = _fn.dataset.fn || ''; picked++; }
+    const _ft = host.querySelector('.slv-axis[data-ax="fit"] .slv-chip.on');
+    if (_ft) { r.rating = parseInt(_ft.dataset.fit, 10) || 0; picked++; }
+    const _vw = host.querySelector('.slv-axis[data-ax="views"] .slv-chip.on');
+    if (_vw) { r.views = parseInt(_vw.dataset.vw, 10) || 0; picked++; }
     if (!picked) return;
     _slvBusy = true; if (!_slvT0) _slvT0 = Date.now();
     r.updatedAt = Date.now();
@@ -42832,6 +42928,29 @@
         if (txt){ csoQ('cso-paste').value = txt; csoTryParse(); }
       });
     }
+    // ── v494 · 방 전체 드롭존: 파일 끌고 들어오면 화면 가득 «놓으면 담겨요» (창고 앱 공법) ──
+    (function(){
+      var room = document.getElementById('cs-room');
+      if (!room || room.querySelector('.cso-dz')) return;
+      var dz = document.createElement('div'); dz.className = 'cso-dz';
+      dz.innerHTML = '📸 여기에 놓으면 여러 장 담겨요<span class="s">이미지·텍스트 파일 모두 OK — 놓는 순간 골대로 슛</span>';
+      room.appendChild(dz);
+      var dzN = 0;
+      function hasFiles(e){ try { return e.dataTransfer && Array.prototype.indexOf.call(e.dataTransfer.types || [], 'Files') !== -1; } catch (err) { return false; } }
+      room.addEventListener('dragenter', function(e){ if (hasFiles(e)){ dzN++; room.classList.add('dzon'); } });
+      room.addEventListener('dragleave', function(){ dzN = Math.max(0, dzN - 1); if (!dzN) room.classList.remove('dzon'); });
+      room.addEventListener('dragover', function(e){ if (hasFiles(e)) e.preventDefault(); });
+      room.addEventListener('drop', function(e){
+        dzN = 0; room.classList.remove('dzon');
+        if (st && st.contains(e.target)) return;  // 골대 자체 드롭은 기존 핸들러가 처리 (이중 저장 방지)
+        e.preventDefault();
+        var dt = e.dataTransfer; if (!dt) return;
+        var imgs = Array.prototype.slice.call(dt.files || []).filter(function(f){ return f.type && f.type.indexOf('image/') === 0; });
+        if (imgs.length){ csHandlePhotos(imgs).then(function(){ csoRenderStrip(); if (_csBlocks.length) csoRenderCards(); csoUpdateStatusbar(); csoThrowFx(); }); return; }
+        var tf = Array.prototype.slice.call(dt.files || []).filter(function(f){ return f.type === 'text/plain'; })[0];
+        if (tf){ var rd = new FileReader(); rd.onload = function(){ csoQ('cso-paste').value = rd.result; csoTryParse(); }; rd.readAsText(tf); }
+      });
+    })();
     // ── 무대 열려 있을 때 어디서든 붙여넣기(Ctrl+V) → 바로 던지기 ──
     document.addEventListener('paste', function(e){
       var room = document.getElementById('cs-room');
@@ -43063,6 +43182,20 @@
     }, 500);
   }
 
+  // ---- ⚡ 빠른 담기 방 (4번째 갈림길) — 라우터: 누르면 그 담기 칸으로 직행 ----
+  function qcOpen() {
+    csCloseFork();
+    const r = document.getElementById('qc-room'); if (!r) return;
+    r.classList.add('show'); document.body.style.overflow = 'hidden';
+    const tiles = r.querySelectorAll('.qc-tile');
+    tiles.forEach(t => { t.style.opacity = '0'; t.style.transform = 'translateY(16px)'; });
+    tiles.forEach((t, i) => setTimeout(() => { t.style.transition = 'opacity .35s, transform .45s cubic-bezier(.2,1.2,.3,1)'; t.style.opacity = ''; t.style.transform = ''; }, 70 + i * 70));
+  }
+  function qcClose() {
+    const r = document.getElementById('qc-room'); if (r) r.classList.remove('show');
+    document.body.style.overflow = '';
+  }
+
   // ---- 배선 (1회) ----
   (function csWire() {
     // 갈림길 칩
@@ -43071,9 +43204,28 @@
         const go = el.dataset.csGo;
         if (go === 'sorter') csOpenRoom();
         else if (go === 'prod') { csCloseFork(); try { switchWorkspace('studio'); } catch (e) {} } // v413 제작소 홈으로
+        else if (go === 'qc') qcOpen(); // ⚡ 빠른 담기
         else csCloseFork(); // ware/skip
       });
     });
+    // ⚡ 빠른 담기 방
+    const qb = document.getElementById('qc-back'); if (qb) qb.onclick = () => { qcClose(); csOpenFork(); };
+    document.querySelectorAll('#qc-room [data-qc]').forEach(t => t.addEventListener('click', () => {
+      const k = t.dataset.qc;
+      qcClose();
+      if (k === 'ai') { csOpenRoom(); return; }
+      try { switchWorkspace('sheet'); } catch (e) {}
+      setTimeout(() => {
+        try {
+          beSelectType(k);
+          const card = document.querySelector('.entry-card');
+          if (card) {
+            card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            card.classList.add('qc-glow'); setTimeout(() => card.classList.remove('qc-glow'), 1700);
+          }
+        } catch (e) {}
+      }, 260);
+    }));
     // 정리 방
     const bk = document.getElementById('cs-room-back'); if (bk) bk.onclick = () => { csCloseRoom(); csOpenFork(); };
     const ww = document.getElementById('cs-room-ware'); if (ww) ww.onclick = () => csCloseRoom();
@@ -43684,6 +43836,32 @@
     }, 300);
   }
 
+  // 🔐 v494 · 한 기기 한 세션 — 다른 기기에서 로그인하면 이 기기는 자동으로 풀린다
+  const SESS_LOCK_KEY = 'session-lock';
+  function cmDeviceId() {
+    try {
+      let d = localStorage.getItem('cm-device-id');
+      if (!d) { d = 'dev_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8); localStorage.setItem('cm-device-id', d); }
+      return d;
+    } catch (e) { return 'dev_mem'; }
+  }
+  async function cmClaimSession() {
+    try { if (_currentUser) await window.storage.set(SESS_LOCK_KEY, JSON.stringify({ dev: cmDeviceId(), at: Date.now() })); } catch (e) {}
+  }
+  async function cmCheckSession() {
+    try {
+      if (!_currentUser) return;
+      const r = await window.storage.get(SESS_LOCK_KEY); if (!r) return;
+      const v = JSON.parse(r.value !== undefined ? r.value : r);
+      // 다른 기기가 최신 세션을 쥐고 있을 때만 풀림 (읽기 실패 등은 그냥 유지 = fail-open)
+      if (v && v.dev && v.dev !== cmDeviceId()) {
+        await setCurrentUser(null);
+        alert('🔒 다른 기기에서 로그인되어, 이 기기는 안전을 위해 로그아웃됐어요.');
+        location.reload();
+      }
+    } catch (e) {}
+  }
+
   function onLoggedIn() {
     const nameEl = document.getElementById('sb-user-name');
     if (nameEl && _currentUser) nameEl.textContent = '(' + _currentUser.name + ')';
@@ -43717,8 +43895,16 @@
     setTimeout(() => { try { maybeBackupReminder(); } catch (e) {} }, 1600);
     // 오늘 접속 기록 → 연속 접속일(스트릭) 갱신
     setTimeout(() => { try { recordVisitToday(); } catch (e) {} }, 400);
-    // 🤖 갈림길 (AI 컨텐츠 정리 / 창고 / 컨텐츠 제작소) — 온보딩 중이면 스킵
-    setTimeout(() => { try { maybeShowFork(); } catch (e) {} }, 1100);
+    // 🤖 갈림길 (AI 컨텐츠 정리 / 창고 / 제작소 / ⚡빠른 담기) — 온보딩 중이면 스킵. v494: 1100→400ms (저마찰)
+    setTimeout(() => { try { maybeShowFork(); } catch (e) {} }, 400);
+    // 🔐 세션 잡기 + 다른 기기 로그인 감시 (화면 다시 볼 때마다 확인)
+    setTimeout(() => { try { cmClaimSession(); } catch (e) {} }, 900);
+    if (!window.__sessWatch) {
+      window.__sessWatch = true;
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') setTimeout(() => { try { cmCheckSession(); } catch (e) {} }, 800);
+      });
+    }
   }
 
   // 앱 톤에 맞는 확인창 (브라우저 기본 confirm 대체) — Promise<boolean>
