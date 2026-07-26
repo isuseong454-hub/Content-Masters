@@ -40937,6 +40937,15 @@
     } catch (e) { console.error('[Supabase] ' + fn + ' 예외:', e); return { ok: false, reason: 'network' }; }
   }
 
+  // === 🔐 v503 · 비번 해시 «코드 소금» ===
+  //   옛 방식(1) = sha256(pin) — 같은 PIN 쓰는 두 사람의 해시가 똑같았다(취약).
+  //   새 방식(2) = sha256(code + ':' + pin) — 사람마다 다른 해시.
+  //   서버(step6 SQL)가 코드별 hashVer를 알려주고, 옛 계정은 로그인 성공 시 자동 승급.
+  let _hashVer = 1;                       // 이번 로그인 대상 코드의 방식
+  let _hashVerKnown = false;              // 서버가 step6 SQL을 갖고 있나 (없으면 옛 방식 고수)
+  async function pinHashFor(code, pin, ver) {
+    return (ver === 2) ? sha256(String(code).toUpperCase() + ':' + pin) : sha256(pin);
+  }
   // === SHA-256 해시 ===
   async function sha256(text) {
     const enc = new TextEncoder().encode(text);
@@ -41217,6 +41226,9 @@
       if (st.expired) { errEl.textContent = '만료된 코드예요. 운영자에게 문의해주세요.'; return; }
       errEl.textContent = '';
       _pendingCode = code;
+      // v503 · 이 코드의 비번 해시 방식 (서버가 안 알려주면 옛 방식으로 안전하게 폴백)
+      _hashVerKnown = (typeof st.hashVer === 'number');   // step6 SQL 적용 여부
+      _hashVer = _hashVerKnown ? st.hashVer : 1;
       // 칩 텍스트 (코드만 표시, 이름 미노출)
       ['auth-chip-code', 'auth-chip-code-2'].forEach(id => { const el = document.getElementById(id); if (el) el.textContent = code; });
       ['auth-chip-name', 'auth-chip-name-2'].forEach(id => { const el = document.getElementById(id); if (el) el.textContent = ''; });
@@ -41238,7 +41250,7 @@
       const errEl = document.getElementById('auth-pin-error');
       if (!_pendingCode) { errEl.textContent = '코드 오류. 다시 시도해주세요.'; return; }
       const goBtn = document.getElementById('auth-pin-go'); if (goBtn) goBtn.classList.add('loading');
-      const hash = await sha256(pin);
+      let hash = await pinHashFor(_pendingCode, pin, _hashVer);   // v503 · 코드 소금
       const res = await cmRpc('cm_login', { p_code: _pendingCode, p_pin_hash: hash });
       if (goBtn) goBtn.classList.remove('loading');
       if (!res || !res.ok) {
@@ -41260,6 +41272,14 @@
         return;
       }
       // 통과
+      // v503 · 옛 방식(1)으로 들어왔으면 새 소금 해시로 조용히 승급 (사용자는 아무것도 안 함)
+      if (_hashVerKnown && _hashVer !== 2) {   // step6 SQL이 있는 서버에서만 승급 시도
+        try {
+          const nh = await pinHashFor(_pendingCode, pin, 2);
+          const up = await cmRpc('cm_rehash', { p_code: _pendingCode, p_old_hash: hash, p_new_hash: nh });
+          if (up && up.ok) { hash = nh; _hashVer = 2; }
+        } catch (e) {}
+      }
       const autoLogin = document.getElementById('auth-autologin').checked;
       await setAutologin(autoLogin);
       addRecentCode(res.user.code); // 내가 쓴 코드 기기에 저장 → 다음에 자동 표시
@@ -41321,7 +41341,8 @@
       }
       if (!_pendingCode) { errEl.textContent = '코드 오류. 다시 시도해주세요.'; return; }
       const goBtn = document.getElementById('auth-signup-go'); if (goBtn) goBtn.classList.add('loading');
-      const hash = await sha256(pin1);
+      // v503 · 서버가 새 방식을 아는 경우에만 소금 해시로 가입 (아니면 옛 방식 — 호환)
+      const hash = await pinHashFor(_pendingCode, pin1, _hashVerKnown ? 2 : 1);
       const res = await cmRpc('cm_signup', { p_code: _pendingCode, p_pin_hash: hash });
       if (goBtn) goBtn.classList.remove('loading');
       if (!res || !res.ok) {
