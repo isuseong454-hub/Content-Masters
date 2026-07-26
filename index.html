@@ -12563,7 +12563,7 @@
   .tb-sec-head { font-family: 'Pretendard', sans-serif; font-size: 14px; font-weight: 800; color: var(--text-main); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
   .tb-sec-cnt { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: var(--emerald); background: var(--emerald-faint); border: 1px solid var(--emerald-line); border-radius: 100px; padding: 1px 8px; }
   .tg-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
-  @media (max-width: 600px) { .tg-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; } }
+  @media (max-width: 600px) { .tg-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; } } /* v501 · 폰=한 줄 3장 */
   .tg-card { background: var(--bg-card); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; cursor: pointer; transition: border-color 0.15s, transform 0.15s; }
   .tg-card:hover { border-color: var(--emerald-line); transform: translateY(-2px); }
   .tg-thumb { width: 100%; aspect-ratio: 9 / 16; background: var(--bg-void); display: flex; align-items: center; justify-content: center; overflow: hidden; }
@@ -17561,7 +17561,19 @@
   .px-pdl span{ color:var(--pxsub); }
   .px-rq{ padding-left:12px; border-left:2px solid rgba(215,243,75,.5); margin-bottom:8px;
     font-size:12px; line-height:1.65; color:#f1f2ec; }
-  .px-rfoot{ display:flex; justify-content:flex-end; padding-top:16px; }
+  .px-rfoot{ display:flex; justify-content:flex-end; gap:9px; padding-top:16px; }
+  /* v502 · 판독 소견 (BC 합체 — B진단서) */
+  .px-ins{ display:flex; gap:8px; font-size:11.5px; font-weight:700; line-height:1.6; margin-top:5px; color:#cfd4c0; }
+  .px-ins .d{ color:#43E0E6; flex:none; }
+  .px-ins b{ color:#D7F34B; }
+  .px-ins:hover ~ #px-formula .px-fstep, .px-insl:hover + * .px-fstep{ filter:brightness(1.2); }
+  /* v502 · 구조 모음 저장 버튼 (C연금술 — 공식 카드 정제) */
+  .px-save2{ font-family:inherit; font-size:12px; font-weight:800; border-radius:12px; padding:11px 16px; cursor:pointer;
+    color:#F5C84B; background:rgba(245,200,75,.08); border:1px solid rgba(245,200,75,.45);
+    box-shadow:0 0 14px rgba(245,200,75,.12); transition:all .18s; }
+  .px-save2:hover{ background:rgba(245,200,75,.16); box-shadow:0 0 20px rgba(245,200,75,.25); }
+  .px-save2:active{ transform:scale(.972); }
+  .px-save2.done{ color:#0b0c06; background:#F5C84B; border-color:#F5C84B; }
   .px-save{ font-family:inherit; font-size:12px; font-weight:800; border-radius:12px; padding:11px 21px;
     cursor:pointer; color:#141609; border:1px solid rgba(255,255,255,.22);
     background:linear-gradient(180deg,#eafd72,#c9e73f);
@@ -20185,6 +20197,10 @@
           <button class="fb-toggle-btn" data-fbmode="comment" style="display:none;">💬 공감댓글</button>
           <button class="fb-toggle-btn" data-fbmode="idea">💡 아이디어</button>
           <button class="fb-toggle-btn" data-fbmode="audio" style="display:none;">🎵 오디오</button>
+        </div>
+        <div class="tb-search-wrap" id="fb-search-wrap">
+          <input type="text" class="tb-search" id="fb-search" placeholder="🔍 검색 — 후킹·유형·키워드로 빨리 찾기" />
+          <button class="tb-search-clear" id="fb-search-clear" type="button" title="지우기">×</button>
         </div>
         <button class="fb-sortline" id="fb-sortline"><span class="t">🦾 미분류 <b id="fb-sl-n">0</b>개 대기 — 썸네일·수식어 유형 비어있어요</span><span class="go">정리 시작 →</span></button>
       </section>
@@ -22983,6 +22999,11 @@
     try { slvRefreshEntries(); } catch (e) {} // 🦾 미분류 배너 갱신
     const el = document.getElementById('fb-columns');
     if (!el) return;
+    // v500 · 보드 검색바 — 시트 보드 모드(유형/퍼널/조회수)에서만 표시
+    try {
+      const sw = document.getElementById('fb-search-wrap');
+      if (sw) sw.style.display = (['format', 'purpose', 'views'].indexOf(fbGroupMode) !== -1) ? '' : 'none';
+    } catch (e) {}
 
     // 분류 뷰 토글 (유형/퍼널/조회수 + 키워드/댓글/아이디어/오디오) 바인딩
     document.querySelectorAll('.fb-toggle-btn').forEach(b => {
@@ -23062,16 +23083,26 @@
       const cap = r.hasThumb ? '' : `<div class="fb-card-cap">${esc(r.hook || stripHtml(r.script || '').slice(0, 80) || r.why || '(내용 없음)')}</div>`;
       const tc = r.format ? fbTypeColor(r.format) : '';
       const chip = r.format ? `<span class="fb-card-type" style="color:${tc};border:1px solid ${fbHexA(tc, .5)}">${esc(r.format)}</span>` : '';
-      return `<div class="fb-card ${r.hasThumb ? 'has-img' : ''}" data-row="${r.id}">${r.hasThumb ? `<img class="fb-card-thumb" data-thumb-row="${r.id}" alt="" style="display:none;" /><span class="fb-card-grad"></span>` : ''}${cap}${views ? `<span class="fb-card-v${vt}"><i>▶</i>${views}</span>` : ''}${chip}</div>`;
+      // v501 · «강함» — 강함 플래그 카드는 유형색 발광 테두리 (컬러=유형, 빛=강함)
+      const isStrong = !!(r.thumbStrong || r.copyStrong);
+      const sc = tc || '#D7F34B';
+      const strongStyle = isStrong ? ` style="border:1.5px solid ${fbHexA(sc, .7)};box-shadow:0 0 14px ${fbHexA(sc, .3)}, inset 0 0 10px ${fbHexA(sc, .08)}"` : '';
+      return `<div class="fb-card ${r.hasThumb ? 'has-img' : ''}${isStrong ? ' strong' : ''}" data-row="${r.id}"${strongStyle}>${r.hasThumb ? `<img class="fb-card-thumb" data-thumb-row="${r.id}" alt="" style="display:none;" /><span class="fb-card-grad"></span>` : ''}${cap}${views ? `<span class="fb-card-v${vt}"><i>▶</i>${views}</span>` : ''}${chip}</div>`;
     };
     const collectCard = (c) => `<div class="fb-card fb-card-collect" data-collect="${c.id}"><img class="fb-card-thumb" data-collect-thumb="${c.id}" alt="" style="display:none;" /><span class="fb-card-badge">⚡ 소재</span></div>`;
 
     // 각 그룹(폴더) 데이터 계산
+    // v500 · 보드 검색 — 후킹·원고·유형·키워드 아무거나 (단어 하나만 걸려도 노출)
+    const fq = (_fbSearch || '').trim().toLowerCase().split(/\s+/).filter(Boolean);
+    const fbHit = h => !fq.length || fq.some(w => h.indexOf(w) !== -1);
+    const fbMatchR = r => fbHit(((r.hook || '') + ' ' + stripHtml(r.script || '') + ' ' + (r.why || '') + ' ' + (r.format || '') + ' ' +
+      (r.keywords || []).join(' ') + ' ' + (r.thumbTypes || []).join(' ') + ' ' + (r.copyTypes || []).join(' ')).toLowerCase());
     const colData = cols.map(col => {
-      const fmtRows = rows.filter(r => isFilled(r) && col.match(r));
+      const fmtRows = rows.filter(r => isFilled(r) && col.match(r)).filter(fbMatchR);
       if (fbGroupMode === 'views') fmtRows.sort((a, b) => (b.views || 0) - (a.views || 0));
-      const colCollects = (fbGroupMode === 'format')
-        ? collects.filter(c => c.kind === 'thumb' && (c.type || '') === (col.key === '__none__' ? '' : col.key)) : [];
+      const colCollects = ((fbGroupMode === 'format')
+        ? collects.filter(c => c.kind === 'thumb' && (c.type || '') === (col.key === '__none__' ? '' : col.key)) : [])
+        .filter(c => fbHit(((c.text || '') + ' ' + (c.type || '') + ' ' + (c.memo || '')).toLowerCase()));
       return { col, fmtRows, colCollects, total: fmtRows.length + colCollects.length };
     });
     if (_fbOpenKey != null && !colData.some(d => d.col.key === _fbOpenKey)) _fbOpenKey = null;
@@ -23322,9 +23353,13 @@
     const thumbMode = overrideMode || tbViewMode; // 로컬: 이 렌더에 쓸 모드
     _matCtx = { mode: thumbMode, el: targetId };
     const rerender = () => renderThumbBoard(thumbMode, targetId);
-    // 수식어 검색창은 썸네일 뷰의 '수식어' 모드에서만 표시
+    // v500 · 검색창 = 썸네일·수식어 모드 공용 (placeholder만 모드별)
     const _searchWrap = document.getElementById('tb-copy-search-wrap');
-    if (_searchWrap) _searchWrap.style.display = (targetId === 'tb-body' && thumbMode === 'copy') ? '' : 'none';
+    if (_searchWrap) {
+      _searchWrap.style.display = (targetId === 'tb-body' && (thumbMode === 'copy' || thumbMode === 'thumb')) ? '' : 'none';
+      const _si = document.getElementById('tb-copy-search');
+      if (_si) _si.placeholder = thumbMode === 'thumb' ? '🔍 썸네일 검색 — 후킹·유형·키워드로 빨리 찾기' : '🔍 수식어 검색 — 문구·유형으로 빠르게 찾기';
+    }
     if (thumbMode === 'audio') {
       const audioRows = rows.filter(r => isFilled(r) && (r.audioType || r.audioTitle || r.audioLink));
       const groups = activeAudio().concat(['__none__']);
@@ -23435,7 +23470,11 @@
       const hasImg = r.hasThumb; // 수식어에도 그 행의 썸네일 이미지를 함께 보여줌
       const tc2 = r.format ? fbTypeColor(r.format) : '';
       const fmtChip = r.format ? '<span class="tg-fmt" data-fmt="' + esc(r.format) + '" style="color:' + tc2 + ';border-color:' + fbHexA(tc2, .5) + '">' + esc(r.format) + '</span>' : '';
-      return '<div class="tg-card tg-mood" data-row="' + r.id + '">' +
+      // v501 · «강함» 표현 — 강함 플래그가 켜진 카드는 유형색으로 테두리가 빛난다 (컬러=유형, 빛=강함)
+      const isStrong = thumbMode === 'copy' ? !!r.copyStrong : !!r.thumbStrong;
+      const sc = tc2 || '#D7F34B';
+      const strongStyle = isStrong ? ' style="border:1.5px solid ' + fbHexA(sc, .7) + ';box-shadow:0 0 14px ' + fbHexA(sc, .3) + ', inset 0 0 10px ' + fbHexA(sc, .08) + '"' : '';
+      return '<div class="tg-card tg-mood' + (isStrong ? ' strong' : '') + '" data-row="' + r.id + '"' + strongStyle + '>' +
         '<div class="tg-thumb" data-img="' + r.id + '" data-kind="thumb">' + (hasImg ? '' : '<span class="tg-noimg">이미지 없음</span>') + '</div>' +
         (hasImg ? '<span class="tg-shade"></span>' : '') +
         (views ? '<span class="tg-views' + vt + '">▶ ' + views + '</span>' : '') + fmtChip +
@@ -23509,11 +23548,12 @@
       types = [...new Set(BASE_COPY_TYPES.concat(customCopyTypes).concat(activeKeywords()).concat(collectTypes))];
     }
     types = types.filter(t => !isTypeTrashed('keyword', t)); // 휴지통 유형은 숨김 (정거장·작성카드와 연동)
-    // 수식어 모드 전용 검색 — 단어 단위로 "두루" 매칭(한 단어라도 들어가면 노출)
-    const qWords = (thumbMode === 'copy' ? (_tbCopySearch || '').trim().toLowerCase().split(/\s+/).filter(Boolean) : []);
+    // v500 · 검색 — 썸네일·수식어 모드 공용, 단어 단위로 "두루" 매칭(한 단어라도 들어가면 노출)
+    const qWords = ((thumbMode === 'copy' || thumbMode === 'thumb') ? (_tbCopySearch || '').trim().toLowerCase().split(/\s+/).filter(Boolean) : []);
     const matchAny = hay => !qWords.length || qWords.some(w => hay.indexOf(w) !== -1);
-    const matchCol = c => matchAny(((c.text || '') + ' ' + (c.type || '')).toLowerCase());
-    const matchRow = r => matchAny(((r.hook || '') + ' ' + stripHtml(r.script || '') + ' ' + (r.why || '') + ' ' + (r.copyTypes || []).join(' ')).toLowerCase());
+    const matchCol = c => matchAny(((c.text || '') + ' ' + (c.type || '') + ' ' + (c.memo || '')).toLowerCase());
+    const matchRow = r => matchAny(((r.hook || '') + ' ' + stripHtml(r.script || '') + ' ' + (r.why || '') + ' ' + (r.copyTypes || []).join(' ') + ' ' +
+      (r.thumbTypes || []).join(' ') + ' ' + (r.format || '') + ' ' + (r.keywords || []).join(' ')).toLowerCase());
     let html = '';
     types.forEach(t => {
       const list = strongRows.filter(r => (r[typesKey] || []).includes(t)).filter(matchRow);
@@ -28605,7 +28645,8 @@
   let _clText = { copy: '' }; // 수식어(카피) 문구 텍스트 입력
   let _clAddOpen = { thumb: false, copy: false, comment: false };
   let _clInited = false;
-  let _tbCopySearch = ''; // 썸네일 탭 · 수식어 모드 전용 검색어
+  let _tbCopySearch = ''; // 썸네일 탭 검색어 (v500: 썸네일·수식어 모드 공용)
+  let _fbSearch = '';     // v500 · 분류(▦) 보드 검색어
   function _clActive(q) { return q === 'comment' ? activeComment() : (q === 'thumb' ? activeFormats() : activeKeywords()); }
   function renderCollectSection(q) {
     // 이미지 미리보기
@@ -28752,11 +28793,16 @@
     window.__tbSearchDelegated = true;
     document.addEventListener('input', function (e) {
       if (e.target && e.target.id === 'tb-copy-search') { _tbCopySearch = e.target.value; try { renderThumbBoard(); } catch (err) {} }
+      if (e.target && e.target.id === 'fb-search') { _fbSearch = e.target.value; try { renderFormatBoard(); } catch (err) {} } // v500 · 분류 보드 검색
     });
     document.addEventListener('click', function (e) {
       if (e.target && e.target.id === 'tb-copy-search-clear') {
         _tbCopySearch = ''; const inp = document.getElementById('tb-copy-search'); if (inp) inp.value = '';
         try { renderThumbBoard(); } catch (err) {} if (inp) inp.focus();
+      }
+      if (e.target && e.target.id === 'fb-search-clear') { // v500
+        _fbSearch = ''; const inp2 = document.getElementById('fb-search'); if (inp2) inp2.value = '';
+        try { renderFormatBoard(); } catch (err) {} if (inp2) inp2.focus();
       }
     });
   }
@@ -46092,6 +46138,58 @@
     const part = axis.filter(R => R.n < _pxPicked.length);
     return { common: common, part: part };
   }
+  // v502 · 📋 판독 소견 (BC 합체·B) — 표본들의 공통점을 앱이 «말»로 찾아준다. 전부 로컬 0원.
+  function pxInsightData() {
+    const L = [];
+    if (_pxPicked.length < 2) return L;
+    const f = pxFormulaData();
+    if (f.common.length >= 2) L.push('구조가 같아요 — <b>' + f.common.map(R => esc(R.g)).join('→') + '</b> (' + _pxPicked.length + '편 모두)');
+    // 훅 길이 — 전부 있고 전부 짧으면
+    const hooks = _pxPicked.map(o => (o.r.hook || '').trim()).filter(Boolean);
+    if (hooks.length === _pxPicked.length) {
+      const mx = Math.max.apply(null, hooks.map(h => h.length));
+      if (mx <= 14) L.push('훅이 전부 <b>' + mx + '자 이하</b> — 짧게 치고 들어가요');
+    }
+    // 유형 — 전부 같은 유형이면
+    const fmts = [...new Set(_pxPicked.map(o => o.r.format).filter(Boolean))];
+    if (fmts.length === 1 && _pxPicked.every(o => o.r.format)) L.push('전부 <b>' + esc(fmts[0]) + '</b> 유형');
+    // 썸네일 유형 교집합 (2편 이상 겹침)
+    const tt = {};
+    _pxPicked.forEach(o => { [...new Set(o.r.thumbTypes || [])].forEach(t => tt[t] = (tt[t] || 0) + 1); });
+    const sharedT = Object.keys(tt).filter(t => tt[t] >= 2).slice(0, 2);
+    if (sharedT.length) L.push('썸네일이 <b>' + sharedT.map(esc).join('·') + '</b>로 눈길을 잡아요');
+    // 키워드 겹침 (2편 이상)
+    const kw = {};
+    _pxPicked.forEach(o => { [...new Set(o.r.keywords || [])].forEach(k => kw[k] = (kw[k] || 0) + 1); });
+    const shared = Object.keys(kw).filter(k => kw[k] >= 2).slice(0, 3);
+    if (shared.length) L.push('키워드 <b>' + shared.map(esc).join(' · ') + '</b> 겹침');
+    return L;
+  }
+  // v502 · 📐 구조 모음에 저장 (BC 합체·C) — 공식이 «공식 카드»로 정제되어 구조 쇼핑에 뜬다
+  async function pxSaveToStructures() {
+    const f = pxFormulaData();
+    if (!f.common.length) { toast('공통 구조가 아직 없어요 — 표본 라벨(역할)을 확인해주세요'); return; }
+    if (!_structLoaded) { try { await loadStructures(); } catch (e) {} }
+    const nmEl = document.getElementById('px-nm');
+    const rep = _pxPicked[Math.min(_pxRep, _pxPicked.length - 1)];
+    const vs = _pxPicked.filter(o => o.views > 0);
+    const avg = vs.length ? Math.round(vs.reduce((a, o) => a + o.views, 0) / vs.length) : 0;
+    const st = {
+      id: structId(),
+      name: ((nmEl ? nmEl.textContent.trim() : '') || '내 공식').slice(0, 24),
+      thumb: (rep && _pxThumbs[rep.id]) || null,
+      steps: f.common.map(R => ({ ico: '▸', label: R.g, note: (_pxNotes[R.g] || '').trim() })),
+      formula: f.common.map(R => R.g).join(' → ') + (avg ? ' · 표본 ' + _pxPicked.length + '편 평균 ' + fmtViews(avg) : ''),
+      refs: _pxPicked.map(o => o.id),
+      kind: 'formula',
+      createdAt: (typeof todayStr === 'function' ? todayStr() : '')
+    };
+    structures.unshift(st);
+    try { await saveStructures(); } catch (e) {}
+    const b = document.getElementById('px-save2');
+    if (b) { b.classList.add('done'); b.textContent = '✓ 공식 카드로 저장됨'; setTimeout(() => { b.classList.remove('done'); b.textContent = '📐 구조 모음에 저장'; }, 2200); }
+    toast('📐 공식 카드 완성! 원고 쓰기 → 구조 쇼핑에 바로 떠요');
+  }
   function pxReportHtml() {
     const f = pxFormulaData();
     const rep = _pxPicked[Math.min(_pxRep, _pxPicked.length - 1)];
@@ -46109,13 +46207,17 @@
       f.common.map(R => '<span class="px-fstep" data-pxf2="' + esc(R.g) + '" style="--pk:' + R.c + '">' + esc(R.g) + '</span>').join('<span class="px-far">→</span>') +
       (f.part.length ? '<span class="px-far">＋</span>' + f.part.map(R => '<span class="px-fstep" data-pxf2="' + esc(R.g) + '" style="--pk:' + R.c + ';opacity:.55">' + esc(R.g) + '?</span>').join('') : '') +
       '</span><div class="px-hint">칩을 탭하면 공식에서 빼거나 다시 넣어요 · 부분 일치는 선택 단계(?)</div></div>';
+    // v502 · 📋 판독 소견 — 앱이 찾은 공통점 (자동)
+    const ins = pxInsightData();
+    if (ins.length) h += '<div class="px-sec" id="px-insl"><h4>📋 판독 소견</h4>' +
+      ins.map((x, i) => '<div class="px-ins"><span class="d">' + '①②③④⑤'.charAt(i) + '</span><span>' + x + '</span></div>').join('') + '</div>';
     h += '<div class="px-sec"><h4>터진 포인트</h4>' +
       '<div class="px-pt" contenteditable="true" id="px-pt">왜 터졌는지 한 줄로 적어보세요</div>' +
       '<div class="px-pdl" id="px-pdl">' + ns.map(k => '<b style="--pc:' + pxRoleColor(k) + '">' + esc(k) + '</b><span>' + esc(_pxNotes[k]) + '</span>').join('') + '</div></div>';
     h += '<div class="px-sec"><h4>포인트 문장</h4>' +
       (_pxHls.length ? _pxHls.map(q => '<div class="px-rq">' + esc(q) + '</div>').join('')
         : '<span style="font-size:11px;color:#5d6350">문장을 드래그해서 고른 뒤 🖍 형광펜을 누르면 여기 모여요.</span>') + '</div>';
-    h += '<div class="px-rfoot"><button class="px-save" id="px-save">저장하기</button></div></div>';
+    h += '<div class="px-rfoot"><button class="px-save2" id="px-save2">📐 구조 모음에 저장</button><button class="px-save" id="px-save">저장하기</button></div></div>';
     return h;
   }
 
@@ -46147,6 +46249,7 @@
     host.querySelectorAll('[data-pxrep]').forEach(t => t.onclick = () => { _pxRep = +t.dataset.pxrep; pxRender(); });
     host.querySelectorAll('[data-pxf2]').forEach(f => f.onclick = () => f.classList.toggle('off'));
     const sv = document.getElementById('px-save'); if (sv) sv.onclick = pxSaveAnalysis;
+    const sv2 = document.getElementById('px-save2'); if (sv2) sv2.onclick = () => { pxSaveToStructures(); };
     pxLoadThumbs(_pxPicked);
   }
   // 형광펜 (선택 → 버튼)
