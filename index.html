@@ -9763,6 +9763,22 @@
   /* ====================================================
      === 고객 분석 섹션 탭 (니즈파악/PMM/내 상품) =========
      ==================================================== */
+  /* v510 · 내 셀링포인트 — 다크 시네마틱 한 칸 */
+  .mesp { max-width:520px; margin:6px auto 0; border:1px solid rgba(215,243,75,.2); border-radius:22px;
+    padding:26px 22px 20px; position:relative; overflow:hidden;
+    background:radial-gradient(120% 70% at 50% 0%, rgba(215,243,75,.07), rgba(255,255,255,.012) 58%, transparent); }
+  .mesp-eye { font-family:Georgia,'Times New Roman',Batang,serif; font-size:9px; letter-spacing:.3em;
+    color:rgba(215,243,75,.75); text-transform:uppercase; }
+  .mesp-q { font-size:22px; font-weight:800; letter-spacing:-.03em; line-height:1.35; margin:9px 0 0; color:var(--text-main); }
+  .mesp-q span { color:#d7f34b; }
+  .mesp-s { font-size:11.5px; color:var(--text-mute); line-height:1.7; margin:9px 0 0; }
+  .mesp-s b { color:var(--text-main); }
+  .mesp-ta { width:100%; box-sizing:border-box; margin-top:15px; font-family:inherit; font-size:14px; font-weight:600;
+    line-height:1.6; color:var(--text-main); background:rgba(0,0,0,.3); border:1px solid rgba(255,255,255,.13);
+    border-radius:14px; padding:14px 15px; resize:vertical; outline:none; transition:border-color .18s, box-shadow .18s; }
+  .mesp-ta:focus { border-color:rgba(215,243,75,.55); box-shadow:0 0 18px rgba(215,243,75,.14); }
+  .mesp-ta::placeholder { color:var(--text-faint); font-weight:400; }
+  .mesp-tip { font-size:10px; color:var(--text-faint); margin-top:10px; }
   .cu-sec-tabs { display:flex; gap:8px; margin:4px 0 22px; }
   .cu-sec-tab { flex:1; padding:12px 8px; border-radius:11px; border:1px solid var(--line); background:var(--bg-card); color:var(--text-mute); font-size:13.5px; font-weight:800; cursor:pointer; font-family:inherit; transition:all .15s; }
   .cu-sec-tab:hover { border-color:var(--sage-line); }
@@ -16069,6 +16085,7 @@
   .qc-tile.t-cp { --qcc:rgba(240,178,58,.5); --qcg:rgba(240,178,58,.14); --qci:rgba(240,178,58,.07); }
   .qc-tile.t-id { --qcc:rgba(200,240,58,.45); --qcg:rgba(200,240,58,.12); --qci:rgba(200,240,58,.06); }
   .qc-tile.t-cm { --qcc:rgba(107,176,240,.55); --qcg:rgba(107,176,240,.16); --qci:rgba(107,176,240,.07); }
+  .qc-tile.t-cu { --qcc:rgba(212,115,127,.55); --qcg:rgba(212,115,127,.16); --qci:rgba(212,115,127,.07); }
   .qc-tile.t-ai { --qcc:rgba(46,224,138,.55); --qcg:rgba(46,224,138,.16); --qci:rgba(46,224,138,.07); }
   /* 빠른 담기 → 시트 도착 시 담기 카드 반짝 안내 */
   .entry-card.qc-glow { box-shadow:0 0 0 2px rgba(90,170,255,.6), 0 0 34px rgba(90,170,255,.25) !important; transition:box-shadow .4s; }
@@ -16923,11 +16940,38 @@
   .cus2-sheet .in{ padding:12px 13px 13px; }
   .cus2-sheet .eb{ font-family:Georgia,serif; font-size:8.5px; letter-spacing:.24em; color:var(--rose); }
   .cus2-sheet .q{ font-size:13.5px; font-weight:700; line-height:1.5; margin-top:7px; }
-  .cus2-sheet input{ width:100%; margin-top:10px; font-family:inherit; font-size:11.5px; color:var(--st2-txt);
+  .cus2-sheet input, .cus2-kwpane input{ width:100%; margin-top:10px; font-family:inherit; font-size:11.5px; color:var(--st2-txt);
     border:1px solid rgba(255,255,255,.12); border-radius:11px; padding:11px 12px; background:rgba(0,0,0,.3); outline:none; }
-  .cus2-sheet input:focus{ border-color:var(--rose-s); }
-  .cus2-sheet .add{ margin-top:11px; width:100%; font-family:inherit; font-size:11px; font-weight:800; padding:10px 0;
+  .cus2-sheet input:focus, .cus2-kwpane input:focus{ border-color:var(--rose-s); }
+  .cus2-sheet .add, .cus2-kwpane .add{ margin-top:11px; width:100%; font-family:inherit; font-size:11px; font-weight:800; padding:10px 0;
     border-radius:10px; border:none; background:var(--rose); color:#12060a; cursor:pointer; }
+  /* v514 · 키워드 시트 (구버전 고객 탭 기능 부활) */
+  .cus2-row.go{ cursor:pointer; align-items:center; transition:background .16s; }
+  .cus2-row.go:hover{ background:rgba(255,255,255,.03); }
+  .cus2-row.go .ar{ flex:none; font-size:13px; color:var(--st2-faint); }
+  .cus2-kwrow{ display:flex; flex-wrap:wrap; align-items:center; gap:5px; margin-top:12px; }
+  .cus2-kwrow .lb{ font-size:9.5px; color:var(--st2-faint); margin-right:3px; }
+  .cus2-kwrow .lb i{ font-style:normal; opacity:.6; }
+  .cus2-kwrow .lb.g{ color:#C9A227; }
+  .cus2-kwrow .em{ font-size:9.5px; color:#4e4b45; }
+  .cus2-kc{ display:inline-flex; align-items:center; gap:5px; font-size:10px; padding:4px 8px; border-radius:99px;
+    background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1); color:var(--st2-sub); }
+  .cus2-kc.g{ color:#C9A227; border-color:rgba(201,162,39,.42); background:rgba(201,162,39,.1); }
+  .cus2-kc .x{ cursor:pointer; opacity:.5; font-size:11px; }
+  .cus2-kc .x:hover{ opacity:1; }
+  .cus2-kwadd{ display:flex; gap:6px; align-items:stretch; margin-top:13px; }
+  .cus2-kwadd input{ margin-top:0; flex:1; }
+  .cus2-kwadd .gd{ flex:none; width:40px; font-size:13px; border-radius:11px; cursor:pointer;
+    background:rgba(0,0,0,.3); border:1px solid rgba(255,255,255,.12); filter:grayscale(1); opacity:.5; transition:.16s; }
+  .cus2-kwadd .gd.on{ filter:none; opacity:1; border-color:rgba(201,162,39,.55); background:rgba(201,162,39,.12); }
+  .cus2-kwadd .add{ margin-top:0; width:auto; padding:0 15px; }
+  .cus2-kwrep{ margin-top:14px; border-top:1px solid var(--st2-line); padding-top:11px; }
+  .cus2-kwrep .rh{ font-size:9.5px; color:var(--st2-faint); margin-bottom:7px; }
+  .cus2-kwrep .rc{ display:block; width:100%; text-align:left; font-family:inherit; font-size:10.5px; color:var(--st2-txt);
+    margin-bottom:5px; padding:8px 11px; border-radius:10px; cursor:pointer;
+    background:rgba(201,162,39,.07); border:1px solid rgba(201,162,39,.28); }
+  .cus2-kwrep .rc i{ font-style:normal; color:var(--st2-faint); margin-left:5px; }
+  .cus2-kwrep .rc b{ float:right; color:#C9A227; font-size:9.5px; }
   .cus2-sheet .have{ margin-top:11px; max-height:230px; overflow-y:auto; scrollbar-width:thin; }
   .cus2-sheet .have::-webkit-scrollbar{ width:3px; }
   .cus2-sheet .have::-webkit-scrollbar-thumb{ background:rgba(255,255,255,.18); border-radius:99px; }
@@ -16962,17 +17006,405 @@
   .cus2-gate{ border:1px solid var(--st2-line); border-radius:16px; padding:13px 13px 12px;
     background:rgba(255,255,255,.045); margin-top:4px; }
   .cus2-gate .eb{ font-family:Georgia,serif; font-size:8.5px; letter-spacing:.24em; color:var(--st2-faint); }
-  .cus2-gtrack{ display:flex; align-items:flex-end; height:92px; margin-top:18px; }
+  .cus2-gtrack{ display:flex; align-items:flex-end; height:118px; margin-top:22px; }
   .cus2-gp{ width:32px; flex:none; display:grid; place-items:end center; }
   .cus2-gp svg{ width:25px; opacity:.85; }
   .cus2-gwalls{ flex:1; display:flex; align-items:flex-end; justify-content:space-evenly; height:100%; padding:0 6px; }
-  .cus2-gw{ width:34px; border-radius:4px 4px 0 0; position:relative; transition:height .5s cubic-bezier(.2,.8,.3,1);
-    background:linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,.05));
-    border:1px solid rgba(255,255,255,.12); border-bottom:none; }
-  .cus2-gw.down{ background:linear-gradient(180deg,rgba(72,201,138,.3),rgba(72,201,138,.1)); border-color:var(--cnv-s); }
-  .cus2-gw .lb{ position:absolute; left:50%; bottom:calc(100% + 6px); transform:translateX(-50%);
-    font-size:8.5px; color:var(--st2-faint); white-space:nowrap; }
-  .cus2-gw.down .lb{ color:var(--cnv); }
+  /* v515 · 벽 = 저항 하나 · 벽돌 5장 (색 = 저항의 코퍼). 위에서부터 부서진다 */
+  .cus2-gw{ width:38px; position:relative; display:flex; flex-direction:column; justify-content:flex-end;
+    gap:2px; height:100%; cursor:pointer; }
+  .cus2-gw .bk{ display:block; height:17px; border-radius:2px; transition:.42s cubic-bezier(.2,.9,.3,1);
+    background:linear-gradient(180deg,rgba(200,122,74,.62),rgba(200,122,74,.34));
+    border:1px solid rgba(200,122,74,.5); box-shadow:inset 0 1px 0 rgba(255,200,160,.18); }
+  /* 부서진 벽돌 = 갈라진 잔해로만 남는다 */
+  .cus2-gw .bk.gone{ height:4px; opacity:.32; border-style:dashed; box-shadow:none;
+    background:repeating-linear-gradient(115deg,rgba(200,122,74,.55) 0 3px,transparent 3px 7px); }
+  .cus2-gw:hover .bk:not(.gone){ filter:brightness(1.15); }
+  .cus2-gw.done .bk{ border-color:rgba(72,201,138,.4);
+    background:repeating-linear-gradient(115deg,rgba(72,201,138,.42) 0 3px,transparent 3px 7px); }
+  .cus2-gw .lb{ position:absolute; left:50%; bottom:calc(100% + 5px); transform:translateX(-50%);
+    font-size:8.5px; color:#c87a4a; white-space:nowrap; }
+  .cus2-gw.done .lb{ color:var(--cnv); }
+  .cus2-gw .pg{ position:absolute; left:50%; top:calc(100% + 4px); transform:translateX(-50%);
+    font-size:8.5px; color:var(--st2-faint); }
+  .cus2-gw.done .pg{ color:var(--cnv); }
+  /* ══ v521 · 캔버스 무대 ══ */
+  .cus2-gate .gh{ display:flex; align-items:center; gap:9px; }
+  .cus2-gate .gh .bpchip{ font-family:inherit; font-size:9.5px; font-weight:600; padding:5px 10px; border-radius:99px;
+    cursor:pointer; color:var(--st2-faint); background:transparent; border:1px solid rgba(255,255,255,.11);
+    transition:.18s; display:inline-flex; align-items:center; gap:5px; }
+  .cus2-gate .gh .bpchip:hover{ color:var(--st2-sub); border-color:rgba(255,255,255,.2); }
+  .cus2-gate .gh .bpchip b{ font-size:10px; color:#C9A227; }
+  .cus2-gate .gh .bpchip .pl{ font-size:11px; opacity:.5; }
+  .cus2-gate .gh .bpchip.open{ color:var(--st2-txt); border-color:rgba(201,162,39,.42); background:rgba(201,162,39,.08); }
+  .cus2-gate .gh .bpchip.done{ border-color:rgba(72,201,138,.45); }
+  .cus2-gate .gh .bpchip.done b{ color:var(--cnv); }
+  @keyframes cus2BpIn{ from{ opacity:0; transform:translateY(-6px); } }
+  .cus2-bpg{ display:grid; grid-template-columns:repeat(3,1fr); gap:5px; margin-top:9px;
+    animation:cus2BpIn .3s cubic-bezier(.2,1.1,.3,1) both; }
+  .cus2-bpg .pc9{ aspect-ratio:1/.62; border-radius:8px; border:1px dashed rgba(255,255,255,.13);
+    background:rgba(255,255,255,.02); display:flex; flex-direction:column; align-items:center;
+    justify-content:center; gap:2px; transition:.3s; }
+  .cus2-bpg .pc9 .ic{ font-size:11px; opacity:.3; }
+  .cus2-bpg .pc9 .t{ font-size:8.5px; color:var(--st2-faint); }
+  .cus2-bpg .pc9.on{ border-style:solid; border-color:rgba(var(--kc),.5); background:rgba(var(--kc),.12); }
+  .cus2-bpg .pc9.on .ic{ opacity:1; }
+  .cus2-bpg .pc9.on .t{ color:var(--st2-txt); font-weight:700; }
+  .cus2-bpg .bpnote{ grid-column:1/-1; font-size:9.5px; color:var(--st2-faint); text-align:center; margin-top:3px; line-height:1.6; }
+  .cus2-bpg .bpnote b{ color:var(--st2-sub); }
+  .cus2-gate .gh .kick{ margin-left:auto; font-family:inherit; font-size:10.5px; font-weight:800;
+    padding:7px 14px; border-radius:9px; cursor:pointer; border:none; background:#d7f34b; color:#0d120c; }
+  .cus2-gate .gh .kick:active{ transform:scale(.96); }
+  #cus2-stage{ display:block; width:100%; height:auto; margin-top:6px; }
+  /* 문답 항목별 저장 (오른쪽) */
+  .cus2-sq .sqsave{ display:flex; justify-content:flex-end; margin-top:7px; }
+  .cus2-sq .sqsave button{ font-family:inherit; font-size:10px; font-weight:800; padding:7px 16px; border-radius:9px;
+    cursor:pointer; border:none; background:var(--cnv); color:#08120C; transition:.16s; }
+  .cus2-sq .sqsave button:disabled{ background:rgba(255,255,255,.06); color:var(--st2-faint); cursor:default; }
+  .cus2-pane.pmm .cus2-sq .sqsave button:not(:disabled){ background:#C9A227; color:#1B1403; }
+  /* 패널 안 액션 줄 (그림은 위 무대에만) */
+  .cus2-act{ display:flex; align-items:center; gap:10px; margin-top:12px; }
+  .cus2-act .go{ font-family:inherit; font-size:11px; font-weight:800; padding:10px 18px; border-radius:11px;
+    cursor:pointer; border:none; background:#d7f34b; color:#0d120c; }
+  .cus2-act.g .go{ background:#C9A227; color:#1B1403; }
+  .cus2-act .go:active{ transform:scale(.97); }
+  .cus2-act .rs{ font-size:9.5px; color:var(--st2-faint); }
+  /* ══ v523 · 수배지 — 서술 + 접힌 상세 ══ */
+  .cus2-wanted{ margin-top:4px; border:1px solid rgba(212,115,127,.3); border-radius:17px; overflow:hidden;
+    padding:16px 0 0; background:linear-gradient(170deg,rgba(212,115,127,.09),rgba(255,255,255,.013)); }
+  .cus2-wanted.done{ border-color:rgba(72,201,138,.42); box-shadow:0 0 26px rgba(72,201,138,.07); }
+  .cus2-wanted .wt{ text-align:center; font-size:17px; letter-spacing:.42em; color:var(--rose);
+    text-shadow:0 0 20px rgba(212,115,127,.35); padding-left:.42em; }
+  .cus2-wanted .ws{ text-align:center; font-size:9px; color:var(--st2-faint); letter-spacing:.14em; margin-top:5px; }
+  /* 수배 사진 틀 — 주인공이 잘 보이게 */
+  .cus2-wanted .mug{ display:grid; place-items:center; padding:14px 0 8px; }
+  .cus2-wanted .fr{ position:relative; width:126px; height:142px; border-radius:10px; overflow:hidden;
+    display:grid; place-items:center;
+    background:
+      repeating-linear-gradient(0deg, rgba(255,255,255,.05) 0 1px, transparent 1px 24px),
+      radial-gradient(90% 80% at 50% 22%, rgba(212,115,127,.18), rgba(0,0,0,.45) 78%);
+    border:1px solid rgba(212,115,127,.4); box-shadow:inset 0 0 26px rgba(0,0,0,.5); }
+  .cus2-wanted .fr .c{ position:absolute; width:11px; height:11px; border:2px solid rgba(212,115,127,.8); }
+  .cus2-wanted .fr .c.tl{ top:6px; left:6px; border-right:0; border-bottom:0; }
+  .cus2-wanted .fr .c.tr{ top:6px; right:6px; border-left:0; border-bottom:0; }
+  .cus2-wanted .fr .c.bl{ bottom:6px; left:6px; border-right:0; border-top:0; }
+  .cus2-wanted .fr .c.br{ bottom:6px; right:6px; border-left:0; border-top:0; }
+  .cus2-wanted .por{ display:grid; place-items:center; transition:filter .6s, opacity .6s; }
+  .cus2-wanted .por svg{ width:88px; height:auto; display:block;
+    filter:drop-shadow(0 6px 18px rgba(212,115,127,.28)); }
+  .cus2-wanted .fr .sc{ position:absolute; left:8px; bottom:9px; display:flex; gap:3px; }
+  .cus2-wanted .fr .sc i{ width:12px; height:3px; border-radius:2px; background:rgba(255,255,255,.16); }
+  .cus2-wanted .fr .sc i.on{ background:var(--rose); box-shadow:0 0 6px rgba(212,115,127,.7); }
+  .cus2-wanted .nm{ text-align:center; font-size:15.5px; font-weight:800; letter-spacing:-.025em; }
+  .cus2-wanted .cno{ text-align:center; font-size:8.5px; color:var(--st2-faint); margin-top:5px; letter-spacing:.16em; }
+  /* 서술 — 문단을 확실히 나눈다 */
+  .cus2-wanted .story{ padding:15px 17px 2px; }
+  .cus2-wanted .ln{ display:flex; gap:10px; align-items:flex-start; margin:0 0 14px;
+    font-size:12px; line-height:1.95; color:#dcd8cf; }
+  .cus2-wanted .ln:last-child{ margin-bottom:4px; }
+  .cus2-wanted .ln.lead{ font-size:13px; padding-bottom:14px; border-bottom:1px solid rgba(255,255,255,.06); }
+  .cus2-wanted .ln .mk{ flex:none; width:15px; text-align:center; font-size:11px; color:var(--rose); padding-top:3px; }
+  .cus2-wanted .ln .mk.am{ color:#F5C84B; } .cus2-wanted .ln .mk.vi{ color:#A87BE0; }
+  .cus2-wanted .ln .mk.co{ color:#C87A4A; font-size:10px; }
+  .cus2-wanted .ln .bd2{ flex:1; min-width:0; }
+  .cus2-wanted .ln b{ color:#fff; font-weight:700; }
+  .cus2-wanted .ln em{ font-style:normal; color:var(--rose); font-weight:700; }
+  .cus2-wanted .ln .sm{ font-size:10.5px; color:var(--st2-faint); }
+  .cus2-wanted .ln .ansv{ display:inline-block; margin-top:4px; font-size:11px; color:var(--st2-sub); }
+  .cus2-wanted .ln .ansv b{ color:var(--cnv); }
+  .cus2-wanted .ln.empty{ color:var(--st2-faint); font-style:italic; line-height:1.9; }
+  .cus2-wanted .ln.empty b{ color:var(--st2-sub); font-style:normal; }
+  .cus2-wanted .ln .sw{ flex:none; align-self:flex-start; font-family:inherit; font-size:9px; padding:3px 7px;
+    border-radius:99px; cursor:pointer; color:var(--st2-faint); background:rgba(255,255,255,.04);
+    border:1px solid rgba(255,255,255,.1); }
+  .cus2-wanted .ln .sw:hover{ color:var(--st2-txt); border-color:rgba(255,255,255,.22); }
+  .cus2-wanted .ln .sw i{ font-style:normal; font-family:Georgia,serif; opacity:.7; }
+  .cus2-wanted .gaps{ margin:2px 17px 0; padding:9px 11px; border-radius:10px; font-size:10px; line-height:1.7;
+    color:var(--st2-faint); background:rgba(255,255,255,.03); border:1px dashed rgba(255,255,255,.12); }
+  .cus2-wanted .gaps b{ color:var(--st2-sub); }
+  .cus2-wanted .det{ display:flex; align-items:center; gap:7px; width:calc(100% - 34px); margin:11px 17px 0;
+    padding:9px 11px; border-radius:10px; cursor:pointer; font-family:inherit; font-size:10px; color:var(--st2-sub);
+    background:rgba(255,255,255,.035); border:1px solid rgba(255,255,255,.09); transition:.18s; }
+  .cus2-wanted .det:hover{ background:rgba(255,255,255,.07); }
+  .cus2-wanted .det .ar{ margin-left:auto; transition:transform .3s; }
+  .cus2-wanted .det.open .ar{ transform:rotate(90deg); }
+  @keyframes cus2DetIn{ from{ opacity:0; transform:translateY(-5px); } }
+  .cus2-wanted .detbd{ padding:4px 17px 0; animation:cus2DetIn .28s cubic-bezier(.2,1.1,.3,1) both; }
+  .cus2-wanted .detbd .fld{ display:flex; gap:10px; padding:7px 0; align-items:baseline;
+    border-bottom:1px solid rgba(255,255,255,.05); }
+  .cus2-wanted .detbd .fld:last-child{ border-bottom:none; }
+  .cus2-wanted .detbd .fld .k{ flex:none; width:58px; font-size:9px; letter-spacing:.05em; color:rgba(212,115,127,.85); }
+  .cus2-wanted .detbd .fld .v{ flex:1; min-width:0; font-size:11px; line-height:1.55; }
+  .cus2-wanted .detbd .fld .v.un{ color:#4c4a44; font-style:italic; }
+  /* v525 · 성과난 반응 포인트 */
+  .cus2-rp{ display:flex; align-items:center; gap:9px; margin-top:12px; padding:12px 17px;
+    cursor:pointer; border-top:1px solid rgba(255,255,255,.07); transition:background .16s; }
+  .cus2-rp:hover{ background:rgba(215,243,75,.05); }
+  .cus2-rp .k{ font-size:11.5px; font-weight:800; }
+  .cus2-rp .n{ margin-left:auto; font-size:15px; color:#d7f34b; text-shadow:0 0 14px rgba(215,243,75,.4); }
+  .cus2-rp .n.z{ color:var(--st2-faint); text-shadow:none; }
+  .cus2-rp .ar{ font-size:12px; color:var(--st2-faint); transition:transform .3s; }
+  .cus2-rp.open .ar{ transform:rotate(90deg); }
+  @keyframes cus2HyIn{ from{ opacity:0; transform:translateY(-5px); } }
+  .cus2-hy{ padding:2px 17px 4px; animation:cus2HyIn .28s cubic-bezier(.2,1.1,.3,1) both; }
+  .cus2-hy .hyf{ display:flex; gap:5px; }
+  .cus2-hy .hyf button{ flex:1; font-family:inherit; font-size:10px; font-weight:700; padding:8px 3px;
+    border-radius:10px; cursor:pointer; color:rgb(var(--c)); background:rgba(var(--c),.09);
+    border:1px solid rgba(var(--c),.28); transition:.16s; }
+  .cus2-hy .hyf button b{ display:block; font-size:13px; margin-top:2px; }
+  .cus2-hy .hyf button.on{ background:rgba(var(--c),.2); border-color:rgba(var(--c),.6); box-shadow:0 0 14px rgba(var(--c),.18); }
+  .cus2-hy .hyf button.off{ opacity:.42; }
+  .cus2-hy .hyx{ font-size:10px; color:var(--st2-sub); line-height:1.75; margin-top:10px; padding:10px 11px;
+    border-radius:10px; background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.08); }
+  .cus2-hy .hyx b{ color:var(--st2-txt); }
+  .cus2-hy .hyi{ border-left:2px solid rgba(var(--c),.55); padding:9px 0 9px 11px; margin-top:11px; }
+  .cus2-hy .hyi .hq{ font-size:11.5px; font-weight:700; line-height:1.5; }
+  .cus2-hy .hyi .hm{ display:flex; align-items:center; gap:7px; margin-top:6px; flex-wrap:wrap; }
+  .cus2-hy .hyi .bg{ font-size:8.5px; font-weight:800; padding:3px 8px; border-radius:99px;
+    color:rgb(var(--c)); background:rgba(var(--c),.12); border:1px solid rgba(var(--c),.35); }
+  .cus2-hy .hyi .st2{ font-size:9.5px; color:var(--st2-faint); }
+  .cus2-hy .hyi .st2 b{ color:#d7f34b; }
+  .cus2-hy .hyi .hc{ font-size:9.5px; color:var(--st2-faint); margin-top:5px; line-height:1.6; }
+  .cus2-hy .hyempty{ font-size:10.5px; color:var(--st2-faint); line-height:1.8; padding:14px 0; text-align:center; }
+  .cus2-wanted .wft{ display:flex; align-items:center; gap:9px; margin-top:13px; padding:11px 17px 13px;
+    border-top:1px solid rgba(255,255,255,.07); }
+  .cus2-wanted .wft .rw{ font-size:9px; color:var(--st2-faint); }
+  .cus2-wanted .wft .rw b{ font-size:13px; color:#C9A227; display:block; margin-top:2px; }
+  .cus2-wanted .wft .pg{ margin-left:auto; display:flex; gap:3px; }
+  .cus2-wanted .wft .pg i{ width:7px; height:7px; border-radius:2px; background:rgba(255,255,255,.13); }
+  .cus2-wanted .wft .pg i.on{ background:#C9A227; box-shadow:0 0 6px rgba(201,162,39,.6); }
+  .cus2-wanted.done .wft .pg i.on{ background:var(--cnv); box-shadow:0 0 6px rgba(72,201,138,.6); }
+  /* ══ v518 · 기록 카드 (한 줄 = 제목, 아래 = 그 사람의 이야기) ══ */
+  .cus2-dep{ display:flex; gap:3px; flex:none; align-self:center; }
+  .cus2-dep i{ width:5px; height:5px; border-radius:50%; background:rgba(255,255,255,.16); transition:.3s; }
+  .cus2-dep i.on{ background:rgb(var(--vc,212,115,127)); box-shadow:0 0 6px rgba(var(--vc,212,115,127),.7); }
+  .cus2-sheet .have .it.open, .cus2-allsec .it.open{ flex-wrap:wrap; background:rgba(var(--vc,212,115,127),.07); }
+  @keyframes cus2RecIn{ from{ opacity:0; transform:translateY(-5px); } }
+  .cus2-rec{ flex-basis:100%; margin-top:8px; animation:cus2RecIn .28s cubic-bezier(.2,1.1,.3,1) both; }
+  .cus2-rec .ln{ display:flex; gap:9px; padding:9px 0; border-top:1px solid rgba(255,255,255,.055); }
+  .cus2-rec .ln .ic{ flex:none; width:14px; text-align:center; font-size:10.5px; padding-top:1px;
+    color:rgb(var(--vc,212,115,127)); }
+  .cus2-rec .ln .bd{ flex:1; min-width:0; }
+  .cus2-rec .ln .say{ font-size:9px; color:rgb(var(--vc,212,115,127)); opacity:.9; }
+  .cus2-rec .ln .val{ display:block; font-size:11px; line-height:1.65; margin-top:3px; }
+  .cus2-rec .ln.em .say{ color:var(--st2-faint); }
+  .cus2-rec .ln.em .val{ color:#46443f; }
+  .cus2-rec textarea{ width:100%; box-sizing:border-box; margin-top:4px; font-family:inherit; font-size:11px;
+    line-height:1.6; color:var(--st2-txt); background:rgba(0,0,0,.3); border:1px solid rgba(255,255,255,.11);
+    border-radius:9px; padding:8px 10px; resize:vertical; outline:none; }
+  .cus2-rec textarea:focus{ border-color:rgba(var(--vc,212,115,127),.55); }
+  .cus2-rec textarea::placeholder{ color:#46443f; }
+  .cus2-rec .rf{ display:flex; align-items:center; gap:9px; border-top:1px solid rgba(255,255,255,.055); padding-top:10px; }
+  .cus2-rec .rf .mode{ font-family:inherit; font-size:10px; font-weight:800; padding:7px 13px; border-radius:9px;
+    cursor:pointer; border:none; color:#12060a; background:rgb(var(--vc,212,115,127)); }
+  .cus2-rec .rf .st{ margin-left:auto; font-size:9px; color:var(--st2-faint); }
+  /* 빈 화면 — 채워진 모습을 먼저 보여준다 */
+  .cus2-empty{ margin-top:13px; }
+  .cus2-empty .gcard{ border:1px dashed rgba(255,255,255,.16); border-radius:12px; padding:11px 12px; opacity:.42; }
+  .cus2-empty .gcard .gt{ font-size:11.5px; font-weight:700; }
+  .cus2-empty .gcard .gl{ display:flex; flex-wrap:wrap; gap:9px; margin-top:7px; font-size:9.5px; color:var(--st2-faint); }
+  .cus2-empty .gcap{ font-size:9.5px; color:var(--st2-faint); text-align:center; margin-top:9px; }
+  .cus2-empty .gcap b{ color:var(--st2-sub); }
+  .cus2-empty .gpull{ margin-top:11px; border-top:1px solid rgba(255,255,255,.06); padding-top:10px; }
+  .cus2-empty .gpull .ph{ font-size:9px; color:var(--st2-faint); }
+  .cus2-empty .chips{ display:flex; flex-wrap:wrap; gap:5px; margin-top:7px; }
+  .cus2-empty .chips button{ font-family:inherit; font-size:10px; padding:6px 10px; border-radius:99px; cursor:pointer;
+    color:rgb(var(--vc,212,115,127)); background:rgba(var(--vc,212,115,127),.09);
+    border:1px dashed rgba(var(--vc,212,115,127),.4); }
+  .cus2-empty .chips button:hover{ border-style:solid; }
+  .cus2-kwcand{ margin-top:13px; border-top:1px solid var(--st2-line); padding-top:11px; }
+  .cus2-kwcand .ph{ font-size:9.5px; color:var(--st2-faint); line-height:1.7; }
+  .cus2-kwcand .ph b{ color:var(--st2-sub); }
+  .cus2-kwcand .chips{ display:flex; flex-wrap:wrap; gap:5px; margin-top:8px; }
+  .cus2-kwcand .chips button{ font-family:inherit; font-size:10px; padding:6px 10px; border-radius:99px; cursor:pointer;
+    color:#C9A227; background:rgba(201,162,39,.08); border:1px dashed rgba(201,162,39,.42); }
+  .cus2-kwcand .chips button:hover{ border-style:solid; }
+  .cus2-kwcand .chips .n{ font-size:8.5px; opacity:.65; margin-left:4px; }
+  .cus2-objempty .cands{ display:flex; flex-wrap:wrap; gap:6px; margin-top:11px; }
+  .cus2-objempty .cands button{ font-family:inherit; font-size:10.5px; padding:7px 12px; border-radius:99px;
+    cursor:pointer; color:#c87a4a; background:rgba(200,122,74,.09); border:1px dashed rgba(200,122,74,.45); }
+  .cus2-objempty .cands button:hover{ border-style:solid; background:rgba(200,122,74,.16); }
+  /* ══ v517 · 세그먼트 한 줄 → 그 자리 확장 ══ */
+  .cus2-seg{ display:flex; gap:4px; padding:4px; margin-top:12px; border-radius:14px;
+    background:rgba(0,0,0,.34); border:1px solid var(--st2-line); }
+  .cus2-seg button{ flex:1; font-family:inherit; font-size:10.5px; font-weight:700; padding:9px 3px; border:none;
+    cursor:pointer; border-radius:11px; background:transparent; color:var(--st2-sub); transition:.2s; }
+  .cus2-seg button .n{ display:block; font-size:9px; color:var(--st2-faint); margin-top:2px; }
+  .cus2-seg button.on{ background:rgba(72,201,138,.14); color:var(--cnv); box-shadow:inset 0 0 0 1px rgba(72,201,138,.3); }
+  .cus2-seg button.on .n{ color:var(--cnv); }
+  .cus2-seg button.on.pmm{ background:rgba(201,162,39,.14); color:#C9A227; box-shadow:inset 0 0 0 1px rgba(201,162,39,.34); }
+  .cus2-seg button.on.pmm .n{ color:#C9A227; }
+  @keyframes cus2Drop{ from{ opacity:0; transform:translateY(-8px) scale(.985); } }
+  .cus2-pane{ margin-top:9px; border:1px solid rgba(72,201,138,.26); border-radius:16px; overflow:hidden;
+    background:linear-gradient(180deg,rgba(72,201,138,.08),rgba(255,255,255,.015));
+    animation:cus2Drop .32s cubic-bezier(.2,1.1,.3,1) both; }
+  .cus2-pane.pmm{ border-color:rgba(201,162,39,.3);
+    background:linear-gradient(180deg,rgba(201,162,39,.08),rgba(255,255,255,.015)); }
+  .cus2-pane > .in{ padding:14px 13px 15px; }
+  .cus2-pane .eb{ font-family:Georgia,serif; font-size:8.5px; letter-spacing:.24em; color:var(--cnv); }
+  .cus2-pane.pmm .eb{ color:#C9A227; }
+  .cus2-pane .q{ font-size:12.5px; font-weight:700; line-height:1.55; margin-top:14px; }
+  .cus2-pane.pmm .cus2-sqa:focus{ border-color:rgba(201,162,39,.5); }
+
+  /* ── 퀘스트 (반박 제거) ── */
+  .cq-h{ text-align:center; }
+  .cq-n{ font-size:9px; letter-spacing:.24em; color:var(--st2-faint); margin-top:9px; }
+  .cq-q{ font-size:17px; font-weight:800; letter-spacing:-.03em; line-height:1.4; margin-top:8px; }
+  .cq-s{ font-size:10px; color:var(--st2-sub); margin-top:6px; }
+  .cq-wall{ display:flex; justify-content:center; margin:16px 0 5px; }
+  .cus2-gw.q{ width:96px; height:auto; gap:3px; cursor:default; }
+  .cus2-gw.q .bk{ height:22px; border-radius:3px; }
+  .cus2-gw.q .bk.gone{ height:5px; }
+  .cq-c{ text-align:center; font-size:12px; color:#c87a4a; }
+  .cq-c.done{ color:var(--cnv); }
+  .cq-btns{ display:flex; flex-wrap:wrap; justify-content:center; gap:7px; margin-top:14px; }
+  .cq-b{ position:relative; overflow:hidden; font-family:inherit; font-size:10.5px; font-weight:800; cursor:pointer;
+    min-width:98px; padding:11px 12px 10px; border-radius:13px; color:#c87a4a;
+    background:linear-gradient(180deg,rgba(200,122,74,.16),rgba(200,122,74,.06));
+    border:1px solid rgba(200,122,74,.45);
+    box-shadow:0 3px 0 rgba(200,122,74,.28), inset 0 1px 0 rgba(255,210,170,.14);
+    transition:transform .16s, box-shadow .16s, filter .16s; }
+  .cq-b .s{ display:block; font-weight:400; font-size:8px; color:var(--st2-faint); margin-top:3px; }
+  .cq-b:hover{ filter:brightness(1.18); transform:translateY(-2px); box-shadow:0 5px 0 rgba(200,122,74,.28); }
+  .cq-b:active{ transform:translateY(3px); box-shadow:0 0 0 rgba(200,122,74,.28); }
+  .cq-b.on{ color:#08120C; background:linear-gradient(180deg,#5FD79B,#3FBE81); border-color:rgba(72,201,138,.7);
+    box-shadow:0 3px 0 rgba(30,120,80,.5), 0 0 18px rgba(72,201,138,.3); }
+  .cq-b.on .s{ color:rgba(8,18,12,.55); }
+  @keyframes cqPop{ 0%{transform:scale(1);} 32%{transform:scale(1.13) rotate(-1.5deg);} 66%{transform:scale(.95);} 100%{transform:scale(1);} }
+  .cq-b.pop{ animation:cqPop .42s cubic-bezier(.2,1.3,.3,1) both; }
+  .cq-b .fl{ position:absolute; inset:0; opacity:0; pointer-events:none;
+    background:radial-gradient(circle at 50% 50%,rgba(255,255,255,.9),transparent 62%); }
+  @keyframes cqFlash{ from{ opacity:.9; } to{ opacity:0; } }
+  .cq-b.pop .fl{ animation:cqFlash .45s ease both; }
+  .cq-ans{ margin-top:15px; }
+  .cq-ta{ width:100%; box-sizing:border-box; font-family:inherit; font-size:11.5px; line-height:1.65; color:var(--st2-txt);
+    background:rgba(0,0,0,.32); border:1px solid rgba(255,255,255,.12); border-radius:12px; padding:11px 12px;
+    resize:vertical; outline:none; }
+  .cq-ta:focus{ border-color:var(--cnv-s); }
+  .cq-ta::placeholder{ color:var(--st2-faint); }
+  .cq-save{ display:flex; align-items:center; gap:10px; margin-top:9px; flex-direction:row-reverse; }
+  .cq-save button{ font-family:inherit; font-size:11px; font-weight:800; padding:10px 20px; border-radius:11px;
+    cursor:pointer; border:none; background:var(--cnv); color:#08120C; transition:.18s; }
+  .cq-save button:disabled{ background:rgba(255,255,255,.06); color:var(--st2-faint); cursor:default; }
+  .cq-save .st{ flex:1; font-size:9.5px; color:var(--st2-faint); }
+  .cq-save .st.ok{ color:var(--cnv); }
+  .cq-nav{ display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:14px;
+    border-top:1px solid var(--st2-line); padding-top:11px; }
+  .cq-nav button{ font-family:inherit; font-size:10.5px; color:var(--st2-sub); background:none; border:none; cursor:pointer; }
+  .cq-nav .dots{ display:flex; gap:5px; }
+  .cq-nav .dots i{ width:6px; height:6px; border-radius:50%; background:rgba(255,255,255,.16); }
+  .cq-nav .dots i.on{ background:#c87a4a; }
+  .cq-nav .dots i.cleared{ background:var(--cnv); }
+
+  /* ── 과녁 (셀링포인트) ── */
+  .caim{ position:relative; height:132px; margin-top:12px; border-radius:13px; overflow:hidden;
+    background:radial-gradient(75% 70% at 50% 55%,rgba(215,243,75,.05),transparent 72%); }
+  .caim-tgt{ position:absolute; left:64%; top:50%; transform:translate(-50%,-50%); width:92px; height:92px; }
+  .caim-tgt i{ position:absolute; inset:0; border-radius:50%; border:1.3px solid rgba(215,243,75,.28); }
+  .caim-tgt i:nth-child(2){ inset:15px; } .caim-tgt i:nth-child(3){ inset:30px; }
+  .caim-tgt i:nth-child(4){ inset:41px; background:rgba(215,243,75,.55); border-color:transparent; }
+  @keyframes caimShake{ 0%,100%{transform:translate(-50%,-50%);} 25%{transform:translate(-52%,-51%) rotate(-2deg);}
+    60%{transform:translate(-48%,-49%) rotate(2deg);} }
+  .caim-tgt.hit{ animation:caimShake .4s ease both; }
+  .caim-cross{ position:absolute; left:64%; top:50%; transform:translate(-50%,-50%);
+    border:1px dashed rgba(215,243,75,.5); border-radius:50%; transition:.45s cubic-bezier(.2,1,.3,1); }
+  .caim-arw{ position:absolute; top:50%; left:6%; width:30px; height:2px; opacity:0;
+    background:linear-gradient(90deg,transparent,#d7f34b); transform:translateY(-50%); }
+  .caim-arw::after{ content:''; position:absolute; right:-4px; top:-3px; border-left:7px solid #d7f34b;
+    border-top:4px solid transparent; border-bottom:4px solid transparent; }
+  .caim-ring{ position:absolute; left:64%; top:50%; width:14px; height:14px; margin:-7px 0 0 -7px; border-radius:50%;
+    border:2px solid #d7f34b; opacity:0; }
+  @keyframes caimRing{ from{ transform:scale(.4); opacity:.9; } to{ transform:scale(4.2); opacity:0; } }
+  .caim-ring.go{ animation:caimRing .6s ease-out both; }
+  .caim-res{ position:absolute; left:0; right:0; bottom:7px; text-align:center; font-size:9.5px; color:var(--st2-faint); }
+  .caim-go{ display:block; width:100%; margin-top:10px; font-family:inherit; font-size:11px; font-weight:800;
+    padding:10px 0; border-radius:11px; cursor:pointer; border:none; background:#d7f34b; color:#0d120c; }
+  .caim-go:active{ transform:scale(.98); }
+  .caim-line{ margin-top:11px; padding:11px 12px; border-radius:12px; font-size:12px; font-weight:800; line-height:1.55;
+    color:#e9f7a8; background:rgba(215,243,75,.09); border:1px solid rgba(215,243,75,.3); }
+
+  /* ── 주조 (핵심 PMM) ── */
+  .cmint{ position:relative; height:142px; margin-top:12px; border-radius:13px; overflow:hidden;
+    background:radial-gradient(70% 60% at 50% 72%,rgba(201,162,39,.09),transparent 72%); }
+  .cmint-press{ position:absolute; left:50%; top:10px; transform:translateX(-50%); width:104px; height:22px; border-radius:5px;
+    background:linear-gradient(180deg,rgba(201,162,39,.5),rgba(201,162,39,.22)); border:1px solid rgba(201,162,39,.55); }
+  @keyframes cmintSlam{ 0%{ transform:translateX(-50%) translateY(0);} 42%{ transform:translateX(-50%) translateY(56px);}
+    56%{ transform:translateX(-50%) translateY(52px);} 100%{ transform:translateX(-50%) translateY(0);} }
+  .cmint-press.go{ animation:cmintSlam .7s cubic-bezier(.4,0,.2,1) both; }
+  .cmint-anvil{ position:absolute; left:50%; bottom:24px; transform:translateX(-50%); width:120px; height:7px;
+    border-radius:3px; background:rgba(255,255,255,.1); }
+  .cmint-mats{ position:absolute; left:50%; bottom:34px; transform:translateX(-50%); display:flex; gap:4px; }
+  .cmint-mats i{ width:14px; height:14px; border-radius:3px; background:rgba(201,162,39,.16);
+    border:1px solid rgba(201,162,39,.35); transition:.3s; }
+  .cmint-mats i.on{ background:rgba(201,162,39,.6); box-shadow:0 0 8px rgba(201,162,39,.5); }
+  .cmint-coin{ position:absolute; left:50%; bottom:40px; transform:translateX(-50%) scale(0); width:48px; height:48px;
+    border-radius:50%; display:grid; place-items:center; font-family:Georgia,serif; font-size:21px; color:#2A1D05;
+    background:radial-gradient(circle at 36% 30%,#F2DE96,#C9A227 62%,#8A6B12);
+    box-shadow:0 0 26px rgba(201,162,39,.6); }
+  @keyframes cmintMint{ 0%{ transform:translateX(-50%) scale(.1) rotateY(0); opacity:0; }
+    45%{ transform:translateX(-50%) translateY(-42px) scale(1.14) rotateY(540deg); opacity:1; }
+    100%{ transform:translateX(-50%) translateY(-32px) scale(1) rotateY(720deg); opacity:1; } }
+  .cmint-coin.go{ animation:cmintMint 1s cubic-bezier(.2,1,.3,1) .34s both; }
+  .cmint-res{ position:absolute; left:0; right:0; bottom:6px; text-align:center; font-size:9.5px; color:rgba(201,162,39,.8); }
+  .cmint-go{ display:block; width:100%; margin-top:10px; font-family:inherit; font-size:11px; font-weight:800;
+    padding:10px 0; border-radius:11px; cursor:pointer; border:none; background:#C9A227; color:#1B1403; }
+  .cmint-go:active{ transform:scale(.98); }
+  /* v516 · 파괴 연출 — 벽돌이 부서질 때 튀고, 벽이 흔들린다 */
+  @keyframes bkSmash{ 0%{ transform:scaleY(1) translateX(0); filter:brightness(2.2); }
+    18%{ transform:scaleY(1.18) translateX(-3px) rotate(-3deg); }
+    42%{ transform:scaleY(.55) translateX(4px) rotate(4deg); filter:brightness(1.5); }
+    70%{ transform:scaleY(1.06) translateX(-2px) rotate(-1.5deg); }
+    100%{ transform:none; filter:none; } }
+  @keyframes wallHit{ 0%,100%{ transform:translateX(0); } 20%{ transform:translateX(-3px); }
+    45%{ transform:translateX(3px); } 70%{ transform:translateX(-1.5px); } }
+  .cus2-gw .bk.smash{ animation:bkSmash .5s cubic-bezier(.2,1.1,.3,1) both; }
+  .cus2-gw.hit{ animation:wallHit .38s ease both; }
+  /* 저항 한 줄 = 벽 하나 · 5버튼 */
+  .cus2-obj .oh{ display:flex; align-items:baseline; gap:8px; }
+  .cus2-obj .oh .oq{ flex:1; min-width:0; }
+  .cus2-obj .oh .on5{ flex:none; font-size:9.5px; color:var(--st2-faint); }
+  .cus2-obj.done .oh .on5{ color:var(--cnv); }
+  .cus2-obj.lit{ background:rgba(72,201,138,.07); border-radius:0 8px 8px 0; }
+  .cus2-bkchips{ display:flex; flex-wrap:wrap; gap:5px; margin-top:8px; }
+  .cus2-bkchips .ch{ position:relative; overflow:hidden; font-family:inherit; font-size:9.5px; font-weight:700;
+    padding:6px 10px; border-radius:99px; cursor:pointer; color:#c87a4a;
+    background:rgba(200,122,74,.1); border:1px solid rgba(200,122,74,.4); transition:.18s; }
+  .cus2-bkchips .ch:hover{ filter:brightness(1.2); transform:translateY(-1px); }
+  .cus2-bkchips .ch:active{ transform:scale(.94); }
+  .cus2-bkchips .ch.on{ color:#0d120c; background:var(--cnv); border-color:var(--cnv);
+    box-shadow:0 0 12px rgba(72,201,138,.35); }
+  @keyframes chSmash{ 0%{ transform:scale(1); } 30%{ transform:scale(1.16) rotate(-2deg); }
+    60%{ transform:scale(.93) rotate(1.5deg); } 100%{ transform:scale(1); } }
+  .cus2-bkchips .ch.smash{ animation:chSmash .42s cubic-bezier(.2,1.3,.3,1) both; }
+  .cus2-bkchips .ch .bar{ position:absolute; inset:0; pointer-events:none; opacity:0; }
+  .cus2-bkchips .ch.smash .bar{ opacity:1; animation:chFlash .42s ease both;
+    background:radial-gradient(circle at 50% 50%,rgba(255,255,255,.85),transparent 62%); }
+  @keyframes chFlash{ 0%{ opacity:.9; } 100%{ opacity:0; } }
+  /* 벽 부수기 시트 */
+  .cus2-bkbar{ display:flex; align-items:center; gap:9px; margin-top:12px; }
+  .cus2-bkbar .tr{ flex:1; display:flex; gap:3px; }
+  .cus2-bkbar .tr i{ flex:1; height:4px; border-radius:99px; background:rgba(200,122,74,.5); transition:.3s; }
+  .cus2-bkbar .tr i.on{ background:var(--cnv); box-shadow:0 0 8px rgba(72,201,138,.45); }
+  .cus2-bkbar .nn{ font-size:10px; color:var(--st2-sub); }
+  .cus2-bkstep{ display:flex; align-items:center; gap:9px; flex-wrap:wrap; margin-top:8px; padding:9px 11px;
+    border-radius:11px; cursor:pointer; background:rgba(200,122,74,.06);
+    border:1px solid rgba(200,122,74,.24); transition:.2s; }
+  .cus2-bkstep:first-of-type{ cursor:default; }
+  .cus2-bkstep.on{ background:rgba(72,201,138,.08); border-color:rgba(72,201,138,.32); }
+  .cus2-bkstep .no{ width:18px; height:18px; flex:none; display:grid; place-items:center; font-size:9.5px;
+    border-radius:50%; color:#c87a4a; border:1px solid rgba(200,122,74,.45); }
+  .cus2-bkstep.on .no{ color:#0d120c; background:var(--cnv); border-color:var(--cnv); }
+  .cus2-bkstep .tx{ flex:1; min-width:0; }
+  .cus2-bkstep .tx b{ display:block; font-size:11px; }
+  .cus2-bkstep .tx i{ font-style:normal; font-size:9px; color:var(--st2-faint); }
+  .cus2-bkstep .ck{ flex:none; width:14px; font-size:11px; color:var(--cnv); }
+  .cus2-bkstep .cus2-oa{ flex-basis:100%; }
+  /* 키워드 탭 */
+  .cus2-kwpane{ border:1px solid var(--st2-line); border-radius:16px; padding:14px 13px 13px;
+    background:rgba(255,255,255,.045); margin-top:4px; }
+  .cus2-kwpane .eb{ font-size:8.5px; letter-spacing:.24em; color:var(--st2-faint); }
+  .cus2-kwpane .q{ font-size:15px; font-weight:800; letter-spacing:-.02em; margin-top:7px; }
+  .cus2-kwpane .q b{ color:var(--rose); }
   .cus2-ggoal{ width:42px; flex:none; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; gap:5px; }
   .cus2-ggoal .ring{ width:29px; height:29px; border-radius:50%; border:1.4px solid var(--cnv); display:grid;
     place-items:center; box-shadow:0 0 14px rgba(72,201,138,.3); }
@@ -16988,6 +17420,55 @@
   .cus2-cv .d{ font-size:9.5px; color:var(--st2-faint); margin-top:2px; font-weight:400; }
   .cus2-cv .n{ font-family:Georgia,serif; font-size:12px; color:var(--cnv); }
   .cus2-cv .n.z{ color:var(--st2-faint); }
+  /* v511 · 전환 시트 = 초록 톤 (반박·셀링포인트) */
+  .cus2-sheet.cnv{ border-color:var(--cnv-s);
+    background:linear-gradient(180deg,rgba(72,201,138,.11),rgba(255,255,255,.02));
+    box-shadow:0 -8px 26px rgba(72,201,138,.1); }
+  .cus2-sheet.cnv .eb{ color:var(--cnv); }
+  .cus2-sheet.cnv .add{ background:var(--cnv); }
+  .cus2-sheet.cnv input:focus, .cus2-sheet.cnv textarea:focus{ border-color:var(--cnv-s); }
+  .cus2-sq{ margin-top:12px; }
+  .cus2-sq .sqq{ font-size:11.5px; font-weight:700; color:var(--cnv); margin-bottom:5px; line-height:1.5; }
+  .cus2-sq .sqq b{ color:var(--st2-txt); }
+  .cus2-sq .sqh{ font-size:9.5px; color:var(--st2-faint); margin-bottom:6px; }
+  /* v512 · 반박 = 저항 항목별 답변 */
+  .cus2-obj{ margin-top:12px; border-left:2px solid rgba(200,122,74,.5); padding-left:11px; }
+  .cus2-obj.done{ border-left-color:var(--cnv); }
+  .cus2-obj .oq{ font-size:11.5px; font-weight:700; color:#e0c0a8; line-height:1.5; }
+  .cus2-obj.done .oq{ color:var(--st2-sub); }
+  .cus2-oa{ width:100%; box-sizing:border-box; margin-top:6px; font-family:inherit; font-size:11.5px; line-height:1.6;
+    color:var(--st2-txt); background:rgba(0,0,0,.3); border:1px solid rgba(255,255,255,.12);
+    border-radius:11px; padding:10px 12px; resize:vertical; outline:none; transition:border-color .18s; }
+  .cus2-oa:focus{ border-color:var(--cnv-s); }
+  .cus2-oa::placeholder{ color:var(--st2-faint); }
+  .cus2-obj.done .cus2-oa{ border-color:rgba(72,201,138,.35); }
+  .cus2-objempty{ margin-top:12px; font-size:11px; color:var(--st2-sub); line-height:1.75; }
+  .cus2-objempty b{ color:#c87a4a; }
+  .cus2-objempty .gores{ display:block; width:100%; margin-top:12px; font-family:inherit; font-size:11px;
+    font-weight:800; padding:10px 0; border-radius:10px; border:1px solid rgba(200,122,74,.5);
+    background:rgba(200,122,74,.1); color:#c87a4a; cursor:pointer; }
+  /* 아직 안 들은 벽(예시) — 흐리게 */
+  .cus2-gw.ghost{ opacity:.3; border-style:dashed; }
+  .cus2-sqa{ width:100%; box-sizing:border-box; font-family:inherit; font-size:11.5px; line-height:1.6;
+    color:var(--st2-txt); background:rgba(0,0,0,.3); border:1px solid rgba(255,255,255,.12);
+    border-radius:11px; padding:10px 12px; resize:vertical; outline:none; transition:border-color .18s; }
+  .cus2-sqa::placeholder{ color:var(--st2-faint); }
+  .cus2-sqtip{ font-size:9.5px; color:var(--st2-faint); margin-top:12px; }
+  /* v513 · 셀링포인트 묶음 머리 (내 상품 / 얻는 것 / 경쟁 속의 나) */
+  .cus2-sgrp{ display:flex; align-items:baseline; gap:8px; margin:20px 0 2px; padding-top:13px;
+    border-top:1px solid var(--st2-line); }
+  .cus2-sgrp:first-child{ margin-top:14px; padding-top:0; border-top:0; }
+  .cus2-sgrp .g{ font-size:10.5px; font-weight:800; color:var(--st2-txt); letter-spacing:-.02em; }
+  .cus2-sgrp .s{ font-size:9px; color:var(--st2-faint); }
+  /* v513 · 핵심 PMM 5문답 */
+  .cus2-p5note{ font-size:10px; color:var(--st2-sub); line-height:1.7; margin-top:10px;
+    padding:9px 11px; border-radius:10px; background:rgba(72,201,138,.07);
+    border:1px solid rgba(72,201,138,.16); }
+  .cus2-sq .p5h{ display:flex; align-items:center; gap:7px; margin-bottom:6px; }
+  .cus2-sq .p5h .no{ width:17px; height:17px; flex:none; display:flex; align-items:center; justify-content:center;
+    font-size:9.5px; color:#0d120c; background:var(--cnv); border-radius:50%; }
+  .cus2-sq .p5h .nm{ font-size:9.5px; font-weight:800; letter-spacing:.06em; color:var(--st2-sub); }
+  .cus2-sq .p5hint{ font-size:9px; color:var(--cnv); opacity:.85; margin-bottom:6px; }
   .cus2-proof{ margin-top:14px; border-top:1px solid var(--st2-line); padding-top:12px; }
   .cus2-proof .ph2{ display:flex; align-items:baseline; gap:8px; margin-bottom:9px; }
   .cus2-proof .ph2 .t{ font-size:10.5px; font-weight:700; }
@@ -16999,6 +17480,18 @@
   .cus2-proof .strip div.more{ display:grid; place-items:center; background:rgba(255,255,255,.03); }
   .cus2-proof .strip div.more span{ font-family:Georgia,serif; font-size:11px; color:var(--st2-faint); }
   .cus2-proof .note2{ font-size:9.5px; color:var(--st2-faint); margin-top:9px; line-height:1.55; text-align:center; }
+  /* v519 · 공감댓글 단독 전체 보기 (유형별) */
+  .cus2-proof .ph2 .back{ margin-left:auto; font-family:inherit; font-size:9.5px; color:var(--st2-sub);
+    background:rgba(255,255,255,.05); border:1px solid var(--st2-line); border-radius:8px; padding:5px 10px; cursor:pointer; }
+  .cus2-proof.all{ border-top:0; padding-top:0; }
+  .cus2-proof .psec{ margin-top:14px; }
+  .cus2-proof .psh{ display:flex; align-items:baseline; gap:7px; font-size:10px; font-weight:700; color:var(--st2-sub);
+    margin-bottom:7px; }
+  .cus2-proof .psh span{ font-size:9.5px; color:var(--st2-faint); }
+  .cus2-proof .pgrid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(84px,1fr)); gap:6px; }
+  .cus2-proof .pgrid div{ aspect-ratio:4/5; border-radius:8px; border:1px solid var(--st2-line);
+    background:rgba(255,255,255,.02); overflow:hidden; }
+  .cus2-proof .pgrid div img{ width:100%; height:100%; object-fit:cover; }
   /* v504 · 🔁 반복 감지 (고객 탭) */
   .st2-rep{ margin-top:16px; border:1px solid rgba(245,200,75,.28); border-radius:16px; padding:12px 12px 11px;
     background:linear-gradient(180deg,rgba(245,200,75,.06),transparent); }
@@ -18141,6 +18634,7 @@
         <button type="button" class="qc-tile t-cp" data-qc="copy"><span class="qi">💬</span><span class="qn">수식어·문구</span><span class="qd">말맛 나는 후킹 문구</span></button>
         <button type="button" class="qc-tile t-id" data-qc="idea"><span class="qi">💡</span><span class="qn">아이디어</span><span class="qd">떠오른 소재·기획 메모</span></button>
         <button type="button" class="qc-tile t-cm" data-qc="comment"><span class="qi">🗨</span><span class="qn">공감댓글</span><span class="qd">고객 반응 댓글 캡처</span></button>
+        <button type="button" class="qc-tile t-cu" data-qc="cus"><span class="qi">◉</span><span class="qn">고객 분석</span><span class="qd">방금 들은 고객 한마디</span></button>
         <button type="button" class="qc-tile t-ai wide" data-qc="ai"><span class="qi">🤖</span><span class="qn">제대로 분해</span><span class="qd">캡처 여러 장 → AI 분해로 꽉 채워 담기</span></button>
       </div>
       <div class="cs-oneapp" id="qc-hint">✦ 골라주세요 — 질문 몇 개면 3초에 담겨요.</div>
@@ -19680,9 +20174,9 @@
     <!-- ===== CUSTOMER ANALYSIS VIEW ===== -->
     <div id="customer-view" class="cu-wrap" style="display:none;">
       <section class="cu-header">
-        <div class="cu-eyebrow">◉ 고객 분석</div>
-        <h1 class="cu-title">뾰족한 <span class="em">고객</span>이 강한 콘텐츠를 만듭니다</h1>
-        <p class="cu-sub">세일즈 = <b>나 × 고객 × 세상</b>의 곱.<br/>세 차원을 맞추면 콘텐츠가 선명해지고 메시지가 강해져요.</p>
+        <div class="cu-eyebrow">◉ 내 무기</div>
+        <h1 class="cu-title">내가 <span class="em">왜</span> 선택받는지</h1>
+        <p class="cu-sub">고객은 «제품»이 아니라 <b>더 나은 자신</b>을 삽니다.<br/>그걸 내가 어떻게 만들어주는지 — 한 문장으로.</p>
       </section>
 
       <div class="cu-content">
@@ -19699,58 +20193,15 @@
           </div>
         </div>
 
-        <!-- 꽂히는 콘텐츠 준비도 게이지 (홈에서 이사 옴) -->
-        <div id="cu-score-host"></div>
-
-        <!-- 수익화 공식 배너 -->
-        <div class="cu-formula">
-          <div class="cu-formula-eq">
-            <span class="cu-fx customer">👥 고객<small>문제</small></span>
-            <span class="cu-fx-op">×</span>
-            <span class="cu-fx me">🙋 나<small>해결</small></span>
-            <span class="cu-fx-op">×</span>
-            <span class="cu-fx world">🌍 세상<small>타이밍·매체</small></span>
-            <span class="cu-fx-op eq">=</span>
-            <span class="cu-fx sales">💰 세일즈</span>
-          </div>
-          <div class="cu-formula-ex">↳ 예: 다이어트 고민 중인 30대 × 당일제조·저당질 빵 × '죄책감 없는 디저트' 릴스</div>
-          <div class="cu-formula-note">셋 중 하나라도 <b>0이면 전체가 0</b> — 합(+)이 아니라 곱(×)이라서요.</div>
+        <!-- v510 · 준비도 게이지 · 곱셈 공식 · 3차원 코어 · 섹션 탭 전부 삭제 (사장님 지시)
+             이 방은 이제 «내 셀링포인트» 하나만 다룬다. 고객은 제작소 고객 탭으로 이사함. -->
+        <div style="display:none">
+          <input id="cu-product-input" data-pmmfield="productName" />
+          <input id="cu-target-input" data-pmmfield="targetName" />
         </div>
 
-        <!-- 3차원 코어 -->
-        <div class="cu-core">
-          <div class="cu-core-head">🎯 3차원 코어 <span>각 차원을 한 줄로 — 아래 탭에서 더 깊이 파요</span></div>
-          <div class="cu-core-row me">
-            <span class="cu-core-tag me">🙋 나</span>
-            <div class="cu-core-body"><div class="cu-core-q">내 핵심 셀링포인트는?</div>
-            <input class="cu-core-in" id="cu-product-input" data-pmmfield="productName" placeholder="예) 당일 제조 + 저당질 빵" /></div>
-          </div>
-          <div class="cu-core-row customer">
-            <span class="cu-core-tag customer">👥 고객</span>
-            <div class="cu-core-body"><div class="cu-core-q">그들의 문제·말투·불안은?</div>
-            <input class="cu-core-in" id="cu-target-input" data-pmmfield="targetName" placeholder="예) 다이어트 고민 중인 30대" /></div>
-          </div>
-          <div class="cu-core-row world">
-            <span class="cu-core-tag world">🌍 세상</span>
-            <div class="cu-core-body"><div class="cu-core-q">어디서·어떻게·지금 왜?</div>
-            <input class="cu-core-in" data-pmmfield="worldCore" placeholder="예) '죄책감 없는 디저트' 트렌드 · 릴스" /></div>
-          </div>
-          <div class="cu-core-sum">
-            <span class="cu-core-sum-tag">✨ 합 · 메시지 <span class="cu-core-sum-done">→ 고객에게 꽂히는 메시지 완성!</span></span>
-            <input class="cu-core-sum-in" data-pmmfield="message" placeholder="예) 다이어트 중인데 빵은 포기 못 하는 분을 위한, 설탕 0g 당일 제조 빵" />
-            <button class="cu-core-draft" id="cu-core-draft" title="나·고객·세상 코어를 합쳐 초안 생성 — 다시 누르면 다른 버전">✨ 코어로 자동 초안 만들기</button>
-          </div>
-        </div>
-
-        <!-- 섹션 탭: 나 / 고객 / 세상 (3차원) -->
-        <div class="cu-sec-tabs" id="cu-sec-tabs">
-          <button class="cu-sec-tab on" data-cusec="me">🙋 나</button>
-          <button class="cu-sec-tab" data-cusec="customer">👥 고객</button>
-          <button class="cu-sec-tab" data-cusec="world">🌍 세상</button>
-        </div>
-
-        <!-- [고객] 니즈 파악 — 속마음 수집함 + 시도했던 것 -->
-        <div class="cu-sec-pane" data-cusecpane="customer">
+        <!-- v510 · [고객] pane 폐기 — 제작소 «고객» 탭으로 완전 이사. 마크업은 데이터 배선 안전을 위해 숨김만 -->
+        <div class="cu-sec-pane" data-cusecpane="customer" style="display:none !important">
         <!-- 고객 속마음 수집함 (니즈 채집) — 시안 -->
         <div class="cm-collect" id="cm-collect">
           <div class="cm-collect-head">
@@ -19799,8 +20250,8 @@
         </div>
         </div><!-- /customer pane -->
 
-        <!-- [세상] 시장·매체·타이밍 -->
-        <div class="cu-sec-pane" data-cusecpane="world">
+        <!-- v510 · [세상] pane 폐기 (사장님 지시) — 마크업은 데이터 배선 안전을 위해 숨김만 -->
+        <div class="cu-sec-pane" data-cusecpane="world" style="display:none !important">
           <div class="cu-prod">
             <div class="cu-prod-intro">🌍 <b>같은 상품도 '언제·어디서'에 따라 터지거나 묻혀요.</b> <span class="cu-prod-intro-sub">고객·나가 맞아도 세상이 0이면 안 팔려요 (= 500k뷰 0예약).</span></div>
             <div class="cu-prod-field">
@@ -19826,40 +20277,23 @@
           </div>
         </div><!-- /world pane -->
 
-        <!-- [나] 내 상품·오퍼 -->
+        <!-- v510 · [나] = 셀링포인트 하나만. 우리 톤(다크 시네마틱)으로 재단장 -->
         <div class="cu-sec-pane on" data-cusecpane="me">
-          <div class="cu-prod">
-            <div class="cu-prod-intro">🙋 <b>내가 가진 무기를 한 장으로.</b> <span class="cu-prod-intro-sub">기능(사실)을 혜택(고객 삶의 변화)으로 번역하고, 증거로 받쳐야 안 팔리던 게 팔려요.</span></div>
-            <div class="cu-prod-field">
-              <label class="cu-prod-label"><span class="cu-prod-ico">🎯</span> 핵심 <b>셀링포인트</b> (한마디로)</label>
-              <div class="cu-prod-hint">20초 안에 직감되게 — 핵심 특징 1~2개</div>
-              <textarea class="cu-prod-ta" data-pmmfield="me.selling" placeholder="예) 얼굴형 분석으로 안 커 보이는 앞머리 디자인"></textarea>
-            </div>
-            <div class="cu-prod-field">
-              <label class="cu-prod-label"><span class="cu-prod-ico">⚙️</span> <b>기능·장점·특징</b> (사실)</label>
-              <div class="cu-prod-hint">팩트 그대로 — 다음 칸에서 혜택으로 번역할 재료</div>
-              <textarea class="cu-prod-ta" data-pmmfield="me.features" placeholder="예) 약산성 약제 / 6개월 지속 / 얼굴형별 맞춤 설계 / 1:1 상담 30분"></textarea>
-            </div>
-            <div class="cu-prod-field">
-              <label class="cu-prod-label"><span class="cu-prod-ico">💡</span> <b>혜택 번역</b> (그래서 삶이 어떻게?)</label>
-              <div class="cu-prod-hint">기능 → '내 삶이 뭐가 바뀌나'. 고객은 기능이 아니라 바뀐 자기 모습을 산다</div>
-              <textarea class="cu-prod-ta" data-pmmfield="me.benefit" placeholder="예) 약산성 → 다음 날 두피 안 가렵고 편하게 잠 / 맞춤 설계 → 손 안 대도 단정"></textarea>
-            </div>
-            <div class="cu-prod-field">
-              <label class="cu-prod-label"><span class="cu-prod-ico">💎</span> <b>차별화</b> (왜 굳이 우리?)</label>
-              <div class="cu-prod-hint">남들이 못 하는 한 가지</div>
-              <textarea class="cu-prod-ta" data-pmmfield="me.diff" placeholder="예) 얼굴형 분석 후 디자인 / 실패 시 무료 보정 / 비포애프터 1,000케이스"></textarea>
-            </div>
-            <div class="cu-prod-field">
-              <label class="cu-prod-label"><span class="cu-prod-ico">🏅</span> <b>증거·신뢰</b> (말만으론 안 믿어요)</label>
-              <div class="cu-prod-hint">비포애프터·후기·숫자·경력 — 증명이 있어야 혜택이 먹힌다</div>
-              <textarea class="cu-prod-ta" data-pmmfield="me.proof" placeholder="예) 비포애프터 1,000장 / 재방문율 80% / 경력 12년 / 후기 500개"></textarea>
-            </div>
-            <div class="cu-prod-field">
-              <label class="cu-prod-label"><span class="cu-prod-ico">🔥</span> 지금 <b>사야 하는 이유</b></label>
-              <div class="cu-prod-hint">'나중에'를 없애는 한정·시즌·손해</div>
-              <textarea class="cu-prod-ta" data-pmmfield="me.why" placeholder="예) 이달 신규 3명 한정 / 여름 전 지금이 적기 / 잘못 자르면 6개월 고생"></textarea>
-            </div>
+          <div class="mesp">
+            <div class="mesp-eye">MY SELLING POINT</div>
+            <h2 class="mesp-q">내가 가진 무기를<br><span>한 문장으로</span></h2>
+            <p class="mesp-s">20초 안에 직감되게. 이 한 줄이 <b>캡션·고정댓글·DM</b>에 그대로 쓰여요.</p>
+            <textarea class="mesp-ta" data-pmmfield="me.selling" rows="3"
+              placeholder="예) 얼굴형 분석으로 안 커 보이는 앞머리 디자인"></textarea>
+            <div class="mesp-tip">제작소 <b style="color:var(--text-mute)">고객 → 전환 → 셀링포인트</b>에서도 같은 칸을 볼 수 있어요</div>
+          </div>
+          <!-- 데이터 보존용(화면에서만 뺌) — 예전에 적어둔 내용이 사라지지 않게 -->
+          <div style="display:none">
+            <textarea data-pmmfield="me.features"></textarea>
+            <textarea data-pmmfield="me.benefit"></textarea>
+            <textarea data-pmmfield="me.diff"></textarea>
+            <textarea data-pmmfield="me.proof"></textarea>
+            <textarea data-pmmfield="me.why"></textarea>
           </div>
         </div><!-- /me pane -->
 
@@ -28485,6 +28919,21 @@
         const r = (rows || []).find(function (x) { return x.id === bid; });
         if (r) { const k = insIdx().rowKw[r.id] || []; if (k.length) return { kws: k.slice(0, 4), src: '연결한 참고 표본' }; }
       }
+    } catch (e) {}
+    // v513 · 3순위 — 내 고객 (황금 키워드 → 담은 재료에서 자주 나온 말)
+    try {
+      const gold = (typeof st2Kw === 'object' && st2Kw && Array.isArray(st2Kw.gold)) ? st2Kw.gold.filter(Boolean) : [];
+      if (gold.length) return { kws: gold.slice(0, 4).map(function (k) { return String(k).toLowerCase(); }), src: '내 고객 황금 키워드' };
+      const cnt = {};
+      (pmms || []).forEach(function (p) {
+        (Array.isArray(p.collect) ? p.collect : []).forEach(function (c) {
+          const u = {}; insTok(String(c.quote || '')).forEach(function (t) { u[t] = 1; });
+          Object.keys(u).forEach(function (t) { cnt[t] = (cnt[t] || 0) + (c.gold ? 2 : 1); });
+        });
+      });
+      const top = Object.keys(cnt).filter(function (t) { return cnt[t] >= 2; })
+        .sort(function (a, b) { return cnt[b] - cnt[a]; }).slice(0, 4);
+      if (top.length) return { kws: top, src: '고객에게 들은 말' };
     } catch (e) {}
     return null;
   }
@@ -43665,8 +44114,11 @@
     thumb:   ['photo', 'hook', 'views', 'posted', 'format'],   // v504 · 올라온 시기 추가(트렌드 시간축)
     copy:    ['text', 'photo'],
     idea:    ['photo', 'memo'],
-    comment: ['photo', 'quote', 'ctype']                        // v504 · «그 말» 한 줄 → 수집함 자동 연결
+    comment: ['photo', 'quote', 'ctype'],                       // v504 · «그 말» 한 줄 → 수집함 자동 연결
+    cus:     ['quote', 'basket', 'situation']                   // v519 · 생각날 때 고객 한마디를 바로
   };
+  // v519 · 고객 분석 — 어느 통에 담을지 (자동 추측 + 손으로 바꾸기)
+  const QCW_BASKETS = [['문제', 'pain'], ['욕구', 'desire'], ['회피', 'fear'], ['저항', 'resist']];
   // v504 · 올라온 시기 → 대략 시각 (트렌드가 «담은 날» 대신 이걸 씀)
   const QCW_POSTED = [['이번 주', 3], ['이번 달', 15], ['3개월 안', 60], ['올해', 200], ['오래됨', 500]];
   // v504 · 고객 말 → 어느 바구니인지 로컬 추론 (AI 0원)
@@ -43691,7 +44143,7 @@
       return true;
     } catch (e) { return false; }
   }
-  const QCW_NAMES = { thumb: '🛍 벤치마킹', copy: '💬 수식어', idea: '💡 아이디어', comment: '🗨 공감댓글' };
+  const QCW_NAMES = { thumb: '🛍 벤치마킹', copy: '💬 수식어', idea: '💡 아이디어', comment: '🗨 공감댓글', cus: '◉ 고객 분석' };
   function qcwHome() {
     _qcw = null;
     const w = document.getElementById('qcw'); if (w) { w.style.display = 'none'; w.innerHTML = ''; }
@@ -43700,7 +44152,8 @@
       if (t) t.style.display = ''; if (g) g.style.display = ''; if (hn) hn.style.display = ''; }
   }
   function qcwStart(kind) {
-    _qcw = { kind: kind, step: 0, img: null, hook: '', text: '', memo: '', views: 0, format: '', ctype: '', quote: '', posted: 0 };
+    _qcw = { kind: kind, step: 0, img: null, hook: '', text: '', memo: '', views: 0, format: '', ctype: '', quote: '', posted: 0,
+      basket: '', situation: '' };
     const r = document.getElementById('qc-room');
     if (r) { const t = r.querySelector('.qc-tiles'), g = r.querySelector('.cs-greet'), hn = document.getElementById('qc-hint');
       if (t) t.style.display = 'none'; if (g) g.style.display = 'none'; if (hn) hn.style.display = 'none'; }
@@ -43716,13 +44169,14 @@
     else if (st === 'text') _qcw.text = ta.value.trim();
     else if (st === 'memo') _qcw.memo = ta.value.trim();
     else if (st === 'quote') _qcw.quote = ta.value.trim();   // v504
+    else if (st === 'situation') _qcw.situation = ta.value.trim();   // v519
   }
   function qcwRender() {
     const w = document.getElementById('qcw'); if (!w || !_qcw) return;
     const flow = QCW_FLOWS[_qcw.kind];
     const st = flow[_qcw.step];
     const last = _qcw.step === flow.length - 1;
-    const Q = {
+    let Q = {
       photo: { q: _qcw.kind === 'comment' ? '반응 터진 댓글,<br>캡처부터 놓으세요' : '방금 본 그거,<br>캡처부터 놓으세요', s: '스크린샷 붙여넣기(Ctrl+V) · 클릭해서 선택' },
       hook:  { q: '뭐라고 하길래<br>멈췄어요?', s: '후킹 문구 한 줄 — 기억나는 만큼만' },
       text:  { q: '그 «말맛» 문구,<br>뭐였어요?', s: '수식어·후킹 문구를 그대로 적어요' },
@@ -43731,18 +44185,29 @@
       format:{ q: '어떤 유형<br>같았어요?', s: '감으로 하나만 — 나중에 바꿀 수 있어요' },
       ctype: { q: '어떤 반응<br>이었어요?', s: '댓글 유형 하나만' },
       quote: { q: '고객이 뭐라고<br>했나요?', s: '그 말 그대로 — 고객 수집함에 같이 담겨요' },
-      posted:{ q: '언제 올라온<br>거예요?', s: '대략이면 충분 — 트렌드 계산에 쓰여요' }
+      posted:{ q: '언제 올라온<br>거예요?', s: '대략이면 충분 — 트렌드 계산에 쓰여요' },
+      basket:  { q: '이건 어느 쪽<br>이야기예요?', s: '자동으로 골라뒀어요 — 다르면 바꾸세요' },
+      situation:{ q: '그 순간,<br>언제·어디서였대요?', s: '건너뛰어도 돼요 — 나중에 고객 분석에서 파도 됩니다' }
     }[st];
+    // v519 · 고객 분석 흐름은 «고객이 한 말»이 주인공
+    if (_qcw.kind === 'cus' && st === 'quote') { Q = { q: '고객이 뭐라고<br>했나요?', s: '들은 말 그대로 — 고객 분석에 바로 담겨요' }; }
     let body = '';
     if (st === 'photo') {
       body = '<div class="qcw-slot' + (_qcw.img ? ' has' : '') + '" id="qcw-slot">' +
         (_qcw.img ? '<img src="' + _qcw.img + '" alt=""/>' : '<span class="pl">＋</span><span class="s">사진 담기</span>') + '</div>';
-    } else if (st === 'hook' || st === 'text' || st === 'memo' || st === 'quote') {
-      const val = st === 'hook' ? _qcw.hook : st === 'text' ? _qcw.text : st === 'quote' ? _qcw.quote : _qcw.memo;
+    } else if (st === 'hook' || st === 'text' || st === 'memo' || st === 'quote' || st === 'situation') {
+      const val = st === 'hook' ? _qcw.hook : st === 'text' ? _qcw.text : st === 'quote' ? _qcw.quote
+                : st === 'situation' ? _qcw.situation : _qcw.memo;
       const ph = st === 'memo' ? '예) 우리 손님 리뷰로 이 구조 따라해보기'
+               : st === 'situation' ? '예) 아침 출근 준비하다 거울 앞에서'
                : st === 'quote' ? '예) 펌하고 3일은 좋았는데 그 뒤로 어색해요'
                : '예) 셋뽀는 모르는 이유 3가지';
       body = '<textarea id="qcw-ta" class="qcw-ta" rows="2" placeholder="' + ph + '">' + esc(val) + '</textarea>';
+    } else if (st === 'basket') {
+      const guess = _qcw.basket || cmGuessBasket(_qcw.quote);
+      _qcw.basket = guess;
+      body = '<div class="qcw-chips">' + QCW_BASKETS.map(v =>
+        '<button type="button" class="qcw-chip' + (guess === v[1] ? ' on' : '') + '" data-qb="' + v[1] + '">' + v[0] + '</button>').join('') + '</div>';
     } else if (st === 'posted') {
       body = '<div class="qcw-chips">' + QCW_POSTED
         .map(v => '<button type="button" class="qcw-chip' + (_qcw.posted === v[1] ? ' on' : '') + '" data-qp="' + v[1] + '">' + v[0] + '</button>').join('') + '</div>';
@@ -43774,6 +44239,7 @@
     w.querySelectorAll('[data-qp]').forEach(b => b.onclick = () => { _qcw.posted = parseInt(b.dataset.qp, 10); qcwRender(); });
     w.querySelectorAll('[data-qf]').forEach(b => b.onclick = () => { _qcw.format = b.dataset.qf; qcwRender(); });
     w.querySelectorAll('[data-qc2]').forEach(b => b.onclick = () => { _qcw.ctype = b.dataset.qc2; qcwRender(); });
+    w.querySelectorAll('[data-qb]').forEach(b => b.onclick = () => { _qcw.basket = b.dataset.qb; qcwRender(); });
   }
   function qcwCompress(file) {
     return new Promise(res => {
@@ -43798,7 +44264,17 @@
     if (!any) { toast('아직 아무것도 없어요 — 사진이나 한 줄만 넣어주세요'); return; }
     let cmSaved = false;
     try {
-      if (k === 'thumb') { // 벤치마킹 = 시트 행 (saveEntry와 같은 규칙: 빈 행 재사용 → 없으면 새 행)
+      if (k === 'cus') { // v519 · 고객 분석 — 생각날 때 바로 담는 문
+        const p2 = (pmms && pmms.length) ? (pmms.find(x => x.id === _currentPmmId) || pmms[0]) : null;
+        if (!p2) { toast('먼저 고객 방에서 타겟을 정해주세요'); return; }
+        if (!Array.isArray(p2.collect)) p2.collect = [];
+        p2.collect.push({ id: 'cm_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7),
+          basket: _qcw.basket || cmGuessBasket(_qcw.quote), quote: _qcw.quote, insight: '',
+          situation: _qcw.situation || '', emotion: '', inner: '',
+          source: '빠른 담기', gold: false, createdAt: Date.now() });
+        p2.updatedAt = Date.now(); await savePmms();
+        cmSaved = true;
+      } else if (k === 'thumb') { // 벤치마킹 = 시트 행 (saveEntry와 같은 규칙: 빈 행 재사용 → 없으면 새 행)
         let target = rows.find(r => !isFilled(r));
         if (!target) { const nextNo = rows.length > 0 ? Math.max(...rows.map(r => r.no)) + 1 : 1; target = newRow(nextNo); rows.push(target); }
         target.hook = _qcw.hook || ''; target.views = _qcw.views || 0; target.format = _qcw.format || '';
@@ -43817,7 +44293,8 @@
         if (k === 'comment' && _qcw.quote) cmSaved = await cmPushQuote(_qcw.quote, '공감댓글');
       }
       try { refreshCurrentBoard(); } catch (e) {}
-      toast(cmSaved ? '⚡ 담기 + 👥 고객 수집함에도 들어갔어요' : '⚡ 담겼어요! 계속 담아도 돼요');
+      toast(k === 'cus' ? '👥 고객 분석에 담겼어요'
+        : (cmSaved ? '⚡ 담기 + 👥 고객 분석에도 들어갔어요' : '⚡ 담겼어요! 계속 담아도 돼요'));
       qcwHome();
     } catch (e) { toast('저장에 문제가 생겼어요 — 다시 시도해주세요'); }
   }
@@ -44873,15 +45350,40 @@
     const n = (st2Kw.normal || []).filter(k => k && text.indexOf(k) !== -1);
     return { gold: g, norm: n };
   }
-  // 3축 점수 (전부 로컬): 트렌드=수집일 최근 2주 · 엣지=별점 · 고객=황금 키워드 매칭 (수집함 비면 중립 0.5)
+  // 3축 점수 (전부 로컬): 트렌드=수집일 최근 2주 · 엣지=별점 · 고객=황금 키워드 + 담은 재료 매칭 (둘 다 비면 중립 0.5)
+  // v513 · 고객 방 «재료»(문제/욕구/회피/저항에 담은 말)도 핏 축에 넣는다.
+  //   황금 키워드는 «내가 콕 집은 것», 재료는 «내가 실제로 들은 말» — 둘 다 고객 신호다.
+  let _cusWordCache = null, _cusWordAt = 0;
+  function st2CusWords() {
+    if (_cusWordCache && Date.now() - _cusWordAt < 4000) return _cusWordCache;
+    const out = new Set();
+    try {
+      (pmms || []).forEach(p => (Array.isArray(p.collect) ? p.collect : []).forEach(c => {
+        const t = [c.quote, c.situation, c.emotion, c.inner].filter(Boolean).join(' ');
+        let toks = [];
+        try { toks = (typeof insTok === 'function') ? insTok(t) : []; } catch (e) {}
+        if (!toks.length) toks = t.split(/[\s,.!?·…"'’”“()\[\]]+/);
+        toks.forEach(w => {
+          w = String(w || '').trim();
+          if (w.length < 2 || w.length > 8 || ST2_REP_STOP.has(w)) return;
+          out.add(w);
+        });
+      }));
+    } catch (e) {}
+    _cusWordCache = [...out].slice(0, 120); _cusWordAt = Date.now();
+    return _cusWordCache;
+  }
   function st2AxisW(r) {
     const age = (Date.now() - (r.createdAt || Date.now())) / 864e5;
     const wT = age <= 14 ? 1 : age <= 45 ? 0.5 : 0.18;
     const wE = (r.rating > 0) ? (r.rating / 5) : 0.35;
     let wC = 0.5;
-    if ((st2Kw.gold || []).length || (st2Kw.normal || []).length) {
-      const m = st2KwMatch(st2RowText(r));
-      wC = m.gold.length ? 1 : (m.norm.length ? 0.7 : 0.15);
+    const mats = st2CusWords();
+    if ((st2Kw.gold || []).length || (st2Kw.normal || []).length || mats.length) {
+      const text = st2RowText(r);
+      const m = st2KwMatch(text);
+      const hitMat = mats.some(w => text.indexOf(w) !== -1);   // 담은 재료와 겹치나
+      wC = m.gold.length ? 1 : (m.norm.length ? 0.7 : (hitMat ? 0.6 : 0.15));
     }
     return { wT, wE, wC, s: (wT + wE + wC) / 3 };
   }
@@ -45682,12 +46184,13 @@
   const ST2_REP_STOP = new Set(['하고', '나서', '해서', '그리고', '그런데', '근데', '너무', '진짜', '정말', '그냥', '아니', '이거', '저거',
     '제가', '저는', '내가', '나는', '아무', '조금', '많이', '계속', '자꾸', '다시', '보고', '하는', '있는', '없는', '같아', '같은', '같아요',
     '해요', '했어요', '있어요', '없어요', '되게', '약간', '완전', '뭔가', '이런', '저런', '그런', '어떻게', '하니까', '때문에', '그래서']);
-  function st2RepeatSuggest(collect) {
-    const REP_MIN = 5;
+  function st2RepeatSuggest(collect, minN) {
+    const REP_MIN = minN || 5;
     const gold = new Set(st2Kw.gold || []);
     const cnt = {};
     (collect || []).forEach(c => {
-      const t = String(c.quote || '');
+      // v518 · 한 줄 + 기록 카드(상황·감정·속마음)까지 읽는다 — 맥락이 깊을수록 정확
+      const t = [c.quote, c.situation, c.emotion, c.inner].filter(Boolean).join(' ');
       let toks = [];
       try { toks = (typeof insTok === 'function') ? insTok(t) : []; } catch (e) {}
       if (!toks.length) toks = t.split(/[\s,.!?·…"'’”“()\[\]]+/);
@@ -45859,6 +46362,9 @@
   let _cus2Tab = 'card';     // 'card' | 'mat' | 'cnv'
   let _cus2Sheet = null;     // 열린 담기 시트 키
   let _cus2All = false;      // v507 · 재료 전체 보기
+  let _cus2Q = 0;            // v517 · 지금 깨는 벽(저항) 번호
+  let _cus2Rec = null, _cus2RecEdit = false;   // v518 · 기록 카드 (상황·감정·속마음)
+  let _cus2Proof = false;                      // v519 · 공감댓글 단독 전체 보기
   let _cus2FigN = 0;         // SVG 그라데이션 id 충돌 방지
   const CUS2_MATS = [
     { k: 'pain',   n: '문제', q: '지금 뭐가<br>불편하다고 하나요?',   ph: '예) 펌하고 3일 지나면 무너져요' },
@@ -45867,6 +46373,307 @@
     { k: 'resist', n: '저항', q: '“근데 좀…”<br>안 산 이유는?',        ph: '예) 가격이 부담돼요' }
   ];
   const CUS2_WALLS = ['비싸요', '시간없어', '효과 의심'];
+  // v515 · 벽 = 저항 하나. 5단계로 «부순다» (사장님 설계)
+  //   위에서부터 한 층씩 무너지고, 부순 벽돌은 저항 색(코퍼) 잔해로 남는다.
+  const CUS2_BREAK = [
+    { k: 'answer', n: '답변', d: '이 말에 뭐라고 답할지 한 줄로' },
+    { k: 'content', n: '컨텐츠화', d: '그 답을 원고·릴스 한 편으로' },
+    { k: 'visual', n: '비포애프터', d: '눈으로 보이는 자료(사진·화면)' },
+    { k: 'expert', n: '전문성 시각화', d: '왜 내가 말할 자격이 있는지' },
+    { k: 'buy', n: '구매 편의성', d: 'DM·예약까지 가는 길이 짧음' }
+  ];
+  function cus2Broke(c) {
+    const s = c.brk || {};
+    let n = (c.answer || '').trim() ? 1 : 0;           // 1단계는 답변이 곧 증거
+    CUS2_BREAK.slice(1).forEach(b => { if (s[b.k]) n++; });
+    return n;
+  }
+  // ══ v521 · 전환 무대 (캔버스) — 고객이 차고 · 벽을 넘고 · 골대로 ══
+  //  힘 = 셀링포인트 7문답 · 벽 높이 = 안 부순 저항 벽돌 · 골대 크기 = 핵심 PMM 5문답
+  const CUS2_SAY = {
+    blocked: ['이건 좀 힘든데…', '아직 벽이 높네', '여기서 막히네요', '아, 안 넘어가'],
+    short:   ['조금만 더…', '힘이 안 실렸어', '아깝다, 짧았어'],
+    bar:     ['아 골대!', '한 뼘 차이…', '골대가 조금만 더 크면'],
+    goal:    ['들어갔다!', '예약 하나 들어옵니다', '깨끗하게 골인'],
+    ready:   ['앞이 뻥 뚫렸어', '이제 편하게 차면 돼']
+  };
+  function cus2Say(k) { const a = CUS2_SAY[k]; return a[(Math.random() * a.length) | 0]; }
+  // 상태 메시지 — «벽이 없고 골대가 클수록 좋다»를 말로도 알려준다
+  function cus2StageMsg(resist, sn, pn) {
+    const left = resist.filter(c => cus2Broke(c) < 5).length;
+    if (!resist.length) return '아직 <b style="color:var(--rose)">저항</b>을 안 들었어요 — 고객 분석에서 먼저 담아주세요';
+    if (!left && pn >= 5 && sn >= 5) return '🏆 <b>완성</b> — 벽도 없고 골대도 최대예요. 차기만 하면 들어갑니다';
+    if (!left && pn >= 5) return '앞이 뻥 뚫렸고 <b>골대도 최대</b>예요 — 이제 웬만하면 들어갑니다';
+    if (!left) return '🚪 <b>앞이 뻥 뚫렸어요</b> — 이제 <b style="color:#C9A227">골대</b>를 키우면 확률이 올라가요';
+    if (pn >= 5) return '<b style="color:#C9A227">골대는 최대</b>예요 — 남은 벽 <b>' + left + '개</b>만 부수면 됩니다';
+    if (sn >= 7) return '힘은 <b>가득</b>이에요 — 남은 벽 <b>' + left + '개</b>를 부숴서 길을 여세요';
+    return '남은 벽 <b>' + left + '개</b> · 힘 <b>' + sn + '/7</b> · 골대 <b>' + pn + '/5</b> — ' +
+      '<b>벽이 낮고 골대가 클수록</b> 잘 들어가요';
+  }
+  // v522 · 전환 설계도 9조각 — 이미 앱에 있는 칸들을 «한 장의 그림»으로 묶은 것
+  const CUS2_BP = [
+    { k: '타겟',   ic: '◉',  c: '224,120,140' }, { k: '문제',   ic: '◷',  c: '224,120,140' },
+    { k: '욕구',   ic: '♡',  c: '245,200,75'  }, { k: '회피',   ic: '◌',  c: '168,123,224' },
+    { k: '저항',   ic: '🧱', c: '200,122,74'  }, { k: '키워드', ic: '🥇', c: '201,162,39'  },
+    { k: '반박',   ic: '⚒',  c: '72,201,138'  }, { k: '셀링',   ic: '⚡', c: '215,243,75'  },
+    { k: 'PMM',    ic: '￦',  c: '201,162,39'  }
+  ];
+  function cus2BpOn(p) {
+    const me = p.me || {}, q5 = p.pmm5 || {};
+    const sn = ['selling', 'features', 'merit', 'benefit', 'rival', 'diff', 'proof'].filter(k => (me[k] || '').trim()).length;
+    const pn = P5Q.filter(q => (q5[q.k] || '').trim()).length;
+    const rs = cus2Bask(p, 'resist');
+    return [
+      !!(p.targetName || '').trim(),
+      cus2Bask(p, 'pain').length > 0,
+      cus2Bask(p, 'desire').length > 0,
+      cus2Bask(p, 'fear').length > 0,
+      rs.length > 0,
+      ((st2Kw.gold || []).length + (st2Kw.normal || []).length) > 0,
+      rs.some(c => (c.answer || '').trim()),
+      sn >= 4,
+      pn >= 3
+    ];
+  }
+  // v522 · 전광판 — 이번 달 실제 DM·예약 (성장기록에 적은 숫자, 지어내지 않음)
+  function cus2Board() {
+    try {
+      const now = new Date(), ym = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0');
+      const cur = (glLog || []).filter(x => String(x.d || '').indexOf(ym) === 0);
+      const prevD = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+      const pym = prevD.getFullYear() + '-' + String(prevD.getMonth() + 1).padStart(2, '0');
+      const prv = (glLog || []).filter(x => String(x.d || '').indexOf(pym) === 0);
+      const sum = (a, k) => a.reduce((s, x) => s + (x[k] || 0), 0);
+      return { dm: sum(cur, 'dm'), buy: sum(cur, 'buy'), pdm: sum(prv, 'dm'), pbuy: sum(prv, 'buy') };
+    } catch (e) { return { dm: 0, buy: 0, pdm: 0, pbuy: 0 }; }
+  }
+  let _cus2Bp = false;   // 설계도 펼침
+  let _cus2St = null, _cus2Raf = 0;
+  function cus2StageStop() { if (_cus2Raf) { cancelAnimationFrame(_cus2Raf); _cus2Raf = 0; } _cus2St = null; }
+  function cus2StageInit(p) {
+    cus2StageStop();
+    const cv = document.getElementById('cus2-stage'); if (!cv) return;
+    const ctx = cv.getContext('2d');
+    const W = 740, H = 252, GY = 202, FX = 78;
+    const C = { rose: '#E0788C', cop: '#C87A4A', lime: '#D7F34B', gold: '#C9A227' };
+    const st = { ball: null, trail: [], dust: [], shake: 0, net: 0, bub: 0, btxt: '', slow: 0, kick: 0,
+      coins: [], t: 0 };
+    _cus2St = st;
+    const S = () => {
+      const me = p.me || {}, q5 = p.pmm5 || {};
+      const rs = cus2Bask(p, 'resist');
+      return {
+        s: ['selling', 'features', 'merit', 'benefit', 'rival', 'diff', 'proof'].filter(k => (me[k] || '').trim()).length,
+        p: P5Q.filter(q => (q5[q.k] || '').trim()).length,
+        walls: rs.map(c => 5 - cus2Broke(c)).filter(n => n > 0).slice(0, 3)
+      };
+    };
+    const wallX = i => 330 + i * 50;
+    const goalX = () => 636;
+    const gdim = () => { const g = 0.66 + S().p * 0.094; return { w: 62 * g, h: 92 * g, g: g }; };
+    const wtop = () => { const w = S().walls; return GY - (w.length ? Math.max.apply(null, w) : 0) * 15; };
+    // 떠다니는 ￦ — 골대가 클수록 많고 크게
+    for (let i = 0; i < 6; i++) st.coins.push({ a: Math.random() * 6.3, r: 20 + Math.random() * 26, sp: .008 + Math.random() * .01 });
+
+    function puff(x, y, n, col, sp) {
+      for (let i = 0; i < n; i++) st.dust.push({ x, y, r: 1.4 + Math.random() * 3.6,
+        vx: (Math.random() - .5) * (sp || 5), vy: -Math.random() * 3.2, l: 20 + Math.random() * 18, L: 38, c: col });
+    }
+    function launch() {
+      const q = S(), power = 8.6 + q.s * 1.42;
+      let ang;
+      if (!q.walls.length) ang = 0.30 + q.s * 0.012;
+      else { const need = (GY - wtop()) / (wallX(q.walls.length - 1) - FX);
+        ang = Math.min(1.05, 0.52 + need * 0.6 + q.walls.length * 0.045); }
+      return { x: FX + 16, y: GY - 16, vx: Math.cos(ang) * power, vy: -Math.sin(ang) * power, sq: 1.4 };
+    }
+    function drawFig() {
+      ctx.save(); ctx.translate(FX, GY);
+      ctx.strokeStyle = C.rose; ctx.lineWidth = 2.8; ctx.lineCap = 'round';
+      ctx.beginPath(); ctx.arc(0, -46, 10.5, 0, 7); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(0, -35); ctx.lineTo(0, -12); ctx.stroke();
+      const leg = Math.sin(st.kick * Math.PI) * 20;
+      ctx.beginPath(); ctx.moveTo(0, -12); ctx.lineTo(-11, 5); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(0, -12); ctx.lineTo(11 + leg, 5 - leg * .5); ctx.stroke();
+      const arm = Math.sin(st.kick * Math.PI) * 12;
+      ctx.beginPath(); ctx.moveTo(0, -30); ctx.lineTo(-13 - arm, -17); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(0, -30); ctx.lineTo(13, -21 + arm * .4); ctx.stroke();
+      ctx.restore();
+    }
+    function drawBub() {
+      if (st.bub <= 0) return;
+      ctx.save(); ctx.globalAlpha = Math.min(1, st.bub);
+      ctx.font = '700 12px -apple-system,Malgun Gothic,sans-serif';
+      const w = ctx.measureText(st.btxt).width + 22, x = FX, y = GY - 68;
+      ctx.fillStyle = 'rgba(255,255,255,.95)';
+      ctx.beginPath(); ctx.roundRect(x - w / 2, y - 24, w, 24, 9); ctx.fill();
+      ctx.beginPath(); ctx.moveTo(x - 5, y - 1); ctx.lineTo(x + 5, y - 1); ctx.lineTo(x, y + 7); ctx.fill();
+      ctx.fillStyle = '#181816'; ctx.textAlign = 'center'; ctx.fillText(st.btxt, x, y - 7);
+      ctx.restore();
+    }
+    function drawBoard() {
+      const d = gdim(), x = goalX(), b = cus2Board(), sc = d.g;
+      ctx.save(); ctx.translate(x, GY - d.h - 30); ctx.scale(sc, sc);
+      ctx.fillStyle = 'rgba(0,0,0,.55)'; ctx.strokeStyle = 'rgba(201,162,39,.4)'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.roundRect(-52, -26, 104, 32, 7); ctx.fill(); ctx.stroke();
+      ctx.textAlign = 'center';
+      ctx.font = '600 15px Georgia,serif'; ctx.fillStyle = C.gold;
+      ctx.fillText(b.dm, -26, -8); ctx.fillText(b.buy, 26, -8);
+      ctx.font = '500 7px -apple-system,Malgun Gothic,sans-serif'; ctx.fillStyle = 'rgba(255,255,255,.42)';
+      ctx.fillText('이번 달 DM', -26, 2); ctx.fillText('예약', 26, 2);
+      ctx.strokeStyle = 'rgba(255,255,255,.12)'; ctx.beginPath(); ctx.moveTo(0, -22); ctx.lineTo(0, 1); ctx.stroke();
+      ctx.restore();
+    }
+    function drawGoal() {
+      const d = gdim(), x = goalX(), q = S();
+      // 떠다니는 ￦ (골대 크기에 비례)
+      const show = Math.max(2, Math.min(6, 2 + q.p));
+      ctx.save(); ctx.translate(x, GY - d.h - 62);
+      st.coins.slice(0, show).forEach((c, i) => {
+        const a = c.a + st.t * c.sp, cx = Math.cos(a) * c.r * d.g, cy = Math.sin(a * 1.3) * 9 - i * 3;
+        const rr = (5 + q.p * 1.5) * d.g;
+        ctx.globalAlpha = .35 + q.p * .12;
+        ctx.fillStyle = C.gold; ctx.shadowColor = 'rgba(201,162,39,.7)'; ctx.shadowBlur = 9;
+        ctx.beginPath(); ctx.arc(cx, cy, rr, 0, 7); ctx.fill(); ctx.shadowBlur = 0;
+        ctx.globalAlpha = .9; ctx.fillStyle = '#2A1D05';
+        ctx.font = '600 ' + (rr * 1.15).toFixed(0) + 'px Georgia,serif'; ctx.textAlign = 'center';
+        ctx.fillText('￦', cx, cy + rr * .42);
+      });
+      ctx.restore(); ctx.globalAlpha = 1;
+      drawBoard();
+      ctx.save(); ctx.translate(x, GY);
+      ctx.strokeStyle = 'rgba(255,255,255,.13)'; ctx.lineWidth = 1;
+      for (let i = 0; i <= 7; i++) { const t = i / 7, sag = Math.sin(st.net) * 8 * Math.sin(Math.PI * t);
+        ctx.beginPath(); ctx.moveTo(-d.w / 2 + d.w * t, -d.h); ctx.lineTo(-d.w / 2 + d.w * t + sag, 0); ctx.stroke(); }
+      for (let j = 0; j <= 5; j++) { const u = j / 5, sg = Math.sin(st.net) * 8 * Math.sin(Math.PI * u);
+        ctx.beginPath(); ctx.moveTo(-d.w / 2, -d.h + d.h * u); ctx.lineTo(d.w / 2, -d.h + d.h * u + sg * .4); ctx.stroke(); }
+      ctx.strokeStyle = C.gold; ctx.lineWidth = 3.4; ctx.lineCap = 'round';
+      ctx.globalAlpha = q.p >= 5 ? 1 : .5 + q.p * .1;
+      ctx.beginPath(); ctx.moveTo(-d.w / 2, 0); ctx.lineTo(-d.w / 2, -d.h); ctx.lineTo(d.w / 2, -d.h); ctx.lineTo(d.w / 2, 0); ctx.stroke();
+      if (q.p >= 5) { ctx.shadowColor = 'rgba(201,162,39,.85)'; ctx.shadowBlur = 18; ctx.stroke(); ctx.shadowBlur = 0; }
+      ctx.globalAlpha = 1;
+      ctx.font = '600 11px Georgia,serif'; ctx.fillStyle = 'rgba(201,162,39,.9)'; ctx.textAlign = 'center';
+      ctx.fillText('예약', 0, 19);
+      ctx.restore();
+    }
+    function drawWalls() {
+      const q = S();
+      q.walls.forEach((n, i) => { const x = wallX(i);
+        for (let b = 0; b < n; b++) { const bh = 15, y = GY - (b + 1) * bh;
+          ctx.fillStyle = 'rgba(200,122,74,.48)'; ctx.strokeStyle = 'rgba(200,122,74,.72)'; ctx.lineWidth = 1;
+          ctx.beginPath(); ctx.roundRect(x - 15, y + 1, 30, bh - 2, 2); ctx.fill(); ctx.stroke(); }
+        // 부순 벽돌 = 잔해
+        for (let b = n; b < 5; b++) { const y = GY - (b + 1) * 15;
+          ctx.strokeStyle = 'rgba(200,122,74,.2)'; ctx.setLineDash([3, 3]); ctx.lineWidth = 1;
+          ctx.beginPath(); ctx.moveTo(x - 14, y + 12); ctx.lineTo(x + 14, y + 12); ctx.stroke(); ctx.setLineDash([]); }
+      });
+    }
+    function draw() {
+      ctx.clearRect(0, 0, W, H);
+      ctx.save();
+      if (st.shake > 0) ctx.translate((Math.random() - .5) * st.shake, (Math.random() - .5) * st.shake);
+      const g = ctx.createLinearGradient(0, 0, W, 0);
+      g.addColorStop(0, 'rgba(255,255,255,0)'); g.addColorStop(.5, 'rgba(255,255,255,.2)'); g.addColorStop(1, 'rgba(255,255,255,0)');
+      ctx.strokeStyle = g; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(16, GY + .5); ctx.lineTo(W - 16, GY + .5); ctx.stroke();
+      drawGoal(); drawWalls();
+      st.trail.forEach((pt, i) => { ctx.globalAlpha = (i / st.trail.length) * .3; ctx.fillStyle = C.lime;
+        ctx.beginPath(); ctx.arc(pt[0], pt[1], 7 * (i / st.trail.length), 0, 7); ctx.fill(); ctx.globalAlpha = 1; });
+      st.dust.forEach(d => { ctx.globalAlpha = Math.max(0, d.l / d.L); ctx.fillStyle = d.c;
+        ctx.beginPath(); ctx.arc(d.x, d.y, d.r, 0, 7); ctx.fill(); ctx.globalAlpha = 1; });
+      drawFig(); drawBub();
+      if (st.ball) { const b = st.ball;
+        ctx.save(); ctx.translate(b.x, b.y); ctx.scale(1 / b.sq, b.sq);
+        ctx.fillStyle = C.lime; ctx.shadowColor = 'rgba(215,243,75,.75)'; ctx.shadowBlur = 14;
+        ctx.beginPath(); ctx.arc(0, 0, 8.5, 0, 7); ctx.fill(); ctx.restore(); }
+      ctx.restore();
+    }
+    function say(k) { st.bub = 2.1; st.btxt = cus2Say(k); }
+    function loop() {
+      st.t++;
+      const slow = st.slow > 0 ? .36 : 1; if (st.slow > 0) st.slow--;
+      st.shake = Math.max(0, st.shake - .6);
+      st.net = st.net > 0 ? st.net - .11 : 0;
+      st.bub = st.bub > 0 ? st.bub - .009 : 0;
+      if (st.kick > 0) st.kick = Math.max(0, st.kick - .07);
+      st.dust = st.dust.filter(d => { d.x += d.vx * slow; d.y += d.vy * slow; d.vy += .17 * slow; d.l -= slow; return d.l > 0; });
+      if (st.ball) {
+        const b = st.ball, q = S();
+        b.sq += (1 - b.sq) * .18;
+        b.x += b.vx * slow; b.y += b.vy * slow; b.vy += .44 * slow;
+        st.trail.push([b.x, b.y]); if (st.trail.length > 14) st.trail.shift();
+        for (let i = 0; i < q.walls.length; i++) { const wx = wallX(i), top = GY - q.walls[i] * 15;
+          if (b.vx > 0 && b.x + 9 > wx - 15 && b.x - 9 < wx + 15 && b.y + 9 > top) {
+            b.vx = -Math.abs(b.vx) * .5; b.vy = -2.5; b.sq = 1.45; st.shake = 10; say('blocked');
+            puff(wx - 14, b.y, 12, 'rgba(200,122,74,.85)', 6); break; } }
+        const d = gdim(), gx = goalX();
+        if (b.x > gx - d.w / 2 - 36 && b.x < gx && st.slow === 0 && b.vx > 0) st.slow = 6;
+        if (b.x + 9 > gx - d.w / 2 && b.x - 9 < gx + d.w / 2) {
+          if (b.y < GY - d.h && b.vy < 0) { b.vy = Math.abs(b.vy) * .5; b.sq = 1.4; st.shake = 11; say('bar');
+            puff(gx, GY - d.h, 9, 'rgba(201,162,39,.9)', 5); }
+          else if (b.y > GY - d.h && b.y < GY) { st.ball = null; st.trail = []; st.net = 3.5; st.shake = 15; say('goal');
+            puff(gx, GY - d.h / 2, 20, 'rgba(201,162,39,.9)', 7);
+            try { toast('⚽ 골인 — 예약이 하나 들어왔어요'); } catch (e) {} }
+        }
+        if (b.y > GY - 9) { b.y = GY - 9; b.vy *= -.4; b.vx *= .74; b.sq = 1.3;
+          puff(b.x, GY - 2, 4, 'rgba(255,255,255,.3)', 3.5);
+          if (Math.abs(b.vy) < 1.1) { b.vy = 0; b.vx *= .88; }
+          if (Math.abs(b.vx) < .35) { st.ball = null; st.trail = []; if (st.bub <= 0) say('short'); } }
+        if (b.x < 14 || b.x > W - 6) { st.ball = null; st.trail = []; }
+      }
+      draw();
+      _cus2Raf = requestAnimationFrame(loop);
+    }
+    st.kickNow = () => { st.ball = launch(); st.trail = []; st.kick = 1; st.shake = 5; st.bub = 0;
+      puff(FX + 12, GY - 4, 8, 'rgba(255,255,255,.35)', 4.5); };
+    st.pulse = (kind) => {
+      st.shake = kind === 'wall' ? 11 : 8;
+      if (kind === 'wall') { const q = S(); q.walls.forEach((n, i) => puff(wallX(i), GY - n * 15, 7, 'rgba(200,122,74,.8)', 5)); }
+      if (kind === 'pmm') { const d = gdim(); st.net = 2.6; puff(goalX(), GY - d.h - 14, 12, 'rgba(201,162,39,.85)', 6); }
+      if (kind === 'sell') puff(FX + 10, GY - 6, 9, 'rgba(215,243,75,.7)', 5);
+    };
+    loop();
+  }
+  // v516 · 벽 그림·진행·메시지를 재렌더 없이 그 자리에서 갱신 (+ 파괴 연출)
+  function cus2PaintWall(p, c, smash) {
+    const n = cus2Broke(c);
+    // 반박 시트 안의 진행 표시
+    const row = document.querySelector('[data-cus2row="' + c.id + '"]');
+    if (row) { row.classList.toggle('done', n >= 5);
+      const n5 = row.querySelector('.on5'); if (n5) n5.textContent = n + '/5'; }
+    const cc = document.getElementById('cq-c');
+    if (cc) { cc.textContent = n + ' / 5'; cc.classList.toggle('done', n >= 5); }
+    const rs = cus2Bask(p, 'resist'), tot = rs.reduce((s, x) => s + cus2Broke(x), 0);
+    const me2 = p.me || {}, q52 = p.pmm5 || {};
+    const sn = ['selling', 'features', 'merit', 'benefit', 'rival', 'diff', 'proof'].filter(k => (me2[k] || '').trim()).length;
+    const pn = P5Q.filter(q => (q52[q.k] || '').trim()).length;
+    const segN = document.querySelector('.cus2-seg button.obj .n');
+    if (segN) segN.textContent = rs.length ? tot + '/' + (rs.length * 5) : '—';
+    const msg = document.getElementById('cus2-gmsg');
+    if (msg) msg.innerHTML = cus2StageMsg(rs, sn, pn);
+    if (smash && _cus2St && _cus2St.pulse) _cus2St.pulse('wall');
+    return n;
+  }
+  function cus2WallHtml(c) {
+    const n = cus2Broke(c);
+    return '<div class="cus2-gw' + (n >= 5 ? ' done' : '') + '" data-cus2wall="' + c.id + '">' +
+      [4, 3, 2, 1, 0].map(i => '<i class="bk' + (i < n ? ' gone' : '') + '"></i>').join('') +
+      '<span class="lb">' + esc(String(c.quote || '').slice(0, 7)) + '</span>' +
+      '<span class="pg srf">' + n + '/5</span></div>';
+  }
+  // v513 · 핵심 PMM — 돈이 되는 말을 찾아내는 5가지 질문 (상품·고객·자사·공감·증거)
+  const P5Q = [
+    { k: 'product', n: '상품·서비스', q: '내 상품은 <b>한마디로 어떤 제품</b>인가요?',
+      sub: '20초 안에 직감되게 — 핵심 특징 두 가지로',
+      ph: '예) 얼굴형에 맞춰 설계하는 «무너지지 않는» 펌 · ① 얼굴형 분석 ② 4주 무료 점검' },
+    { k: 'customer', n: '고객', q: '20초 설명만 듣고도 <b>“저한테 팔아주세요”</b><br>할 사람은 누구인가요?',
+      sub: '누구나 말고 «머리를 조아릴» 한 사람', ph: '예) 펌이 3일 만에 무너져 매일 아침 30분씩 버리는 30대 직장인' },
+    { k: 'self', n: '자사', q: '비슷한 걸 파는 데가 많은데<br><b>왜 굳이 나에게서</b> 살까요?',
+      sub: '왜 이 상품을 · 왜 지금 · 왜 나에게서', ph: '예) 스타일이 아니라 «자라는 방향»까지 계산해서, 3개월 뒤가 다르니까' },
+    { k: 'empathy', n: '공감', q: '이 사람은 <b>어떤 순간에</b> 화나고,<br>밤잠 설치고, 지갑을 여나요?',
+      sub: '설명 말고 «그 장면»을 오감으로', ph: '예) 아침 7시, 거울 앞에서 세 번째 다시 묶으며 “또 이러네” 하는 순간' },
+    { k: 'proof', n: '증거', q: '이 얘길 들은 고객이 품을 <b>의심</b>과,<br>그걸 날릴 <b>압도적 증거</b>는?',
+      sub: '의심 → 증거 짝으로', ph: '예) “나도 될까?” → 같은 얼굴형 비포애프터 200장 · 재방문율 80%' }
+  ];
   function cus2Ensure(p) {
     if (!p) return;
     if (!Array.isArray(p.episodes)) p.episodes = [];
@@ -45892,6 +46699,60 @@
       .sort((a, b) => (b.gold ? 1 : 0) - (a.gold ? 1 : 0) || (b.createdAt || 0) - (a.createdAt || 0));
   }
   // v506 · 담은 목록 — 전부 보이게 + ⭐핵심 + 탭해서 수정 + 삭제
+  // v518 · 기록 카드 — 한 줄이 «제목», 그 아래가 그 사람의 이야기
+  const CUS2_REC = [
+    { k: 'situation', ic: '◷', say: '그래서 이런 상황이에요', ph: '예) 아침 출근 준비하다 거울 앞에서' },
+    { k: 'emotion',   ic: '♡', say: '이때 감정은 이래요',     ph: '예) 짜증나고 자신감이 뚝 떨어졌다' },
+    { k: 'inner',     ic: '◌', say: '속으로는 이렇게 생각해요', ph: '예) ‘또 미용실 가야 하나… 돈 아까운데’' }
+  ];
+  function cus2Depth(c) { return CUS2_REC.filter(f => ((c && c[f.k]) || '').trim()).length; }
+  function cus2DepHtml(c) {
+    const d = cus2Depth(c);
+    return '<span class="cus2-dep">' + [0, 1, 2].map(k => '<i class="' + (k < d ? 'on' : '') + '"></i>').join('') + '</span>';
+  }
+  function cus2RecHtml(c) {
+    const d = cus2Depth(c), ed = _cus2RecEdit;
+    return '<div class="cus2-rec"><div class="rb">' + CUS2_REC.map(f => {
+      const v = (c[f.k] || '').trim();
+      if (ed) return '<div class="ln"><span class="ic">' + f.ic + '</span><span class="bd">' +
+        '<span class="say">' + f.say + '</span>' +
+        '<textarea data-cus2rf="' + c.id + '|' + f.k + '" rows="2" placeholder="' + f.ph + '">' + esc(v) + '</textarea>' +
+        '</span></div>';
+      return '<div class="ln' + (v ? '' : ' em') + '"><span class="ic">' + f.ic + '</span><span class="bd">' +
+        '<span class="say">' + f.say + '</span>' +
+        '<span class="val">' + esc(v || f.ph.replace('예) ', '')) + '</span></span></div>';
+    }).join('') + '</div>' +
+    '<div class="rf"><button class="mode" data-cus2recmode="1">' + (ed ? '✓ 다 적었어요' : '적기') + '</button>' +
+    '<span class="st">' + (d ? '판 칸 ' + d + ' / 3' : '아직 안 팠어요 — 한 칸만 채워도 돼요') + '</span></div></div>';
+  }
+  // v518 · 빈 화면 법칙 — ①채워진 모습을 먼저 ②할 일은 하나 ③내 데이터에서 후보를 꺼냄 ④0으로 겁주지 않기
+  const CUS2_GHOST = {
+    pain:   { q: '펌하고 3일은 좋았는데 그 뒤로 어색해요', a: '◷ 아침 거울 앞에서', b: '♡ 자신감이 뚝' },
+    desire: { q: '아침에 손 안 대도 단정했으면 좋겠어요', a: '◷ 출근 준비 20분', b: '♡ 여유로웠으면' },
+    fear:   { q: '머리가 부해 보이는 건 진짜 싫어요', a: '◷ 사진 찍힐 때', b: '♡ 위축됨' },
+    resist: { q: '근데 가격이 좀 부담돼요', a: '◷ 상담 끝날 무렵', b: '♡ 망설임' }
+  };
+  // 담아둔 벤치마킹에서 «자주 나온 말» 후보 (타이핑 0으로 시작하게)
+  function cus2Cand() {
+    const cnt = {};
+    (rows || []).forEach(r => {
+      if (!isFilled(r)) return;
+      (r.keywords || []).forEach(k => { k = String(k || '').trim(); if (k.length >= 2 && k.length <= 10) cnt[k] = (cnt[k] || 0) + 1; });
+    });
+    return Object.keys(cnt).sort((a, b) => cnt[b] - cnt[a]).slice(0, 4);
+  }
+  function cus2EmptyBask(m) {
+    const g = CUS2_GHOST[m.k] || CUS2_GHOST.pain;
+    const cand = cus2Cand();
+    return '<div class="cus2-empty">' +
+      '<div class="gcard"><div class="gt">“' + g.q + '”</div>' +
+      '<div class="gl"><span>' + g.a + '</span><span>' + g.b + '</span></div></div>' +
+      '<div class="gcap">이렇게 쌓입니다 — <b>한 줄만</b> 적어보세요</div>' +
+      (cand.length ? '<div class="gpull"><div class="ph">담아둔 벤치마킹에서 자주 나온 말이에요 — 눌러서 시작</div>' +
+        '<div class="chips">' + cand.map(k => '<button data-cus2cand="' + esc(k) + '">' + esc(k) + '</button>').join('') +
+        '</div></div>' : '') +
+      '</div>';
+  }
   function cus2ListHtml(list, opt) {
     opt = opt || {};
     if (!list.length) return '';
@@ -45900,14 +46761,16 @@
     const shown = many ? list.slice(0, 4) : list;
     return '<div class="haveh"><span class="t">담은 것</span><span class="n srf">' + list.length + '</span>' +
       (opt.allKey ? '<span class="tip seeall" data-cus2all="' + opt.allKey + '">▤ 전체 보기</span>'
-                  : '<span class="tip">글자를 탭하면 고쳐요</span>') + '</div>' +
+                  : '<span class="tip">눌러서 더 파요</span>') + '</div>' +
       '<div class="have">' + shown.map(c => {
         const txt = String(c[key] || '');
-        return '<div class="it' + (c.gold ? ' g' : '') + '" data-cus2it="' + c.id + '">' +
+        return '<div class="it' + (c.gold ? ' g' : '') + (_cus2Rec === c.id ? ' open' : '') + '" data-cus2it="' + c.id + '">' +
           (opt.star ? '<span class="st" data-cus2star="' + c.id + '">' + (c.gold ? '★' : '☆') + '</span>' : '') +
-          '<span class="tx" data-cus2edit="' + c.id + '">' + (opt.quoted ? '“' + esc(txt) + '”' : esc(txt)) +
+          '<span class="tx" data-cus2rec="' + c.id + '">' + (opt.quoted ? '“' + esc(txt) + '”' : esc(txt)) +
           (c.source ? '<span class="src">' + esc(c.source) + '</span>' : '') + '</span>' +
-          '<span class="x" data-cus2del="' + c.id + '">×</span></div>';
+          (key === 'quote' ? cus2DepHtml(c) : '') +
+          '<span class="x" data-cus2del="' + c.id + '">×</span>' +
+          (_cus2Rec === c.id && key === 'quote' ? cus2RecHtml(c) : '') + '</div>';
       }).join('') +
       (many ? '<div class="moreline" data-cus2all="' + (opt.allKey || '') + '">＋ ' + (list.length - 4) + '개 더 — 전체 보기 ›</div>' : '') +
       '</div>';
@@ -45968,50 +46831,246 @@
       '</div>' +
       '<div class="cus2-tabs">' +
       '<button data-cus2t="card"' + (_cus2Tab === 'card' ? ' class="on"' : '') + '>카드</button>' +
-      '<button data-cus2t="mat"' + (_cus2Tab === 'mat' ? ' class="on"' : '') + '>재료</button>' +
+      '<button data-cus2t="mat"' + (_cus2Tab === 'mat' ? ' class="on"' : '') + '>고객 분석</button>' +
+      '<button data-cus2t="kw"' + (_cus2Tab === 'kw' ? ' class="on"' : '') + '>키워드</button>' +
       '<button data-cus2t="cnv"' + (_cus2Tab === 'cnv' ? ' class="on c"' : '') + '>전환</button></div>';
 
     if (_cus2Tab === 'card') h += cus2CardHtml(p, filled);
+    else if (_cus2Tab === 'kw') h += cus2KwHtml(p);
     else if (_cus2Tab === 'mat') h += cus2MatHtml(p);
     else h += cus2CnvHtml(p);
 
     el.innerHTML = h + '</div>';
     cus2Wire(p);
+    // v521 · 전환 탭에서만 캔버스 무대를 돌린다 (다른 탭이면 정지)
+    if (_cus2Tab === 'cnv') cus2StageInit(p); else cus2StageStop();
   }
   // ── 탭 1 · 카드 (정리된 한 사람) ──
+  // ══ v525 · 가설 검증 — 담은 말 하나하나가 «가설»이다 ══
+  //  ◌ 의심(안 써봄) → ▶ 실행(써봤고 결과 대기) → ✓ 반응(평균 초과 1편) → ★ 확신(2편+)
+  //  ⚠️ 앱 헌법: 1편만 넘으면 «반응», 2편 이상이어야 «확신». 운 하나를 법칙이라 부르지 않는다
+  let _cus2Hy = false, _cus2HyF = -1;
+  function cus2HyTok(t) {
+    let toks = [];
+    try { toks = (typeof insTok === 'function') ? insTok(String(t || '')) : []; } catch (e) {}
+    if (!toks.length) toks = String(t || '').split(/[\s,.!?·…"'’”“()\[\]]+/);
+    return [...new Set(toks)].map(w => String(w || '').trim())
+      .filter(w => w.length >= 2 && w.length <= 8 && !ST2_REP_STOP.has(w))
+      .sort((a, b) => b.length - a.length).slice(0, 3);
+  }
+  function cus2HyList(p) {
+    const ups = (scripts || []).filter(s => (s.uploadViews || 0) > 0);
+    const avg = ups.length ? ups.reduce((a, s) => a + (s.uploadViews || 0), 0) / ups.length : 0;
+    const cache = ups.map(s => {
+      let body = ''; try { body = st2SrcText(s) || ''; } catch (e) {}
+      return { s: s, t: (scriptDisplayTitle(s) || '') + ' ' + body };
+    });
+    const out = [];
+    const add = (label, bask, toks) => {
+      if (!toks.length) return;
+      const hit = cache.filter(o => toks.some(w => o.t.indexOf(w) !== -1));
+      const over = hit.filter(o => (o.s.uploadViews || 0) > avg);
+      const st = hit.length ? (over.length ? 2 : 1) : 0;
+      const gain = (over.length && avg)
+        ? Math.round((over.reduce((a, o) => a + o.s.uploadViews, 0) / over.length - avg) / avg * 100) : 0;
+      out.push({ q: label, bask: bask, st: st, n: hit.length, over: over.length, gain: gain,
+        clips: hit.sort((a, b) => b.s.uploadViews - a.s.uploadViews).slice(0, 3)
+          .map(o => (scriptDisplayTitle(o.s) || '무제').slice(0, 22) + ' · ' + fmtViews(o.s.uploadViews)) });
+    };
+    (p.collect || []).forEach(c => {
+      const nm = (CUS2_MATS.find(m => m.k === (c.basket || 'pain')) || {}).n || '문제';
+      add('“' + String(c.quote || '').slice(0, 40) + '”', nm, cus2HyTok(
+        [c.quote, c.situation, c.emotion, c.inner].filter(Boolean).join(' ')));
+    });
+    (st2Kw.gold || []).forEach(k => add(k, '🥇 황금', [k]));
+    (st2Kw.normal || []).forEach(k => add(k, '키워드', [k]));
+    return out;
+  }
+  const CUS2_HYC = ['120,118,110', '224,178,122', '215,243,75'];
+  function cus2HyBadge(h) {
+    if (h.st === 0) return '◌ 의심';
+    if (h.st === 1) return '▶ 실행';
+    return h.over >= 2 ? '★ 확신' : '✓ 반응 하나';
+  }
+  function cus2HyHtml(p) {
+    const L = cus2HyList(p);
+    const cnt = [0, 0, 0]; L.forEach(h => cnt[h.st]++);
+    const sure = L.filter(h => h.st === 2).length;
+    let h = '<div class="cus2-rp' + (_cus2Hy ? ' open' : '') + '" id="cus2-rp">' +
+      '<span class="k">성과난 반응 포인트</span>' +
+      '<span class="n srf' + (sure ? '' : ' z') + '">' + (sure || '—') + '</span>' +
+      '<span class="ar">›</span></div>';
+    if (!_cus2Hy) return h;
+    h += '<div class="cus2-hy">';
+    if (!L.length) {
+      h += '<div class="hyempty">아직 담은 말이 없어요 — 고객 분석에서 한 줄만 담아보세요</div></div>';
+      return h;
+    }
+    h += '<div class="hyf">' + [1, 2, 0].map(s =>
+      '<button data-cus2hyf="' + s + '" class="' + (_cus2HyF === s ? 'on' : (_cus2HyF >= 0 ? 'off' : '')) +
+      '" style="--c:' + CUS2_HYC[s] + '">' + ['◌ 의심', '▶ 실행', '★ 확신'][s] +
+      '<b class="srf">' + cnt[s] + '</b></button>').join('') + '</div>' +
+      '<div class="hyx">콘텐츠로 만들었을 때 <b>실제 반응이 확인된 것들</b>의 모음이에요.<br>' +
+      '<b style="color:#E0B27A">▶실행</b>은 결과를 기다리는 중, <b style="color:#d7f34b">★확신</b>은 <b>내 평균을 넘긴</b> 것들입니다.</div>';
+    const view = L.filter(x => _cus2HyF < 0 || x.st === _cus2HyF)
+      .sort((a, b) => (b.st === 1 ? 1 : 0) - (a.st === 1 ? 1 : 0) || b.st - a.st || b.over - a.over || b.n - a.n)
+      .slice(0, 12);
+    h += view.map(x => '<div class="hyi" style="--c:' + CUS2_HYC[x.st] + '">' +
+      '<div class="hq">' + esc(x.q) + '</div>' +
+      '<div class="hm"><span class="bg">' + cus2HyBadge(x) + '</span>' +
+      '<span class="st2">' + esc(x.bask) + (x.n ? ' · ' + x.n + '편' : '') +
+      (x.st === 2 ? (x.gain > 0 ? ' · 평균 대비 <b>+' + x.gain + '%</b>' : ' · 평균 초과') :
+        (x.st === 1 ? ' · 결과 기다리는 중' : ' · 아직 안 써봤어요')) + '</span></div>' +
+      (x.clips.length ? '<div class="hc">' + x.clips.map(c => '· ' + esc(c)).join('<br>') + '</div>' : '') +
+      '</div>').join('');
+    if (!view.length) h += '<div class="hyempty">이 단계는 아직 비어 있어요</div>';
+    return h + '</div>';
+  }
+  // ══ v523 · 카드 탭 = 수배지 «이 사람을 찾습니다» ══
+  //  서술(사람으로 읽힘) + 접힌 상세 이력(빈 칸 확인). 내용이 늘면 «대표»가 자동으로 바뀐다.
+  let _cus2Det = false, _cus2Pick = {};
+  //  대표 뽑기 — ⭐핵심 → 판 깊이(상황·감정·속마음) → 최신. 늘어나면 대표가 바뀐다
+  function cus2Rep(p, k) {
+    const list = (p.collect || []).filter(c => (c.basket || 'pain') === k)
+      .sort((a, b) => (b.gold ? 1 : 0) - (a.gold ? 1 : 0) || cus2Depth(b) - cus2Depth(a) ||
+        (b.createdAt || 0) - (a.createdAt || 0));
+    if (!list.length) return null;
+    const idx = ((_cus2Pick[k] || 0) % list.length + list.length) % list.length;
+    return { c: list[idx], n: list.length, i: idx };
+  }
   function cus2CardHtml(p, filled) {
     const gold = (st2Kw.gold || []), norm = (st2Kw.normal || []);
-    const kwHtml = (gold.length || norm.length)
-      ? gold.map(k => '<span class="g">' + esc(k) + '</span>').join('') + norm.slice(0, 3).map(k => '<span>' + esc(k) + '</span>').join('')
-      : '';
-    const row = (k, mk) => {
-      const list = cus2Bask(p, mk);
-      return '<div class="cus2-row"><span class="k">' + k + '</span>' +
-        (list.length ? '<span class="v">' + esc(list[0].quote || '') + (list.length > 1 ? ' <span style="color:var(--st2-faint)">외 ' + (list.length - 1) + '</span>' : '') + '</span>'
-                     : '<span class="v em">— 아직</span>') + '</div>';
-    };
-    const nextM = CUS2_MATS.find(m => !cus2Bask(p, m.k).length);
-    let h = '<div class="cus2-dos"><div class="cus2-dh">' +
-      '<div class="cus2-por">' + cus2Fig(p.gender || 'f') + '</div>' +
-      '<div class="meta"><div class="no srf">MY TARGET</div>' +
-      '<div class="nm">' + esc((p.targetName || '').slice(0, 30)) + '</div>' +
-      '<div class="st">' + [0, 1, 2, 3].map(i => '<i' + (i < filled ? ' class="on"' : '') + '></i>').join('') + '</div>' +
-      '<div class="pc srf">' + filled + ' / 4 · ' + (filled >= 4 ? '또렷' : '또렷해지는 중') + '</div>' +
+    const kws = gold.concat(norm).slice(0, 4);
+    const pain = cus2Rep(p, 'pain'), want = cus2Rep(p, 'desire'),
+          fear = cus2Rep(p, 'fear'), res = cus2Rep(p, 'resist');
+    const sit = (pain && (pain.c.situation || '').trim()) ||
+      ((p.collect || []).map(c => (c.situation || '').trim()).filter(Boolean)[0] || '');
+    const emo = pain && (pain.c.emotion || '').trim();
+    const ans = res && (res.c.answer || '').trim();
+    const bpOn = cus2BpOn(p), bpN = bpOn.filter(Boolean).length;
+    const bd = cus2Board();
+    const Q = t => '<em>“' + esc(String(t).slice(0, 60)) + '”</em>';
+    const swap = (k, o) => (o && o.n > 1)
+      ? '<button class="sw" data-cus2sw="' + k + '" title="다른 말로 보기">↻ <i>' + (o.i + 1) + '/' + o.n + '</i></button>' : '';
+
+    // ── 서술 — 문단을 나눠서 읽기 쉽게 ──
+    let story = '';
+    if (pain) story += '<p class="ln lead"><span class="mk">◷</span><span class="bd2">' +
+      (sit ? '<b>' + esc(sit) + '</b>에서<br>' : '') + Q(pain.c.quote) + ' 하는 사람.' +
+      (emo ? '<br><span class="sm">그때 ' + esc(emo) + '</span>' : '') + '</span>' + swap('pain', pain) + '</p>';
+    else if (sit) story += '<p class="ln lead"><span class="mk">◷</span><span class="bd2"><b>' + esc(sit) + '</b>에 나타나는 사람.</span></p>';
+    if (want) story += '<p class="ln"><span class="mk am">♡</span><span class="bd2">' + Q(want.c.quote) + '<br>— 이걸 바랍니다.</span>' + swap('desire', want) + '</p>';
+    if (fear) story += '<p class="ln"><span class="mk vi">◌</span><span class="bd2">대신 ' + Q(fear.c.quote) + '<br>— 이건 싫어합니다.</span>' + swap('fear', fear) + '</p>';
+    if (res) story += '<p class="ln"><span class="mk co">🧱</span><span class="bd2">' + Q(res.c.quote) + '<br>앞에서 한 번 망설이고 —' +
+      (ans ? '<br><span class="ansv">그때 필요한 말: <b>' + esc(ans) + '</b></span>' : '<span class="sm"> 아직 답이 없어요</span>') +
+      '</span>' + swap('resist', res) + '</p>';
+    if (!story) story = '<p class="ln empty">아직 아무것도 못 들었습니다.<br><b>한 줄만 담아도</b> 이 사람이 보이기 시작해요.</p>';
+
+    const gaps = [];
+    if (!pain) gaps.push('문제'); if (!want) gaps.push('원하는 것'); if (!fear) gaps.push('피하는 것');
+    if (!res) gaps.push('망설이는 것'); if (!sit) gaps.push('그 순간'); if (!kws.length) gaps.push('키워드');
+
+    const F = (k, v2) => '<div class="fld"><span class="k">' + k + '</span>' +
+      (v2 ? '<span class="v">' + v2 + '</span>' : '<span class="v un">미확인</span>') + '</div>';
+    const last = (p.collect || []).slice().sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0))[0];
+
+    let h = '<div class="cus2-wanted' + (bpN >= 9 ? ' done' : '') + '">' +
+      '<div class="wt srf">WANTED</div><div class="ws">이 사람을 찾습니다</div>' +
+      '<div class="mug"><div class="fr">' +
+        '<span class="c tl"></span><span class="c tr"></span><span class="c bl"></span><span class="c br"></span>' +
+        '<div class="por" style="filter:blur(' + (filled >= 4 ? 0 : (4 - filled) * 0.45) + 'px);opacity:' +
+          (0.74 + filled * 0.065).toFixed(2) + '">' + cus2Fig(p.gender || 'f') + '</div>' +
+        '<span class="sc">' + [0, 1, 2, 3].map(i => '<i' + (i < filled ? ' class="on"' : '') + '></i>').join('') + '</span>' +
       '</div></div>' +
-      row('문제', 'pain') + row('욕구', 'desire') + row('회피', 'fear') + row('저항', 'resist') +
-      '<div class="cus2-row"><span class="k">키워드</span>' +
-        (kwHtml ? '<span class="v kw">' + kwHtml + '</span>' : '<span class="v em">— 재료에서 저절로 올라와요</span>') + '</div>' +
+      '<div class="nm">' + esc((p.targetName || '').slice(0, 30)) + '</div>' +
+      '<div class="cno srf">CASE No. 001 · ' + ['아직 흐릿', '조금 보임', '얼굴이 잡힘', '거의 또렷', '또렷'][filled] + '</div>' +
+      '<div class="story">' + story + '</div>' +
+      (gaps.length ? '<div class="gaps">아직 모르는 것 — <b>' + gaps.join(' · ') + '</b></div>' : '') +
+      '<button class="det' + (_cus2Det ? ' open' : '') + '" id="cus2-det">상세 이력<span class="ar">›</span></button>' +
+      (_cus2Det ? '<div class="detbd">' +
+        F('인상착의', kws.length ? esc(kws.join(' · ')) : '') +
+        F('주 증상', pain ? esc(pain.c.quote) : '') +
+        F('원하는 것', want ? esc(want.c.quote) : '') +
+        F('피하는 것', fear ? esc(fear.c.quote) : '') +
+        F('접근 주의', res ? esc(res.c.quote) + (ans ? ' <span style="color:var(--cnv)">· 답변 있음</span>' : '') : '') +
+        F('출몰 시각', sit ? esc(sit) : '') +
+        F('최근 목격', last ? (new Date(last.createdAt || Date.now())).toLocaleDateString('ko-KR', { month: 'long', day: 'numeric' }) +
+          (last.source ? ' · ' + esc(last.source) : '') : '') +
+        '</div>' : '') +
+      cus2HyHtml(p) +
+      '<div class="wft"><span class="rw">현상금 · 이번 달 예약<b class="srf">' + bd.buy + '건</b></span>' +
+        '<span class="pg">' + bpOn.map(o => '<i class="' + (o ? 'on' : '') + '"></i>').join('') + '</span></div>' +
       '</div>';
-    if (nextM) h += '<div class="cus2-next" id="cus2-next"><div class="bx"><div class="k">다음 재료</div>' +
+
+    const nextM = CUS2_MATS.find(m => !cus2Bask(p, m.k).length);
+    if (nextM) h += '<div class="cus2-next" id="cus2-next"><div class="bx"><div class="k">다음 단서</div>' +
       '<div class="v">' + nextM.n + ' — ' + nextM.q.replace(/<br>/g, ' ') + '</div></div><span class="go">›</span></div>';
-    h += '<div class="cus2-used"><div class="h srf">USED IN</div><div class="row">' +
-      '<div><div class="t">훅 추천</div><div class="n srf">' + (filled >= 2 ? 'ON' : '—') + '</div></div>' +
-      '<div><div class="t">캡션</div><div class="n srf">' + (filled >= 1 ? 'ON' : '—') + '</div></div>' +
-      '<div><div class="t">주간 기획</div><div class="n srf">' + (filled >= 2 ? 'ON' : '—') + '</div></div>' +
-      '</div></div>';
+    if (!kws.length) h += '<div class="cus2-next" data-cus2go="kw"><div class="bx"><div class="k">인상착의가 비었어요</div>' +
+      '<div class="v">키워드를 등록하면 수배지가 또렷해져요</div></div><span class="go">›</span></div>';
     return h;
   }
-  // ── 탭 2 · 재료 (조향대 4통) ──
+  // ── 탭 2 · 키워드 (v515 · 독립 탭으로 승격) ──
+  function cus2KwHtml(p) {
+    const gold = (st2Kw.gold || []), norm = (st2Kw.normal || []);
+    const rep = st2RepeatSuggest(p.collect || []);
+    return '<div class="cus2-kwpane">' +
+      '<div class="eb srf">KEYWORDS</div>' +
+      '<div class="q">이 고객이 <b>반응하는 말</b></div>' +
+      '<div class="cus2-kwrow"><span class="lb g">🥇 황금 <i>최대 3</i></span>' +
+      (gold.length ? gold.map((k, i) => '<span class="cus2-kc g">' + esc(k) +
+          '<span class="x" data-cus2kwx="g' + i + '">×</span></span>').join('')
+        : '<span class="em">아직 없어요 — 제일 세게 반응한 말 3개까지</span>') + '</div>' +
+      '<div class="cus2-kwrow"><span class="lb">💬 일반</span>' +
+      (norm.length ? norm.map((k, i) => '<span class="cus2-kc">' + esc(k) +
+          '<span class="x" data-cus2kwx="n' + i + '">×</span></span>').join('')
+        : '<span class="em">아직 없어요</span>') + '</div>' +
+      // v518 · 하나도 없으면 «담은 말»에서 후보를 먼저 꺼내준다 (타이핑 0)
+      ((!gold.length && !norm.length)
+        ? (function () {
+            const cand = st2RepeatSuggest(p.collect || [], 2);
+            if (!cand.length) return '<div class="cus2-kwcand"><div class="ph">' +
+              '고객 분석에 <b>같은 말이 두 번</b> 담기면, 여기에 후보가 저절로 떠요.</div></div>';
+            return '<div class="cus2-kwcand"><div class="ph">담은 말에서 <b>자주 나온 단어</b>를 뽑아왔어요 —' +
+              ' 이 중에 «고객이 반응하는 말»이 있나요?</div><div class="chips">' +
+              cand.map(x => '<button data-cus2kwc="' + esc(x.w) + '">' + esc(x.w) +
+                '<span class="n">' + x.n + '번</span></button>').join('') + '</div></div>';
+          })()
+        : '') +
+      '<div class="cus2-kwadd"><input id="cus2-kwin" placeholder="예) 앞머리 · 볼륨 · 상담">' +
+      '<button class="gd" id="cus2-kwg">🥇</button><button class="add" id="cus2-kwadd">담기</button></div>' +
+      (rep.length ? '<div class="cus2-kwrep"><div class="rh">🔁 고객 분석에서 반복해서 들린 말</div>' +
+        rep.map(x => '<button class="rc" data-cus2rep="' + esc(x.w) + '">' + esc(x.w) +
+          '<i>' + x.n + '번</i> <b>🥇 황금으로</b></button>').join('') + '</div>' : '') +
+      '<div class="cus2-sqtip">여기 등록한 말이 <b style="color:var(--rose)">훅 추천 · 3차원 맵 고객축 · 캡션</b>에 쓰여요</div>' +
+      '</div>' + cus2ProofHtml();
+  }
+  // v519 · 증거(공감댓글) — 전환 탭에서 키워드 탭으로 이사. 전체 보기는 «여기서» 유형별로
+  function cus2ProofHtml() {
+    const all = (collects || []).filter(c => c.kind === 'comment');
+    if (_cus2Proof) {
+      // 단독 전체 보기 — 유형별로 묶어서 (썸네일 탭으로 안 넘어감)
+      const by = {};
+      all.forEach(c => { const k = (c.copyType || c.type || '').trim() || '유형 미지정'; (by[k] = by[k] || []).push(c); });
+      const keys = Object.keys(by).sort((a, b) => by[b].length - by[a].length);
+      return '<div class="cus2-proof all"><div class="ph2"><span class="t">증거 — 공감댓글 ' +
+        '<span class="srf" style="color:var(--st2-faint)">' + all.length + '</span></span>' +
+        '<button class="back" id="cus2-proofback">‹ 키워드로</button></div>' +
+        (keys.length ? keys.map(k => '<div class="psec"><div class="psh">' + esc(k) +
+          '<span class="srf">' + by[k].length + '</span></div><div class="pgrid">' +
+          by[k].map(c => '<div data-cus2img="' + c.id + '"></div>').join('') + '</div></div>').join('')
+          : '<div class="note2">아직 담은 공감댓글이 없어요 — <b style="color:var(--st2-sub)">빠른 담기</b>에서 캡처를 던져보세요</div>') +
+        '</div>';
+    }
+    const cms = all.filter(c => c.hasImg !== false).slice(0, 3);
+    return '<div class="cus2-proof"><div class="ph2"><span class="t">증거 — 공감댓글</span>' +
+      (all.length ? '<span class="go" id="cus2-proofgo">전체 보기 →</span>' : '') + '</div><div class="strip">' +
+      (cms.length ? cms.map(c => '<div data-cus2img="' + c.id + '"></div>').join('') : '<div></div><div></div><div></div>') +
+      '<div class="more"><span class="srf">' + (all.length > 3 ? '+' + (all.length - 3) : '＋') + '</span></div></div>' +
+      '<div class="cus2-proof-note note2">' + (all.length
+        ? '고객이 <b style="color:var(--st2-sub)">직접 쓴 말</b>이에요 — 키워드 후보가 여기 있어요'
+        : '빠른 담기에서 <b style="color:var(--st2-sub)">공감댓글 캡처</b>를 던지면 여기 쌓여요') + '</div></div>';
+  }
+  // ── 탭 3 · 재료 (조향대 4통) ──
   function cus2MatHtml(p) {
     // v508 · 한 통의 «전체 보기» — 그 통에 담은 것만 쭉 나열 (썸네일 유형별 모아보기 방식)
     if (_cus2All) {
@@ -46021,16 +47080,20 @@
         return '<div class="cus2-allsec" data-cus2v="' + m.k + '">' +
           '<div class="ah"><span class="t">' + m.n + '</span><span class="n srf">' + list.length + '</span>' +
           '<span class="add2" data-cus2v="' + m.k + '">＋ 담기</span></div>' +
-          (list.length ? list.map(c => '<div class="it' + (c.gold ? ' g' : '') + '">' +
+          (list.length ? list.map(c => '<div class="it' + (c.gold ? ' g' : '') +
+            (_cus2Rec === c.id ? ' open' : '') + '">' +
             '<span class="st" data-cus2star="' + c.id + '">' + (c.gold ? '★' : '☆') + '</span>' +
-            '<span class="tx" data-cus2edit="' + c.id + '">“' + esc(c.quote || '') + '”' +
+            '<span class="tx" data-cus2rec="' + c.id + '">“' + esc(c.quote || '') + '”' +
             (c.source ? '<span class="src">' + esc(c.source) + '</span>' : '') + '</span>' +
-            '<span class="x" data-cus2del="' + c.id + '">×</span></div>').join('')
-            : '<div class="em2">아직 비어 있어요 — ＋로 담아보세요</div>') +
+            cus2DepHtml(c) + '<span class="x" data-cus2del="' + c.id + '">×</span>' +
+            (_cus2Rec === c.id ? cus2RecHtml(c) : '') + '</div>').join('')
+            : cus2EmptyBask(m)) +
           '</div>';
       }
       _cus2All = false;
     }
+    // v516 · 들어오면 «문제»가 열려 있게 (빈 화면 방지)
+    if (!CUS2_MATS.some(m => m.k === _cus2Sheet)) _cus2Sheet = 'pain';
     let h = '<div class="cus2-organ">';
     CUS2_MATS.forEach(m => {
       const n = cus2Bask(p, m.k).length;
@@ -46040,7 +47103,7 @@
         (n ? '<span class="n2 srf">' + n + '</span>' : '') + '</span>' +
         '<span class="cap2">' + m.n + '</span></div>';
     });
-    h += '</div><div class="cus2-tapnote">통을 누르면 그 재료를 담아요</div>';
+    h += '</div><div class="cus2-tapnote">통을 누르면 그 항목을 담아요</div>';
     // 담기 시트
     const cur = CUS2_MATS.find(m => m.k === _cus2Sheet);
     if (cur) {
@@ -46049,46 +47112,158 @@
         '<div class="eb">' + cur.n + '</div><div class="q">' + cur.q + '</div>' +
         '<input id="cus2-min" placeholder="' + cur.ph + '">' +
         '<button class="add" id="cus2-madd">담기</button>' +
-        cus2ListHtml(list, { star: true, quoted: true, allKey: cur.k }) +
+        (list.length ? cus2ListHtml(list, { star: true, quoted: true, allKey: cur.k }) : cus2EmptyBask(cur)) +
         '</div></div>';
     }
     return h;
   }
   // ── 탭 3 · 전환 (문턱 무너뜨리기) ──
   function cus2CnvHtml(p) {
-    const objN = p.objections.length;
-    const down = Math.min(3, objN);
+    // v512 · 벽 = «내가 실제로 들은 저항». 답을 단 저항만 무너진다 (하드코딩 폐기)
+    if (['obj', 'sell', 'pmm'].indexOf(_cus2Sheet) < 0) _cus2Sheet = 'obj';   // v517 · 세그먼트 기본
+    const resist = cus2Bask(p, 'resist');
+    const walls = resist.slice(0, 3);
+    const answered = resist.filter(c => (c.answer || '').trim()).length;
+    const objN = answered;
+    const brokeTot = resist.reduce((s, c) => s + cus2Broke(c), 0);
+    const brickTot = resist.length * 5;
     const me = p.me || {};
-    const sellN = ['selling', 'diff', 'proof', 'benefit'].filter(k => (me[k] || '').trim()).length;
-    let h = '<div class="cus2-gate"><div class="eb srf">THRESHOLD</div><div class="cus2-gtrack">' +
-      '<div class="cus2-gp"><svg viewBox="0 0 30 44" fill="none" stroke="#D4737F" stroke-width="1.3">' +
-      '<circle cx="15" cy="9" r="6"/><path d="M4 42c1.5-9 6-14 11-14s9.5 5 11 14"/></svg></div>' +
-      '<div class="cus2-gwalls">' +
-      CUS2_WALLS.map((w, i) => '<div class="cus2-gw' + (i < down ? ' down' : '') + '" style="height:' + (i < down ? 12 : 86 - i * 8) + '%">' +
-        '<span class="lb">' + w + (i < down ? ' ✓' : '') + '</span></div>').join('') +
-      '</div><div class="cus2-ggoal"><span class="ring"><span class="srf">￦</span></span><span class="t">예약</span></div>' +
-      '</div><div class="cus2-gbase"></div>' +
-      '<div class="cus2-gmsg">' + (down ? '벽 <b>' + down + '개</b>를 없앴어요' + (down < 3 ? ' — ' + (3 - down) + '개 남았습니다' : ' — 길이 열렸어요') : '아직 벽이 <b>3개</b> 그대로예요') + '</div></div>';
-    h += '<div class="cus2-cv' + (objN ? ' on' : '') + '" data-cus2d="obj"><div><div class="k">반박 제거</div>' +
-      '<div class="d">“비싸요·시간 없어요”의 답</div></div><span class="n srf' + (objN ? '' : ' z') + '">' + (objN || '—') + '</span></div>' +
-      '<div class="cus2-cv' + (sellN ? ' on' : '') + '" data-cus2sell><div><div class="k">셀링포인트</div>' +
-      '<div class="d">나만 할 수 있는 이유 — 고객 분석에서</div></div><span class="n srf' + (sellN ? '' : ' z') + '">' + (sellN || '—') + '</span></div>';
-    if (_cus2Sheet === 'obj') {
-      h += '<div class="cus2-sheet"><div class="grab"></div><div class="in">' +
-        '<div class="eb">반박 제거</div><div class="q">망설이는 말에<br>뭐라고 답하나요?</div>' +
-        '<input id="cus2-min" placeholder="예) 비싸요 → 6개월 유지되니 한 달 1만원꼴">' +
-        '<button class="add" id="cus2-madd">담기</button>' +
-        cus2ListHtml(p.objections, { textKey: 'text' }) +
+    const SELL_KEYS = ['selling', 'features', 'merit', 'benefit', 'rival', 'diff', 'proof']; // v513
+    const sellN = SELL_KEYS.filter(k => (me[k] || '').trim()).length;
+    const p5 = p.pmm5 || {};
+    const p5N = P5Q.filter(q => (p5[q.k] || '').trim()).length;
+    // v521 · THRESHOLD = 캔버스 무대 (슛·벽·골대·떠다니는 ￦)
+    const wallsLeft = resist.filter(c => cus2Broke(c) < 5).length;
+    const bpOn = cus2BpOn(p), bpN = bpOn.filter(Boolean).length;
+    let h = '<div class="cus2-gate"><div class="gh"><span class="eb srf">THRESHOLD</span>' +
+      '<button class="bpchip' + (_cus2Bp ? ' open' : '') + (bpN >= 9 ? ' done' : '') + '" id="cus2-bp">' +
+        '내 전환 설계도 <b class="srf">' + bpN + '/9</b><span class="pl">' + (_cus2Bp ? '−' : '＋') + '</span></button>' +
+      '<button class="kick" id="cus2-kick">차 보기 ⚽</button></div>' +
+      (_cus2Bp ? '<div class="cus2-bpg">' + CUS2_BP.map((q, i) =>
+        '<div class="pc9' + (bpOn[i] ? ' on' : '') + '" style="--kc:' + q.c + '">' +
+        '<span class="ic">' + q.ic + '</span><span class="t">' + q.k + '</span></div>').join('') +
+        '<div class="bpnote">' + (bpN >= 9
+          ? '✅ <b>설계도 완성</b> — 캡션·DM 프롬프트가 «내 고객 전용»이 됐어요'
+          : '빈 칸이 <b>' + (9 - bpN) + '개</b> — 채울수록 프롬프트가 정확해져요') + '</div></div>' : '') +
+      '<canvas id="cus2-stage" width="740" height="252"></canvas>' +
+      '<div class="cus2-gmsg" id="cus2-gmsg">' + cus2StageMsg(resist, sellN, p5N) + '</div></div>';
+    // v517 · 세그먼트 한 줄 → 그 자리에서 확장 (애플식). 셋의 «동사»가 전부 다르다
+    const SEG = [
+      { k: 'obj', n: '반박 제거', v: '부순다', c: resist.length ? brokeTot + '/' + brickTot : '—' },
+      { k: 'sell', n: '셀링포인트', v: '조준한다', c: sellN ? sellN + '/7' : '—' },
+      { k: 'pmm', n: '핵심 PMM', v: '찍어낸다', c: p5N ? p5N + '/5' : '—' }
+    ];
+    h += '<div class="cus2-seg">' + SEG.map(s => '<button class="' + (_cus2Sheet === s.k ? 'on ' : '') + s.k + '"' +
+      ' data-cus2d="' + s.k + '">' + s.n + '<span class="n srf">' + s.c + '</span></button>').join('') + '</div>';
+    // v511 · 셀링포인트 = 그 자리 아래 시트로 (페이지 이동 X)
+    if (_cus2Sheet === 'sell') {
+      // v512 · 질문을 «고객 기준»으로 — 고객은 제품이 아니라 «더 나은 자신»을 산다
+      const who = (p.targetName || '내 고객').slice(0, 16);
+      const painQ = (cus2Bask(p, 'pain')[0] || {}).quote || '';
+      const wantQ = (cus2Bask(p, 'desire')[0] || {}).quote || '';
+      const SELLQ = [
+        { grp: '내 상품', gs: '기능 → 장점 → 혜택 순서로 내려갑니다',
+          k: 'selling', q: '「' + who + '」의 그 문제,<br><b>내가 어떻게 풀어주나요?</b>',
+          hint: painQ ? '들은 문제: “' + painQ.slice(0, 26) + '”' : '한 문장으로',
+          ph: '예) 얼굴형을 먼저 보고, 무너지지 않는 각도로 설계해요' },
+        // v513 · 사장님 요청 — 기능·장점·특징 / 경쟁 차별화 추가
+        { k: 'features', q: '그래서 <b>뭐가 들어있나요?</b><br><span style="font-weight:400">— 기능 · 구성 · 특징</span>',
+          hint: '사실만. 시간·횟수·범위·포함되는 것', ph: '예) 1:1 90분 · 얼굴형 분석지 · 홈케어 가이드 · 4주 뒤 무료 점검' },
+        { k: 'merit', q: '그 기능의 <b>장점은 뭔가요?</b><br><span style="font-weight:400">— 다른 방법보다 나은 점</span>',
+          hint: '더 빠른가 · 더 오래가는가 · 더 쉬운가', ph: '예) 매번 새로 잡을 필요 없이 한 번 설계로 3개월 감' },
+        { grp: '고객이 얻는 것', gs: '기능이 아니라 «바뀐 자기 모습»을 삽니다',
+          k: 'benefit', q: '그래서 이 사람의<br><b>어떤 모습이 바뀌나요?</b>',
+          hint: wantQ ? '들은 바람: “' + wantQ.slice(0, 26) + '”' : '기능 말고 «바뀐 자기 모습»으로',
+          ph: '예) 아침에 손 안 대도 단정해서, 거울 앞에서 안 서성여요' },
+        { grp: '경쟁 속의 나', gs: '고객은 나를 «혼자» 보지 않습니다 — 비교하고 옵니다',
+          k: 'rival', q: '이 사람은 <b>나 말고 어딜 보나요?</b><br><span style="font-weight:400">— 비교 대상</span>',
+          hint: '옆 가게 · 유튜브 셀프 · 저가 체인 · 그냥 참기', ph: '예) 동네 저가 체인 / 유튜브 보고 셀프 / 아무것도 안 함' },
+        { k: 'diff', q: '거기 말고 <b>나를 골라야 할<br>이유</b>는 뭔가요?',
+          hint: '경쟁자가 «따라 못 하는» 한 가지', ph: '예) 거긴 스타일만, 나는 얼굴형 설계 후 실패 시 무료 보정' },
+        { k: 'proof', q: '말만으론 안 믿어요.<br><b>뭘 보면 믿을 수 있죠?</b>',
+          hint: '비포애프터·후기·숫자·경력', ph: '예) 비포애프터 1,000장 · 재방문율 80%' }
+      ];
+      // v517 · 과녁 조준 — 7문답은 «몇 칸»이 아니라 «얼마나 정확해졌나»
+      h += '<div class="cus2-pane sell"><div class="in">' +
+        '<div class="eb">셀링포인트 · 뚫는다</div>' +
+        '<div class="cus2-act"><span class="rs" id="caim-res">' + (sellN >= 7
+            ? '7 / 7 — 고객이 바로 앞까지 왔어요' : sellN + ' / 7 — 한 칸 저장할 때마다 고객이 한 걸음 다가와요') + '</span></div>' +
+        (sellN >= 7 && (me.selling || '').trim()
+          ? '<div class="caim-line">“' + esc(me.selling.trim()) + '”</div>' : '') +
+        '<div class="q">고객은 «제품»이 아니라 더 나은 <b style="color:var(--cnv)">자기 모습</b>을 삽니다</div>' +
+        SELLQ.map(s => (s.grp ? '<div class="cus2-sgrp"><span class="g">' + s.grp + '</span>' +
+            '<span class="s">' + s.gs + '</span></div>' : '') +
+          '<div class="cus2-sq"><div class="sqq">' + s.q + '</div>' +
+          (s.hint ? '<div class="sqh">' + esc(s.hint) + '</div>' : '') +
+          '<textarea class="cus2-sqa" data-cus2sell="' + s.k + '" rows="2" placeholder="' + s.ph + '">' +
+          esc((me[s.k] || '')) + '</textarea>' +
+          '<div class="sqsave"><button data-cus2save="sell|' + s.k + '" disabled>저장</button></div></div>').join('') +
+        '<div class="cus2-sqtip">저장을 누르면 <b style="color:var(--cnv)">고객이 한 걸음</b> 다가와요 — 캡션·DM에도 실립니다</div>' +
         '</div></div>';
     }
-    // 증거 — 공감댓글 (썸네일 탭과 같은 사진, 새 공간 안 만듦)
-    const cms = (collects || []).filter(c => c.kind === 'comment' && c.hasImg !== false).slice(0, 3);
-    const total = (collects || []).filter(c => c.kind === 'comment').length;
-    h += '<div class="cus2-proof"><div class="ph2"><span class="t">증거 — 공감댓글</span>' +
-      '<span class="go" id="cus2-proofgo">전체 보기 →</span></div><div class="strip">' +
-      (cms.length ? cms.map(c => '<div data-cus2img="' + c.id + '"></div>').join('') : '<div></div><div></div><div></div>') +
-      '<div class="more"><span class="srf">' + (total > 3 ? '+' + (total - 3) : '＋') + '</span></div></div>' +
-      '<div class="cus2-proof-note note2">썸네일 탭 · 공감댓글과 <b style="color:var(--st2-sub)">같은 사진</b>이에요</div></div>';
+    if (_cus2Sheet === 'pmm') {
+      // v513 · 핵심 PMM 5문답 — 담은 재료를 힌트로 얹어준다
+      const painQ2 = (cus2Bask(p, 'pain')[0] || {}).quote || '';
+      const resQ2 = (cus2Bask(p, 'resist')[0] || {}).quote || '';
+      const HINT = { customer: p.targetName ? '내 타겟: ' + p.targetName : '',
+        empathy: painQ2 ? '들은 문제: “' + painQ2.slice(0, 26) + '”' : '',
+        proof: resQ2 ? '들은 의심: “' + resQ2.slice(0, 26) + '”' : '',
+        product: (me.features || '').trim() ? '셀링포인트에 적은 기능: ' + me.features.trim().slice(0, 26) : '',
+        self: (me.diff || '').trim() ? '적어둔 차별점: ' + me.diff.trim().slice(0, 26) : '' };
+      // v517 · ￦ 주조 — 「돈이 되는 말」이면 화면에서도 돈이 만들어져야 한다
+      h += '<div class="cus2-pane pmm"><div class="in">' +
+        '<div class="eb">핵심 PMM · 찍어낸다</div>' +
+        '<div class="cus2-act g"><span class="rs" id="cmint-res">' + p5N + ' / 5 — ' +
+          (p5N >= 5 ? '골대가 활짝 열렸어요' : '한 칸 저장할 때마다 골대가 커져요') + '</span></div>' +
+        '<div class="q">돈이 되는 말을 찾아내는 <b style="color:#C9A227">5가지 질문</b></div>' +
+        '<div class="cus2-p5note">한 번 충실히 답해두면 «막연한 주장»과 «자기중심적 설명»을 미리 걸러낼 수 있어요.</div>' +
+        P5Q.map((q, i) => '<div class="cus2-sq"><div class="p5h"><span class="no srf">' + (i + 1) + '</span>' +
+          '<span class="nm">' + q.n + '</span></div>' +
+          '<div class="sqq">' + q.q + '</div><div class="sqh">' + esc(q.sub) + '</div>' +
+          (HINT[q.k] ? '<div class="p5hint">' + esc(HINT[q.k]) + '</div>' : '') +
+          '<textarea class="cus2-sqa" data-cus2p5="' + q.k + '" rows="3" placeholder="' + q.ph + '">' +
+          esc(p5[q.k] || '') + '</textarea>' +
+          '<div class="sqsave"><button data-cus2save="pmm|' + q.k + '" disabled>저장</button></div></div>').join('') +
+        '<div class="cus2-sqtip">저장을 누르면 <b style="color:#C9A227">골대가 커져요</b> — 캡션·DM 프롬프트에도 실립니다</div>' +
+        '</div></div>';
+    }
+    if (_cus2Sheet === 'obj') {
+      // v517 · 저항 하나 = 한 판. 벽이 가운데 서 있고 5버튼으로 깬다
+      h += '<div class="cus2-pane obj"><div class="in">';
+      if (!resist.length) {
+        h += '<div class="eb">반박 제거 · 부순다</div>' +
+          '<div class="cus2-objempty">아직 못 들으셨다면 — <b>이 셋은 거의 다 나옵니다.</b><br>' +
+          '해당되는 걸 누르면 바로 벽이 세워져요.' +
+          '<div class="cands">' + CUS2_WALLS.map((w, i) => '<button data-cus2res="' +
+            esc(['비싸요', '시간이 없어요', '효과가 있을까요'][i]) + '">' +
+            esc(['비싸요', '시간이 없어요', '효과가 있을까요'][i]) + '</button>').join('') + '</div>' +
+          '<button class="gores" id="cus2-gores">직접 들은 말로 담기 →</button></div>';
+      } else {
+        if (_cus2Q >= resist.length) _cus2Q = 0;
+        const c = resist[_cus2Q], s = c.brk || {}, n = cus2Broke(c);
+        h += '<div class="cq-h"><div class="cq-n srf">QUEST ' + (_cus2Q + 1) + ' / ' + resist.length + '</div>' +
+          '<div class="cq-q">“' + esc(c.quote || '') + '”</div>' +
+          '<div class="cq-s">이 벽을 깨야 예약까지 길이 열립니다</div></div>' +
+          '<div class="cq-c srf' + (n >= 5 ? ' done' : '') + '" id="cq-c">' + n + ' / 5</div>' +
+          '<div class="cq-btns">' + CUS2_BREAK.map((b, i) => {
+            const on = i === 0 ? !!(c.answer || '').trim() : !!s[b.k];
+            return '<button class="cq-b' + (on ? ' on' : '') + '"' +
+              (i === 0 ? ' data-cus2focus="' + c.id + '"' : ' data-cus2brk="' + c.id + '|' + b.k + '"') +
+              '><span class="fl"></span>' + b.n + '<span class="s">' + b.d + '</span></button>';
+          }).join('') + '</div>' +
+          '<div class="cq-ans"><textarea class="cq-ta" id="cq-ta" data-cus2qans="' + c.id + '" rows="2" ' +
+            'placeholder="→ 이 말에 뭐라고 답하시겠어요?">' + esc(c.answer || '') + '</textarea>' +
+            '<div class="cq-save"><button id="cq-save" disabled>저장</button>' +
+            '<span class="st' + ((c.answer || '').trim() ? ' ok' : '') + '" id="cq-st">' +
+            ((c.answer || '').trim() ? '저장됨 — 첫 벽돌이 깨졌습니다' : '적고 저장을 누르면 첫 벽돌이 깨집니다') +
+            '</span></div></div>' +
+          (resist.length > 1 ? '<div class="cq-nav"><button id="cq-prev">‹ 이전 벽</button>' +
+            '<span class="dots">' + resist.map((x, i) => '<i class="' + (cus2Broke(x) >= 5 ? 'cleared' :
+              (i === _cus2Q ? 'on' : '')) + '"></i>').join('') + '</span>' +
+            '<button id="cq-next">다음 벽 ›</button></div>' : '');
+      }
+      h += '</div></div>';
+    }
     return h;
   }
   // ── 배선 ──
@@ -46124,6 +47299,9 @@
       e.stopPropagation(); _cus2All = false; _cus2Sheet = a.dataset.cus2v; st2RenderCus();
       setTimeout(() => { const i = document.getElementById('cus2-min'); if (i) i.focus(); }, 80);
     });
+    document.querySelectorAll('[data-cus2go]').forEach(g => g.onclick = () => {
+      _cus2Tab = g.dataset.cus2go; _cus2Sheet = null; _cus2All = false; st2RenderCus();
+    });
     const bk = document.getElementById('cus2-back');
     if (bk) bk.onclick = async () => {
       if (!await appConfirm('타겟을 다시 정할까요?\n(모은 재료는 그대로 남아요)', { okText: '다시 정하기', cancelText: '취소' })) return;
@@ -46140,10 +47318,204 @@
       _cus2Sheet = (_cus2Sheet === d.dataset.cus2d) ? null : d.dataset.cus2d; st2RenderCus();
       setTimeout(() => { const i = document.getElementById('cus2-min'); if (i) i.focus(); }, 80);
     });
-    const sell = document.querySelector('[data-cus2sell]');
-    if (sell) sell.onclick = () => { try { switchWorkspace('customer'); } catch (e) {} };
+    // v512 · 저항 항목별 «내 답변» — 적으면 그 벽이 무너진다
+    document.querySelectorAll('.cus2-oa[data-cus2ans]').forEach(ta => {
+      let t = 0;
+      const save = async () => {
+        const c = (p.collect || []).find(i => i.id === ta.dataset.cus2ans);
+        if (!c) return;
+        const was = !!(c.answer || '').trim();
+        c.answer = (ta.value || '').trim();
+        p.updatedAt = Date.now(); await savePmms();
+        // v516 · 1단계(답변)도 벽돌 하나 — 답변 칩·벽 그림 즉시 갱신
+        const chip = document.querySelector('[data-cus2focus="' + c.id + '"]');
+        if (chip) chip.classList.toggle('on', !!c.answer);
+        const n = cus2PaintWall(p, c, !was && !!c.answer);
+        if (!was && c.answer) toast('🧱 벽돌이 부서졌어요 · ' + n + '/5');
+      };
+      ta.oninput = () => { clearTimeout(t); t = setTimeout(save, 500); };
+      ta.onblur = save;
+    });
+    const gores = document.getElementById('cus2-gores');
+    if (gores) gores.onclick = () => { _cus2Tab = 'mat'; _cus2Sheet = 'resist'; _cus2All = false; st2RenderCus();
+      setTimeout(() => { const i = document.getElementById('cus2-min'); if (i) i.focus(); }, 80); };
+    // v525 · 성과난 반응 포인트
+    const rpb = document.getElementById('cus2-rp');
+    if (rpb) rpb.onclick = () => { _cus2Hy = !_cus2Hy; if (!_cus2Hy) _cus2HyF = -1; st2RenderCus(); };
+    document.querySelectorAll('[data-cus2hyf]').forEach(b3 => b3.onclick = (e) => {
+      e.stopPropagation();
+      const v = +b3.dataset.cus2hyf;
+      _cus2HyF = (_cus2HyF === v) ? -1 : v; st2RenderCus();
+    });
+    // v523 · 수배지 — 상세 이력 접기/펴기 · «다른 말로 보기»
+    const dt = document.getElementById('cus2-det');
+    if (dt) dt.onclick = () => { _cus2Det = !_cus2Det; st2RenderCus(); };
+    document.querySelectorAll('[data-cus2sw]').forEach(b2 => b2.onclick = (e) => {
+      e.stopPropagation();
+      const k = b2.dataset.cus2sw;
+      _cus2Pick[k] = (_cus2Pick[k] || 0) + 1; st2RenderCus();
+    });
+    // v522 · 설계도 칩 (평소엔 조용히, 누르면 펼침)
+    const bpb = document.getElementById('cus2-bp');
+    if (bpb) bpb.onclick = () => { _cus2Bp = !_cus2Bp; st2RenderCus(); };
+    // v521 · 차 보기
+    const kb = document.getElementById('cus2-kick');
+    if (kb) kb.onclick = () => { if (_cus2St && _cus2St.kickNow) _cus2St.kickNow(); };
+    document.querySelectorAll('[data-cus2focus]').forEach(b => b.onclick = () => {
+      const ta = document.getElementById('cq-ta'); if (ta) ta.focus();
+    });
+    // 퀘스트 이동
+    const qprev = document.getElementById('cq-prev'), qnext = document.getElementById('cq-next');
+    const rN = cus2Bask(p, 'resist').length;
+    if (qprev) qprev.onclick = () => { _cus2Q = (_cus2Q + rN - 1) % rN; st2RenderCus(); };
+    if (qnext) qnext.onclick = () => { _cus2Q = (_cus2Q + 1) % rN; st2RenderCus(); };
+    // 답변은 «저장 버튼»으로 (자동저장 X — 사장님 요청)
+    const qta = document.getElementById('cq-ta'), qsave = document.getElementById('cq-save');
+    if (qta && qsave) {
+      const cur = () => (p.collect || []).find(x => x.id === qta.dataset.cus2qans);
+      const sync = () => { const c = cur(); qsave.disabled = !c || (qta.value.trim() === (c.answer || '').trim()); };
+      qta.oninput = sync;
+      qsave.onclick = async () => {
+        const c = cur(); if (!c) return;
+        const was = !!(c.answer || '').trim();
+        c.answer = qta.value.trim();
+        const chip = document.querySelector('[data-cus2focus="' + c.id + '"]');
+        if (chip) chip.classList.toggle('on', !!c.answer);
+        const n = cus2PaintWall(p, c, !was && !!c.answer);
+        const st = document.getElementById('cq-st');
+        if (st) { st.textContent = c.answer ? '저장됨 — 첫 벽돌이 깨졌습니다' : '적고 저장을 누르면 첫 벽돌이 깨집니다';
+          st.classList.toggle('ok', !!c.answer); }
+        qsave.disabled = true;
+        toast(c.answer ? (n >= 5 ? '🎉 벽이 완전히 무너졌어요' : '🧱 벽돌이 부서졌어요 · ' + n + '/5') : '답을 지웠어요');
+        p.updatedAt = Date.now(); await savePmms();
+      };
+      sync();
+    }
+    // v518 · 기록 카드 — 한 줄을 누르면 그 아래로 열린다 (보기 기본, «적기»로 전환)
+    document.querySelectorAll('[data-cus2rec]').forEach(t => t.onclick = (e) => {
+      e.stopPropagation();
+      const id = t.dataset.cus2rec;
+      if (_cus2Rec === id) { _cus2Rec = null; } else { _cus2Rec = id; _cus2RecEdit = false; }
+      st2RenderCus();
+    });
+    document.querySelectorAll('[data-cus2recmode]').forEach(b => b.onclick = (e) => {
+      e.stopPropagation(); _cus2RecEdit = !_cus2RecEdit; st2RenderCus();
+      if (_cus2RecEdit) setTimeout(() => { const t = document.querySelector('[data-cus2rf]'); if (t) t.focus(); }, 70);
+    });
+    document.querySelectorAll('[data-cus2rf]').forEach(ta => {
+      let t = 0;
+      const save = async () => {
+        const [id, k] = ta.dataset.cus2rf.split('|');
+        const c = (p.collect || []).find(x => x.id === id); if (!c) return;
+        c[k] = (ta.value || '').trim();
+        // 농도 점·문구는 그 자리에서 (재렌더하면 타이핑이 끊긴다)
+        const box = ta.closest('.it'), d = cus2Depth(c);
+        if (box) { [...box.querySelectorAll('.cus2-dep i')].forEach((i2, ix) => i2.classList.toggle('on', ix < d));
+          const st = box.querySelector('.cus2-rec .st');
+          if (st) st.textContent = d ? '판 칸 ' + d + ' / 3' : '아직 안 팠어요 — 한 칸만 채워도 돼요'; }
+        p.updatedAt = Date.now(); await savePmms();
+      };
+      ta.oninput = () => { clearTimeout(t); t = setTimeout(save, 500); };
+      ta.onblur = save;
+      ta.onclick = e => e.stopPropagation();
+    });
+    // v518 · 빈 화면 후보 칩들
+    document.querySelectorAll('[data-cus2cand]').forEach(b => b.onclick = (e) => {
+      e.stopPropagation();
+      const i = document.getElementById('cus2-min');
+      if (i) { i.value = b.dataset.cus2cand + ' '; i.focus(); }
+    });
+    document.querySelectorAll('[data-cus2kwc]').forEach(b => b.onclick = () => {
+      const w = b.dataset.cus2kwc;
+      if ((st2Kw.gold || []).length < 3) st2Kw.gold.push(w); else st2Kw.normal.push(w);
+      st2KwSave(); st2RenderCus(); try { st2RenderMap3(); } catch (e) {}
+      toast('🥇 «' + w + '» 등록했어요');
+    });
+    document.querySelectorAll('[data-cus2res]').forEach(b => b.onclick = async () => {
+      const v = b.dataset.cus2res;
+      p.collect.push({ id: 'cm_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7),
+        basket: 'resist', quote: v, insight: '', source: '흔한 저항', gold: false, createdAt: Date.now() });
+      p.updatedAt = Date.now(); await savePmms();
+      _cus2Q = 0; st2RenderCus();
+      toast('🧱 «' + v + '» 벽이 세워졌어요');
+    });
+    // v514 · 키워드 등록 (황금 3개 제한 · 반복 승급 · 삭제)
+    const kwAdd = document.getElementById('cus2-kwadd'), kwIn = document.getElementById('cus2-kwin'),
+      kwG = document.getElementById('cus2-kwg');
+    if (kwG) kwG.onclick = () => kwG.classList.toggle('on');
+    if (kwAdd) kwAdd.onclick = () => {
+      const v = (kwIn.value || '').trim(); if (!v) { kwIn.focus(); return; }
+      if ((st2Kw.gold || []).indexOf(v) !== -1 || (st2Kw.normal || []).indexOf(v) !== -1) { toast('이미 있는 키워드예요'); return; }
+      if (kwG && kwG.classList.contains('on')) {
+        if ((st2Kw.gold || []).length >= 3) { toast('🥇 황금은 3개까지 — 하나를 지우고 올려주세요'); return; }
+        st2Kw.gold.push(v);
+      } else st2Kw.normal.push(v);
+      st2KwSave(); st2RenderCus(); try { st2RenderMap3(); } catch (e) {}
+      setTimeout(() => { const i = document.getElementById('cus2-kwin'); if (i) i.focus(); }, 80);
+    };
+    if (kwIn) kwIn.onkeydown = e => { if (e.key === 'Enter') { e.preventDefault(); if (kwAdd) kwAdd.click(); } };
+    document.querySelectorAll('[data-cus2kwx]').forEach(x => x.onclick = (e) => {
+      e.stopPropagation();
+      const c = x.dataset.cus2kwx, i = parseInt(c.slice(1), 10);
+      if (c[0] === 'g') st2Kw.gold.splice(i, 1); else st2Kw.normal.splice(i, 1);
+      st2KwSave(); st2RenderCus(); try { st2RenderMap3(); } catch (e2) {}
+    });
+    document.querySelectorAll('[data-cus2rep]').forEach(b => b.onclick = () => {
+      const w = b.dataset.cus2rep;
+      if ((st2Kw.gold || []).length >= 3) { toast('🥇 황금은 3개까지 — 하나를 지우고 올려주세요'); return; }
+      if (!st2Kw.gold.includes(w)) st2Kw.gold.push(w);
+      st2Kw.normal = (st2Kw.normal || []).filter(x => x !== w);
+      st2KwSave(); st2RenderCus(); try { st2RenderMap3(); } catch (e) {}
+      toast('🥇 «' + w + '» 황금 키워드로');
+    });
+    // v520 · 셀링·PMM 문답 = «항목별 저장 버튼». 저장하면 위 무대가 반응한다
+    const sqDirty = (ta) => {
+      const box = ta.closest('.cus2-sq'); if (!box) return;
+      const b = box.querySelector('[data-cus2save]'); if (!b) return;
+      const k = b.dataset.cus2save.split('|');
+      const cur = k[0] === 'sell' ? ((p.me || {})[k[1]] || '') : ((p.pmm5 || {})[k[1]] || '');
+      b.disabled = (ta.value.trim() === String(cur).trim());
+    };
+    document.querySelectorAll('.cus2-sqa[data-cus2sell], .cus2-sqa[data-cus2p5]').forEach(ta => {
+      ta.oninput = () => sqDirty(ta); sqDirty(ta);
+    });
+    const cus2PaintStage = (kind) => {
+      const me3 = p.me || {}, q5b = p.pmm5 || {};
+      const sn = ['selling', 'features', 'merit', 'benefit', 'rival', 'diff', 'proof']
+        .filter(k => (me3[k] || '').trim()).length;
+      const pn = P5Q.filter(q => (q5b[q.k] || '').trim()).length;
+      const rs = cus2Bask(p, 'resist');
+      const r1 = document.getElementById('caim-res');
+      if (r1) r1.textContent = sn >= 7 ? '7 / 7 — 힘이 가득이에요'
+        : sn + ' / 7 — 저장할 때마다 «차는 힘»이 세져요';
+      const r2 = document.getElementById('cmint-res');
+      if (r2) r2.textContent = pn + ' / 5 — ' + (pn >= 5 ? '골대가 최대예요' : '저장할 때마다 골대가 커져요');
+      const sgn = document.querySelector('.cus2-seg button.sell .n');
+      if (sgn) sgn.textContent = sn ? sn + '/7' : '—';
+      const pgn = document.querySelector('.cus2-seg button.pmm .n');
+      if (pgn) pgn.textContent = pn ? pn + '/5' : '—';
+      const msg = document.getElementById('cus2-gmsg');
+      if (msg) msg.innerHTML = cus2StageMsg(rs, sn, pn);
+      if (kind && _cus2St && _cus2St.pulse) _cus2St.pulse(kind);
+      return { sn: sn, pn: pn };
+    };
+    document.querySelectorAll('[data-cus2save]').forEach(b => b.onclick = async () => {
+      const kk = b.dataset.cus2save.split('|'), grp = kk[0], key = kk[1];
+      const ta = b.closest('.cus2-sq').querySelector('textarea');
+      const was = grp === 'sell' ? ((p.me || {})[key] || '').trim() : ((p.pmm5 || {})[key] || '').trim();
+      if (grp === 'sell') { if (!p.me) p.me = {}; p.me[key] = ta.value.trim(); }
+      else { if (!p.pmm5) p.pmm5 = {}; p.pmm5[key] = ta.value.trim(); }
+      b.disabled = true;
+      const st = cus2PaintStage(grp);
+      if (!was && ta.value.trim()) toast(grp === 'sell'
+        ? (st.sn >= 7 ? '⚡ 힘이 가득 찼어요 — 차 보세요' : '⚡ 차는 힘이 세졌어요 · ' + st.sn + '/7')
+        : (st.pn >= 5 ? '⭕ 골대가 최대가 됐어요' : '⭕ 골대가 커졌어요 · ' + st.pn + '/5'));
+      p.updatedAt = Date.now(); await savePmms();
+    });
     const pg = document.getElementById('cus2-proofgo');
-    if (pg) pg.onclick = () => { try { tbViewMode = 'comment'; switchWorkspace('thumb'); } catch (e) {} };
+    if (pg) pg.onclick = () => { _cus2Proof = true; st2RenderCus(); };
+    const pb = document.getElementById('cus2-proofback');
+    if (pb) pb.onclick = () => { _cus2Proof = false; st2RenderCus(); };
     // 담기
     const add = document.getElementById('cus2-madd');
     if (add) add.onclick = async () => {
@@ -46269,6 +47641,26 @@
     if (target) L.push('· 내 고객: ' + target);
     if (product) L.push('· 내 상품: ' + product);
     if (proof) L.push('· 고객이 흔히 품는 의심과 내 증거: ' + proof.split('\n').slice(0, 3).join(' '));
+    // v512 · 내가 실제로 들은 저항 + 거기에 단 답변을 그대로 넘긴다
+    try {
+      const rs = (p && Array.isArray(p.collect) ? p.collect : [])
+        .filter(c => (c.basket === 'resist') && (c.answer || '').trim()).slice(0, 4);
+      if (rs.length) {
+        L.push('· 이 고객이 실제로 망설인 말과, 내가 준비한 답:');
+        rs.forEach(c => L.push('  · “' + String(c.quote || '').trim() + '” → ' + String(c.answer).trim()));
+      }
+      const me2 = (p && p.me) || {};
+      if ((me2.features || '').trim()) L.push('· 내 상품에 들어있는 것(기능·구성): ' + me2.features.trim());
+      if ((me2.merit || '').trim()) L.push('· 그 기능의 장점: ' + me2.merit.trim());
+      if ((me2.benefit || '').trim()) L.push('· 이 사람의 바뀌는 모습: ' + me2.benefit.trim());
+      if ((me2.rival || '').trim()) L.push('· 이 사람이 나 말고 보는 곳(비교 대상): ' + me2.rival.trim());
+      if ((me2.diff || '').trim()) L.push('· 거기 말고 나를 골라야 하는 이유: ' + me2.diff.trim());
+      // v513 · 핵심 PMM 5문답
+      const q5 = (p && p.pmm5) || {};
+      const P5L = { product: '내 상품 한마디로', customer: '팔아달라 할 사람', self: '왜 나에게서 사나',
+        empathy: '분노·불안·욕망의 그 순간', proof: '의심과 그걸 날릴 증거' };
+      Object.keys(P5L).forEach(k => { if ((q5[k] || '').trim()) L.push('· ' + P5L[k] + ': ' + q5[k].trim()); });
+    } catch (e) {}
     L.push('');
     L.push('[받은 문의] ← 여기에 받은 DM을 붙여넣으세요');
     L.push('');
@@ -46282,8 +47674,18 @@
     const body = st2SrcText(s);
     const pain = (p && p.answers) ? (p.answers.empathy || '').trim() : '';
     const proof = (p && p.answers) ? (p.answers.proof || '').trim() : '';
-    const quotes = m.collect.slice().sort((a, b) => (b.gold ? 1 : 0) - (a.gold ? 1 : 0)).slice(0, 6)
-      .map(c => '· ' + String(c.quote || '').trim() + (c.insight ? ' → ' + String(c.insight).trim() : ''))
+    // v518 · ⭐핵심 → 판 깊이(상황·감정·속마음) 순. 깊은 것이 카피 재료로 훨씬 세다
+    const quotes = m.collect.slice()
+      .sort((a, b) => (b.gold ? 1 : 0) - (a.gold ? 1 : 0) || cus2Depth(b) - cus2Depth(a))
+      .slice(0, 6)
+      .map(c => {
+        let t = '· ' + String(c.quote || '').trim();
+        if ((c.situation || '').trim()) t += '\n    ◷ 그 순간: ' + c.situation.trim();
+        if ((c.emotion || '').trim()) t += '\n    ♡ 감정: ' + c.emotion.trim();
+        if ((c.inner || '').trim()) t += '\n    ◌ 속마음: ' + c.inner.trim();
+        if ((c.insight || '').trim()) t += '\n    → 내 해석: ' + c.insight.trim();
+        return t;
+      })
       .filter(x => x.length > 4);
     const L = [];
     L.push('너는 내 전속 SNS 카피라이터야. 아래 [내 원고]를 각 채널 형식에 맞게 다시 써줘.');
@@ -46300,6 +47702,20 @@
     if (proof) L.push('· 의심을 없앨 증거: ' + proof.split('\n').slice(0, 3).join(' '));
     if (m.gold.length) L.push('· 꼭 넣을 핵심 키워드: ' + m.gold.join(', '));
     if (quotes.length) { L.push('· 고객이 실제로 한 말(공감 포인트):'); quotes.forEach(q => L.push('  ' + q)); }
+    // v513 · 고객 방 «전환»에 적어둔 것도 그대로 싣는다 (셀링포인트 · 핵심 PMM · 반박 답변)
+    try {
+      const me3 = (p && p.me) || {}, q5c = (p && p.pmm5) || {};
+      const CAP_ME = { selling: '내가 푸는 방식', features: '상품 구성·기능', merit: '그 기능의 장점',
+        benefit: '고객이 바뀌는 모습(이걸 그림처럼 써줘)', rival: '고객의 비교 대상', diff: '나만의 차별점', proof: '내 증거' };
+      Object.keys(CAP_ME).forEach(k => { if ((me3[k] || '').trim()) L.push('· ' + CAP_ME[k] + ': ' + me3[k].trim()); });
+      if ((q5c.empathy || '').trim()) L.push('· 고객이 그 감정을 마주하는 «그 순간»: ' + q5c.empathy.trim());
+      if ((q5c.self || '').trim()) L.push('· 왜 하필 나에게서 사는가: ' + q5c.self.trim());
+      if ((q5c.proof || '').trim()) L.push('· 예상 의심과 증거: ' + q5c.proof.trim());
+      const ans = (p && Array.isArray(p.collect) ? p.collect : [])
+        .filter(c => c.basket === 'resist' && (c.answer || '').trim()).slice(0, 3);
+      if (ans.length) { L.push('· 고객이 망설인 말 → 내 답 (고정댓글에 녹여줘):');
+        ans.forEach(c => L.push('  · “' + String(c.quote || '').trim() + '” → ' + String(c.answer).trim())); }
+    } catch (e) {}
     L.push('');
     if (m.voices.length) {
       L.push('=== [말투 샘플] — 이 어투를 그대로 흉내 내 (내가 예전에 쓴 글) ===');
