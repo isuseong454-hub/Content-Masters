@@ -18895,6 +18895,8 @@
       </div>
     </div>
 
+  </aside>
+
   <!-- ===== MAIN ===== -->
   <main class="sh-main">
     <!-- 🧭 방 레일 — 어느 방에 있든 항상 보임 (정리 · 홈 · 제작소) -->
@@ -19541,6 +19543,7 @@
                 <div class="big">압도적으로 성장하는 크리에이터의 핵심 🔥</div>
                 <div class="small">이미 성공해 <b>증명된 구조를 벤치마킹</b>해서 콘텐츠를 만든다 — 그게 전부예요.</div>
               </div>
+            </div>
           </section>
 
           <!-- CONTENT FUNNEL -->
@@ -19604,9 +19607,9 @@
             <div class="funnel-wrap" id="funnel-wrap"></div>
             <div class="funnel-balance" id="funnel-balance"></div>
           </section>
+        </div>
 
-
-            <div>
+        <div>
           <!-- STATS MINI -->
           <section class="home-section">
             <div class="home-sec-label">현재 상태 · STATS</div>
@@ -21067,21 +21070,7 @@
     </div>
   </div>
 
-  <div class="mb-dropzone" id="mb-dropzone">
-    <div class="mb-dropzone-txt">여기에 놓으면 추가돼요 ⟢</div>
-  </div>
-
-  <!-- Memo editor popup -->
-  <div class="mb-memo-pop" id="mb-memo-pop">
-    <div class="mb-memo-box">
-      <h3>메모 — 왜 이 이미지를 골랐나?</h3>
-      <textarea class="mb-memo-textarea" id="mb-memo-textarea" placeholder="이 레퍼런스에서 가져오고 싶은 것…"></textarea>
-      <div class="mb-memo-btns">
-        <button class="mb-memo-cancel" id="mb-memo-cancel">취소</button>
-        <button class="mb-memo-save" id="mb-memo-save">저장</button>
-      </div>
-    </div>
-  </div>
+  <!-- v533 · 무드보드 잔재(드롭존·메모팝) 삭제 — CSS를 잃고 flex 아이템으로 본문을 밀어내고 있었다 -->
 
   <!-- ===== CHARACTER BOT ===== -->
   <div class="bot" id="bot" title="궁금한 게 있으면 눌러보세요">
@@ -21344,8 +21333,6 @@
 
   <input type="file" id="hidden-file-input" accept="image/*" style="display:none;" />
   <input type="file" id="json-import-file" accept=".json" style="display:none;" />
-  <input type="file" id="mb-file-input" accept="image/*" multiple style="display:none;" />
-  <input type="file" id="mb-import-file" accept=".json" style="display:none;" />
 </div>
 
 <script>
