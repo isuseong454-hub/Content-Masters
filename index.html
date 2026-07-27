@@ -13874,6 +13874,57 @@
     .sh-sb-burger { display: none; }
     .sh-sidebar { padding-top: calc(26px + env(safe-area-inset-top)); }
   }
+
+  /* ═══════════ 🖼 v538 · 한 프레임 구도 (PC) — 본문이 가운데 «기둥» 안에 산다 ═══════════
+     아이디어 폴더에서 검증한 공법 이식(사장님 C안 확정 · 2026-07-27).
+     폰(≤820px)은 그대로. 사이드바는 원래부터 «더보기» 서랍이라 손대지 않고,
+     본문·하단바·고정버튼을 전부 한 기둥 폭(--shfw)으로 모은다 → 시선 왕복 제거. */
+  @media (min-width: 821px) {
+    :root { --shfw: min(900px, 100vw); }
+    body.in-studio { --shfw: min(1080px, 100vw); }   /* 제작소=탭·달력·쇼핑이 넓다 (아이디어 폴더 실행보드와 같은 예외) */
+    .sh-app {
+      justify-content: center;
+      background: radial-gradient(85% 55% at 50% 0%, #10130A, transparent 70%), #070805;
+    }
+    .sh-main {
+      flex: 0 1 100%;
+      max-width: var(--shfw);
+      background: var(--bg-void);
+      border-left: 1px solid #20231B;
+      border-right: 1px solid #20231B;
+      box-shadow: 0 0 90px rgba(0,0,0,.8), 0 0 160px rgba(215,243,75,.05);
+      transition: max-width .35s cubic-bezier(.3,.9,.25,1);
+    }
+    .bottom-nav {
+      left: 50%; right: auto; transform: translateX(-50%);
+      width: var(--shfw);
+      border-left: 1px solid #20231B; border-right: 1px solid #20231B;
+      transition: width .35s cubic-bezier(.3,.9,.25,1);
+    }
+    /* 기둥 밖에 떠 있던 고정 버튼들 → 기둥 가장자리로 */
+    .sh-totop { right: calc(50% - var(--shfw)/2 + 20px); }
+    .bot { left: calc(50% - var(--shfw)/2 + 20px); }
+    .bot-bubble { left: calc(50% - var(--shfw)/2 + 20px); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .sh-main, .bottom-nav { transition: none !important; }
+  }
+
+  /* v538 · 좁혀보기 칩 — 서랍 속 필터가 몰래 데이터를 좁히는 사고 방지 (시트 테이블 바로 위) */
+  .sh-fchips { display: none; flex-wrap: wrap; align-items: center; gap: 7px;
+    padding: 9px 22px; border-bottom: 1px solid var(--line); background: rgba(255,255,255,.028); }
+  .sh-fchips.on { display: flex; }
+  .shfc-lead { font-size: 11px; color: var(--text-faint); font-weight: 700; letter-spacing: .02em; }
+  .shfc-chip { display: inline-flex; align-items: center; gap: 6px; font-family: inherit;
+    font-size: 12px; font-weight: 700; color: var(--neon); background: rgba(215,243,75,.09);
+    border: 1px solid rgba(215,243,75,.42); border-radius: 999px; padding: 5px 11px;
+    cursor: pointer; transition: transform .12s, background .15s; }
+  .shfc-chip:hover { background: rgba(215,243,75,.16); }
+  .shfc-chip:active { transform: scale(.95); }
+  .shfc-chip .x { opacity: .65; font-size: 10px; }
+  .shfc-clear { font-family: inherit; font-size: 11.5px; font-weight: 700; color: var(--text-sub);
+    background: none; border: 1px solid #343429; border-radius: 999px; padding: 5px 11px; cursor: pointer; }
+  .shfc-clear:hover { color: var(--text-main); }
   /* ============================================================
      ==================== v50 AUTH & ADMIN =====================
      불씨 노트 스타일 + 우리 톤(에메랄드)
@@ -20106,6 +20157,9 @@
         <button class="fmt-btn clear-btn" data-fmt="clear" title="포맷 제거">✕ 지우기</button>
       </div>
 
+      <!-- v538 · 좁혀보기 칩 — 걸린 필터·검색을 테이블 바로 위에 노출, ✕로 즉시 해제 -->
+      <div class="sh-fchips" id="sh-fchips"></div>
+
       <div class="sh-sheet-wrap">
         <div class="sh-cards" id="sh-tbody"></div>
         <div class="sh-add-row-wrap">
@@ -26002,6 +26056,50 @@
     renderTable();
   }
 
+  // ===== v538 · 좁혀보기 칩 =====
+  //   서랍(사이드바) 속 필터가 걸린 채 잊히면 «행이 사라진 것처럼» 보인다(실제 사고 2회).
+  //   걸린 조건을 테이블 바로 위에 칩으로 꺼내고, ✕ 한 번으로 푼다.
+  //   setFilter엔 끄기(toggle)가 없어서 이 칩이 유일한 원클릭 탈출구다.
+  function shfcLabel(f) {
+    if (f === 'fav') return '★ 즐겨찾기만';
+    if (f === 'ig') return '인스타만';
+    if (f === 'yt') return '유튜브만';
+    if (f === 'strength:thumb') return '썸네일 강점';
+    if (f === 'strength:copy') return '수식어 강점';
+    if (f === 'strength:both') return '둘 다 강함';
+    if (f.startsWith('tt:')) return '썸네일 유형 · ' + f.slice(3);
+    if (f.startsWith('ct:')) return '수식어 유형 · ' + f.slice(3);
+    if (f.startsWith('fmt:')) return '컨텐츠 유형 · ' + f.slice(4);
+    if (f.startsWith('au:')) return '오디오 · ' + f.slice(3);
+    if (f.startsWith('tag:')) return '#' + f.slice(4);
+    if (f.startsWith('h:')) return '후킹 · ' + f.slice(2);
+    if (f.startsWith('v:')) return '반응 · ' + f.slice(2);
+    return f;
+  }
+  function shChipsRender() {
+    const bar = document.getElementById('sh-fchips'); if (!bar) return;
+    const chips = [];
+    if (filterBy && filterBy !== 'all') chips.push({ t: shfcLabel(filterBy), k: 'filter' });
+    if (viewMode === 'filled') chips.push({ t: '작성된 행만', k: 'view' });
+    const sEl = document.getElementById('sh-search');
+    const q = sEl ? sEl.value.trim() : '';
+    if (q) chips.push({ t: '검색 “' + q + '”', k: 'search' });
+    if (!chips.length) { bar.classList.remove('on'); bar.innerHTML = ''; return; }
+    bar.classList.add('on');
+    bar.innerHTML = '<span class="shfc-lead">좁혀보는 중 —</span>' +
+      chips.map(c => '<button type="button" class="shfc-chip" data-k="' + c.k + '">' + esc(c.t) + '<span class="x">✕</span></button>').join('') +
+      (chips.length > 1 ? '<button type="button" class="shfc-clear" data-k="__all">전체 보기</button>' : '');
+    bar.querySelectorAll('button').forEach(b => {
+      b.onclick = () => {
+        const k = b.dataset.k;
+        if (k === 'filter') setFilter('all');
+        else if (k === 'view') setViewMode('all');
+        else if (k === 'search') { if (sEl) sEl.value = ''; renderTable(); }
+        else { if (sEl) sEl.value = ''; setViewMode('all'); setFilter('all'); }
+      };
+    });
+  }
+
   // ===== TABLE =====
   function getVisible() {
     let arr = rows.slice();
@@ -26079,6 +26177,7 @@
     const visible = getVisible();
     const filledCount = rows.filter(isFilled).length;
     document.getElementById('sh-meta').textContent = String(filledCount).padStart(3, '0') + ' / ' + rows.length;
+    try { shChipsRender(); } catch (e) {}   // v538 · 좁혀보기 칩 동기화
 
     renderSidebarCounts();
 
