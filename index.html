@@ -5691,153 +5691,6 @@
   }
   .home-start-btn.ghost:hover { background: rgba(255,255,255,0.04); color: var(--text-main); border-color: var(--text-faint); box-shadow: none; }
 
-  /* Active challenges list */
-  .ch-list { display: flex; flex-direction: column; gap: 14px; }
-
-  .ch-card {
-    background: var(--bg-card);
-    border: 1px solid var(--line);
-    border-radius: 12px;
-    padding: 22px;
-    position: relative;
-    overflow: hidden;
-  }
-
-  /* Aurora glow when active */
-  .ch-card.active {
-    position: relative;
-  }
-  .ch-card.active::before {
-    content: '';
-    position: absolute;
-    inset: -1px;
-    border-radius: 13px;
-    padding: 1px;
-    background: linear-gradient(120deg,
-      rgba(215, 243, 75, 0.5),
-      rgba(0, 230, 118, 0.8),
-      rgba(215, 243, 75, 0.3),
-      rgba(0, 230, 118, 0.7));
-    background-size: 300% 300%;
-    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    animation: aurora 6s ease-in-out infinite;
-    pointer-events: none;
-  }
-  @keyframes aurora {
-    0%, 100% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-  }
-
-  .ch-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 14px;
-    margin-bottom: 14px;
-  }
-
-  .ch-title {
-    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
-    font-size: 20px;
-    font-weight: 700;
-    color: var(--text-main);
-    line-height: 1.2;
-  }
-
-  .ch-meta {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    color: var(--sage);
-    letter-spacing: 0.1em;
-    margin-top: 4px;
-  }
-
-  .ch-dday {
-    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
-    font-size: 24px;
-    font-weight: 800;
-    padding: 6px 16px;
-    border-radius: 8px;
-    border: 1.5px solid;
-    line-height: 1;
-    white-space: nowrap;
-    letter-spacing: -0.02em;
-  }
-  .ch-dday.safe { color: var(--sage); border-color: var(--sage-line); background: var(--sage-soft); }
-  .ch-dday.warn { color: var(--text-main); border-color: var(--text-main); background: rgba(255,255,255,0.05); }
-  .ch-dday.over { color: var(--wine); border-color: var(--wine); background: var(--wine-soft); }
-  .ch-dday.done { color: var(--cream); border-color: var(--cream); background: var(--cream-soft); }
-
-  /* === 챌린지 게임화: 등급 / 스트릭 / 스테이지 / CTA === */
-  .ch-hero {
-    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
-    margin-bottom: 14px; padding-bottom: 14px;
-    border-bottom: 1px dashed var(--line);
-  }
-  .ch-rank {
-    display: inline-flex; align-items: center; gap: 6px;
-    padding: 5px 11px; border-radius: 999px;
-    background: var(--bg-elev); border: 1px solid var(--line);
-  }
-  .ch-rank-emoji { font-size: 19px; line-height: 1; }
-  .ch-rank-name { font-size: 12px; font-weight: 800; color: var(--text-main); letter-spacing: -0.01em; }
-  .ch-streak {
-    display: inline-flex; align-items: center; gap: 4px;
-    padding: 5px 10px; border-radius: 999px;
-    font-size: 11.5px; font-weight: 800; color: #FFB454;
-    background: rgba(255, 140, 40, 0.12); border: 1px solid rgba(255, 140, 40, 0.4);
-  }
-  .ch-mment {
-    flex: 1 1 100%; margin-top: 2px;
-    font-size: 12.5px; line-height: 1.5; color: var(--sage); font-weight: 600;
-  }
-
-  /* 5단계 시즌 패스 */
-  .ch-stages {
-    display: grid; grid-template-columns: repeat(5, 1fr); gap: 0;
-    margin: 16px 0 6px; position: relative;
-  }
-  .ch-stages::before {
-    content: ''; position: absolute; top: 15px; left: 10%; right: 10%;
-    height: 2px; background: var(--line); z-index: 0;
-  }
-  .ch-stage {
-    display: flex; flex-direction: column; align-items: center; gap: 5px;
-    position: relative; z-index: 1; text-align: center;
-  }
-  .ch-stage-node {
-    width: 30px; height: 30px; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center; font-size: 14px;
-    background: var(--bg-elev); border: 2px solid var(--line);
-    filter: grayscale(1) opacity(0.55); transition: all 0.3s;
-  }
-  .ch-stage.done .ch-stage-node {
-    background: var(--neon); border-color: var(--neon);
-    box-shadow: 0 0 12px var(--neon-glow); filter: none;
-    animation: dotPop 0.4s cubic-bezier(0.2, 1.5, 0.3, 1);
-  }
-  .ch-stage-title { font-size: 9px; color: var(--text-mute); line-height: 1.2; }
-  .ch-stage.done .ch-stage-title { color: var(--text-main); font-weight: 700; }
-  .ch-stage-need { font-family: 'JetBrains Mono', monospace; font-size: 8.5px; color: var(--text-faint); }
-
-  /* 다음 한 칸 CTA */
-  .ch-cta-row { margin: 14px 0 4px; }
-  .ch-cta-btn {
-    width: 100%; padding: 13px; border-radius: 10px; cursor: pointer;
-    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
-    font-size: 14px; font-weight: 800; letter-spacing: -0.01em;
-    color: #06140C; background: linear-gradient(120deg, var(--emerald), var(--neon));
-    border: none; box-shadow: 0 0 16px var(--neon-glow);
-    transition: transform 0.15s, filter 0.15s;
-  }
-  .ch-cta-btn:hover { filter: brightness(1.08); transform: translateY(-1px); }
-  .ch-cta-btn:active { transform: translateY(0); }
-  .ch-cta-btn.done {
-    background: var(--cream-soft); color: var(--cream);
-    border: 1.5px solid var(--cream); box-shadow: none; cursor: default;
-  }
 
   /* === 완수 트로피 카드 (명예의 전당) === */
   .ch-card.ch-trophy {
@@ -7877,402 +7730,6 @@
   }
   .bot-bubble-close:hover { color: var(--text-main); }
 
-  /* ===== CHALLENGE WIZARD MODAL ===== */
-  .cw-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.85);
-    z-index: 1500;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    backdrop-filter: blur(8px);
-    padding: 20px;
-  }
-  .cw-overlay.show { display: flex; }
-  .cw-box {
-    background: var(--bg-card);
-    border: 1px solid var(--emerald-line);
-    border-radius: 14px;
-    width: 100%;
-    max-width: 520px;
-    max-height: 92vh;
-    overflow-y: auto;
-    padding: 28px;
-    animation: bubbleIn 0.35s ease;
-  }
-
-  .cw-step-mark {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    color: var(--sage);
-    letter-spacing: 0.2em;
-    margin-bottom: 6px;
-  }
-
-  .cw-title {
-    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
-    font-size: 26px;
-    font-weight: 800;
-    margin-bottom: 16px;
-    line-height: 1.2;
-  }
-  .cw-title .em { color: var(--emerald);  }
-
-  .cw-intro {
-    background: var(--ice-soft);
-    border-left: 3px solid var(--ice);
-    padding: 16px 18px;
-    border-radius: 0 8px 8px 0;
-    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
-    font-size: 13.5px;
-    color: var(--text-sub);
-    line-height: 1.7;
-    margin-bottom: 22px;
-    font-weight: 500;
-  }
-  .cw-intro strong { color: var(--emerald); font-weight: 700; }
-
-  .cw-field { margin-bottom: 16px; }
-  .cw-label {
-    display: block;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 9px;
-    letter-spacing: 0.2em;
-    color: var(--sage);
-    text-transform: uppercase;
-    margin-bottom: 8px;
-  }
-
-  .cw-input {
-    width: 100%;
-    background: var(--bg-input);
-    border: 1px solid var(--line);
-    color: var(--text-main);
-    padding: 11px 14px;
-    border-radius: 5px;
-    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
-    font-size: 13px;
-  }
-  .cw-input:focus { outline: none; border-color: var(--emerald); box-shadow: 0 0 0 3px var(--emerald-glow); }
-
-  .cw-preset {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr) 1.4fr;
-    gap: 6px;
-  }
-  .cw-preset-btn {
-    padding: 11px 8px;
-    background: var(--bg-input);
-    border: 1px solid var(--line);
-    color: var(--text-sub);
-    border-radius: 5px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
-    cursor: pointer;
-    font-weight: 600;
-    letter-spacing: 0.05em;
-  }
-  .cw-preset-btn.active {
-    border-color: var(--emerald);
-    background: var(--emerald-glow);
-    color: var(--emerald);
-  }
-  .cw-preset-custom {
-    background: var(--bg-input);
-    border: 1px solid var(--line);
-    color: var(--text-main);
-    padding: 8px 10px;
-    border-radius: 5px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
-    text-align: center;
-  }
-  .cw-preset-custom:focus { outline: none; border-color: var(--emerald); }
-
-  .cw-dates {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-  }
-  .cw-input[type="date"] {
-    font-family: 'JetBrains Mono', monospace;
-    color-scheme: dark;
-  }
-
-  .cw-summary {
-    background: rgba(52, 168, 116, 0.08);
-    border: 1px solid var(--emerald-line);
-    border-radius: 6px;
-    padding: 14px;
-    margin-top: 6px;
-    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
-    font-size: 12.5px;
-    color: var(--sage);
-    line-height: 1.6;
-  }
-  .cw-summary strong { color: var(--emerald); }
-
-  .cw-btns {
-    display: grid;
-    grid-template-columns: 1fr 2fr;
-    gap: 10px;
-    margin-top: 24px;
-  }
-  .cw-btn {
-    padding: 14px;
-    border-radius: 6px;
-    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
-    font-size: 13px;
-    font-weight: 700;
-    cursor: pointer;
-    border: none;
-  }
-  .cw-cancel {
-    background: var(--bg-elev);
-    color: var(--text-sub);
-    border: 1px solid var(--line);
-  }
-  .cw-start {
-    background: var(--emerald);
-    color: var(--bg-void);
-  }
-  .cw-btn:active { transform: scale(0.98); }
-
-  /* === Aurora row glow for challenge rows === */
-  /* 챌린지 행 반짝이 — 사용자 요청으로 제거(표시 안 함) */
-  .sh-tr.in-challenge .sh-td { transition: background-color 0.3s; }
-  @keyframes auroraGlow { 0%, 100% { opacity: 1; } }
-
-  /* === HONOR CARD (우하단 떠다니는 챌린지 진행 카드) === */
-  .honor-stack {
-    position: fixed;
-    bottom: calc(env(safe-area-inset-bottom, 0px) + 78px); /* 하단 메뉴 위로 */
-    right: 24px;
-    z-index: 280;
-    display: flex;
-    flex-direction: column-reverse;
-    gap: 10px;
-    pointer-events: none;
-  }
-
-  .honor-card {
-    pointer-events: auto;
-    width: 280px;
-    background: rgba(20, 20, 20, 0.85);
-    backdrop-filter: blur(12px);
-    border-radius: 12px;
-    padding: 14px 16px;
-    position: relative;
-    overflow: hidden;
-    cursor: pointer;
-    transition: transform 0.2s;
-    animation: honorFloat 6s ease-in-out infinite;
-  }
-  .honor-card:hover {
-    transform: translateY(-2px) scale(1.02);
-  }
-  .honor-card.compact {
-    animation-delay: 1.5s;
-  }
-  .honor-card.compact:nth-child(3) { animation-delay: 3s; }
-
-  /* Aurora flowing border */
-  .honor-card::before {
-    content: '';
-    position: absolute;
-    inset: -1px;
-    border-radius: 13px;
-    padding: 1.5px;
-    background: linear-gradient(120deg,
-      rgba(215, 243, 75, 0.6),
-      rgba(0, 230, 118, 0.9),
-      rgba(245, 230, 211, 0.4),
-      rgba(215, 243, 75, 0.6));
-    background-size: 300% 300%;
-    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    animation: aurora 5s ease-in-out infinite;
-    pointer-events: none;
-  }
-
-  .honor-card.done::before {
-    background: linear-gradient(120deg,
-      rgba(245, 230, 211, 0.7),
-      rgba(0, 230, 118, 0.9),
-      rgba(245, 230, 211, 0.7));
-  }
-
-  .honor-card.urgent::before {
-    background: linear-gradient(120deg,
-      rgba(192, 72, 72, 0.7),
-      rgba(245, 230, 211, 0.5),
-      rgba(192, 72, 72, 0.7));
-    animation: aurora 3s ease-in-out infinite;
-  }
-
-  @keyframes honorFloat {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-4px); }
-  }
-
-  .honor-head {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 10px;
-    margin-bottom: 10px;
-  }
-
-  .honor-name {
-    font-family: 'Pretendard', sans-serif;
-    font-size: 13px;
-    font-weight: 800;
-    color: var(--text-main);
-    letter-spacing: -0.01em;
-    line-height: 1.3;
-    flex: 1;
-  }
-
-  .honor-eyebrow {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 8.5px;
-    letter-spacing: 0.25em;
-    color: var(--emerald);
-    text-transform: uppercase;
-    margin-bottom: 4px;
-    font-weight: 600;
-  }
-  .honor-card.urgent .honor-eyebrow { color: var(--wine); }
-  .honor-card.done .honor-eyebrow { color: var(--cream); }
-
-  .honor-dday {
-    font-family: 'Pretendard', sans-serif;
-    font-size: 14px;
-    font-weight: 800;
-    padding: 3px 9px;
-    border-radius: 5px;
-    border: 1px solid;
-    line-height: 1;
-    letter-spacing: -0.02em;
-    flex-shrink: 0;
-  }
-  .honor-dday.safe { color: var(--emerald); border-color: var(--emerald); background: var(--emerald-faint); }
-  .honor-dday.warn { color: var(--text-main); border-color: var(--text-main); background: rgba(255,255,255,0.06); }
-  .honor-dday.over { color: var(--wine); border-color: var(--wine); background: var(--wine-soft); }
-  .honor-dday.done { color: var(--cream); border-color: var(--cream); background: var(--cream-soft); }
-
-  .honor-bars {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-  .honor-bar-row {
-    display: grid;
-    grid-template-columns: 40px 1fr 48px;
-    gap: 8px;
-    align-items: center;
-  }
-  .honor-bar-lbl {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 8.5px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    font-weight: 600;
-  }
-  .honor-bar-lbl.ana { color: var(--emerald); }
-  .honor-bar-lbl.upl { color: var(--neon); }
-  .honor-bar {
-    height: 5px;
-    background: rgba(255,255,255,0.06);
-    border-radius: 3px;
-    overflow: hidden;
-  }
-  .honor-bar-fill {
-    height: 100%;
-    border-radius: 3px;
-    transition: width 0.5s cubic-bezier(0.2, 1.2, 0.3, 1);
-  }
-  .honor-bar-fill.ana { background: var(--emerald); box-shadow: 0 0 6px var(--emerald-glow); }
-  .honor-bar-fill.upl { background: var(--neon); box-shadow: 0 0 6px var(--neon-glow); }
-  .honor-bar-num {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    font-weight: 700;
-    text-align: right;
-  }
-  .honor-bar-num.ana { color: var(--emerald); }
-  .honor-bar-num.upl { color: var(--neon); }
-
-  /* Collapse/expand button */
-  .honor-toggle {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    width: 18px;
-    height: 18px;
-    background: rgba(255,255,255,0.08);
-    border: none;
-    color: var(--text-mute);
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 2;
-  }
-  .honor-toggle:hover { color: var(--text-main); background: rgba(255,255,255,0.15); }
-
-  .honor-stack.collapsed .honor-card { display: none; }
-  .honor-stack.collapsed .honor-collapsed-pill { display: flex; }
-
-  .honor-collapsed-pill {
-    display: none;
-    pointer-events: auto;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 14px;
-    background: rgba(20, 20, 20, 0.85);
-    backdrop-filter: blur(12px);
-    border: 1px solid var(--emerald-line);
-    border-radius: 100px;
-    color: var(--emerald);
-    cursor: pointer;
-    font-family: 'Pretendard', sans-serif;
-    font-size: 12px;
-    font-weight: 700;
-    box-shadow: 0 0 20px var(--emerald-glow);
-    animation: honorFloat 5s ease-in-out infinite;
-  }
-  .honor-collapsed-pill:hover {
-    transform: scale(1.05);
-  }
-  .honor-collapsed-pill .dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: var(--emerald);
-    box-shadow: 0 0 8px var(--emerald);
-    animation: dotPulse 1.5s ease-in-out infinite;
-  }
-  @keyframes dotPulse {
-    0%, 100% { opacity: 0.6; transform: scale(1); }
-    50% { opacity: 1; transform: scale(1.3); }
-  }
-
-  /* Mobile: smaller honor cards */
-  @media (max-width: 720px) {
-    .honor-stack { right: 12px; bottom: calc(env(safe-area-inset-bottom, 0px) + 72px); }
-    .honor-card { width: 240px; padding: 12px 14px; }
-  }
-
-  /* v529 · 화면 전체 aurora 테두리 «삭제»(사장님 확정 2026-07-27)
-     — 챌린지 UI는 이미 전부 사라졌는데 이 테두리만 남아 있었다.
-       알릴 기능이 화면에 없으니 알림도 없앤다. 챌린지 데이터(58개 카드)는 그대로 보존.
-       비용: 화면 크기 그라데이션(200%) 매 프레임 재계산 + mask-composite → 결과는 1px 테두리였음. */
-  .sh-main.aurora-on { position: relative; }
 
   /* ===== CONTENT FORMAT & AUDIO PICKER ===== */
   .fmt-block, .audio-block {
@@ -20084,15 +19541,6 @@
                 <div class="big">압도적으로 성장하는 크리에이터의 핵심 🔥</div>
                 <div class="small">이미 성공해 <b>증명된 구조를 벤치마킹</b>해서 콘텐츠를 만든다 — 그게 전부예요.</div>
               </div>
-              <div class="home-cta-btns">
-                <button class="home-start-btn primary" id="home-start-100">🔥 벤치마킹 챌린지 100 시작</button>
-              </div>
-            </div>
-
-            <div class="home-daily" id="home-daily" style="display:none;">
-              <div class="home-daily-icon">◐</div>
-              <div class="home-daily-text" id="home-daily-text">오늘의 페이스를 확인하세요</div>
-            </div>
           </section>
 
           <!-- CONTENT FUNNEL -->
@@ -20157,33 +19605,6 @@
             <div class="funnel-balance" id="funnel-balance"></div>
           </section>
 
-          <!-- ACTIVE CHALLENGES -->
-          <section class="home-section">
-            <div class="home-sec-label">진행 중인 챌린지</div>
-            <div class="ch-list" id="ch-list"></div>
-          </section>
-        </div>
-
-        <div>
-          <!-- STATS MINI -->
-          <section class="home-section">
-            <div class="home-sec-label">현재 상태 · STATS</div>
-            <div class="home-stats-row" id="home-stats"></div>
-          </section>
-
-          <!-- TIP -->
-          <section class="home-section">
-            <div class="home-sec-label">TAKEAWAY</div>
-            <div style="font-family:'Pretendard',sans-serif;font-size:18px;color:var(--text-main);line-height:1.4;font-weight:700;letter-spacing:-0.01em;">
-              레퍼런스가 쌓이면<br/><span style="color:var(--emerald);">감각이 된다.</span>
-            </div>
-            <div style="margin-top:16px;font-size:12.5px;color:var(--text-sub);line-height:1.7;font-weight:500;">
-              모든 벤치마킹는 자동으로 저장됩니다.<br/>시트에서 분석을 이어가세요.
-            </div>
-          </section>
-        </div>
-      </div>
-    </div>
 
     <!-- ===== CUSTOMER ANALYSIS VIEW ===== -->
     <div id="customer-view" class="cu-wrap" style="display:none;">
@@ -21712,66 +21133,6 @@
     <div id="bot-bubble-msg"></div>
   </div>
 
-  <!-- ===== HONOR CARD STACK (우하단 떠다니는 챌린지 카드) ===== -->
-  <div class="honor-stack" id="honor-stack">
-    <button class="honor-collapsed-pill" id="honor-collapsed-pill" title="펼치기">
-      <span class="dot"></span>
-      <span id="honor-pill-text">챌린지 진행 중</span>
-    </button>
-  </div>
-
-  <!-- ===== CHALLENGE WIZARD ===== -->
-  <div class="cw-overlay" id="cw-overlay">
-    <div class="cw-box">
-      <div class="cw-step-mark">CHALLENGE · BENCHMARK 100</div>
-      <h2 class="cw-title"><span class="em">벤치마킹 챌린지 100</span> 설정</h2>
-
-      <div class="cw-intro">
-        잘 된 콘텐츠 <strong>100개를 분석(시트 채우기)</strong>하는 건 <strong>고정</strong>이에요.
-        그중 <strong>몇 개를 콘텐츠로 만들어 업로드</strong>할지만 정하면 돼요. (예: 주 3개씩 30개)
-      </div>
-
-      <div class="cw-field">
-        <label class="cw-label">챌린지 이름</label>
-        <input type="text" class="cw-input" id="cw-name" placeholder="벤치마킹 챌린지 100" />
-      </div>
-
-      <div class="cw-field">
-        <label class="cw-label">📤 업로드 목표 <span style="font-weight:500;color:var(--text-mute);font-size:11px;">— 분석(시트 채우기)은 100개 고정</span></label>
-        <div class="cw-preset">
-          <button class="cw-preset-btn active" data-target="30">30</button>
-          <button class="cw-preset-btn" data-target="60">60</button>
-          <button class="cw-preset-btn" data-target="100">100</button>
-          <input type="number" class="cw-preset-custom" id="cw-target-custom" placeholder="직접 입력" min="1" max="999" />
-        </div>
-      </div>
-
-      <div class="cw-field">
-        <label class="cw-label">기간 설정</label>
-        <div class="cw-dates">
-          <div>
-            <div style="font-size:10px;color:var(--text-mute);margin-bottom:4px;font-family:'JetBrains Mono',monospace;">시작</div>
-            <input type="date" class="cw-input" id="cw-start" />
-          </div>
-          <div>
-            <div style="font-size:10px;color:var(--text-mute);margin-bottom:4px;font-family:'JetBrains Mono',monospace;">마감</div>
-            <input type="date" class="cw-input" id="cw-end" />
-          </div>
-        </div>
-      </div>
-
-      <div class="cw-summary" id="cw-summary">
-        기간을 설정하면 페이스가 계산됩니다.
-      </div>
-
-      <div class="cw-btns">
-        <button class="cw-btn cw-cancel" id="cw-cancel">취소</button>
-        <button class="cw-btn cw-start" id="cw-start-btn">시작하기 →</button>
-      </div>
-    </div>
-  </div>
-
-  <button class="sh-totop" id="sh-totop">↑</button>
 
   <!-- ===== MODAL ===== -->
   <div class="sh-modal-overlay" id="sh-modal">
@@ -30574,21 +29935,8 @@
       return;
     }
 
-    // 1) 빈 행 찾기 (챌린지 활성 행 우선)
-    let targetRow = null;
-    // 챌린지 행에서 빈 행 우선
-    for (const ch of challenges) {
-      if (!isChallengeActive(ch)) continue;
-      for (const rid of (ch.rowIds || [])) {
-        const r = rows.find(x => x.id === rid);
-        if (r && !isFilled(r)) { targetRow = r; break; }
-      }
-      if (targetRow) break;
-    }
-    // 챌린지 외 빈 행
-    if (!targetRow) {
-      targetRow = rows.find(r => !isFilled(r));
-    }
+    // 1) 빈 행 찾기
+    let targetRow = rows.find(r => !isFilled(r));
     // 그래도 없으면 새 행 추가
     if (!targetRow) {
       const nextNo = rows.length > 0 ? Math.max(...rows.map(r => r.no)) + 1 : 1;
@@ -30672,7 +30020,6 @@
     // 4) 시트 리렌더 + 새로 추가된 행으로 스크롤
     renderTable();
     renderSidebarCounts();
-    renderHonorCards();
 
     setTimeout(() => {
       const tr = document.querySelector(`.sh-card[data-id="${targetRow.id}"]`);
@@ -32417,23 +31764,7 @@
     // 2027
     '2027-01-01','2027-02-06','2027-02-07','2027-02-08','2027-02-09','2027-03-01','2027-05-05','2027-05-13','2027-06-06','2027-08-15','2027-09-14','2027-09-15','2027-09-16','2027-10-03','2027-10-09','2027-12-25'
   ]);
-  function challengeProgress(ch) {
-    return rows.filter(r => isFilled(r) && (ch.rowIds || []).includes(r.id)).length;
-  }
   // Upload progress: count of slots marked uploaded
-  function challengeUploaded(ch) {
-    return (ch.uploadedSlots || []).filter(Boolean).length;
-  }
-  function isChallengeActive(ch) {
-    // active if either analysis or upload still incomplete
-    return challengeProgress(ch) < ch.target || challengeUploaded(ch) < (ch.uploadTarget || ch.target);
-  }
-  function anyActiveChallenge() {
-    return challenges.some(isChallengeActive);
-  }
-  function rowInActiveChallenge(rowId) {
-    return challenges.some(ch => isChallengeActive(ch) && (ch.rowIds || []).includes(rowId));
-  }
 
   // Ensure backward compat: uploadedSlots is per-position array of bool
   function ensureChallengeShape(ch) {
@@ -32450,241 +31781,18 @@
 
   // === 챌린지 게임화 헬퍼 (등급/스트릭/스테이지/멘트) =================
   // 업로드한 '날짜'를 기록 — 연속 스트릭 계산용 (오늘 날짜 1회만)
-  function logChallengeUpload(ch) {
-    ch.uploadLog = ch.uploadLog || [];
-    const t = dateToYMD(new Date());
-    if (!ch.uploadLog.includes(t)) ch.uploadLog.push(t);
-  }
   // 연속 업로드 일수 (오늘 또는 어제부터 거꾸로 끊김 없이)
-  function challengeStreak(ch) {
-    const set = new Set(ch.uploadLog || []);
-    if (!set.size) return 0;
-    let d = new Date(); d.setHours(0, 0, 0, 0);
-    if (!set.has(dateToYMD(d))) { d = addDays(d, -1); if (!set.has(dateToYMD(d))) return 0; }
-    let n = 0;
-    while (set.has(dateToYMD(d))) { n++; d = addDays(d, -1); }
-    return n;
-  }
   // 5단계 시즌 패스 (업로드 목표 기준 20/40/60/80/100%)
-  function challengeStages(ch) {
-    const uplT = ch.uploadTarget || ch.target;
-    const upl = challengeUploaded(ch);
-    const defs = [
-      { emoji: '🌱', title: '시작한 사람', frac: 0.2 },
-      { emoji: '🔥', title: '꾸준한 사람', frac: 0.4 },
-      { emoji: '⚡', title: '추진하는 사람', frac: 0.6 },
-      { emoji: '💎', title: '증명하는 사람', frac: 0.8 },
-      { emoji: '👑', title: '챌린지 마스터', frac: 1.0 }
-    ];
-    return defs.map(d => { const need = Math.max(1, Math.ceil(uplT * d.frac)); return { emoji: d.emoji, title: d.title, need, done: upl >= need }; });
-  }
   // 통과한 스테이지 수(0~5) → 등급
-  function challengeRank(ch) {
-    const cleared = challengeStages(ch).filter(s => s.done).length;
-    const ranks = [
-      { emoji: '🥚', name: '새싹' },
-      { emoji: '🌱', name: '새싹+' },
-      { emoji: '🔥', name: '불씨' },
-      { emoji: '⚡', name: '추진' },
-      { emoji: '💎', name: '크리에이터' },
-      { emoji: '👑', name: '마스터' }
-    ];
-    return ranks[Math.max(0, Math.min(5, cleared))];
-  }
   // 상황별 한 줄 동기부여
-  function challengeMment(ch) {
-    const upl = challengeUploaded(ch), uplT = ch.uploadTarget || ch.target;
-    const days = ch.endDate ? dateDiff(ch.endDate) : null;
-    if (upl >= uplT) return '해냈다. 너는 증명했어 👑';
-    if (days !== null && days < 0) return `마감은 지났지만 끝까지 — ${uplT - upl}개 남았어`;
-    const frac = upl / uplT;
-    if (upl === 0) return '첫 업로드가 가장 무거워. 딱 한 개만 올려봐';
-    if (frac >= 0.8) return `여기서 멈추면 아까워. ${uplT - upl}개 남았어!`;
-    if (frac >= 0.5) return '절반을 넘었어 — 이제 가속 구간이야';
-    if (days !== null && days > 0) { const pace = ((uplT - upl) / days * 7).toFixed(1); return `3개월 뒤 완전히 다른 크리에이터 · 주 ${pace}개 페이스`; }
-    return '3개월 뒤, 너는 완전히 다른 크리에이터다';
-  }
 
   // Auto-add new filled rows to active challenges
-  async function autoLinkRowToChallenges(rowId) {
-    let changed = false;
-    challenges.forEach(ch => {
-      if (!isChallengeActive(ch)) return;
-      if (!(ch.rowIds || []).includes(rowId)) {
-        ch.rowIds = ch.rowIds || [];
-        ch.rowIds.push(rowId);
-        changed = true;
-      }
-    });
-    if (changed) {
-      await saveChallenges();
-      // Check milestones
-      challenges.forEach(ch => checkMilestone(ch));
-    }
-    return changed;
-  }
 
-  function checkMilestone(ch) {
-    const p = challengeProgress(ch);
-    const milestones = [10, 25, 50, 75, 100, ch.target].filter((v, i, a) => v <= ch.target && a.indexOf(v) === i);
-    ch.milestonesShown = ch.milestonesShown || [];
-    for (const m of milestones) {
-      if (p >= m && !ch.milestonesShown.includes(m)) {
-        ch.milestonesShown.push(m);
-        saveChallenges();
-        celebrateMilestone(ch, m);
-        break; // one at a time
-      }
-    }
-  }
 
-  function celebrateMilestone(ch, m) {
-    const messages = {
-      10: `10개 돌파! 첫 챕터가 끝났어요. 감각이 익기 시작합니다.`,
-      25: `25개. 1/4 지점. 이쯤에서 패턴이 보이기 시작해요.`,
-      50: `절반입니다. 여기까지 온 사람은 많지 않아요.`,
-      75: `75개 — 거의 다 왔어요. 끝까지 가본 사람이 가진 것을 곧 얻게 됩니다.`,
-      100: `100개. 한 권의 책을 쓰신 거예요. 다음 챌린지로 가요.`
-    };
-    const msg = messages[m] || `${m}개 달성!`;
-    showBotMessage(msg, '마일스톤 · ' + m);
-    document.getElementById('bot').classList.add('happy');
-    setTimeout(() => document.getElementById('bot').classList.remove('happy'), 2000);
-  }
 
   // === HONOR CARD RENDER (우하단 떠다니는 카드) ===
   let honorCollapsed = false;
 
-  function renderHonorCards() {
-    const stack = document.getElementById('honor-stack');
-    if (!stack) return;
-    // 밖에 떠있던 챌린지 위젯 제거 — 진행 상황은 '진행 중 챌린지' 패널에서 확인(중복·지저분 방지)
-    stack.style.display = 'none';
-    return;
-
-    const active = challenges.filter(isChallengeActive);
-
-    // 활성 챌린지가 없으면 완전히 숨김
-    if (active.length === 0) {
-      stack.style.display = 'none';
-      return;
-    }
-    stack.style.display = 'flex';
-
-    // Pill 텍스트 갱신
-    const pillText = document.getElementById('honor-pill-text');
-    if (pillText) {
-      const totalRem = active.reduce((sum, ch) => sum + (ch.target - challengeProgress(ch)), 0);
-      pillText.textContent = `${active.length}개 챌린지 · 남은 ${totalRem}`;
-    }
-
-    // 기존 카드 제거 (pill은 유지)
-    Array.from(stack.querySelectorAll('.honor-card')).forEach(c => c.remove());
-
-    if (honorCollapsed) {
-      stack.classList.add('collapsed');
-      return;
-    } else {
-      stack.classList.remove('collapsed');
-    }
-
-    // 정렬: D-day 임박한 순
-    const sorted = active.slice().sort((a, b) => {
-      const dA = a.endDate ? dateDiff(a.endDate) : 9999;
-      const dB = b.endDate ? dateDiff(b.endDate) : 9999;
-      return dA - dB;
-    });
-
-    // 최대 3개까지만 카드로
-    const display = sorted.slice(0, 3);
-
-    display.forEach((ch, idx) => {
-      const ana = challengeProgress(ch);
-      const upl = challengeUploaded(ch);
-      const anaPct = Math.min(100, Math.round(ana / ch.target * 100));
-      const uplPct = Math.min(100, Math.round(upl / ch.target * 100));
-      const dd = ddayLabel(ch.endDate, Math.min(ana, upl), ch.target);
-
-      // Card 상태
-      let cardClass = '';
-      const days = ch.endDate ? dateDiff(ch.endDate) : null;
-      if (ana >= ch.target && upl >= ch.target) cardClass = 'done';
-      else if (days !== null && days <= 3 && days >= 0) cardClass = 'urgent';
-      else if (days !== null && days < 0) cardClass = 'urgent';
-
-      const eyebrowText = cardClass === 'done' ? '✓ 챌린지 완수' 
-                       : cardClass === 'urgent' ? '⚠ 챌린지 진행 중' 
-                       : '◆ 챌린지 진행 중';
-
-      const card = document.createElement('div');
-      card.className = `honor-card ${cardClass} ${idx > 0 ? 'compact' : ''}`;
-      card.dataset.chId = ch.id;
-      card.innerHTML = `
-        ${idx === 0 ? `<button class="honor-toggle" data-act="toggle-honor" title="접기">▾</button>` : ''}
-        <div class="honor-eyebrow">${eyebrowText}</div>
-        <div class="honor-head">
-          <div class="honor-name">${esc(ch.name)}</div>
-          <div class="honor-dday ${dd.cls}">${dd.txt}</div>
-        </div>
-        <div class="honor-bars">
-          <div class="honor-bar-row">
-            <span class="honor-bar-lbl ana">시트</span>
-            <div class="honor-bar"><div class="honor-bar-fill ana" style="width:${anaPct}%"></div></div>
-            <span class="honor-bar-num ana">${ana}/${ch.target}</span>
-          </div>
-          <div class="honor-bar-row">
-            <span class="honor-bar-lbl upl">업로드</span>
-            <div class="honor-bar"><div class="honor-bar-fill upl" style="width:${uplPct}%"></div></div>
-            <span class="honor-bar-num upl">${upl}/${ch.target}</span>
-          </div>
-        </div>
-      `;
-      // Append to stack (column-reverse will visually stack from bottom)
-      stack.appendChild(card);
-
-      // Card click → scroll to first row of this challenge in sheet (if in sheet view)
-      card.addEventListener('click', (e) => {
-        if (e.target.closest('[data-act="toggle-honor"]')) return;
-        // Switch to sheet view & scroll
-        switchWorkspace('sheet');
-        setTimeout(() => {
-          const firstRowId = (ch.rowIds || [])[0];
-          if (firstRowId) {
-            const tr = document.querySelector(`.sh-tr[data-id="${firstRowId}"]`);
-            if (tr) {
-              tr.scrollIntoView({ behavior: 'smooth', block: 'center' });
-              tr.style.transition = 'background 0.3s';
-              tr.querySelectorAll('.sh-td').forEach(td => {
-                td.style.background = 'rgba(215, 243, 75, 0.2)';
-              });
-              setTimeout(() => {
-                tr.querySelectorAll('.sh-td').forEach(td => { td.style.background = ''; });
-              }, 1500);
-            }
-          }
-        }, 300);
-      });
-    });
-
-    // Toggle button
-    const toggleBtn = stack.querySelector('[data-act="toggle-honor"]');
-    if (toggleBtn) {
-      toggleBtn.onclick = (e) => {
-        e.stopPropagation();
-        honorCollapsed = true;
-        renderHonorCards();
-      };
-    }
-
-    // Pill click → expand
-    const pill = document.getElementById('honor-collapsed-pill');
-    if (pill) {
-      pill.onclick = () => {
-        honorCollapsed = false;
-        renderHonorCards();
-      };
-    }
-  }
 
   // === RENDER HOME ===
   // ============================================================
@@ -32985,7 +32093,6 @@
       if (key === 'insight') { const n = (rows || []).filter(isFilled).length; return n ? ('벤치마킹 ' + n + '개') : '데이터 없음'; }
       if (key === 'week') { const dd = getWeekDday(); return dd.uploaded + ' 업로드 / ' + dd.slotsTotal + '칸'; }
       if (key === 'funnel') { const fs = funnelSlots || {}; const n = ((fs.attract || []).length) + ((fs.convert || []).length) + ((fs.retain || []).length); return n + '개 배치'; }
-      if (key === 'challenge') { const act = (challenges || []).filter(c => { try { return isChallengeActive(c); } catch (e) { return true; } }); if (!act.length) return '진행 중 없음'; const c = act[0]; try { ensureChallengeShape(c); } catch (e) {} const ana = challengeProgress(c), upl = challengeUploaded(c), uplT = c.uploadTarget || c.target; return '시트 ' + ana + '/' + c.target + ' · 업로드 ' + upl + '/' + uplT + (act.length > 1 ? ' 외 ' + (act.length - 1) : ''); }
       if (key === 'calendar') { if (!calBaseMonday) return ''; const mo = `${calBaseMonday.getMonth() + 1}월`; const g = monthlyUploadGoal || 0; return g > 0 ? `${mo} · ${_monthUploaded || 0}/${g} 업로드` : `${calBaseMonday.getFullYear()}년 ${mo}`; }
       if (key === 'stats') { const n = (rows || []).filter(r => !!(r.why || r.idea || r.script || r.url || r.hook || r.author || r.hasThumb || r.hasComment)).length; return n + '개 분석'; }
       if (key === 'goal') { return (homeData && homeData.goal) ? '설정됨' : '미설정'; }
@@ -33061,19 +32168,6 @@
   function updateWeekDdayChip() { setAccDdayChip('week', getWeekDday()); }
   function updateCalendarDdayChip() { setAccDdayChip('calendar', getMonthDday()); }
   // 진행 중 챌린지 D-day 칩 (이번주·캘린더 헤더와 동일 스타일)
-  function getChallengeDday() {
-    const act = (challenges || []).filter(c => { try { return isChallengeActive(c); } catch (e) { return false; } });
-    if (!act.length) return { level: 'none', label: '', sub: '진행 중 챌린지 없음' };
-    const c = act.slice().sort((a, b) => { const da = a.endDate ? dateDiff(a.endDate) : 9999; const db = b.endDate ? dateDiff(b.endDate) : 9999; return da - db; })[0];
-    try { ensureChallengeShape(c); } catch (e) {}
-    if (!c.endDate) return { level: 'cool', label: '진행 중', sub: c.name || '' };
-    const d = dateDiff(c.endDate);
-    let level, label, sub;
-    if (d < 0) { level = 'urgent'; label = 'D+' + Math.abs(d); sub = '마감 지남'; }
-    else { level = d >= 14 ? 'cool' : d >= 5 ? 'warn' : 'urgent'; label = d === 0 ? 'D-DAY' : 'D-' + d; sub = d + '일 남음'; }
-    return { level, label, sub };
-  }
-  function updateChallengeDdayChip() { setAccDdayChip('challenge', getChallengeDday()); }
 
   // === 목표 · 기간 통합 모달 (미니 달력 드래그) ===
   let _gmStart = '', _gmEnd = '', _gmMonth = null, _gmAnchor = null, _gmDragging = false, _gmBound = false;
@@ -33469,12 +32563,6 @@
         var pct = Math.max(0, Math.min(100, Math.round(done / g * 100)));
         return '<div class="acc-vbar"><i style="width:' + pct + '%;background:var(--emerald)"></i></div>';
       }
-      if (key === 'challenge') {
-        var ch = (challenges || []).find(function (c) { try { ensureChallengeShape(c); return isChallengeActive(c); } catch (e) { return false; } });
-        if (!ch) return '';
-        var p = challengeProgress(ch), t = ch.target || 1; var cp = Math.max(0, Math.min(100, Math.round(p / t * 100)));
-        return '<div class="acc-vbar"><i style="width:' + cp + '%;background:#b07bf0"></i></div>';
-      }
       if (key === 'week') {
         var w = (typeof computeThisWeekStats === 'function') ? computeThisWeekStats() : null; if (!w) return '';
         var fill = w.weekCards || 0, tot = Math.max(w.slotsTotal || 0, fill, 3); var dots = '';
@@ -33511,7 +32599,6 @@
     try { renderAccViz(); } catch (e) {}
     updateWeekDdayChip();
     updateCalendarDdayChip();
-    updateChallengeDdayChip();
     updateWeekNudge();
   }
   // 이번 주 슬롯 = 살아있는 넛지. 안 채우면 패널이 은은히 주황으로 맥동(채워야 할 느낌),
@@ -34068,7 +33155,6 @@
       const w = computeThisWeekStats(); c.weekCards = w.weekCards; c.weekDone = w.weekDone;
       c.slotsTotal = (weekSlots || []).length; c.slotsFilled = (weekSlots || []).filter(Boolean).length;
       const st = computeStreak(); c.streakDays = st.daysThisWeek; c.streakWeeks = st.weeks;
-      (challenges || []).forEach(ch => { try { const p = challengeProgress(ch); const t = ch.target || 0; if (t > 0) { const ratio = p / t; if (!c.chBest || ratio > c.chBest.ratio) c.chBest = { name: ch.name, p: p, t: t, ratio: ratio, done: p >= t }; } } catch (e) {} });
     } catch (e) {}
     return c;
   }
@@ -36584,10 +35670,6 @@
 
     renderStatsMini();
     renderFunnel();
-    renderChallengeList();
-    renderDaily();
-    updateAuroraIndicator();
-    renderHonorCards();
     renderTrainingRoom();
     renderMissionPanel();
     renderTodayPanel();
@@ -37272,7 +36354,6 @@
     s.uploaded = nowUploaded;
     s.updatedAt = Date.now();
     await saveScripts();
-    await bumpChallengeUpload(nowUploaded ? 1 : -1); // 챌린지 업로드 자동 연동
     await renderTrWeeksList();
     try { renderWeekSlots(); } catch (e) {} // 이번 주 패널도 동기화
     
@@ -37301,26 +36382,6 @@
   window.__toggleScriptUploaded = toggleScriptUploaded;
 
   // 카드 업로드 → 활성 챌린지 업로드 수 자동 +1/−1 연동
-  async function bumpChallengeUpload(delta) {
-    if (!challenges || !challenges.length) return;
-    const ch = challenges.find(isChallengeActive) || challenges[0];
-    if (!ch) return;
-    ensureChallengeShape(ch);
-    if (delta > 0) {
-      const i = ch.uploadedSlots.findIndex(v => !v);
-      if (i < 0) return; // 이미 가득
-      ch.uploadedSlots[i] = true;
-      logChallengeUpload(ch);
-    } else {
-      let last = -1;
-      for (let i = ch.uploadedSlots.length - 1; i >= 0; i--) { if (ch.uploadedSlots[i]) { last = i; break; } }
-      if (last < 0) return;
-      ch.uploadedSlots[last] = false;
-    }
-    await saveChallenges();
-    try { renderChallengeList(); } catch (e) {}
-    try { renderStatsMini(); } catch (e) {}
-  }
 
   // === 카드 꾹 눌러 다른 주차로 드래그 이동 (캘린더 주차 리스트 한정) ===
   let _cardDragMoved = false, _cardDragBound = false;
@@ -37473,36 +36534,7 @@
       ? (streak.daysThisWeek > 0 ? `이번 주 ${streak.daysThisWeek}일째 (5일 채우면 시작!)` : '오늘부터 시작!')
       : `${streak.weeks}주 연속 (이번 주 ${streak.daysThisWeek}/5일)`;
 
-    // === 2) 챌린지 미니 ===
-    const activeChallenges = challenges.filter(isChallengeActive);
-    let challengeMini;
-    if (activeChallenges.length === 0) {
-      challengeMini = `
-        <div class="tr-status-mini">
-          <div class="tr-status-mini-label">◆ 챌린지</div>
-          <div class="tr-status-mini-empty">진행 중 없음</div>
-        </div>
-      `;
-    } else {
-      const ch = activeChallenges[0];
-      const ana = challengeProgress(ch);
-      const target = ch.target;
-      const pct = Math.min(100, Math.round(ana / target * 100));
-      challengeMini = `
-        <div class="tr-status-mini">
-          <div class="tr-status-mini-label">◆ ${esc(ch.name)}</div>
-          <div class="tr-status-mini-row">
-            <div class="tr-status-mini-bar">
-              <div class="tr-status-mini-fill challenge" style="width:${pct}%"></div>
-            </div>
-            <div class="tr-status-mini-num">${ana}/${target}</div>
-          </div>
-          ${activeChallenges.length > 1 ? `<div class="tr-status-mini-extra">+${activeChallenges.length - 1}개 더</div>` : ''}
-        </div>
-      `;
-    }
-
-    // === 3) 이번 주 미니 ===
+    // === 3) 이번 주 미니 ===    // === 3) 이번 주 미니 ===
     const weekScripts = getScriptsInWeek(getMondayOf(new Date()));
     const wDoneCount = weekScripts.filter(s => !!s.done || s.state === 'done' || s.state === 'uploaded').length;
     const wTotalCount = weekScripts.length;
@@ -37576,7 +36608,6 @@
 
       <!-- 챌린지 + 이번 주 미니 (한 줄) -->
       <div class="tr-status-minis">
-        ${challengeMini}
         ${weekMini}
       </div>
     `;
@@ -38416,450 +37447,25 @@
       return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') === tmKey;
     }).length;
 
-    const activeCount = challenges.filter(isChallengeActive).length;
-    const completedCount = challenges.filter(ch => challengeProgress(ch) >= ch.target).length;
-
     document.getElementById('home-stats').innerHTML = `
       <div class="home-stat"><div class="home-stat-num">${total}</div><div class="home-stat-lbl">total</div></div>
       <div class="home-stat"><div class="home-stat-num">${thisMonth}</div><div class="home-stat-lbl">this month</div></div>
-      <div class="home-stat"><div class="home-stat-num">${activeCount}</div><div class="home-stat-lbl">active</div></div>
-      <div class="home-stat"><div class="home-stat-num">${completedCount}</div><div class="home-stat-lbl">cleared</div></div>
     `;
   }
 
-  function renderChallengeList() {
-    const el = document.getElementById('ch-list');
-    if (challenges.length === 0) {
-      const _nm = (typeof onboardState !== 'undefined' && onboardState && onboardState.name) ? esc(onboardState.name) : '';
-      el.innerHTML = `<div class="ch-empty">
-        <div class="ch-empty-title">🔥 벤치마킹 챌린지 100</div>
-        <div class="ch-empty-sub"><b>100일(약 3개월)</b> 동안 잘 된 콘텐츠 <b>100개를 분석</b>하고, <b>주 3개씩 업로드</b>하는 도전이에요. 이번 도전으로 ${_nm ? _nm + '님의 ' : ''}<b>콘텐츠 감각이 비약적으로</b> 높아져요!</div>
-        <button class="home-start-btn primary ch-empty-btn" id="ch-empty-start-100">🔥 벤치마킹 챌린지 100 시작</button>
-      </div>`;
-      const b = document.getElementById('ch-empty-start-100'); if (b) b.onclick = openWizard;
-      return;
-    }
-    // sort: active first, then completed
-    const sorted = challenges.slice().sort((a, b) => {
-      const aA = isChallengeActive(a) ? 0 : 1;
-      const bA = isChallengeActive(b) ? 0 : 1;
-      if (aA !== bA) return aA - bA;
-      return b.createdAt - a.createdAt;
-    });
 
-    let _chStamped = false;
-    el.innerHTML = sorted.map(ch => {
-      ensureChallengeShape(ch);
-      const ana = challengeProgress(ch);
-      const upl = challengeUploaded(ch);
-      const uplTarget = ch.uploadTarget || ch.target;
-      const anaPct = Math.min(100, Math.round(ana / ch.target * 100));
-      const uplPct = Math.min(100, Math.round(upl / uplTarget * 100));
-      const dd = ddayLabel(ch.endDate, Math.min(ana, upl), ch.target);
-      const active = isChallengeActive(ch);
-      const cols = ch.target <= 30 ? 'cols-10' : ch.target <= 60 ? 'cols-15' : '';
 
-      // === 완수(달성) → 트로피 카드 변신 (명예의 전당) ===
-      const fullyDone = ana >= ch.target && upl >= uplTarget;
-      if (fullyDone) {
-        if (!ch.completedAt) { ch.completedAt = dateToYMD(new Date()); _chStamped = true; }
-        const periodDays = (ch.startDate && ch.endDate) ? Math.max(1, Math.round((ymdToDate(ch.endDate) - ymdToDate(ch.startDate)) / 86400000)) : null;
-        return `
-          <div class="ch-card ch-trophy" data-id="${ch.id}">
-            <div class="ch-trophy-rays"></div>
-            <div class="ch-trophy-badge">🏆</div>
-            <div class="ch-trophy-name">${esc(ch.name || '챌린지')} <span>완주!</span></div>
-            ${periodDays ? `<div class="ch-trophy-period">${periodDays}일 완주</div>` : ''}
-            <div class="ch-trophy-stats">시트 ${ana}/${ch.target} · 업로드 ${upl}/${uplTarget}</div>
-            <div class="ch-trophy-stamp">👑 마스터</div>
-            ${ch.completedAt ? `<div class="ch-trophy-date">${esc(ch.completedAt)} 달성 · 명예의 전당</div>` : ''}
-            <div class="ch-trophy-actions">
-              <button class="ch-act-btn" data-act="goto" data-id="${ch.id}">시트로</button>
-              <button class="ch-act-btn del" data-act="del" data-id="${ch.id}">삭제</button>
-            </div>
-          </div>`;
-      }
 
-      // 게임화: 등급 / 스트릭 / 스테이지 / 멘트 / 다음 한 칸
-      const rank = challengeRank(ch);
-      const streak = challengeStreak(ch);
-      const stages = challengeStages(ch);
-      const mment = challengeMment(ch);
-      const uplDone = upl >= uplTarget;
-      const heroHtml = `
-        <div class="ch-hero">
-          <span class="ch-rank"><span class="ch-rank-emoji">${rank.emoji}</span><span class="ch-rank-name">${rank.name}</span></span>
-          ${streak > 0 ? `<span class="ch-streak">🔥 ${streak}일 연속</span>` : ''}
-          <span class="ch-mment">${esc(mment)}</span>
-        </div>`;
-      const stagesHtml = `
-        <div class="ch-stages">
-          ${stages.map(s => `
-            <div class="ch-stage ${s.done ? 'done' : ''}">
-              <div class="ch-stage-node">${s.done ? s.emoji : '🔒'}</div>
-              <div class="ch-stage-title">${s.title}</div>
-              <div class="ch-stage-need">${s.need}개</div>
-            </div>`).join('')}
-        </div>`;
-      const ctaHtml = `
-        <div class="ch-cta-row">
-          <button class="ch-cta-btn ${uplDone ? 'done' : ''}" data-act="next-upload" data-id="${ch.id}" ${uplDone ? 'disabled' : ''}>
-            ${uplDone ? '🏆 챌린지 완수!' : `▶ 다음 업로드 1개 — ${upl}/${uplTarget}`}
-          </button>
-        </div>`;
-
-      // Dots: 4 states + 시작일 기준 날짜 라벨(달력처럼)
-      const chStart0 = ch.startDate ? ymdToDate(ch.startDate) : null;
-      const dots = Array.from({ length: ch.target }, (_, i) => {
-        const isAnalyzed = i < ana;
-        const isUploaded = !!ch.uploadedSlots[i];
-        const ms = [9, 24, 49, 74, ch.target - 1].includes(i);
-        const cls = ['ch-dot'];
-        if (isAnalyzed) cls.push('analyzed');
-        if (isUploaded) cls.push('uploaded');
-        if (ms) cls.push('milestone');
-        // 날짜 라벨 (시작일 + i일) + 토/일·공휴일 색
-        let dateLabel = '', titleDate = '';
-        if (chStart0) {
-          const cd = addDays(chStart0, i);
-          const dnum = cd.getDate();
-          const dow = cd.getDay();
-          const ymd = dateToYMD(cd);
-          const isFirst = (i === 0 || dnum === 1);
-          dateLabel = isFirst ? `${cd.getMonth() + 1}/${dnum}` : `${dnum}`;
-          if (dow === 0 || HOLIDAYS_KR.has(ymd)) cls.push('ch-dot-sun');
-          else if (dow === 6) cls.push('ch-dot-sat');
-          if (isFirst) cls.push('ch-dot-mstart');
-          titleDate = `${cd.getMonth() + 1}월 ${dnum}일 (${['일','월','화','수','목','금','토'][dow]})${HOLIDAYS_KR.has(ymd) ? ' · 공휴일' : ''} — `;
-        }
-        const title = titleDate + ((isAnalyzed && isUploaded) ? '분석 ✓ · 업로드 ✓ (클릭=업로드 해제)'
-                    : isAnalyzed ? '분석 ✓ (클릭=업로드 표시)'
-                    : isUploaded ? '업로드 ✓ (클릭=해제)'
-                    : '클릭=업로드 표시');
-        return `<div class="${cls.join(' ')}" data-ch="${ch.id}" data-idx="${i}" title="${esc(title)}"><span class="ch-dot-d">${dateLabel}</span></div>`;
-      }).join('');
-
-      // Timeline today marker position (0~100%)
-      let timelineHtml = '';
-      if (ch.startDate && ch.endDate) {
-        const s = new Date(ch.startDate);
-        const e = new Date(ch.endDate);
-        const now = new Date();
-        s.setHours(0,0,0,0); e.setHours(0,0,0,0); now.setHours(0,0,0,0);
-        const total = e - s;
-        const elapsed = now - s;
-        let pos = total > 0 ? Math.max(0, Math.min(100, (elapsed / total) * 100)) : 0;
-        let beforeStart = '';
-        if (now < s) { pos = 0; beforeStart = 'before-start'; }
-        else if (now > e) { pos = 100; }
-        const elapsedPct = total > 0 ? Math.max(0, Math.min(100, (elapsed / total) * 100)) : 0;
-        timelineHtml = `
-          <div class="ch-timeline">
-            <div class="ch-timeline-bar">
-              <div class="ch-timeline-elapsed" style="width:${elapsedPct}%"></div>
-              <div class="ch-timeline-marker ${beforeStart}" style="left:${pos}%"></div>
-            </div>
-            <div class="ch-timeline-ends">
-              <span>${esc(ch.startDate)}</span>
-              <span>${esc(ch.endDate)}</span>
-            </div>
-          </div>
-        `;
-      }
-
-      const pacePerWeek = ch.startDate && ch.endDate ? (() => {
-        const start = new Date(ch.startDate);
-        const end = new Date(ch.endDate);
-        const days = Math.max(1, Math.round((end - start) / (24*60*60*1000)));
-        return (ch.target / days * 7).toFixed(1);
-      })() : null;
-
-      return `
-        <div class="ch-card ${active ? 'active' : ''}" data-id="${ch.id}">
-          <div class="ch-top">
-            <div>
-              <div class="ch-title">${esc(ch.name || '이름 없는 챌린지')}</div>
-              <div class="ch-meta">${esc(ch.startDate || '')}${ch.endDate ? ' → ' + esc(ch.endDate) : ''}${pacePerWeek ? ' · 주 ' + pacePerWeek + '개 페이스' : ''}</div>
-            </div>
-            <div class="ch-dday ${dd.cls}">${dd.txt}</div>
-          </div>
-
-          ${heroHtml}
-
-          ${timelineHtml}
-
-          <div class="ch-gauges">
-            <div class="ch-gauge-row">
-              <div class="ch-gauge-label ana"><span class="ch-gauge-dotmark ana"></span>시트 채우기</div>
-              <div class="ch-gauge-bar"><div class="ch-gauge-fill ana" style="width:${anaPct}%"></div></div>
-              <div class="ch-gauge-num ana">${ana}<span class="total">/${ch.target}</span></div>
-            </div>
-            <div class="ch-gauge-row">
-              <div class="ch-gauge-label upl"><span class="ch-gauge-dotmark upl"></span>업로드</div>
-              <div class="ch-gauge-bar"><div class="ch-gauge-fill upl" style="width:${uplPct}%"></div></div>
-              <div class="ch-gauge-num upl">${upl}<span class="total">/${uplTarget}</span></div>
-            </div>
-          </div>
-
-          ${stagesHtml}
-
-          <div class="ch-dots ${cols}">${dots}</div>
-
-          ${ctaHtml}
-
-          <div class="ch-legend">
-            <div class="ch-legend-item"><span class="ch-legend-swatch ana"></span>시트 채우기</div>
-            <div class="ch-legend-item"><span class="ch-legend-swatch upl"></span>업로드</div>
-            <div class="ch-legend-item"><span class="ch-legend-swatch both"></span>둘 다</div>
-            <div class="ch-legend-item" style="margin-left:auto;color:var(--text-mute);">점 클릭 → 업로드 토글</div>
-          </div>
-
-          <div class="ch-bottom">
-            <div class="ch-progress-text">${anaPct}% <span class="total">시트</span> · <span style="color:var(--neon);">${uplPct}%</span> <span class="total">업로드</span></div>
-            <div class="ch-actions">
-              <button class="ch-act-btn" data-act="goto" data-id="${ch.id}">시트로</button>
-              <button class="ch-act-btn del" data-act="del" data-id="${ch.id}">삭제</button>
-            </div>
-          </div>
-        </div>
-      `;
-    }).join('');
-
-    if (_chStamped) saveChallenges(); // 완주 달성일 박제 저장
-
-    // Action buttons
-    el.querySelectorAll('[data-act]').forEach(btn => {
-      btn.onclick = async (e) => {
-        e.stopPropagation();
-        const id = btn.dataset.id;
-        const act = btn.dataset.act;
-        if (act === 'del') {
-          if (await appConfirm('이 챌린지를 삭제할까요?\n시트의 행은 그대로 유지돼요.', { okText: '삭제', danger: true })) {
-            challenges = challenges.filter(c => c.id !== id);
-            await saveChallenges();
-            renderHome();
-            toast('챌린지 삭제됨');
-          }
-        } else if (act === 'goto') {
-          switchWorkspace('sheet');
-        } else if (act === 'next-upload') {
-          const ch = challenges.find(c => c.id === id);
-          if (!ch) return;
-          ensureChallengeShape(ch);
-          const i = ch.uploadedSlots.findIndex(v => !v);
-          if (i < 0) return; // 이미 가득
-          ch.uploadedSlots[i] = true;
-          logChallengeUpload(ch);
-          await saveChallenges();
-          checkUploadMilestone(ch);
-          renderChallengeList();
-          renderDaily();
-          renderStatsMini();
-          updateAuroraIndicator();
-          toast(`업로드 ${challengeUploaded(ch)}개째 ✓`);
-        }
-      };
-    });
-
-    // Dot click → toggle upload
-    el.querySelectorAll('.ch-dot[data-ch]').forEach(dot => {
-      dot.onclick = async (e) => {
-        e.stopPropagation();
-        const chId = dot.dataset.ch;
-        const idx = parseInt(dot.dataset.idx, 10);
-        const ch = challenges.find(c => c.id === chId);
-        if (!ch) return;
-        ensureChallengeShape(ch);
-        ch.uploadedSlots[idx] = !ch.uploadedSlots[idx];
-        if (ch.uploadedSlots[idx]) logChallengeUpload(ch);
-        await saveChallenges();
-        // Check upload milestones
-        checkUploadMilestone(ch);
-        renderChallengeList();
-        renderDaily();
-        renderStatsMini();
-        updateAuroraIndicator();
-        if (ch.uploadedSlots[idx]) {
-          toast(`#${idx + 1} 업로드 표시 ✓`);
-        }
-      };
-    });
-  }
-
-  function checkUploadMilestone(ch) {
-    const upl = challengeUploaded(ch);
-    const uplT = ch.uploadTarget || ch.target;
-    const milestones = [10, 25, 50, 75, 100, uplT].filter((v, i, a) => v <= uplT && a.indexOf(v) === i);
-    ch.uploadMilestonesShown = ch.uploadMilestonesShown || [];
-    for (const m of milestones) {
-      if (upl >= m && !ch.uploadMilestonesShown.includes(m)) {
-        ch.uploadMilestonesShown.push(m);
-        saveChallenges();
-        const messages = {
-          10: `업로드 10개! 분석만 하던 사람에서 행동하는 사람으로 넘어가셨네요.`,
-          25: `업로드 25개. 알고리즘이 당신을 인식하기 시작합니다.`,
-          50: `업로드 50개 — 절반의 행동. 결과가 누적되기 시작해요.`,
-          75: `업로드 75개. 이미 다른 사람이 되어가고 있어요.`
-        };
-        const msg = messages[m] || `업로드 ${m}개 달성!`;
-        showBotMessage(msg, '업로드 마일스톤 · ' + m);
-        const bot = document.getElementById('bot');
-        bot.classList.add('happy');
-        setTimeout(() => bot.classList.remove('happy'), 2000);
-        break;
-      }
-    }
-  }
-
-  function renderDaily() {
-    const active = challenges.filter(isChallengeActive);
-    const el = document.getElementById('home-daily');
-    if (active.length === 0) { el.style.display = 'none'; return; }
-    el.style.display = 'flex';
-    const tips = active.map(ch => {
-      const ana = challengeProgress(ch);
-      const upl = challengeUploaded(ch);
-      const remAna = ch.target - ana;
-      const remUpl = ch.target - upl;
-      const days = ch.endDate ? dateDiff(ch.endDate) : null;
-      let line = `<strong>${esc(ch.name)}</strong>`;
-      if (days != null && days > 0) {
-        const paceAna = (remAna / days).toFixed(1);
-        const paceUpl = (remUpl / days).toFixed(1);
-        line += `: ${days}일 남음 · 분석 ${remAna}개(${paceAna}/일) · <span style="color:var(--neon);">업로드 ${remUpl}개(${paceUpl}/일)</span>`;
-      } else if (days != null && days <= 0) {
-        line += `: 마감 ${Math.abs(days)}일 지남 · 분석 ${remAna}개 · <span style="color:var(--neon);">업로드 ${remUpl}개</span> 남음`;
-      } else {
-        line += `: 분석 ${remAna}개 · <span style="color:var(--neon);">업로드 ${remUpl}개</span> 남음`;
-      }
-      return line;
-    });
-    document.getElementById('home-daily-text').innerHTML = tips.join('<br/>');
-  }
-
-  function updateAuroraIndicator() {
-    document.querySelector('.sh-main').classList.toggle('aurora-on', anyActiveChallenge());
-  }
 
   // === CHALLENGE WIZARD ===
   let cwTarget = 60;
 
-  function openWizard() {
-    document.getElementById('cw-name').value = '';
-    document.getElementById('cw-target-custom').value = '';
-    setCwTarget(30);
 
-    const today = todayStr();
-    const future = new Date();
-    future.setDate(future.getDate() + 100);
-    const futureStr = future.getFullYear() + '-' + String(future.getMonth()+1).padStart(2,'0') + '-' + String(future.getDate()).padStart(2,'0');
-    document.getElementById('cw-start').value = today;
-    document.getElementById('cw-end').value = futureStr;
 
-    updateCwSummary();
-    document.getElementById('cw-overlay').classList.add('show');
-  }
 
-  function closeWizard() {
-    document.getElementById('cw-overlay').classList.remove('show');
-  }
 
-  function setCwTarget(n) {
-    cwTarget = n;
-    document.querySelectorAll('.cw-preset-btn').forEach(b => {
-      b.classList.toggle('active', parseInt(b.dataset.target, 10) === n);
-    });
-    updateCwSummary();
-  }
 
-  function updateCwSummary() {
-    const start = document.getElementById('cw-start').value;
-    const end = document.getElementById('cw-end').value;
-    const el = document.getElementById('cw-summary');
-    if (!start || !end) { el.textContent = '기간을 설정하면 페이스가 계산됩니다.'; return; }
-    const s = new Date(start), e = new Date(end);
-    const days = Math.round((e - s) / (24*60*60*1000));
-    if (days <= 0) { el.innerHTML = '<strong>마감일이 시작일보다 빠릅니다.</strong>'; return; }
-    const perWeek = (cwTarget / days * 7).toFixed(1);
-    el.innerHTML = `분석 <strong>100개</strong> + 업로드 <strong>${cwTarget}개</strong>를 <strong>${days}일</strong> 동안 — 업로드 주 약 <strong>${perWeek}개</strong> 페이스.`;
-  }
-
-  async function startChallenge() {
-    const ANALYSIS = 100;            // 시트 채우기(분석)는 항상 100 고정
-    const uploadGoal = cwTarget;     // 위저드의 숫자 = 업로드 목표
-    const name = document.getElementById('cw-name').value.trim() || '벤치마킹 챌린지 100';
-    const start = document.getElementById('cw-start').value;
-    const end = document.getElementById('cw-end').value;
-
-    if (start && end) {
-      const s = new Date(start), e = new Date(end);
-      if (e <= s) { toast('마감일이 시작일보다 빠릅니다'); return; }
-    }
-    if (uploadGoal < 1) { toast('업로드 목표 개수가 잘못됨'); return; }
-
-    // 챌린지에 할당할 행 ID들 — 분석 100개. 빈 행 우선, 부족하면 새로 만들어 추가
-    let emptyRows = rows.filter(r => !isFilled(r));
-    const assignedIds = [];
-
-    // 1) 기존 빈 행을 먼저 사용
-    for (const r of emptyRows) {
-      if (assignedIds.length >= ANALYSIS) break;
-      const inOtherActive = challenges.some(c => isChallengeActive(c) && (c.rowIds || []).includes(r.id));
-      if (inOtherActive) continue;
-      assignedIds.push(r.id);
-    }
-
-    // 2) 부족하면 새 행 자동 추가
-    const needed = ANALYSIS - assignedIds.length;
-    if (needed > 0) {
-      let nextNo = rows.length > 0 ? Math.max(...rows.map(r => r.no)) + 1 : 1;
-      for (let i = 0; i < needed; i++) {
-        const newR = newRow(nextNo++);
-        rows.push(newR);
-        assignedIds.push(newR.id);
-      }
-      await saveRows();
-    }
-
-    const ch = {
-      id: 'ch_' + Date.now() + '_' + Math.random().toString(36).slice(2,8),
-      name,
-      target: ANALYSIS,              // 분석(시트 채우기) 100
-      uploadTarget: uploadGoal,      // 업로드 목표(설정값)
-      startDate: start || todayStr(),
-      endDate: end || '',
-      rowIds: assignedIds,
-      uploadedSlots: new Array(ANALYSIS).fill(false),
-      milestonesShown: [],
-      uploadMilestonesShown: [],
-      createdAt: Date.now()
-    };
-    challenges.push(ch);
-    await saveChallenges();
-    closeWizard();
-    renderHome();
-    renderTable();
-    renderHonorCards();
-    toast(`챌린지 시작! 분석 100개 · 업로드 ${uploadGoal}개 목표`);
-    showBotMessage(`<strong>${esc(ch.name)}</strong> 시작!<br/><br/>시트 100개 행이 이 챌린지의 자리예요(분석). 그중 <strong>${uploadGoal}개를 업로드</strong>하면 클리어! 점을 클릭해 업로드를 표시해요.`, '챌린지 시작');
-  }
-
-  // 우리 핵심 챌린지 "벤치마킹 챌린지 100"을 한 번에 시작 (위저드 없이 startChallenge 재사용)
-  async function quickStart100() {
-    // 이미 진행 중이면 중복 생성 방지
-    const exists = challenges.some(c => isChallengeActive(c) && c.name === '벤치마킹 챌린지 100');
-    if (exists) { toast('이미 진행 중이에요! 아래에서 확인해보세요 👇'); return; }
-    const today = todayStr();
-    const future = new Date(); future.setDate(future.getDate() + 100);
-    const futureStr = future.getFullYear() + '-' + String(future.getMonth() + 1).padStart(2, '0') + '-' + String(future.getDate()).padStart(2, '0');
-    const nameEl = document.getElementById('cw-name'); if (nameEl) nameEl.value = '벤치마킹 챌린지 100';
-    const sEl = document.getElementById('cw-start'); if (sEl) sEl.value = today;
-    const eEl = document.getElementById('cw-end'); if (eEl) eEl.value = futureStr;
-    setCwTarget(100);
-    await startChallenge();
-  }
-
-  // === BOT messages ===
+  // === BOT messages ===  // === BOT messages ===
   let botMsgTimer = null;
   function showBotMessage(htmlMsg, title) {
     document.getElementById('bot-bubble-msg').innerHTML = htmlMsg;
@@ -38876,27 +37482,16 @@
   }
 
   function onBotClick() {
-    // Click → show contextual message
-    const active = challenges.filter(isChallengeActive);
-    if (active.length === 0) {
-      if (homeData.goal || homeData.why) {
-        showBotMessage(
-          `당신의 목표를 잊지 마세요:<br/><br/>` +
-          (homeData.goal ? `<strong style="color:var(--emerald);">${esc(homeData.goal)}</strong><br/><br/>` : '') +
-          (homeData.why ? `<em style="color:var(--text-sub);">${esc(homeData.why)}</em>` : ''),
-          '목적 상기'
-        );
-      } else {
-        showBotMessage('홈에서 목표를 적고 챌린지를 시작해보세요. 종이에 X를 긋듯, 한 걸음씩 채워나가는 게임이에요.', '안녕하세요');
-      }
+    // v531 · 챌린지 삭제 — 목표 상기만 남긴다
+    if (homeData.goal || homeData.why) {
+      showBotMessage(
+        `당신의 목표를 잊지 마세요:<br/><br/>` +
+        (homeData.goal ? `<strong style="color:var(--emerald);">${esc(homeData.goal)}</strong><br/><br/>` : '') +
+        (homeData.why ? `<em style="color:var(--text-sub);">${esc(homeData.why)}</em>` : ''),
+        '목적 상기'
+      );
     } else {
-      const lines = active.map(ch => {
-        const ana = challengeProgress(ch);
-        const upl = challengeUploaded(ch);
-        return `<strong>${esc(ch.name)}</strong><br/>분석 ${ana}/${ch.target} · <span style="color:var(--neon);">업로드 ${upl}/${ch.target}</span>`;
-      });
-      const whyLine = homeData.why ? `<br/><br/><em style="color:var(--neon);">왜 시작했었나요?</em><br/><em style="color:var(--text-sub);">"${esc(homeData.why)}"</em>` : '';
-      showBotMessage(lines.join('<br/><br/>') + whyLine, '현재 진행');
+      showBotMessage('홈에서 <strong>목표</strong>를 적어두면, 흔들릴 때 제가 다시 보여드릴게요.', '목적 상기');
     }
   }
 
@@ -38924,31 +37519,6 @@
       setTimeout(() => { gfSave.classList.remove('saved'); gfSave.textContent = '💾 목표 저장하기'; }, 1800);
     };
 
-    // Start button — '벤치마킹 챌린지 100 시작' = 위저드 열기(업로드 목표만 설정, 분석 100 고정)
-    { const c = document.getElementById('home-start-ch'); if (c) c.onclick = openWizard; }
-    { const b100 = document.getElementById('home-start-100'); if (b100) b100.onclick = openWizard; }
-
-    // Wizard
-    document.getElementById('cw-cancel').onclick = closeWizard;
-    document.getElementById('cw-start-btn').onclick = startChallenge;
-    document.getElementById('cw-overlay').onclick = (e) => {
-      if (e.target.id === 'cw-overlay') closeWizard();
-    };
-    document.querySelectorAll('.cw-preset-btn').forEach(b => {
-      b.onclick = () => {
-        document.getElementById('cw-target-custom').value = '';
-        setCwTarget(parseInt(b.dataset.target, 10));
-      };
-    });
-    document.getElementById('cw-target-custom').addEventListener('input', (e) => {
-      const v = parseInt(e.target.value, 10);
-      if (v > 0 && v < 1000) setCwTarget(v);
-    });
-    document.getElementById('cw-start').addEventListener('input', updateCwSummary);
-    document.getElementById('cw-start').addEventListener('change', updateCwSummary);
-    document.getElementById('cw-end').addEventListener('input', updateCwSummary);
-    document.getElementById('cw-end').addEventListener('change', updateCwSummary);
-
     // Bot
     document.getElementById('bot').classList.add('show');
     document.getElementById('bot').onclick = onBotClick;
@@ -38968,78 +37538,13 @@
 
     // Hook into sheet row saves: re-render home + auto-link
     const originalSaveRows = saveRows;
-    window.__autoLinkRows = autoLinkRowToChallenges;
 
     // Initial honor cards render
-    renderHonorCards();
 
     // Hook: whenever a row is filled, auto-link. We patch the save mechanism by
     // observing the rows array - simplest is to add a check after debouncedRowUpdate.
     // The cleanest approach: re-render whenever home is shown.
   }
-
-  // Patch renderTable to mark rows in active challenges with aurora indicator
-  const _origRenderTable = renderTable;
-  renderTable = async function() {
-    await _origRenderTable();
-    // After render, add in-challenge class to rows that are in active challenges
-    document.querySelectorAll('.sh-tr').forEach(tr => {
-      const id = tr.dataset.id;
-      if (id && rowInActiveChallenge(id)) {
-        tr.classList.add('in-challenge');
-        // Check if fully done (analyzed + uploaded) in any challenge
-        const row = rows.find(r => r.id === id);
-        if (row && isFilled(row)) {
-          // For each challenge this row is in, check if its slot is uploaded
-          let isDoneInAny = false;
-          challenges.forEach(ch => {
-            if (!(ch.rowIds || []).includes(id)) return;
-            const idx = ch.rowIds.indexOf(id);
-            // Row is "analyzed" if it's filled and in the analyzed count
-            // It's "uploaded" if uploadedSlots[idx] is true
-            const slotUploaded = (ch.uploadedSlots || [])[idx];
-            if (slotUploaded) isDoneInAny = true;
-          });
-          if (isDoneInAny) tr.classList.add('fully-done');
-        }
-      }
-    });
-    // Refresh honor cards
-    renderHonorCards();
-  };
-
-  // Patch the debounced row update to auto-link new content
-  const _origDebouncedRowUpdate = debouncedRowUpdate;
-  // We can't easily replace the const above; instead hook via blur events already firing saveRows
-  // The cleanest way: poll rows for new filled ones when home is rendered, or hook saveRows directly.
-  const _origSaveRows = saveRows;
-  saveRows = async function() {
-    await _origSaveRows();
-    // Auto-link newly filled rows
-    let changed = false;
-    for (const r of rows) {
-      if (isFilled(r)) {
-        for (const ch of challenges) {
-          if (!isChallengeActive(ch)) continue;
-          if (!(ch.rowIds || []).includes(r.id)) {
-            ch.rowIds = ch.rowIds || [];
-            ch.rowIds.push(r.id);
-            changed = true;
-          }
-        }
-      }
-    }
-    if (changed) {
-      await saveChallenges();
-      // Check milestones for each
-      challenges.forEach(ch => checkMilestone(ch));
-      updateAuroraIndicator();
-      // If home is visible, refresh it
-      if (document.getElementById('home-view').style.display !== 'none') {
-        renderHome();
-      }
-    }
-  };
 
   // ============================================================
   // === 설정 모달 ==============================================
