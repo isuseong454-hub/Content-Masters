@@ -1403,342 +1403,6 @@
     color: var(--text-main);
   }
 
-  /* ===== MOODBOARD — FREE CANVAS ===== */
-  .mb-wrap {
-    display: none;
-    flex: 1;
-    flex-direction: column;
-    overflow: hidden;
-    position: relative;
-  }
-
-  .mb-bar {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 20px;
-    border-bottom: 1px solid var(--line);
-    background: var(--bg-deep);
-    z-index: 20;
-    flex-wrap: wrap;
-  }
-
-  .mb-name {
-    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
-    font-size: 22px;
-    font-weight: 800;
-    color: var(--text-main);
-    background: transparent;
-    border: none;
-    border-bottom: 1px solid transparent;
-    padding: 2px 4px;
-    min-width: 120px;
-    max-width: 220px;
-  }
-  .mb-name:focus { outline: none; border-bottom-color: var(--emerald); }
-
-  .mb-desc {
-    flex: 1;
-    min-width: 160px;
-    max-width: 360px;
-    background: transparent;
-    border: none;
-    border-bottom: 1px solid var(--line);
-    color: var(--sage);
-    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
-    
-    font-size: 13px;
-    padding: 4px;
-  }
-  .mb-desc:focus { outline: none; border-bottom-color: var(--emerald); }
-
-  .mb-count {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    color: var(--text-mute);
-    letter-spacing: 0.15em;
-  }
-
-  .mb-bar-btn {
-    background: var(--bg-elev);
-    border: 1px solid var(--line);
-    color: var(--sage);
-    padding: 8px 12px;
-    border-radius: 4px;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.08em;
-    cursor: pointer;
-    text-transform: uppercase;
-    white-space: nowrap;
-  }
-  .mb-bar-btn:hover { border-color: var(--emerald); color: var(--emerald); }
-  .mb-bar-btn.primary { background: var(--emerald); color: var(--bg-void); border-color: var(--emerald); font-weight: 600; }
-
-  /* Zoom controls */
-  .mb-zoom {
-    display: flex;
-    align-items: center;
-    gap: 2px;
-    background: var(--bg-elev);
-    border: 1px solid var(--line);
-    border-radius: 4px;
-    overflow: hidden;
-  }
-  .mb-zoom button {
-    background: none;
-    border: none;
-    color: var(--sage);
-    width: 30px;
-    height: 30px;
-    font-size: 15px;
-    cursor: pointer;
-    line-height: 1;
-  }
-  .mb-zoom button:hover { background: var(--bg-row-hover); color: var(--emerald); }
-  .mb-zoom-val {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    color: var(--text-sub);
-    min-width: 42px;
-    text-align: center;
-    cursor: pointer;
-  }
-
-  /* Canvas viewport */
-  .mb-viewport {
-    flex: 1;
-    overflow: hidden;
-    position: relative;
-    background:
-      radial-gradient(circle at 1px 1px, var(--grid-line-soft) 1px, transparent 0);
-    background-size: 28px 28px;
-    cursor: grab;
-    touch-action: none;
-  }
-  .mb-viewport.panning { cursor: grabbing; }
-  .mb-viewport.adding { cursor: copy; }
-
-  .mb-canvas {
-    position: absolute;
-    top: 0;
-    left: 0;
-    transform-origin: 0 0;
-    width: 4000px;
-    height: 4000px;
-  }
-
-  /* Floating image item */
-  .mb-item {
-    position: absolute;
-    border: 1px solid var(--line);
-    border-radius: 6px;
-    overflow: hidden;
-    background: var(--bg-card);
-    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
-    cursor: move;
-    user-select: none;
-  }
-  .mb-item.selected {
-    border-color: var(--emerald);
-    box-shadow: 0 0 0 2px var(--emerald-glow), 0 8px 28px rgba(0,0,0,0.5);
-    z-index: 50 !important;
-  }
-
-  .mb-item-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    pointer-events: none;
-  }
-
-  /* Palette strip on item */
-  .mb-item-palette {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 14px;
-    display: flex;
-    opacity: 0;
-    transition: opacity 0.15s;
-  }
-  .mb-item:hover .mb-item-palette,
-  .mb-item.selected .mb-item-palette { opacity: 1; }
-  .mb-item-swatch { flex: 1; cursor: pointer; }
-
-  /* Memo bubble */
-  .mb-item-memo {
-    position: absolute;
-    bottom: 18px;
-    left: 6px;
-    right: 6px;
-    background: rgba(5, 11, 8, 0.82);
-    color: var(--text-main);
-    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
-    font-size: 11px;
-    line-height: 1.4;
-    padding: 6px 8px;
-    border-radius: 4px;
-    backdrop-filter: blur(4px);
-    border: 1px solid var(--emerald-line);
-    display: none;
-    max-height: 50%;
-    overflow-y: auto;
-    white-space: pre-wrap;
-  }
-  .mb-item-memo.show { display: block; }
-
-  /* Toolbar that floats over selected item */
-  .mb-item-tools {
-    position: absolute;
-    top: -34px;
-    left: 0;
-    display: none;
-    gap: 4px;
-    z-index: 60;
-  }
-  .mb-item.selected .mb-item-tools { display: flex; }
-
-  .mb-tool-btn {
-    width: 28px;
-    height: 28px;
-    border-radius: 5px;
-    background: var(--bg-elev);
-    border: 1px solid var(--emerald-line);
-    color: var(--sage);
-    cursor: pointer;
-    font-size: 13px;
-    line-height: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .mb-tool-btn:hover { background: var(--emerald-deep); color: var(--text-main); }
-  .mb-tool-btn.memo-on { background: var(--emerald-deep); color: var(--text-main); }
-  .mb-tool-btn.del:hover { background: var(--danger); color: #fff; border-color: var(--danger); }
-
-  /* Resize handle */
-  .mb-resize {
-    position: absolute;
-    right: -1px;
-    bottom: -1px;
-    width: 20px;
-    height: 20px;
-    background: var(--emerald);
-    border-radius: 5px 0 5px 0;
-    cursor: nwse-resize;
-    display: none;
-    z-index: 55;
-    align-items: center;
-    justify-content: center;
-    color: var(--bg-void);
-    font-size: 10px;
-  }
-  .mb-item.selected .mb-resize { display: flex; }
-
-  /* Memo editor popup */
-  .mb-memo-pop {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.7);
-    z-index: 1100;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    backdrop-filter: blur(4px);
-    padding: 20px;
-  }
-  .mb-memo-pop.show { display: flex; }
-  .mb-memo-box {
-    background: var(--bg-card);
-    border: 1px solid var(--emerald-line);
-    border-radius: 12px;
-    padding: 20px;
-    width: 100%;
-    max-width: 420px;
-  }
-  .mb-memo-box h3 {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
-    letter-spacing: 0.2em;
-    color: var(--sage);
-    text-transform: uppercase;
-    margin-bottom: 12px;
-    font-weight: 500;
-  }
-  .mb-memo-textarea {
-    width: 100%;
-    min-height: 100px;
-    background: var(--bg-input);
-    border: 1px solid var(--line);
-    color: var(--text-main);
-    border-radius: 6px;
-    padding: 12px;
-    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
-    font-size: 13px;
-    line-height: 1.5;
-    resize: vertical;
-  }
-  .mb-memo-textarea:focus { outline: none; border-color: var(--emerald); }
-  .mb-memo-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 14px; }
-  .mb-memo-btns button {
-    padding: 11px;
-    border-radius: 6px;
-    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
-    font-size: 12px;
-    font-weight: 700;
-    cursor: pointer;
-    border: none;
-  }
-  .mb-memo-cancel { background: var(--bg-elev); color: var(--text-sub); border: 1px solid var(--line); }
-  .mb-memo-save { background: var(--emerald); color: var(--bg-void); }
-
-  /* Empty hint */
-  .mb-canvas-hint {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-    pointer-events: none;
-  }
-  .mb-canvas-hint .mark {
-    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
-    
-    font-size: 60px;
-    color: var(--emerald);
-    opacity: 0.3;
-  }
-  .mb-canvas-hint .txt {
-    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
-    
-    font-size: 15px;
-    color: var(--sage);
-    margin-top: 10px;
-  }
-
-  /* Big drop zone overlay */
-  .mb-dropzone {
-    position: fixed;
-    inset: 0;
-    background: rgba(5, 11, 8, 0.92);
-    z-index: 500;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    border: 3px dashed var(--emerald);
-    pointer-events: none;
-  }
-  .mb-dropzone.show { display: flex; }
-  .mb-dropzone-txt {
-    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif;
-    
-    font-size: 28px;
-    color: var(--emerald);
-  }
-
   /* ===== HOME (대시보드) ===== */
   .home-wrap {
     display: none;
@@ -19606,9 +19270,6 @@
       <button class="sh-sb-item sh-sb-main" id="ws-sorter" title="AI 컨텐츠 정리">
         <span class="sh-sb-icon">🤖</span><span class="sh-sb-label">AI 컨텐츠 정리</span>
       </button>
-      <button class="sh-sb-item" data-ws="moodboard" id="ws-moodboard">
-        <span class="sh-sb-icon">◳</span><span class="sh-sb-label">무드보드</span>
-      </button>
       <button class="sh-sb-item" data-ws="pattern" id="ws-pattern">
         <span class="sh-sb-icon">🎯</span><span class="sh-sb-label">패턴 파악</span>
       </button>
@@ -19776,30 +19437,6 @@
         <div class="sb-kw-trigger-hint">반응하는 단어를 모아두세요</div>
       </div>
     </div>
-
-    <!-- MOODBOARD-ONLY SIDEBAR -->
-    <div id="sb-moodboard-sections" style="display:none;">
-      <div class="sh-sb-section">
-        <div class="sh-sb-section-title">MOODBOARD</div>
-        <button class="sh-sb-item" id="mb-sb-add">
-          <span class="sh-sb-icon">+</span><span class="sh-sb-label">이미지 추가</span>
-        </button>
-      </div>
-      <div class="sh-sb-section">
-        <div class="sh-sb-section-title">도구</div>
-        <div class="sh-sb-action-grid">
-          <button class="sh-sb-action full" id="mb-act-backup">💾 백업</button>
-          <button class="sh-sb-action full" id="mb-act-restore">📥 복원</button>
-        </div>
-      </div>
-      <div class="sh-sb-section">
-        <div class="sh-sb-section-title">TIP</div>
-        <div style="padding:6px 10px;font-size:11px;color:var(--text-sub);line-height:1.6;font-family:'Pretendard',sans-serif;">
-          내 계정의 비주얼 기준점.<br/>색감·분위기를 모아두고<br/>촬영·편집 전에 비춰보세요.
-        </div>
-      </div>
-    </div>
-  </aside>
 
   <!-- ===== MAIN ===== -->
   <main class="sh-main">
@@ -20541,7 +20178,7 @@
               레퍼런스가 쌓이면<br/><span style="color:var(--emerald);">감각이 된다.</span>
             </div>
             <div style="margin-top:16px;font-size:12.5px;color:var(--text-sub);line-height:1.7;font-weight:500;">
-              모든 벤치마킹는 자동으로 저장됩니다.<br/>시트에서 분석을, 무드보드에서 비주얼 큐레이션을 이어가세요.
+              모든 벤치마킹는 자동으로 저장됩니다.<br/>시트에서 분석을 이어가세요.
             </div>
           </section>
         </div>
@@ -21778,29 +21415,6 @@
       </div>
     </div>
 
-    <!-- ===== MOODBOARD VIEW (FREE CANVAS) ===== -->
-    <div id="mb-view" class="mb-wrap" style="display:none;">
-      <div class="mb-bar">
-        <input type="text" class="mb-name" id="mb-name" value="My Moodboard" />
-        <input type="text" class="mb-desc" id="mb-desc" placeholder="컨셉 한 줄 — 예: 따뜻하면서 시크한 변신 영상 톤" />
-        <span class="mb-count" id="mb-count">00</span>
-        <div class="mb-zoom">
-          <button id="mb-zoom-out">−</button>
-          <span class="mb-zoom-val" id="mb-zoom-val" title="원래 크기로">100%</span>
-          <button id="mb-zoom-in">+</button>
-        </div>
-        <button class="mb-bar-btn" id="mb-fit">⤢ 전체보기</button>
-        <button class="mb-bar-btn primary" id="mb-add-btn">+ 이미지</button>
-      </div>
-      <div class="mb-viewport" id="mb-viewport">
-        <div class="mb-canvas" id="mb-canvas"></div>
-        <div class="mb-canvas-hint" id="mb-canvas-hint">
-          <div class="mark">◳</div>
-          <div class="txt">이미지를 끌어다 놓거나 [+ 이미지]를 눌러보세요<br/>자유롭게 옮기고 크기를 조절할 수 있어요</div>
-        </div>
-      </div>
-    </div>
-
     <!-- ===== 패턴 파악 (작전도) VIEW ===== -->
     <!-- ═══════════════ 🎬 제작소 v2 (st2) — 홈+고객 셸 (내용은 JS 렌더) ═══════════════ -->
     <div id="st2-view" style="display:none;">
@@ -22397,7 +22011,7 @@
       'shv4-funnel-slots': 'funnel_slots',
       'shv4-week-slots': 'week_slots'
     };
-    // profiles 묶음(설정·커스텀목록·무드보드·홈/챌린지) — profiles.data jsonb 한 행에 모아 동기화
+    // profiles 묶음(설정·커스텀목록·홈) — profiles.data jsonb 한 행에 모아 동기화
     const PROFILE_KEYS = new Set([
       'shv4-prefs',
       'shv4-custom-keywords', 'shv4-custom-formats', 'shv4-custom-audio', 'shv4-custom-tags', 'shv4-custom-viral', 'shv4-custom-comment', 'shv4-collects', 'shv4-type-trash', 'shv4-custom-content-types',
@@ -22408,7 +22022,7 @@
       'hmv1-northstars', 'hmv1-visitdays', 'hmv1-ideaboards', 'hmv1-structures',
       'hmv1-growth', 'shv4-custom-thumb-types', 'shv4-custom-copy-types', 'hmv1-dash'
     ]);
-    // 이미지 키(벤치마킹 시트·무드보드) → Supabase Storage 버킷
+    // 이미지 키(벤치마킹 시트) → Supabase Storage 버킷
     const IMG_BUCKET = 'cm-images';
     function isSynced(k) { return !!KIND[k]; }
     function isProfile(k) { return PROFILE_KEYS.has(k); }
@@ -22921,7 +22535,32 @@
   const PART_TYPES = BASE_TYPES;
 
   let rows = [];
-  let imageCache = {};
+  // 🖼 v530 · 이미지 캐시에 «최근 N장만» 남긴다 (LRU).
+  //   전에는 한 번 읽은 사진을 앱 끌 때까지 안 놨다 → 오래 켜두면 램이 계속 찼다.
+  //   이제 새 사진이 들어오면 «가장 오래 안 본 것»부터 버린다. 읽을 때마다 순번이 갱신된다.
+  const IMG_CACHE_MAX = 60;                       // 사진 60장 ≈ 6~12MB (장당 100~200KB)
+  let imageCache = (function () {
+    const map = new Map();
+    return new Proxy({}, {
+      get(_, k) {
+        if (typeof k !== 'string') return undefined;
+        if (!map.has(k)) return undefined;
+        const v = map.get(k); map.delete(k); map.set(k, v);   // 최근 쓴 것을 뒤로
+        return v;
+      },
+      set(_, k, v) {
+        if (map.has(k)) map.delete(k);
+        map.set(k, v);
+        while (map.size > IMG_CACHE_MAX) map.delete(map.keys().next().value);  // 가장 오래된 것부터
+        return true;
+      },
+      has(_, k) { return map.has(k); },
+      deleteProperty(_, k) { map.delete(k); return true; },
+      ownKeys() { return Array.from(map.keys()); },
+      getOwnPropertyDescriptor() { return { enumerable: true, configurable: true }; }
+    });
+  })();
+  window.__imgCacheSize = () => Object.keys(imageCache).length;   // 검증용
   let viewMode = 'all';   // 'all' | 'filled'
   let sortBy = 'newest'; // v407: 기본=최신순 (새로 담은 게 바로 위에 보이게)
   let filterBy = 'all';
@@ -24807,9 +24446,6 @@
     }
     if (ctx.space === 'formatboard' && ctx.isEmpty) {
       return ['카드를 유형별로 정리해볼까요?', '시트에서 분석한 행을 드래그해서\n유형 칸에 옮길 수 있어요.'];
-    }
-    if (ctx.space === 'moodboard' && ctx.isEmpty) {
-      return ['무드보드는 영감을 모으는 곳', '마음에 드는 썸네일, 후킹 문구를\n자유롭게 모아두세요.'];
     }
 
     // 기본 인사
@@ -28827,8 +28463,6 @@
     // 로그인 직후 시트가 번쩍 보였다 홈으로 가는 현상 방지 — async 초기화 전에 즉시 홈 표시
     try { switchWorkspace('home'); } catch (e) { console.error('[init] switchWorkspace(home) 실패:', e); }
 
-    // Moodboard init — 한 모듈이 실패해도 나머지 init이 멈추지 않게 각각 보호
-    try { await initMoodboard(); } catch (e) { console.error('[init] initMoodboard 실패:', e); }
 
     // Home / Challenge init
     try { await initHome(); } catch (e) { console.error('[init] initHome 실패:', e); }
@@ -32475,7 +32109,7 @@
   }
 
   // 🧭 방 레일 — 어느 방/어느 화면인지 항상 표시
-  const RR_LABELS = { home: '트레이닝 룸', sheet: '벤치마킹 시트', customer: '고객 분석', moodboard: '무드보드',
+  const RR_LABELS = { home: '트레이닝 룸', sheet: '벤치마킹 시트', customer: '고객 분석', 
     formatboard: '분류', pattern: '패턴 파악', northstar: '라이벌 멘토', diagnose: '릴스 진단',
     scripts: '내 원고', thumb: '썸네일', studio: '컨텐츠 제작소' };
   function rrUpdate(ws) {
@@ -32535,7 +32169,7 @@
     const homeView = document.getElementById('home-view');
     const sheetView = document.getElementById('sh-sheet-view');
     const statsView = document.getElementById('sh-stats-view');
-    const mbView = document.getElementById('mb-view');
+    const mbView = { style: {} };   // v530 · 무드보드 삭제 — 남은 분기의 참조를 안전하게 흡수
     const fbView = document.getElementById('fb-view');
     const thumbView = document.getElementById('thumb-view');
     const scView = document.getElementById('sc-view');
@@ -32545,7 +32179,7 @@
     const patternView = document.getElementById('pattern-view');
     const st2View = document.getElementById('st2-view'); // 🎬 제작소 v2
     const sheetSb = document.getElementById('sb-sheet-sections');
-    const mbSb = document.getElementById('sb-moodboard-sections');
+    const mbSb = { style: {} };     // v530 · 무드보드 삭제
     const cuSb = document.getElementById('sb-customer-sections');
     const topbarTitle = document.querySelector('.sh-topbar-title');
     const topbarMeta = document.getElementById('sh-meta');
@@ -32626,18 +32260,6 @@
       if (cuSb) cuSb.style.display = 'none';
       topbar.style.display = 'none';
       renderScripts();
-    } else if (ws === 'moodboard') {
-      hideAll();
-      mbView.style.display = 'flex';
-      sheetSb.style.display = 'none';
-      mbSb.style.display = 'block';
-      if (cuSb) cuSb.style.display = 'none';
-      topbar.style.display = 'flex';
-      topbarTitle.innerHTML = 'Mood <span class="em">Board</span>';
-      topbarMeta.style.display = 'none';
-      search.style.display = 'none';
-      if (addTop) addTop.style.display = 'none';
-      renderMoodboard();
     } else if (ws === 'northstar') {
       hideAll();
       if (nsView) { nsView.style.display = 'flex'; nsView.style.flexDirection = 'column'; }
@@ -32698,525 +32320,6 @@
       el.style.display = 'none';
       el.innerHTML = '';
     }
-  }
-
-  // ============================================================
-  // ================= MOODBOARD (FREE CANVAS) ==================
-  // ============================================================
-  const MB_META_KEY = 'mbv2-meta';
-  const MB_CARDS_KEY = 'mbv2-cards';
-  const MB_IMG_PREFIX = 'mbv2-img-';
-
-  let mbMeta = { name: 'My Moodboard', desc: '' };
-  let mbCards = []; // {id, x, y, w, h, z, memo, palette, showMemo, createdAt}
-  let mbImgCache = {};
-  let mbView_ = { scale: 1, tx: 80, ty: 80 };
-  let mbSelected = null;
-  let mbZTop = 1;
-
-  async function mbLoadMeta() {
-    try { const r = await window.storage.get(MB_META_KEY); if (r) mbMeta = JSON.parse(r.value); } catch (e) {}
-  }
-  async function mbSaveMeta() {
-    try { await window.storage.set(MB_META_KEY, JSON.stringify(mbMeta)); } catch (e) {}
-  }
-  async function mbLoadCards() {
-    try { const r = await window.storage.get(MB_CARDS_KEY); mbCards = r ? JSON.parse(r.value) : []; } catch (e) { mbCards = []; }
-    mbCards.forEach(c => { if (c.z > mbZTop) mbZTop = c.z; });
-  }
-  const mbSaveCards = debounce(async () => {
-    try { await window.storage.set(MB_CARDS_KEY, JSON.stringify(mbCards)); } catch (e) { toast('저장 실패'); }
-  }, 300);
-  async function mbSaveCardsNow() {
-    try { await window.storage.set(MB_CARDS_KEY, JSON.stringify(mbCards)); } catch (e) { toast('저장 실패'); }
-  }
-  async function mbLoadImg(id) {
-    const key = MB_IMG_PREFIX + id;
-    if (mbImgCache[key]) return mbImgCache[key];
-    try { const r = await window.storage.get(key); if (r) { mbImgCache[key] = r.value; return r.value; } } catch (e) {}
-    return mbImgCache[key] || null;
-  }
-  async function mbSaveImg(id, dataUrl) {
-    const key = MB_IMG_PREFIX + id;
-    // Cache FIRST so the image always renders this session even if persistence fails
-    mbImgCache[key] = dataUrl;
-    try { await window.storage.set(key, dataUrl); } catch (e) { /* persistence may be unavailable; in-memory still works */ }
-  }
-  async function mbDeleteImg(id) {
-    const key = MB_IMG_PREFIX + id;
-    delete mbImgCache[key];
-    try { await window.storage.delete(key); } catch (e) {}
-  }
-
-  function extractPalette(img, count) {
-    try {
-      const canvas = document.createElement('canvas');
-      const size = 60;
-      canvas.width = size; canvas.height = size;
-      const ctx = canvas.getContext('2d');
-      ctx.drawImage(img, 0, 0, size, size);
-      const data = ctx.getImageData(0, 0, size, size).data;
-      const buckets = {};
-      for (let i = 0; i < data.length; i += 4) {
-        if (data[i + 3] < 125) continue;
-        const r = data[i], g = data[i + 1], b = data[i + 2];
-        const key = (Math.round(r/32)*32) + ',' + (Math.round(g/32)*32) + ',' + (Math.round(b/32)*32);
-        if (!buckets[key]) buckets[key] = { count: 0, r: 0, g: 0, b: 0 };
-        buckets[key].count++; buckets[key].r += r; buckets[key].g += g; buckets[key].b += b;
-      }
-      const sorted = Object.values(buckets).sort((a, b) => b.count - a.count);
-      const palette = [], used = [];
-      for (const bk of sorted) {
-        if (palette.length >= count) break;
-        const ar = Math.round(bk.r/bk.count), ag = Math.round(bk.g/bk.count), ab = Math.round(bk.b/bk.count);
-        if (used.some(u => Math.abs(u[0]-ar)+Math.abs(u[1]-ag)+Math.abs(u[2]-ab) < 40)) continue;
-        used.push([ar, ag, ab]);
-        palette.push('#' + [ar, ag, ab].map(x => x.toString(16).padStart(2, '0')).join(''));
-      }
-      return palette.length ? palette : ['#333333'];
-    } catch (e) { return ['#333333']; }
-  }
-
-  function mbProcessImage(file) {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const img = new Image();
-        img.onload = () => {
-          const maxDim = 800;
-          const canvas = document.createElement('canvas');
-          let w = img.width, h = img.height;
-          if (w > maxDim || h > maxDim) {
-            if (w > h) { h = (h * maxDim) / w; w = maxDim; } else { w = (w * maxDim) / h; h = maxDim; }
-          }
-          canvas.width = w; canvas.height = h;
-          canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-          resolve({ dataUrl: canvas.toDataURL('image/jpeg', 0.82), palette: extractPalette(img, 5), ratio: img.height / img.width });
-        };
-        img.onerror = reject;
-        img.src = e.target.result;
-      };
-      reader.onerror = reject;
-      reader.readAsDataURL(file);
-    });
-  }
-
-  async function mbAddFiles(files) {
-    let added = 0;
-    let offset = 0;
-    for (const file of files) {
-      if (!file.type.startsWith('image/')) continue;
-      try {
-        const { dataUrl, palette, ratio } = await mbProcessImage(file);
-        const id = 'mb_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8);
-        await mbSaveImg(id, dataUrl);
-        // place near center of current view
-        const vp = document.getElementById('mb-viewport');
-        const cx = (-mbView_.tx + vp.clientWidth / 2) / mbView_.scale;
-        const cy = (-mbView_.ty + vp.clientHeight / 2) / mbView_.scale;
-        const w = 220;
-        const h = Math.round(w * (ratio || 1));
-        mbZTop++;
-        mbCards.push({
-          id, x: cx - w/2 + offset, y: cy - h/2 + offset, w, h, z: mbZTop,
-          memo: '', palette, showMemo: false, createdAt: Date.now()
-        });
-        offset += 28;
-        added++;
-      } catch (e) {}
-    }
-    if (added > 0) {
-      await mbSaveCardsNow();
-      renderMoodboard();
-      toast(`이미지 ${added}개 추가됨`);
-    }
-  }
-
-  function applyViewTransform() {
-    const canvas = document.getElementById('mb-canvas');
-    canvas.style.transform = `translate(${mbView_.tx}px, ${mbView_.ty}px) scale(${mbView_.scale})`;
-    document.getElementById('mb-zoom-val').textContent = Math.round(mbView_.scale * 100) + '%';
-  }
-
-  async function renderMoodboard() {
-    document.getElementById('mb-name').value = mbMeta.name || 'My Moodboard';
-    document.getElementById('mb-desc').value = mbMeta.desc || '';
-    document.getElementById('mb-count').textContent = String(mbCards.length).padStart(2, '0');
-    document.getElementById('mb-canvas-hint').style.display = mbCards.length ? 'none' : 'block';
-
-    const canvas = document.getElementById('mb-canvas');
-    const htmls = await Promise.all(mbCards.map(async (c) => {
-      const img = await mbLoadImg(c.id);
-      const swatches = (c.palette || []).map(hex =>
-        `<div class="mb-item-swatch" style="background:${esc(hex)};" data-copy="${esc(hex)}" title="${esc(hex)}"></div>`
-      ).join('');
-      return `
-        <div class="mb-item ${mbSelected === c.id ? 'selected' : ''}" data-id="${c.id}"
-             style="left:${c.x}px;top:${c.y}px;width:${c.w}px;height:${c.h}px;z-index:${c.z};">
-          <div class="mb-item-tools">
-            <button class="mb-tool-btn memo ${c.showMemo ? 'memo-on' : ''}" data-tool="memo" data-id="${c.id}" title="메모">✎</button>
-            <button class="mb-tool-btn" data-tool="front" data-id="${c.id}" title="맨 앞으로">⬆</button>
-            <button class="mb-tool-btn del" data-tool="del" data-id="${c.id}" title="삭제">×</button>
-          </div>
-          ${img ? `<img class="mb-item-img" src="${esc(img)}" alt="" draggable="false"/>` : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:var(--text-faint);font-family:'Pretendard',sans-serif;">이미지 없음</div>`}
-          <div class="mb-item-memo ${c.showMemo && c.memo ? 'show' : ''}">${esc(c.memo || '')}</div>
-          ${swatches ? `<div class="mb-item-palette">${swatches}</div>` : ''}
-          <div class="mb-resize" data-resize="${c.id}">⌟</div>
-        </div>
-      `;
-    }));
-    canvas.innerHTML = htmls.join('');
-    applyViewTransform();
-    wireItems();
-  }
-
-  function wireItems() {
-    const canvas = document.getElementById('mb-canvas');
-
-    canvas.querySelectorAll('.mb-item').forEach(el => {
-      const id = el.dataset.id;
-
-      // Drag to move
-      el.addEventListener('pointerdown', (e) => {
-        if (e.target.closest('.mb-tool-btn') || e.target.closest('.mb-resize') || e.target.closest('.mb-item-swatch')) return;
-        e.stopPropagation();
-        selectItem(id);
-        const card = mbCards.find(c => c.id === id);
-        if (!card) return;
-        const startX = e.clientX, startY = e.clientY;
-        const origX = card.x, origY = card.y;
-        el.setPointerCapture(e.pointerId);
-        const onMove = (ev) => {
-          card.x = origX + (ev.clientX - startX) / mbView_.scale;
-          card.y = origY + (ev.clientY - startY) / mbView_.scale;
-          el.style.left = card.x + 'px';
-          el.style.top = card.y + 'px';
-        };
-        const onUp = () => {
-          el.removeEventListener('pointermove', onMove);
-          el.removeEventListener('pointerup', onUp);
-          mbSaveCards();
-        };
-        el.addEventListener('pointermove', onMove);
-        el.addEventListener('pointerup', onUp);
-      });
-
-      // Resize
-      const rz = el.querySelector('.mb-resize');
-      if (rz) {
-        rz.addEventListener('pointerdown', (e) => {
-          e.stopPropagation();
-          selectItem(id);
-          const card = mbCards.find(c => c.id === id);
-          if (!card) return;
-          const startX = e.clientX, startY = e.clientY;
-          const origW = card.w, origH = card.h;
-          const ratio = origH / origW;
-          rz.setPointerCapture(e.pointerId);
-          const onMove = (ev) => {
-            let nw = origW + (ev.clientX - startX) / mbView_.scale;
-            nw = Math.max(80, nw);
-            card.w = nw;
-            card.h = nw * ratio;
-            el.style.width = card.w + 'px';
-            el.style.height = card.h + 'px';
-          };
-          const onUp = () => {
-            rz.removeEventListener('pointermove', onMove);
-            rz.removeEventListener('pointerup', onUp);
-            mbSaveCards();
-          };
-          rz.addEventListener('pointermove', onMove);
-          rz.addEventListener('pointerup', onUp);
-        });
-      }
-    });
-
-    // Tool buttons
-    canvas.querySelectorAll('[data-tool]').forEach(btn => {
-      btn.onclick = async (e) => {
-        e.stopPropagation();
-        const id = btn.dataset.id;
-        const tool = btn.dataset.tool;
-        const card = mbCards.find(c => c.id === id);
-        if (!card) return;
-        if (tool === 'del') {
-          if (confirm('이 이미지를 삭제할까요?')) {
-            await mbDeleteImg(id);
-            mbCards = mbCards.filter(c => c.id !== id);
-            mbSelected = null;
-            await mbSaveCardsNow();
-            renderMoodboard();
-            toast('삭제됨');
-          }
-        } else if (tool === 'front') {
-          mbZTop++;
-          card.z = mbZTop;
-          await mbSaveCardsNow();
-          renderMoodboard();
-        } else if (tool === 'memo') {
-          openMemoEditor(id);
-        }
-      };
-    });
-
-    // Swatch copy
-    canvas.querySelectorAll('[data-copy]').forEach(sw => {
-      sw.onclick = (e) => {
-        e.stopPropagation();
-        const hex = sw.dataset.copy;
-        if (navigator.clipboard) navigator.clipboard.writeText(hex).then(() => toast(hex + ' 복사됨')).catch(() => {});
-      };
-    });
-  }
-
-  function selectItem(id) {
-    mbSelected = id;
-    document.querySelectorAll('.mb-item').forEach(el => {
-      el.classList.toggle('selected', el.dataset.id === id);
-    });
-  }
-
-  // Memo editor
-  let memoEditId = null;
-  function openMemoEditor(id) {
-    memoEditId = id;
-    const card = mbCards.find(c => c.id === id);
-    document.getElementById('mb-memo-textarea').value = card ? (card.memo || '') : '';
-    document.getElementById('mb-memo-pop').classList.add('show');
-    document.getElementById('mb-memo-textarea').focus();
-  }
-  function closeMemoEditor() {
-    document.getElementById('mb-memo-pop').classList.remove('show');
-    memoEditId = null;
-  }
-  async function saveMemo() {
-    if (!memoEditId) return;
-    const card = mbCards.find(c => c.id === memoEditId);
-    if (card) {
-      card.memo = document.getElementById('mb-memo-textarea').value.trim();
-      card.showMemo = !!card.memo;
-      await mbSaveCardsNow();
-      renderMoodboard();
-      toast(card.memo ? '메모 저장됨' : '메모 비움');
-    }
-    closeMemoEditor();
-  }
-
-  // Zoom & pan
-  function setZoom(newScale, centerX, centerY) {
-    const vp = document.getElementById('mb-viewport');
-    const rect = vp.getBoundingClientRect();
-    const cx = centerX != null ? centerX - rect.left : vp.clientWidth / 2;
-    const cy = centerY != null ? centerY - rect.top : vp.clientHeight / 2;
-    const old = mbView_.scale;
-    newScale = Math.max(0.2, Math.min(3, newScale));
-    // keep point under cursor stable
-    mbView_.tx = cx - (cx - mbView_.tx) * (newScale / old);
-    mbView_.ty = cy - (cy - mbView_.ty) * (newScale / old);
-    mbView_.scale = newScale;
-    applyViewTransform();
-  }
-
-  function fitToContent() {
-    if (mbCards.length === 0) {
-      mbView_ = { scale: 1, tx: 80, ty: 80 };
-      applyViewTransform();
-      return;
-    }
-    let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
-    mbCards.forEach(c => {
-      minX = Math.min(minX, c.x); minY = Math.min(minY, c.y);
-      maxX = Math.max(maxX, c.x + c.w); maxY = Math.max(maxY, c.y + c.h);
-    });
-    const pad = 60;
-    const vp = document.getElementById('mb-viewport');
-    const cw = maxX - minX + pad * 2;
-    const ch = maxY - minY + pad * 2;
-    const scale = Math.min(vp.clientWidth / cw, vp.clientHeight / ch, 1.5);
-    mbView_.scale = Math.max(0.2, scale);
-    mbView_.tx = -(minX - pad) * mbView_.scale + (vp.clientWidth - cw * mbView_.scale) / 2;
-    mbView_.ty = -(minY - pad) * mbView_.scale + (vp.clientHeight - ch * mbView_.scale) / 2;
-    applyViewTransform();
-  }
-
-  async function mbExportBackup() {
-    const imgs = {};
-    for (const c of mbCards) { const img = await mbLoadImg(c.id); if (img) imgs[c.id] = img; }
-    const payload = { version: 2, type: 'moodboard', meta: mbMeta, cards: mbCards, images: imgs };
-    const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url; a.download = `moodboard_backup_${new Date().toISOString().slice(0,10)}.json`;
-    document.body.appendChild(a); a.click(); document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-    toast('무드보드 백업 다운로드');
-  }
-
-  function mbImportBackup(e) {
-    const file = e.target.files[0];
-    if (!file) { e.target.value = ''; return; }
-    const reader = new FileReader();
-    reader.onload = async (ev) => {
-      try {
-        const data = JSON.parse(ev.target.result);
-        if (data.type !== 'moodboard' || !Array.isArray(data.cards)) throw new Error('Invalid');
-        if (!confirm(`무드보드를 불러옵니다. 현재 이미지 ${data.cards.length}개로 교체됩니다. 계속할까요?`)) { e.target.value = ''; return; }
-        for (const c of mbCards) await mbDeleteImg(c.id);
-        mbMeta = data.meta || mbMeta;
-        mbCards = data.cards;
-        mbCards.forEach(c => { if (c.z > mbZTop) mbZTop = c.z; });
-        if (data.images) { for (const [id, val] of Object.entries(data.images)) await mbSaveImg(id, val); }
-        await mbSaveMeta();
-        await mbSaveCardsNow();
-        renderMoodboard();
-        fitToContent();
-        toast('복원 완료');
-      } catch (err) { toast('파일 형식 오류'); }
-      e.target.value = '';
-    };
-    reader.readAsText(file);
-  }
-
-  async function initMoodboard() {
-    await mbLoadMeta();
-    await mbLoadCards();
-
-    const fileInput = document.getElementById('mb-file-input');
-    const vp = document.getElementById('mb-viewport');
-
-    document.getElementById('mb-add-btn').onclick = () => fileInput.click();
-    document.getElementById('mb-sb-add').onclick = () => { switchWorkspace('moodboard'); fileInput.click(); };
-
-    fileInput.onchange = async (e) => {
-      if (e.target.files && e.target.files.length) await mbAddFiles(Array.from(e.target.files));
-      e.target.value = '';
-    };
-
-    document.getElementById('mb-name').addEventListener('blur', async (e) => {
-      mbMeta.name = e.target.value.trim() || 'My Moodboard'; await mbSaveMeta();
-    });
-    document.getElementById('mb-desc').addEventListener('blur', async (e) => {
-      mbMeta.desc = e.target.value.trim(); await mbSaveMeta();
-    });
-
-    document.getElementById('mb-act-backup').onclick = mbExportBackup;
-    document.getElementById('mb-act-restore').onclick = () => document.getElementById('mb-import-file').click();
-    document.getElementById('mb-import-file').onchange = mbImportBackup;
-
-    // Zoom buttons
-    document.getElementById('mb-zoom-in').onclick = () => setZoom(mbView_.scale * 1.2);
-    document.getElementById('mb-zoom-out').onclick = () => setZoom(mbView_.scale / 1.2);
-    document.getElementById('mb-zoom-val').onclick = () => { setZoom(1); };
-    document.getElementById('mb-fit').onclick = fitToContent;
-
-    // Wheel / trackpad gestures
-    //  - Pinch-to-zoom on trackpad fires wheel with ctrlKey=true
-    //  - Two-finger scroll on trackpad fires wheel with deltaX/deltaY (pan)
-    //  - Mouse wheel zooms (no horizontal delta, larger steps)
-    vp.addEventListener('wheel', (e) => {
-      e.preventDefault();
-      if (e.ctrlKey) {
-        // Trackpad pinch zoom (browser maps pinch to ctrl+wheel)
-        const factor = Math.exp(-e.deltaY * 0.01);
-        setZoom(mbView_.scale * factor, e.clientX, e.clientY);
-        return;
-      }
-      // Mouse wheel: large integer deltaY, no deltaX → zoom
-      const isMouseWheel = e.deltaX === 0 && Math.abs(e.deltaY) >= 50 && Number.isInteger(e.deltaY);
-      if (isMouseWheel) {
-        const delta = e.deltaY < 0 ? 1.12 : 1 / 1.12;
-        setZoom(mbView_.scale * delta, e.clientX, e.clientY);
-      } else {
-        // Trackpad two-finger scroll → pan
-        mbView_.tx -= e.deltaX;
-        mbView_.ty -= e.deltaY;
-        applyViewTransform();
-      }
-    }, { passive: false });
-
-    // Native pinch gesture support (Safari) 
-    let gestureStartScale = 1;
-    vp.addEventListener('gesturestart', (e) => { e.preventDefault(); gestureStartScale = mbView_.scale; });
-    vp.addEventListener('gesturechange', (e) => { e.preventDefault(); setZoom(gestureStartScale * e.scale, e.clientX, e.clientY); });
-    vp.addEventListener('gestureend', (e) => { e.preventDefault(); });
-
-    // Touch pinch (mobile + some trackpads)
-    let touchState = null;
-    vp.addEventListener('touchstart', (e) => {
-      if (e.target.closest('.mb-item')) return;
-      if (e.touches.length === 2) {
-        const [a, b] = e.touches;
-        touchState = {
-          dist: Math.hypot(b.clientX - a.clientX, b.clientY - a.clientY),
-          midX: (a.clientX + b.clientX) / 2,
-          midY: (a.clientY + b.clientY) / 2,
-          scale: mbView_.scale,
-          tx: mbView_.tx, ty: mbView_.ty
-        };
-      } else if (e.touches.length === 1) {
-        touchState = { single: true, x: e.touches[0].clientX, y: e.touches[0].clientY, tx: mbView_.tx, ty: mbView_.ty };
-      }
-    }, { passive: true });
-    vp.addEventListener('touchmove', (e) => {
-      if (!touchState) return;
-      if (e.touches.length === 2 && !touchState.single) {
-        e.preventDefault();
-        const [a, b] = e.touches;
-        const newDist = Math.hypot(b.clientX - a.clientX, b.clientY - a.clientY);
-        const ratio = newDist / touchState.dist;
-        setZoom(touchState.scale * ratio, touchState.midX, touchState.midY);
-      } else if (e.touches.length === 1 && touchState.single) {
-        mbView_.tx = touchState.tx + (e.touches[0].clientX - touchState.x);
-        mbView_.ty = touchState.ty + (e.touches[0].clientY - touchState.y);
-        applyViewTransform();
-      }
-    }, { passive: false });
-    vp.addEventListener('touchend', () => { touchState = null; });
-
-    // Pan (drag empty space) + deselect
-    let panning = false, panStart = null;
-    vp.addEventListener('pointerdown', (e) => {
-      if (e.target.closest('.mb-item')) return;
-      panning = true;
-      panStart = { x: e.clientX, y: e.clientY, tx: mbView_.tx, ty: mbView_.ty };
-      vp.classList.add('panning');
-      // deselect
-      mbSelected = null;
-      document.querySelectorAll('.mb-item.selected').forEach(el => el.classList.remove('selected'));
-    });
-    window.addEventListener('pointermove', (e) => {
-      if (!panning) return;
-      mbView_.tx = panStart.tx + (e.clientX - panStart.x);
-      mbView_.ty = panStart.ty + (e.clientY - panStart.y);
-      applyViewTransform();
-    });
-    window.addEventListener('pointerup', () => {
-      if (panning) { panning = false; vp.classList.remove('panning'); }
-    });
-
-    // Memo popup
-    document.getElementById('mb-memo-cancel').onclick = closeMemoEditor;
-    document.getElementById('mb-memo-save').onclick = saveMemo;
-    document.getElementById('mb-memo-pop').onclick = (e) => { if (e.target.id === 'mb-memo-pop') closeMemoEditor(); };
-
-    // Drag & drop files onto canvas
-    const mbViewEl = document.getElementById('mb-view');
-    const dropzone = document.getElementById('mb-dropzone');
-    let dragCounter = 0;
-    window.addEventListener('dragenter', (e) => {
-      if (mbViewEl.style.display !== 'none' && e.dataTransfer && Array.from(e.dataTransfer.types).includes('Files')) {
-        dragCounter++; dropzone.classList.add('show');
-      }
-    });
-    window.addEventListener('dragleave', () => { dragCounter--; if (dragCounter <= 0) { dropzone.classList.remove('show'); dragCounter = 0; } });
-    window.addEventListener('dragover', (e) => { if (mbViewEl.style.display !== 'none') e.preventDefault(); });
-    window.addEventListener('drop', async (e) => {
-      if (mbViewEl.style.display !== 'none') {
-        e.preventDefault(); dropzone.classList.remove('show'); dragCounter = 0;
-        if (e.dataTransfer && e.dataTransfer.files.length) await mbAddFiles(Array.from(e.dataTransfer.files));
-      }
-    });
   }
 
   // ============================================================
@@ -33793,76 +32896,6 @@
       .myins-sub{font-size:10.5px;font-weight:600;color:var(--text-faint);margin-left:5px;}
       .myins-coach{margin-top:12px;font-size:12px;line-height:1.55;color:var(--text-sub);padding:11px 13px;border-radius:10px;background:var(--emerald-faint);border:1px solid var(--emerald-line);}
       .myins-coach b{color:var(--emerald);font-weight:800;}
-      /* 🏆 업로드 명예의 전당 */
-      .hof-gauge{background:linear-gradient(180deg,var(--gold-soft),transparent 70%),var(--bg-card);border:1px solid rgba(245,230,211,.32);border-radius:12px;padding:13px 14px;margin-bottom:12px;}
-      .hof-gauge.reached{border-color:var(--gold);box-shadow:0 0 18px rgba(245,230,211,.22);}
-      .hof-gauge-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px;gap:8px;}
-      .hof-gauge-title{font-size:13px;font-weight:800;color:var(--text-main);}
-      .hof-gauge-count{font-family:'Pretendard',sans-serif;font-size:18px;font-weight:900;color:var(--gold);white-space:nowrap;}
-      .hof-gauge-count .sl{font-size:13px;font-weight:700;color:var(--text-mute);}
-      .hof-gauge-bar{height:8px;border-radius:99px;background:var(--bg-input);overflow:hidden;}
-      .hof-gauge-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--flare),var(--gold));transition:width .45s ease;}
-      .hof-gauge-msg{font-size:11.5px;color:var(--text-mute);margin-top:8px;}
-      .hof-gauge-msg b{color:var(--flare);}
-      .hof-gauge-msg.done{color:var(--gold);font-weight:800;}
-      .hof-setgoal{margin-top:8px;width:100%;padding:9px;border-radius:8px;border:1px dashed rgba(245,230,211,.4);background:transparent;color:var(--gold);font-weight:700;font-size:12px;cursor:pointer;}
-      .hof-setgoal:hover{background:var(--gold-soft);}
-      .hof-scope{display:flex;gap:6px;margin-bottom:10px;}
-      .hof-scope-btn{padding:5px 11px;border-radius:99px;border:1px solid var(--line);background:var(--bg-input);color:var(--text-mute);font-size:11px;font-weight:700;cursor:pointer;transition:all .15s;}
-      .hof-scope-btn.on{border-color:rgba(245,230,211,.45);color:var(--gold);background:var(--gold-soft);}
-      .hof-stage-open{margin-left:auto;padding:5px 12px;border-radius:99px;border:1px solid rgba(245,230,211,.5);background:linear-gradient(180deg,var(--gold-soft),transparent);color:var(--gold);font-size:11px;font-weight:800;cursor:pointer;transition:all .15s;white-space:nowrap;}
-      .hof-stage-open:hover{background:var(--gold-soft);box-shadow:0 0 12px rgba(245,230,211,.25);}
-      .hof-wall{display:grid;grid-template-columns:repeat(auto-fill,minmax(70px,1fr));gap:8px;}
-      .hof-tile{position:relative;aspect-ratio:9/16;border-radius:10px;overflow:hidden;border:1px solid var(--line);background:var(--bg-input);cursor:pointer;padding:0;display:flex;align-items:center;justify-content:center;transition:transform .12s,box-shadow .15s;}
-      .hof-tile.filled{border-color:rgba(245,230,211,.38);background:linear-gradient(180deg,var(--gold-soft),transparent 60%),var(--bg-card);}
-      .hof-tile.filled:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(245,230,211,.2);}
-      .hof-tile.has-img{border-color:var(--gold);}
-      .hof-tile img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:var(--bg-deep);}
-      .hof-medal{font-size:25px;filter:drop-shadow(0 0 6px rgba(245,230,211,.5));}
-      /* 사진 위 작은 코너 메달 — 작품을 가리지 않게 */
-      .hof-badge{position:absolute;top:5px;left:5px;font-size:11px;line-height:1;background:rgba(0,0,0,.42);border-radius:6px;padding:2px 4px;filter:drop-shadow(0 0 4px rgba(245,230,211,.55));}
-      .hof-cap{position:absolute;left:0;right:0;bottom:0;padding:6px 4px 4px;background:linear-gradient(0deg,rgba(0,0,0,.74),transparent);display:flex;flex-direction:column;gap:1px;}
-      .hof-tile.has-img .hof-cap{background:linear-gradient(0deg,rgba(0,0,0,.64),transparent);}
-      .hof-cap-t{font-size:9px;font-weight:700;color:#fff;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-      .hof-cap-v{font-size:8.5px;font-weight:800;color:var(--gold);text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-      .hof-best{position:absolute;top:4px;right:4px;font-size:13px;line-height:1;filter:drop-shadow(0 0 5px rgba(245,230,211,.7));z-index:2;}
-      .hof-tile.best{border-color:var(--gold);box-shadow:inset 0 0 12px rgba(245,230,211,.28),0 4px 14px rgba(245,230,211,.18);}
-      .hof-addhint{position:absolute;top:4px;left:4px;font-size:8px;font-weight:700;color:var(--gold);background:rgba(0,0,0,.55);border-radius:6px;padding:2px 4px;}
-      .hof-tile.empty{border-style:dashed;background:transparent;cursor:pointer;opacity:.5;transition:all .15s;padding:0;}
-      .hof-tile.empty:hover{opacity:1;border-color:rgba(245,230,211,.6);background:rgba(245,230,211,.05);transform:translateY(-2px);}
-      .hof-tile.empty:hover .hof-empty-mark{color:var(--gold);}
-      .hof-empty-mark{font-size:18px;color:var(--text-faint);}
-      .hof-empty{font-size:12.5px;color:var(--text-mute);padding:14px 6px;line-height:1.55;text-align:center;border:1px dashed var(--line);border-radius:10px;}
-      .hof-empty b{color:var(--flare);}
-      /* 🎖 등급/마일스톤 한 줄 */
-      .hof-milestone{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:-2px 0 12px;font-size:11.5px;}
-      .hof-tier-badge{font-weight:800;color:var(--gold);background:var(--gold-soft);border:1px solid rgba(245,230,211,.35);border-radius:99px;padding:3px 10px;}
-      .hof-tier-next{color:var(--text-mute);font-weight:600;}
-      .hof-tier-next b{color:var(--flare);font-weight:800;}
-      /* 📈 성장 곡선 */
-      .hof-curve{border:1px solid var(--line);border-radius:12px;padding:12px 12px 10px;margin-bottom:12px;background:var(--bg-card);}
-      .hof-curve-label{font-size:11px;font-weight:800;color:var(--text-mute);letter-spacing:.06em;margin-bottom:12px;}
-      .hof-curve-bars{display:flex;align-items:flex-end;gap:8px;height:90px;}
-      .hof-cbar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;height:100%;}
-      .hof-cbar-col{flex:1;width:100%;display:flex;align-items:flex-end;justify-content:center;}
-      .hof-cbar{width:62%;max-width:30px;border-radius:5px 5px 2px 2px;background:linear-gradient(180deg,rgba(245,230,211,.5),rgba(245,230,211,.14));position:relative;min-height:2px;transition:height .4s ease;}
-      .hof-cbar.cur{background:linear-gradient(180deg,var(--flare),var(--gold));}
-      .hof-cbar-n{position:absolute;top:-15px;left:50%;transform:translateX(-50%);font-size:10px;font-weight:800;color:var(--text-sub);}
-      .hof-cbar-m{font-size:9.5px;color:var(--text-faint);font-weight:600;}
-      .hof-cbar-m.cur{color:var(--flare);font-weight:800;}
-      .hof-curve-recap{font-size:11.5px;color:var(--text-mute);margin-top:10px;text-align:center;}
-      .hof-curve-recap b{color:var(--gold);}
-      /* 🌟 비전 연결 + 다음 넛지 */
-      .hof-footer{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:space-between;margin-top:13px;padding-top:12px;border-top:1px solid var(--line);}
-      .hof-foot-vision{font-size:11px;color:var(--text-mute);font-weight:600;min-width:0;max-width:40%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-      .hof-foot-diag{flex:0 0 auto;padding:6px 12px;border-radius:99px;border:1px solid var(--line);background:var(--bg-input);color:var(--text-sub);font-size:11px;font-weight:800;cursor:pointer;transition:all .15s;}
-      .hof-foot-diag:hover{border-color:var(--sage-line);color:var(--text-main);}
-      .hof-foot-nudge{flex:0 0 auto;padding:6px 12px;border-radius:99px;border:1px solid var(--emerald-line);background:var(--emerald-faint);color:var(--emerald);font-size:11px;font-weight:800;cursor:pointer;transition:all .15s;}
-      .hof-foot-nudge:hover{background:var(--emerald);color:#fff;}
-      /* 🎉 마일스톤 축하 폭죽 */
-      .hof-confetti{position:fixed;inset:0;z-index:100060;pointer-events:none;overflow:hidden;}
-      .hof-confetti span{position:absolute;top:-16px;width:8px;height:13px;border-radius:2px;opacity:.95;animation-name:hofConfFall;animation-timing-function:cubic-bezier(.25,.6,.5,1);animation-iteration-count:1;animation-fill-mode:forwards;}
-      @keyframes hofConfFall{0%{transform:translateY(0) rotate(0);opacity:1;}100%{transform:translateY(104vh) rotate(560deg);opacity:.35;}}
       /* 카드 모달 — 내가 올린 결과물 슬롯 */
       .tr-summary-myup{padding:0 18px 4px;}
       .myup-label{font-size:12px;font-weight:800;color:var(--text-main);margin:8px 0 8px;}
@@ -37272,7 +36305,6 @@
   // gauge=이번 달 목표(monthlyUploadGoal/_monthUploaded와 동일 집계),
   // 벽=업로드된 카드 타일(내가 올린 썸네일 or 🏆), 남은 목표=은은한 빈 칸.
   // ============================================================
-  let _hofScope = 'month'; // 'month' | 'all'
   function getMonthUploadedScripts() {
     const base = calBaseMonday || getMondayOf(new Date());
     const out = [];
@@ -37283,261 +36315,6 @@
     return out;
   }
 
-  // === 🎖 전당 등급(마일스톤) — 누적 업로드 기준 ===
-  const HOF_TIERS = [
-    { n: 1,   name: '첫 발',        ico: '🌱' },
-    { n: 5,   name: '브론즈 전당',  ico: '🥉' },
-    { n: 10,  name: '실버 전당',    ico: '🥈' },
-    { n: 25,  name: '골드 전당',    ico: '🥇' },
-    { n: 50,  name: '플래티넘 전당', ico: '💎' },
-    { n: 100, name: '레전드 전당',  ico: '👑' }
-  ];
-  function hofTotalUploaded() { return (scripts || []).filter(s => s.uploaded).length; }
-  function hofTierInfo() {
-    const c = hofTotalUploaded();
-    let cur = null, next = null;
-    for (const t of HOF_TIERS) { if (c >= t.n) cur = t; else { next = t; break; } }
-    return { count: c, cur, next };
-  }
-  function celebrateMilestone(tier) {
-    toast('🎉 «' + tier.name + '» 달성! ' + tier.ico);
-    try { hofConfetti(); } catch (e) {}
-  }
-  function hofConfetti() {
-    const wrap = document.createElement('div'); wrap.className = 'hof-confetti';
-    const colors = ['#F5E6D3', '#FF7A33', '#d7f34b', '#FFFFFF', '#FFCD50'];
-    let h = '';
-    for (let i = 0; i < 38; i++) {
-      const left = Math.round(Math.random() * 100);
-      const c = colors[i % colors.length];
-      const dur = (Math.random() * 1.2 + 1.5).toFixed(2);
-      const delay = (Math.random() * 0.5).toFixed(2);
-      h += `<span style="left:${left}%;background:${c};animation-duration:${dur}s;animation-delay:${delay}s;"></span>`;
-    }
-    wrap.innerHTML = h;
-    document.body.appendChild(wrap);
-    setTimeout(() => wrap.remove(), 2800);
-  }
-
-  // === 📈 월별 업로드 추이 (전체 누적 탭) ===
-  function hofMonthlySeries(n) {
-    const now = new Date();
-    const map = {};
-    (scripts || []).filter(s => s.uploaded).forEach(s => {
-      const d = ymdToDate(s.targetDate); if (!d) return;
-      const k = d.getFullYear() + '-' + (d.getMonth() + 1);
-      map[k] = (map[k] || 0) + 1;
-    });
-    const arr = [];
-    for (let i = n - 1; i >= 0; i--) {
-      const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
-      const k = d.getFullYear() + '-' + (d.getMonth() + 1);
-      arr.push({ label: (d.getMonth() + 1) + '월', count: map[k] || 0, isCur: i === 0 });
-    }
-    return arr;
-  }
-  function buildHofCurve() {
-    const series = hofMonthlySeries(6);
-    const max = Math.max(1, ...series.map(s => s.count));
-    const bars = series.map(s => {
-      const h = Math.round(s.count / max * 100);
-      return `<div class="hof-cbar-wrap"><div class="hof-cbar-col"><div class="hof-cbar ${s.isCur ? 'cur' : ''}" style="height:${s.count > 0 ? Math.max(14, h) : 2}%">${s.count > 0 ? `<span class="hof-cbar-n">${s.count}</span>` : ''}</div></div><div class="hof-cbar-m ${s.isCur ? 'cur' : ''}">${s.label}</div></div>`;
-    }).join('');
-    // 요약은 곡선과 같은 '달력 월' 기준으로 통일 (막대 숫자와 일치)
-    const now = new Date();
-    const monLabel = (now.getMonth() + 1) + '월';
-    const curMonthUps = (scripts || []).filter(s => {
-      if (!s.uploaded) return false;
-      const d = ymdToDate(s.targetDate);
-      return d && d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth();
-    });
-    let best = null; curMonthUps.forEach(s => { if (!best || (s.uploadViews || 0) > (best.uploadViews || 0)) best = s; });
-    const recap = curMonthUps.length
-      ? `${monLabel} <b>${curMonthUps.length}개</b>${best && (best.uploadViews || 0) > 0 ? ` · 베스트 「${esc((isFreeEmpty(best) ? '자유' : scriptDisplayTitle(best)).slice(0, 12))}」 👁 ${fmtNum(best.uploadViews)}` : ''}`
-      : `${monLabel}은 아직 — 첫 업로드를 올려봐요`;
-    return `<div class="hof-curve"><div class="hof-curve-label">📈 업로드 추이 · 월별</div><div class="hof-curve-bars">${bars}</div><div class="hof-curve-recap">${recap}</div></div>`;
-  }
-  async function renderHallOfFamePanel() {
-    const body = document.getElementById('halloffame-panel-body'); if (!body) return;
-    const goal = monthlyUploadGoal || 0;
-    const monthUps = getMonthUploadedScripts();
-    const achieved = monthUps.length;
-    const pct = goal > 0 ? Math.min(100, Math.round(achieved / goal * 100)) : (achieved > 0 ? 100 : 0);
-    const reached = goal > 0 && achieved >= goal;
-    const scope = _hofScope;
-    const allUps = (scripts || []).filter(s => s.uploaded);
-    const listScripts = (scope === 'all' ? allUps.slice() : monthUps.slice())
-      .sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0));
-    // 내가 올린 썸네일 이미지 로드 (있는 것만)
-    const imgs = {};
-    await Promise.all(listScripts.filter(s => s.hasUploadImg).map(async s => {
-      try { imgs[s.id] = await loadImage(s.id, 'myup'); } catch (e) {}
-    }));
-    const bestViews = Math.max(0, ...listScripts.map(s => s.uploadViews || 0));
-    const tilesHtml = listScripts.map(s => {
-      const t = isFreeEmpty(s) ? '자유' : scriptDisplayTitle(s);
-      const img = imgs[s.id];
-      const v = s.uploadViews || 0, l = s.uploadLikes || 0;
-      const isBest = v > 0 && v === bestViews;
-      const shortT = t.length > 9 ? t.slice(0, 8) + '…' : t;
-      const statHtml = v > 0 ? `<span class="hof-cap-v">👁 ${fmtNum(v)}${l > 0 ? ' · ♥ ' + fmtNum(l) : ''}</span>` : '';
-      return `<button class="hof-tile filled ${img ? 'has-img' : ''} ${isBest ? 'best' : ''}" data-hof-script="${s.id}" title="${esc(t)}">`
-        + (img ? `<img src="${esc(img)}" alt=""/><div class="hof-badge">🏆</div>` : `<div class="hof-medal">🏆</div>`)
-        + (isBest ? `<div class="hof-best" title="이번 베스트">🥇</div>` : '')
-        + `<div class="hof-cap"><span class="hof-cap-t">${esc(shortT)}</span>${statHtml}</div>`
-        + (img ? '' : `<div class="hof-addhint">＋내 사진</div>`)
-        + `</button>`;
-    }).join('');
-    let emptyHtml = '';
-    if (scope === 'month' && goal > 0) {
-      const rem = Math.max(0, goal - achieved);
-      for (let i = 0; i < rem; i++) emptyHtml += `<button class="hof-tile empty" data-hof-empty="1" title="여기 눌러 이번 업로드 등록"><div class="hof-empty-mark">＋</div></button>`;
-    }
-    const gauge = `<div class="hof-gauge ${reached ? 'reached' : ''}">
-        <div class="hof-gauge-top"><span class="hof-gauge-title">🏆 이번 달 전당</span><span class="hof-gauge-count">${achieved}<span class="sl"> / ${goal > 0 ? goal : '–'}</span></span></div>
-        <div class="hof-gauge-bar"><div class="hof-gauge-fill" style="width:${pct}%"></div></div>
-        ${goal > 0
-          ? (reached ? `<div class="hof-gauge-msg done">🏆 이번 달 전당 완성! 최고예요 🎉</div>`
-                     : `<div class="hof-gauge-msg">앞으로 <b>${goal - achieved}개</b> 더 — 비전에 한 걸음씩</div>`)
-          : `<button class="hof-setgoal" id="hof-setgoal">＋ 이번 달 업로드 목표 정하기</button>`}
-      </div>`;
-    const scopeBar = `<div class="hof-scope">
-        <button class="hof-scope-btn ${scope === 'month' ? 'on' : ''}" data-hofscope="month">이번 달</button>
-        <button class="hof-scope-btn ${scope === 'all' ? 'on' : ''}" data-hofscope="all">전체 누적 (${allUps.length})</button>
-        <button class="hof-stage-open" id="hof-stage-open" title="명예의 전당 크게 보기">🏆 크게 보기</button>
-      </div>`;
-    const wall = (tilesHtml || emptyHtml)
-      ? `<div class="hof-wall">${tilesHtml}${emptyHtml}</div>`
-      : `<div class="hof-empty">아직 업로드가 없어요.<br>이번 주 할일에서 <b>업로드 완료</b>를 누르거나 올린 썸네일을 추가하면 여기 전당에 쌓여요 🏆</div>`;
-    // 📈 성장 곡선은 '전체 누적' 탭에서만
-    const curveHtml = (scope === 'all') ? buildHofCurve() : '';
-    // 🌟 비전 연결 + 다음 작품 넛지 (하단 한 줄)
-    const vis = ((typeof homeData !== 'undefined' && homeData && (homeData.goal || homeData.sixMonth)) || '').trim().replace(/\s+/g, ' ');
-    const vShort = vis ? (vis.length > 16 ? vis.slice(0, 15) + '…' : vis) : '';
-    const footerHtml = `<div class="hof-footer"><span class="hof-foot-vision">${vShort ? `🌟 「${esc(vShort)}」에 쌓이는 중` : '🌟 한 편씩, 비전에 가까워지는 중'}</span><button class="hof-foot-diag" id="hof-diag">🩺 릴스 진단</button><button class="hof-foot-nudge" id="hof-next-plan">다음 작품 기획하기 →</button></div>`;
-    body.innerHTML = gauge + scopeBar + curveHtml + wall + footerHtml;
-    const sg = document.getElementById('hof-setgoal'); if (sg) sg.onclick = () => { try { openGoalModal(); } catch (e) {} };
-    const stageBtn = document.getElementById('hof-stage-open'); if (stageBtn) stageBtn.onclick = openHofStage;
-    const nextBtn = document.getElementById('hof-next-plan'); if (nextBtn) nextBtn.onclick = () => { try { switchWorkspace('sheet'); } catch (e) {} };
-    const diagBtn = document.getElementById('hof-diag'); if (diagBtn) diagBtn.onclick = () => { try { switchWorkspace('diagnose'); } catch (e) {} };
-    body.querySelectorAll('[data-hof-empty]').forEach(b => b.onclick = () => { try { openUploadPromptNew(); } catch (e) {} });
-    body.querySelectorAll('[data-hofscope]').forEach(b => b.onclick = () => { _hofScope = b.dataset.hofscope; renderHallOfFamePanel(); });
-    body.querySelectorAll('[data-hof-script]').forEach(b => b.onclick = () => { try { openTrSummaryModal(b.dataset.hofScript); } catch (e) {} });
-  }
-
-  // ===== 🏆 명예의 전당 — 전체화면 (시상대 + 명예의 벽) =====
-  function injectHofStageStyle() {
-    if (document.getElementById('hof-stage-style')) return;
-    const st = document.createElement('style'); st.id = 'hof-stage-style';
-    st.textContent = `
-      .hof-stage{position:fixed;inset:0;z-index:100050;overflow-y:auto;-webkit-overflow-scrolling:touch;opacity:0;transition:opacity .3s ease;
-        background:radial-gradient(ellipse 70% 45% at 50% -5%, rgba(245,230,211,.13), transparent 60%), radial-gradient(ellipse 120% 90% at 50% 120%, rgba(215,243,75,.06), transparent 60%), #06080A;}
-      .hof-stage.show{opacity:1;}
-      .hof-stage-particles{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:1;}
-      .hof-particle{position:absolute;bottom:-12px;border-radius:50%;background:rgba(245,230,211,.85);box-shadow:0 0 7px rgba(245,230,211,.7);opacity:0;
-        animation-name:hofFloat;animation-timing-function:linear;animation-iteration-count:infinite;animation-duration:11s;}
-      .hof-particle.em{background:rgba(215,243,75,.85);box-shadow:0 0 7px rgba(215,243,75,.7);}
-      @keyframes hofFloat{0%{transform:translateY(0);opacity:0;}12%{opacity:.9;}88%{opacity:.65;}100%{transform:translateY(-104vh);opacity:0;}}
-      .hof-stage-close{position:fixed;top:14px;right:16px;z-index:6;width:40px;height:40px;border-radius:50%;border:1px solid rgba(255,255,255,.16);background:rgba(0,0,0,.45);color:#fff;font-size:22px;line-height:1;cursor:pointer;}
-      .hof-stage-close:hover{background:rgba(0,0,0,.72);}
-      .hof-stage-inner{position:relative;z-index:2;max-width:680px;margin:0 auto;padding:48px 18px 64px;}
-      .hof-stage-head{text-align:center;margin-bottom:26px;}
-      .hof-stage-crown{font-size:34px;filter:drop-shadow(0 0 12px rgba(245,230,211,.6));margin-bottom:4px;}
-      .hof-stage-title{font-family:'Pretendard',sans-serif;font-size:30px;font-weight:900;letter-spacing:.14em;color:#F5E6D3;text-shadow:0 0 26px rgba(245,230,211,.35);margin:0;}
-      .hof-stage-sub{font-size:12.5px;color:var(--text-mute);margin-top:9px;letter-spacing:.02em;}
-      .hof-pedestal-wrap{position:relative;display:flex;flex-direction:column;align-items:center;margin:6px 0 40px;}
-      .hof-beam{position:absolute;top:-34px;left:50%;transform:translateX(-50%);width:220px;height:300px;background:linear-gradient(180deg, rgba(245,230,211,.22), transparent 76%);clip-path:polygon(40% 0,60% 0,100% 100%,0 100%);filter:blur(7px);pointer-events:none;}
-      .hof-top-rank{font-size:12px;font-weight:800;color:#F5E6D3;letter-spacing:.06em;margin-bottom:11px;text-shadow:0 0 10px rgba(245,230,211,.45);position:relative;}
-      .hof-top-frame{position:relative;width:150px;aspect-ratio:9/16;border-radius:14px;overflow:hidden;border:2px solid #F5E6D3;background:linear-gradient(180deg, rgba(245,230,211,.14), transparent 60%), var(--bg-card);box-shadow:0 0 32px rgba(245,230,211,.32),0 16px 44px rgba(0,0,0,.6);display:flex;align-items:center;justify-content:center;}
-      .hof-top-img{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;}
-      .hof-top-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:var(--bg-deep);}
-      .hof-medal-lg{font-size:46px;filter:drop-shadow(0 0 10px rgba(245,230,211,.6));}
-      .hof-top-title{font-size:14px;font-weight:800;color:var(--text-main);margin-top:14px;text-align:center;max-width:240px;line-height:1.4;}
-      .hof-top-stat{font-size:12.5px;font-weight:800;color:#F5E6D3;margin-top:5px;}
-      .hof-pedestal{margin-top:16px;width:212px;height:30px;border-radius:8px 8px 4px 4px;background:linear-gradient(180deg, rgba(245,230,211,.5), rgba(245,230,211,.15));box-shadow:0 12px 32px rgba(245,230,211,.16);position:relative;}
-      .hof-pedestal::after{content:'';position:absolute;left:50%;top:-1px;transform:translateX(-50%);width:58%;height:3px;background:#F5E6D3;border-radius:2px;opacity:.75;}
-      .hof-wall-label{text-align:center;font-size:12px;font-weight:800;letter-spacing:.1em;color:var(--text-mute);margin:6px 0 16px;}
-      .hof-plaques{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:12px;}
-      .hof-plaque{position:relative;border:1px solid rgba(245,230,211,.3);border-radius:10px;overflow:hidden;background:linear-gradient(180deg, rgba(245,230,211,.08), transparent 60%), var(--bg-card);padding:0;}
-      .hof-plaque-img{position:relative;aspect-ratio:9/16;display:flex;align-items:center;justify-content:center;}
-      .hof-plaque-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:var(--bg-deep);}
-      .hof-medal-sm{font-size:23px;filter:drop-shadow(0 0 6px rgba(245,230,211,.5));}
-      .hof-plaque-t{font-size:10px;font-weight:700;color:#fff;padding:6px 6px 2px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-      .hof-plaque-v{font-size:9.5px;font-weight:800;color:#F5E6D3;padding:0 6px 7px;text-align:center;}
-      .hof-stage-empty{text-align:center;color:var(--text-mute);font-size:13px;line-height:1.7;padding:30px 10px;}
-      .hof-stage-empty .hof-medal-lg{margin-bottom:14px;}
-      .hof-stage-empty b{color:#F5E6D3;}
-    `;
-    document.head.appendChild(st);
-  }
-  function openHofStage() {
-    injectHofStageStyle();
-    const allUps = (scripts || []).filter(s => s.uploaded);
-    const sorted = allUps.slice().sort((a, b) => (b.uploadViews || 0) - (a.uploadViews || 0) || (b.updatedAt || 0) - (a.updatedAt || 0));
-    const top = sorted[0] || null;
-    const rest = sorted.slice(1);
-    const name = (typeof _currentUser !== 'undefined' && _currentUser && _currentUser.name) ? _currentUser.name : '';
-    const vision = ((typeof homeData !== 'undefined' && homeData && (homeData.goal || homeData.sixMonth)) || '').trim().replace(/\s+/g, ' ');
-    const visionShort = vision.length > 18 ? vision.slice(0, 17) + '…' : vision;
-
-    let parts = '';
-    for (let i = 0; i < 18; i++) {
-      const left = Math.round(Math.random() * 100);
-      const size = (Math.random() * 3 + 2).toFixed(1);
-      const dur = (Math.random() * 8 + 8).toFixed(1);
-      const delay = (Math.random() * 10).toFixed(1);
-      parts += `<span class="hof-particle ${i % 3 === 0 ? 'em' : ''}" style="left:${left}%;width:${size}px;height:${size}px;animation-duration:${dur}s;animation-delay:-${delay}s;"></span>`;
-    }
-    let topHtml = '';
-    if (top) {
-      const tt = isFreeEmpty(top) ? '자유' : scriptDisplayTitle(top);
-      const tv = top.uploadViews || 0, tl = top.uploadLikes || 0;
-      topHtml = `<div class="hof-pedestal-wrap">
-        <div class="hof-beam"></div>
-        <div class="hof-top-rank">${tv > 0 ? '🥇 이 달의 정점' : '🏆 가장 최근의 한 편'}</div>
-        <div class="hof-top-frame"><div class="hof-top-img" data-myup="${top.id}"><div class="hof-medal-lg">🏆</div></div></div>
-        <div class="hof-top-title">${esc(tt)}</div>
-        ${tv > 0 ? `<div class="hof-top-stat">👁 ${fmtNum(tv)}${tl > 0 ? ' · ♥ ' + fmtNum(tl) : ''}</div>` : ''}
-        <div class="hof-pedestal"></div>
-      </div>`;
-    }
-    let wallHtml = '';
-    if (rest.length) {
-      wallHtml = `<div class="hof-wall-label">— 명예의 벽 · ${allUps.length}개 —</div><div class="hof-plaques">`
-        + rest.map(s => {
-          const t = isFreeEmpty(s) ? '자유' : scriptDisplayTitle(s);
-          const v = s.uploadViews || 0;
-          return `<div class="hof-plaque"><div class="hof-plaque-img" data-myup="${s.id}"><div class="hof-medal-sm">🏆</div></div>`
-            + `<div class="hof-plaque-t">${esc(t.length > 14 ? t.slice(0, 13) + '…' : t)}</div>`
-            + (v > 0 ? `<div class="hof-plaque-v">👁 ${fmtNum(v)}</div>` : '')
-            + `</div>`;
-        }).join('') + `</div>`;
-    }
-    const emptyHtml = (!top) ? `<div class="hof-stage-empty"><div class="hof-medal-lg">🏆</div><div>아직 전당의 주인공이 없어요.<br>첫 작품을 올려 <b>전당의 첫 주인공</b>이 되어보세요.</div></div>` : '';
-
-    const stage = document.createElement('div');
-    stage.id = 'hof-stage'; stage.className = 'hof-stage';
-    stage.innerHTML = `<div class="hof-stage-particles">${parts}</div>
-      <button class="hof-stage-close" id="hof-stage-close" aria-label="닫기">×</button>
-      <div class="hof-stage-inner">
-        <div class="hof-stage-head">
-          <div class="hof-stage-crown">🏆</div>
-          <h1 class="hof-stage-title">명예의 전당</h1>
-          <div class="hof-stage-sub">${name ? esc(name) + '의 ' : ''}${allUps.length}개의 작품${visionShort ? ` · 「${esc(visionShort)}」을 향해` : ''}</div>
-        </div>
-        ${topHtml}${wallHtml}${emptyHtml}
-      </div>`;
-    document.body.appendChild(stage);
-    requestAnimationFrame(() => stage.classList.add('show'));
-    // 내가 올린 썸네일 로드
-    stage.querySelectorAll('[data-myup]').forEach(async el => {
-      const sid = el.dataset.myup; const s = (scripts || []).find(x => x.id === sid);
-      if (s && s.hasUploadImg) { try { const img = await loadImage(sid, 'myup'); if (img) el.innerHTML = `<img src="${esc(img)}" alt=""/>`; } catch (e) {} }
-    });
-    const close = () => { stage.classList.remove('show'); setTimeout(() => stage.remove(), 260); };
-    document.getElementById('hof-stage-close').onclick = close;
-    stage.addEventListener('click', (e) => { if (e.target === stage || e.target.classList.contains('hof-stage-inner')) close(); });
-  }
 
   // 카드에 "내가 올린 결과물(썸네일)" 추가 → 자동 업로드 완료 + 전당 반영
   function pickScriptUploadImage(scriptId) {
@@ -37554,7 +36331,6 @@
         else { await saveScripts(); }
         toast('🏆 전당에 올렸어요!');
         if (s) renderSummaryMyUp(s);
-        try { renderHallOfFamePanel(); } catch (e) {}
       } catch (e) { toast('이미지 처리 실패'); }
     };
     inp.click();
@@ -37578,7 +36354,7 @@
       e.stopPropagation();
       try { await deleteImage(s.id, 'myup'); } catch (e2) {}
       s.hasUploadImg = false; s.updatedAt = Date.now(); await saveScripts();
-      renderSummaryMyUp(s); try { renderHallOfFamePanel(); } catch (e2) {}
+      renderSummaryMyUp(s);
     };
   }
 
@@ -37623,7 +36399,6 @@
       const prevBest = Math.max(0, ...(scripts || []).filter(x => x.id !== s.id).map(x => x.uploadViews || 0));
       s.uploadViews = nv; s.uploadLikes = nl; s.uploadSaves = nsv; s.uploadShares = nsh; s.uploadDms = ndm; s.uploadAvgWatch = naw; s.memo = nmemo; s.updatedAt = Date.now();
       await saveScripts();
-      try { renderHallOfFamePanel(); } catch (e) {}
       try { renderInsightPanel(); } catch (e) {} // 🔮 내 인사이트도 갱신
       if (nv > 0 && nv > prevBest) toast('🥇 최고 기록 갱신! 「' + fmtNum(nv) + ' 조회」');
     };
@@ -37817,7 +36592,6 @@
     renderMissionPanel();
     renderTodayPanel();
     renderInsightPanel();
-    renderHallOfFamePanel();
     renderCustomerScore();
     renderGrowthPanel();
     try { renderFutureDash(); } catch (e) {}
@@ -38123,7 +36897,7 @@
       const s = scripts.find(x => x.id === tempId);
       if (s && !s.uploaded && !s.hasUploadImg) {
         scripts = scripts.filter(x => x.id !== tempId);
-        await saveScripts(); renderTrainingRoom(); try { renderHallOfFamePanel(); } catch (e) {}
+        await saveScripts(); renderTrainingRoom();
       }
     }
   }
@@ -38176,7 +36950,7 @@
     _uploadPromptTemp = null; // 커밋됨 — 유지
     await closeTrSummaryModal();
     if (!wasUp) { try { hofConfetti(); } catch (e) {} } // 🎉 축하 폭죽
-    renderTrainingRoom(); try { renderHallOfFamePanel(); } catch (e) {}
+    renderTrainingRoom();
   }
 
   function initTrSummaryModal() {
@@ -38501,7 +37275,7 @@
     await bumpChallengeUpload(nowUploaded ? 1 : -1); // 챌린지 업로드 자동 연동
     await renderTrWeeksList();
     try { renderWeekSlots(); } catch (e) {} // 이번 주 패널도 동기화
-    try { renderHallOfFamePanel(); } catch (e) {} // 🏆 전당도 동기화
+    
     try { renderTrophyHero(); } catch (e) {} // 🏆 홈 트로피(레벨) 즉시 갱신
     try { renderJourneyRail(); } catch (e) {} // 여정 레일 즉시 갱신
     try { renderMissionPanel(); } catch (e) {} // 미션 패널 즉시 갱신
@@ -38522,12 +37296,6 @@
           toast('✓ 업로드 완료! 🎉');
         }
       }
-      // 🎖 전당 등급 마일스톤 — 누적이 등급 문턱에 딱 도달하면 축하
-      try {
-        const totalUp = (scripts || []).filter(x => x.uploaded).length;
-        const tier = HOF_TIERS.find(m => m.n === totalUp);
-        if (tier) setTimeout(() => celebrateMilestone(tier), 500);
-      } catch (e) {}
     }
   }
   window.__toggleScriptUploaded = toggleScriptUploaded;
@@ -42959,7 +41727,7 @@
         feats: [
           { ico: '📋', n: '카드로 분석', d: '후킹문구·왜 떠졌나·아이디어·조회수를 한 카드에 정리. 흘려보던 콘텐츠가 기록이 돼요.' },
           { ico: '🧩', n: '유형 태그로 분해', d: '후킹유형·부품종류로 쪼개서 "재료"를 봅니다. 따라 만들 수 있는 단위로.' },
-          { ico: '🖼', n: '썸네일·후킹 수집', d: '끌리는 썸네일과 첫 문장을 모아 무드보드로. 영감 창고가 쌓여요.' },
+          { ico: '🖼', n: '썸네일·후킹 수집', d: '끌리는 썸네일과 첫 문장을 모아두면 영감 창고가 쌓여요.' },
         ] },
       { id: 'gm-s3', tag: 'STEP 03 · 유형 보드', title: '흩어진 카드를 <span class="gm-em">패턴</span>으로',
         sub: '분류하는 순간, 안 보이던 공통점이 드러나요.',
