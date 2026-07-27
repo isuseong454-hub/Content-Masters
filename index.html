@@ -1152,6 +1152,104 @@
     margin-left: 8px;
   }
 
+  /* ═══════ v553 · 판독지 (카드 원페이지) ═══════
+     카드를 열면 «입력칸 20개»가 아니라 «읽는 한 장»이 먼저 온다.
+     왼쪽 기둥 = 이 영상이 무엇인가(그림·숫자·판단) · 오른쪽 = 무슨 말을 했나(제목·키워드·원고)
+     ⚠️ 기존 폼 DOM은 지우지 않는다 — 저장 로직이 그대로 읽는다. 여기서 고치면 그 원본에 되쓴다. */
+  #rd { display: none; }
+  #rd.on { display: block; }
+  .rd-body { display: grid; grid-template-columns: 252px 1fr; gap: 0; border: 1px solid var(--line); border-radius: 16px; overflow: hidden; background: var(--bg-elev); }
+  @media (max-width: 820px) { .rd-body { grid-template-columns: 1fr; } }
+  .rd-L { padding: 16px; border-right: 1px solid var(--line); background: rgba(0,0,0,.22); display: grid; gap: 12px; align-content: start; }
+  /* 한 줄로 떨어지면 썸네일이 전폭을 먹어 900px짜리 그림이 된다 → 그림 옆에 명세를 세운다 */
+  @media (max-width: 820px) {
+    .rd-L { border-right: none; border-bottom: 1px solid var(--line);
+      grid-template-columns: 136px 1fr; gap: 12px; }
+    #rd-thumb { grid-column: 1; grid-row: 1; }
+    #rd-spec { grid-column: 2; grid-row: 1; align-self: start; }
+    .rd-L > .rd-blk { grid-column: 1 / -1; }
+  }
+  @media (max-width: 380px) { .rd-L { grid-template-columns: 112px 1fr; } }
+  .rd-R { padding: 18px 20px; display: grid; gap: 13px; align-content: start; min-width: 0; }
+  .rd-thumb { width: 100%; aspect-ratio: 9/14; border-radius: 12px; overflow: hidden; position: relative;
+    background: radial-gradient(120% 90% at 30% 12%, #26303a, #0d1216); border: 1px solid var(--line2, rgba(255,255,255,.1)); }
+  .rd-thumb img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .rd-thumb .ph { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    font-size: 11px; color: var(--text-faint); }
+  /* 명세 리스트 — 숫자와 점수를 같은 「라벨 : 값」 문법으로 (상자 여섯 개가 아니라 하나로 읽히게) */
+  .rd-spec { border: 1px solid var(--line); border-radius: 11px; overflow: hidden; background: var(--bg-card, #14171b); }
+  .rd-spec .r { display: flex; align-items: center; justify-content: space-between; gap: 9px; padding: 8px 11px; border-bottom: 1px solid var(--line); }
+  .rd-spec .r:last-child { border-bottom: none; }
+  .rd-spec .k { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; letter-spacing: .1em; color: var(--text-faint); text-transform: uppercase; white-space: nowrap; }
+  .rd-spec .v { font-family: 'JetBrains Mono', monospace; font-size: 13.5px; font-weight: 800; font-variant-numeric: tabular-nums;
+    white-space: nowrap; display: flex; align-items: center; gap: 6px; }
+  .rd-spec .v.none { color: var(--text-faint); font-weight: 600; }
+  .rd-dots { display: inline-flex; gap: 3px; align-items: center; }
+  .rd-dots i { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,.14); }
+  .rd-dots i.on { background: currentColor; box-shadow: 0 0 7px currentColor; }
+  .rd-blk .k { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; letter-spacing: .12em; color: var(--text-faint);
+    text-transform: uppercase; display: block; margin-bottom: 7px; }
+  .rd-pills { display: flex; flex-wrap: wrap; gap: 5px; }
+  .rd-pill { border-radius: 999px; padding: 4px 10px; font-size: 11.5px; font-weight: 800; line-height: 1.2;
+    border: 1px solid currentColor; background: rgba(255,255,255,.03); display: inline-block; }
+  .rd-pill.solid { color: #0b0c08; border-color: transparent; }
+  .rd-pill.none { color: var(--text-faint); border-style: dashed; }
+  .rd-hook { font-size: clamp(19px, 2.6vw, 27px); font-weight: 800; line-height: 1.3; letter-spacing: -.02em;
+    margin: 0; color: var(--text-main); word-break: keep-all; }
+  .rd-sub { display: flex; flex-wrap: wrap; gap: 5px; align-items: center; }
+  .rd-src { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--text-faint); margin-left: auto;
+    text-decoration: none; }
+  .rd-src:hover { color: var(--lime, #d7f34b); }
+  /* 원고 = 시간 흐름. 왼쪽 색 줄이 구조 5색 그대로라 어디가 비었는지 한눈에 보인다 */
+  .rd-time { position: relative; padding-left: 24px; }
+  .rd-time::before { content: ''; position: absolute; left: 6px; top: 14px; bottom: 14px; width: 2px; border-radius: 2px;
+    background: linear-gradient(180deg, #E25C5C, #5B8DEF, #A9C437, #2FB6A0, #2FD07B); opacity: .55; }
+  .rd-fr { position: relative; padding: 9px 0; display: grid; gap: 5px; }
+  .rd-fr::before { content: ''; position: absolute; left: -23px; top: 14px; width: 11px; height: 11px; border-radius: 50%;
+    background: var(--bg-deep, #0a0c08); border: 2.5px solid currentColor; }
+  .rd-fh { display: flex; align-items: center; gap: 8px; }
+  .rd-fh .l { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; font-weight: 800; letter-spacing: .08em; }
+  .rd-fx { font-size: 13.5px; line-height: 1.72; color: var(--text-main); background: rgba(0,0,0,.24);
+    border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; transition: border-color .16s; word-break: keep-all; }
+  .rd-empty { font-size: 12.5px; color: var(--text-faint); padding: 14px 0; }
+  .rd-foot { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; padding-top: 3px; }
+  .rd-btn { font-family: inherit; font-size: 12px; font-weight: 800; border-radius: 9px; padding: 9px 14px; cursor: pointer;
+    transition: .15s; border: 1px solid var(--line2, rgba(255,255,255,.14)); background: rgba(255,255,255,.04); color: var(--text-sub); }
+  .rd-btn:hover { color: var(--text-main); border-color: var(--text-faint); }
+  .rd-btn.pri { background: var(--lime, #d7f34b); border-color: var(--lime, #d7f34b); color: #12140a; }
+  .rd-btn:active { transform: scale(.96); }
+  .rd-edit { font-family: inherit; font-size: 11.5px; font-weight: 700; color: var(--text-sub); cursor: pointer;
+    background: transparent; border: 1px solid var(--line2, rgba(255,255,255,.14)); border-radius: 8px; padding: 6px 12px; transition: .15s; }
+  .rd-edit:hover { color: var(--lime, #d7f34b); border-color: rgba(215,243,75,.5); }
+  .rd-edit.live { background: var(--lime, #d7f34b); border-color: var(--lime, #d7f34b); color: #12140a; }
+
+  /* ── 수정 모드: 읽는 화면이 «그 자리에서» 고치는 화면이 된다 (레이아웃은 안 움직인다) ── */
+  #rd.editing .rd-fx { border-style: dashed; border-color: var(--line2, rgba(255,255,255,.18)); cursor: text; }
+  #rd.editing .rd-fx:focus { outline: none; border-style: solid; border-color: var(--lime, #d7f34b); }
+  #rd .rd-pick { display: none; }
+  #rd.editing .rd-pick { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 7px; }
+  #rd.editing .rd-ro { display: none; }
+  .rd-cp { border-radius: 999px; padding: 5px 10px; font-size: 11px; font-weight: 800; cursor: pointer; font-family: inherit;
+    border: 1px solid var(--line2, rgba(255,255,255,.14)); background: rgba(255,255,255,.04); color: var(--text-sub); transition: .14s; }
+  .rd-cp:hover { color: var(--text-main); }
+  .rd-cp.on { color: #0b0c08; border-color: transparent; }
+  .rd-num { min-width: 30px; text-align: center; font-family: 'JetBrains Mono', monospace; }
+  .rd-inp { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 800; text-align: right; width: 96px;
+    background: rgba(0,0,0,.3); border: 1px solid var(--line2, rgba(255,255,255,.16)); border-radius: 7px; padding: 4px 8px; color: var(--text-main); }
+  .rd-inp:focus { outline: none; border-color: var(--lime, #d7f34b); }
+  .rd-memo { width: 100%; font-family: inherit; font-size: 12.5px; line-height: 1.65; color: var(--text-main);
+    background: rgba(0,0,0,.24); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; resize: vertical; min-height: 62px; }
+  .rd-memo:focus { outline: none; border-color: var(--lime, #d7f34b); }
+  /* 판독지는 «한 장으로 읽는» 화면이라 옛 입력폼(680px)보다 넓어야 원고가 눌리지 않는다 */
+  #sh-modal.rd-mode .sh-modal { max-width: 1000px; }
+  /* 판독지가 켜지면 옛 폼은 물러난다 (DOM은 그대로 — 저장이 읽는다) */
+  #sh-modal.rd-mode .sh-field,
+  #sh-modal.rd-mode .fmt-block,
+  #sh-modal.rd-mode .audio-block { display: none !important; }
+  /* 읽는 동안엔 저장·초기화 줄도 안 보인다. 「수정하기」를 눌러야 나온다 */
+  #sh-modal.rd-mode .sh-modal-btns { display: none; }
+  #sh-modal.rd-mode.rd-editing .sh-modal-btns { display: flex; }
+
   .sh-close {
     background: none;
     border: none;
@@ -18190,6 +18288,38 @@
       .cso-tb.pr{color:var(--cso-lime);border-color:var(--cso-limeln);background:var(--cso-limeft)}
       .cso-tb.hp{color:var(--cso-neon);border-color:var(--cso-limeln)}
       .cso-top .sp{flex:1}
+      /* v543 · 다음 방으로 가는 문 (상단) — 시안 D안 */
+      .cso-tb.nx{color:var(--cso-cyan);border-color:rgba(67,224,230,.42);background:rgba(67,224,230,.09);
+        display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+      .cso-tb.nx:hover{background:rgba(67,224,230,.16)}
+      .cso-tb.nx .n{font-family:'JetBrains Mono',monospace;font-size:10.5px;opacity:.9}
+      /* v543 · 여정 스텝 — 얇게, 골대를 가리지 않게 */
+      .cso-steps{display:flex;align-items:center;gap:0;margin:2px 2px 9px}
+      .cs-st{display:flex;align-items:center;gap:6px;font-size:10.5px;font-weight:800;color:var(--cso-sub2);
+        transition:color .3s}
+      .cs-st .dot{width:17px;height:17px;border-radius:50%;border:1.5px solid var(--cso-line2);
+        display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;
+        font-size:9px;transition:.3s}
+      .cs-st.done{color:var(--cso-emer)}
+      .cs-st.done .dot{border-color:var(--cso-emer);background:rgba(55,214,122,.14);color:var(--cso-emer)}
+      .cs-st.on{color:var(--cso-lime)}
+      .cs-st.on .dot{border-color:var(--cso-lime);background:var(--cso-limeft);color:var(--cso-lime)}
+      .cs-ln{flex:1;height:1.5px;background:var(--cso-line2);margin:0 7px;border-radius:9px;transition:background .35s}
+      .cs-ln.done{background:linear-gradient(90deg,var(--cso-emer),var(--cso-lime))}
+      /* v543 · 다음 방 예고 카드 — 저장 «전»에 다음을 보여준다 */
+      .cso-peek{display:none;align-items:center;gap:10px;margin-top:11px;padding:11px 12px;border-radius:12px;
+        cursor:pointer;border:1px solid rgba(67,224,230,.32);
+        background:linear-gradient(100deg,rgba(67,224,230,.09),rgba(67,224,230,.02));
+        transition:background .16s,transform .12s;font-family:inherit;width:100%;text-align:left}
+      .cso-peek.on{display:flex}
+      .cso-peek:hover{background:rgba(67,224,230,.15)}
+      .cso-peek:active{transform:scale(.99)}
+      .cso-peek .ic{font-size:17px;flex:none}
+      .cso-peek .tx{flex:1;min-width:0}
+      .cso-peek .t1{font-size:11.5px;font-weight:800;color:var(--cso-cyan);display:block}
+      .cso-peek .t2{font-size:10px;color:var(--cso-sub);margin-top:2px;display:block}
+      .cso-peek .go{font-size:15px;color:var(--cso-cyan);flex:none}
+      @media (prefers-reduced-motion:reduce){.cs-st,.cs-st .dot,.cs-ln,.cso-peek{transition:none!important}}
       /* 무대 */
       .cso-stage{position:relative;height:min(460px,56vh);min-height:380px;display:flex;align-items:center;justify-content:center;cursor:pointer;overflow:hidden;border-radius:18px;border:1px solid var(--cso-line);
         background:radial-gradient(130% 80% at 50% 12%,#141813,#0b0c09 60%)}
@@ -18306,13 +18436,111 @@
       /* 반짝이 배경 */
       .cso-tw{position:absolute;pointer-events:none;z-index:4;color:var(--acc,#c2f24a);font-size:11px;text-shadow:0 0 6px currentColor;animation:csoTwinkle 2.6s ease-in-out infinite}
       @keyframes csoTwinkle{0%,100%{opacity:.2;transform:scale(.7)}50%{opacity:.9;transform:scale(1.1)}}
+      /* ═══ v539 · 분해 카드 재설계 — «뭐가 담겼는지» 보이게 ═══
+         74px 정사각 가로 카드로는 12자밖에 못 담아서, 여러 개를 넣으면 확인이 불가능했다.
+         세로 목록 + 후킹 전문 + 사실 칩 + 펼치면 담긴 원고. (골인 벨트 연출은 그대로) */
+      .cso-row{ flex-direction:column; overflow-x:visible; gap:8px; }
+      .cso-card{ width:100% !important; flex:none; border-radius:13px; }
+      .cc-head{ display:flex; gap:10px; padding:9px; align-items:flex-start; }
+      .cc-th{ width:50px; height:63px; flex:none; border-radius:8px; overflow:hidden; position:relative;
+        background:linear-gradient(160deg,#33402a,#12140c); border:1px solid var(--cso-line2);
+        display:flex; align-items:center; justify-content:center; }
+      .cc-th img{ width:100%; height:100%; object-fit:cover; display:block; }
+      .cc-th .ph2{ font-size:17px; opacity:.32; }
+      .cc-swap{ position:absolute; left:0; right:0; bottom:0; display:flex; z-index:3; }
+      .cc-swap button{ flex:1; border:none; background:rgba(0,0,0,.74); color:var(--cso-lime);
+        font-size:9.5px; font-weight:900; padding:2px 0; cursor:pointer; font-family:inherit; line-height:1.3; }
+      .cc-swap button:active{ background:rgba(0,0,0,.9); }
+      .cc-body{ flex:1; min-width:0; }
+      .cc-hook{ font-size:12.5px; font-weight:800; letter-spacing:-.02em; line-height:1.36; color:#EDEFE6;
+        display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+      .cc-meta{ display:flex; gap:5px; flex-wrap:wrap; margin-top:6px; }
+      .cc-meta .mc{ font-size:9.5px; font-weight:700; padding:2.5px 7px; border-radius:99px;
+        background:#0E0F0B; border:1px solid var(--cso-line2); color:#9AA08A; white-space:nowrap; }
+      .cc-meta .mc.v{ font-family:'JetBrains Mono',monospace; color:var(--cso-lime);
+        border-color:rgba(215,243,75,.35); }
+      .cc-meta .mc.ok{ color:#2FD07B; border-color:rgba(47,208,123,.36); }
+      .cc-meta .mc.miss{ color:#F0CF7E; border-color:rgba(240,207,126,.4); }
+      .cc-chk{ flex:none; width:19px; height:19px; border-radius:50%; display:flex; align-items:center;
+        justify-content:center; font-size:11px; font-weight:900; background:var(--cso-lime); color:#0B0C0A;
+        transition:.18s; }
+      .cso-card.off .cc-chk{ background:transparent; border:1.5px solid var(--cso-line2); color:transparent; }
+      .cc-flag{ font-size:9.5px; font-weight:800; padding:2.5px 7px; border-radius:99px; flex:none;
+        background:rgba(224,120,140,.14); color:#E0788C; border:1px solid rgba(224,120,140,.42); }
+      .cc-more{ display:flex; align-items:center; gap:5px; width:100%; background:none; border:none;
+        border-top:1px solid var(--cso-line2); color:#6B715C; font-family:inherit; font-size:10.5px;
+        font-weight:700; padding:7px 10px; cursor:pointer; text-align:left; }
+      .cc-more:hover{ color:#9AA08A; }
+      .cc-more .cv{ transition:transform .22s; display:inline-block; }
+      .cso-card.open .cc-more .cv{ transform:rotate(90deg); }
+      .cc-peek{ max-height:0; overflow:hidden; transition:max-height .3s cubic-bezier(.3,.9,.25,1); }
+      .cso-card.open .cc-peek{ max-height:420px; overflow:auto; }
+      .cc-peek-in{ padding:2px 10px 11px; }
+      .cc-prow{ display:flex; gap:8px; font-size:11px; line-height:1.55; padding:2.5px 0; }
+      .cc-plab{ flex:none; width:54px; font-weight:800; font-size:9.5px; padding-top:1px; word-break:keep-all; }
+      .cc-ptxt{ color:#9AA08A; flex:1; min-width:0; white-space:pre-wrap; }
+      .cso-card.warn{ border-color:rgba(240,207,126,.45); }
+      .cso-card.dup{ border-color:rgba(224,120,140,.5); }
+      @media (max-width:420px){ .cc-hook{ font-size:12px; } .cc-th{ width:44px; height:56px; } }
+
+      /* ═══ v539 · 받을 준비 (C 골대가 다가옴 + B 점선 가이드 + 배경 톤) ═══
+         Ctrl/⌘을 누르거나 파일을 끌면 «놓기 전에» 골대가 마중 나온다.
+         색은 무대 테마를 그대로 따라간다 — 4버전 전부. */
+      .cso-stage[data-theme="dunk"]  { --rdy:#e6fb62; --rdy-rgb:230,251,98; }
+      .cso-stage[data-theme="scan"]  { --rdy:#43e0e6; --rdy-rgb:67,224,230; }
+      .cso-stage[data-theme="jewel"] { --rdy:#f0cf7e; --rdy-rgb:240,207,126; }
+      .cso-stage[data-theme="flower"]{ --rdy:#ff9ec2; --rdy-rgb:255,158,194; }
+      .cso-stage{ transition:background .3s ease, box-shadow .3s ease; }
+      /* B · 점선 가이드 — 받을 «자리»를 그려준다 */
+      .cso-stage::after{
+        content:''; position:absolute; inset:9px; border-radius:14px; z-index:3; pointer-events:none;
+        border:2.5px dashed rgba(var(--rdy-rgb),.62); background:rgba(var(--rdy-rgb),.06);
+        opacity:0; transform:scale(.985);
+        transition:opacity .22s ease, transform .26s cubic-bezier(.3,.9,.25,1);
+      }
+      .cso-stage.cso-ready::after{ opacity:1; transform:scale(1); }
+      /* 배경 톤 — 은은하게 데워짐 */
+      .cso-stage.cso-ready{
+        background:radial-gradient(120% 90% at 50% 42%, rgba(var(--rdy-rgb),.09), transparent 68%), #0A0C08;
+        box-shadow:inset 0 0 46px rgba(var(--rdy-rgb),.1), 0 0 30px rgba(var(--rdy-rgb),.09);
+      }
+      /* C · 골대가 다가옴 — 그 테마의 오브제만 커진다 */
+      .cso-stage .cso-obj{ transition:transform .3s cubic-bezier(.3,1.05,.35,1), filter .3s ease; }
+      .cso-stage.cso-ready .cso-obj{
+        transform:scale(1.13); filter:drop-shadow(0 0 16px rgba(var(--rdy-rgb),.42));
+      }
+      /* 문구 교체 — 「던지기」에서 「놓으세요」로 */
+      .cso-lbl .t1, .cso-lbl .t2{ transition:opacity .2s ease; }
+      .cso-stage.cso-ready .cso-lbl .t1, .cso-stage.cso-ready .cso-lbl .t2{ opacity:0; }
+      .cso-rdylbl{
+        position:absolute; left:0; right:0; top:50%; transform:translateY(-50%) scale(.96); z-index:4;
+        text-align:center; pointer-events:none; opacity:0;
+        transition:opacity .22s ease, transform .26s cubic-bezier(.3,.9,.25,1);
+      }
+      .cso-stage.cso-ready .cso-rdylbl{ opacity:1; transform:translateY(-50%) scale(1); }
+      .cso-rdylbl .r1{ font-size:17px; font-weight:900; letter-spacing:-.02em; color:var(--rdy);
+        text-shadow:0 0 18px rgba(var(--rdy-rgb),.5); }
+      .cso-rdylbl .r2{ font-size:11.5px; font-weight:700; color:rgba(var(--rdy-rgb),.72); margin-top:5px; }
+      @media (prefers-reduced-motion: reduce){
+        .cso-stage, .cso-stage::after, .cso-stage .cso-obj, .cso-rdylbl{ transition:none !important; }
+        .cso-stage.cso-ready .cso-obj{ transform:none; }
+      }
+
       /* 붙여넣기 바텀시트 */
       .cso-feedov{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:60;display:none}
       .cso-feedov.on{display:block}
-      .cso-feed{position:fixed;left:50%;bottom:0;transform:translateX(-50%);width:min(520px,100%);z-index:61;background:#15160f;border:1px solid var(--cso-line2);border-bottom:none;border-radius:20px 20px 0 0;padding:14px 16px calc(20px + env(safe-area-inset-bottom));display:none;animation:csoUp .28s cubic-bezier(.2,.9,.3,1) both}
+      /* v541 · 가운데 정렬을 transform이 아니라 margin으로 — 스와이프 닫기(translateY)와 충돌하지 않게 */
+      .cso-feed{position:fixed;left:0;right:0;bottom:0;margin:0 auto;width:min(520px,100%);z-index:61;background:#15160f;border:1px solid var(--cso-line2);border-bottom:none;border-radius:20px 20px 0 0;padding:14px 16px calc(20px + env(safe-area-inset-bottom));display:none;animation:csoUp .28s cubic-bezier(.2,.9,.3,1) both;touch-action:pan-y}
       .cso-feed.on{display:block}
-      @keyframes csoUp{0%{transform:translate(-50%,40px);opacity:0}100%{transform:translate(-50%,0);opacity:1}}
-      .cso-feed .grip{width:38px;height:4px;border-radius:99px;background:var(--cso-line2);margin:0 auto 12px}
+      @keyframes csoUp{0%{transform:translateY(40px);opacity:0}100%{transform:none;opacity:1}}
+      .cso-feed .grip{width:38px;height:4px;border-radius:99px;background:var(--cso-line2);margin:0 auto 12px;cursor:grab}
+      /* v541 · 시트 탈출구 — 닫는 법이 «보여야» 한다 (배경 클릭만 있으면 아무도 모른다) */
+      .cso-feedx{position:absolute;top:9px;right:11px;z-index:3;width:30px;height:30px;border-radius:50%;
+        border:1px solid var(--cso-line2);background:rgba(255,255,255,.04);color:#9AA08A;
+        font-family:inherit;font-size:13px;font-weight:800;cursor:pointer;line-height:1;
+        display:flex;align-items:center;justify-content:center;transition:.15s}
+      .cso-feedx:hover{background:rgba(255,255,255,.1);color:#EDEFE6;border-color:#4A4E3E}
+      .cso-feedx:active{transform:scale(.92)}
       .cso-feed .ft{font-size:13px;font-weight:800;margin-bottom:9px}
       #cso-paste{width:100%;background:#0c0d0a;border:1px solid var(--cso-line2);border-radius:12px;color:var(--ink,#eee);padding:11px 12px;font-size:12.5px;font-family:inherit;resize:none;line-height:1.55;outline:none}
       #cso-paste.cso-shake{animation:csoShake .42s ease;border-color:var(--cso-lime)}
@@ -18326,6 +18554,25 @@
       .cso-dring #cso-paste{background:transparent;border:none;border-radius:12px}
       .cso-dring #cso-paste:focus{border:none}
       @media(prefers-reduced-motion:reduce){.cso-dring::before{animation:none}}
+      /* v541 · 좌우 2단 (왼쪽=사진, 오른쪽=원고). 세로 부피가 줄고 «짝»이 보인다 */
+      .cso-2col{display:grid;grid-template-columns:132px 1fr;gap:11px;margin-top:2px;align-items:stretch}
+      .cso-cl{display:flex;flex-direction:column;gap:7px;min-width:0}
+      /* 사진 칸 = 세로 카드(4:5) — 실제 썸네일 비율이라 «뭘 넣는지»가 그려진다 */
+      .cso-cl #cso-pick{flex:0 0 auto;flex-direction:column;justify-content:center;gap:6px;
+        aspect-ratio:4/5;padding:10px 8px;text-align:center;margin-left:0}
+      .cso-cl #cso-pick .ic{font-size:21px}
+      .cso-cl #cso-pick .tx{font-size:11px;line-height:1.35}
+      .cso-cl #cso-pick .ct{margin-left:0}
+      .cso-cl #cso-strip{margin-top:0;max-height:96px;overflow-y:auto}
+      .cso-feed-act #cso-go{flex:1;width:100%}
+      .cso-cr{min-width:0;display:flex}
+      .cso-cr .cso-dring{flex:1;display:flex}
+      .cso-cr .cso-dinner{flex:1;display:flex}
+      .cso-cr #cso-paste{flex:1;min-height:118px}
+      @media(max-width:560px){
+        .cso-2col{grid-template-columns:96px 1fr;gap:9px}
+        .cso-cr #cso-paste{min-height:104px}
+      }
       .cso-feed-act{display:flex;gap:8px;margin-top:10px}
       .cso-feed-act button{border:none;border-radius:11px;padding:12px;font-family:inherit;font-size:12px;font-weight:800;cursor:pointer}
       #cso-pick{flex:1;display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.02);border:1.5px dashed rgba(255,255,255,.18);color:#9aa08a;border-radius:11px;padding:12px 14px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;transition:.15s;text-align:left}
@@ -18367,7 +18614,17 @@
       .cso-card .dupflag{position:absolute;left:3px;top:3px;z-index:3;font-size:8px;font-weight:800;color:#fff;background:rgba(224,91,91,.85);border-radius:5px;padding:1px 4px}
       .cso-card .chkmark{position:absolute;right:3px;top:3px;z-index:3;width:15px;height:15px;border-radius:50%;background:var(--cso-emer);color:#04120a;font-size:9px;display:grid;place-items:center;font-weight:800}
       .cso-card.off .chkmark{background:rgba(255,255,255,.15);color:transparent}
-      .cso-savebar{display:flex;align-items:center;gap:8px;margin-top:10px}
+      /* v542 · 저장바 = 방 바닥에 «항상 붙어 있는» 다음 걸음.
+         전에는 분해가 끝나도 화면 밖(909px)에 있어서 «버튼이 어디 갔지?»가 됐다 (사장님 제보). */
+      .cso-savebar{display:flex;align-items:center;gap:8px;margin-top:10px;
+        position:sticky;bottom:0;z-index:12;
+        padding:10px 12px;margin-left:-12px;margin-right:-12px;
+        background:linear-gradient(to top,#0B0C08 62%,rgba(11,12,8,.92) 88%,rgba(11,12,8,0));
+        -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+      .cso-savebar .tx{flex:1;min-width:0}
+      /* 카드가 없을 땐 굳이 바닥에 붙어 있을 이유가 없다 */
+      #cso.cso-empty0 .cso-savebar{position:static;background:none;backdrop-filter:none;
+        margin-left:0;margin-right:0;padding:0}
       .cso-savebar .tx{flex:1;font-size:10px;color:var(--cso-sub2)}.cso-savebar .tx b{color:var(--cso-emer)}
       .cso-savebar button{border:none;border-radius:11px;padding:11px 16px;font-family:inherit;font-size:12.5px;font-weight:800;cursor:pointer;background:linear-gradient(135deg,var(--cso-emer),#22a860);color:#04120a}
       .cso-savebar button:disabled{opacity:.4;background:#1a1b16;color:var(--cso-sub2)}
@@ -18398,6 +18655,16 @@
           <button class="cso-tb pr" id="cso-prompt">📋 프롬프트</button>
           <span class="sp"></span>
           <button class="cso-tb hp" id="cso-help">📖 설명서</button>
+          <!-- v543 · 「여기가 끝인 줄」 막는 문 — 미분류가 있을 때만 나타난다 -->
+          <button class="cso-tb nx" id="cso-tonext" style="display:none">분류하기 <span class="n" id="cso-nx-n">0</span> ›</button>
+        </div>
+        <!-- v543 · 여정 스텝 — 지금 어디고 뭐가 남았는지 -->
+        <div class="cso-steps" id="cso-steps">
+          <div class="cs-st" data-st="1"><span class="dot">1</span><span class="lb">붙여넣기</span></div>
+          <div class="cs-ln"></div>
+          <div class="cs-st" data-st="2"><span class="dot">2</span><span class="lb">확인</span></div>
+          <div class="cs-ln"></div>
+          <div class="cs-st" data-st="3"><span class="dot">3</span><span class="lb">분류</span></div>
         </div>
         <div class="cso-stage" id="cso-stage" data-theme="dunk">
           <div class="aura"></div>
@@ -18406,21 +18673,37 @@
           <div class="cso-obj o-jewel"><div class="box"><div class="lid"></div><div class="base"><div class="gems"><span class="gem"></span><span class="gem"></span><span class="gem"></span></div></div></div></div>
           <div class="cso-obj o-flower"><div class="blooms"><span class="bloom b1">🌸</span><span class="bloom b2">🌷</span><span class="bloom b3">🌼</span></div><div class="vase"></div></div>
           <div class="cso-lbl"><div class="t1">여기에 <b>던지기</b></div><div class="t2">봇이 정리해준 걸 붙여넣고 캡처 던지기</div></div>
+          <div class="cso-rdylbl" id="cso-rdylbl"><div class="r1">여기에 놓으세요</div><div class="r2" id="cso-rdysub">⌘V로 바로 담깁니다</div></div>
           <div class="cso-belt"></div>
           <div class="cso-statusbar" id="cso-statusbar"><span class="sl">담긴 재료</span><div class="sb-items"><span class="sb t1" id="sb-thumb"><i></i>썸네일</span><span class="sb t2" id="sb-content"><i></i>내용</span><span class="sb t3" id="sb-script"><i></i>원고</span></div></div>
         </div>
         <div class="cso-tray-h"><span class="t">컨텐츠 분해 카드</span><span class="c" id="cso-cnt"></span><span class="sp"></span><span class="dn" id="cso-dn"></span></div>
         <div class="cso-row" id="cso-row"><span class="cso-empty">무대에 던지면 여기 좌르륵 — 카드가 채워져요</span></div>
-        <div class="cso-savebar"><span class="tx" id="cso-savetx">완성 카드만 창고로</span><button id="cso-save" disabled>💾 한번에 저장</button></div>
+        <!-- v543 · 다음 방 예고 — 저장 «전»에 보여준다 (팝업으로 묻는 대신) -->
+        <button type="button" class="cso-peek" id="cso-peek">
+          <span class="ic">🦾</span>
+          <span class="tx"><span class="t1">다음 — 유형 분류</span><span class="t2" id="cso-peek-s">저장하면 미분류가 기다려요</span></span>
+          <span class="go">›</span>
+        </button>
+        <div class="cso-savebar"><span class="tx" id="cso-savetx">완성 카드만 창고로</span><button id="cso-save" disabled>창고에 넣고 분류하기 ›</button></div>
         <div class="cso-note">카드 탭 = 저장 선택/해제 · 카드 색이 밝을수록 재료가 다 찬 것 (썸네일·내용·원고)</div>
       </div>
       <div class="cso-feedov" id="cso-feedov"></div>
       <div class="cso-feed" id="cso-feed">
         <div class="grip"></div>
+        <button type="button" class="cso-feedx" id="cso-feedx" aria-label="닫기">✕</button>
         <div class="ft">봇 정리 결과를 <b style="color:#e6fb62">붙여넣으면 끝</b> — 알아서 카드가 돼요</div>
-        <div class="cso-dring"><div class="cso-dinner"><textarea id="cso-paste" rows="4" placeholder="여기 길게 눌러 붙여넣기 (Ctrl+V) — 붙이는 순간 자동 분해"></textarea></div></div>
-        <div id="cso-strip"></div>
-        <div class="cso-feed-act"><button id="cso-pick"><span class="ic">🖼</span><span class="tx">썸네일 사진 넣기 (선택)</span><span class="ct" id="cso-slotct"></span></button><button type="button" id="cso-go">넣기 →</button></div>
+        <!-- v541 · 좌우 2단 — 왼쪽 «어떤 사진», 오른쪽 «무슨 내용». 짝이 눈에 보이게 -->
+        <div class="cso-2col">
+          <div class="cso-cl">
+            <button id="cso-pick"><span class="ic">🖼</span><span class="tx">썸네일 사진</span><span class="ct" id="cso-slotct"></span></button>
+            <div id="cso-strip"></div>
+          </div>
+          <div class="cso-cr">
+            <div class="cso-dring"><div class="cso-dinner"><textarea id="cso-paste" rows="4" placeholder="여기 길게 눌러 붙여넣기 (Ctrl+V) — 붙이는 순간 자동 분해"></textarea></div></div>
+          </div>
+        </div>
+        <div class="cso-feed-act"><button type="button" id="cso-go">넣기 →</button></div>
         <div style="font-size:9.5px;color:#6b715c;text-align:center;margin-top:8px">붙여넣으면 자동으로 카드가 돼요 — [넣기]를 눌러도 같아요 · 사진이 있으면 썸네일이 밝아져요</div>
       </div>
       <div class="cso-gov" id="cso-gov"></div>
@@ -20184,8 +20467,34 @@
     .slv-led{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:10.5px;font-weight:800;letter-spacing:.08em;color:var(--sneon);text-shadow:0 0 8px rgba(230,251,98,.5);
       background:#0a0b06;border:1px solid rgba(230,251,98,.25);border-radius:8px;padding:6px 10px;white-space:nowrap}
     .slv-led .dim{color:rgba(230,251,98,.4)}
+    /* v544 · 되돌리기 — 평소엔 숨고, 방금 배정한 게 있을 때만 나타난다 */
+    .slv-undo{display:none;align-items:center;gap:5px;flex:none;background:rgba(255,255,255,.05);
+      border:1px solid var(--sline2);color:var(--ssub);border-radius:9px;padding:6px 10px;
+      font-family:inherit;font-size:11px;font-weight:700;cursor:pointer;max-width:190px;
+      overflow:hidden;white-space:nowrap;text-overflow:ellipsis;transition:.15s}
+    .slv-undo.on{display:inline-flex}
+    .slv-undo:hover{background:rgba(255,255,255,.1);color:#EDEFE6;border-color:#4A4E3E}
+    .slv-undo:active{transform:scale(.95)}
+    .slv-undo .ic{font-size:12px;flex:none}
+    .slv-undo .t{overflow:hidden;text-overflow:ellipsis}
+    @media (max-width:430px){ .slv-undo{max-width:104px} .slv-undo .t{display:none} }
     .slv-machine{border:1px solid var(--sline);background:linear-gradient(180deg,#15170f,#0e0f09);border-radius:20px;overflow:hidden;box-shadow:0 22px 46px -22px rgba(0,0,0,.8),inset 0 1px 0 rgba(255,255,255,.05)}
     .slv-floor{position:relative;height:288px;overflow:hidden;background:radial-gradient(120% 90% at 50% 0%,#13150e,#0a0b07 62%)}
+    /* v544 · 폰에서 무대를 눌러 «한 화면»에 담는다 — 연출은 첫 장에서만 감동이고, 12번 반복하면 공간이 아깝다.
+       실측(375×812): 전체 871px로 59px 넘쳐 스크롤이 생겼다 → floor를 줄여 스크롤 제거 */
+    /* ⚠️ .slv-cc 정의가 이 아래에 또 있어서 «#slv »를 붙여 우선순위를 올린다 */
+    /* v549 · 나머지 축을 접어 155px을 벌었으니 무대를 «주인공»으로 되돌린다.
+       로봇팔이 카드를 집어 옮기는 연출은 무대가 커야 살아난다 (사장님 「압도적으로 크게」) */
+    @media (max-width:430px){
+      .slv-floor{height:330px}
+      #slv .slv-cc{width:106px}
+      .slv-axis{margin-bottom:9px}
+      .slv-chip{padding:6px 11px}
+    }
+    @media (max-height:760px){
+      .slv-floor{height:280px}
+      #slv .slv-cc{width:96px}
+    }
     /* 무대 조명: 은은한 틸·바이올렛 베이스 + 컬러 스윕(에메랄드→시안→라임 빛 띠가 벨트 방향으로) */
     .slv-floor::before{content:'';position:absolute;inset:0;pointer-events:none;z-index:1;
       background:radial-gradient(45% 55% at 6% 18%,rgba(47,182,160,.11),transparent 70%),
@@ -20198,7 +20507,11 @@
     .slv-armbase{position:absolute;left:0;right:0;top:14px;height:11px;background:linear-gradient(180deg,#22251a,#15170f);border-bottom:1px solid rgba(255,255,255,.1);z-index:6}
     .slv-armbase::before{content:'';position:absolute;inset:3px 0;background:repeating-linear-gradient(90deg,rgba(255,255,255,.06) 0 2px,transparent 2px 14px);animation:slvbelt .8s linear infinite}
     @keyframes slvbelt{to{background-position-x:14px}}
-    .slv-arm{position:absolute;top:23px;width:12px;height:52px;z-index:8;transition:left .55s cubic-bezier(.35,.85,.35,1),height .4s cubic-bezier(.35,.85,.35,1)}
+    /* v551 · 공정 속도는 «한 손잡이»로 — 빨라져도 «같은 동작을 끝까지» 한다.
+       v549는 시간만 줄여(190ms) CSS .55s 이동이 도중에 잘렸다 → 눈에는 순간이동으로 보임(레일 세계관이 죽던 원인). */
+    #slv{--sd1:.55s;--sd2:.45s}
+    #slv.slv-fast{--sd1:.27s;--sd2:.2s}
+    .slv-arm{position:absolute;top:23px;width:12px;height:52px;z-index:8;transition:left var(--sd1) cubic-bezier(.35,.85,.35,1),height var(--sd2) cubic-bezier(.35,.85,.35,1)}
     .slv-arm .shaft{position:absolute;left:50%;top:0;bottom:14px;width:8px;transform:translateX(-50%);background:linear-gradient(90deg,#2a2d20,#191b12);border:1px solid rgba(255,255,255,.12);border-radius:0 0 3px 3px}
     .slv-arm .claw{position:absolute;left:50%;bottom:0;transform:translateX(-50%);width:56px;height:16px}
     .slv-arm .claw::before,.slv-arm .claw::after{content:'';position:absolute;top:0;width:7px;height:15px;border-radius:0 0 4px 4px;background:#2e321f;border:1px solid rgba(230,251,98,.4);transition:.25s}
@@ -20209,12 +20522,16 @@
     .slv-arm.work .lamp{background:var(--pf-acc,var(--sneon));box-shadow:0 0 12px var(--pf-acc,rgba(230,251,98,.8))}
     .slv-cc{position:absolute;width:106px;aspect-ratio:9/14;border-radius:12px;overflow:hidden;border:1.5px solid rgba(230,251,98,.55);z-index:7;
       box-shadow:0 0 0 1px rgba(230,251,98,.28),0 14px 30px rgba(0,0,0,.6),0 0 22px rgba(215,243,75,.18);
-      transition:left .55s cubic-bezier(.35,.85,.35,1),top .45s cubic-bezier(.35,.85,.35,1),transform .45s,opacity .35s}
+      transition:left var(--sd1) cubic-bezier(.35,.85,.35,1),top var(--sd2) cubic-bezier(.35,.85,.35,1),transform var(--sd2),opacity .35s}
     .slv-cc img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
     .slv-cc::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 46%,rgba(0,0,0,.76))}
     .slv-cc .hk{position:absolute;left:8px;right:8px;bottom:22px;z-index:2;font-size:9.5px;font-weight:700;line-height:1.35;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.8)}
+    /* v547 · 썸네일에 이미 문구가 박혀 있는데 그 위에 또 글씨를 얹으면 «판단할 그림»을 가린다.
+       사진이 붙으면 후킹문구는 물러난다 (사진 없을 때만 판단 재료로 남김) */
+    .slv-cc.has-img .hk{display:none}
+    .slv-cc.has-img .vw{bottom:6px;background:rgba(0,0,0,.55);border-radius:6px;padding:2px 6px;left:6px}
     .slv-cc .vw{position:absolute;left:8px;bottom:6px;z-index:2;font-family:'JetBrains Mono',monospace;font-size:9.5px;font-weight:800;color:var(--sneon)}
-    .slv-cc.release{transition:top .45s cubic-bezier(.5,0,.8,.45),transform .45s,opacity .3s .2s,left .55s cubic-bezier(.35,.85,.35,1);transform:scale(.5) rotate(6deg);opacity:0}
+    .slv-cc.release{transition:top var(--sd2) cubic-bezier(.5,0,.8,.45),transform var(--sd2),opacity calc(var(--sd2)*.7) calc(var(--sd2)*.42),left var(--sd1) cubic-bezier(.35,.85,.35,1);transform:scale(.5) rotate(6deg);opacity:0}
     .slv-q{position:absolute;left:14px;bottom:14px;z-index:4;width:150px;height:62px}
     .slv-q .qd{position:absolute;bottom:0;width:44px;height:62px;border-radius:8px;background:linear-gradient(160deg,#222620,#121510);border:1px solid rgba(255,255,255,.14);overflow:hidden;box-shadow:0 5px 12px rgba(0,0,0,.45)}
     /* 오프셋 덱: 맨 앞(다음 차례)만 온전히, 뒤는 살짝씩 겹쳐 쌓임 */
@@ -20265,14 +20582,77 @@
     .slv-axh .hint{font-size:9px;color:var(--sfaint);margin-left:auto}
     .slv-chips{display:flex;flex-wrap:wrap;gap:6px}
     .slv-chip{border:1px solid var(--sline2);background:#1A1B16;color:var(--ssub);border-radius:999px;padding:7px 13px;font-size:11px;font-weight:700;font-family:inherit;cursor:pointer;transition:.14s}
+    /* v550 · 「다 보이게」 — 접지 않는다. 대신 칩이 적은 축은 «제목과 같은 줄»에 놓아 납작하게.
+       퍼널(2)·핏(5)·트렌드(5)는 한 줄이면 충분하고, 그만큼 무대를 크게 유지할 수 있다. */
+    .slv-axis[data-ax="funnel"], .slv-axis[data-ax="fit"], .slv-axis[data-ax="trend"]{
+      display:flex; align-items:center; gap:10px; flex-wrap:wrap}
+    .slv-axis[data-ax="funnel"] .slv-axh,
+    .slv-axis[data-ax="fit"] .slv-axh,
+    .slv-axis[data-ax="trend"] .slv-axh{flex:0 0 auto; margin:0; min-width:96px}
+    .slv-axis[data-ax="funnel"] .slv-chips,
+    .slv-axis[data-ax="fit"] .slv-chips,
+    .slv-axis[data-ax="trend"] .slv-chips{flex:1 1 auto; margin:0; justify-content:flex-end}
+    /* 힌트는 한 줄 안에서 자리를 못 버티므로 툴팁처럼 물러난다 (제목은 그대로 보임) */
+    .slv-axis[data-ax="funnel"] .slv-axh .hint,
+    .slv-axis[data-ax="fit"] .slv-axh .hint,
+    .slv-axis[data-ax="trend"] .slv-axh .hint{display:none}
+    /* 폰에선 한 줄에 들어가도록 제목·칩을 더 조인다 (다 보이면서 무대도 지키기) */
+    @media (max-width:430px){
+      .slv-axis[data-ax="funnel"] .slv-chip .sub{display:none}   /* 「— 누구나 볼 것」은 물러남 */
+      .slv-axis[data-ax="funnel"] .slv-axh,
+      .slv-axis[data-ax="fit"] .slv-axh,
+      .slv-axis[data-ax="trend"] .slv-axh{min-width:74px}
+      .slv-axis[data-ax="funnel"] .slv-axh .n,
+      .slv-axis[data-ax="fit"] .slv-axh .n,
+      .slv-axis[data-ax="trend"] .slv-axh .n{font-size:11px}
+      .slv-chip.slv-num{min-width:32px;font-size:11.5px}
+      .slv-axis[data-ax="funnel"] .slv-chip{padding:6px 9px;font-size:10.5px}
+      /* v551 · 폰에서 긴 안내문이 제목·[편집]을 밀어 둘 다 두 줄로 깨졌다 → 안내문만 아랫줄로 */
+      .slv-axis[data-ax="thumb"] .slv-axh{flex-wrap:wrap}
+      .slv-axis[data-ax="thumb"] .slv-axh .n{white-space:nowrap}
+      .slv-axis[data-ax="thumb"] .slv-axh .hint{flex:1 0 100%;order:3;margin:3px 0 0;line-height:1.45}
+    }
+    /* v548 · 자동배정 미니 버튼 — 큰 바가 화면을 먹어서 상단으로 옮김 (확실한 게 있을 때만) */
+    .slv-automini{display:none;align-items:center;gap:4px;flex:none;border-radius:9px;padding:6px 10px;
+      font-family:inherit;font-size:11px;font-weight:800;cursor:pointer;transition:.15s;
+      background:rgba(230,251,98,.1);border:1px solid rgba(230,251,98,.4);color:var(--sneon)}
+    .slv-automini.on{display:inline-flex}
+    .slv-automini:hover{background:rgba(230,251,98,.2)}
+    .slv-automini:active{transform:scale(.94)}
+    .slv-automini b{font-family:'JetBrains Mono',monospace;font-size:11.5px}
+    #slv-auto{display:none !important}   /* 큰 바 폐기 (마크업·함수는 보존) */
+    /* v547 · 퍼널 두 갈래는 색으로 갈린다 — 유입=자석(따뜻), 전환=초록(내 고객) */
+    .slv-chip.fn-in{border-color:rgba(224,120,140,.42);color:#E0788C}
+    .slv-chip.fn-cv{border-color:rgba(47,208,123,.42);color:#2FD07B}
+    /* v545 · 핏 점수 = 숫자 한 자리. 별 5개는 폰에서 줄을 넘겼다 */
+    .slv-chip.slv-num{min-width:38px;padding:7px 0;text-align:center;
+      font-family:'JetBrains Mono',ui-monospace,monospace;font-size:12.5px;font-weight:800}
     .slv-chip.on{color:#0B0C0A;font-weight:800}
     .slv-axis[data-ax="thumb"] .slv-chip.on{background:#a7e3c4;border-color:#a7e3c4}
     .slv-axis[data-ax="copy"] .slv-chip.on{background:#9fd0e8;border-color:#9fd0e8}
-    /* v495 · 사람-판단 축 — 퍼널(유입 캔들·전환 초록)·핏(골드)·조회수(라임) */
-    .slv-axis[data-ax="funnel"] .slv-chip.on[data-fn="attract"]{background:#E0B27A;border-color:#E0B27A}
-    .slv-axis[data-ax="funnel"] .slv-chip.on[data-fn="convert"]{background:#34d77a;border-color:#34d77a}
-    .slv-axis[data-ax="fit"] .slv-chip.on{background:#F5C84B;border-color:#F5C84B}
+    /* v551 · 퍼널 선택색 — v547이 «연분홍 글씨(#FFD9E0) + 베이지 배경(#E0B27A)»으로 겹쳐
+       대비 1.6:1이 나오고 있었다(고른 게 오히려 흐려짐). 색의 헌법대로 되돌린다:
+       유입=자석 로즈 · 전환=초록하트. 고른 칩은 «채워지고 글씨는 어둡게» — 한눈에 켜진 게 보이도록. */
+    .slv-axis[data-ax="funnel"] .slv-chip.on[data-fn="attract"]{background:#E0788C;border-color:#E0788C;
+      color:#2B0A11;box-shadow:0 2px 12px rgba(224,120,140,.32)}
+    .slv-axis[data-ax="funnel"] .slv-chip.on[data-fn="convert"]{background:#2FD07B;border-color:#2FD07B;
+      color:#04200F;box-shadow:0 2px 12px rgba(47,208,123,.32)}
     .slv-axis[data-ax="views"] .slv-chip.on{background:#d7f34b;border-color:#d7f34b}
+    /* v551 · 1~5는 «버튼 다섯 개»가 아니라 «하나의 척도»다. 애플 세그먼티드 컨트롤처럼 한 덩어리로 묶고,
+       고른 지점까지 트랙이 차오르게 해 «정도»가 숫자보다 먼저 눈에 들어오게 한다.
+       (트렌드 축은 여태 선택색 규칙이 아예 없어 «검은 글씨 on 검은 배경»이었다 — 눌러도 안 보이던 원인) */
+    .slv-axis[data-ax="fit"] .slv-chips,
+    .slv-axis[data-ax="trend"] .slv-chips{gap:0;flex-wrap:nowrap;flex:0 0 auto;margin-left:auto;padding:2px;
+      border-radius:999px;background:#15160F;border:1px solid var(--sline2)}
+    .slv-axis[data-ax="fit"] .slv-chip.slv-num,
+    .slv-axis[data-ax="trend"] .slv-chip.slv-num{background:transparent;border:none;min-width:34px;padding:6px 0;
+      color:var(--sfaint);border-radius:999px;transition:background .16s ease,color .16s ease}
+    /* 차오름 = 고른 것 «앞의» 칸들 (별점의 직관을 숫자 폭으로) */
+    .slv-axis[data-ax="fit"] .slv-chip.slv-num.fill{background:rgba(245,200,75,.16);color:#F5C84B;border-radius:0}
+    .slv-axis[data-ax="trend"] .slv-chip.slv-num.fill{background:rgba(255,122,69,.16);color:#FFA778;border-radius:0}
+    .slv-chips .slv-num.fill:first-child{border-radius:999px 0 0 999px}
+    .slv-axis[data-ax="fit"] .slv-chip.slv-num.on{background:#F5C84B;color:#2A1E00;box-shadow:0 2px 10px rgba(245,200,75,.36)}
+    .slv-axis[data-ax="trend"] .slv-chip.slv-num.on{background:#FF7A45;color:#2A0C00;box-shadow:0 2px 10px rgba(255,122,69,.36)}
     .slv-chip.addc{border-style:dashed;color:var(--sfaint)}
     /* ✦ 추론으로 미리 켜둔 것 — 내가 고른 것과 구분되게 점선 */
     .slv-chip.gsd{border-style:dashed;box-shadow:none}
@@ -20350,6 +20730,10 @@
         <div class="slv-top">
           <button class="slv-back" id="slv-back">←</button>
           <div class="slv-tt">미분류 정리</div>
+          <!-- v544 · 방금 것 되돌리기 — 반복 작업에서 Undo는 없으면 안 되는 것 -->
+          <button type="button" class="slv-undo" id="slv-undo"><span class="ic">↩</span><span class="t" id="slv-undo-t">되돌리기</span></button>
+          <!-- v548 · 자동배정 = 큰 바에서 «작은 버튼»으로 (기능은 유지, 화면은 안 먹게) -->
+          <button type="button" class="slv-automini" id="slv-automini" title="문구만 봐도 확실한 것을 한 번에 배정">✨ <b id="slv-auton">0</b></button>
           <div class="slv-led">대기 <b id="slv-in">00</b> <span class="dim">→</span> 완료 <b id="slv-out">00</b></div>
         </div>
         <div class="slv-machine">
@@ -21206,7 +21590,39 @@
       <div class="sh-modal-head">
         <h2 class="sh-modal-title">컨텐츠 <span class="em">분해</span><span class="sh-modal-no" id="sh-modal-no"></span></h2>
         <div style="display:flex;gap:8px;align-items:center;">
+          <button type="button" class="rd-edit" id="rd-edit">수정하기</button>
           <button class="sh-close sh-back" id="sh-modal-close">← 뒤로</button>
+        </div>
+      </div>
+
+      <!-- ═══ v553 · 판독지 — 카드를 열면 먼저 «읽히는» 한 장 ═══
+           아래 기존 폼은 지우지 않는다(저장 로직이 읽는다). rd-mode에서 시각적으로만 물러난다. -->
+      <div id="rd">
+        <div class="rd-body">
+          <div class="rd-L">
+            <div class="rd-thumb" id="rd-thumb"></div>
+            <div class="rd-spec" id="rd-spec"></div>
+            <div class="rd-blk"><span class="k">📸 썸네일 유형</span>
+              <div class="rd-pills rd-ro" id="rd-th-ro"></div>
+              <div class="rd-pick" id="rd-th-pick"></div></div>
+            <div class="rd-blk"><span class="k">💬 수식어 유형</span>
+              <div class="rd-pills rd-ro" id="rd-cp-ro"></div>
+              <div class="rd-pick" id="rd-cp-pick"></div></div>
+            <div class="rd-blk"><span class="k">왜 터졌나 · 메모</span>
+              <div class="rd-ro" id="rd-memo-ro"></div>
+              <div class="rd-pick" style="display:none" id="rd-memo-wrap"><textarea class="rd-memo" id="rd-memo" placeholder="이건 왜 통했을까 — 한 줄로"></textarea></div></div>
+          </div>
+          <div class="rd-R">
+            <div>
+              <h2 class="rd-hook" id="rd-hook"></h2>
+              <div class="rd-sub" id="rd-sub" style="margin-top:9px"></div>
+            </div>
+            <div id="rd-script"></div>
+            <div class="rd-foot">
+              <button type="button" class="rd-btn" id="rd-open-script">✎ 원고 열기</button>
+              <button type="button" class="rd-btn pri" id="rd-to-studio">이 구조로 내 원고 쓰기</button>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -26760,6 +27176,209 @@
   }
 
   // ===== MODAL =====
+  // ═══════════ v553 · 판독지 (카드 원페이지) ═══════════
+  //   지금까지 이 모달은 «퍼널·별점·메모» 세 칸만 보이고 나머지는 전부 hidden이었다.
+  //   썸네일 유형·수식어·조회수·원고는 «고칠 방법이 아예 없었다» — 그게 사장님이 말한 「수정 버튼이 없다」의 정체.
+  //   판독지는 그 전부를 한 장에 보여주고, 「수정하기」를 누르면 그 자리에서 고친다.
+  //   ⚠️ 저장은 기존 saveRow를 그대로 탄다. 판독지는 «숨은 원본 폼»에 값을 되쓸 뿐이다(로직 무손상).
+  const RD_FUNNEL = { attract: ['🧲 유입', '#E0788C'], convert: ['💚 전환', '#2FD07B'], retain: ['🔁 관계', '#C29CFF'] };
+  let _rdEdit = false;
+  function rdDots(n, color) {
+    let s = '<span class="rd-dots" style="color:' + color + '">';
+    for (let i = 1; i <= 5; i++) s += '<i class="' + (i <= n ? 'on' : '') + '"></i>';
+    return s + '</span>';
+  }
+  function rdTypeList(which) {
+    // 정거장과 «같은 목록»을 쓴다 (사용자가 추가한 유형도 함께 보이도록)
+    try {
+      const ax = (typeof SLV_AXES !== 'undefined') && SLV_AXES.find(a => a.ax === which);
+      if (ax) { const l = slvActiveTypes(ax); if (l && l.length) return l; }
+    } catch (e) {}
+    return which === 'thumb' ? BASE_THUMB_TYPES.slice() : BASE_COPY_TYPES.slice();
+  }
+  function rdChips(hostId, list, picked, color, onToggle) {
+    const el = document.getElementById(hostId); if (!el) return;
+    el.innerHTML = list.map(t => '<button type="button" class="rd-cp' + (picked.includes(t) ? ' on' : '') + '"' +
+      (picked.includes(t) ? ' style="background:' + color + '"' : '') + ' data-t="' + esc(t) + '">' + esc(t) + '</button>').join('');
+    el.querySelectorAll('.rd-cp').forEach(b => { b.onclick = () => {
+      const t = b.dataset.t, i = picked.indexOf(t);
+      if (i > -1) picked.splice(i, 1); else picked.push(t);
+      onToggle();
+    }; });
+  }
+  function rdRender(r) {
+    if (!r) return;
+    // ① 썸네일
+    const th = document.getElementById('rd-thumb');
+    th.innerHTML = '<span class="ph">썸네일 없음</span>';
+    if (r.hasThumb) loadImage(r.id, 'thumb').then(u => {
+      if (u && editingRowId === r.id) th.innerHTML = '<img src="' + u + '" alt="" />';
+    }).catch(() => {});
+
+    // ② 명세 — 숫자와 점수를 같은 「라벨 : 값」 문법으로 (상자 여섯 개가 아니라 하나로 읽히게)
+    const fn = RD_FUNNEL[r.funnelStage] || null;
+    const num = v => v > 0 ? '<span class="v">' + Number(v).toLocaleString() + '</span>' : '<span class="v none">—</span>';
+    document.getElementById('rd-spec').innerHTML =
+      '<div class="r"><span class="k">조회수</span>' + (r.views > 0 ? '<span class="v" style="color:var(--lime,#d7f34b)">' + fmtViews(r.views) + '</span>' : '<span class="v none">—</span>') + '</div>' +
+      '<div class="r"><span class="k">공유</span>' + num(r.shares) + '</div>' +
+      '<div class="r"><span class="k">저장</span>' + num(r.saves) + '</div>' +
+      '<div class="r"><span class="k">퍼널</span><span class="v">' +
+        (fn ? '<span class="rd-pill solid" style="background:' + fn[1] + '">' + fn[0] + '</span>' : '<span class="rd-pill none">아직</span>') + '</span></div>' +
+      '<div class="r"><span class="k">나에게 핏</span><span class="v" style="color:#F5C84B">' +
+        (r.rating > 0 ? rdDots(r.rating, '#F5C84B') + r.rating : '<span class="none">—</span>') + '</span></div>' +
+      '<div class="r"><span class="k">트렌드</span><span class="v" style="color:#FF7A45">' +
+        (r.trendScore > 0 ? rdDots(r.trendScore, '#FF7A45') + r.trendScore : '<span class="none">—</span>') + '</span></div>';
+
+    // ③ 유형 — 읽기 줄 + (수정 모드에서만) 고르는 칩
+    const ro = (arr, bg) => (arr || []).length
+      ? arr.map(t => '<span class="rd-pill solid" style="background:' + bg + '">' + esc(t) + '</span>').join('')
+      : '<span class="rd-pill none">아직 없음</span>';
+    document.getElementById('rd-th-ro').innerHTML = ro(r.thumbTypes, '#a7e3c4');
+    document.getElementById('rd-cp-ro').innerHTML = ro(r.copyTypes, '#9fd0e8');
+    const thList = rdTypeList('thumb'), cpList = rdTypeList('copy');
+    function thAgain() {
+      document.getElementById('rd-th-ro').innerHTML = ro(formThumbTypes, '#a7e3c4');
+      rdChips('rd-th-pick', thList, formThumbTypes, '#a7e3c4', thAgain);
+    }
+    function cpAgain() {
+      document.getElementById('rd-cp-ro').innerHTML = ro(formCopyTypes, '#9fd0e8');
+      rdChips('rd-cp-pick', cpList, formCopyTypes, '#9fd0e8', cpAgain);
+    }
+    rdChips('rd-th-pick', thList, formThumbTypes, '#a7e3c4', thAgain);
+    rdChips('rd-cp-pick', cpList, formCopyTypes, '#9fd0e8', cpAgain);
+
+    // ④ 메모
+    const memo = (r.memo || '').trim();
+    document.getElementById('rd-memo-ro').innerHTML = memo
+      ? '<div style="font-size:12.5px;line-height:1.68;color:var(--text-sub)">' + esc(memo) + '</div>'
+      : '<div style="font-size:12px;color:var(--text-faint)">아직 안 적었어요</div>';
+    document.getElementById('rd-memo').value = memo;
+
+    // ⑤ 제목 · 키워드 · 원본
+    document.getElementById('rd-hook').textContent = r.hook || r.copyText || '(제목 없음)';
+    const kws = (r.keywords || []).concat(r.format ? ['#' + r.format] : []);
+    document.getElementById('rd-sub').innerHTML =
+      (kws.length ? kws.map(k => '<span class="rd-pill" style="color:#43E0E6">' + esc(k) + '</span>').join('') : '') +
+      (r.url ? '<a class="rd-src" href="' + esc(r.url) + '" target="_blank" rel="noopener">' + esc((r.author || '원본')) + ' ↗</a>' : '');
+
+    // ⑥ 원고 = 시간 흐름
+    rdRenderScript(r);
+  }
+  function rdRenderScript(r) {
+    const host = document.getElementById('rd-script'); if (!host) return;
+    let rowsHtml = '';
+    try { mergeIntroFlex(r.scriptSecFlex); } catch (e) {}
+    if (Array.isArray(r.scriptSecFlex) && r.scriptSecFlex.length) {
+      rowsHtml = r.scriptSecFlex.map((x, i) => {
+        const t = (x.t || '').trim(); if (!t) return '';
+        const meta = x.c ? SCRIPT_SECTIONS.find(s => s.key === x.c) : null;
+        const color = meta ? meta.color : flexLabelColor(x.k);
+        return '<div class="rd-fr" style="color:' + color + '"><div class="rd-fh"><span class="l">' +
+          esc(meta ? meta.label : x.k) + '</span></div>' +
+          '<div class="rd-fx" data-fi="' + i + '">' + esc(t) + '</div></div>';
+      }).filter(Boolean).join('');
+    } else {
+      rowsHtml = SCRIPT_SECTIONS.map(s => {
+        const v = (r.scriptSections || {})[s.key];
+        const t = v ? String(v).replace(/<[^>]*>/g, '').trim() : '';
+        if (!t) return '';
+        return '<div class="rd-fr" style="color:' + s.color + '"><div class="rd-fh"><span class="l">' + esc(s.label) + '</span></div>' +
+          '<div class="rd-fx" data-sk="' + s.key + '">' + esc(t) + '</div></div>';
+      }).filter(Boolean).join('');
+    }
+    host.innerHTML = rowsHtml
+      ? '<div class="rd-time">' + rowsHtml + '</div>'
+      : '<div class="rd-empty">아직 원고가 없어요 — 아래 <b>✎ 원고 열기</b>에서 붙여넣고 나눠보세요.</div>';
+    if (_rdEdit) host.querySelectorAll('.rd-fx').forEach(el => el.contentEditable = 'true');
+  }
+  function rdSetEdit(on) {
+    _rdEdit = !!on;
+    const rd = document.getElementById('rd'), modal = document.getElementById('sh-modal'), btn = document.getElementById('rd-edit');
+    rd.classList.toggle('editing', _rdEdit);
+    modal.classList.toggle('rd-editing', _rdEdit);
+    btn.classList.toggle('live', _rdEdit);
+    btn.textContent = _rdEdit ? '고치는 중' : '수정하기';
+    document.getElementById('rd-memo-wrap').style.display = _rdEdit ? 'block' : 'none';
+    rd.querySelectorAll('.rd-fx').forEach(el => el.contentEditable = _rdEdit ? 'true' : 'false');
+    // 수정 모드에선 명세 줄이 «누르는 것»이 된다
+    rdBindSpecEdit();
+  }
+  function rdBindSpecEdit() {
+    const spec = document.getElementById('rd-spec'); if (!spec) return;
+    const r = rows.find(x => x.id === editingRowId); if (!r) return;
+    if (!_rdEdit) { spec.onclick = null; return; }
+    spec.onclick = (e) => {
+      const row = e.target.closest('.r'); if (!row) return;
+      const k = row.querySelector('.k').textContent.trim();
+      if (k === '퍼널') {
+        const order = ['attract', 'convert', ''];
+        const cur = order.indexOf(formFunnelStage || '');
+        formFunnelStage = order[(cur + 1) % order.length];
+        try { renderFunnelStagePicker(); } catch (er) {}
+      } else if (k === '나에게 핏') { setRating(formRating >= 5 ? 0 : formRating + 1); }
+      else if (k === '트렌드') { r.trendScore = (r.trendScore >= 5) ? 0 : (r.trendScore || 0) + 1; }
+      else if (k === '조회수' || k === '공유' || k === '저장') { rdEditNum(row, k, r); return; }
+      else return;
+      rdRefreshSpec(r);
+    };
+  }
+  function rdEditNum(row, k, r) {
+    if (row.querySelector('.rd-inp')) return;
+    const cur = k === '조회수' ? (r.views || 0) : k === '공유' ? (r.shares || 0) : (r.saves || 0);
+    const v = row.querySelector('.v');
+    v.outerHTML = '<input type="text" class="rd-inp" inputmode="numeric" value="' + (cur || '') + '" placeholder="0" />';
+    const inp = row.querySelector('.rd-inp'); inp.focus(); inp.select();
+    const done = () => {
+      const n = parseNum(inp.value) || 0;
+      if (k === '조회수') { r.views = n; const fv = document.getElementById('f-views'); if (fv) fv.value = n; }
+      else if (k === '공유') r.shares = n; else r.saves = n;
+      rdRefreshSpec(r);
+    };
+    inp.onblur = done;
+    inp.onkeydown = (e) => { if (e.key === 'Enter') { e.preventDefault(); inp.blur(); } };
+  }
+  function rdRefreshSpec(r) {
+    // 명세만 다시 그린다 (전체 재렌더는 편집 중인 원고를 날린다)
+    const keep = { views: r.views, shares: r.shares, saves: r.saves, trendScore: r.trendScore,
+      funnelStage: formFunnelStage, rating: formRating, thumbTypes: r.thumbTypes, copyTypes: r.copyTypes };
+    const snap = Object.assign({}, r, keep);
+    const spec = document.getElementById('rd-spec');
+    const tmp = document.createElement('div'); tmp.id = 'rd-spec';
+    spec.replaceWith(tmp);
+    (function () {   // 썸네일을 다시 불러오지 않으려고 명세만 따로 그린다
+      const fn = RD_FUNNEL[snap.funnelStage] || null;
+      const num = v => v > 0 ? '<span class="v">' + Number(v).toLocaleString() + '</span>' : '<span class="v none">—</span>';
+      tmp.className = 'rd-spec';
+      tmp.innerHTML =
+        '<div class="r"><span class="k">조회수</span>' + (snap.views > 0 ? '<span class="v" style="color:var(--lime,#d7f34b)">' + fmtViews(snap.views) + '</span>' : '<span class="v none">—</span>') + '</div>' +
+        '<div class="r"><span class="k">공유</span>' + num(snap.shares) + '</div>' +
+        '<div class="r"><span class="k">저장</span>' + num(snap.saves) + '</div>' +
+        '<div class="r"><span class="k">퍼널</span><span class="v">' +
+          (fn ? '<span class="rd-pill solid" style="background:' + fn[1] + '">' + fn[0] + '</span>' : '<span class="rd-pill none">아직</span>') + '</span></div>' +
+        '<div class="r"><span class="k">나에게 핏</span><span class="v" style="color:#F5C84B">' +
+          (snap.rating > 0 ? rdDots(snap.rating, '#F5C84B') + snap.rating : '<span class="none">—</span>') + '</span></div>' +
+        '<div class="r"><span class="k">트렌드</span><span class="v" style="color:#FF7A45">' +
+          (snap.trendScore > 0 ? rdDots(snap.trendScore, '#FF7A45') + snap.trendScore : '<span class="none">—</span>') + '</span></div>';
+    })();
+    rdBindSpecEdit();
+  }
+  // 저장 직전 — 판독지에서 고친 것을 «숨은 원본»과 행에 되쓴다 (capture라 기존 saveRow보다 먼저 돈다)
+  function rdCollect() {
+    if (!document.getElementById('sh-modal').classList.contains('rd-mode')) return;
+    const r = rows.find(x => x.id === editingRowId); if (!r) return;
+    // ⚠️ saveRow는 thumbStrong이 false면 thumbTypes를 통째로 비운다 → 고른 게 있으면 켜준다
+    formThumbStrong = formThumbTypes.length > 0 ? true : formThumbStrong;
+    formCopyStrong = formCopyTypes.length > 0 ? true : formCopyStrong;
+    const memo = document.getElementById('rd-memo');
+    if (memo) document.getElementById('f-memo').value = memo.value;
+    // saveRow가 안 건드리는 것들은 여기서 직접
+    document.querySelectorAll('#rd .rd-fx').forEach(el => {
+      const t = (el.innerText || '').trim();
+      if (el.dataset.fi != null && r.scriptSecFlex && r.scriptSecFlex[+el.dataset.fi]) r.scriptSecFlex[+el.dataset.fi].t = t;
+      else if (el.dataset.sk && r.scriptSections) r.scriptSections[el.dataset.sk] = t;
+    });
+  }
+
   function openDetail(rowId) {
     editingRowId = rowId;
     const r = rows.find(x => x.id === rowId);
@@ -26812,6 +27431,15 @@
     renderViralPicker();
     renderKwPicker();
     renderFunnelStagePicker();
+
+    // v553 · 판독지를 먼저 세운다 (읽는 화면 → 「수정하기」를 눌러야 고치는 화면)
+    const _rd = document.getElementById('rd');
+    if (_rd) {
+      _rd.classList.add('on');
+      document.getElementById('sh-modal').classList.add('rd-mode');
+      rdSetEdit(false);
+      try { rdRender(r); } catch (e) { console.warn('rd', e); }
+    }
 
     const _shm = document.getElementById('sh-modal');
     _shm.classList.add('show');
@@ -27082,6 +27710,11 @@
 
   function closeModal() {
     document.getElementById('sh-modal').classList.remove('show');
+    // v553 · 판독지 흔적을 걷어야 «새 벤치마킹»(입력 모드)이 원래 폼으로 열린다
+    document.getElementById('sh-modal').classList.remove('rd-mode', 'rd-editing');
+    const _rd = document.getElementById('rd');
+    if (_rd) { _rd.classList.remove('on', 'editing'); }
+    _rdEdit = false;
     editingRowId = null;
     entryDisasmMode = false;
   }
@@ -27461,6 +28094,26 @@
     document.getElementById('sh-modal-close').onclick = closeModal;
     document.getElementById('sh-cancel').onclick = closeModal;
     document.getElementById('sh-save').onclick = saveDetail;
+    // ── v553 · 판독지 배선 ──
+    document.getElementById('sh-save').addEventListener('click', rdCollect, true);  // capture = saveDetail보다 먼저
+    const _rdE = document.getElementById('rd-edit');
+    if (_rdE) _rdE.onclick = function () { rdSetEdit(!_rdEdit); };
+    const _rdOs = document.getElementById('rd-open-script');
+    if (_rdOs) _rdOs.onclick = function () {
+      const id = editingRowId; closeModal();
+      setTimeout(function () { try { openRowStruct(id); } catch (e) {} }, 60);
+    };
+    const _rdTs = document.getElementById('rd-to-studio');
+    if (_rdTs) _rdTs.onclick = function () {
+      const r = rows.find(x => x.id === editingRowId); if (!r) return;
+      closeModal();
+      setTimeout(function () {
+        try {
+          if (typeof stFromBenchmark === 'function') { stFromBenchmark(r); return; }
+        } catch (e) {}
+        try { openRowStruct(r.id); } catch (e2) {}
+      }, 60);
+    };
     { const wb = document.getElementById('sh-write-from-bench'); if (wb) wb.onclick = () => { if (editingRowId) startScriptFromBenchmark(editingRowId); }; }
     document.getElementById('sh-clear-row').onclick = clearRow;
 
@@ -29917,6 +30570,9 @@
     entryDisasmMode = true;
 
     // 임시 행 객체 만들어서 openDetail에 넘기는 대신, 모달을 entry mode로 직접 채움
+    // v553 · 여긴 «아직 행이 없는» 입력 모드라 판독지를 쓰지 않는다 (옛 폼 그대로)
+    document.getElementById('sh-modal').classList.remove('rd-mode', 'rd-editing');
+    const _rdOff = document.getElementById('rd'); if (_rdOff) _rdOff.classList.remove('on', 'editing');
     document.getElementById('sh-modal-no').textContent = '· 새 벤치마킹';
     document.getElementById('f-why').value = entryState.why || '';
     document.getElementById('f-idea').value = entryState.idea || '';
@@ -41169,7 +41825,7 @@
     chips.forEach((c, i) => setTimeout(() => c.classList.add('in'), 90 + i * 110));
   }
   function csCloseFork() { const ov = document.getElementById('cs-fork'); if (ov) ov.classList.remove('show'); document.body.style.overflow = ''; ovFreeze(false); }
-  function csOpenRoom() { csCloseFork(); const r = document.getElementById('cs-room'); if (r) { r.classList.add('show'); document.body.style.overflow = 'hidden'; ovFreeze(true); csGoStep(_csStep || 1); try { csoShow(); } catch (e) {} } }
+  function csOpenRoom() { csCloseFork(); const r = document.getElementById('cs-room'); if (r) { r.classList.add('show'); document.body.style.overflow = 'hidden'; ovFreeze(true); csGoStep(_csStep || 1); try { csoShow(); } catch (e) {} try { csoSyncNext(); } catch (e) {} } }
   function csCloseRoom() { const r = document.getElementById('cs-room'); if (r) r.classList.remove('show'); document.body.style.overflow = ''; ovFreeze(false); }
   window.__openSorter = csOpenRoom; // 외부 진입용
   // 🔍 v412 상태 노출 — 콘솔에서 __cm.dash() 로 확인. IIFE 안이라 원래는 못 봤음.
@@ -41188,17 +41844,18 @@
   // 🦾 미분류 정리 라인 (slv, v408) — 로봇 집게 픽 앤 플레이스
   // 미분류 = 썸네일/수식어 유형 중 하나라도 빈 행. 배정=행에 태그 저장(폴더 즉시 반영)
   // ============================================================
+  // v546 · 정거장은 «썸네일을 보고 고르는 곳». 수식어 유형은 프롬프트가 이미 채우므로 여기선 안 묻는다.
+  //   (데이터·시트·분류 폴더의 copyTypes는 그대로 살아 있다 — 묻는 것만 뺀 것)
   const SLV_AXES = [
-    { ax: 'thumb', key: 'thumbTypes', dot: '#a7e3c4', n: '📸 썸네일 유형', base: () => BASE_THUMB_TYPES, custom: () => customThumbTypes, save: () => saveCustomThumbTypes() },
-    { ax: 'copy',  key: 'copyTypes',  dot: '#9fd0e8', n: '✍️ 수식어 유형', base: () => BASE_COPY_TYPES,  custom: () => customCopyTypes,  save: () => saveCustomCopyTypes() }
+    { ax: 'thumb', key: 'thumbTypes', dot: '#a7e3c4', n: '📸 썸네일 유형', base: () => BASE_THUMB_TYPES, custom: () => customThumbTypes, save: () => saveCustomThumbTypes() }
   ];
   const SLV_GRADS = ['radial-gradient(120% 90% at 30% 15%,#35485a,#10171c)', 'radial-gradient(120% 90% at 70% 20%,#3e4650,#141821)', 'radial-gradient(120% 90% at 40% 25%,#2f4a3a,#101a14)', 'radial-gradient(120% 90% at 60% 30%,#2f4a48,#101a19)', 'radial-gradient(120% 90% at 35% 20%,#3a5063,#0d1418)', 'radial-gradient(120% 90% at 55% 15%,#44505c,#131820)'];
   // 미분류 = ①썸네일 유형이 비었거나 ②수식어 «문구»가 있는데 그 유형이 빈 행.
   //   (v449) 수식어를 안 적은 행에까지 «수식어 유형»을 물으면 영원히 안 끝난다
+  // v546 · 미분류 = «썸네일 유형이 빈 것»만. 수식어 유형은 프롬프트가 채우므로 여기 기준에서 뺀다
   function slvUnsorted() {
     return (rows || []).filter(function (r) {
-      if (!(r.thumbTypes || []).length) return true;
-      return !!(r.copyText || '').trim() && !(r.copyTypes || []).length;
+      return !(r.thumbTypes || []).length;
     });
   }
   function slvRefreshEntries() {
@@ -41215,7 +41872,16 @@
     } catch (e) {}
   }
   let _slvQ = [], _slvDone = 0, _slvT0 = null, _slvBusy = false, _slvInited = false, _slvCard = null;
-  const SLV_CARD_TOP = 92;
+  let _slvHand = 0;   // v551 · «손으로 넘긴» 장수 (자동배정은 안 셈) — 연출 속도 판정용
+  // v544 · 무대 높이에 카드 위치를 맞춘다 (폰에선 floor가 낮아져 카드가 잘리던 것)
+  let SLV_CARD_TOP = 92;
+  function slvFitStage() {
+    try {
+      const f = document.getElementById('slv-floor'); if (!f) return;
+      const h = f.getBoundingClientRect().height || 288;
+      SLV_CARD_TOP = h < 250 ? 62 : 92;
+    } catch (e) {}
+  }
   function slvPickX() { const f = document.getElementById('slv-floor'); return f.clientWidth / 2 - 53; }
   function slvTrayX() {
     const t = document.getElementById('slv-tray').getBoundingClientRect(), f = document.getElementById('slv-floor').getBoundingClientRect();
@@ -41239,7 +41905,13 @@
       document.getElementById('slv-fs').textContent = _slvDone + '개 · ' + secs + '초';
       fin.style.display = 'flex';
       document.querySelector('#slv .slv-console').style.display = 'none';
-    } else { fin.style.display = 'none'; document.querySelector('#slv .slv-console').style.display = 'block'; }
+      // v544 · 밀린 걸 다 갚아낸 순간 — 이 앱에서 가장 크게 축하해도 되는 지점
+      if (_slvDone > 0 && !fin.dataset.cheered) {
+        fin.dataset.cheered = '1';
+        try { slvCheer(fin, _slvDone, secs); } catch (e) {}
+      }
+      try { slvUndoBar(false); } catch (e) {}   // 다 끝났으면 되돌리기는 걷는다
+    } else { fin.style.display = 'none'; document.querySelector('#slv .slv-console').style.display = 'block'; delete fin.dataset.cheered; }
   }
 
   // ═══════════════════════════════════════════════════════════════
@@ -41283,7 +41955,10 @@
       const sc = guessScored(src, slvActiveTypes(a));
       // 확실 = ①근거가 2개 이상이거나 ②경쟁자가 없거나 ③1등이 2등보다 앞선 경우.
       //   동점이면 «어느 쪽인지 모르겠다»는 뜻이니 사람에게 넘긴다
-      const ok = sc.length && (sc[0].s >= 2 || sc.length === 1 || sc[0].s > sc[1].s);
+      // v544 · 기준 완화 — 여긴 «밀린 숙제를 갚는 방»이라 빨리 끝나는 게 유일한 미덕이다.
+      //   1등이 2등의 1.5배 이상이면 사실상 확실한 것으로 본다(전엔 초근소한 차도 사람에게 넘겼음).
+      //   잘못 넘어가도 «되돌리기»와 시트 편집이 있으니 되돌릴 수 있다.
+      const ok = sc.length && (sc[0].s >= 2 || sc.length === 1 || sc[0].s > sc[1].s || sc[0].s >= sc[1].s * 1.5);
       if (!ok) sure = false; else filled++;
     });
     return sure && filled > 0;
@@ -41331,21 +42006,35 @@
           '<span class="hint">' + hint + '</span></div><div class="slv-chips">' + chipsHtml + '</div>';
         host.appendChild(ax);
         // 단일 선택 (라디오) — 하나 켜면 형제는 꺼짐
-        ax.querySelectorAll('.slv-chip').forEach(ch => { ch.onclick = () => {
+        const chips = [...ax.querySelectorAll('.slv-chip')];
+        // v551 · 척도 축(1~5)은 고른 지점«까지» 트랙이 차오른다 — 숫자보다 «정도»가 먼저 읽히게
+        const paint = () => {
+          const i = chips.findIndex(x => x.classList.contains('on'));
+          chips.forEach((x, n) => x.classList.toggle('fill', i > 0 && n < i));
+        };
+        chips.forEach(ch => { ch.onclick = () => {
           const was = ch.classList.contains('on');
-          ax.querySelectorAll('.slv-chip').forEach(x => x.classList.remove('on'));
+          chips.forEach(x => x.classList.remove('on'));
           if (!was) ch.classList.add('on');
+          paint();
           btn.disabled = !host.querySelector('.slv-chip.on');
         }; });
       }
-      if (!r.funnelStage) addSpecial('funnel', '#E0B27A', '🚪 퍼널', '처음 본 사람도 끝까지 볼까? 예=유입 · 아니오=전환',
-        '<button type="button" class="slv-chip" data-fn="attract">🚪 유입 — 누구나 볼 것</button>' +
-        '<button type="button" class="slv-chip" data-fn="convert">🌱 전환 — 내 고객용 (CTA·예약·DM)</button>');
-      if (!(r.rating > 0)) addSpecial('fit', '#F5C84B', '⭐ 나에게 핏', '내 고객·내 방향에 맞나 — 쓸 건가',
-        [1, 2, 3, 4, 5].map(n => '<button type="button" class="slv-chip" data-fit="' + n + '">' + '★'.repeat(n) + '</button>').join(''));
-      if (!(r.views > 0)) addSpecial('views', '#a9b4c0', '▶ 조회수', '대략이면 충분 — 나중에 고칠 수 있어요',
-        [['1만+', 10000], ['10만+', 100000], ['50만+', 500000], ['100만+', 1000000], ['500만+', 5000000]]
-          .map(v => '<button type="button" class="slv-chip" data-vw="' + v[1] + '">' + v[0] + '</button>').join(''));
+      // v547 · 앱 전체가 쓰는 표기로 통일 (🧲 유입 / 💚 전환) — 정거장만 🚪🌱로 달랐다
+      if (!r.funnelStage) addSpecial('funnel', 'linear-gradient(135deg,#E0788C,#2FD07B)', '🧭 퍼널', '처음 본 사람도 끝까지 볼까? 예=유입 · 아니오=전환',
+        '<button type="button" class="slv-chip fn-in" data-fn="attract">🧲 유입<span class="sub"> — 누구나 볼 것</span></button>' +
+        '<button type="button" class="slv-chip fn-cv" data-fn="convert">💚 전환<span class="sub"> — 내 고객용 (CTA·예약·DM)</span></button>');
+      // v545 · 별 5개(★★★★★)는 칸을 너무 먹어서 폰에서 줄바꿈이 났다 → 숫자 한 자리로 (사장님 확정)
+      if (!(r.rating > 0)) addSpecial('fit', '#F5C84B', '⭐ 나에게 핏', '내 고객·내 방향에 맞나 — 1(아님) ~ 5(딱 맞음)',
+        [1, 2, 3, 4, 5].map(n => '<button type="button" class="slv-chip slv-num" data-fit="' + n + '" title="' + '★'.repeat(n) + '">' + n + '</button>').join(''));
+      // v548 · 트렌드 점수 — 적합도 엔진의 «트렌드» 축이 지금은 «담은 날짜»로만 계산된다.
+      //   사람이 매기면 그게 진짜 트렌드가 되어 추천 정확도가 올라간다 (사장님 제안)
+      if (!(r.trendScore > 0)) addSpecial('trend', '#FF7A45', '🔥 트렌드', '지금 이 주제가 뜨고 있나 — 1(지났음) ~ 5(지금 한창)',
+        [1, 2, 3, 4, 5].map(n => '<button type="button" class="slv-chip slv-num" data-tr="' + n + '">' + n + '</button>').join(''));
+      // v550 · 접기 폐기 (사장님 「선택으로 빼면 안 돼, 다 보이게」).
+      //   대신 «한 줄짜리 축»으로 납작하게 만들어 다 보이면서도 무대를 지킨다 — 아래 CSS .slv-axis.oneline
+      // v547 · 조회수 축 삭제 — 프롬프트가 캡처를 읽어 이미 채운다 (사장님 확정).
+      //   비어 있는 옛 행은 시트에서 직접 고치는 게 빠르다. 저장 로직(data-vw)은 보존.
     })();
     // 미리 골라둔 게 있으면 바로 「배정」할 수 있게
     try {
@@ -41418,7 +42107,7 @@
       requestAnimationFrame(() => { c.style.transition = ''; c.style.left = slvPickX() + 'px'; c.style.transform = ''; c.style.borderRadius = ''; });
     }
     else { c.style.left = slvPickX() + 'px'; f.appendChild(c); }
-    if (r.hasThumb) loadImage(r.id, 'thumb').then(u => { if (u && c.parentNode) c.insertAdjacentHTML('afterbegin', '<img src="' + u + '" alt=""/>'); }).catch(() => {});
+    if (r.hasThumb) loadImage(r.id, 'thumb').then(u => { if (u && c.parentNode) { c.insertAdjacentHTML('afterbegin', '<img src="' + u + '" alt=""/>'); c.classList.add('has-img'); } }).catch(() => {});
     const sig = document.getElementById('slv-sig');
     if (sig) { // 3요소 신호등: 현재 카드 채움 상태
       const hasScript = !!(String(r.script || '').replace(/<[^>]*>/g, '').trim() || (r.scriptSecFlex && r.scriptSecFlex.length) || (r.scriptSections && Object.keys(r.scriptSections).some(k => r.scriptSections[k] && String(r.scriptSections[k]).replace(/<[^>]*>/g, '').trim())));
@@ -41430,10 +42119,82 @@
     document.getElementById('slv-assign').disabled = true;
     slvBuildAxes(); slvHud();
   }
+  // ═══ v544 · 다 갚았을 때의 축하 ═══
+  //   12개를 하나씩 넘긴 끝이니 담백하게 끝내면 아깝다. 다만 «희소한 3층 연출»이라 여기서만 쓴다.
+  function slvCheer(fin, n, secs) {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const acc = _slvAcc || '#e6fb62';
+    // 링 두 겹이 퍼지고, 위에서 작은 조각이 떨어진다 (무대 테마색)
+    for (let k = 0; k < 2; k++) {
+      const rg = document.createElement('span');
+      rg.style.cssText = 'position:absolute;left:50%;top:50%;width:20px;height:20px;margin:-10px 0 0 -10px;' +
+        'border-radius:50%;border:2px solid ' + acc + ';pointer-events:none;z-index:16';
+      fin.appendChild(rg);
+      try {
+        rg.animate([{ opacity: .85, width: '20px', height: '20px', margin: '-10px 0 0 -10px' },
+                    { opacity: 0, width: '340px', height: '340px', margin: '-170px 0 0 -170px' }],
+                   { duration: 900, delay: k * 180, easing: 'cubic-bezier(.2,.8,.3,1)' });
+      } catch (e) {}
+      setTimeout(function () { rg.remove(); }, 1200 + k * 180);
+    }
+    for (let i = 0; i < 16; i++) {
+      const p = document.createElement('span');
+      const sz = 4 + Math.random() * 5;
+      p.style.cssText = 'position:absolute;top:-10px;left:' + (8 + Math.random() * 84) + '%;width:' + sz + 'px;height:' + sz + 'px;' +
+        'border-radius:2px;background:' + acc + ';opacity:.85;pointer-events:none;z-index:15';
+      fin.appendChild(p);
+      try {
+        p.animate([{ transform: 'translateY(0) rotate(0deg)', opacity: .9 },
+                   { transform: 'translateY(' + (150 + Math.random() * 90) + 'px) rotate(' + (180 + Math.random() * 360) + 'deg)', opacity: 0 }],
+                  { duration: 1100 + Math.random() * 700, delay: Math.random() * 420, easing: 'cubic-bezier(.3,.6,.5,1)' });
+      } catch (e) {}
+      setTimeout(function () { p.remove(); }, 2400);
+    }
+    try { if (typeof ebBuzz === 'function') ebBuzz(24); } catch (e) {}
+    // 한 줄로 «무엇이 좋아졌는지» — 숫자만 남기지 않는다
+    const el = document.getElementById('slv-fs');
+    if (el) el.textContent = n + '개 · ' + secs + '초 — 이제 창고에서 유형별로 꺼내 쓸 수 있어요';
+  }
+
+  // ═══ v544 · 되돌리기 ═══
+  //   12개를 빠르게 넘기는 화면인데 잘못 눌러도 되돌릴 수 없었다 →
+  //   시트로 가서 그 행을 찾아 고쳐야 했음. 반복 작업에서 Undo는 «없으면 안 되는 것».
+  let _slvUndo = null;
+  function slvSnap(r) {
+    const s = { id: r.id, funnelStage: r.funnelStage, rating: r.rating, views: r.views, trendScore: r.trendScore };
+    SLV_AXES.forEach(function (a) { s[a.key] = (r[a.key] || []).slice(); });
+    return s;
+  }
+  function slvUndoBar(on, label) {
+    const el = document.getElementById('slv-undo');
+    if (!el) return;
+    el.classList.toggle('on', !!on);
+    const t = document.getElementById('slv-undo-t');
+    if (t && label) t.textContent = label;
+  }
+  async function slvDoUndo() {
+    if (!_slvUndo) return;
+    const snap = _slvUndo; _slvUndo = null; slvUndoBar(false);
+    const r = (rows || []).find(function (x) { return x && x.id === snap.id; });
+    if (!r) return;
+    SLV_AXES.forEach(function (a) { r[a.key] = (snap[a.key] || []).slice(); });
+    r.funnelStage = snap.funnelStage; r.rating = snap.rating; r.views = snap.views; r.trendScore = snap.trendScore;
+    r.updatedAt = Date.now();
+    try { await saveRows(); } catch (e) {}
+    try { renderTable(); } catch (e) {}
+    // 큐 맨 앞으로 되돌려 다시 보여준다
+    _slvQ = _slvQ.filter(function (x) { return x !== r; });
+    _slvQ.unshift(r);
+    _slvDone = Math.max(0, _slvDone - 1); _slvHand = Math.max(0, _slvHand - 1);
+    try { slvRefreshEntries(); } catch (e) {}
+    slvSpawn(false); slvAutoBar(); slvHud();
+    try { csToast('↩ 되돌렸어요 — 다시 골라주세요'); } catch (e) {}
+  }
   async function slvAssign() {
     if (_slvBusy || !_slvQ.length || !_slvCard) return;
     const host = document.getElementById('slv-axes');
     const r = _slvQ[0];
+    const _snap = slvSnap(r);        // 배정 «전» 상태 보관
     let picked = 0;
     SLV_AXES.forEach(a => {
       const sel = [...host.querySelectorAll('.slv-axis[data-ax="' + a.ax + '"] .slv-chip.on')].map(x => x.dataset.c);
@@ -41444,11 +42205,15 @@
     if (_fn) { r.funnelStage = _fn.dataset.fn || ''; picked++; }
     const _ft = host.querySelector('.slv-axis[data-ax="fit"] .slv-chip.on');
     if (_ft) { r.rating = parseInt(_ft.dataset.fit, 10) || 0; picked++; }
+    const _tr = host.querySelector('.slv-axis[data-ax="trend"] .slv-chip.on');   // v548
+    if (_tr) { r.trendScore = parseInt(_tr.dataset.tr, 10) || 0; picked++; }
     const _vw = host.querySelector('.slv-axis[data-ax="views"] .slv-chip.on');
     if (_vw) { r.views = parseInt(_vw.dataset.vw, 10) || 0; picked++; }
     if (!picked) return;
     _slvBusy = true; if (!_slvT0) _slvT0 = Date.now();
     r.updatedAt = Date.now();
+    _slvUndo = _snap;                                        // v544 · 방금 것 되돌리기 준비
+    slvUndoBar(true, '방금 «' + String(r.hook || r.topicMain || '카드').slice(0, 14) + '» 배정함');
     try { saveRows(); } catch (e) {}
     // 🦾 픽 앤 플레이스 사이클
     const el = _slvCard; _slvCard = null;
@@ -41457,6 +42222,12 @@
     // 🎨 집게 램프 = 내 무대 색 (공정 톤)
     const _lamp = arm.querySelector('.lamp'), _acc = _slvAcc || '#e6fb62';
     if (_lamp) { _lamp.style.setProperty('background', _acc, 'important'); _lamp.style.setProperty('box-shadow', '0 0 12px ' + _acc, 'important'); }
+    // v551 · «빠르게»는 «생략»이 아니다 — 4장째부터도 집고·옮기고·놓는 세 동작을 그대로 하되 2배속으로 끝낸다.
+    //   (v549는 시간만 잘라 팔이 출발만 하고 카드가 사라졌다. 세는 것도 손으로 넘긴 것만 — ✨자동배정 한 번에
+    //    카운트가 뛰어 첫 장부터 축약으로 떨어지던 문제.)
+    const _full = _slvHand < 3;
+    const _sv = document.getElementById('slv'); if (_sv) _sv.classList.toggle('slv-fast', !_full);
+    const _t1 = _full ? 580 : 300, _t2 = _full ? 430 : 220;
     const tx = slvTrayX();
     arm.style.left = (tx + 53 - 6) + 'px'; el.style.left = tx + 'px';
     setTimeout(() => {
@@ -41466,13 +42237,13 @@
         const t = document.getElementById('slv-tray'); t.classList.remove('bump'); void t.offsetWidth; t.classList.add('bump');
         const rg = document.getElementById('slv-ring'); if (rg) { rg.classList.remove('go'); void rg.offsetWidth; rg.classList.add('go'); } // 받는 순간 링 퍼짐
         el.remove();
-        _slvQ.shift(); _slvDone++;
+        _slvQ.shift(); _slvDone++; _slvHand++;
         arm.classList.remove('work');
         slvSpawn(true);
         slvRefreshEntries();
         _slvBusy = false;
-      }, 430);
-    }, 580);
+      }, _t2);
+    }, _t1);
   }
   // 🎨 공정 톤: 내 무대(cso) 테마 액센트를 정거장 공정에도 이어줌 (자산=유형색은 그대로)
   const PF_ACC = { dunk: '#e6fb62', scan: '#43e0e6', jewel: '#f0cf7e', flower: '#ff9ec2' };
@@ -41528,6 +42299,14 @@
   }
   // 상단 배너 — 지금 큐에 확실한 게 몇 개인지
   function slvAutoBar() {
+    // v548 · 상단 미니 버튼으로 이동 — 확실한 게 있을 때만 나타난다
+    const mini = document.getElementById('slv-automini');
+    if (mini) {
+      const sure = _slvQ.filter(slvSureOf).length;
+      mini.classList.toggle('on', sure > 0);
+      const nb = document.getElementById('slv-auton'); if (nb) nb.textContent = sure;
+      mini.onclick = slvAutoAll;
+    }
     const host = document.getElementById('slv-auto'); if (!host) return;
     const n = _slvQ.filter(slvSureOf).length, rest = _slvQ.length - n;
     if (!n) {
@@ -41548,7 +42327,11 @@
     slvInit();
     slvApplyProcessTone();
     _slvQ = slvUnsorted(); _slvDone = 0; _slvT0 = null; _slvBusy = false;
+    _slvHand = 0;                                              // v551 · 들어올 때마다 «처음 3장»은 다시 제대로
+    _slvUndo = null; try { slvUndoBar(false); } catch (e) {}   // v544
+    document.getElementById('slv').classList.remove('slv-fast');
     document.getElementById('slv').classList.add('on');
+    try { slvFitStage(); } catch (e) {}                        // v544 · 무대 높이에 카드 맞춤
     document.body.classList.add('cm-ov-open');
     window.scrollTo(0, 0);
     slvSpawn(false);
@@ -41564,6 +42347,7 @@
   function slvInit() {
     if (_slvInited) return; _slvInited = true;
     document.getElementById('slv-back').onclick = slvClose;
+    var _ub = document.getElementById('slv-undo'); if (_ub) _ub.onclick = slvDoUndo;   // v544
     document.getElementById('slv-assign').onclick = function () { slvAssign(); setTimeout(function () { try { slvAutoBar(); } catch (e) {} }, 700); };
     document.getElementById('slv-skip').onclick = () => { if (_slvBusy || _slvQ.length < 2) return; _slvQ.push(_slvQ.shift()); slvSpawn(true); slvAutoBar(); };
     const fb = document.getElementById('fb-sortline'); if (fb) fb.onclick = slvOpen;
@@ -41723,33 +42507,75 @@
       }
     }
     if (!_csBlocks.length){ row.innerHTML = '<span class="cso-empty">무대에 던지면 여기 좌르륵 — 카드가 채워져요</span>'; csoRefresh(); return; }
+    // v539 · 「뭐가 담겼는지」가 보이는 카드 — 퍼센트 대신 사실만, 탭하면 담긴 원고
     row.innerHTML = _csBlocks.map(function(b, i){
       b._dup = csoDupCheck(b);
       var photo = csPhotoFor(i);
       var hasThumb = !!photo;
       var hasContent = !!(b.topicMain || b.copyText || b.thumbHook || b.views || b.format || (b.custMind && b.custMind.length));
-      var structN = Object.keys(b.sections).filter(function(k){ return b.sections[k]; }).length;
-      var hasScript = !!(structN || b.scriptFree || (b.secList && b.secList.length));
-      var onN = [hasThumb, hasContent, hasScript].filter(Boolean).length;
-      var p = Math.round(onN / 3 * 100), ok = p === 100;
-      var pcol = ok ? 'var(--cso-emer)' : (p >= 66 ? 'var(--cso-lime)' : 'var(--cso-gold)');
+      var flex = (b.secList && b.secList.length) ? b.secList : null;
+      var structN = flex ? flex.length : Object.keys(b.sections).filter(function(k){ return b.sections[k]; }).length;
+      var hasScript = !!(structN || b.scriptFree);
+      var ok = hasThumb && hasContent && hasScript;
+      var sel = !b._dup;
+      var methodN = flex ? flex.filter(function(x){ return /^방법/.test(String(x.k || '')); }).length : 0;
+      var tooMany = methodN > 3;                                  // 잘못 잘린 신호
       var thumbInner = hasThumb ? '<img src="' + photo + '" alt=""/>' : '<span class="ph2">📷</span>';
-      var dots = '<div class="dots"><i class="' + (hasThumb ? 'on1' : '') + '"></i><i class="' + (hasContent ? 'on2' : '') + '"></i><i class="' + (hasScript ? 'on3' : '') + '"></i></div>';
-      var nm = (b.hook || b.topicMain || '항목').replace(/</g,'&lt;').slice(0, 12);
-      var sel = !b._dup; // 기본 선택(중복은 해제)
       var swap = (_csPhotos.length > 1)
-        ? '<span class="csw"><button type="button" data-csw="-1" title="이전 사진과 바꾸기">‹</button><button type="button" data-csw="1" title="다음 사진과 바꾸기">›</button></span>'
+        ? '<span class="cc-swap"><button type="button" data-csw="-1" title="이전 사진과 바꾸기">‹</button><button type="button" data-csw="1" title="다음 사진과 바꾸기">›</button></span>'
         : '';
-      return '<div class="cso-card' + (ok ? ' done' : '') + (sel ? '' : ' off') + '" data-i="' + i + '">' +
-        (b._dup ? '<span class="dupflag">중복?</span>' : '') +
-        '<span class="chkmark">✓</span>' +
-        '<div class="th' + (hasThumb ? '' : ' off') + '">' + thumbInner + dots + swap + '</div>' +
-        '<div class="foot"><span class="nm">' + nm + '</span><span class="pc" style="color:' + pcol + '">' + p + '</span></div>' +
+      // 사실만 적는 칩 (퍼센트 폐기 — 담을수록 깎이는 숫자는 벌이 된다)
+      var chips = [];
+      if (b.views) chips.push('<span class="mc v">' + esc(fmtNum(b.views)) + '</span>');
+      if (b.format) chips.push('<span class="mc ok">' + esc(b.format) + '</span>');
+      if (structN) chips.push('<span class="mc ' + (tooMany ? 'miss' : 'ok') + '">원고 ' + structN + '칸' + (tooMany ? ' · 잘게 쪼개짐' : '') + '</span>');
+      else if (b.scriptFree) chips.push('<span class="mc ok">원고 통글</span>');
+      else chips.push('<span class="mc miss">원고 없음</span>');
+      if (!hasThumb) chips.push('<span class="mc miss">사진 없음</span>');
+      // 펼치면 나오는 담긴 원고
+      var peek = '';
+      if (flex) {
+        peek = flex.map(function(x){
+          var t = String(x.t || '').trim(); if (!t) return '';
+          var col = (typeof flexLabelColor === 'function') ? flexLabelColor(x.k) : '#9AA08A';
+          return '<div class="cc-prow"><span class="cc-plab" style="color:' + col + '">' + esc(x.k) + '</span><span class="cc-ptxt">' + esc(t) + '</span></div>';
+        }).join('');
+      } else if (structN) {
+        peek = SCRIPT_SECTIONS.map(function(s){
+          var v = String(b.sections[s.key] || '').trim(); if (!v) return '';
+          return '<div class="cc-prow"><span class="cc-plab" style="color:' + s.color + '">' + esc(s.label) + '</span><span class="cc-ptxt">' + esc(v) + '</span></div>';
+        }).join('');
+      } else if (b.scriptFree) {
+        peek = '<div class="cc-prow"><span class="cc-plab" style="color:#9AA08A">통글</span><span class="cc-ptxt">' + esc(b.scriptFree) + '</span></div>';
+      }
+      if (b.author) peek += '<div class="cc-prow"><span class="cc-plab" style="color:#6B715C">계정</span><span class="cc-ptxt">' + esc(b.author) + '</span></div>';
+      var moreLabel = b._dup ? '이미 창고에 있는 것 같아요 — 그래도 담으려면 카드를 누르세요'
+                    : tooMany ? '담긴 원고 보기 · 방법이 ' + methodN + '칸으로 잘렸어요'
+                    : '담긴 원고 보기';
+      return '<div class="cso-card' + (ok ? ' done' : '') + (sel ? '' : ' off') +
+        (b._dup ? ' dup' : (tooMany ? ' warn' : '')) + '" data-i="' + i + '">' +
+        '<div class="cc-head">' +
+          '<div class="cc-th">' + thumbInner + swap + '</div>' +
+          '<div class="cc-body">' +
+            '<div class="cc-hook">' + esc(b.hook || b.topicMain || '(제목 없음)') + '</div>' +
+            '<div class="cc-meta">' + chips.join('') + '</div>' +
+          '</div>' +
+          (b._dup ? '<span class="cc-flag">이미 있음</span>' : '<span class="cc-chk">✓</span>') +
+        '</div>' +
+        (peek ? '<button type="button" class="cc-more" data-ccmore="' + i + '"><span class="cv">›</span>' + esc(moreLabel) + '</button>' +
+                '<div class="cc-peek"><div class="cc-peek-in">' + peek + '</div></div>' : '') +
         '<input type="checkbox" data-cs-chk="' + i + '" ' + (sel ? 'checked' : '') + ' style="display:none">' +
         '</div>';
     }).join('');
+    // 「담긴 원고 보기」 — 카드 선택(탭)과 분리
+    row.querySelectorAll('[data-ccmore]').forEach(function(btn){
+      btn.onclick = function(e){
+        e.stopPropagation();
+        var card = btn.closest('.cso-card'); if (card) card.classList.toggle('open');
+      };
+    });
     // v499 · 사진 바꾸기 ‹› — 카드 선택 클릭과 분리
-    row.querySelectorAll('.csw button').forEach(function(b){
+    row.querySelectorAll('.cc-swap button').forEach(function(b){
       b.onclick = function(e){
         e.stopPropagation();
         var card = b.closest('.cso-card'); if (!card) return;
@@ -41770,14 +42596,78 @@
     var bar = csoQ('cso-statusbar');
     if (bar){ bar.classList.add('flash'); setTimeout(function(){ bar.classList.remove('flash'); }, 700); }
   }
+  // ═══ v543 · «여기가 끝이 아니다» 엔진 (시안 D안) ═══
+  //   여정 = 붙여넣기 → 확인 → 분류. 지금 어디인지, 다음이 뭔지를 «저장 전»에 보여준다.
+  //   기존엔 저장을 누른 «뒤에야» 팝업으로 물어봐서 여기서 끝인 줄 알게 됐다 (사장님 제보).
+  function csoUnsortedN(){
+    try { return (typeof slvUnsorted === 'function') ? slvUnsorted().length : 0; } catch (e) { return 0; }
+  }
+  function csoSyncNext(){
+    var nCards = 0;
+    try { nCards = (csoQ('cso-row') || {}).querySelectorAll ? csoQ('cso-row').querySelectorAll('.cso-card').length : 0; } catch (e) {}
+    var un = csoUnsortedN();
+    // ① 여정 스텝 — 카드가 있으면 «확인» 단계
+    var step = nCards ? 2 : 1;
+    document.querySelectorAll('#cso-steps .cs-st').forEach(function(el){
+      var n = parseInt(el.dataset.st, 10);
+      el.classList.toggle('done', n < step);
+      el.classList.toggle('on', n === step);
+    });
+    document.querySelectorAll('#cso-steps .cs-ln').forEach(function(el, i){
+      el.classList.toggle('done', i < step - 1);
+    });
+    // ② 상단 «분류하기 N ›» — 미분류가 실제로 있을 때만
+    var nx = csoQ('cso-tonext');
+    if (nx){
+      nx.style.display = un > 0 ? 'inline-flex' : 'none';
+      var nn = csoQ('cso-nx-n'); if (nn) nn.textContent = un;
+    }
+    // ③ 다음 방 예고 — 담을 카드가 있을 때만 (빈 화면에 미리 겁주지 않는다)
+    var pk = csoQ('cso-peek');
+    if (pk){
+      pk.classList.toggle('on', nCards > 0);
+      var ps = csoQ('cso-peek-s');
+      if (ps) ps.textContent = un > 0
+        ? '저장하면 미분류 ' + un + '개가 기다려요 · 한 장씩 3초'
+        : '저장한 뒤 유형만 골라주면 창고에서 바로 써먹을 수 있어요';
+    }
+  }
+  // 저장 → 분류로 «부드럽게» 넘어간다 (팝업 대신 화면 전환)
+  function csoGoSort(){
+    try { csCloseRoom(); } catch (e) {}
+    setTimeout(function(){ try { slvOpen(); } catch (e) {} }, 180);
+  }
   function csoRefresh(){
     var row = csoQ('cso-row'); if (!row) return;
     var cards = row.querySelectorAll('.cso-card');
+    try { var _cso = csoQ('cso'); if (_cso) _cso.classList.toggle('cso-empty0', cards.length === 0); } catch (e) {}
     var cnt = csoQ('cso-cnt'); if (cnt) cnt.textContent = cards.length ? cards.length + '장' : '';
     var selN = row.querySelectorAll('.cso-card:not(.off)').length;
     var dn = csoQ('cso-dn'); if (dn) dn.textContent = selN ? '✓ ' + selN + ' 선택' : '';
-    var sb = csoQ('cso-save'); if (sb){ sb.disabled = selN === 0; sb.textContent = '💾 한번에 저장' + (selN ? ' (' + selN + ')' : ''); }
-    var tx = csoQ('cso-savetx'); if (tx) tx.innerHTML = selN ? '<b>' + selN + '장</b> 선택됨 — 창고로 보낼 준비 끝' : '완성 카드만 창고로';
+    // v543 · 버튼이 «다음에 무슨 일이 일어나는지» 스스로 말한다 (저장은 종착점이 아니다)
+    var sb = csoQ('cso-save'); if (sb){ sb.disabled = selN === 0; sb.textContent = (selN ? selN + '개 ' : '') + '창고에 넣고 분류하기 ›'; }
+    try { csoSyncNext(); } catch (e) {}
+    // v539 · 누르기 «전»에 무엇이 들어가는지 한 줄로 — 되돌리기보다 미리 보여주는 게 안심에 세다
+    var tx = csoQ('cso-savetx');
+    if (tx) {
+      if (!selN) { tx.innerHTML = '완성 카드만 창고로'; }
+      else {
+        var sel = [], off = 0;
+        row.querySelectorAll('.cso-card').forEach(function(c){
+          var i = parseInt(c.dataset.i, 10);
+          if (c.classList.contains('off')) { off++; return; }
+          if (!isNaN(i) && _csBlocks[i]) sel.push({ b: _csBlocks[i], i: i });
+        });
+        var nPh = sel.filter(function(x){ return !!csPhotoFor(x.i); }).length;
+        var nSc = sel.filter(function(x){ var b = x.b;
+          return (b.secList && b.secList.length) || Object.keys(b.sections).some(function(k){ return b.sections[k]; }) || b.scriptFree; }).length;
+        var parts = ['<b>' + selN + '개</b>를 창고에 넣습니다'];
+        parts.push('사진 ' + nPh + (nPh < selN ? '<span style="color:#F0CF7E">/' + selN + '</span>' : ''));
+        parts.push('원고 ' + nSc + (nSc < selN ? '<span style="color:#F0CF7E">/' + selN + '</span>' : ''));
+        if (off) parts.push('<span style="color:#6B715C">' + off + '개는 빼고</span>');
+        tx.innerHTML = parts.join(' · ');
+      }
+    }
   }
   function csoOpenFeed(){ csoQ('cso-feed').classList.add('on'); csoQ('cso-feedov').classList.add('on'); setTimeout(function(){ var p = csoQ('cso-paste'); if (p) p.focus(); }, 80); }
   function csoCloseFeed(){ csoQ('cso-feed').classList.remove('on'); csoQ('cso-feedov').classList.remove('on'); }
@@ -41794,6 +42684,13 @@
     csoUpdateStatusbar();                            // 하단 상태바 점등
     csToast('🧩 ' + _csBlocks.length + '개 카드로 슉!');
     setTimeout(csoRenderCards, 360);
+    // v542 · 골인 연출이 끝나면 «다음 걸음»으로 데려간다 — 카드와 저장 버튼이 한 화면에 오도록
+    setTimeout(function(){
+      try {
+        var tray = document.querySelector('.cso-tray-h') || csoQ('cso-row');
+        if (tray && tray.scrollIntoView) tray.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } catch (e) {}
+    }, 1150);
     return true;
   }
   var _csoSaving = false;
@@ -41817,8 +42714,41 @@
       try { csoRefresh(); } catch (e) {}
     }
   }
+  // ═══ v539 · 받을 준비 ═══
+  //   Ctrl/⌘을 «누르는 순간» 골대가 마중 나온다 (C 확대 + B 점선 + 배경 톤).
+  //   드래그 중에도 같은 연출을 쓴다 — 두 경로가 한 몸으로 보이게.
+  var _csoRdy = false;
+  function csoRoomOpen(){
+    var r = document.getElementById('cs-room');
+    return !!(r && r.classList.contains('show'));
+  }
+  function csoReady(on, mode){
+    var st = csoQ('cso-stage'); if (!st) return;
+    if (on && !csoRoomOpen()) return;                       // 방이 닫혀 있으면 무시
+    if (on && csoQ('cso-feed') && csoQ('cso-feed').classList.contains('on')) return; // 시트가 열렸으면 그쪽이 주인
+    if (_csoRdy === !!on) return;                           // 같은 상태면 건드리지 않음(깜빡임 방지)
+    _csoRdy = !!on;
+    st.classList.toggle('cso-ready', !!on);
+    var sub = csoQ('cso-rdysub');
+    if (sub && on) {
+      var mac = false; try { mac = /Mac|iPhone|iPad/.test(navigator.platform || ''); } catch (e) {}
+      sub.textContent = (mode === 'drop') ? '놓는 순간 골대로 슛' : (mac ? '⌘V로 바로 담깁니다' : 'Ctrl+V로 바로 담깁니다');
+    }
+  }
+  function csoBindReady(){
+    document.addEventListener('keydown', function(e){
+      if (!(e.ctrlKey || e.metaKey)) return;
+      var t = e.target, tag = t && t.tagName;
+      if (tag === 'TEXTAREA' || tag === 'INPUT' || (t && t.isContentEditable)) return; // 입력 중엔 방해 안 함
+      csoReady(true, 'paste');
+    });
+    document.addEventListener('keyup', function(e){ if (!e.ctrlKey && !e.metaKey) csoReady(false); });
+    window.addEventListener('blur', function(){ csoReady(false); });
+    document.addEventListener('paste', function(){ setTimeout(function(){ csoReady(false); }, 60); });
+  }
   function csoInit(){
     if (_csoInited) return; _csoInited = true;
+    csoBindReady();
     // 저장된 테마 (기본=슬램덩크)
     var saved; try{ saved = localStorage.getItem('cso-theme'); }catch(e){}
     csoSetTheme(saved || 'dunk');
@@ -41829,10 +42759,10 @@
       st.addEventListener('mouseenter', function(){ st.classList.add('hot'); });
       st.addEventListener('mouseleave', function(){ st.classList.remove('hot'); });
       // ── 골대에 직접 끌어다 놓기 (드래그 앤 드롭) ──
-      st.addEventListener('dragover', function(e){ e.preventDefault(); st.classList.add('hot'); });
-      st.addEventListener('dragleave', function(e){ if (e.target === st) st.classList.remove('hot'); });
+      st.addEventListener('dragover', function(e){ e.preventDefault(); st.classList.add('hot'); csoReady(true, 'drop'); });
+      st.addEventListener('dragleave', function(e){ if (e.target === st) { st.classList.remove('hot'); csoReady(false); } });
       st.addEventListener('drop', function(e){
-        e.preventDefault(); st.classList.remove('hot');
+        e.preventDefault(); st.classList.remove('hot'); csoReady(false);
         var dt = e.dataTransfer; if (!dt) return;
         var imgs = Array.prototype.slice.call(dt.files || []).filter(function(f){ return f.type && f.type.indexOf('image/') === 0; });
         if (imgs.length){ csHandlePhotos(imgs).then(function(){ csoRenderStrip(); if (_csBlocks.length) csoRenderCards(); csoUpdateStatusbar(); csoThrowFx(); }); return; }
@@ -41851,11 +42781,11 @@
       room.appendChild(dz);
       var dzN = 0;
       function hasFiles(e){ try { return e.dataTransfer && Array.prototype.indexOf.call(e.dataTransfer.types || [], 'Files') !== -1; } catch (err) { return false; } }
-      room.addEventListener('dragenter', function(e){ if (hasFiles(e)){ dzN++; room.classList.add('dzon'); } });
-      room.addEventListener('dragleave', function(){ dzN = Math.max(0, dzN - 1); if (!dzN) room.classList.remove('dzon'); });
+      room.addEventListener('dragenter', function(e){ if (hasFiles(e)){ dzN++; room.classList.add('dzon'); csoReady(true, 'drop'); } });
+      room.addEventListener('dragleave', function(){ dzN = Math.max(0, dzN - 1); if (!dzN) { room.classList.remove('dzon'); csoReady(false); } });
       room.addEventListener('dragover', function(e){ if (hasFiles(e)) e.preventDefault(); });
       room.addEventListener('drop', function(e){
-        dzN = 0; room.classList.remove('dzon');
+        dzN = 0; room.classList.remove('dzon'); csoReady(false);
         if (st && st.contains(e.target)) return;  // 골대 자체 드롭은 기존 핸들러가 처리 (이중 저장 방지)
         e.preventDefault();
         var dt = e.dataTransfer; if (!dt) return;
@@ -41878,6 +42808,10 @@
       var txt = cd.getData && cd.getData('text/plain');
       if (txt && txt.trim().length > 15){ csoQ('cso-paste').value = txt; if (csoTryParse(true)) e.preventDefault(); }
     });
+    // v543 · 다음 방으로 가는 문 2개 (상단 버튼 · 예고 카드)
+    var tn = csoQ('cso-tonext'); if (tn) tn.onclick = csoGoSort;
+    var pk = csoQ('cso-peek');   if (pk) pk.onclick = csoGoSort;
+    try { csoSyncNext(); } catch (e) {}
     // 프롬프트 / 설명서
     var pb = csoQ('cso-prompt'); if (pb) pb.onclick = function(){ csCopyText(csBuildPrompt()); };
     var hb = csoQ('cso-help'); if (hb) hb.onclick = function(){ csoQ('cso-guide').classList.add('on'); csoQ('cso-gov').classList.add('on'); };
@@ -41886,7 +42820,21 @@
     // 버전 선택
     document.querySelectorAll('#cso-vers .cso-ver').forEach(function(v){ v.onclick = function(){ csoSetTheme(v.dataset.ver); csToast('무대를 ' + v.querySelector('.vn').textContent + '로 바꿨어요'); }; });
     // 붓기 시트 — 붙여넣으면 즉시 분해 (버튼 없음)
+    // v541 · 시트에서 나가는 길 4개 — ✕ · 배경 · ESC · 아래로 스와이프
+    //   배경 클릭만 있으면 «닫는 법이 안 보여서» 막다른 길이 된다 (사장님 제보)
     var fov = csoQ('cso-feedov'); if (fov) fov.onclick = csoCloseFeed;
+    var fx = csoQ('cso-feedx'); if (fx) fx.onclick = function(e){ e.stopPropagation(); csoCloseFeed(); };
+    document.addEventListener('keydown', function(e){
+      if (e.key !== 'Escape') return;
+      var f = csoQ('cso-feed');
+      if (f && f.classList.contains('on')) { e.preventDefault(); csoCloseFeed(); return; }
+      var g = csoQ('cso-guide');
+      if (g && g.classList.contains('on')) { e.preventDefault(); g.classList.remove('on'); var go = csoQ('cso-gov'); if (go) go.classList.remove('on'); }
+    });
+    try {
+      var fsheet = csoQ('cso-feed');
+      if (fsheet && typeof attachSheetDrag === 'function') attachSheetDrag(fsheet, csoCloseFeed);  // 애플식 아래로 던져 닫기
+    } catch (e) {}
     var paste = csoQ('cso-paste');
     if (paste){
       paste.addEventListener('paste', function(){ setTimeout(function(){ csoTryParse(true); }, 30); });   // 붙여넣는 즉시
@@ -42101,13 +43049,12 @@
     const st = document.getElementById('cs-photo-strip'); if (st) { st.style.display = 'none'; st.innerHTML = ''; }
     const area = document.getElementById('cs-review-area'); if (area) area.style.display = 'none';
     const emp = document.getElementById('cs-review-empty'); if (emp) emp.style.display = '';
+    // v543 · 저장은 종착점이 아니다 — 묻지 말고 «다음 방»으로 이어준다.
+    //   버튼에 「창고에 넣고 분류하기 ›」라고 이미 적혀 있으니, 팝업으로 또 묻는 건 말이 안 맞는다.
     setTimeout(async () => {
       const _un = (typeof slvUnsorted === 'function') ? slvUnsorted().length : 0;
-      if (_un > 0) {
-        if (await appConfirm('창고에 쌓였어요! 미분류 ' + _un + '개 — 지금 유형 정리할까요?', { okText: '🦾 정리하기', cancelText: '나중에' })) {
-          csCloseRoom(); slvOpen();
-        }
-      } else if (await appConfirm('창고(시트)에서 방금 담은 걸 볼까요?', { okText: '보러가기', cancelText: '계속 정리' })) {
+      if (_un > 0) { csoGoSort(); return; }                    // 분류할 게 있으면 바로 정거장으로
+      if (await appConfirm('창고(시트)에서 방금 담은 걸 볼까요?', { okText: '보러가기', cancelText: '계속 정리' })) {
         csCloseRoom(); switchWorkspace('sheet');
       }
     }, 500);
@@ -43597,8 +44544,10 @@
     return _cusWordCache;
   }
   function st2AxisW(r) {
+    // v548 · 「트렌드」축이 그동안 «담은 날짜»로만 계산됐다(최근에 담았다 ≠ 트렌드다).
+    //   정거장에서 사람이 매긴 trendScore(1~5)가 있으면 그걸 쓰고, 없을 때만 날짜로 폴백한다.
     const age = (Date.now() - (r.createdAt || Date.now())) / 864e5;
-    const wT = age <= 14 ? 1 : age <= 45 ? 0.5 : 0.18;
+    const wT = (r.trendScore > 0) ? (r.trendScore / 5) : (age <= 14 ? 1 : age <= 45 ? 0.5 : 0.18);
     const wE = (r.rating > 0) ? (r.rating / 5) : 0.35;
     let wC = 0.5;
     const mats = st2CusWords();
