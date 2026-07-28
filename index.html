@@ -7415,7 +7415,7 @@
   }
 
   /* ====================================================
-     === 패턴 파악 (작전도) ==============================
+     === 패턴 파악 뷰 껍데기 + 픽커 공용 CSS =============
      ==================================================== */
   #pattern-view {
     padding: 28px 30px 120px;
@@ -7424,278 +7424,13 @@
       radial-gradient(ellipse at top left, rgba(215, 243, 75, 0.06), transparent 50%),
       radial-gradient(ellipse at bottom right, rgba(215, 243, 75, 0.04), transparent 55%);
   }
-  .pp-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; margin-bottom: 22px; }
-  .pp-eyebrow { font-size: 10.5px; letter-spacing: 0.24em; font-weight: 800; color: var(--emerald); opacity: 0.9; margin-bottom: 8px; }
-  .pp-title { font-size: 32px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.1; margin: 0 0 10px; }
-  .pp-sub { font-size: 13.5px; line-height: 1.65; color: var(--text-sub); max-width: 640px; margin: 0; }
-  .pp-sub b { color: var(--text-main); }
-  .pp-new-btn { flex: 0 0 auto; background: var(--emerald); color: #06140C; border: none; border-radius: 10px; padding: 12px 18px; font-family: inherit; font-size: 13.5px; font-weight: 800; cursor: pointer; transition: filter .15s; }
-  .pp-new-btn:hover { filter: brightness(1.08); }
-
-  /* 보관함 */
-  .pp-vault { margin-bottom: 26px; }
-  .pp-vault-title { font-size: 12px; font-weight: 800; color: var(--text-sub); letter-spacing: 0.04em; margin-bottom: 11px; }
-  .pp-vault-list { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 6px; }
-  .pp-vault-card { flex: 0 0 auto; width: 210px; text-align: left; background: var(--bg-elev); border: 1px solid var(--line); border-radius: 14px; padding: 14px 15px; cursor: pointer; font-family: inherit; transition: border-color .15s, transform .15s; }
-  .pp-vault-card:hover { transform: translateY(-2px); border-color: var(--emerald-line); }
-  .pp-vault-card.active { border-color: var(--emerald); box-shadow: 0 0 0 1px var(--emerald); }
-  .pp-vault-card { position: relative; }
-  .pp-vault-del { position: absolute; top: 8px; right: 9px; color: var(--text-faint); font-size: 12px; cursor: pointer; opacity: 0; transition: opacity .12s; padding: 2px 4px; }
-  .pp-vault-card:hover .pp-vault-del { opacity: 1; }
-  .pp-vault-del:hover { color: var(--wine); }
-  .pp-vault-card-topic { font-size: 14px; font-weight: 800; color: var(--text-main); line-height: 1.35; margin-bottom: 8px; }
-  .pp-vault-card-meta { font-size: 11px; color: var(--text-faint); font-weight: 600; margin-bottom: 9px; }
-  .pp-vault-card-thumbs { font-size: 14px; color: var(--emerald); letter-spacing: 3px; opacity: 0.7; }
-  .pp-vault-new { flex: 0 0 auto; width: 110px; background: transparent; border: 1.5px dashed var(--line); border-radius: 14px; color: var(--text-faint); font-family: inherit; font-size: 12px; font-weight: 700; line-height: 1.5; cursor: pointer; transition: border-color .15s, color .15s; }
-  .pp-vault-new:hover { border-color: var(--emerald-line); color: var(--emerald); }
-
-  /* 작전도 보드 */
-  .pp-board { background: rgba(255,255,255,0.012); border: 1px solid var(--line); border-radius: 18px; padding: 20px 22px 24px; }
-  .pp-board-bar { display: flex; gap: 12px; align-items: center; margin-bottom: 22px; }
-  .pp-board-topic { flex: 1; background: var(--bg-void); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; color: var(--text-main); font-family: inherit; font-size: 15px; font-weight: 800; }
-  .pp-board-topic:focus { outline: none; border-color: var(--emerald-line); }
-  .pp-shop-btn { flex: 0 0 auto; background: var(--emerald); color: #06140C; border: none; border-radius: 10px; padding: 12px 16px; font-family: inherit; font-size: 13px; font-weight: 800; cursor: pointer; transition: filter .15s; }
-  .pp-shop-btn:hover { filter: brightness(1.08); }
-
-  /* 파트 공통 */
-  .pp-part { position: relative; padding: 18px 0 22px; border-top: 1px dashed var(--line); }
-  .pp-part:first-of-type { border-top: none; padding-top: 4px; }
-  .pp-part-head { display: flex; align-items: baseline; gap: 11px; margin-bottom: 15px; flex-wrap: wrap; }
-  .pp-part-no { font-size: 10px; font-weight: 900; letter-spacing: 0.14em; color: #06140C; background: var(--emerald); padding: 3px 8px; border-radius: 6px; }
-  .pp-part-head h3 { font-size: 18px; font-weight: 800; margin: 0; letter-spacing: -0.02em; }
-  .pp-part-hint { font-size: 12px; color: var(--text-faint); font-weight: 600; }
-
-  /* PART 1 — 썸네일 나열 */
-  .pp-thumbs { display: flex; gap: 18px; overflow-x: auto; padding: 8px 4px 12px; justify-content: safe center; }
-  .pp-thumb { flex: 0 0 auto; width: 156px; }
-  .pp-thumb-img { width: 156px; height: 278px; border-radius: 10px; background: var(--bg-void); border: 2px solid #2A3340; box-shadow: 0 8px 22px rgba(0,0,0,0.45); display: flex; align-items: center; justify-content: center; color: var(--text-faint); font-size: 30px; overflow: hidden; position: relative; }
-  .pp-thumb-img img { width: 100%; height: 100%; object-fit: cover; }
-  .pp-thumb-no { position: absolute; top: 9px; left: 9px; background: var(--emerald); color: #06140C; font-size: 13px; font-weight: 900; padding: 3px 9px; border-radius: 7px; box-shadow: 0 2px 6px rgba(0,0,0,0.4); }
-  .pp-thumb-cap { font-size: 13px; color: var(--text-main); text-align: center; margin-top: 10px; line-height: 1.35; font-weight: 800; }
-  .pp-thumb-add { flex: 0 0 auto; width: 156px; height: 278px; border-radius: 10px; border: 2px dashed var(--line); background: transparent; color: var(--text-faint); font-family: inherit; font-size: 13px; font-weight: 800; cursor: pointer; line-height: 1.5; transition: border-color .15s, color .15s; }
-  .pp-thumb-add:hover { border-color: var(--emerald-line); color: var(--emerald); }
-
-  /* PART 2 — 원고 패턴 그리드 (따뜻하게·쓰고 싶게) */
-  .pp-script-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 14px; background: linear-gradient(180deg, rgba(215,243,75,0.025), transparent 120px); }
-  .pp-script-grid { border-collapse: separate; border-spacing: 0; width: 100%; min-width: 620px; }
-  .pp-script-grid th, .pp-script-grid td { border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); vertical-align: top; }
-  .pp-script-grid thead th { background: var(--bg-elev); padding: 11px 12px; font-size: 12.5px; font-weight: 800; color: var(--text-main); text-align: left; position: sticky; top: 0; }
-  .pp-script-grid thead th.pp-sec-col { color: var(--emerald); }
-  .pp-sec-col { width: 162px; min-width: 162px; background: rgba(215,243,75,0.05) !important; border-left: 3px solid var(--emerald-line); padding: 11px 11px 11px 12px; font-size: 12.5px; font-weight: 800; color: var(--text-main); }
-  .pp-sec-col small { display: block; color: var(--emerald); opacity: 0.8; font-weight: 700; font-size: 9.5px; margin-top: 3px; letter-spacing: 0.02em; }
-  .pp-script-cell { padding: 11px 12px; font-size: 12.5px; line-height: 1.6; color: var(--text-main); min-width: 158px; cursor: text; transition: background .12s; }
-  .pp-script-cell:hover { background: rgba(255,255,255,0.018); }
-  .pp-script-cell.empty { color: var(--text-faint); }
-  .pp-script-cell.empty::before { content: '✎ 여기 적기'; opacity: 0.45; font-size: 11px; font-style: normal; }
-  /* PART 2 데이터 기반 — 편집 셀/섹션/레퍼런스 */
-  /* 썸네일 헤더 — 표 느낌 빼고 크고 여유롭게(떠 있는 카드) */
-  .pp-ref-th { border: none !important; padding: 22px 18px 16px !important; min-width: 200px; text-align: center; vertical-align: bottom; }
-  .pp-ref-thumb { position: relative; width: 138px; aspect-ratio: 9 / 16; margin: 0 auto 11px; border-radius: 14px; overflow: hidden; background: #15171c; border: 1px solid #2A3340; box-shadow: 0 12px 30px rgba(0,0,0,0.55); transition: transform .16s, box-shadow .16s; }
-  .pp-ref-th:hover .pp-ref-thumb { transform: translateY(-3px); box-shadow: 0 16px 38px rgba(0,0,0,0.6); }
-  .pp-ref-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .pp-ref-thumb-empty { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; color: var(--text-faint); font-size: 30px; opacity: 0.3; }
-  .pp-ref-no { position: absolute; top: 6px; left: 6px; font-size: 11px; font-weight: 900; color: #06140C; background: var(--emerald); padding: 2px 8px; border-radius: 6px; box-shadow: 0 2px 6px rgba(0,0,0,0.5); }
-  .pp-ref-rm { position: absolute; top: 6px; right: 6px; background: rgba(0,0,0,0.55); border: none; color: #fff; width: 20px; height: 20px; line-height: 1; border-radius: 6px; font-size: 12px; cursor: pointer; opacity: 0; transition: opacity .12s; }
-  .pp-ref-th:hover .pp-ref-rm { opacity: 1; }
-  .pp-ref-rm:hover { background: var(--wine); }
-  .pp-ref-name { display: block; width: 100%; background: transparent; border: none; color: var(--text-main); font-family: inherit; font-size: 13px; font-weight: 800; padding: 0; box-sizing: border-box; text-align: center; }
-  .pp-ref-name:focus { outline: none; }
-  /* 조회수 뱃지 + 떡상(최고 조회수) 강조 */
-  .pp-ref-views { position: absolute; bottom: 6px; left: 6px; background: rgba(0,0,0,0.72); color: #fff; font-size: 10.5px; font-weight: 800; padding: 2px 7px; border-radius: 6px; backdrop-filter: blur(2px); }
-  .pp-ref-views.top { background: rgba(245,200,75,0.94); color: #1a1400; }
-  .pp-ref-th-top .pp-ref-thumb { border-color: #F5C84B; box-shadow: 0 12px 30px rgba(0,0,0,0.55), 0 0 0 2px rgba(245,200,75,0.55); }
-  /* ════ v477 · 엑스레이 — 썸네일에 구조를 투시한다 ════
-     왼쪽 척추 = 섹션 순서. 채워진 칸은 그 섹션 색으로 빛나고, 빈 칸은 어둡다.
-     여러 표본을 나란히 놓으면 «전부 켜진 줄»이 보인다 — 그게 공통 공식이다. */
-  .pp-xray { position: absolute; left: 0; top: 0; bottom: 0; width: 8px; z-index: 3;
-    display: flex; flex-direction: column; gap: 1.5px; padding: 3px 2px; pointer-events: none;
-    background: linear-gradient(90deg, rgba(0,0,0,.5), transparent); }
-  .pp-xray i { flex: 1; border-radius: 2px; background: var(--xc, #888); opacity: .14; transition: opacity .3s ease; }
-  .pp-xray i.on { opacity: .95; box-shadow: 0 0 7px var(--xc, #888); }
-  .pp-xray-cap { display: block; margin-top: 5px; font-size: 10px; font-weight: 800;
-    color: var(--text-faint); font-variant-numeric: tabular-nums; }
-  .pp-xray-cap b { color: var(--emerald); }
-  .pp-xray-cap.full b { color: #F5C84B; }
-  .pp-xray-legend { font-size: 10.5px; color: var(--text-faint); line-height: 1.6; margin: 2px 0 10px; }
-  .pp-xray-legend b { color: var(--text-sub); }
-  .pp-ref-thumb[draggable="true"] { cursor: grab; }
-  .pp-ref-thumb.pp-dragging { opacity: 0.45; cursor: grabbing; }
-  .pp-ref-th.pp-drag-over .pp-ref-thumb { outline: 2px dashed var(--emerald); outline-offset: 3px; }
-  .pp-head-sort { border-color: rgba(255,122,51,0.5) !important; color: var(--flare) !important; }
-  .pp-head-sort:hover { background: rgba(255,122,51,0.14) !important; }
-  .pp-ref-empty { background: var(--bg-elev); padding: 11px 14px; font-size: 12px; color: var(--text-faint); font-weight: 600; text-align: left; }
-  .pp-sec-label { display: block; width: 100%; background: transparent; border: none; color: var(--text-main); font-family: inherit; font-size: 12.5px; font-weight: 800; padding: 0; box-sizing: border-box; }
-  .pp-sec-label:focus { outline: none; }
-  .pp-sec-hint { display: block; width: 100%; background: transparent; border: none; color: var(--text-sub); opacity: 1; font-family: inherit; font-size: 10px; font-weight: 600; padding: 2px 0 0; box-sizing: border-box; }
-  .pp-sec-hint:focus { outline: none; opacity: 1; }
-  .pp-sec-hint::placeholder { color: var(--text-faint); }
-  .pp-sec-rm { position: absolute; top: 5px; right: 5px; background: none; border: none; color: var(--text-faint); font-size: 11px; cursor: pointer; opacity: 0; transition: opacity .12s; }
-  .pp-sec-col:hover .pp-sec-rm { opacity: 1; }
-  .pp-sec-rm:hover { color: var(--wine); }
-  .pp-script-td { padding: 0; }
-  .pp-cell { padding: 10px 12px; font-size: 12.5px; line-height: 1.55; color: var(--text-main); min-width: 158px; min-height: 22px; outline: none; cursor: text; transition: background .12s; white-space: pre-wrap; word-break: break-word; }
-  .pp-cell:hover { background: rgba(255,255,255,0.018); }
-  .pp-cell:focus { background: rgba(215,243,75,0.06); }
-  .pp-cell:empty::before { content: '✎ 적기'; color: var(--text-faint); opacity: 0.5; font-size: 11px; }
-  .pp-cell b, .pp-cell strong { font-weight: 800; color: var(--text-main); }
-  .pp-cell span[data-c="red"] { color: #E85A5A; font-weight: 700; }
-  .pp-cell span[data-c="orange"] { color: #F0A23E; font-weight: 700; }
-  .pp-cell span[data-c="emerald"] { color: var(--emerald); font-weight: 700; }
-  /* 🎬 2단 셀 — 말(위) + 장면(아래, 칸 맨 아래로 고정해 행끼리 가로 정렬) */
-  .pp-script-grid td.pp-script-td { height: 1px; }            /* 내부 stack이 행 높이를 100%로 채우게 */
-  .pp-cell-stack { display: flex; flex-direction: column; height: 100%; min-height: 60px; }
-  .pp-cell-copy { flex: 1 1 auto; }
-  .pp-scene-zone { margin-top: auto; min-height: 74px; padding: 7px 12px 9px; border-top: 1px dashed rgba(47,182,160,0.32); background: rgba(47,182,160,0.035); }
-  .pp-scene-lbl { font-size: 10px; font-weight: 800; color: #2FB6A0; opacity: 0.85; letter-spacing: 0.02em; margin-bottom: 3px; }
-  .pp-cell-scene { color: #2FB6A0; font-size: 12px; min-height: 18px; white-space: pre-wrap; padding: 0; }
-  .pp-cell-scene:empty::before { content: '✎ 화면에 뭘 보여줄지'; color: var(--text-faint); opacity: 0.45; font-size: 10.5px; }
-  /* 보기 모드: 장면 보기 — 말은 흐리게, 장면 또렷 */
-  .pp-script-scroll.pp-view-scene .pp-cell-copy { opacity: 0.32; }
-  .pp-script-scroll.pp-view-scene .pp-scene-zone { background: rgba(47,182,160,0.06); border-radius: 6px; }
-  /* 보기 모드: 장면 숨기기 — 장면 칸 접기 */
-  .pp-script-scroll.pp-view-copy .pp-scene-zone { display: none; }
-  .pp-head-scene { border-color: rgba(47,182,160,0.5) !important; color: #2FB6A0 !important; }
-  .pp-head-scene.act-scene { background: rgba(47,182,160,0.16) !important; }
-  .pp-head-scene.act-copy { background: rgba(245,200,75,0.14) !important; border-color: rgba(245,200,75,0.5) !important; color: #F5C84B !important; }
-  .pp-fmt-bar { display: flex; align-items: center; gap: 6px; margin-bottom: 10px; flex-wrap: wrap; }
-  .pp-fmt-label { font-size: 11px; color: var(--text-faint); font-weight: 700; margin-right: 4px; }
-  .pp-head-btns { margin-left: auto; display: flex; gap: 8px; flex-wrap: wrap; }
-  .pp-head-add { background: var(--bg-elev); border: 1px solid var(--line); color: var(--text-sub); border-radius: 8px; padding: 6px 12px; font-family: inherit; font-size: 12px; font-weight: 700; cursor: pointer; transition: border-color .15s, color .15s; white-space: nowrap; }
-  .pp-head-add:hover { border-color: var(--emerald-line); color: var(--emerald); }
-  .pp-head-draft { background: rgba(245,200,75,0.12); border-color: rgba(245,200,75,0.4); color: #F5C84B; }
-  .pp-head-draft:hover { border-color: #F5C84B; color: #F5C84B; }
-  .pp-head-piece { background: rgba(168,123,214,0.12); border-color: rgba(168,123,214,0.45); color: #B488E0; }
-  .pp-head-piece:hover { border-color: #B488E0; color: #B488E0; }
-  .pp-piece-palette { display: flex; flex-wrap: wrap; gap: 7px; margin: 0 0 11px; padding: 11px 12px; background: var(--bg-void); border: 1px dashed var(--line); border-radius: 11px; }
-  .pp-piece-chip { background: var(--bg-elev); border: 1px solid var(--line); border-radius: 20px; padding: 5px 13px; font-family: inherit; font-size: 12px; font-weight: 800; cursor: pointer; transition: transform .12s, background .12s; }
-  .pp-piece-chip:hover { transform: translateY(-1px); background: var(--bg-row-hover); }
-  @keyframes ppRowNew { 0% { background: rgba(215,243,75,0.28); } 100% { background: transparent; } }
-  .pp-row-new td { animation: ppRowNew 1.1s ease-out; }
-  /* 내꺼 칸 (골드) + 줄별 패턴 칸 (에메랄드) */
-  .pp-mine-th { background: rgba(245,200,75,0.13) !important; color: #F5C84B !important; min-width: 172px; vertical-align: middle !important; text-align: center; }
-  .pp-mine-td { background: rgba(245,200,75,0.04); }
-  .pp-mine-cell { color: #F0E0B0; }
-  .pp-mine-cell:empty::before { content: '✨ 내 원고'; color: rgba(245,200,75,0.5); }
-  .pp-pat-th { background: rgba(215,243,75,0.1) !important; color: var(--emerald) !important; min-width: 150px; vertical-align: middle !important; text-align: center; }
-  .pp-pat-td { background: rgba(215,243,75,0.03); }
-  .pp-pat-cell { color: var(--text-sub); font-size: 12px; }
-  .pp-pat-cell:empty::before { content: '🧠 공통 패턴'; color: rgba(215,243,75,0.5); }
-  .pp-thumb-rm { position: absolute; top: 7px; right: 7px; background: rgba(0,0,0,0.6); border: none; color: #fff; font-size: 11px; width: 20px; height: 20px; border-radius: 6px; cursor: pointer; opacity: 0; transition: opacity .12s; z-index: 2; }
-  .pp-thumb:hover .pp-thumb-rm { opacity: 1; }
-  .pp-memo { margin-top: 14px; }
-  .pp-memo label { display: block; font-size: 12.5px; font-weight: 800; color: var(--emerald); margin-bottom: 8px; }
-  .pp-memo textarea { width: 100%; min-height: 76px; background: var(--bg-void); border: 1px solid var(--emerald-line); border-radius: 10px; padding: 11px 13px; color: var(--text-main); font-family: inherit; font-size: 13px; line-height: 1.6; resize: none; overflow: hidden; box-sizing: border-box; }
-  .pp-memo textarea:focus { outline: none; border-color: var(--emerald); }
-
-  /* PART 3 — 작전도 (믹서기) */
-  .pp-part-plan { border-top: 1px solid var(--emerald-line); }
-  .pp-plan-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-  .pp-plan-cell { background: var(--bg-void); border: 1px solid var(--line); border-radius: 12px; padding: 13px 14px; }
-  .pp-plan-cell label { display: flex; align-items: center; gap: 7px; font-size: 12.5px; font-weight: 800; color: var(--text-main); margin-bottom: 8px; }
-  .pp-plan-cell .pp-plan-ico { font-size: 15px; }
-  .pp-plan-cell textarea { width: 100%; min-height: 58px; background: transparent; border: none; color: var(--text-sub); font-family: inherit; font-size: 12.5px; line-height: 1.6; resize: vertical; box-sizing: border-box; }
-  .pp-plan-cell textarea:focus { outline: none; }
-  .pp-plan-cell textarea::placeholder { color: var(--text-faint); }
-  /* 공통점·떡상 자동 분석 */
-  .pp-analyze-btn { margin-top: 12px; width: 100%; box-sizing: border-box; display: flex; align-items: center; justify-content: center; gap: 6px; background: rgba(76,155,230,0.09); border: 1px solid rgba(76,155,230,0.35); border-radius: 11px; padding: 12px; color: #6BB0F0; font-family: inherit; font-size: 13px; font-weight: 800; cursor: pointer; transition: border-color .15s, background .15s; }
-  .pp-analyze-btn:hover { border-color: #6BB0F0; background: rgba(76,155,230,0.14); }
-  .pp-analyze-caret { transition: transform .25s; }
-  .pp-analyze-btn.open .pp-analyze-caret { transform: rotate(180deg); }
-  .pp-analysis { margin-top: 10px; padding: 13px 14px; background: var(--bg-void); border: 1px solid var(--line); border-radius: 12px; }
-  .pp-an-note { font-size: 11px; line-height: 1.6; color: var(--text-faint); margin-bottom: 11px; }
-  .pp-an-note b { color: var(--text-mute); }
-  .pp-an-empty { font-size: 12.5px; color: var(--text-faint); text-align: center; padding: 8px; }
-  .pp-an-row { display: flex; gap: 10px; padding: 8px 0; border-top: 1px solid var(--line); align-items: baseline; }
-  .pp-an-row:first-of-type { border-top: none; }
-  .pp-an-sec { flex-shrink: 0; width: 74px; font-size: 12px; font-weight: 800; color: var(--text-main); }
-  .pp-an-bits { display: flex; flex-wrap: wrap; gap: 6px; }
-  .pp-an-bit { font-size: 11px; padding: 3px 8px; border-radius: 7px; line-height: 1.5; }
-  .pp-an-bit.rep { background: rgba(94,184,106,0.12); color: #7BD08A; }
-  .pp-an-bit.tag { background: rgba(168,123,214,0.14); color: #C29BEA; }
-  .pp-an-bit.viral { background: rgba(245,200,75,0.12); color: #F5C84B; }
-  .pp-an-bit.miss { background: rgba(226,87,76,0.12); color: #E88; }
-  .pp-an-draft { margin-top: 12px; width: 100%; box-sizing: border-box; background: rgba(94,184,106,0.12); border: 1px solid var(--emerald-line); border-radius: 10px; padding: 11px; color: var(--emerald); font-family: inherit; font-size: 12.5px; font-weight: 800; cursor: pointer; transition: filter .15s; }
-  .pp-an-draft b { font-weight: 800; }
-  .pp-an-draft:hover { background: rgba(94,184,106,0.2); }
-  .pp-finale { margin-top: 16px; padding: 14px; border: 1px solid var(--emerald-line); border-radius: 13px; background: rgba(94,184,106,0.06); }
-  .pp-finale-lbl { font-size: 12px; font-weight: 700; color: var(--emerald); margin-bottom: 10px; text-align: center; }
-  .pp-tostruct-btn { width: 100%; box-sizing: border-box; background: var(--emerald); color: #06140C; border: none; border-radius: 11px; padding: 14px; font-family: inherit; font-size: 14.5px; font-weight: 800; cursor: pointer; transition: filter .15s, transform .12s; }
-  .pp-tostruct-btn:hover { filter: brightness(1.08); transform: translateY(-1px); }
-  /* PART2 도구 접기 */
-  .pp-head-tools.on { background: rgba(94,184,106,0.14); border-color: var(--emerald); color: var(--emerald); }
-  .pp-head-more { display: inline-flex; gap: 7px; }
-  /* PART3 접기 토글 */
-  .pp-part3-toggle { width: 100%; box-sizing: border-box; display: flex; align-items: center; gap: 8px; background: var(--bg-void); border: 1px dashed var(--line); border-radius: 11px; padding: 13px 15px; color: var(--text-mute); font-family: inherit; font-size: 13.5px; font-weight: 700; cursor: pointer; transition: border-color .15s, color .15s; }
-  .pp-part3-toggle b { color: var(--text-main); }
-  .pp-part3-toggle:hover { border-color: var(--emerald); color: var(--text-main); }
-  .pp-part3-toggle.open { border-style: solid; border-color: var(--emerald); }
-  .pp-part3-opt { font-weight: 600; color: var(--text-faint); font-size: 11.5px; }
-  .pp-part3-caret { margin-left: auto; transition: transform .25s; }
-  .pp-part3-toggle.open .pp-part3-caret { transform: rotate(180deg); }
-  .pp-part3-body { margin-top: 12px; }
-  .pp-save-plan { margin-top: 16px; width: 100%; background: var(--emerald); color: #06140C; border: none; border-radius: 11px; padding: 13px; font-family: inherit; font-size: 14px; font-weight: 800; cursor: pointer; transition: filter .15s; }
-  .pp-save-plan:hover { filter: brightness(1.08); }
-
-  /* PART 3 — 작전판 캔버스 */
-  .pp-canvas { position: relative; height: 330px; background: #0A0E14; border: 1px solid #1C2430; border-radius: 14px; overflow: hidden; touch-action: none; cursor: grab; }
-  .pp-canvas.panning { cursor: grabbing; }
-  .pp-stage { position: absolute; inset: 0; transform-origin: 0 0; }
-  .pp-timeline { position: absolute; left: 50%; transform: translateX(-50%); bottom: 14px; width: min(640px, 92%); pointer-events: none; opacity: 0.97; }
-  .pp-timeline svg { width: 100%; height: auto; display: block; }
-  .pp-timeline .pp-seg-label { pointer-events: auto; cursor: text; }
-  .pp-timeline .pp-seg-del { pointer-events: auto; cursor: pointer; fill: #6B7480; opacity: 0.6; transition: opacity .12s; }
-  .pp-timeline .pp-seg-del:hover { opacity: 1; fill: #C04848; }
-  .pp-notes-layer { position: absolute; inset: 0; }
-  .pp-zoom { position: absolute; top: 10px; right: 12px; z-index: 60; display: flex; align-items: center; gap: 4px; background: rgba(10,14,20,0.82); border: 1px solid #2A3340; border-radius: 9px; padding: 4px; }
-  .pp-zoom button { width: 26px; height: 26px; background: transparent; border: none; color: var(--text-sub); font-size: 16px; font-weight: 800; cursor: pointer; border-radius: 6px; line-height: 1; }
-  .pp-zoom button:hover { background: var(--bg-row-hover); color: var(--emerald); }
-  .pp-zoom span { font-size: 11.5px; color: var(--text-sub); font-weight: 700; min-width: 38px; text-align: center; }
-  .pp-postit { position: absolute; width: 152px; min-height: 86px; border-radius: 9px; padding: 9px 11px 11px; box-sizing: border-box; cursor: grab; user-select: none; box-shadow: 0 4px 12px rgba(0,0,0,0.35); font-family: 'Jua', 'Pretendard', sans-serif; }
-  .pp-postit:active { cursor: grabbing; }
-  .pp-postit .pp-pi-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 5px; }
-  .pp-postit .pp-pi-tag { font-size: 12.5px; font-weight: 400; opacity: 1; }
-  .pp-postit .pp-pi-del { cursor: pointer; font-size: 14px; line-height: 1; opacity: 0.6; padding: 0 2px; }
-  .pp-postit .pp-pi-del:hover { opacity: 1; }
-  .pp-postit .pp-pi-body { width: 100%; background: transparent; border: none; resize: none; font-family: 'Jua', 'Pretendard', sans-serif; font-size: 15px; line-height: 1.45; outline: none; overflow: hidden; }
-  .pp-postit .pp-pi-body::placeholder { opacity: 0.72; }
-  .pp-pi-idea  { background: #E9C84B; } .pp-pi-idea  .pp-pi-tag, .pp-pi-idea  .pp-pi-del { color: #4A3B00; } .pp-pi-idea  .pp-pi-body { color: #3A2D00; } .pp-pi-idea .pp-pi-body::placeholder { color: #6B5600; }
-  .pp-pi-edit  { background: #C99BE0; } .pp-pi-edit  .pp-pi-tag, .pp-pi-edit  .pp-pi-del { color: #34164A; } .pp-pi-edit  .pp-pi-body { color: #260E38; } .pp-pi-edit .pp-pi-body::placeholder { color: #4A2862; }
-  .pp-pi-audio { background: #7FCBE0; } .pp-pi-audio .pp-pi-tag, .pp-pi-audio .pp-pi-del { color: #073141; } .pp-pi-audio .pp-pi-body { color: #04222C; } .pp-pi-audio .pp-pi-body::placeholder { color: #0A4658; }
-  .pp-pi-thumb { background: #14202E; border: 1px solid #2A3848; width: 110px; padding: 6px; }
-  .pp-pi-thumb .pp-pi-tag { color: #7FA3C8; } .pp-pi-thumb .pp-pi-del { color: #7FA3C8; }
-  .pp-pi-thumb .pp-pi-imgbox { width: 100%; height: 138px; border-radius: 6px; background: #0A0E14; display: flex; align-items: center; justify-content: center; color: #5A6B7E; font-size: 12px; font-weight: 700; overflow: hidden; cursor: pointer; }
-  .pp-pi-thumb .pp-pi-imgbox img { width: 100%; height: 100%; object-fit: cover; }
-  .pp-pi-resize { position: absolute; right: 2px; bottom: 2px; width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; color: #7FA3C8; font-size: 11px; cursor: nwse-resize; opacity: 0.7; }
-  .pp-pi-resize:hover { opacity: 1; }
-  .pp-canvas-tools { display: flex; align-items: center; gap: 8px; margin-top: 13px; flex-wrap: wrap; }
-  .pp-tool { background: var(--bg-elev); color: var(--text-sub); border: 1px solid var(--line); border-radius: 9px; padding: 8px 13px; font-family: inherit; font-size: 12.5px; font-weight: 700; cursor: pointer; transition: border-color .15s, color .15s; }
-  .pp-tool:hover { border-color: var(--emerald-line); color: var(--emerald); }
-  .pp-tool-idea:hover { border-color: #E9C84B; color: #E9C84B; }
-  .pp-tool-seg { margin-left: 4px; }
-  .pp-canvas-hint2 { font-size: 11.5px; color: var(--text-faint); font-weight: 600; margin-left: auto; }
-
-  /* 썸네일 포스트잇 — 시트 라벨 + 빈 상태 */
-  .pp-pi-imgempty { font-size: 12px; font-weight: 800; line-height: 1.4; text-align: center; }
-  .pp-pi-thumb-label { font-size: 11px; font-weight: 700; color: #AFC2D6; margin-top: 5px; line-height: 1.3; max-height: 28px; overflow: hidden; }
-
-  /* 시트 레퍼런스 검색 피커 */
   .pp-picker-ov { display: none; position: fixed; inset: 0; z-index: 4000; background: rgba(0,0,0,0.62); align-items: center; justify-content: center; padding: 24px; }
   .pp-picker-box { width: min(700px, 94vw); max-height: 82vh; display: flex; flex-direction: column; background: var(--bg-elev); border: 1px solid var(--line); border-radius: 16px; padding: 18px 18px 20px; }
   .pp-picker-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 13px; }
   .pp-picker-head b { font-size: 15px; font-weight: 800; }
   .pp-picker-x { cursor: pointer; color: var(--text-faint); font-size: 16px; padding: 0 4px; }
   .pp-picker-x:hover { color: var(--text-main); }
-  .pp-picker-search { width: 100%; background: var(--bg-void); border: 1px solid var(--line); border-radius: 10px; padding: 11px 13px; color: var(--text-main); font-family: inherit; font-size: 14px; margin-bottom: 14px; box-sizing: border-box; }
-  .pp-picker-search:focus { outline: none; border-color: var(--emerald-line); }
-  .pp-picker-grid { overflow-y: auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(98px, 1fr)); gap: 12px; align-content: start; }
-  .pp-picker-item { background: var(--bg-void); border: 1px solid var(--line); border-radius: 10px; padding: 7px; cursor: pointer; font-family: inherit; text-align: center; transition: border-color .15s, transform .15s; }
-  .pp-picker-item:hover { border-color: var(--emerald); transform: translateY(-2px); }
-  .pp-picker-thumb { width: 100%; height: 128px; border-radius: 7px; background: #0A0E14; display: flex; align-items: center; justify-content: center; color: var(--text-faint); font-size: 20px; overflow: hidden; }
-  .pp-picker-thumb img { width: 100%; height: 100%; object-fit: cover; }
-  .pp-picker-label { font-size: 11px; color: var(--text-sub); margin-top: 6px; line-height: 1.3; font-weight: 600; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-  .pp-picker-empty { grid-column: 1 / -1; text-align: center; color: var(--text-faint); padding: 44px 0; font-size: 13px; line-height: 1.6; }
-
-  @media (max-width: 620px) { .pp-plan-grid { grid-template-columns: 1fr; } #pattern-view { padding: 22px 16px 120px; } .pp-canvas-hint2 { display: none; } }
+  @media (max-width: 620px) { #pattern-view { padding: 22px 16px 120px; } }
 
   /* ====================================================
      === 시각 위계 강화 (v33-D) ===========================
@@ -9502,6 +9237,17 @@
     cursor:pointer; transition:color .15s, background .15s, border-color .15s; }
   .sc-tab:hover { color:var(--text-main); border-color:rgba(255,255,255,.2); }
   .sc-tab.on { background:rgba(215,243,75,.1); border-color:rgba(215,243,75,.45); color:var(--law-asset); }
+  /* v557 · ★패턴 파악 = 숨쉬는 글로우 (D안 확정) — 안 눌렀을 때만 3.4초에 한 번 숨쉬고,
+     들어가면 숨이 멎는다(«불렀으니 됐다»). 상태가 곧 의미. */
+  .sc-tab.star { border-color:rgba(215,243,75,.3); color:#C3D96A;
+    animation:scTabBreathe 3.4s cubic-bezier(.45,0,.55,1) infinite; }
+  @keyframes scTabBreathe {
+    0%,100% { box-shadow:0 0 0 1px rgba(215,243,75,.05), 0 2px 10px -3px rgba(215,243,75,.18); }
+    50%     { box-shadow:0 0 0 1px rgba(215,243,75,.18), 0 5px 24px -3px rgba(215,243,75,.62); }
+  }
+  .sc-tab.star.on { animation:none; color:var(--law-asset);
+    box-shadow:0 5px 24px -4px rgba(215,243,75,.55); }
+  @media (prefers-reduced-motion:reduce) { .sc-tab.star { animation:none; } }
   .sc-tabpane { animation:scFade .25s ease; }
   @keyframes scFade { from { opacity:0; transform:translateY(4px); } to { opacity:1; transform:none; } }
 
@@ -15995,50 +15741,96 @@
   .fbk-say .tx em{ font-style:normal; color:var(--law-asset,#d7f34b); font-weight:700; }
   @media (max-width:520px){ .fbk-r{ grid-template-columns:64px 1fr auto; gap:8px; } }
 
-  /* ════ v480 · 트렌드 방 — 시장이 지금 쓰는 말 (세 번째 축) ════
-     4인 검토 결과: 수명 단계로 나누되 «앱이 단정하지 않는 이름»으로(애플),
-     칩마다 미니 곡선을 넣어 되살아나는 트렌드를 놓치지 않게(인스타),
-     내 고객도 한 말이면 🎯를 켠다(세일즈) — 시장 × 고객 둘 다 켜진 게 진짜. */
-  .trd{ border:1px solid rgba(255,255,255,.09); border-radius:20px;
-    background:rgba(255,255,255,.035); padding:20px; margin-top:14px; }
-  .trd-hd{ display:flex; align-items:center; gap:9px; flex-wrap:wrap; cursor:pointer; user-select:none;
-    margin:-4px -4px 0; padding:4px; border-radius:12px; transition:background .18s ease; }
-  .trd-hd:hover{ background:rgba(255,255,255,.03); }
-  .trd-hd h4{ margin:0; font-size:15.5px; font-weight:800; letter-spacing:-.02em; color:var(--st2-txt,#e8e9e6); }
-  .trd-hd .t{ font-size:10.5px; color:var(--st2-faint); margin-left:auto; }
-  .trd-hd .cv{ flex:0 0 auto; font-size:11px; color:var(--st2-faint);
-    transition:transform .4s cubic-bezier(.2,.9,.3,1); }
-  .trd.open .trd-hd .cv{ transform:rotate(180deg); }
-  .trd-body{ max-height:0; overflow:hidden; opacity:0;
-    transition:max-height .55s cubic-bezier(.2,.9,.3,1), opacity .3s ease; }
-  .trd.open .trd-body{ max-height:1400px; opacity:1; }
-  .trd-peek{ font-size:11.5px; color:var(--st2-sub); line-height:1.6; margin-top:8px; }
-  .trd-peek b{ color:var(--st2-txt,#e8e9e6); font-weight:800; }
-  .trd.open .trd-peek{ display:none; }
-  .trd-lead{ font-size:11.5px; color:var(--st2-sub); line-height:1.65; margin:14px 0 16px; }
-  .trd-lead b{ color:var(--st2-txt,#e8e9e6); }
-  /* 3단 레인 */
-  .trd-lanes{ display:flex; flex-direction:column; gap:11px; }
-  .trd-lane{ border:1px solid rgba(255,255,255,.09); border-radius:15px; padding:13px 14px;
-    position:relative; overflow:hidden; }
-  .trd-lane::before{ content:''; position:absolute; left:0; top:0; bottom:0; width:3px; background:var(--lc); }
-  .trd-lane .lb{ font-size:11.5px; font-weight:800; color:var(--lc); display:flex; align-items:baseline;
-    gap:7px; flex-wrap:wrap; }
-  .trd-lane .lb span{ font-size:10px; color:var(--st2-faint); font-weight:600; }
-  .trd-chips{ display:flex; flex-wrap:wrap; gap:6px; margin-top:10px; }
-  .trd-chip{ display:inline-flex; align-items:center; gap:5px; font-size:11.5px; font-weight:700;
-    padding:5px 11px; border-radius:99px; cursor:pointer;
-    border:1px solid color-mix(in srgb,var(--lc) 32%,transparent);
-    background:color-mix(in srgb,var(--lc) 10%,transparent);
-    color:color-mix(in srgb,var(--lc) 62%,#fff); transition:transform .18s ease,box-shadow .3s ease; }
-  .trd-chip:hover{ transform:translateY(-1px); box-shadow:0 0 16px color-mix(in srgb,var(--lc) 22%,transparent); }
-  .trd-chip.both{ border-color:rgba(215,243,75,.5); box-shadow:inset 0 0 0 1px rgba(215,243,75,.12); }
-  .trd-chip svg{ opacity:.75; }
-  .trd-chip small{ font-weight:600; opacity:.65; font-variant-numeric:tabular-nums; }
-  .trd-empty{ font-size:10.5px; color:var(--st2-faint); margin-top:9px; }
-  .trd-note{ font-size:10.5px; color:var(--st2-faint); margin-top:14px; line-height:1.65;
-    padding-top:12px; border-top:1px solid rgba(255,255,255,.08); }
-  .trd-note b{ color:var(--st2-sub); }
+  /* ════ v557 · 🔥 트렌드 방 (trv) — 무대 «능선과 나» + 벽(집계) ════
+     확정: 패러글라이딩 · 밤 · 보통 속도 고정. 추가 효과 0 —
+     강해지는 느낌은 «색·크기·선명도·아우라» 네 가지가 높이 따라 연속으로 변하는 것만으로.
+     들어오는 것 = 최근 반년 + 트렌드 3점 이상. 전체보기 = 달별. */
+  .trv{ padding:0 0 40px; }
+  .trv-stage{ position:relative; border:1px solid rgba(255,255,255,.09); border-radius:20px; overflow:hidden; margin-top:14px; }
+  .trv-sky{ height:400px; position:relative; overflow:hidden;
+    background:radial-gradient(125% 105% at 50% 36%,#0B1116,#070A0D 58%,#050608); }
+  @media(max-width:640px){ .trv-sky{ height:330px; } }
+  .trv-stars{ position:absolute; inset:0; pointer-events:none; opacity:.4;
+    background-image:radial-gradient(1px 1px at 14% 15%,#fff,transparent),radial-gradient(1px 1px at 37% 8%,#fff,transparent),
+    radial-gradient(1px 1px at 61% 18%,#fff,transparent),radial-gradient(1.2px 1.2px at 82% 11%,#fff,transparent),
+    radial-gradient(1px 1px at 93% 24%,#fff,transparent),radial-gradient(1px 1px at 50% 5%,#fff,transparent),
+    radial-gradient(1px 1px at 26% 27%,#fff,transparent),radial-gradient(1px 1px at 71% 30%,#fff,transparent); }
+  .trv-rig{ position:absolute; inset:0; width:100%; height:100%; }
+  .trv-tline{ position:absolute; left:0; right:0; z-index:5; pointer-events:none; border-top:1.5px dashed rgba(255,122,69,.42); }
+  .trv-tline .lb{ position:absolute; left:18px; top:-9px; font-family:'JetBrains Mono',monospace; font-size:9px; font-weight:800;
+    letter-spacing:.1em; color:#FF7A45; background:#0A0C10; padding:1.5px 8px; border-radius:5px; text-transform:uppercase; }
+  .trv-tline .rb{ position:absolute; right:16px; top:-8px; font-size:10px; color:#6A7063; background:#0A0C10; padding:1.5px 7px; border-radius:5px; }
+  .trv-pt{ position:absolute; z-index:6; transform:translate(-50%,-50%); pointer-events:none; text-align:center; }
+  .trv-pt .glow{ position:absolute; left:50%; top:50%; width:64px; height:64px; margin:-32px 0 0 -32px; border-radius:50%;
+    background:radial-gradient(circle,currentColor,transparent 62%); opacity:.13; transition:opacity .4s,transform .4s; }
+  .trv-pt .dot{ position:absolute; left:50%; top:50%; width:6px; height:6px; margin:-3px 0 0 -3px; border-radius:50%;
+    background:currentColor; box-shadow:0 0 9px currentColor; transition:box-shadow .4s,transform .4s; }
+  .trv-pt .nm{ position:absolute; left:50%; bottom:11px; transform:translateX(-50%); font-family:'JetBrains Mono',monospace;
+    font-size:10px; font-weight:800; white-space:nowrap; transition:opacity .4s,transform .4s; }
+  .trv-pt .nm b{ opacity:.55; margin-left:4px; }
+  .trv-pt.hot{ color:#E09562; } .trv-pt.dim{ color:#5C6771; } .trv-pt.dim .nm{ opacity:.62; }
+  .trv-pt.near .glow{ opacity:.3; transform:scale(1.25); }
+  .trv-pt.near .dot{ box-shadow:0 0 18px currentColor; transform:scale(1.35); }
+  .trv-pt.near .nm{ transform:translateX(-50%) translateY(-3px); opacity:1; }
+  .trv-me{ position:absolute; z-index:9; transform:translate(-50%,-50%); text-align:center; pointer-events:none; }
+  .trv-me .av{ display:block; margin:0 auto; overflow:visible; }
+  .trv-me .av .st{ fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; }
+  .trv-me .av .fl{ fill:currentColor; }
+  .trv-me .av .canopy{ transform-origin:50% 30%; transition:transform .45s cubic-bezier(.2,1.3,.4,1); }
+  .trv-me .lb{ display:inline-block; margin-top:4px; font-family:'JetBrains Mono',monospace; font-size:9px; font-weight:800;
+    border-radius:5px; padding:2px 8px; white-space:nowrap; transition:background .5s,color .5s; }
+  .trv-me .aura{ position:absolute; left:50%; top:50%; border-radius:50%; transform:translate(-50%,-50%);
+    background:radial-gradient(circle,currentColor,transparent 64%); }
+  .trv-me .flag{ position:absolute; left:50%; top:-32px; transform:translateX(-50%); font-family:'JetBrains Mono',monospace;
+    font-size:9.5px; font-weight:800; padding:3px 9px; border-radius:6px; white-space:nowrap; opacity:0; }
+  .trv-me .flag.f1{ color:#12140A; background:#D7F34B; }
+  .trv-me .flag.f2{ color:#CFE0EE; background:rgba(20,32,42,.95); border:1px solid rgba(94,130,166,.45); }
+  .trv-me.fire .flag.f1, .trv-me.chill .flag.f2{ animation:trvFlag 2.2s cubic-bezier(.2,.9,.3,1) forwards; }
+  @keyframes trvFlag{ 0%{opacity:0;transform:translateX(-50%) translateY(7px)}
+    15%{opacity:1;transform:translateX(-50%) translateY(0)} 78%{opacity:1} 100%{opacity:0;transform:translateX(-50%) translateY(-6px)} }
+  .trv-cap{ position:absolute; left:20px; top:18px; z-index:10; pointer-events:none; }
+  .trv-cap .kk{ font-family:'JetBrains Mono',monospace; font-size:9.5px; letter-spacing:.18em; text-transform:uppercase; color:#6A7063; }
+  .trv-cap .tt{ font-size:clamp(17px,2.4vw,23px); font-weight:800; letter-spacing:-.022em; margin-top:6px; line-height:1.26; color:#EDEFE8; }
+  .trv-cap .tt em{ font-style:normal; color:#FF7A45; }
+  .trv-cap .ss{ font-size:11.5px; color:#9BA192; margin-top:7px; max-width:30ch; line-height:1.6; }
+  .trv-hud{ position:absolute; right:18px; bottom:16px; z-index:10; display:flex; gap:1px; background:#22262B;
+    border:1px solid #22262B; border-radius:11px; overflow:hidden; }
+  .trv-hud div{ background:rgba(10,12,15,.86); padding:8px 13px; text-align:right; backdrop-filter:blur(8px); }
+  .trv-hud .k{ font-family:'JetBrains Mono',monospace; font-size:8.5px; letter-spacing:.13em; color:#6A7063; text-transform:uppercase; }
+  .trv-hud .v{ font-family:'JetBrains Mono',monospace; font-size:15px; font-weight:800; margin-top:2px; color:#EDEFE8; }
+  /* ── 벽(집계) — 카드는 눌렀을 때만 ── */
+  .trv-bar{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin:16px 0 4px; }
+  .trv-seg{ display:inline-flex; background:rgba(255,255,255,.035); border:1px solid rgba(255,255,255,.09); border-radius:999px; padding:3px; }
+  .trv-seg button{ font-family:inherit; font-size:11.5px; font-weight:800; color:var(--st2-sub); cursor:pointer; border:none;
+    background:transparent; border-radius:999px; padding:6px 13px; transition:.15s; }
+  .trv-seg button.on{ background:#FF7A45; color:#2A0C00; }
+  .trv-bar .n{ font-size:11px; color:var(--st2-faint); margin-left:auto; }
+  .trv-bar .n b{ color:#FFA778; }
+  .trv-wall{ display:flex; flex-wrap:wrap; gap:7px; margin-top:10px; }
+  .trv-kw{ display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:800; cursor:pointer;
+    padding:8px 14px; border-radius:99px; border:1px solid rgba(255,122,69,.32); color:#FFA778;
+    background:rgba(255,122,69,.08); transition:transform .18s ease, box-shadow .3s ease; }
+  .trv-kw:hover{ transform:translateY(-1px); box-shadow:0 0 16px rgba(255,122,69,.2); }
+  .trv-kw.on{ background:#FF7A45; color:#2A0C00; border-color:#FF7A45; }
+  .trv-kw small{ font-weight:700; opacity:.65; font-variant-numeric:tabular-nums; }
+  .trv-kw.none{ border-style:dashed; color:var(--st2-faint); background:transparent; border-color:rgba(255,255,255,.16); }
+  .trv-kw.none.on{ background:rgba(255,255,255,.12); color:var(--st2-txt,#e8e9e6); }
+  .trv-cards{ display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:10px; margin-top:12px; }
+  .trv-card{ border:1px solid rgba(255,255,255,.09); border-radius:14px; padding:12px 14px; cursor:pointer;
+    background:rgba(255,255,255,.03); transition:border-color .18s, transform .18s; }
+  .trv-card:hover{ border-color:rgba(255,122,69,.45); transform:translateY(-2px); }
+  .trv-card .hk{ font-size:12.5px; font-weight:800; color:var(--st2-txt,#e8e9e6); line-height:1.45;
+    display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+  .trv-card .mt{ display:flex; gap:8px; align-items:center; font-size:10px; color:var(--st2-faint); margin-top:7px;
+    font-variant-numeric:tabular-nums; }
+  .trv-card .mt .tr{ color:#FFA778; font-weight:800; }
+  .trv-mon{ margin-top:18px; }
+  .trv-mon .mh{ display:flex; align-items:baseline; gap:9px; font-size:13px; font-weight:800; color:var(--st2-txt,#e8e9e6);
+    padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,.08); }
+  .trv-mon .mh small{ font-size:10.5px; color:var(--st2-faint); font-weight:600; }
+  .trv-empty{ border:1px dashed rgba(255,255,255,.16); border-radius:16px; padding:22px 18px; margin-top:12px;
+    font-size:12.5px; line-height:1.7; color:var(--st2-sub); }
+  .trv-empty b{ color:#FFA778; }
 
   /* ════ v481 · 마법 — 「먼저 말을 겁니다」 ════
      묻기 전에 알고리즘이 알아낸 것만 카드로 올린다. 계산이 안 되면 «왜 조용한지»를 말한다. */
@@ -18002,88 +17794,9 @@
   .px-dfoot .del:hover{ color:#E0788C; }
   @media(prefers-reduced-motion:reduce){ .px *,.px-sheet,.px-rec{ animation:none!important; transition:none!important; } }
 
-  /* ═══════════════ 📐 패턴 파악 A+C 합본 (pt2) — 대조대+공식 조립대 ═══════════════ */
+  /* ═══ #pt2 — 패턴 파악(px)이 렌더되는 가운데 기둥 (pt2 대조대 본체는 v557에서 삭제) ═══ */
   .pt2{ --lime:#d7f34b; --acid:#e6fb62; --sub:#9aa08a; --faint:#6b715c; --line:rgba(255,255,255,.08);
     max-width:760px; margin:0 auto; padding:6px 16px 30px; width:100%; }
-  .pt2-fchips{ display:flex; gap:6px; flex-wrap:wrap; margin:4px 0 0; }
-  .pt2-fchip{ font-family:inherit; font-size:11px; font-weight:800; color:var(--faint); background:rgba(255,255,255,.03);
-    border:1px solid var(--line); border-radius:999px; padding:7px 13px; cursor:pointer; }
-  .pt2-fchip.on{ color:#0b0c06; background:var(--lime); border-color:var(--lime); }
-  .pt2-fchip .n{ font-family:'JetBrains Mono',monospace; font-size:9.5px; opacity:.75; margin-left:2px; }
-  .pt2-legend{ display:flex; flex-wrap:wrap; gap:4px 10px; margin:11px 2px 0; }
-  .pt2-lg{ display:inline-flex; align-items:center; gap:4px; font-size:9px; font-weight:700; color:var(--sub); }
-  .pt2-lg i{ width:7px; height:7px; border-radius:2px; }
-  .pt2-align{ display:flex; gap:4px; margin:14px 0 10px; background:rgba(255,255,255,.04);
-    border:1px solid var(--line); border-radius:999px; padding:3px; width:max-content; }
-  .pt2-align button{ font-family:inherit; font-size:11px; font-weight:800; color:var(--faint); background:transparent;
-    border:none; border-radius:999px; padding:7px 14px; cursor:pointer; }
-  .pt2-align button.on{ color:#0b0c06; background:var(--lime); }
-  .pt2-cmpwrap{ overflow-x:auto; margin:0 -16px; padding:0 16px; }
-  .pt2-cmp{ display:grid; gap:7px; width:max-content; }
-  .pt2-colhd{ font-size:10px; font-weight:800; text-align:center; color:var(--sub); padding:4px 2px;
-    max-width:132px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  .pt2-colhd s{ text-decoration:none; display:block; font-family:'JetBrains Mono',monospace; font-size:8.5px; color:var(--faint); }
-  .pt2-blk{ width:132px; border-radius:10px; border:1px solid var(--line); background:rgba(255,255,255,.025);
-    padding:8px 9px; position:relative; overflow:hidden; min-height:54px; }
-  .pt2-blk::before{ content:''; position:absolute; left:0; top:0; bottom:0; width:3px; background:var(--rc,#666); }
-  .pt2-blk .rl{ font-size:8.5px; font-weight:800; color:var(--rc,#aaa); letter-spacing:.03em; }
-  .pt2-blk .tx{ font-size:9.5px; color:var(--sub); line-height:1.55; margin-top:3px; word-break:keep-all;
-    display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
-  .pt2-blk.ghost{ opacity:.14; border-style:dashed; }
-  .pt2-empty{ border:1px dashed rgba(255,255,255,.16); border-radius:16px; padding:22px 18px; font-size:12.5px;
-    color:var(--sub); line-height:1.8; text-align:center; margin-top:14px; }
-  .pt2-empty b{ color:#eef0e4; }
-  /* 감지 + 조립대 */
-  .pt2-match{ margin-top:14px; border:1px solid rgba(215,243,75,.25); border-radius:16px; padding:14px 15px;
-    background:radial-gradient(140% 200% at 50% 0%,rgba(215,243,75,.07),transparent 55%); }
-  .pt2-match .mt{ font-size:12px; font-weight:800; line-height:1.6; color:#eef0e4; }
-  .pt2-match .mt b{ color:var(--acid); }
-  .pt2-seq{ display:flex; flex-wrap:wrap; gap:4px; margin-top:9px; align-items:center; }
-  .pt2-seq i{ font-style:normal; font-size:9.5px; font-weight:800; padding:5px 9px; border-radius:999px;
-    color:#0b0c06; background:var(--sc,#889); }
-  .pt2-seq .ar{ color:var(--faint); background:none; padding:0; }
-  .pt2-fill{ display:block; width:100%; margin-top:12px; font-family:inherit; font-size:12px; font-weight:800;
-    color:var(--lime); background:rgba(215,243,75,.1); border:1px solid rgba(215,243,75,.35);
-    border-radius:12px; padding:11px; cursor:pointer; }
-  .pt2-bench{ margin-top:18px; }
-  .pt2-bench .bt{ font-size:13px; font-weight:800; color:#eef0e4; margin-bottom:3px; }
-  .pt2-bench .bs{ font-size:10.5px; color:var(--sub); line-height:1.6; margin-bottom:10px; }
-  .pt2-pal{ display:flex; flex-wrap:wrap; gap:6px; }
-  .pt2-palc{ font-family:inherit; font-size:10.5px; font-weight:800; border-radius:999px; padding:8px 13px; cursor:pointer;
-    color:var(--rc); background:rgba(255,255,255,.03); border:1px solid var(--rc); }
-  .pt2-palc:active{ transform:scale(.94); }
-  .pt2-rail{ margin-top:11px; border:1px dashed rgba(255,255,255,.16); border-radius:14px; padding:11px; min-height:58px; }
-  .pt2-rail .empty{ font-size:11px; color:var(--faint); text-align:center; padding:10px 0; }
-  .pt2-slot{ display:flex; align-items:center; gap:9px; padding:9px 10px; border-radius:10px; margin-bottom:6px;
-    background:rgba(255,255,255,.03); border:1px solid var(--line); position:relative; overflow:hidden; }
-  .pt2-slot::before{ content:''; position:absolute; left:0; top:0; bottom:0; width:3px; background:var(--rc,#666); }
-  .pt2-slot .no{ font-family:'JetBrains Mono',monospace; font-size:9.5px; color:var(--faint); width:13px; }
-  .pt2-slot .rn{ font-size:11px; font-weight:800; color:var(--rc,#aaa); min-width:52px; }
-  .pt2-slot input{ flex:1; font-family:inherit; font-size:10.5px; color:#eef0e4; background:transparent;
-    border:none; border-bottom:1px dashed rgba(255,255,255,.14); padding:2px 1px 4px; outline:none; min-width:0; }
-  .pt2-slot input::placeholder{ color:var(--faint); }
-  .pt2-slot .x{ color:var(--faint); cursor:pointer; font-size:13px; padding:0 3px; }
-  .pt2-racts{ display:flex; gap:6px; margin-top:8px; }
-  .pt2-ract{ font-family:inherit; font-size:10.5px; font-weight:800; color:var(--sub); background:rgba(255,255,255,.04);
-    border:1px solid var(--line); border-radius:999px; padding:8px 13px; cursor:pointer; }
-  .pt2-namer{ display:flex; gap:6px; margin-top:12px; }
-  .pt2-namer input{ flex:1; font-family:inherit; font-size:13px; font-weight:700; color:#eef0e4;
-    background:rgba(255,255,255,.03); border:1px solid var(--line); border-radius:12px; padding:12px 14px; outline:none; min-width:0; }
-  .pt2-namer input:focus{ border-color:rgba(215,243,75,.4); }
-  .pt2-reg{ font-family:inherit; font-size:12px; font-weight:800; color:#0b0c06; background:var(--lime);
-    border:none; border-radius:12px; padding:0 18px; cursor:pointer; box-shadow:0 0 16px rgba(215,243,75,.2); }
-  .pt2-done{ margin-top:12px; border:1px solid rgba(215,243,75,.3); border-radius:14px; padding:13px 14px; display:none;
-    background:radial-gradient(140% 200% at 50% 0%,rgba(215,243,75,.09),transparent 55%); }
-  .pt2-done.show{ display:block; animation:pt2pop .45s cubic-bezier(.2,1.3,.4,1); }
-  @keyframes pt2pop{ 0%{transform:scale(.94);opacity:0} 100%{transform:scale(1);opacity:1} }
-  .pt2-done .d1{ font-size:12px; font-weight:800; color:#eef0e4; }
-  .pt2-done .d1 b{ color:var(--acid); }
-  .pt2-done .d2{ font-family:'JetBrains Mono',monospace; font-size:9px; color:var(--sub); margin-top:6px; line-height:1.8; }
-  .pt2-done .d3{ font-size:10px; color:var(--faint); margin-top:8px; line-height:1.6; }
-  .pt2-done .d3 b{ color:var(--sub); }
-  .pt2-oldtg{ display:block; margin:22px auto 0; font-family:inherit; font-size:11px; font-weight:800; color:var(--faint);
-    background:rgba(255,255,255,.03); border:1px solid var(--line); border-radius:999px; padding:9px 16px; cursor:pointer; }
-  #pattern-view.pt2-hideold .pp-vault, #pattern-view.pt2-hideold .pp-board, #pattern-view.pt2-hideold .pp-header .pp-new-btn{ display:none; }
 
 </style>
 
@@ -19066,9 +18779,7 @@
       <button class="sh-sb-item sh-sb-main" id="ws-sorter" title="AI 컨텐츠 정리">
         <span class="sh-sb-icon">🤖</span><span class="sh-sb-label">AI 컨텐츠 정리</span>
       </button>
-      <button class="sh-sb-item" data-ws="pattern" id="ws-pattern">
-        <span class="sh-sb-icon">🎯</span><span class="sh-sb-label">패턴 파악</span>
-      </button>
+      <!-- (v557 · 패턴 파악은 원고 탭 안으로 이사 — 사이드바 버튼 제거) -->
       <button class="sh-sb-item" data-ws="northstar" id="ws-northstar">
         <span class="sh-sb-icon">🥊</span><span class="sh-sb-label">라이벌 멘토</span>
       </button>
@@ -20832,8 +20543,8 @@
       <!-- 원고 탭 토글 (썸네일 탭처럼) -->
       <div class="sc-tabs" id="sc-tabs">
         <button class="sc-tab on" data-sctab="write">✎ 원고 쓰기</button>
+        <button class="sc-tab star" data-sctab="pattern">🎯 패턴 파악</button>
         <button class="sc-tab" data-sctab="collect">🗂 원고 모음</button>
-        <button class="sc-tab" data-sctab="structure">📐 구조 모음</button>
       </div>
 
       <!-- 탭A: 원고 쓰기 -->
@@ -21194,21 +20905,28 @@
       </div>
       </div><!-- /sc-tab-collect -->
 
-      <!-- 탭C: 구조 모음 (공식 라이브러리) -->
-      <div id="sc-tab-structure" class="sc-tabpane" style="display:none;">
-        <div class="sl-intro">
-          <div class="sl-intro-text">
-            <b>떡상하는 사람은 영상을 복사하지 않고 <span class="em">구조</span>를 복사합니다.</b>
-            패턴 파악에서 찾은 <b>성공 구조(공식)</b>를 대표 썸네일과 함께 모아두는 곳이에요.
-            나중에 원고 쓸 때 <b>구조는 그대로, 내용만</b> 바꿔 쓰면 됩니다.
-          </div>
-          <div class="sl-intro-btns">
-            <button class="sl-ex-btn" id="sl-ex-btn" type="button">📚 참고 예시</button>
-            <button class="sl-new-btn" id="sl-new-btn" type="button">＋ 새 구조</button>
-          </div>
+      <!-- 탭B: 🎯 패턴 파악 (v557 · 사이드바 방에서 원고 탭으로 이사) -->
+      <div id="sc-tab-pattern" class="sc-tabpane" style="display:none;">
+        <div id="pattern-view">
+          <!-- 🔍 패턴 파악 (px · JS 렌더) — 컨베이어 3단계 + 폴더 -->
+          <div class="pt2" id="pt2"></div>
+          <!-- 📐 구조 모음 — px «구조 모음» 폴더를 고르면 이 판이 열린다 (탭이던 것을 기능 그대로 흡수) -->
+          <div id="sc-tab-structure" style="display:none;">
+            <div class="sl-intro">
+              <div class="sl-intro-text">
+                <b>떡상하는 사람은 영상을 복사하지 않고 <span class="em">구조</span>를 복사합니다.</b>
+                패턴 파악에서 찾은 <b>성공 구조(공식)</b>를 대표 썸네일과 함께 모아두는 곳이에요.
+                나중에 원고 쓸 때 <b>구조는 그대로, 내용만</b> 바꿔 쓰면 됩니다.
+              </div>
+              <div class="sl-intro-btns">
+                <button class="sl-ex-btn" id="sl-ex-btn" type="button">📚 참고 예시</button>
+                <button class="sl-new-btn" id="sl-new-btn" type="button">＋ 새 구조</button>
+              </div>
+            </div>
+            <div class="sl-grid" id="sl-grid"></div>
+          </div><!-- /sc-tab-structure -->
         </div>
-        <div class="sl-grid" id="sl-grid"></div>
-      </div><!-- /sc-tab-structure -->
+      </div><!-- /sc-tab-pattern -->
     </div>
 
     <!-- 벤치마킹 행 선택 모달 -->
@@ -21316,13 +21034,14 @@
         <div class="st2-ws" id="st2-ws">
           <button class="on" data-st2tab="home">인사이트</button>
           <button data-st2tab="cus">고객</button>
-          <button data-st2tab="pattern">패턴·구조</button>
+          <button data-st2tab="trend">🔥 트렌드</button>
           <button data-st2tab="scripts">원고</button>
           <button data-st2tab="osmu">배포</button>
         </div>
         <div id="st2-home"></div>
         <div id="st2-cus" style="display:none;"></div>
         <div id="st2-osmu" style="display:none;"></div>
+        <div id="st2-trend" style="display:none;"></div><!-- v557 · 🔥 트렌드 (JS 렌더 st2RenderTrend) -->
       </div>
       <div class="st2-sheet" id="st2-sheet"><div class="bx" id="st2-sheet-bx"></div></div>
       <!-- 맵 풀스크린 오버레이 -->
@@ -21349,98 +21068,7 @@
       </div>
     </div>
 
-    <div id="pattern-view" style="display:none;">
-      <button type="button" onclick="if(window.__goWs)window.__goWs('studio')" style="display:inline-flex;align-items:center;gap:6px;margin:14px 0 0 16px;font-family:inherit;font-size:12px;font-weight:800;color:#9aa08a;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);border-radius:999px;padding:8px 14px;cursor:pointer;">← 제작소</button>
-      <header class="pp-header">
-        <div class="pp-header-text">
-          <div class="pp-eyebrow">패턴 파악 · 성공 공식 뽑기</div>
-          <h1 class="pp-title">패턴 <span class="em">파악</span></h1>
-          <p class="pp-sub">비슷한 레퍼런스를 <b>나란히 분해·분석</b>해서 <b>"아, 다 같은 뼈대네"</b> 하는 공통 공식을 찾는 곳이에요.<br/>찾은 공식은 <b>📐 구조 모음</b>에 저장해 다음 원고에 그대로 꺼내 씁니다.</p>
-        </div>
-        <button class="pp-new-btn" id="pp-new-btn">+ 새 아이디어 보드</button>
-      </header>
-
-      <!-- ═══ 📐 A+C 합본: 나란히 대조대 + 공식 조립대 (pt2 · JS 렌더) ═══ -->
-      <div class="pt2" id="pt2"></div>
-
-      <!-- 보관함 -->
-      <div class="pp-vault">
-        <div class="pp-vault-title">📁 아이디어 보드 보관함</div>
-        <div class="pp-vault-list" id="pp-vault-list">
-          <button class="pp-vault-card active" type="button">
-            <div class="pp-vault-card-topic">유방암 환자가 토마토 끓여먹는 이유</div>
-            <div class="pp-vault-card-meta">레퍼런스 5 · 6/6 작성</div>
-            <div class="pp-vault-card-thumbs">▣ ▣ ▣ ▣ ▣</div>
-          </button>
-          <button class="pp-vault-card" type="button">
-            <div class="pp-vault-card-topic">앞머리 자르면 안 되는 사람</div>
-            <div class="pp-vault-card-meta">레퍼런스 3 · 초안</div>
-            <div class="pp-vault-card-thumbs">▣ ▣ ▣</div>
-          </button>
-          <button class="pp-vault-new" type="button">＋<br/>새 보드</button>
-        </div>
-      </div>
-
-      <!-- 작전도 보드 (여정) -->
-      <div class="pp-board" id="pp-board">
-        <div class="pp-board-bar">
-          <input class="pp-board-topic" id="pp-topic" placeholder="이 아이디어 보드의 주제 — 예: 토마토 효능 릴스" />
-          <button class="pp-shop-btn" type="button" id="pp-shop-btn">🛒 시트에서 레퍼런스 쇼핑</button>
-        </div>
-
-        <!-- PART 2 -->
-        <section class="pp-part">
-          <div class="pp-part-head"><span class="pp-part-no">PART 2</span><h3>레퍼런스 분해·비교</h3><span class="pp-part-hint">칸을 눌러 직접 적어요</span><span class="pp-head-btns"><button class="pp-head-add pp-head-piece" type="button" id="pp-piece-btn">🧩 구조 조각 ▾</button><button class="pp-head-add" type="button" id="pp-colfree-add">＋ 자유 원고 칸</button><button class="pp-head-add pp-head-tools" type="button" id="pp-head-tools">⚙ 도구 ▾</button><span class="pp-head-more" id="pp-head-more" style="display:none;"><button class="pp-head-add pp-head-sort" type="button" id="pp-sort-views" title="조회수 높은 순으로 칸 정렬">🔥 조회수 순</button><button class="pp-head-add pp-head-scene" type="button" id="pp-scene-toggle" title="🎬 장면(화면) — 둘다 / 장면 보기 / 장면 숨기기">👁 둘다</button><button class="pp-head-add pp-head-draft" type="button" id="pp-draft-mine">✨ 내꺼 자동 초안</button></span></span></div>
-          <div class="pp-piece-palette" id="pp-piece-palette" style="display:none;"></div>
-          <div class="pp-fmt-bar" id="pp-fmt-bar">
-            <span class="pp-fmt-label">선택 강조</span>
-            <button class="fmt-btn bold-btn" type="button" data-ppfmt="bold" title="굵게">B</button>
-            <button class="fmt-btn red-btn" type="button" data-ppfmt="color:red" title="빨강 · 핵심"><span class="swatch"></span><span class="lbl">핵심</span></button>
-            <button class="fmt-btn orange-btn" type="button" data-ppfmt="color:orange" title="주황 · 참고"><span class="swatch"></span><span class="lbl">참고</span></button>
-            <button class="fmt-btn emerald-btn" type="button" data-ppfmt="color:emerald" title="에메랄드 · 보조"><span class="swatch"></span><span class="lbl">보조</span></button>
-            <button class="fmt-btn clear-btn" type="button" data-ppfmt="clear" title="포맷 제거">✕</button>
-          </div>
-          <div class="pp-script-scroll" id="pp-part2-scroll"></div>
-          <button class="pp-analyze-btn" type="button" id="pp-analyze-btn">🔍 공통점·떡상 짚어주기 <span class="pp-analyze-caret">▾</span></button>
-          <div class="pp-analysis" id="pp-analysis" style="display:none;"></div>
-          <div class="pp-memo">
-            <label>🧠 찾은 공식 한 줄 — 비교하며 느낀 공통 뼈대</label>
-            <textarea id="pp-memo-ta" placeholder="예: 다섯 개 다 초반에 '재료는 딱 하나'처럼 호기심 → 숫자로 단순화. 방법은 전부 '갈아서 끝' 3스텝. CTA는 '저장해두고 내일 아침'으로 통일."></textarea>
-          </div>
-          <div class="pp-finale">
-            <div class="pp-finale-lbl">✅ 공식을 찾았다면 — 저장해서 다음 원고에 그대로 꺼내 쓰세요</div>
-            <button class="pp-tostruct-btn" type="button" id="pp-tostruct-btn">📐 이 패턴을 공식으로 저장 &nbsp;→&nbsp; 구조 모음</button>
-          </div>
-        </section>
-
-        <!-- PART 3 (선택 · 기본 접힘) -->
-        <section class="pp-part pp-part-plan">
-          <button class="pp-part3-toggle" type="button" id="pp-part3-toggle">🧩 <b>아이디어 보드로 조합</b> <span class="pp-part3-opt">(선택 · 포스트잇 자유 배치)</span> <span class="pp-part3-caret">▾</span></button>
-          <div class="pp-part3-body" id="pp-part3-body" style="display:none;">
-          <div class="pp-canvas" id="pp-canvas">
-            <div class="pp-stage" id="pp-stage">
-              <div class="pp-timeline" id="pp-timeline"></div>
-              <div class="pp-notes-layer" id="pp-notes-layer"></div>
-            </div>
-            <div class="pp-zoom" id="pp-zoom">
-              <button type="button" data-ppzoom="out" title="축소">−</button>
-              <span id="pp-zoom-val">100%</span>
-              <button type="button" data-ppzoom="in" title="확대">＋</button>
-            </div>
-          </div>
-          <div class="pp-canvas-tools">
-            <button class="pp-tool pp-tool-idea" type="button" data-ppadd="idea">＋ 아이디어</button>
-            <button class="pp-tool" type="button" data-ppadd="edit">＋ 편집점</button>
-            <button class="pp-tool" type="button" data-ppadd="audio">＋ 오디오</button>
-            <button class="pp-tool" type="button" data-ppadd="thumb">＋ 썸네일</button>
-            <button class="pp-tool pp-tool-seg" type="button" data-ppadd="seg">＋ 구간</button>
-            <span class="pp-canvas-hint2">카드를 끌어서 자유 배치 — 형사 단서판처럼 이리저리 옮기며 짜보세요</span>
-          </div>
-          <button class="pp-save-plan" type="button">💾 아이디어 보드 저장</button>
-          </div>
-        </section>
-      </div>
-    </div>
+    <!-- (v557 · 패턴 파악 뷰는 원고 탭 안 #sc-tab-pattern으로 이사) -->
 
     <!-- ===== NORTH STAR (롤모델) VIEW ===== -->
     <div id="northstar-view" class="ns-wrap" style="display:none;">
@@ -25198,12 +24826,14 @@
 
   // === 원고 탭 전환 (쓰기 / 모음) ===
   function scSwitchTab(tab) {
+    // v557 · 구조 모음은 패턴 파악 안 «폴더»로 흡수 — 옛 호출들이 그대로 도착하게 별칭 처리
+    if (tab === 'structure') { _pxFolder = 'lib'; tab = 'pattern'; }
     document.querySelectorAll('#sc-tabs .sc-tab').forEach(b => b.classList.toggle('on', b.dataset.sctab === tab));
-    const w = document.getElementById('sc-tab-write'), c = document.getElementById('sc-tab-collect'), s = document.getElementById('sc-tab-structure');
+    const w = document.getElementById('sc-tab-write'), c = document.getElementById('sc-tab-collect'), p = document.getElementById('sc-tab-pattern');
     if (w) w.style.display = (tab === 'write') ? 'block' : 'none';
     if (c) c.style.display = (tab === 'collect') ? 'block' : 'none';
-    if (s) s.style.display = (tab === 'structure') ? 'block' : 'none';
-    if (tab === 'structure') renderStructureLib();
+    if (p) p.style.display = (tab === 'pattern') ? 'block' : 'none';
+    if (tab === 'pattern') { try { pxRender(); } catch (e) { console.error('[px] render 실패:', e); } }
     const sv = document.getElementById('sc-view'); if (sv) sv.scrollTop = 0;
   }
 
@@ -30967,16 +30597,21 @@
     return { rows: rs, chips: chips, avg: avg, bangers: bangers, count: rs.length, gaps: gaps };
   }
   function rivalSendToPattern(id) {
+    // v557 · 옛 작전판(pp)이 사라져 px 표본으로 직행 — 구조 분해된 원고만 표본이 될 수 있다
     const rs = rivalRows(id);
     if (!rs.length) { toast('먼저 시트에서 이 라이벌의 콘텐츠를 배정하세요'); return; }
     try {
-      ppBoard = ppNewBoard();
-      ppBoard.topic = (rivalName(id) || '라이벌') + ' 분해';
-      ppSegs = ppDefaultSegs(); ppNotes = []; ppScale = 1;
-      const top = rs.slice().sort((a, b) => (parseInt(b.views, 10) || 0) - (parseInt(a.views, 10) || 0)).slice(0, 8);
-      top.forEach(r => { ppBoard.refs.push({ id: ppId('r'), rowId: r.id, label: (r.why || r.hook || ('No.' + r.no)), img: null, _imgChecked: false }); });
+      const ids = new Set(rs.map(r => r.id));
+      const pool = pxPool().filter(o => ids.has(o.id)).sort((a, b) => b.views - a.views).slice(0, 4);
+      if (!pool.length) {
+        switchWorkspace('pattern');
+        toast('구조로 분해된 원고가 아직 없어요 — 시트에서 원고를 구조로 나눠주세요');
+        return;
+      }
+      _pxPicked = pool; _pxStep = 1; _pxFolder = 'x';
+      try { pxLoadThumbs(_pxPicked); } catch (e) {}
       switchWorkspace('pattern');
-      toast('🎯 ' + top.length + '개 콘텐츠를 패턴 파악으로 보냈어요');
+      toast('🎯 ' + pool.length + '편을 패턴 파악 표본으로 담았어요');
     } catch (e) { console.error('[rival] pattern 전송 실패:', e); }
   }
   function openRivalPicker(rowId) {
@@ -31229,321 +30864,8 @@
     toast(isNew ? '북극성 추가됨 ⭐' : '수정됨');
   }
 
-  // ===== 패턴 파악 — PART 3 작전판 (자유 포스트잇 + 작전 타임라인 바) =====
-  let ppSegs = [
-    { id: 'h', label: '초반 2초', color: '#E2574C', cap: '사람의 이목을 집중', flow: false },
-    { id: 'i', label: '이득&손해제시', color: '#E68A3A', cap: '끝까지 보게 만드는', flow: true },
-    { id: 'r', label: '공감 상황', color: '#5B8DEF', cap: '', flow: true },
-    { id: 's', label: '방법', color: '#A9C437', cap: '', flow: true },
-    { id: 'a', label: '소구포인트', color: '#2FD07B', cap: '', flow: true },
-    { id: 'c', label: 'CTA', color: '#5DB86A', cap: '다음 행동 유도', flow: true }
-  ];
-  let ppNotes = [];
-  let ppSeq = 1;
-  let ppZ = 5;
-  let ppScale = 1;
-  let ppPanX = 0, ppPanY = 0;
-  let ppBoardWired = false;
-  function ppApplyZoom() {
-    // 구조(타임라인)가 화면 밖으로 안 벗어나게 — 줌·팬 범위 클램프
-    ppScale = Math.max(0.75, Math.min(1.4, ppScale));
-    const cv = document.getElementById('pp-canvas');
-    if (cv) {
-      const limX = cv.clientWidth * 0.42, limY = cv.clientHeight * 0.42;
-      ppPanX = Math.max(-limX, Math.min(limX, ppPanX));
-      ppPanY = Math.max(-limY, Math.min(limY, ppPanY));
-    }
-    const st = document.getElementById('pp-stage');
-    if (st) st.style.transform = 'translate(' + ppPanX + 'px,' + ppPanY + 'px) scale(' + ppScale + ')';
-    const v = document.getElementById('pp-zoom-val');
-    if (v) v.textContent = Math.round(ppScale * 100) + '%';
-  }
-  function ppZoomAt(cx, cy, newScale) {
-    newScale = Math.max(0.75, Math.min(1.4, Math.round(newScale * 100) / 100));
-    const wx = (cx - ppPanX) / ppScale, wy = (cy - ppPanY) / ppScale;
-    ppScale = newScale;
-    ppPanX = cx - wx * ppScale; ppPanY = cy - wy * ppScale;
-    ppApplyZoom();
-  }
-  function ppEsc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
-
-  function renderPpTimeline() {
-    const host = document.getElementById('pp-timeline');
-    if (!host) return;
-    const N = ppSegs.length;
-    const W = 840, x0 = 24, x1 = 816, barY = 132, barH = 56, rad = 13;
-    const segW = (x1 - x0) / N;
-    let g = '<svg viewBox="0 0 ' + W + ' 300" xmlns="http://www.w3.org/2000/svg">';
-    g += '<defs><clipPath id="ppbarclip"><rect x="' + x0 + '" y="' + barY + '" width="' + (x1 - x0) + '" height="' + barH + '" rx="' + rad + '"/></clipPath></defs>';
-    // 상단 리더 라벨 (초반2초·도입부·CTA)
-    ppSegs.forEach(function (s, i) {
-      const cx = x0 + (i + 0.5) * segW;
-      if (s.cap) {
-        const capY = (i % 2 === 0) ? 108 : 70;
-        g += '<text x="' + cx + '" y="' + (capY - 19) + '" text-anchor="middle" fill="#8A929C" font-family="Jua,sans-serif" font-size="12">' + ppEsc(s.cap) + '</text>';
-        g += '<text x="' + cx + '" y="' + capY + '" text-anchor="middle" fill="' + s.color + '" font-family="Jua,sans-serif" font-size="18">' + ppEsc(s.label) + '</text>';
-        g += '<line x1="' + cx + '" y1="' + (capY + 9) + '" x2="' + cx + '" y2="' + (barY - 3) + '" stroke="' + s.color + '" stroke-width="2"/>';
-      }
-    });
-    // 하나로 이어진 막대 — 색 구간이 붙어서 흐름 (clip으로 라운드 끝)
-    g += '<g clip-path="url(#ppbarclip)">';
-    g += '<rect x="' + x0 + '" y="' + barY + '" width="' + (x1 - x0) + '" height="' + barH + '" fill="#0E141C"/>';
-    ppSegs.forEach(function (s, i) {
-      const L = x0 + i * segW;
-      g += '<rect x="' + L + '" y="' + barY + '" width="' + (segW + 0.6) + '" height="' + barH + '" fill="' + s.color + '" fill-opacity="0.18"/>';
-    });
-    g += '</g>';
-    // 구간 사이 옅은 구분선 + 다음→ 흐름 화살표
-    ppSegs.forEach(function (s, i) {
-      if (i === 0) return;
-      const L = x0 + i * segW;
-      g += '<line x1="' + L + '" y1="' + (barY + 9) + '" x2="' + L + '" y2="' + (barY + barH - 9) + '" stroke="#27313E" stroke-width="1"/>';
-      g += '<text x="' + L + '" y="' + (barY + barH / 2 + 6) + '" text-anchor="middle" fill="#3C4858" font-family="sans-serif" font-size="14">›</text>';
-    });
-    // 구간 라벨 (가운데, 클릭=이름변경) + ✕(삭제)
-    ppSegs.forEach(function (s, i) {
-      const cx = x0 + (i + 0.5) * segW;
-      g += '<text x="' + cx + '" y="' + (barY + barH / 2 + 5) + '" text-anchor="middle" fill="' + s.color + '" font-family="Jua,sans-serif" font-size="15" class="pp-seg-label" data-seg="' + s.id + '">' + ppEsc(s.label) + '</text>';
-      const rx = x0 + (i + 1) * segW - 8;
-      g += '<text x="' + rx + '" y="' + (barY + 14) + '" text-anchor="middle" font-family="sans-serif" font-size="11" class="pp-seg-del" data-segdel="' + s.id + '">✕</text>';
-    });
-    // 막대 외곽선
-    g += '<rect x="' + x0 + '" y="' + barY + '" width="' + (x1 - x0) + '" height="' + barH + '" rx="' + rad + '" fill="none" stroke="#2C3644" stroke-width="1.5"/>';
-    // 내용 구성 브래킷 (flow 구간 묶음)
-    const flowIdx = ppSegs.map(function (s, i) { return s.flow ? i : -1; }).filter(function (i) { return i >= 0; });
-    if (flowIdx.length) {
-      const fa = x0 + flowIdx[0] * segW + 8;
-      const fb = x0 + (flowIdx[flowIdx.length - 1] + 1) * segW - 8;
-      const mid = (fa + fb) / 2;
-      const by = barY + barH + 18;
-      g += '<path d="M' + fa + ' ' + by + ' Q' + mid + ' ' + (by + 24) + ' ' + fb + ' ' + by + '" stroke="#D9A441" stroke-width="4" fill="none" stroke-linecap="round"/>';
-      g += '<line x1="' + mid + '" y1="' + (by + 13) + '" x2="' + mid + '" y2="' + (by + 24) + '" stroke="#D9A441" stroke-width="4"/>';
-      g += '<text x="' + mid + '" y="' + (by + 44) + '" text-anchor="middle" fill="#8A929C" font-family="Jua,sans-serif" font-size="12">영상을 계속 보게 만드는</text>';
-      g += '<text x="' + mid + '" y="' + (by + 65) + '" text-anchor="middle" fill="#D9A441" font-family="Jua,sans-serif" font-size="16">내용 구성</text>';
-    }
-    g += '</svg>';
-    host.innerHTML = g;
-    host.querySelectorAll('.pp-seg-label').forEach(function (t) {
-      t.addEventListener('click', function () {
-        const seg = ppSegs.find(function (x) { return x.id === t.dataset.seg; });
-        if (!seg) return;
-        const v = prompt('구간 이름', seg.label);
-        if (v == null) return;
-        if (v.trim()) { seg.label = v.trim(); renderPpTimeline(); }
-      });
-    });
-    host.querySelectorAll('.pp-seg-del').forEach(function (t) {
-      t.addEventListener('click', function (e) {
-        e.stopPropagation();
-        if (ppSegs.length <= 1) { toast('최소 1칸은 필요해요'); return; }
-        const id = t.dataset.segdel;
-        ppSegs = ppSegs.filter(function (x) { return x.id !== id; });
-        ppBoard.sections = ppBoard.sections.filter(function (x) { return x.id !== id; });
-        renderPpTimeline(); renderPpPart2();
-      });
-    });
-  }
-
-  function ppKindMeta(kind) {
-    return ({
-      idea: { tag: '💡 아이디어', cls: 'pp-pi-idea', ph: '아이디어 메모…' },
-      edit: { tag: '✂️ 편집점', cls: 'pp-pi-edit', ph: '편집점…' },
-      audio: { tag: '🎵 오디오', cls: 'pp-pi-audio', ph: '오디오…' },
-      thumb: { tag: '▣ 썸네일', cls: 'pp-pi-thumb', ph: '' }
-    })[kind] || { tag: '메모', cls: 'pp-pi-idea', ph: '메모…' };
-  }
-
-  function renderPpNotes() {
-    const layer = document.getElementById('pp-notes-layer');
-    if (!layer) return;
-    layer.innerHTML = ppNotes.map(function (n) {
-      const m = ppKindMeta(n.kind);
-      const head = '<div class="pp-pi-head"><span class="pp-pi-tag">' + m.tag + '</span><span class="pp-pi-del" data-pi-del="' + n.id + '">✕</span></div>';
-      if (n.kind === 'thumb') {
-        const w = n.w || 120;
-        const boxH = Math.round((w - 12) * (n.ratio || 1.4));
-        const box = '<div class="pp-pi-imgbox" data-pi-img="' + n.id + '" style="height:' + boxH + 'px;">' + (n.img ? '<img src="' + ppEsc(n.img) + '" alt="" draggable="false"/>' : '<span class="pp-pi-imgempty">＋<br>시트에서</span>') + '</div>';
-        const lab = n.label ? '<div class="pp-pi-thumb-label">' + ppEsc(n.label) + '</div>' : '';
-        return '<div class="pp-postit pp-pi-thumb" data-pi-card="' + n.id + '" style="left:' + n.x + 'px;top:' + n.y + 'px;width:' + w + 'px;z-index:' + (n.z || 1) + ';">'
-          + head + box + lab + '<div class="pp-pi-resize" data-pi-resize="' + n.id + '" title="크기 조절">⌟</div></div>';
-      }
-      return '<div class="pp-postit ' + m.cls + '" data-pi-card="' + n.id + '" style="left:' + n.x + 'px;top:' + n.y + 'px;z-index:' + (n.z || 1) + ';">'
-        + head + '<textarea class="pp-pi-body" data-pi="' + n.id + '" placeholder="' + ppEsc(m.ph) + '" rows="2">' + ppEsc(n.text || '') + '</textarea></div>';
-    }).join('');
-    ppWireNotes();
-  }
-
-  function ppPickImage(cb) {
-    const inp = document.createElement('input');
-    inp.type = 'file'; inp.accept = 'image/*';
-    inp.onchange = function () {
-      const f = inp.files && inp.files[0]; if (!f) return;
-      const rd = new FileReader();
-      rd.onload = function () { ppDownscale(rd.result, 700, cb); };
-      rd.readAsDataURL(f);
-    };
-    inp.click();
-  }
-  function ppDownscale(dataUrl, maxPx, cb) {
-    const img = new Image();
-    img.onload = function () {
-      const w = img.naturalWidth, h = img.naturalHeight, ratio = (w ? h / w : 1.4);
-      let nw = w, nh = h;
-      if (Math.max(w, h) > maxPx) { if (w >= h) { nw = maxPx; nh = Math.round(maxPx * ratio); } else { nh = maxPx; nw = Math.round(maxPx / ratio); } }
-      try { const c = document.createElement('canvas'); c.width = nw; c.height = nh; c.getContext('2d').drawImage(img, 0, 0, nw, nh); cb(c.toDataURL('image/jpeg', 0.82), ratio); }
-      catch (e) { cb(dataUrl, ratio); }
-    };
-    img.onerror = function () { cb(dataUrl, 1.4); };
-    img.src = dataUrl;
-  }
-
-  function ppWireNotes() {
-    const layer = document.getElementById('pp-notes-layer');
-    const canvas = document.getElementById('pp-canvas');
-    if (!layer || !canvas) return;
-    layer.querySelectorAll('.pp-postit').forEach(function (el) {
-      const id = el.dataset.piCard;
-      el.addEventListener('pointerdown', function (e) {
-        if (e.target.closest('.pp-pi-body') || e.target.closest('.pp-pi-del') || e.target.closest('.pp-pi-resize')) return;
-        const note = ppNotes.find(function (x) { return x.id === id; });
-        if (!note) return;
-        note.z = ++ppZ; el.style.zIndex = note.z;
-        try { el.setPointerCapture(e.pointerId); } catch (err) {}
-        const sx = e.clientX, sy = e.clientY;
-        const startX = note.x, startY = note.y;
-        let moved = false;
-        const imgHit = !!e.target.closest('.pp-pi-imgbox');
-        function mv(ev) {
-          if (Math.abs(ev.clientX - sx) + Math.abs(ev.clientY - sy) > 4) moved = true;
-          note.x = Math.round(startX + (ev.clientX - sx) / ppScale);
-          note.y = Math.round(startY + (ev.clientY - sy) / ppScale);
-          el.style.left = note.x + 'px'; el.style.top = note.y + 'px';
-        }
-        function up() {
-          el.removeEventListener('pointermove', mv); el.removeEventListener('pointerup', up);
-          if (!moved && note.kind === 'thumb' && imgHit) {
-            ppOpenSheetPicker(function (sel) { note.img = sel.img || null; note.rowId = sel.rowId; note.label = sel.label; if (sel.ratio) note.ratio = sel.ratio; renderPpNotes(); });
-          }
-        }
-        el.addEventListener('pointermove', mv); el.addEventListener('pointerup', up);
-      });
-    });
-    layer.querySelectorAll('.pp-pi-resize').forEach(function (h) {
-      h.addEventListener('pointerdown', function (e) {
-        e.stopPropagation();
-        const note = ppNotes.find(function (x) { return x.id === h.dataset.piResize; });
-        if (!note) return;
-        const el = h.closest('.pp-postit');
-        const box = el.querySelector('.pp-pi-imgbox');
-        try { h.setPointerCapture(e.pointerId); } catch (err) {}
-        const sx = e.clientX, sw = note.w || 120;
-        function mv(ev) {
-          let nw = sw + (ev.clientX - sx) / ppScale; nw = Math.max(80, Math.min(nw, 420));
-          note.w = Math.round(nw);
-          el.style.width = note.w + 'px';
-          if (box) box.style.height = Math.round((note.w - 12) * (note.ratio || 1.4)) + 'px';
-        }
-        function up() { h.removeEventListener('pointermove', mv); h.removeEventListener('pointerup', up); }
-        h.addEventListener('pointermove', mv); h.addEventListener('pointerup', up);
-      });
-    });
-    layer.querySelectorAll('.pp-pi-body').forEach(function (ta) {
-      ta.addEventListener('input', function () {
-        const n = ppNotes.find(function (x) { return x.id === ta.dataset.pi; });
-        if (n) n.text = ta.value;
-      });
-    });
-    layer.querySelectorAll('.pp-pi-del').forEach(function (b) {
-      b.addEventListener('click', function () {
-        ppNotes = ppNotes.filter(function (x) { return x.id !== b.dataset.piDel; });
-        renderPpNotes();
-      });
-    });
-  }
-
-  function ppAddNote(kind) {
-    if (kind === 'seg') {
-      const v = prompt('새 구간 이름 (예: 반전, 증명)', '');
-      if (v == null) return;
-      ppSegs.push({ id: 'g' + (ppSeq++), label: (v.trim() || '새 구간'), color: '#9A6BCF', cap: '', flow: true });
-      renderPpTimeline();
-      return;
-    }
-    const k = ppNotes.length;
-    if (kind === 'thumb') {
-      ppOpenSheetPicker(function (sel) {
-        const j = ppNotes.length;
-        ppNotes.push({ id: 'n' + (ppSeq++), kind: 'thumb', img: sel.img || null, rowId: sel.rowId, label: sel.label, ratio: sel.ratio || 1.4, w: 120, x: 22 + (j % 5) * 24, y: 18 + (j % 6) * 22, z: ++ppZ });
-        renderPpNotes();
-      });
-      return;
-    }
-    ppNotes.push({ id: 'n' + (ppSeq++), kind: kind, text: '', x: 22 + (k % 5) * 24, y: 18 + (k % 6) * 22, z: ++ppZ });
-    renderPpNotes();
-  }
-
-  // 시트 레퍼런스 검색 피커 (썸네일 = 시트에서 가져오기)
-  function ppRowLabel(r) { return (r && (r.why || r.hook || r.author)) || ('No.' + ((r && r.no) || '')) || '제목 없음'; }
-  function ppOpenSheetPicker(cb) {
-    let ov = document.getElementById('pp-sheet-picker');
-    if (!ov) {
-      ov = document.createElement('div');
-      ov.id = 'pp-sheet-picker';
-      ov.className = 'pp-picker-ov';
-      ov.innerHTML = '<div class="pp-picker-box">'
-        + '<div class="pp-picker-head"><b>🛒 시트에서 레퍼런스 가져오기</b><span class="pp-picker-x" id="pp-picker-x">✕</span></div>'
-        + '<input type="text" class="pp-picker-search" id="pp-picker-search" placeholder="🔍 주제·작성자로 검색…" />'
-        + '<div class="pp-picker-grid" id="pp-picker-grid"></div></div>';
-      document.body.appendChild(ov);
-      ov.addEventListener('click', function (e) { if (e.target === ov) ov.style.display = 'none'; });
-      ov.querySelector('#pp-picker-x').addEventListener('click', function () { ov.style.display = 'none'; });
-      ov.querySelector('#pp-picker-search').addEventListener('input', function () { ppRenderPickerGrid(); });
-    }
-    ov._cb = cb;
-    ov.style.display = 'flex';
-    ov.querySelector('#pp-picker-search').value = '';
-    ppRenderPickerGrid();
-    setTimeout(function () { try { ov.querySelector('#pp-picker-search').focus(); } catch (e) {} }, 50);
-  }
-  function ppRenderPickerGrid() {
-    const ov = document.getElementById('pp-sheet-picker'); if (!ov) return;
-    const grid = ov.querySelector('#pp-picker-grid');
-    const q = (ov.querySelector('#pp-picker-search').value || '').trim().toLowerCase();
-    const meaningful = (rows || []).filter(function (r) {
-      return r.hasThumb || (r.why && r.why.trim()) || (r.hook && r.hook.trim()) || (r.script && r.script.trim());
-    });
-    const list = meaningful.filter(function (r) {
-      if (!q) return true;
-      const hay = ((r.why || '') + ' ' + (r.hook || '') + ' ' + (r.author || '') + ' ' + (r.script || '')).toLowerCase();
-      return hay.indexOf(q) >= 0;
-    });
-    if (!list.length) { grid.innerHTML = '<div class="pp-picker-empty">' + (q ? '검색 결과가 없어요.' : '시트에 담긴 레퍼런스가 없어요.<br>먼저 벤치마킹 시트에 컨텐츠를 담아보세요.') + '</div>'; return; }
-    grid.innerHTML = list.map(function (r) {
-      return '<button class="pp-picker-item" data-row="' + r.id + '" type="button">'
-        + '<div class="pp-picker-thumb" id="ppk-' + r.id + '">' + (r.hasThumb ? '⌛' : '▣') + '</div>'
-        + '<div class="pp-picker-label">' + ppEsc(ppRowLabel(r)) + '</div></button>';
-    }).join('');
-    grid.querySelectorAll('.pp-picker-item').forEach(function (btn) {
-      btn.addEventListener('click', async function () {
-        const r = (rows || []).find(function (x) { return x.id === btn.dataset.row; });
-        const cb = ov._cb; ov.style.display = 'none';
-        let img = null; try { img = await loadImage(r.id, 'thumb'); } catch (e) {}
-        if (img) {
-          const im = new Image();
-          im.onload = function () { if (cb) cb({ rowId: r.id, img: img, label: ppRowLabel(r), ratio: im.naturalWidth ? im.naturalHeight / im.naturalWidth : 1.4 }); };
-          im.onerror = function () { if (cb) cb({ rowId: r.id, img: img, label: ppRowLabel(r), ratio: 1.4 }); };
-          im.src = img;
-        } else if (cb) { cb({ rowId: r.id, img: null, label: ppRowLabel(r), ratio: 1.4 }); }
-      });
-    });
-    list.forEach(async function (r) {
-      if (!r.hasThumb) return;
-      try { const img = await loadImage(r.id, 'thumb'); const cell = ov.querySelector('#ppk-' + r.id); if (cell && img) cell.innerHTML = '<img src="' + ppEsc(img) + '" alt=""/>'; } catch (e) {}
-    });
-  }
-
-  // ===== 아이디어 보드 데이터 모델 + PART 1/2 + 보관함 =====
-  // 원고 섹션 공유 스키마 (시트 '기준' 입력 ↔ PART2 매트릭스 같은 키)
+  // ===== 원고 섹션 공유 스키마 =====
+  // ⚠️ v557 · 옛 작전판(pp)을 지울 때 이 4개는 공용이라 살려냈다 — 시트 분해·기찻길·판독지가 전부 씀
   // v462 · 후킹·도입부·이득&손해는 같은 말이라 한 칸으로. 색은 헌법 --law-sec1~5 그대로.
   const SCRIPT_SECTIONS = [
     { key: 'gain', label: '이득&손해', hint: '초반 2초 · 멈추게 하는 첫 마디', color: '#E25C5C' },
@@ -31580,719 +30902,14 @@
     delete secObj.intro;
     return secObj;
   }
-  const PP_SEC_COLORS = ['#E25C5C', '#5B8DEF', '#D8B23A', '#A9C437', '#2FD07B', '#2FB6A0', '#E091B0', '#B48CE0'];
-  const PP_DEFAULT_SECTIONS = SCRIPT_SECTIONS.map(function (s) { return { id: s.key, label: s.label, hint: s.hint, color: s.color }; });
   // 구조(섹션) 원고 → 표시용 합성 HTML
   function scriptFromSections(secObj) {
     return SCRIPT_SECTIONS.map(function (s) { const v = (secObj || {})[s.key]; const t = v ? String(v).replace(/<[^>]*>/g, '').trim() : ''; return t ? ('<b>' + esc(s.label) + '</b> ' + String(v)) : ''; }).filter(Boolean).join('<br>');
   }
-  const PP_MAX_SECTIONS = 11;
-  const PP_MAX_REFS = 8;
-  const PP_BOARDS_KEY = 'hmv1-ideaboards';
-  function ppDefaultSegs() {
-    return [
-      { id: 'h', label: '초반 2초', color: '#E2574C', cap: '사람의 이목을 집중', flow: false },
-      { id: 'i', label: '이득&손해제시', color: '#E68A3A', cap: '끝까지 보게 만드는', flow: true },
-      { id: 'r', label: '공감 상황', color: '#5B8DEF', cap: '', flow: true },
-      { id: 's', label: '방법', color: '#A9C437', cap: '', flow: true },
-      { id: 'a', label: '소구포인트', color: '#2FD07B', cap: '', flow: true },
-      { id: 'c', label: 'CTA', color: '#5DB86A', cap: '다음 행동 유도', flow: true }
-    ];
-  }
-  function ppId(p) { return (p || 'x') + (ppSeq++).toString(36) + Math.random().toString(36).slice(2, 5); }
-  function ppNewBoard() {
-    return { id: null, topic: '', refs: [], sections: PP_DEFAULT_SECTIONS.map(function (s) { return { id: s.id, label: s.label, hint: s.hint, color: s.color, pattern: '', patternScene: '' }; }), matrix: {}, scene: {}, mine: {}, mineScene: {}, memo: '', _sceneSplit: true };
-  }
-  let ppBoard = ppNewBoard();
-  let ppBoards = [];
-  let ppBoardsLoaded = false;
-
-  function renderPpTopic() { const t = document.getElementById('pp-topic'); if (t) t.value = ppBoard.topic || ''; }
-  function ppAutoGrow(el) { if (!el) return; el.style.height = 'auto'; el.style.height = Math.max(76, el.scrollHeight) + 'px'; }
-  function renderPpMemo() { const m = document.getElementById('pp-memo-ta'); if (m) { m.value = ppBoard.memo || ''; ppAutoGrow(m); } }
-
-  // 🎬 한 칸 HTML을 {copy, scene}로 분리 — "(화면 → …)"/"(장면 …)" 괄호 지시문을 장면으로 뽑아냄
-  const PP_SCENE_RE = /[\(（][^()（）]*(?:화면|장면)[^()（）]*[\)）]/g;
-  function ppSplitCell(html) {
-    if (!html) return { copy: '', scene: '' };
-    const tmp = document.createElement('div'); tmp.innerHTML = html;
-    tmp.querySelectorAll('span[data-scene]').forEach(function (s) { while (s.firstChild) s.parentNode.insertBefore(s.firstChild, s); s.remove(); });
-    const scenes = [];
-    const walker = document.createTreeWalker(tmp, NodeFilter.SHOW_TEXT, null);
-    const tns = []; let nd; while ((nd = walker.nextNode())) tns.push(nd);
-    tns.forEach(function (tn) {
-      const txt = tn.nodeValue; PP_SCENE_RE.lastIndex = 0; if (!PP_SCENE_RE.test(txt)) return; PP_SCENE_RE.lastIndex = 0;
-      let m, out = '', last = 0;
-      while ((m = PP_SCENE_RE.exec(txt))) {
-        const inner = m[0].replace(/^[\(（]\s*/, '').replace(/\s*[\)）]$/, '').replace(/^(?:화면|장면)\s*[→>\-:»]*\s*/, '').trim();
-        if (inner) scenes.push(inner);
-        out += txt.slice(last, m.index); last = m.index + m[0].length;
-      }
-      out += txt.slice(last);
-      tn.nodeValue = out;
-    });
-    // 빈 줄/잉여 공백 정리
-    let copy = tmp.innerHTML.replace(/(<br\s*\/?>\s*){2,}/gi, '<br>').replace(/^\s*(<br\s*\/?>)+/i, '').replace(/(<br\s*\/?>)+\s*$/i, '');
-    return { copy: copy, scene: scenes.map(esc).join('<br>') };
-  }
-  // 보드의 인라인 장면을 장면 칸으로 1회 이전 (마이그레이션)
-  function ppEnsureSceneSplit(board) {
-    if (!board || board._sceneSplit) return;
-    if (!board.scene) board.scene = {}; if (!board.mineScene) board.mineScene = {};
-    Object.keys(board.matrix || {}).forEach(function (k) {
-      const sp = ppSplitCell(board.matrix[k]);
-      board.matrix[k] = sp.copy; if (sp.scene) board.scene[k] = (board.scene[k] ? board.scene[k] + '<br>' : '') + sp.scene;
-    });
-    Object.keys(board.mine || {}).forEach(function (k) {
-      const sp = ppSplitCell(board.mine[k]);
-      board.mine[k] = sp.copy; if (sp.scene) board.mineScene[k] = (board.mineScene[k] ? board.mineScene[k] + '<br>' : '') + sp.scene;
-    });
-    (board.sections || []).forEach(function (s) {
-      const sp = ppSplitCell(s.pattern || '');
-      s.pattern = sp.copy; if (sp.scene) s.patternScene = (s.patternScene ? s.patternScene + '<br>' : '') + sp.scene;
-    });
-    board._sceneSplit = true;
-  }
-  // PART2 보기 모드: both / scene / copy
-  let ppPart2View = 'both';
-  function ppApplyPart2View() {
-    const host = document.getElementById('pp-part2-scroll'); if (!host) return;
-    host.classList.remove('pp-view-scene', 'pp-view-copy');
-    if (ppPart2View === 'scene') host.classList.add('pp-view-scene');
-    else if (ppPart2View === 'copy') host.classList.add('pp-view-copy');
-    const btn = document.getElementById('pp-scene-toggle');
-    if (btn) {
-      btn.classList.remove('act-scene', 'act-copy');
-      if (ppPart2View === 'scene') { btn.textContent = '🎬 장면 보기'; btn.classList.add('act-scene'); }
-      else if (ppPart2View === 'copy') { btn.textContent = '🙈 장면 숨기기'; btn.classList.add('act-copy'); }
-      else btn.textContent = '👁 둘다';
-    }
-  }
-  // 2단 셀(말 위 + 🎬장면 아래) HTML
-  // 장면 앞 화살표/꺾쇠 잔재(예전 "(화면 -> …)"에서 남은 ">") 표시 시 정리
-  function ppCleanSceneLead(html) { return String(html || '').replace(/(^|<br\s*\/?>)\s*(?:&gt;|&#62;|[>→»])+\s*/gi, '$1'); }
-  function ppCellPair(copyHtml, sceneHtml, copyCls, copyAttr, sceneAttr) {
-    return '<div class="pp-cell-stack">'
-      + '<div class="pp-cell pp-cell-copy ' + copyCls + '" contenteditable="true" ' + copyAttr + '>' + (copyHtml || '') + '</div>'
-      + '<div class="pp-scene-zone"><div class="pp-scene-lbl">🎬 장면</div><div class="pp-cell pp-cell-scene" contenteditable="true" ' + sceneAttr + '>' + ppCleanSceneLead(sceneHtml) + '</div></div>'
-      + '</div>';
-  }
-  // 레퍼런스의 조회수 (연결된 시트 행에서)
-  function ppRefViews(ref) {
-    if (!ref || !ref.rowId) return 0;
-    const r = (rows || []).find(function (x) { return x.id === ref.rowId; });
-    return r ? (parseInt(r.views, 10) || 0) : 0;
-  }
-  function ppSortByViews() {
-    if (!ppBoard.refs || ppBoard.refs.length < 2) { toast('레퍼런스가 2개 이상이어야 정렬해요'); return; }
-    ppBoard.refs.sort(function (a, b) { return ppRefViews(b) - ppRefViews(a); });
-    renderPpPart2();
-    toast('🔥 조회수 높은 순으로 정렬');
-  }
-  function ppReorderRefs(srcId, targetId) {
-    if (!srcId || !targetId || srcId === targetId) return;
-    const arr = ppBoard.refs;
-    const si = arr.findIndex(function (r) { return r.id === srcId; });
-    if (si < 0) return;
-    const moved = arr.splice(si, 1)[0];
-    const ti = arr.findIndex(function (r) { return r.id === targetId; });
-    arr.splice(ti < 0 ? arr.length : ti, 0, moved);
-    renderPpPart2();
-  }
-  // ============================================================
-  // === 공통점·떡상 자동 분석 (순수 코드, AI 없음) ============
-  // 반복 단어 + 후킹 유형 사전 태그 + 떡상 상관 + 빠진 요소 + 공식 초안
-  // ============================================================
-  const PP_JOSA = ['으로써', '으로서', '이라도', '으로', '에서', '에게', '한테', '이나', '하고', '이랑', '으로', '라도', '이든', '조차', '마저', '밖에', '처럼', '만큼', '보다', '이야', '이라', '까지', '부터', '로써', '로서', '와', '과', '랑', '은', '는', '이', '가', '을', '를', '에', '의', '도', '만', '께', '고', '야', '라', '나'];
-  const PP_STOP = new Set(['그리고', '그런데', '하지만', '그래서', '정말', '진짜', '너무', '매우', '완전', '약간', '조금', '그냥', '근데', '이제', '그것', '저것', '이것', '이거', '저거', '그거', '때문', '통해', '위해', '대한', '같은', '있는', '없는', '하는', '되는', '으면', '면서', '해서', '거나', '이런', '저런', '그런', '무슨']);
-  const PP_HOOK_DICT = [
-    { tag: '충격·부정형', words: ['실패', '망함', '망하', '최악', '후회', '큰일', '위험', '절대', '안돼', '문제', '잘못', '손해', '폭망', '충격', '경고', '독', '망칠'] },
-    { tag: '궁금증형', words: ['왜', '이유', '비밀', '사실', '알고', '몰랐', '몰라', '숨겨', '정체', '무엇', '어떻게', '알아야', '진실', '알면'] },
-    { tag: '권위·전문형', words: ['의사', '전문가', '교수', '박사', '원장', '프로', '선수', '대표', '과학', '연구', '한의사', '변호사', '약사'] },
-    { tag: '손실·긴급형', words: ['놓치', '늦으', '지금', '당장', '마감', '오늘', '품절', '한정', '기회', '서두', '늦기', '마지막'] },
-    { tag: '이득·비법형', words: ['방법', '비법', '꿀팁', '공짜', '무료', '쉽게', '빠르게', '효과', '완벽', '해결', '팁'] }
-  ];
-  function ppStripTags(html) { return String(html || '').replace(/<[^>]+>/g, ' ').replace(/&[a-z]+;/gi, ' ').replace(/\s+/g, ' ').trim(); }
-  const PP_TAIL = ['합니다', '습니다', '하세요', '하는', '하기', '하고', '하며', '해서', '하면', '해야', '되는', '예요', '에요', '아요', '어요', '했다', '한다', '하다', '세요', '해요', '했', '한', '하', '해', '함', '됨'];
-  function ppStripJosa(w) { for (let i = 0; i < PP_JOSA.length; i++) { const j = PP_JOSA[i]; if (w.length > j.length + 1 && w.slice(-j.length) === j) return w.slice(0, -j.length); } return w; }
-  function ppStripTail(w) { for (let i = 0; i < PP_TAIL.length; i++) { const t = PP_TAIL[i]; if (w.length > t.length + 1 && w.slice(-t.length) === t) return w.slice(0, -t.length); } return w; }
-  function ppTokens(text) {
-    return (text || '').split(/[^가-힣A-Za-z0-9]+/).filter(Boolean)
-      .map(ppStripJosa).map(ppStripTail).filter(function (w) { return w.length >= 2 && !PP_STOP.has(w); });
-  }
-  // 이 섹션의 레퍼런스 칸 텍스트 + 조회수
-  function ppSectionCells(sec) {
-    return (ppBoard.refs || []).map(function (r, i) {
-      return { text: ppStripTags(ppBoard.matrix[sec.id + '|' + r.id] || ''), views: ppRefViews(r), no: i + 1 };
-    });
-  }
-  function ppRepeatWords(texts) {
-    const sets = texts.map(function (t) { return new Set(ppTokens(t)); });
-    const count = {};
-    sets.forEach(function (s) { s.forEach(function (w) { count[w] = (count[w] || 0) + 1; }); });
-    return Object.keys(count).filter(function (w) { return count[w] >= 2; })
-      .sort(function (a, b) { return count[b] - count[a]; }).slice(0, 3)
-      .map(function (w) { return { w: w, n: count[w] }; });
-  }
-  function ppHookTags(texts) {
-    const n = texts.length; if (!n) return [];
-    const res = [];
-    let numCells = texts.filter(function (t) { return /[0-9]|[한두세네다섯여섯일곱여덟아홉열]\s?(가지|개|명|번|위|등|초|분|살|년|시간|달|주)/.test(t); }).length;
-    if (numCells >= 2 && numCells >= Math.ceil(n / 2)) res.push({ tag: '숫자형', n: numCells });
-    PP_HOOK_DICT.forEach(function (cat) {
-      let c = 0;
-      texts.forEach(function (t) { const low = t.toLowerCase(); if (cat.words.some(function (w) { return low.indexOf(w) >= 0; })) c++; });
-      if (c >= 2 && c >= Math.ceil(n / 2)) res.push({ tag: cat.tag, n: c });
-    });
-    return res.slice(0, 2);
-  }
-  function ppViralInsight(cells) {
-    const withV = cells.filter(function (c) { return c.views > 0 && c.text; });
-    if (withV.length < 3) return '';
-    const sorted = withV.slice().sort(function (a, b) { return b.views - a.views; });
-    const half = Math.max(1, Math.floor(sorted.length / 2));
-    const high = sorted.slice(0, half), low = sorted.slice(-half);
-    const feats = [
-      { name: '숫자 포함', test: function (t) { return /[0-9]/.test(t); } },
-      { name: '물음표로 후킹', test: function (t) { return t.indexOf('?') >= 0; } },
-      { name: '따옴표(인용)', test: function (t) { return /["'“”]/.test(t); } },
-      { name: '짧고 강함(≤12자)', test: function (t) { return t.replace(/\s/g, '').length <= 12; } }
-    ];
-    for (let i = 0; i < feats.length; i++) {
-      const f = feats[i];
-      const hi = high.filter(function (c) { return f.test(c.text); }).length;
-      const lo = low.filter(function (c) { return f.test(c.text); }).length;
-      if (hi === high.length && lo === 0) return '조회수 높은 ' + high.length + '개는 다 ' + f.name + ' — 낮은 건 아님';
-    }
-    return '';
-  }
-  function ppMissing(sec) {
-    const refs = ppBoard.refs || []; if (refs.length < 2) return '';
-    const empty = [];
-    refs.forEach(function (r, i) { if (!ppStripTags(ppBoard.matrix[sec.id + '|' + r.id] || '')) empty.push('#' + (i + 1)); });
-    if (empty.length >= 1 && empty.length < refs.length && (refs.length - empty.length) >= 2) return empty.join(',') + ' 칸만 이 줄이 비었어요';
-    return '';
-  }
-  function ppAnalyzeSection(sec) {
-    const cells = ppSectionCells(sec);
-    const texts = cells.map(function (c) { return c.text; }).filter(Boolean);
-    return {
-      repeats: ppRepeatWords(texts),
-      tags: ppHookTags(texts),
-      viral: ppViralInsight(cells),
-      missing: ppMissing(sec),
-      filled: texts.length
-    };
-  }
-  // 공식 자동 초안 (C) — 섹션별 신호를 → 로 연결
-  function ppFormulaDraft() {
-    const parts = (ppBoard.sections || []).map(function (sec) {
-      const label = ppStripTags(sec.label) || '단계';
-      const a = ppAnalyzeSection(sec);
-      if (!a.filled) return '';
-      let sig = '';
-      if (a.tags.length) sig = a.tags[0].tag.replace('형', '').replace('·', '/');
-      else if (a.repeats.length) sig = "'" + a.repeats[0].w + "'";
-      return sig ? (label + '(' + sig + ')') : label;
-    }).filter(Boolean);
-    return parts.join(' → ');
-  }
-  function ppRenderAnalysis() {
-    const host = document.getElementById('pp-analysis'); if (!host) return;
-    if (!ppBoard.refs || !ppBoard.refs.length) { host.innerHTML = '<div class="pp-an-empty">먼저 🛒 레퍼런스를 담고 칸을 채워보세요.</div>'; return; }
-    let rows = '';
-    let any = false;
-    (ppBoard.sections || []).forEach(function (sec) {
-      const a = ppAnalyzeSection(sec);
-      const bits = [];
-      if (a.repeats.length) bits.push('<span class="pp-an-bit rep">🔁 ' + a.repeats.map(function (r) { return "'" + ppEsc(r.w) + "'"; }).join(' ') + '</span>');
-      if (a.tags.length) bits.push('<span class="pp-an-bit tag">🏷 ' + a.tags.map(function (t) { return ppEsc(t.tag); }).join(' · ') + '</span>');
-      if (a.viral) { bits.push('<span class="pp-an-bit viral">🔥 ' + ppEsc(a.viral) + '</span>'); }
-      if (a.missing) bits.push('<span class="pp-an-bit miss">⚠ ' + ppEsc(a.missing) + '</span>');
-      if (!bits.length) return;
-      any = true;
-      rows += '<div class="pp-an-row"><span class="pp-an-sec">' + ppEsc(ppStripTags(sec.label)) + '</span><span class="pp-an-bits">' + bits.join('') + '</span></div>';
-    });
-    if (!any) rows = '<div class="pp-an-empty">아직 겹치는 게 안 보여요. 칸을 더 채우면 코드가 반복·떡상 패턴을 짚어줄게요.</div>';
-    host.innerHTML =
-      '<div class="pp-an-note">🔍 코드가 <b>글자에서 찾은 힌트</b>예요 (뜻이 아니라 반복·표면 패턴). 진짜 통찰은 직접 찍으세요.</div>' +
-      rows +
-      '<button class="pp-an-draft" type="button" id="pp-an-draft">✨ 이 분석으로 <b>공식 초안</b> 자동 채우기</button>';
-    const draftBtn = document.getElementById('pp-an-draft');
-    if (draftBtn) draftBtn.addEventListener('click', function () {
-      const draft = ppFormulaDraft();
-      if (!draft) { toast('아직 채운 칸이 부족해요'); return; }
-      const ta = document.getElementById('pp-memo-ta');
-      if (ta) { ta.value = draft; ppBoard.memo = draft; if (typeof ppAutoGrow === 'function') ppAutoGrow(ta); ta.scrollIntoView({ block: 'center' }); }
-      toast('✨ 공식 초안을 채웠어요 — 다듬어서 저장하세요');
-    });
-  }
-
-  function renderPpPart2() {
-    const host = document.getElementById('pp-part2-scroll'); if (!host) return;
-    ppEnsureSceneSplit(ppBoard);
-    if (!ppBoard.scene) ppBoard.scene = {}; if (!ppBoard.mineScene) ppBoard.mineScene = {};
-    const refs = ppBoard.refs;
-    const maxViews = refs.reduce(function (m, r) { return Math.max(m, ppRefViews(r)); }, 0);
-    // v477 · 엑스레이 범례 — 척추가 뭘 말하는지 한 줄로
-    let h = refs.length
-      ? '<div class="pp-xray-legend">🩻 썸네일 왼쪽 <b>척추</b>는 그 표본이 채운 구조예요 — ' +
-        '<b>빛나면 있음, 어두우면 없음.</b> 나란히 놓고 <b>전부 켜진 줄</b>을 찾으면 그게 공통 공식입니다.</div>'
-      : '';
-    h += '<table class="pp-script-grid"><thead><tr><th class="pp-sec-col">섹션</th>';
-    if (!refs.length) h += '<th class="pp-ref-empty">🛒 위 “레퍼런스 쇼핑”으로 담으면 칸마다 썸네일이 떠요</th>';
-    else refs.forEach(function (ref, i) {
-      const thumb = ref.img ? '<img src="' + ppEsc(ref.img) + '" alt=""/>' : '<div class="pp-ref-thumb-empty">▣</div>';
-      const v = ppRefViews(ref);
-      const isTop = v > 0 && v === maxViews && refs.length > 1;
-      const viewsBadge = v > 0 ? '<span class="pp-ref-views' + (isTop ? ' top' : '') + '">' + (isTop ? '🔥 ' : '👁 ') + fmtViews(v) + '</span>' : '';
-      // v477 · 엑스레이 — 이 표본이 어느 구조 칸을 채웠는지 왼쪽 척추로 투시
-      let xn = 0;
-      const xray = '<div class="pp-xray">' + ppBoard.sections.map(function (sec) {
-        const filled = String(ppBoard.matrix[sec.id + '|' + ref.id] || '').trim().length > 0;
-        if (filled) xn++;
-        return '<i class="' + (filled ? 'on' : '') + '" style="--xc:' + (sec.color || 'var(--emerald)') +
-          '" title="' + ppEsc(sec.label || '') + (filled ? ' — 있음' : ' — 없음') + '"></i>';
-      }).join('') + '</div>';
-      const total = ppBoard.sections.length;
-      const xcap = total ? '<span class="pp-xray-cap' + (xn === total ? ' full' : '') + '">구조 <b>' +
-        xn + '</b>/' + total + (xn === total ? ' · 다 갖춤' : '') + '</span>' : '';
-      h += '<th class="pp-ref-th' + (isTop ? ' pp-ref-th-top' : '') + '"><div class="pp-ref-thumb" draggable="true" data-refdrag="' + ref.id + '" title="드래그해서 순서 변경">' + thumb
-        + xray
-        + '<span class="pp-ref-no">#' + (i + 1) + '</span>'
-        + viewsBadge
-        + '<button class="pp-ref-rm" data-refrm2="' + ref.id + '" type="button" title="빼기">✕</button></div>'
-        + '<input class="pp-ref-name" data-refname="' + ref.id + '" value="' + ppEsc(ref.label || '') + '" />'
-        + xcap + '</th>';
-    });
-    h += '<th class="pp-pat-th">🧠 패턴</th><th class="pp-mine-th">✨ 내꺼</th>';
-    h += '</tr></thead><tbody>';
-    if (!ppBoard.mine) ppBoard.mine = {};
-    ppBoard.sections.forEach(function (sec) {
-      const col = sec.color || 'var(--emerald)';
-      const isNew = sec._new; if (sec._new) delete sec._new;
-      h += '<tr' + (isNew ? ' class="pp-row-new"' : '') + '><td class="pp-sec-col" style="border-left-color:' + col + ';"><input class="pp-sec-label" data-seclabel="' + sec.id + '" value="' + ppEsc(sec.label) + '" style="color:' + col + ';" />'
-        + '<input class="pp-sec-hint" data-sechint="' + sec.id + '" value="' + ppEsc(sec.hint || '') + '" placeholder="기준" />'
-        + '<button class="pp-sec-rm" data-secrm="' + sec.id + '" type="button" title="줄 삭제">✕</button></td>';
-      if (!refs.length) h += '<td class="pp-script-cell empty"></td>';
-      else refs.forEach(function (ref) {
-        const key = sec.id + '|' + ref.id;
-        h += '<td class="pp-script-td">' + ppCellPair(ppBoard.matrix[key] || '', ppBoard.scene[key] || '', '', 'data-cell="' + key + '"', 'data-scene-cell="' + key + '"') + '</td>';
-      });
-      h += '<td class="pp-script-td pp-pat-td">' + ppCellPair(sec.pattern || '', sec.patternScene || '', 'pp-pat-cell', 'data-pat="' + sec.id + '"', 'data-pat-scene="' + sec.id + '"') + '</td>';
-      h += '<td class="pp-script-td pp-mine-td">' + ppCellPair(ppBoard.mine[sec.id] || '', ppBoard.mineScene[sec.id] || '', 'pp-mine-cell', 'data-mine="' + sec.id + '"', 'data-mine-scene="' + sec.id + '"') + '</td>';
-      h += '</tr>';
-    });
-    h += '</tbody></table>';
-    host.innerHTML = h;
-    ppWirePart2();
-    ppApplyPart2View();
-    // 헤더 썸네일 이미지 지연 로드 (시트 행과 연결된 레퍼런스)
-    const pending = ppBoard.refs.filter(function (r) { return !r.img && r.rowId && !r._imgChecked; });
-    if (pending.length) {
-      Promise.all(pending.map(async function (r) { r._imgChecked = true; try { const img = await loadImage(r.rowId, 'thumb'); if (img) r.img = img; } catch (e) {} })).then(function () { renderPpPart2(); });
-    }
-  }
-
-  let ppActiveCell = null;
-  let ppDragSrc = null;
-  let ppCellSel = null;
-  function ppSaveCellSel() {
-    const sel = window.getSelection();
-    if (sel.rangeCount && ppActiveCell && ppActiveCell.contains(sel.anchorNode)) ppCellSel = sel.getRangeAt(0).cloneRange();
-  }
-  function ppStoreCell(el) {
-    let html = '';
-    try { html = sanitizeScriptHtml(el.innerHTML); } catch (e) { html = el.innerHTML; }
-    if (el.dataset.cell != null) ppBoard.matrix[el.dataset.cell] = html;
-    else if (el.dataset.sceneCell != null) { if (!ppBoard.scene) ppBoard.scene = {}; ppBoard.scene[el.dataset.sceneCell] = html; }
-    else if (el.dataset.mine != null) { if (!ppBoard.mine) ppBoard.mine = {}; ppBoard.mine[el.dataset.mine] = html; }
-    else if (el.dataset.mineScene != null) { if (!ppBoard.mineScene) ppBoard.mineScene = {}; ppBoard.mineScene[el.dataset.mineScene] = html; }
-    else if (el.dataset.pat != null) { const s = ppBoard.sections.find(function (x) { return x.id === el.dataset.pat; }); if (s) s.pattern = html; }
-    else if (el.dataset.patScene != null) { const s = ppBoard.sections.find(function (x) { return x.id === el.dataset.patScene; }); if (s) s.patternScene = html; }
-  }
-  function ppApplyFmt(fmt) {
-    if (!ppActiveCell) { toast('칸을 클릭한 뒤 글자를 드래그하세요'); return; }
-    ppActiveCell.focus();
-    const sel = window.getSelection();
-    if (ppCellSel) { try { sel.removeAllRanges(); sel.addRange(ppCellSel); } catch (e) {} }
-    if (sel.isCollapsed) { toast('강조할 글자를 먼저 드래그하세요'); return; }
-    if (fmt === 'bold') document.execCommand('bold', false, null);
-    else if (fmt === 'clear') { document.execCommand('removeFormat', false, null); try { stripColorSpansFromSelection(); } catch (e) {} }
-    else if (fmt.indexOf('color:') === 0) { try { wrapSelectionWithColorSpan(fmt.slice(6)); } catch (e) {} }
-    ppStoreCell(ppActiveCell);
-    const s2 = window.getSelection(); if (s2.rangeCount) ppCellSel = s2.getRangeAt(0).cloneRange();
-    ppActiveCell.focus();
-  }
-
-  function ppWirePart2() {
-    const host = document.getElementById('pp-part2-scroll'); if (!host) return;
-    host.querySelectorAll('.pp-ref-name').forEach(function (inp) {
-      inp.addEventListener('input', function () {
-        const r = ppBoard.refs.find(function (x) { return x.id === inp.dataset.refname; });
-        if (r) r.label = inp.value;
-      });
-    });
-    host.querySelectorAll('[data-refrm2]').forEach(function (b) { b.addEventListener('click', function () { ppRemoveRef(b.dataset.refrm2); }); });
-    // 썸네일 드래그로 칸 순서 변경
-    host.querySelectorAll('.pp-ref-thumb[data-refdrag]').forEach(function (el) {
-      el.addEventListener('dragstart', function (e) { ppDragSrc = el.dataset.refdrag; el.classList.add('pp-dragging'); try { e.dataTransfer.effectAllowed = 'move'; e.dataTransfer.setData('text/plain', el.dataset.refdrag); } catch (_) {} });
-      el.addEventListener('dragend', function () { ppDragSrc = null; host.querySelectorAll('.pp-dragging,.pp-drag-over').forEach(function (x) { x.classList.remove('pp-dragging', 'pp-drag-over'); }); });
-    });
-    host.querySelectorAll('.pp-ref-th').forEach(function (th) {
-      th.addEventListener('dragover', function (e) { if (ppDragSrc) { e.preventDefault(); th.classList.add('pp-drag-over'); } });
-      th.addEventListener('dragleave', function () { th.classList.remove('pp-drag-over'); });
-      th.addEventListener('drop', function (e) { e.preventDefault(); const t = th.querySelector('[data-refdrag]'); const targetId = t ? t.dataset.refdrag : null; const src = ppDragSrc; ppDragSrc = null; if (src && targetId) ppReorderRefs(src, targetId); });
-    });
-    host.querySelectorAll('.pp-sec-label').forEach(function (inp) { inp.addEventListener('input', function () { const s = ppBoard.sections.find(function (x) { return x.id === inp.dataset.seclabel; }); if (s) s.label = inp.value; }); });
-    host.querySelectorAll('.pp-sec-hint').forEach(function (inp) { inp.addEventListener('input', function () { const s = ppBoard.sections.find(function (x) { return x.id === inp.dataset.sechint; }); if (s) s.hint = inp.value; }); });
-    host.querySelectorAll('[data-secrm]').forEach(function (b) { b.addEventListener('click', function () { if (ppBoard.sections.length <= 1) { toast('최소 1줄은 필요해요'); return; } const id = b.dataset.secrm; ppBoard.sections = ppBoard.sections.filter(function (x) { return x.id !== id; }); ppSegs = ppSegs.filter(function (x) { return x.id !== id; }); renderPpPart2(); renderPpTimeline(); }); });
-    host.querySelectorAll('.pp-cell').forEach(function (el) {
-      el.addEventListener('focus', function () { ppActiveCell = el; });
-      el.addEventListener('keyup', ppSaveCellSel);
-      el.addEventListener('mouseup', ppSaveCellSel);
-      el.addEventListener('input', function () { ppStoreCell(el); });
-      el.addEventListener('blur', function () {
-        // 말 칸에 '(화면 →)'을 치면 자동으로 아래 🎬장면 칸으로 옮김
-        if (el.classList.contains('pp-cell-copy')) {
-          const sp = ppSplitCell(el.innerHTML);
-          if (sp.scene) {
-            el.innerHTML = sp.copy; ppStoreCell(el);
-            const td = el.parentNode; const sceneDiv = td ? td.querySelector('.pp-cell-scene') : null;
-            if (sceneDiv) { const cur = sceneDiv.innerHTML.trim(); sceneDiv.innerHTML = (cur ? cur + '<br>' : '') + sp.scene; ppStoreCell(sceneDiv); }
-            return;
-          }
-        }
-        ppStoreCell(el);
-      });
-    });
-  }
-
-  function ppRemoveRef(refId) {
-    ppBoard.refs = ppBoard.refs.filter(function (r) { return r.id !== refId; });
-    const suffix = '|' + refId;
-    Object.keys(ppBoard.matrix).forEach(function (k) { if (k.indexOf(suffix) === k.length - suffix.length) delete ppBoard.matrix[k]; });
-    if (ppBoard.scene) Object.keys(ppBoard.scene).forEach(function (k) { if (k.indexOf(suffix) === k.length - suffix.length) delete ppBoard.scene[k]; });
-    renderPpPart2();
-  }
-  function ppAddSection() {
-    if (ppBoard.sections.length >= PP_MAX_SECTIONS) { toast('섹션은 최대 ' + PP_MAX_SECTIONS + '줄'); return; }
-    ppBoard.sections.push({ id: ppId('s'), label: '자유', hint: '직접 입력', color: PP_SEC_COLORS[ppBoard.sections.length % PP_SEC_COLORS.length], pattern: '', patternScene: '' });
-    renderPpPart2();
-  }
-  // 구조 조각 — 추가하면 원고 칸(PART2) + 막대(PART3)에 동시 반영 (연동)
-  const PP_PIECES = [
-    { label: '패턴깨기', color: '#E2574C' },
-    { label: '일반론 반론', color: '#E68A3A' },
-    { label: '호기심 유도', color: '#4C9BE6' },
-    { label: '반전', color: '#A87BD6' },
-    { label: '증명', color: '#5DB86A' },
-    { label: '미완결(자이가르닉)', color: '#2FB6A0' },
-    { label: '✏ 자유', color: '#E091B0', custom: true }
-  ];
-  function ppAddPiece(label, color, custom) {
-    if (ppBoard.sections.length >= PP_MAX_SECTIONS) { toast('섹션은 최대 ' + PP_MAX_SECTIONS + '줄'); return; }
-    if (custom) { const v = prompt('새 구조 이름 (예: 권위, 데이터)', ''); if (v == null) return; label = (v.trim() || '자유'); color = '#E091B0'; }
-    const id = ppId('p');
-    ppBoard.sections.push({ id: id, label: label, hint: '', color: color, pattern: '', patternScene: '', _new: true });
-    ppSegs.push({ id: id, label: label, color: color, cap: '', flow: true });
-    renderPpPart2(); renderPpTimeline();
-    toast('🧩 "' + label + '" 추가 — 원고 칸 + 막대에 반영');
-  }
-  function ppAddFreeRef() {
-    if (ppBoard.refs.length >= PP_MAX_REFS) { toast('레퍼런스는 최대 ' + PP_MAX_REFS + '개'); return; }
-    ppBoard.refs.push({ id: ppId('r'), rowId: null, label: '직접 입력', img: null, _imgChecked: true });
-    renderPpPart2();
-  }
-  // 패턴 메모 + 레퍼런스 칸에서 '내꺼' 초안 자동 생성 (빈 내꺼 칸만)
-  function ppDraftMine() {
-    if (!ppBoard.mine) ppBoard.mine = {}; if (!ppBoard.mineScene) ppBoard.mineScene = {}; if (!ppBoard.scene) ppBoard.scene = {};
-    let n = 0;
-    ppBoard.sections.forEach(function (sec) {
-      if (ppBoard.mine[sec.id] && ppBoard.mine[sec.id].trim()) return; // 이미 쓴 칸은 건드리지 않음
-      let draft = '', dscene = '';
-      if (sec.pattern && sec.pattern.trim()) {
-        draft = sec.pattern.trim(); dscene = (sec.patternScene || '').trim();
-      } else {
-        for (let i = 0; i < ppBoard.refs.length; i++) {
-          const k = sec.id + '|' + ppBoard.refs[i].id; const v = ppBoard.matrix[k];
-          if (v && v.trim()) { draft = v.trim(); dscene = (ppBoard.scene[k] || '').trim(); break; }
-        }
-      }
-      if (draft) { ppBoard.mine[sec.id] = draft; if (dscene && !(ppBoard.mineScene[sec.id] || '').trim()) ppBoard.mineScene[sec.id] = dscene; n++; }
-    });
-    renderPpPart2();
-    toast(n ? '✨ 내꺼 초안 ' + n + '칸 — 내 식으로 다듬어보세요!' : '먼저 패턴 메모나 레퍼런스를 채워주세요');
-  }
-  function ppShop() {
-    if (ppBoard.refs.length >= PP_MAX_REFS) { toast('레퍼런스는 최대 ' + PP_MAX_REFS + '개'); return; }
-    ppOpenSheetPicker(function (sel) {
-      const refId = ppId('r');
-      ppBoard.refs.push({ id: refId, rowId: sel.rowId, label: sel.label, img: sel.img || null, _imgChecked: true });
-      // '기준' 모드로 쓴 시트 원고 → PART 2 섹션 칸 자동 채움
-      const row = (rows || []).find(function (r) { return r.id === sel.rowId; });
-      if (row && row.scriptMode === 'sections' && row.scriptSections) {
-        let filled = 0;
-        if (!ppBoard.scene) ppBoard.scene = {};
-        ppBoard.sections.forEach(function (sec) {
-          const val = row.scriptSections[sec.id];
-          if (val && String(val).replace(/<[^>]*>/g, '').trim()) { const key = sec.id + '|' + refId; const sp = ppSplitCell(String(val)); ppBoard.matrix[key] = sp.copy; if (sp.scene) ppBoard.scene[key] = sp.scene; filled++; }
-        });
-        if (filled) toast('📋 기준 원고 ' + filled + '칸 자동 채움');
-      }
-      renderPpPart2();
-    });
-  }
-
-  async function ppLoadBoards() {
-    try { const r = await window.storage.get(PP_BOARDS_KEY); if (r && r.value) ppBoards = JSON.parse(r.value) || []; } catch (e) { ppBoards = []; }
-    if (!Array.isArray(ppBoards)) ppBoards = [];
-  }
-  async function ppSaveBoards() { try { await window.storage.set(PP_BOARDS_KEY, JSON.stringify(ppBoards)); } catch (e) { toast('저장 실패'); } }
-  function ppSnapshot() {
-    const topic = (document.getElementById('pp-topic') || {}).value;
-    const memo = (document.getElementById('pp-memo-ta') || {}).value;
-    return {
-      id: ppBoard.id,
-      topic: (topic != null ? topic : ppBoard.topic) || '',
-      refs: ppBoard.refs.map(function (r) { return { id: r.id, rowId: r.rowId, label: r.label }; }),
-      sections: ppBoard.sections.map(function (s) { return { id: s.id, label: s.label, hint: s.hint, color: s.color, pattern: s.pattern || '', patternScene: s.patternScene || '' }; }),
-      matrix: ppBoard.matrix,
-      scene: ppBoard.scene || {},
-      mine: ppBoard.mine || {},
-      mineScene: ppBoard.mineScene || {},
-      memo: (memo != null ? memo : ppBoard.memo) || '',
-      _sceneSplit: true,
-      segs: ppSegs.map(function (s) { return Object.assign({}, s); }),
-      notes: ppNotes.map(function (n) { return Object.assign({}, n); }),
-      updatedAt: Date.now()
-    };
-  }
-  async function ppSaveCurrent() {
-    const snap = ppSnapshot();
-    if (!snap.topic && !snap.refs.length && !ppNotes.length) { toast('주제나 내용을 먼저 채워주세요'); return; }
-    if (ppBoard.id) {
-      const idx = ppBoards.findIndex(function (b) { return b.id === ppBoard.id; });
-      if (idx >= 0) ppBoards[idx] = snap; else ppBoards.unshift(snap);
-    } else {
-      snap.id = ppId('board'); ppBoard.id = snap.id; ppBoards.unshift(snap);
-    }
-    ppBoard.topic = snap.topic; ppBoard.memo = snap.memo;
-    await ppSaveBoards();
-    renderPpVault();
-    toast('💾 아이디어 보드 저장됨');
-  }
-  function ppOpenBoard(id) {
-    const b = ppBoards.find(function (x) { return x.id === id; });
-    if (!b) return;
-    ppBoard = {
-      id: b.id, topic: b.topic || '',
-      refs: (b.refs || []).map(function (r) { return { id: r.id, rowId: r.rowId, label: r.label, img: null }; }),
-      sections: (b.sections && b.sections.length ? b.sections : PP_DEFAULT_SECTIONS).map(function (s) { return { id: s.id, label: s.label, hint: s.hint, color: s.color, pattern: s.pattern || '', patternScene: s.patternScene || '' }; }),
-      matrix: Object.assign({}, b.matrix || {}), scene: Object.assign({}, b.scene || {}),
-      mine: Object.assign({}, b.mine || {}), mineScene: Object.assign({}, b.mineScene || {}),
-      memo: b.memo || '', _sceneSplit: !!b._sceneSplit
-    };
-    ppEnsureSceneSplit(ppBoard);
-    ppSegs = (b.segs && b.segs.length) ? b.segs.map(function (s) { return Object.assign({}, s); }) : ppDefaultSegs();
-    ppNotes = (b.notes || []).map(function (n) { return Object.assign({}, n); });
-    ppScale = 1; ppPanX = 0; ppPanY = 0;
-    ppRenderAll();
-  }
-  function ppNewBoardAction() {
-    ppBoard = ppNewBoard();
-    ppSegs = ppDefaultSegs();
-    ppNotes = [];
-    ppScale = 1; ppPanX = 0; ppPanY = 0;
-    ppRenderAll();
-    toast('새 아이디어 보드');
-  }
-  function renderPpVault() {
-    const list = document.getElementById('pp-vault-list'); if (!list) return;
-    let html = ppBoards.map(function (b) {
-      const dots = (b.refs || []).slice(0, 6).map(function () { return '▣'; }).join(' ') || '—';
-      const active = (b.id === ppBoard.id) ? ' active' : '';
-      return '<button class="pp-vault-card' + active + '" type="button" data-openboard="' + b.id + '">'
-        + '<span class="pp-vault-del" data-delboard="' + b.id + '" title="삭제">✕</span>'
-        + '<div class="pp-vault-card-topic">' + ppEsc(b.topic || '제목 없음') + '</div>'
-        + '<div class="pp-vault-card-meta">레퍼런스 ' + ((b.refs || []).length) + ' · 섹션 ' + ((b.sections || []).length) + '</div>'
-        + '<div class="pp-vault-card-thumbs">' + dots + '</div></button>';
-    }).join('');
-    html += '<button class="pp-vault-new" type="button" id="pp-vault-new">＋<br/>새 보드</button>';
-    list.innerHTML = html;
-    list.querySelectorAll('[data-delboard]').forEach(function (d) { d.addEventListener('click', function (e) { e.stopPropagation(); ppDeleteBoard(d.dataset.delboard); }); });
-    list.querySelectorAll('[data-openboard]').forEach(function (c) { c.addEventListener('click', function () { ppOpenBoard(c.dataset.openboard); }); });
-    const nb = document.getElementById('pp-vault-new'); if (nb) nb.addEventListener('click', ppNewBoardAction);
-  }
-  async function ppDeleteBoard(id) {
-    const b = ppBoards.find(function (x) { return x.id === id; });
-    if (!b) return;
-    if (!confirm('"' + (b.topic || '제목 없음') + '" 아이디어 보드를 삭제할까요?')) return;
-    ppBoards = ppBoards.filter(function (x) { return x.id !== id; });
-    if (ppBoard.id === id) ppBoard.id = null;
-    await ppSaveBoards();
-    renderPpVault();
-    toast('삭제됨');
-  }
-
-  function ppRenderAll() {
-    renderPpTopic(); renderPpPart2(); renderPpMemo();
-    renderPpTimeline(); renderPpNotes(); renderPpVault(); ppApplyZoom();
-  }
-
-  async function renderPatternBoard() {
-    if (!ppBoardsLoaded) { try { await ppLoadBoards(); } catch (e) {} ppBoardsLoaded = true; }
-    ppRenderAll();
-    if (!ppBoardWired) {
-      ppBoardWired = true;
-      const tools = document.querySelector('.pp-canvas-tools');
-      if (tools) tools.addEventListener('click', function (e) { const b = e.target.closest('[data-ppadd]'); if (b) ppAddNote(b.dataset.ppadd); });
-      const zoom = document.getElementById('pp-zoom');
-      if (zoom) zoom.addEventListener('click', function (e) {
-        const b = e.target.closest('[data-ppzoom]'); if (!b) return;
-        const cv = document.getElementById('pp-canvas');
-        const cx = cv ? cv.clientWidth / 2 : 300, cy = cv ? cv.clientHeight / 2 : 250;
-        ppZoomAt(cx, cy, b.dataset.ppzoom === 'in' ? ppScale + 0.1 : ppScale - 0.1);
-      });
-      // 피그마식 패닝/줌
-      const canvasEl = document.getElementById('pp-canvas');
-      if (canvasEl) {
-        canvasEl.addEventListener('pointerdown', function (e) {
-          if (e.pointerType === 'touch') return;
-          if (e.target.closest('.pp-postit') || e.target.closest('.pp-zoom') || e.target.closest('.pp-seg-label')) return;
-          const sx = e.clientX, sy = e.clientY, px = ppPanX, py = ppPanY;
-          canvasEl.classList.add('panning');
-          try { canvasEl.setPointerCapture(e.pointerId); } catch (err) {}
-          function mv(ev) { ppPanX = px + (ev.clientX - sx); ppPanY = py + (ev.clientY - sy); ppApplyZoom(); }
-          function up() { canvasEl.classList.remove('panning'); canvasEl.removeEventListener('pointermove', mv); canvasEl.removeEventListener('pointerup', up); }
-          canvasEl.addEventListener('pointermove', mv); canvasEl.addEventListener('pointerup', up);
-        });
-        canvasEl.addEventListener('wheel', function (e) {
-          e.preventDefault();
-          const rect = canvasEl.getBoundingClientRect();
-          if (e.ctrlKey) { ppZoomAt(e.clientX - rect.left, e.clientY - rect.top, ppScale * (1 - e.deltaY * 0.01)); }
-          else { ppPanX -= e.deltaX; ppPanY -= e.deltaY; ppApplyZoom(); }
-        }, { passive: false });
-        let _pt1 = null, _pt2 = null;
-        canvasEl.addEventListener('touchstart', function (e) {
-          if (e.touches.length === 1) {
-            const t = e.touches[0];
-            if (e.target.closest('.pp-postit') || e.target.closest('.pp-zoom') || e.target.closest('.pp-seg-label')) { _pt1 = null; return; }
-            _pt1 = { sx: t.clientX, sy: t.clientY, px: ppPanX, py: ppPanY }; _pt2 = null;
-          } else if (e.touches.length === 2) {
-            const a = e.touches[0], b = e.touches[1], rect = canvasEl.getBoundingClientRect();
-            _pt2 = { dist: Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY), scale: ppScale, panX: ppPanX, panY: ppPanY, rectL: rect.left, rectT: rect.top, cx0: (a.clientX + b.clientX) / 2 - rect.left, cy0: (a.clientY + b.clientY) / 2 - rect.top };
-            _pt1 = null;
-          }
-        }, { passive: false });
-        canvasEl.addEventListener('touchmove', function (e) {
-          if (e.touches.length === 1 && _pt1) {
-            e.preventDefault(); const t = e.touches[0];
-            ppPanX = _pt1.px + (t.clientX - _pt1.sx); ppPanY = _pt1.py + (t.clientY - _pt1.sy); ppApplyZoom();
-          } else if (e.touches.length === 2 && _pt2) {
-            e.preventDefault();
-            const a = e.touches[0], b = e.touches[1];
-            const dist = Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
-            const ns = Math.max(0.75, Math.min(1.4, _pt2.scale * (dist / (_pt2.dist || 1))));
-            const wx = (_pt2.cx0 - _pt2.panX) / _pt2.scale, wy = (_pt2.cy0 - _pt2.panY) / _pt2.scale;
-            const ncx = (a.clientX + b.clientX) / 2 - _pt2.rectL, ncy = (a.clientY + b.clientY) / 2 - _pt2.rectT;
-            ppScale = ns; ppPanX = ncx - wx * ppScale; ppPanY = ncy - wy * ppScale; ppApplyZoom();
-          }
-        }, { passive: false });
-        canvasEl.addEventListener('touchend', function (e) {
-          if (e.touches.length === 0) { _pt1 = null; _pt2 = null; }
-          else if (e.touches.length === 1) { _pt2 = null; const t = e.touches[0]; _pt1 = { sx: t.clientX, sy: t.clientY, px: ppPanX, py: ppPanY }; }
-        });
-      }
-      const shop = document.getElementById('pp-shop-btn'); if (shop) shop.addEventListener('click', ppShop);
-      const coladd = document.getElementById('pp-colfree-add'); if (coladd) coladd.addEventListener('click', ppAddFreeRef);
-      const sortv = document.getElementById('pp-sort-views'); if (sortv) sortv.addEventListener('click', ppSortByViews);
-      const sceneBtn = document.getElementById('pp-scene-toggle');
-      if (sceneBtn) sceneBtn.addEventListener('click', function () { ppPart2View = ppPart2View === 'both' ? 'scene' : (ppPart2View === 'scene' ? 'copy' : 'both'); ppApplyPart2View(); });
-      const draftm = document.getElementById('pp-draft-mine'); if (draftm) draftm.addEventListener('click', ppDraftMine);
-      const pieceBtn = document.getElementById('pp-piece-btn');
-      const piecePal = document.getElementById('pp-piece-palette');
-      if (pieceBtn && piecePal) {
-        piecePal.innerHTML = PP_PIECES.map(function (p, i) { return '<button type="button" class="pp-piece-chip" data-piece="' + i + '" style="border-color:' + p.color + ';color:' + p.color + ';">' + esc(p.label) + '</button>'; }).join('');
-        pieceBtn.addEventListener('click', function () { piecePal.style.display = piecePal.style.display === 'none' ? 'flex' : 'none'; });
-        piecePal.addEventListener('click', function (e) { const b = e.target.closest('[data-piece]'); if (!b) return; const p = PP_PIECES[parseInt(b.dataset.piece, 10)]; if (p) ppAddPiece(p.label, p.color, p.custom); });
-      }
-      const fmtBar = document.getElementById('pp-fmt-bar');
-      if (fmtBar) {
-        fmtBar.addEventListener('mousedown', function (e) { if (e.target.closest('[data-ppfmt]')) { e.preventDefault(); ppSaveCellSel(); } });
-        fmtBar.addEventListener('click', function (e) { const b = e.target.closest('[data-ppfmt]'); if (b) ppApplyFmt(b.dataset.ppfmt); });
-      }
-      const topic = document.getElementById('pp-topic'); if (topic) topic.addEventListener('input', function () { ppBoard.topic = topic.value; });
-      const memo = document.getElementById('pp-memo-ta'); if (memo) memo.addEventListener('input', function () { ppBoard.memo = memo.value; ppAutoGrow(memo); });
-      const newb = document.getElementById('pp-new-btn'); if (newb) newb.addEventListener('click', ppNewBoardAction);
-      const savep = document.querySelector('.pp-save-plan'); if (savep) savep.addEventListener('click', ppSaveCurrent);
-      const tostruct = document.getElementById('pp-tostruct-btn'); if (tostruct) tostruct.addEventListener('click', ppSaveAsStructure);
-      const analyzeBtn = document.getElementById('pp-analyze-btn');
-      if (analyzeBtn) analyzeBtn.addEventListener('click', function () {
-        const panel = document.getElementById('pp-analysis'); if (!panel) return;
-        const open = panel.style.display === 'none';
-        panel.style.display = open ? 'block' : 'none';
-        analyzeBtn.classList.toggle('open', open);
-        if (open) ppRenderAnalysis();
-      });
-      const headTools = document.getElementById('pp-head-tools');
-      if (headTools) headTools.addEventListener('click', function () {
-        const more = document.getElementById('pp-head-more'); if (!more) return;
-        const open = more.style.display === 'none';
-        more.style.display = open ? 'inline-flex' : 'none';
-        headTools.classList.toggle('on', open);
-      });
-      const p3toggle = document.getElementById('pp-part3-toggle');
-      if (p3toggle) p3toggle.addEventListener('click', function () {
-        const body = document.getElementById('pp-part3-body'); if (!body) return;
-        const open = body.style.display === 'none';
-        body.style.display = open ? 'block' : 'none';
-        p3toggle.classList.toggle('open', open);
-        if (open) { try { if (typeof renderPpTimeline === 'function') renderPpTimeline(); if (typeof renderPpNotes === 'function') renderPpNotes(); } catch (e) {} }
-      });
-    }
-  }
-
-  // 패턴 파악 → 구조 모음 자동 정제 (구조 조각·패턴 메모 → 단계형 구조 카드)
-  async function ppSaveAsStructure() {
-    const secs = (ppBoard && ppBoard.sections) || [];
-    if (!secs.length) { toast('원고 패턴(구조 조각)이 먼저 있어야 해요'); return; }
-    const strip = h => String(h || '').replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
-    const steps = secs.map(function (sec) {
-      let note = strip(sec.pattern);
-      if (!note) {
-        for (let i = 0; i < (ppBoard.refs || []).length; i++) {
-          const v = ppBoard.matrix && ppBoard.matrix[sec.id + '|' + ppBoard.refs[i].id];
-          if (v) { note = strip(v); if (note) break; }
-        }
-      }
-      return { ico: '•', label: strip(sec.label) || '단계', note: note.slice(0, 70) };
-    });
-    // 대표 썸네일 = 조회수 최고 레퍼런스(있으면), 없으면 첫 이미지
-    let thumb = null, maxV = -1;
-    (ppBoard.refs || []).forEach(function (r) {
-      const vw = (typeof ppRefViews === 'function') ? (ppRefViews(r) || 0) : 0;
-      if (r.img && vw > maxV) { maxV = vw; thumb = r.img; }
-    });
-    if (!thumb) { const f = (ppBoard.refs || []).find(r => r.img); if (f) thumb = f.img; }
-    const memo = (ppBoard.memo || '').trim();
-    const st = {
-      id: structId(), kind: 'steps',
-      name: (ppBoard.topic || '').trim() || '패턴 파악 구조',
-      thumb: thumb, steps: steps,
-      formula: memo ? memo.split('\n')[0].slice(0, 80) : '',
-      detail: memo,
-      refs: (ppBoard.refs || []).map(r => ({ label: r.label || '', rowId: r.rowId || null })),
-      createdAt: (typeof todayStr === 'function' ? todayStr() : '')
-    };
-    structures.unshift(st);
-    await saveStructures();
-    toast('📐 구조 모음에 저장했어요 — 원고 › 구조 모음에서 확인');
-  }
 
   // 🧭 방 레일 — 어느 방/어느 화면인지 항상 표시
-  const RR_LABELS = { home: '트레이닝 룸', sheet: '벤치마킹 시트', customer: '고객 분석', 
-    formatboard: '분류', pattern: '패턴 파악', northstar: '라이벌 멘토', diagnose: '릴스 진단',
+  const RR_LABELS = { home: '트레이닝 룸', sheet: '벤치마킹 시트', customer: '고객 분석',
+    formatboard: '분류', northstar: '라이벌 멘토', diagnose: '릴스 진단',
     scripts: '내 원고', thumb: '썸네일', studio: '컨텐츠 제작소' };
   function rrUpdate(ws) {
     const rail = document.getElementById('room-rail'); if (!rail) return;
@@ -32309,7 +30926,7 @@
   }
   // 새로 열린 화면이 옆에서 밀려 들어오게 (뒤로 갈 땐 반대 방향)
   const RR_VIEWS = ['home-view','sh-sheet-view','sh-stats-view','mb-view','fb-view','thumb-view',
-    'sc-view','customer-view','northstar-view','diagnose-view','pattern-view','st2-view'];
+    'sc-view','customer-view','northstar-view','diagnose-view','st2-view'];
   function rrSlide() {
     const cls = window.__rrDir === 'back' ? 'rr-pop' : 'rr-push';
     window.__rrDir = null;
@@ -32344,6 +30961,12 @@
   }
 
   function switchWorkspace(ws) {
+    // v557 · 패턴 파악은 원고 탭 안으로 이사 — 옛 호출은 전부 여기로 도착해도 원고 탭에 내려준다
+    if (ws === 'pattern') {
+      switchWorkspace('scripts');
+      try { scSwitchTab('pattern'); } catch (e) {}
+      return;
+    }
     try { rrWire(); rrUpdate(ws); } catch (e) {}
     document.querySelectorAll('[data-ws]').forEach(b => b.classList.toggle('active', b.dataset.ws === ws));
     setTimeout(function () { try { if (typeof renderTutorial === 'function') renderTutorial(); } catch (e) {} }, 80);
@@ -32358,7 +30981,6 @@
     const cuView = document.getElementById('customer-view');
     const nsView = document.getElementById('northstar-view');
     const dgView = document.getElementById('diagnose-view');
-    const patternView = document.getElementById('pattern-view');
     const st2View = document.getElementById('st2-view'); // 🎬 제작소 v2
     const sheetSb = document.getElementById('sb-sheet-sections');
     const mbSb = { style: {} };     // v530 · 무드보드 삭제
@@ -32381,7 +31003,6 @@
       if (cuView) cuView.style.display = 'none';
       if (nsView) nsView.style.display = 'none';
       if (dgView) dgView.style.display = 'none';
-      if (patternView) patternView.style.display = 'none';
       if (st2View) st2View.style.display = 'none';
     };
 
@@ -32458,15 +31079,6 @@
       if (cuSb) cuSb.style.display = 'none';
       topbar.style.display = 'none';
       renderDiagnose();
-    } else if (ws === 'pattern') {
-      hideAll();
-      if (patternView) { patternView.style.display = 'flex'; patternView.style.flexDirection = 'column'; }
-      sheetSb.style.display = 'none';
-      mbSb.style.display = 'none';
-      if (cuSb) cuSb.style.display = 'none';
-      topbar.style.display = 'none';
-      try { renderPatternBoard(); } catch (e) { console.error('[pattern] render 실패:', e); }
-      try { pt2Render(); } catch (e) { console.error('[pt2] render 실패:', e); } // A+C 합본 대조대
     } else {
       hideAll();
       sheetView.style.display = '';
@@ -34448,15 +33060,8 @@
       '둘 다 3편 이상 해본 것입니다.</span>';
   }
 
-  // ════ v480 · 트렌드 방 — 시장이 지금 쓰는 말 ════
-  //   재료는 이미 있다: 담은 행의 keywords + 담은 날짜(updatedAt).
-  //   최근 4주 vs 그 전 4주를 비교해 세 칸으로 나눈다. 이름은 «단정하지 않는» 말로.
-  let _trdOpen = false;
-  const TRD_LANES = [
-    { k: 'rise', n: '지금 들어갈 만한 것', s: '최근에 부쩍 늘어난 말', c: '#43E0E6' },
-    { k: 'peak', n: '이미 많이 쓰인 말',   s: '꾸준하지만 새롭진 않아요', c: '#D8B23A' },
-    { k: 'fade', n: '요즘 안 보이는 말',   s: '다시 뜰 수도 있어요 — 버리진 마세요', c: '#6B7A70' }
-  ];
+  // ════ v480 · 트렌드 데이터(키워드 × 시간 분포) ════
+  //   v557 · 옛 여닫이 화면(renderTrendRoomHtml)은 삭제 — trdData는 마법·주간기획이 계속 쓴다.
   const TRD_WEEK = 7 * 24 * 3600 * 1000;
   // 내 고객도 이 말을 했나 — 고객 방(황금·후보 키워드 + 수집함 인용)과 겹치면 🎯
   function trdCustomerWords() {
@@ -34510,52 +33115,221 @@
     out.sort(function (a, b) { return b.recent - a.recent || b.total - a.total; });
     return out;
   }
-  function trdSpark(wks, n) {
-    const seg = wks.slice(6), mx = Math.max.apply(null, seg) || 1;
-    const pts = seg.map(function (v, i) { return (i / (seg.length - 1) * 34).toFixed(1) + ',' + (11 - (v / mx) * 9).toFixed(1); }).join(' ');
-    return '<svg width="36" height="12" aria-hidden="true"><polyline points="' + pts +
-      '" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/></svg>';
-  }
-  function renderTrendRoomHtml() {
-    const d = trdData();
-    const mk = function (peek) {
-      return '<div class="trd' + (_trdOpen ? ' open' : '') + '" id="trd-box">' +
-        '<div class="trd-hd" id="trd-toggle" role="button" tabindex="0" aria-expanded="' + (_trdOpen ? 'true' : 'false') + '">' +
-          '<h4>트렌드 방</h4><span class="t">시장이 지금 쓰는 말</span><span class="cv">⌄</span></div>' +
-        (peek ? '<div class="trd-peek">' + peek + '</div>' : '') + '<div class="trd-body">';
-    };
-    if (!d.length) {
-      return mk('담은 것에 <b>키워드</b>를 붙이면 여기가 채워집니다') +
-        '<p class="trd-lead">아직 볼 게 없어요.<br>담을 때 <b>키워드</b>를 붙이면 — ' +
-        '<b>어떤 말이 오르고 어떤 말이 식는지</b>를 날짜로 계산해 보여드립니다.</p></div></div>';
-    }
-    const rise = d.filter(function (x) { return x.lane === 'rise'; });
-    const both = d.filter(function (x) { return x.cust && x.lane === 'rise'; });
-    const peek = (both.length
-      ? '🎯 <b>' + both[0].k + '</b> — 시장도 고객도 이 말을 해요'
-      : (rise.length ? '<b>' + rise[0].k + '</b>이 오르는 중' : d.length + '개 말을 보는 중'));
-    let h = mk(peek) +
-      '<p class="trd-lead">세 번째 축입니다. <b>나</b>는 알고리즘 분석이, <b>고객</b>은 고객 방이 봅니다 — 여기는 <b>시장</b>이에요.<br>' +
-      '담은 것들의 <b>키워드에 날짜가 붙어 있어서</b>, 최근 4주와 그 전 4주를 비교합니다.</p>' +
-      '<div class="trd-lanes">';
-    TRD_LANES.forEach(function (L) {
-      const items = d.filter(function (x) { return x.lane === L.k; }).slice(0, 12);
-      h += '<div class="trd-lane" style="--lc:' + L.c + '"><div class="lb">' + L.n +
-        ' <span>' + L.s + '</span></div><div class="trd-chips">';
-      h += items.length ? items.map(function (x) {
-        return '<span class="trd-chip' + (x.cust ? ' both' : '') + '" data-trdkw="' + esc(x.k) + '" ' +
-          'title="' + esc(x.k) + ' · 최근 4주 ' + x.recent + '회' +
-          (x.cust ? ' · 내 고객도 한 말' : '') + '">' +
-          (x.cust ? '🎯 ' : '') + esc(x.k) + trdSpark(x.wks) +
-          '<small>' + x.recent + '</small></span>';
-      }).join('') : '<div class="trd-empty">지금은 비어 있어요</div>';
-      h += '</div></div>';
+  // ════ v557 · 🔥 트렌드 방 (trv) — 무대 «능선과 나» + 벽(집계) ════
+  //   확정: 패러글라이딩 · 밤 · 보통 속도 고정. 추가 효과 0 — 색·크기·선명도·아우라 연속 변화만.
+  //   들어오는 것 = 최근 반년 + trendScore 3점 이상. 전체보기 = 달별. 카드는 눌렀을 때만.
+  const TRV_HALF = 183 * 24 * 3600 * 1000;
+  let _trvMode = 'half';    // 'half' 반년 | 'all' 전체(달별)
+  let _trvOpenKw = null;    // 펼친 키워드 (칩 누르기 전엔 카드 안 보임)
+  let _trvRun = false;      // 무대 rAF — 탭을 벗어나면 스스로 멈춘다 (v529 모션 절약)
+
+  function trvRows(all) {
+    const now = Date.now();
+    return (rows || []).filter(function (r) {
+      if (!isFilled(r)) return false;
+      if (!(r.trendScore >= 3)) return false;
+      if (all) return true;
+      const t = r.postedAt || r.updatedAt || r.createdAt || 0;
+      return t && (now - t) <= TRV_HALF;
     });
+  }
+  // 키워드(trendKw = «지금 왜?») 집계 — 많이 적힌 말이 곧 내가 본 트렌드
+  function trvKws(rs) {
+    const map = {};
+    rs.forEach(function (r) {
+      (Array.isArray(r.trendKw) ? r.trendKw : []).forEach(function (k) {
+        k = String(k).trim(); if (!k) return;
+        (map[k] = map[k] || []).push(r);
+      });
+    });
+    return Object.keys(map).map(function (k) { return { k: k, rows: map[k], n: map[k].length }; })
+      .sort(function (a, b) { return b.n - a.n; });
+  }
+  function trvMonKey(r) {
+    const t = r.postedAt || r.updatedAt || r.createdAt || 0;
+    if (!t) return '날짜 없음';
+    const d = new Date(t);
+    return d.getFullYear() + '년 ' + (d.getMonth() + 1) + '월';
+  }
+  function trvCardHtml(r) {
+    const t = r.postedAt || r.updatedAt || r.createdAt || 0;
+    const d = t ? new Date(t) : null;
+    return '<div class="trv-card" data-trvrow="' + r.id + '">' +
+      '<div class="hk">' + esc(r.hook || r.author || '제목 없음') + '</div>' +
+      '<div class="mt"><span class="tr">🔥 ' + (r.trendScore || 0) + '</span>' +
+      (r.views ? '<span>▶ ' + fmtNum(r.views) + '</span>' : '') +
+      (d ? '<span>' + (d.getMonth() + 1) + '/' + d.getDate() + '</span>' : '') + '</div></div>';
+  }
+
+  function st2RenderTrend() {
+    const host = document.getElementById('st2-trend'); if (!host) return;
+    const all = _trvMode === 'all';
+    const rs = trvRows(all);
+    const kws = trvKws(rs);
+    const noKw = rs.filter(function (r) { return !(Array.isArray(r.trendKw) && r.trendKw.length); });
+
+    // ── 무대 (항상 그린다 — 데이터 0이어도 «채워진 모습»이 무드를 만든다) ──
+    const pts = kws.slice(0, 6);
+    const mx = pts.length ? pts[0].n : 1;
+    const SLOT = [44, 74.5, 60.4, 27, 9.2, 91];                       // 시안의 x 배치 그대로
+    let ptsH = '';
+    pts.forEach(function (p, i) {
+      const hot = p.n >= Math.max(2, mx * 0.6);
+      const top = 62 - (p.n / mx) * 34;                                // 많이 적힌 말일수록 높이
+      ptsH += '<div class="trv-pt ' + (hot ? 'hot' : 'dim') + '" style="left:' + SLOT[i % 6] + '%;top:' + top.toFixed(1) + '%">' +
+        '<span class="glow"></span><span class="dot"></span><span class="nm">' + esc(p.k) + ' <b>' + p.n + '</b></span></div>';
+    });
+    const PARA = '<svg class="av" width="54" height="50" viewBox="0 0 60 54">' +
+      '<path class="canopy st" d="M4,20 Q30,-1 56,20 Q43,13 30,15 Q17,13 4,20"/>' +
+      '<path class="st" d="M7,21 L29,38 M53,21 L31,38"/>' +
+      '<circle class="fl" cx="30" cy="41" r="3.6"/>' +
+      '<path class="st" d="M30,45 v5 M30,48 l-4,4 M30,48 l4,4"/></svg>';
+    let h = '<div class="trv">' +
+      '<div class="trv-stage"><div class="trv-sky" id="trv-sky">' +
+        '<div class="trv-stars"></div>' +
+        '<svg class="trv-rig" viewBox="0 0 900 440" preserveAspectRatio="none" aria-hidden="true">' +
+          '<path fill="#0B1015" opacity=".75" d="M0,440 V300 L96,266 L188,300 L282,232 L378,282 L472,212 L580,272 L688,228 L796,282 L900,250 V440 Z"/>' +
+          '<path fill="#0A0E13" opacity=".85" d="M0,440 V346 L120,320 L246,346 L364,300 L490,340 L612,296 L734,340 L854,318 L900,332 V440 Z"/>' +
+          '<path fill="#0D1218" d="M0,440 V352 Q42,322 83,286 Q140,330 196,318 Q222,268 243,218 Q296,300 337,300 ' +
+            'Q368,190 396,123 Q432,224 470,262 Q508,214 544,178 Q588,252 623,272 Q650,212 671,160 Q722,252 760,292 ' +
+            'Q790,286 819,278 Q862,300 900,312 V440 Z"/>' +
+          '<path fill="none" stroke="#1B242D" stroke-width="1.2" stroke-opacity=".8" d="M0,352 Q42,322 83,286 Q140,330 196,318 ' +
+            'Q222,268 243,218 Q296,300 337,300 Q368,190 396,123 Q432,224 470,262 Q508,214 544,178 Q588,252 623,272 ' +
+            'Q650,212 671,160 Q722,252 760,292 Q790,286 819,278 Q862,300 900,312"/>' +
+        '</svg>' +
+        '<div class="trv-tline" id="trv-tl" style="top:50%"><span class="lb">트렌드 라인</span><span class="rb">이 위 = 올라탄 상태</span></div>' +
+        ptsH +
+        '<div class="trv-me" id="trv-me"><span class="aura" id="trv-aura"></span>' +
+          '<span class="flag f1">▲ 올라탔어요</span><span class="flag f2">▼ 내려왔어요</span>' +
+          PARA + '<span class="lb" id="trv-lb">올라탄 중</span></div>' +
+        '<div class="trv-cap"><div class="kk">Trend</div>' +
+          '<div class="tt">높이 오를수록<br><em>더 강하게</em></div>' +
+          '<div class="ss">점 하나가 <b>「지금 왜?」 한 마디</b>입니다. 자주 적힌 말일수록 높이 떠 있어요.</div></div>' +
+        '<div class="trv-hud">' +
+          '<div><div class="k">지금 힘</div><div class="v" id="trv-pw">—</div></div>' +
+          '<div><div class="k">키워드</div><div class="v" style="color:#FFA778">' + kws.length + '</div></div>' +
+          '<div><div class="k">' + (all ? '전체' : '반년') + ' 3점↑</div><div class="v" style="color:#B9CE63">' + rs.length + '</div></div>' +
+        '</div>' +
+      '</div></div>';
+
+    // ── 벽 (집계 먼저 · 카드는 눌렀을 때만) ──
+    h += '<div class="trv-bar"><div class="trv-seg" id="trv-seg">' +
+      '<button' + (all ? '' : ' class="on"') + ' data-m="half">최근 반년</button>' +
+      '<button' + (all ? ' class="on"' : '') + ' data-m="all">전체 · 달별</button></div>' +
+      '<span class="n">트렌드 <b>3점 이상</b>만 이 방에 들어옵니다</span></div>';
+
+    if (!rs.length) {
+      h += '<div class="trv-empty"><b>아직 이 방은 비어 있어요.</b><br>' +
+        '분류(정거장)에서 <b>🔥 트렌드 3점 이상</b>을 주면 그 카드가 여기 쌓입니다.<br>' +
+        '3점을 주면서 <b>「지금 왜?」 한 마디</b>를 적으면 — 저 능선 위에 그 말이 뜹니다.</div>';
+    } else if (!all) {
+      h += '<div class="trv-wall">' +
+        kws.map(function (p) {
+          return '<span class="trv-kw' + (_trvOpenKw === p.k ? ' on' : '') + '" data-trvkw="' + esc(p.k) + '">' +
+            esc(p.k) + ' <small>' + p.n + '</small></span>';
+        }).join('') +
+        (noKw.length ? '<span class="trv-kw none' + (_trvOpenKw === '__none' ? ' on' : '') + '" data-trvkw="__none">키워드 없이 3점↑ <small>' + noKw.length + '</small></span>' : '') +
+        '</div>';
+      const open = _trvOpenKw === '__none' ? noKw
+        : (_trvOpenKw ? (kws.find(function (p) { return p.k === _trvOpenKw; }) || { rows: [] }).rows : null);
+      if (open) h += '<div class="trv-cards">' + open.map(trvCardHtml).join('') + '</div>';
+    } else {
+      // 전체보기 — 달별로 나눠서 그동안 쌓인 것도 본다
+      const byMon = {};
+      rs.forEach(function (r) { const k = trvMonKey(r); (byMon[k] = byMon[k] || []).push(r); });
+      Object.keys(byMon).sort().reverse().forEach(function (mk2) {
+        const list = byMon[mk2];
+        const mkws = trvKws(list);
+        h += '<div class="trv-mon"><div class="mh">' + esc(mk2) + ' <small>' + list.length + '편</small></div>' +
+          '<div class="trv-wall">' + mkws.map(function (p) {
+            const key = mk2 + '|' + p.k;
+            return '<span class="trv-kw' + (_trvOpenKw === key ? ' on' : '') + '" data-trvkw="' + esc(key) + '">' +
+              esc(p.k) + ' <small>' + p.n + '</small></span>';
+          }).join('') +
+          '<span class="trv-kw none' + (_trvOpenKw === mk2 + '|__all' ? ' on' : '') + '" data-trvkw="' + esc(mk2) + '|__all">이 달 전부 보기 <small>' + list.length + '</small></span></div>';
+        if (_trvOpenKw && _trvOpenKw.indexOf(mk2 + '|') === 0) {
+          const kk = _trvOpenKw.slice(mk2.length + 1);
+          const open2 = kk === '__all' ? list : (mkws.find(function (p) { return p.k === kk; }) || { rows: [] }).rows;
+          h += '<div class="trv-cards">' + open2.map(trvCardHtml).join('') + '</div>';
+        }
+        h += '</div>';
+      });
+    }
     h += '</div>';
-    h += '<div class="trd-note">🎯 = <b>내 고객도 이 말을 했어요</b> — 고객 방 키워드·수집함과 겹친 말.<br>' +
-      '<b>시장 × 고객 둘 다 켜진 게 진짜 만들 것</b>이고, 시장만 켜진 건 남의 유행입니다. ' +
-      '작은 곡선은 최근 6주 흐름 — <b>식었어도 다시 뜰 수 있으니 버리지 마세요.</b></div>';
-    return h + '</div></div>';
+    host.innerHTML = h;
+
+    // ── 배선 ──
+    const seg = document.getElementById('trv-seg');
+    if (seg) seg.onclick = function (e) {
+      const b = e.target.closest('button'); if (!b) return;
+      _trvMode = b.dataset.m; _trvOpenKw = null; st2RenderTrend();
+    };
+    host.querySelectorAll('[data-trvkw]').forEach(function (c) {
+      c.onclick = function () {
+        const k = c.dataset.trvkw;
+        _trvOpenKw = (_trvOpenKw === k) ? null : k;   // 같은 칩 다시 누르면 접힘
+        st2RenderTrend();
+      };
+    });
+    host.querySelectorAll('[data-trvrow]').forEach(function (c) {
+      c.onclick = function () { try { openDetail(c.dataset.trvrow); } catch (e) { console.error('[trv] 카드 열기 실패:', e); } };
+    });
+    trvStartStage();
+  }
+
+  // 무대 비행 — 패러글라이딩 · 보통 속도 고정. 강해지는 건 색·크기·선명도·아우라 네 가지뿐.
+  function trvStartStage() {
+    if (_trvRun) return;
+    _trvRun = true;
+    const LINE = 0.5, AMP = 0.19, LIME = [215, 243, 75], COLD = [94, 130, 166];
+    const mix = function (a, b, t) { return 'rgb(' + Math.round(a[0] + (b[0] - a[0]) * t) + ',' + Math.round(a[1] + (b[1] - a[1]) * t) + ',' + Math.round(a[2] + (b[2] - a[2]) * t) + ')'; };
+    const rgba2 = function (a, b, t, al) { return 'rgba(' + Math.round(a[0] + (b[0] - a[0]) * t) + ',' + Math.round(a[1] + (b[1] - a[1]) * t) + ',' + Math.round(a[2] + (b[2] - a[2]) * t) + ',' + al + ')'; };
+    let acc = 0, last = null, upWas = null;
+    function frame(ts) {
+      const sky = document.getElementById('trv-sky');
+      // 탭을 벗어났거나 다시 그려졌으면 스스로 멈춘다 — 숨은 화면에서 헛돌지 않기
+      if (!sky || sky.offsetParent === null) { _trvRun = false; return; }
+      if (last === null) last = ts;
+      acc += (ts - last) / 1000; last = ts;
+      const me = document.getElementById('trv-me'), aura = document.getElementById('trv-aura');
+      const lb = document.getElementById('trv-lb'), pw2 = document.getElementById('trv-pw'), tl = document.getElementById('trv-tl');
+      if (!me) { _trvRun = false; return; }
+      const H = sky.getBoundingClientRect().height;
+      const x = 0.5 + Math.sin(acc / 7.5) * 0.40;
+      const y = LINE - Math.sin(acc / 4.3 + 1.1) * AMP;
+      let s = (LINE - y) / AMP; if (s > 1) s = 1; if (s < -1) s = -1;
+      const t = (s + 1) / 2, pw = Math.max(0, s);
+      me.style.left = (x * 100) + '%'; me.style.top = (y * H) + 'px';
+      const col = mix(COLD, LIME, t); me.style.color = col;
+      const avEl = me.querySelector('.av');
+      if (avEl) {
+        const dir = Math.cos(acc / 7.5) >= 0 ? 1 : -1;
+        avEl.style.transform = 'scaleX(' + dir + ') rotate(' + (dir * Math.cos(acc / 4.3 + 1.1) * -8) + 'deg) scale(' + (0.80 + 0.36 * t).toFixed(3) + ')';
+        avEl.style.filter = 'drop-shadow(0 0 ' + (2 + 20 * pw).toFixed(1) + 'px ' + rgba2(COLD, LIME, t, (0.15 + 0.55 * pw).toFixed(2)) + ') ' +
+          'saturate(' + (0.35 + 0.75 * t).toFixed(2) + ') brightness(' + (0.66 + 0.5 * t).toFixed(2) + ')';
+        avEl.style.opacity = (0.55 + 0.45 * t).toFixed(2);
+        const cv = avEl.querySelector('.canopy'); if (cv) cv.style.transform = 'scaleY(' + (0.74 + 0.44 * t).toFixed(2) + ')';
+      }
+      const ar = 34 + 92 * pw;
+      if (aura) { aura.style.width = ar + 'px'; aura.style.height = ar + 'px'; aura.style.opacity = (0.05 + 0.28 * pw).toFixed(2); }
+      if (tl) tl.style.borderTopColor = 'rgba(255,122,69,' + (0.34 + 0.5 * pw).toFixed(2) + ')';
+      if (lb) {
+        lb.textContent = s > 0.55 ? '제대로 탔어요' : s > 0 ? '올라탄 중' : s > -0.55 ? '아직 아래' : '많이 처졌어요';
+        lb.style.background = s > 0 ? col : 'rgba(20,32,42,.92)';
+        lb.style.color = s > 0 ? '#101408' : '#B9CCDD';
+      }
+      if (pw2) { pw2.textContent = (s >= 0 ? '+' : '') + Math.round(s * 100) + '%'; pw2.style.color = col; }
+      const isUp = s > 0;
+      if (upWas === null) upWas = isUp;
+      else if (isUp !== upWas) { upWas = isUp; me.classList.remove('fire', 'chill'); void me.offsetWidth; me.classList.add(isUp ? 'fire' : 'chill'); }
+      // 가까이 지나는 키워드 점은 살짝 밝아진다
+      document.querySelectorAll('#trv-sky .trv-pt').forEach(function (p) {
+        const px = parseFloat(p.style.left) / 100, py = parseFloat(p.style.top) / 100;
+        p.classList.toggle('near', Math.abs(px - x) < 0.07 && Math.abs(py - y) < 0.13);
+      });
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
   }
 
   // ════ v481 · 마법 — LV7 「묻기 전에 먼저 말을 겁니다」 ════
@@ -34715,7 +33489,6 @@
   // 검증 훅 — window.__ins와 같은 용도(내부 배열이 window에서 안 보이므로)
   window.__fbk = function () { return { ups: fbkUps(), group: fbkGroup, scripts: scripts, rows: rows }; };
   window.__sl = function (label) { return slStepColor(label); };   // 구조 카드 5색 매핑 검증용
-  window.__pp = function () { return (typeof ppBoard !== 'undefined') ? ppBoard : null; };  // 엑스레이 검증용
   window.__trd = function () { return trdData(); };   // 트렌드 방 검증용
   window.__mag = function () { return { html: renderMagicHtml(),
     life: magLife(trdData()), twin: magTwin(fbkUps()), gem: magGem(fbkUps()),
@@ -45057,10 +43830,9 @@
         '<div class="st2-mapmini" id="st2-mapmini"><span class="mv"></span>' +
         '<span><div class="m1" id="st2-mapm1"></div><div class="m2">탭해서 크게 — 3차원·스윗스팟 토글은 안에</div></span><span class="go">›</span></div>' +
       '</div>' +
-      '<div class="st2-focap st2-rv" id="st2-focap"></div>' +
+      '<div class="st2-focap st2-rv" id="st2-focap"></div>';
       // v483 · 알고리즘 분석(구 성적표)은 1막 코어 아래로 이사함
-      // v480 · 세 번째 축 — 시장.
-      '<div class="st2-rv" id="st2-trd">' + renderTrendRoomHtml() + '</div>';
+      // v557 · 옛 트렌드 방(#st2-trd·담은 날짜 분포)은 삭제 — 세 번째 축은 «🔥 트렌드 탭»이 담당
       // v485 · 마법(알고리즘이 알아낸 것)은 1막 알고리즘 분석 안으로 이사함
     // ── 3막 · 실행 — 그래서 뭘 할까 (달력 + 쇼핑) ──
     h += '<div class="st2-act st2-rv"><span class="n">02</span><span class="t">실행</span>' +
@@ -45284,42 +44056,12 @@
           const box = document.getElementById('fbk-box');
           if (box) { box.classList.add('open'); box.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
         } else if (k === '키워드 수명') {
-          _trdOpen = true;
-          const box = document.getElementById('trd-box');
-          if (box) { box.classList.add('open'); box.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+          // v557 · 옛 여닫이(trd-box)가 사라져 🔥 트렌드 탭으로 보낸다
+          try { st2SetTab('trend'); } catch (err2) {}
         }
       } catch (err) {}
     });
-    // v480 · 트렌드 방 — 여닫이 + 칩 누르면 그 키워드로 검색
-    const trdWrap = document.getElementById('st2-trd');
-    if (trdWrap) {
-      trdWrap.addEventListener('click', function (e) {
-        if (e.target.closest('#trd-toggle')) {
-          _trdOpen = !_trdOpen;
-          const box = document.getElementById('trd-box'), tg = document.getElementById('trd-toggle');
-          if (box) box.classList.toggle('open', _trdOpen);
-          if (tg) tg.setAttribute('aria-expanded', _trdOpen ? 'true' : 'false');
-          return;
-        }
-        const c = e.target.closest('[data-trdkw]');
-        if (c) {
-          const kw = c.dataset.trdkw;
-          try {
-            switchWorkspace('sheet');
-            setTimeout(function () {
-              const s = document.getElementById('sh-search');
-              if (s) { s.value = kw; s.dispatchEvent(new Event('input', { bubbles: true })); s.focus(); }
-            }, 260);
-          } catch (err) {}
-          toast('🔍 「' + kw + '」로 담은 것 보기');
-        }
-      });
-      trdWrap.addEventListener('keydown', function (e) {
-        if ((e.key === 'Enter' || e.key === ' ') && e.target.closest('#trd-toggle')) {
-          e.preventDefault(); e.target.closest('#trd-toggle').click();
-        }
-      });
-    }
+    // (v557 · 옛 트렌드 방(#st2-trd) 여닫이 배선 삭제 — 세 번째 축은 🔥 트렌드 탭이 담당)
     // v471 · 1막 코어 — 그리기 + 눌러서 알고리즘 화면 열기
     try { hcoreDraw(); } catch (e) {}
     // v485 · 코어·LV 클릭으로 소개 화면 이동 제거 — 소개는 로그인창(사용설명서)·더보기에만 있으면 됨 (사장님 결정)
@@ -47179,7 +45921,8 @@
   }
   function st2SetTab(tab) {
     // 패턴·원고는 제작소의 탭이면서 화면은 워크스페이스를 쓴다 — 탭 줄이 따라가므로 나간 티가 없다
-    if (tab === 'pattern') { _st2Tab = tab; window.__rrFrom = 'studio'; try { switchWorkspace('pattern'); } catch (e) {} return; }
+    // v557 · 패턴·구조 탭은 🔥 트렌드로 교체 — 옛 'pattern' 호출은 원고 탭 안 패턴 파악으로 넘어간다
+    if (tab === 'pattern') { window.__rrFrom = 'studio'; try { switchWorkspace('pattern'); } catch (e) {} return; }
     if (tab === 'scripts') { _st2Tab = tab; window.__rrFrom = 'studio'; try { switchWorkspace('scripts'); } catch (e) {} return; }
     // 워크스페이스 화면(원고·패턴)에 있다가 제작소 자체 탭으로 돌아올 때는 st2-view를 먼저 되살린다
     try {
@@ -47191,9 +45934,11 @@
     document.getElementById('st2-home').style.display = (tab === 'home') ? 'block' : 'none';
     document.getElementById('st2-cus').style.display = (tab === 'cus') ? 'block' : 'none';
     const osmuEl = document.getElementById('st2-osmu'); if (osmuEl) osmuEl.style.display = (tab === 'osmu') ? 'block' : 'none';
+    const trdEl = document.getElementById('st2-trend'); if (trdEl) trdEl.style.display = (tab === 'trend') ? 'block' : 'none';
     window.scrollTo({ top: 0 });
     if (tab === 'cus') st2RenderCus();
     if (tab === 'osmu') st2RenderOsmu();
+    if (tab === 'trend') { try { st2RenderTrend(); } catch (e) { console.error('[trend] render 실패:', e); } }
   }
   function renderStudio2() {
     if (!_st2Inited) {
@@ -47218,156 +45963,6 @@
     }
     st2RenderHome();
     st2SetTab(_st2Tab === 'cus' ? 'cus' : 'home');
-  }
-
-  // ═══════════════════════════════════════════════════════════════
-  // 📐 패턴 파악 A+C 합본 (pt2) — 나란히 대조대 + 공식 조립대 (v413)
-  // 데이터: rows의 scriptSecFlex(딥분해) 또는 scriptSections(표준 6칸)
-  // 등록: structures(구조 모음)에 steps+formula+refs로 push — 전부 로컬
-  // ═══════════════════════════════════════════════════════════════
-  let _pt2Fmt = null, _pt2Al = 'orig', _pt2Rail = [], _pt2Notes = [], _pt2Sel = [], _pt2ShowOld = false;
-  function pt2Blocks(r) {
-    if (Array.isArray(r.scriptSecFlex) && r.scriptSecFlex.length) {
-      return r.scriptSecFlex.map(x => {
-        const t = (x.t || '').trim(); if (!t) return null;
-        const meta = x.c ? SCRIPT_SECTIONS.find(s => s.key === x.c) : null;
-        return { lb: meta ? meta.label : x.k, c: meta ? meta.color : flexLabelColor(x.k), t };
-      }).filter(Boolean);
-    }
-    const out = [];
-    SCRIPT_SECTIONS.forEach(s => {
-      const v = (r.scriptSections || {})[s.key];
-      const t = v ? String(v).replace(/<[^>]*>/g, '').trim() : '';
-      if (t) out.push({ lb: s.label, c: s.color, t });
-    });
-    return out;
-  }
-  const PT2_ROLE_MAP = [
-    [/(후킹|훅|도입|오프닝|인트로)/, '후킹'], [/(이득|손해)/, '이득'],
-    [/(공감|상황|장면|스토리|일상|사례|경험)/, '공감·상황'],
-    [/(방법|과정|단계|꿀팁|팁|해결|솔루션|노하우|레시피|원리)/, '방법'],
-    [/(좌절|문제|고민|실패|실수|위기|불안|불만|고통|착각|오해)/, '문제'],
-    [/(원인|이유|진단|분석|배경)/, '원인'], [/(깨달음|발견|계기|반전|전환|인사이트)/, '깨달음'],
-    [/(변화|결과|성장|완성|성공|효과|증명|애프터|후기|비교)/, '변화·증명'], [/(소구)/, '소구'],
-    [/(CTA|저장|공유|팔로우|댓글)/i, 'CTA']
-  ];
-  function pt2Role(lb) { for (const m of PT2_ROLE_MAP) if (m[0].test(lb)) return m[1]; return lb; }
-  const PT2_ROLE_COLOR = { '후킹': '#E25C5C', '이득': '#E25C5C', '공감·상황': '#5B8DEF', '소구': '#2FD07B', 'CTA': '#2FD07B' };
-  function pt2RoleColor(g) { return PT2_ROLE_COLOR[g] || flexLabelColor(g); }
-  function pt2Rows() { return (rows || []).filter(isFilled).map(r => ({ r, blocks: pt2Blocks(r) })).filter(o => o.blocks.length >= 2); }
-  function pt2RoleSeq(o) { const seen = new Set(), seq = []; o.blocks.forEach(b => { const g = pt2Role(b.lb); if (!seen.has(g)) { seen.add(g); seq.push(g); } }); return seq; }
-  function pt2Detect(sel) {
-    const seqs = sel.map(pt2RoleSeq), n = seqs.length;
-    const need = Math.max(2, Math.ceil(n * 0.7));
-    const cnt = {}, pos = {};
-    seqs.forEach(seq => seq.forEach((g, i) => { cnt[g] = (cnt[g] || 0) + 1; pos[g] = (pos[g] || 0) + i; }));
-    const common = Object.keys(cnt).filter(g => cnt[g] >= need).sort((a, b) => (pos[a] / cnt[a]) - (pos[b] / cnt[b]));
-    return { common, n, hit: common.length ? Math.min.apply(null, common.map(g => cnt[g])) : 0 };
-  }
-  function pt2Title(r) { return (r.hook || r.author || '컨텐츠').slice(0, 18); }
-  function pt2Render() {
-    try { if (typeof pxRender === 'function') return pxRender(); } catch (e) { console.error('[px]', e); }
-    return pt2RenderLegacy();
-  }
-  function pt2RenderLegacy() {
-    const el = document.getElementById('pt2'); if (!el) return;
-    const pv = document.getElementById('pattern-view');
-    if (pv) pv.classList.toggle('pt2-hideold', !_pt2ShowOld);
-    if (!_structLoaded) { try { loadStructures(); } catch (e) {} }
-    const all = pt2Rows();
-    const oldBtn = '<button class="pt2-oldtg" id="pt2-oldtg">🗂 이전 아이디어 보드 ' + (_pt2ShowOld ? '숨기기' : '보기') + '</button>';
-    if (!all.length) {
-      el.innerHTML = '<div class="pt2-empty">아직 <b>구조가 분해된 원고</b>가 없어요.<br>시트에서 벤치마킹 원고를 붙여넣고 구조로 나눠두면,<br>여기 <b>나란히 대조대</b>에서 같은 뼈대를 찾을 수 있어요.</div>' + oldBtn;
-      pt2WireOld(); return;
-    }
-    const byF = {}; all.forEach(o => { const f = o.r.format || '기타'; (byF[f] = byF[f] || []).push(o); });
-    const fmts = Object.entries(byF).sort((a, b) => b[1].length - a[1].length);
-    if (!_pt2Fmt || !byF[_pt2Fmt]) _pt2Fmt = fmts[0][0];
-    const sel = byF[_pt2Fmt].slice().sort((a, b) => (b.r.views || 0) - (a.r.views || 0)).slice(0, 4);
-    _pt2Sel = sel;
-    // 역할 축 (선택 원고들의 등장 순서 평균)
-    const det = pt2Detect(sel);
-    const axisCnt = {}, axisPos = {};
-    sel.forEach(o => pt2RoleSeq(o).forEach((g, i) => { axisCnt[g] = (axisCnt[g] || 0) + 1; axisPos[g] = (axisPos[g] || 0) + i; }));
-    const axis = Object.keys(axisCnt).sort((a, b) => (axisPos[a] / axisCnt[a]) - (axisPos[b] / axisCnt[b]));
-    let h = '<div class="pt2-fchips">' + fmts.map(f =>
-      '<button class="pt2-fchip' + (f[0] === _pt2Fmt ? ' on' : '') + '" data-pt2f="' + esc(f[0]) + '">' + esc(f[0]) + ' <span class="n">' + f[1].length + '</span></button>').join('') + '</div>';
-    h += '<div class="pt2-legend">' + axis.map(g => '<span class="pt2-lg"><i style="background:' + pt2RoleColor(g) + '"></i>' + esc(g) + '</span>').join('') + '</div>';
-    h += '<div class="pt2-align"><button' + (_pt2Al === 'orig' ? ' class="on"' : '') + ' data-pt2al="orig">원문 순서</button><button' + (_pt2Al === 'role' ? ' class="on"' : '') + ' data-pt2al="role">역할 정렬 ✨</button></div>';
-    // 대조대
-    h += '<div class="pt2-cmpwrap"><div class="pt2-cmp" style="grid-template-columns:repeat(' + sel.length + ',132px)">';
-    h += sel.map(o => '<div class="pt2-colhd">' + esc(pt2Title(o.r)) + '<s>' + ((o.r.views || 0) > 0 ? '▶ ' + fmtNum(o.r.views) : '조회수 미입력') + '</s></div>').join('');
-    const blkHtml = b => '<div class="pt2-blk" style="--rc:' + b.c + '"><span class="rl">' + esc(b.lb) + '</span><div class="tx">' + esc(b.t) + '</div></div>';
-    if (_pt2Al === 'orig') {
-      const maxLen = Math.max.apply(null, sel.map(o => o.blocks.length));
-      for (let i = 0; i < maxLen; i++) sel.forEach(o => { h += o.blocks[i] ? blkHtml(o.blocks[i]) : '<div class="pt2-blk ghost"></div>'; });
-    } else {
-      axis.forEach(g => sel.forEach(o => {
-        const b = o.blocks.find(x => pt2Role(x.lb) === g);
-        h += b ? blkHtml(b) : '<div class="pt2-blk ghost"></div>';
-      }));
-    }
-    h += '</div></div>';
-    // 감지 바
-    if (det.common.length >= 2) {
-      h += '<div class="pt2-match"><div class="mt">' + sel.length + '개 중 <b>' + det.hit + '개</b>가 같은 뼈대를 반복해요</div>' +
-        '<div class="pt2-seq">' + det.common.map((g, i) => (i ? '<i class="ar">→</i>' : '') + '<i style="--sc:' + pt2RoleColor(g) + '">' + esc(g) + '</i>').join('') + '</div>' +
-        '<button class="pt2-fill" id="pt2-fill">⚡ 이 뼈대로 조립대 채우기</button></div>';
-    }
-    // 조립대
-    h += '<div class="pt2-bench"><div class="bt">📐 공식 조립대</div>' +
-      '<div class="bs">공통 순서대로 블록을 탭해 쌓고, 칸마다 <b style="color:#eef0e4">장면 포인트</b>(왜 반응하는지) 한 줄 — 이름 짓고 등록하면 <b style="color:#eef0e4">구조 모음</b>에 들어가요.</div>' +
-      '<div class="pt2-pal">' + axis.map(g => '<button class="pt2-palc" data-pt2p="' + esc(g) + '" style="--rc:' + pt2RoleColor(g) + '">' + esc(g) + '</button>').join('') + '</div>' +
-      '<div class="pt2-rail" id="pt2-rail"></div>' +
-      '<div class="pt2-racts"><button class="pt2-ract" id="pt2-reset">비우기</button></div>' +
-      '<div class="pt2-namer"><input id="pt2-name" placeholder="공식 이름 — 예: ' + esc(_pt2Fmt) + ' 공식"><button class="pt2-reg" id="pt2-reg">등록</button></div>' +
-      '<div class="pt2-done" id="pt2-done"></div></div>' + oldBtn;
-    el.innerHTML = h;
-    // 배선
-    el.querySelectorAll('[data-pt2f]').forEach(b => b.onclick = () => { _pt2Fmt = b.dataset.pt2f; _pt2Rail = []; _pt2Notes = []; pt2Render(); });
-    el.querySelectorAll('[data-pt2al]').forEach(b => b.onclick = () => { _pt2Al = b.dataset.pt2al; pt2Render(); });
-    const fill = document.getElementById('pt2-fill');
-    if (fill) fill.onclick = () => { _pt2Rail = det.common.slice(); _pt2Notes = _pt2Rail.map(() => ''); pt2RailRender(); document.getElementById('pt2-rail').scrollIntoView({ behavior: 'smooth', block: 'center' }); };
-    el.querySelectorAll('[data-pt2p]').forEach(b => b.onclick = () => { _pt2Rail.push(b.dataset.pt2p); _pt2Notes.push(''); pt2RailRender(); });
-    document.getElementById('pt2-reset').onclick = () => { _pt2Rail = []; _pt2Notes = []; pt2RailRender(); };
-    document.getElementById('pt2-reg').onclick = pt2Register;
-    pt2WireOld(); pt2RailRender();
-  }
-  function pt2WireOld() {
-    const b = document.getElementById('pt2-oldtg');
-    if (b) b.onclick = () => { _pt2ShowOld = !_pt2ShowOld; pt2Render(); };
-  }
-  function pt2RailRender() {
-    const el = document.getElementById('pt2-rail'); if (!el) return;
-    if (!_pt2Rail.length) { el.innerHTML = '<div class="empty">위 블록을 탭하거나 ⚡로 채워요 — 여기에 공식 순서가 쌓여요</div>'; return; }
-    el.innerHTML = _pt2Rail.map((g, i) => '<div class="pt2-slot" style="--rc:' + pt2RoleColor(g) + '">' +
-      '<span class="no">' + (i + 1) + '</span><span class="rn">' + esc(g) + '</span>' +
-      '<input data-pt2n="' + i + '" placeholder="장면 포인트 — 왜 반응하나" value="' + esc(_pt2Notes[i] || '').replace(/"/g, '&quot;') + '">' +
-      '<span class="x" data-pt2x="' + i + '">×</span></div>').join('');
-    el.querySelectorAll('[data-pt2n]').forEach(inp => inp.oninput = () => { _pt2Notes[+inp.dataset.pt2n] = inp.value; });
-    el.querySelectorAll('[data-pt2x]').forEach(x => x.onclick = () => { const i = +x.dataset.pt2x; _pt2Rail.splice(i, 1); _pt2Notes.splice(i, 1); pt2RailRender(); });
-  }
-  async function pt2Register() {
-    if (_pt2Rail.length < 2) { toast('블록을 2개 이상 쌓아주세요'); return; }
-    if (!_structLoaded) { try { await loadStructures(); } catch (e) {} }
-    const nm = (document.getElementById('pt2-name').value || '').trim() || (_pt2Fmt + ' 공식');
-    const entry = {
-      id: structId(), name: nm, thumb: null,
-      steps: _pt2Rail.map((g, i) => ({ ico: '▸', label: g, note: _pt2Notes[i] || '' })),
-      formula: _pt2Rail.join(' → '),
-      refs: _pt2Sel.map(o => o.r.id),
-      createdAt: (typeof todayStr === 'function' ? todayStr() : '')
-    };
-    structures.unshift(entry);
-    await saveStructures();
-    const d = document.getElementById('pt2-done');
-    if (d) {
-      d.innerHTML = '<div class="d1">📐 구조 모음에 들어갔어요 — <b>' + esc(nm) + '</b></div>' +
-        '<div class="d2">' + esc(entry.formula) + '</div>' +
-        '<div class="d3">원고 쓰기 <b>2단계(구조)</b>에서 이 공식을 고르면 칸마다 장면 포인트가 힌트로 떠요. 비교한 원고 ' + entry.refs.length + '개가 예시로 연결됐어요.</div>';
-      d.classList.add('show');
-    }
-    toast('📐 「' + nm + '」 구조 모음에 등록!');
   }
 
   // ═══════════════════════════════════════════════════════════════
@@ -47480,8 +46075,6 @@
 
   function pxRender() {
     const host = document.getElementById('pt2'); if (!host) return;
-    const pvw = document.getElementById('pattern-view');
-    if (pvw) { pvw.classList.add('pt2-hideold'); const ph = pvw.querySelector('.pp-header'); if (ph) ph.style.display = 'none'; }
     if (!_structLoaded) { try { loadStructures().then(() => pxRender()); } catch (e) {} }
     if (!_pxALoaded) { pxLoad().then(() => pxRender()); }
     const cnt = { x: null, lib: (structures || []).length, ana: pxAnalyses.length };
@@ -47494,15 +46087,20 @@
         '<button data-pxf="' + k + '">' + SH[k] + (cnt[k] != null ? '<b>' + cnt[k] + '</b>' : '') + '</button>').join('') +
       '</span></div>';
     if (_pxFolder === 'x') h += pxStageHtml();
-    else if (_pxFolder === 'lib') h += pxLibHtml();
-    else h += pxAnaHtml();
+    else if (_pxFolder === 'ana') h += pxAnaHtml();
+    // lib(구조 모음)은 html을 안 만든다 — 아래에서 흡수한 «구조 모음 판»을 켠다 (v557)
     h += '</div>';
     host.innerHTML = h;
     pxAmbient(true);
     host.querySelectorAll('[data-pxf]').forEach(b => b.onclick = () => { _pxFolder = b.dataset.pxf; pxRender(); });
     if (_pxFolder === 'x') pxWireStage();
-    if (_pxFolder === 'lib') host.querySelectorAll('[data-pxs]').forEach(c => c.onclick = () => pxOpenStruct(+c.dataset.pxs));
     if (_pxFolder === 'ana') host.querySelectorAll('[data-pxa]').forEach(c => c.onclick = () => pxOpenRec(+c.dataset.pxa));
+    // v557 · 구조 모음 폴더 = 옛 «📐 구조 모음» 탭 판 그대로 (새 구조·참고 예시·편집 전부 유지)
+    const slPane = document.getElementById('sc-tab-structure');
+    if (slPane) {
+      slPane.style.display = (_pxFolder === 'lib') ? 'block' : 'none';
+      if (_pxFolder === 'lib') { try { renderStructureLib(); } catch (e) { console.error('[sl] render 실패:', e); } }
+    }
   }
 
   function pxStageHtml() {
@@ -47833,39 +46431,7 @@
       '<div class="px-ameta">🖍 ' + (a.ct || []).length + '문장 · <b>⭐ ' + esc(a.pt) + '</b> · ' + esc(a.date) + '</div></span></div>').join('') +
       '</div><div style="font-size:9.5px;color:#5d6350;margin-top:10px">분석이 쌓일수록 눈이 좋아지는 건 앱이 아니라 당신이에요. 좋은 공식이 익으면 카드에서 「📐 공식화하기」 — 구조 모음으로 승격.</div>';
   }
-  // ── 폴더: 구조 모음 (B 공식 카드) ──
-  function pxLibHtml() {
-    if (!(structures || []).length) return '<div class="px-empty2">아직 구조가 없어요.<br>분석을 저장한 뒤 <b>📐 공식화하기</b>를 누르면 여기로 승격됩니다.</div>';
-    return '<div class="px-lib">' + structures.map((s2, i) => {
-      const steps = (s2.steps || []).map(st => st.label || st.ico || '').filter(Boolean);
-      return '<div class="px-scard" data-pxs="' + i + '"><div class="px-snm">' + esc(s2.name || '이름 없는 구조') + '</div>' +
-        '<div class="px-sfm">' + steps.map(l => '<span class="px-schip" style="--pc:' + pxRoleColor(pxRole(l)) + '">' + esc(l) + '</span>').join('<span class="px-far">→</span>') + '</div>' +
-        (s2.why ? '<div class="px-swhy"><b>💡</b> ' + esc(s2.why) + '</div>' : (s2.formula ? '<div class="px-swhy">' + esc(s2.formula) + '</div>' : '')) +
-        '<div class="px-suse">원고 ' + ((s2.refs || []).length) + '편에서 추출' + (s2.createdAt ? ' · ' + esc(s2.createdAt) : '') + '</div></div>';
-    }).join('') + '</div>';
-  }
-  function pxOpenStruct(i) {
-    const s2 = structures[i]; if (!s2) return;
-    pxEnsureSheets();
-    document.getElementById('px-rect').textContent = '📐 ' + (s2.name || '구조');
-    document.getElementById('px-recb').innerHTML = '<div class="px-bmain">' +
-      '<div class="px-sec"><h4>공식</h4><span class="px-formula">' +
-      (s2.steps || []).map(st => '<span class="px-fstep" style="--pk:' + pxRoleColor(pxRole(st.label || '')) + ';cursor:default">' + esc(st.label || '') + '</span>').join('<span class="px-far">→</span>') +
-      '</span></div>' +
-      '<div class="px-sec"><h4>단계 메모</h4>' + (s2.steps || []).map(st =>
-        '<div style="font-size:11px;color:#9aa08a;padding:3px 0"><b style="color:' + pxRoleColor(pxRole(st.label || '')) + ';font-size:9px">' + esc(st.label || '') + '</b> ' + esc(st.note || '—') + '</div>').join('') + '</div>' +
-      '<div class="px-dfoot"><button class="del" data-pxsdel="' + i + '">삭제</button></div></div>';
-    document.getElementById('px-rec').classList.add('on');
-    document.getElementById('px-scrim').classList.add('on');
-    const d = document.querySelector('[data-pxsdel]');
-    if (d) d.onclick = async () => {
-      if (!confirm('이 구조를 삭제할까요?')) return;
-      structures.splice(i, 1); await saveStructures();
-      document.getElementById('px-rec').classList.remove('on');
-      document.getElementById('px-scrim').classList.remove('on');
-      pxRender();
-    };
-  }
+  // (v557 · pxLibHtml/pxOpenStruct 삭제 — 구조 모음 폴더는 흡수한 «구조 모음 판»(sl)이 담당)
   // ── 분석 기록 시트 (사이드 인덱스) ──
   function pxOpenRec(i) {
     const a = pxAnalyses[i]; if (!a) return;
