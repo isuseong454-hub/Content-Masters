@@ -12679,31 +12679,64 @@
     overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 
 
-  /* 🎬 A안(v434) — 제작소 탭 줄을 «방 레일 아래»로 옮겨, 원고·패턴 화면까지 들고 다닌다.
-     이러면 «제작소를 나갔다»는 느낌이 없어져 「← 홈」·「‹ 제작소로」 봉합 버튼이 필요 없다. */
+  /* 🎬 v558 — 제작소 탭 줄을 «하단 유리 도크»로 (B안 확정 · 힉스필드).
+     v434에서 상단 sticky로 올렸던 것을 되돌린다 — 탭 5개는 워크스페이스가 아닌데
+     워크스페이스 자리(상단)를 쓰고 있었고, 정작 엄지가 닿는 하단은 비어 있었다.
+     활성 탭 «위로 빛이 올라온다» — 어두운 화면에서 켜진 자리가 멀리서도 보인다. */
   #st2-ws{ display:none; }
   body.in-studio #st2-ws{
     /* #st2-view 밖으로 나왔으므로 스코프 변수를 다시 물려준다 (없으면 활성 탭이 검정으로 사라짐) */
     --st2-lime:#d7f34b; --st2-faint:#6b715c; --st2-line:rgba(255,255,255,.08);
-    display:flex; gap:6px; position:sticky; top:0; z-index:60;
-    width:100%; align-self:stretch; justify-content:center; padding:9px 16px 10px;
-    background:#0B0C09; border-bottom:1px solid rgba(255,255,255,.055); box-sizing:border-box; }
-  body.in-studio #st2-ws button{ flex:1 1 0; max-width:130px; padding:8px 2px; font-size:11.5px;
-    white-space:nowrap; }
-  body.in-studio .bottom-nav{ display:none !important; }   /* 위 탭 줄이 곧 이동 수단 */
+    display:flex; gap:0; position:fixed; left:0; right:0; bottom:0; top:auto; z-index:60;
+    width:100%; justify-content:center; box-sizing:border-box;
+    padding:11px 6px calc(11px + env(safe-area-inset-bottom));
+    background:linear-gradient(180deg,rgba(11,12,9,.62),rgba(11,12,9,.96));
+    backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
+    border-top:1px solid rgba(255,255,255,.09); border-bottom:none; }
+  @supports not (backdrop-filter: blur(1px)){
+    body.in-studio #st2-ws{ background:rgba(11,12,9,.97); }
+  }
+  /* 탭 하나 = 글리프 + 라벨 (앱 하단바와 같은 문법). 알약 배경은 버린다 — 도크는 평평해야 한다 */
+  body.in-studio #st2-ws button{
+    position:relative; flex:1 1 0; max-width:96px; display:flex; flex-direction:column;
+    align-items:center; gap:4px; padding:3px 0 0; font-size:8.5px; font-weight:800; letter-spacing:.01em;
+    color:var(--st2-faint); background:none; border:none; border-radius:0; box-shadow:none;
+    white-space:nowrap; cursor:pointer; transition:color .2s ease; }
+  body.in-studio #st2-ws button .g{ font-size:16px; line-height:1; }
+  /* 빛 기둥 — 활성 탭 위로 광원이 새어 나온다 */
+  body.in-studio #st2-ws button::before{
+    content:''; position:absolute; left:50%; top:-11px; width:26px; height:2px; margin-left:-13px;
+    border-radius:0 0 4px 4px; background:var(--st2-lime); opacity:0; transform:scaleX(.3);
+    transition:opacity .26s ease, transform .3s cubic-bezier(.2,1.2,.3,1); }
+  body.in-studio #st2-ws button::after{
+    content:''; position:absolute; left:50%; top:-11px; width:52px; height:46px; margin-left:-26px;
+    background:radial-gradient(60% 70% at 50% 0%,rgba(215,243,75,.3),transparent 72%);
+    opacity:0; transition:opacity .3s ease; pointer-events:none; }
+  body.in-studio #st2-ws button.on{ color:var(--st2-lime); background:none; box-shadow:none; }
+  body.in-studio #st2-ws button.on::before{ opacity:1; transform:scaleX(1); }
+  body.in-studio #st2-ws button.on::after{ opacity:1; }
+  /* 🔥 트렌드는 켜졌을 때만 오렌지 — 색의 헌법(오렌지=트렌드) */
+  body.in-studio #st2-ws button.on[data-st2tab="trend"]{ color:#FF7A45; }
+  body.in-studio #st2-ws button.on[data-st2tab="trend"]::before{ background:#FF7A45; }
+  body.in-studio #st2-ws button.on[data-st2tab="trend"]::after{
+    background:radial-gradient(60% 70% at 50% 0%,rgba(255,122,69,.34),transparent 72%); }
+  /* 도크에 가리지 않게 본문 바닥을 띄운다 (도크 ≈ 62px + 안전영역) */
+  body.in-studio{ --st2-dock:calc(62px + env(safe-area-inset-bottom)); }
+  body.in-studio .st2-wrap,
+  body.in-studio #sc-view,
+  body.in-studio .sc-tabpane{ padding-bottom:calc(var(--st2-dock) + 28px); }
+  body.in-studio .bottom-nav{ display:none !important; }   /* 도크가 곧 이동 수단 */
   .sc-backhome{ display:none !important; }                  /* 「← 홈」 폐기 (마크업 보존) */
   #rr-back{ display:none !important; }                      /* 「‹ 제작소로」 폐기 (마크업 보존) */
 
 
   /* 🪟 v435 — 상단이 스크롤에 반응한다 (모션 위계 2층: 전환).
-     내리면 방 레일이 걷히고, 탭 줄만 위로 올라붙어 남는다 → 이동 수단은 잃지 않으면서 두께가 절반. */
+     v558 · 탭 줄이 하단으로 내려가서, 이제 걷히는 건 방 레일 하나뿐이다 (도크는 늘 그 자리). */
   /* ⚠️ will-change:transform 금지 — sticky 요소에 붙이면 이 브라우저에서 전환이 «시작값에 붙잡혀» 안 움직인다(v435에서 겪음) */
   #room-rail{ transition:transform .3s cubic-bezier(.2,.9,.3,1), opacity .2s ease; }
   body.hdr-hide #room-rail{ transform:translateY(-108%); opacity:0; pointer-events:none; }
-  body.in-studio #st2-ws{ transition:transform .3s cubic-bezier(.2,.9,.3,1), padding .3s ease; }
-  body.hdr-hide.in-studio #st2-ws{ transform:translateY(calc(-1 * var(--rr-h, 52px))); padding-top:calc(9px + env(safe-area-inset-top)); }
   @media (prefers-reduced-motion: reduce){
-    #room-rail, body.in-studio #st2-ws{ transition:none !important; }
+    #room-rail{ transition:none !important; }
   }
 
 
@@ -15585,7 +15618,8 @@
     --st2-txt:#eef0e4; --st2-sub:#9aa08a; --st2-faint:#6b715c; --st2-line:rgba(255,255,255,.08);
     background:radial-gradient(120% 60% at 50% -5%,rgba(215,243,75,.05),transparent 55%),#0B0C09; min-height:100vh; }
   .st2-wrap{ max-width:560px; margin:0 auto; padding:14px 16px 90px; color:var(--st2-txt); }
-  /* 탭 */
+  /* 탭 — ⚠️ v558 이후 이 규칙들은 안 쓰인다. #st2-ws{display:none}(ID)가 이기고,
+     실제 도크는 «body.in-studio #st2-ws»(하단 유리 도크)가 그린다. 마크업 호환용으로만 남김 */
   .st2-ws{ display:flex; gap:6px; position:sticky; top:0; z-index:40; padding:8px 0 10px;
     background:linear-gradient(180deg,#0B0C09 78%,transparent); }
   .st2-ws button{ flex:1; font-family:inherit; font-size:12px; font-weight:800; color:var(--st2-faint);
@@ -15831,6 +15865,66 @@
   .trv-empty{ border:1px dashed rgba(255,255,255,.16); border-radius:16px; padding:22px 18px; margin-top:12px;
     font-size:12.5px; line-height:1.7; color:var(--st2-sub); }
   .trv-empty b{ color:#FFA778; }
+  /* ── 폴더 머리 (패턴 파악과 같은 문법 · 색만 오렌지) ── */
+  .trv-fhd{ display:flex; align-items:baseline; gap:14px; margin:2px 0 4px; flex-wrap:wrap; }
+  .trv-fbig{ font-size:22px; font-weight:800; letter-spacing:-.035em; color:#f3f4ee; }
+  .trv-fbig b{ font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:700; color:#FFA778;
+    margin-left:5px; vertical-align:3px; }
+  .trv-fsmall{ margin-left:auto; display:flex; gap:12px; align-items:baseline; flex-wrap:wrap; }
+  .trv-fsmall button{ font-family:inherit; font-size:11px; font-weight:800; color:var(--st2-faint);
+    background:none; border:none; cursor:pointer; padding:0; transition:color .16s ease; }
+  .trv-fsmall button b{ font-family:'JetBrains Mono',monospace; font-size:9px; font-weight:700; margin-left:3px; }
+  .trv-fsmall button:hover{ color:var(--st2-sub); }
+  .trv-lead{ font-size:11.5px; color:var(--st2-sub); line-height:1.65; margin:0 0 12px; }
+  .trv-lead b{ color:var(--st2-txt,#e8e9e6); }
+  .trv-thin{ font-size:11px; color:var(--st2-faint); line-height:1.6; margin-top:11px;
+    padding-top:10px; border-top:1px solid rgba(255,255,255,.07); }
+  .trv-thin b{ color:#FFA778; }
+  /* ── 사분면 (핏 × 반응) ── */
+  .trv-quad{ position:relative; margin-top:12px; border:1px solid rgba(255,255,255,.09); border-radius:18px;
+    background:rgba(255,255,255,.02); padding:34px 30px 30px 40px; }
+  .trv-qbox{ position:relative; height:330px; }
+  @media(max-width:520px){ .trv-quad{ padding:28px 16px 26px 30px; } .trv-qbox{ height:270px; } }
+  .trv-qbox .ax{ position:absolute; background:rgba(255,255,255,.13); }
+  .trv-qbox .ax.h{ left:0; right:0; top:50%; height:1px; }
+  .trv-qbox .ax.v{ top:0; bottom:0; left:50%; width:1px; }
+  .trv-qlb{ position:absolute; font-size:9.5px; font-weight:800; letter-spacing:.04em; line-height:1.4; pointer-events:none; }
+  .trv-qlb small{ display:block; font-size:9px; font-weight:600; opacity:.6; margin-top:2px; }
+  .trv-qlb.tr{ right:8px; top:6px; text-align:right; color:#B9CE63; }
+  .trv-qlb.tl{ left:8px; top:6px; color:#E09562; }
+  .trv-qlb.br{ right:8px; bottom:6px; text-align:right; color:#8E9683; }
+  .trv-qlb.bl{ left:8px; bottom:6px; color:#5C6771; }
+  .trv-qax{ position:absolute; font-size:9px; font-weight:800; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--st2-faint); }
+  .trv-qax.x{ left:50%; bottom:-24px; transform:translateX(-50%); }
+  .trv-qax.y{ left:-30px; top:50%; transform:translateY(-50%) rotate(-90deg); }
+  .trv-dot{ position:absolute; width:13px; height:13px; margin:-6.5px 0 0 -6.5px; border-radius:50%; cursor:pointer;
+    background:currentColor; box-shadow:0 0 10px currentColor; transition:transform .18s ease, box-shadow .3s ease; }
+  .trv-dot:hover{ transform:scale(1.5); box-shadow:0 0 20px currentColor; z-index:3; }
+  .trv-dot.q1{ color:#B9CE63; } .trv-dot.q2{ color:#E09562; }
+  .trv-dot.q3{ color:#8E9683; } .trv-dot.q4{ color:#5C6771; }
+  /* ── 순위판 + 파도 ── */
+  .trv-rank{ margin-top:12px; display:flex; flex-direction:column; gap:9px; }
+  .trv-rk{ display:grid; grid-template-columns:26px 1fr auto; align-items:center; gap:11px; cursor:pointer;
+    padding:10px 13px; border-radius:13px; border:1px solid rgba(255,255,255,.08);
+    background:rgba(255,255,255,.025); transition:border-color .18s, transform .18s; position:relative; overflow:hidden; }
+  .trv-rk:hover{ border-color:rgba(255,122,69,.4); transform:translateX(2px); }
+  .trv-rk .no{ font-family:'JetBrains Mono',monospace; font-size:13px; font-weight:800; color:var(--st2-faint); }
+  .trv-rk.top .no{ color:#FF7A45; }
+  .trv-rk .nm{ font-size:13px; font-weight:800; color:var(--st2-txt,#e8e9e6); }
+  .trv-rk .ct{ font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:800; color:#FFA778; }
+  .trv-rk .bar{ position:absolute; left:0; top:0; bottom:0; background:rgba(255,122,69,.09); z-index:0; }
+  .trv-rk > *{ position:relative; z-index:1; }
+  .trv-wave{ margin-top:16px; border:1px solid rgba(255,255,255,.09); border-radius:16px; padding:16px 16px 12px;
+    background:rgba(255,255,255,.02); }
+  .trv-wave .wh{ font-size:11.5px; font-weight:800; color:var(--st2-txt,#e8e9e6); margin-bottom:12px; }
+  .trv-wave .wh span{ font-size:10.5px; font-weight:600; color:var(--st2-faint); margin-left:7px; }
+  .trv-wbars{ display:flex; align-items:flex-end; gap:6px; height:86px; }
+  .trv-wb{ flex:1; display:flex; flex-direction:column; align-items:center; gap:5px; min-width:0; }
+  .trv-wb i{ display:block; width:100%; border-radius:5px 5px 2px 2px; min-height:3px;
+    background:linear-gradient(180deg,#FF7A45,rgba(255,122,69,.28)); box-shadow:0 0 12px rgba(255,122,69,.22); }
+  .trv-wb span{ font-size:8.5px; color:var(--st2-faint); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:100%; }
+  .trv-wb b{ font-family:'JetBrains Mono',monospace; font-size:9px; color:#FFA778; }
 
   /* ════ v481 · 마법 — 「먼저 말을 겁니다」 ════
      묻기 전에 알고리즘이 알아낸 것만 카드로 올린다. 계산이 안 되면 «왜 조용한지»를 말한다. */
@@ -21031,12 +21125,13 @@
     <!-- ═══════════════ 🎬 제작소 v2 (st2) — 홈+고객 셸 (내용은 JS 렌더) ═══════════════ -->
     <div id="st2-view" style="display:none;">
       <div class="st2-wrap">
+        <!-- v558 · 하단 유리 도크. 글리프는 앱 하단바 문법(⌂ ▤ ✎ ▣ ▦)과 한 혈통 — 이모지 금지 -->
         <div class="st2-ws" id="st2-ws">
-          <button class="on" data-st2tab="home">인사이트</button>
-          <button data-st2tab="cus">고객</button>
-          <button data-st2tab="trend">🔥 트렌드</button>
-          <button data-st2tab="scripts">원고</button>
-          <button data-st2tab="osmu">배포</button>
+          <button class="on" data-st2tab="home"><span class="g">◎</span><span class="t">인사이트</span></button>
+          <button data-st2tab="cus"><span class="g">◉</span><span class="t">고객</span></button>
+          <button data-st2tab="trend"><span class="g">△</span><span class="t">트렌드</span></button>
+          <button data-st2tab="scripts"><span class="g">✎</span><span class="t">원고</span></button>
+          <button data-st2tab="osmu"><span class="g">⬡</span><span class="t">배포</span></button>
         </div>
         <div id="st2-home"></div>
         <div id="st2-cus" style="display:none;"></div>
@@ -33120,6 +33215,7 @@
   //   들어오는 것 = 최근 반년 + trendScore 3점 이상. 전체보기 = 달별. 카드는 눌렀을 때만.
   const TRV_HALF = 183 * 24 * 3600 * 1000;
   let _trvMode = 'half';    // 'half' 반년 | 'all' 전체(달별)
+  let _trvFolder = 'stage'; // 폴더: stage 무대 | quad 사분면 | wall 벽 | rank 순위판
   let _trvOpenKw = null;    // 펼친 키워드 (칩 누르기 전엔 카드 안 보임)
   let _trvRun = false;      // 무대 rAF — 탭을 벗어나면 스스로 멈춘다 (v529 모션 절약)
 
@@ -33161,6 +33257,87 @@
       (d ? '<span>' + (d.getMonth() + 1) + '/' + d.getDate() + '</span>' : '') + '</div></div>';
   }
 
+  // ── 폴더 머리 (패턴 파악과 같은 문법: 지금 폴더는 크게, 나머지는 오른쪽 작게) ──
+  const TRV_FOLDERS = [
+    { k: 'stage', n: '🪂 무대', s: '무대' },
+    { k: 'quad', n: '◫ 사분면', s: '사분면' },
+    { k: 'wall', n: '▦ 벽', s: '벽' },
+    { k: 'rank', n: '🏆 순위판', s: '순위판' }
+  ];
+  function trvFolderHead(rs, kws) {
+    const cnt = { stage: kws.length, quad: rs.length, wall: rs.length, rank: kws.length };
+    const cur = TRV_FOLDERS.find(function (f) { return f.k === _trvFolder; }) || TRV_FOLDERS[0];
+    return '<div class="trv-fhd"><span class="trv-fbig">' + cur.n +
+      '<b>' + (cnt[cur.k] || 0) + '</b></span><span class="trv-fsmall">' +
+      TRV_FOLDERS.filter(function (f) { return f.k !== _trvFolder; }).map(function (f) {
+        return '<button data-trvf="' + f.k + '">' + f.s + '<b>' + (cnt[f.k] || 0) + '</b></button>';
+      }).join('') + '</span></div>';
+  }
+  // ── ◫ 사분면 — 나에게 핏(가로) × 반응(세로) ──
+  function trvQuadHtml(rs) {
+    const withFit = rs.filter(function (r) { return (r.rating > 0) || (r.views > 0); });
+    let h = '<p class="trv-lead">가로는 <b>나에게 핏</b>, 세로는 <b>반응(조회수)</b>입니다. ' +
+      '오른쪽 위로 갈수록 «내 것이면서 터진 것» — <b>바로 만들 자리</b>예요.</p>';
+    if (!withFit.length) {
+      return h + '<div class="trv-empty">아직 <b>핏·조회수</b>가 적힌 카드가 없어요.<br>' +
+        '정거장에서 ⭐ 핏을 매기거나 판독지에서 조회수를 넣으면 여기 점으로 뜹니다.</div>';
+    }
+    const mxV = Math.max.apply(null, withFit.map(function (r) { return r.views || 0; })) || 1;
+    let dots = '';
+    withFit.forEach(function (r) {
+      const fx = ((r.rating || 3) - 1) / 4;                       // 0~1 (핏 1~5)
+      const vy = Math.min(1, Math.sqrt((r.views || 0) / mxV));    // 조회수는 제곱근으로 눌러 편차 완화
+      const q = fx >= 0.5 ? (vy >= 0.5 ? 'q1' : 'q3') : (vy >= 0.5 ? 'q2' : 'q4');
+      dots += '<span class="trv-dot ' + q + '" data-trvrow="' + r.id + '" title="' +
+        esc((r.hook || '제목 없음').slice(0, 40)) + ' · 핏 ' + (r.rating || '—') +
+        (r.views ? ' · ▶ ' + fmtNum(r.views) : '') + '" style="left:' + (6 + fx * 88).toFixed(1) +
+        '%;top:' + (94 - vy * 88).toFixed(1) + '%"></span>';
+    });
+    h += '<div class="trv-quad"><div class="trv-qbox">' +
+      '<i class="ax h"></i><i class="ax v"></i>' +
+      '<span class="trv-qlb tr">바로 만들 것<small>내 것이고 터진다</small></span>' +
+      '<span class="trv-qlb tl">남의 유행<small>터지지만 내 것은 아님</small></span>' +
+      '<span class="trv-qlb br">내 건데 조용<small>포장을 바꿔볼 것</small></span>' +
+      '<span class="trv-qlb bl">지나간 것<small>굳이 쫓지 않기</small></span>' +
+      dots +
+      '<span class="trv-qax x">나에게 핏 →</span><span class="trv-qax y">반응 →</span>' +
+      '</div></div>';
+    if (withFit.length < 10) h += '<div class="trv-thin">지금 <b>' + withFit.length + '편</b>이에요. ' +
+      '10편쯤 모이면 «어느 쪽에 몰려 있는지»가 눈에 확 들어옵니다.</div>';
+    return h;
+  }
+  // ── 🏆 순위판 + 파도 — 어떤 말이 많이 나왔나 · 달마다 어떻게 출렁였나 ──
+  function trvRankHtml(rs, kws) {
+    let h = '<p class="trv-lead">내가 <b>「지금 왜?」에 적은 말</b>을 많이 나온 순으로 세웁니다. ' +
+      '아래 파도는 <b>달마다 몇 편이나 트렌드로 봤는지</b>예요.</p>';
+    if (!kws.length) {
+      h += '<div class="trv-empty">아직 적힌 말이 없어요.<br>' +
+        '트렌드 <b>3점 이상</b>을 줄 때 «지금 왜?» 한 마디를 적으면 여기 순위가 섭니다.</div>';
+    } else {
+      const mx = kws[0].n || 1;
+      h += '<div class="trv-rank">' + kws.slice(0, 12).map(function (p, i) {
+        return '<div class="trv-rk' + (i < 3 ? ' top' : '') + '" data-trvkw2="' + esc(p.k) + '">' +
+          '<i class="bar" style="width:' + (p.n / mx * 100).toFixed(0) + '%"></i>' +
+          '<span class="no">' + (i + 1) + '</span><span class="nm">' + esc(p.k) + '</span>' +
+          '<span class="ct">' + p.n + '편</span></div>';
+      }).join('') + '</div>';
+    }
+    // 파도 — 최근 6개월 (달별 편수)
+    const byMon = {};
+    rs.forEach(function (r) { const k = trvMonKey(r); byMon[k] = (byMon[k] || 0) + 1; });
+    const mons = Object.keys(byMon).sort().slice(-6);
+    if (mons.length) {
+      const mxM = Math.max.apply(null, mons.map(function (m) { return byMon[m]; })) || 1;
+      h += '<div class="trv-wave"><div class="wh">🌊 파도 <span>달마다 트렌드로 본 편수</span></div><div class="trv-wbars">' +
+        mons.map(function (m) {
+          const v = byMon[m];
+          return '<div class="trv-wb"><b>' + v + '</b><i style="height:' + Math.max(4, v / mxM * 62).toFixed(0) + 'px"></i>' +
+            '<span>' + esc(m.replace(/^\d+년\s*/, '')) + '</span></div>';
+        }).join('') + '</div></div>';
+    }
+    return h;
+  }
+
   function st2RenderTrend() {
     const host = document.getElementById('st2-trend'); if (!host) return;
     const all = _trvMode === 'all';
@@ -33184,7 +33361,7 @@
       '<path class="st" d="M7,21 L29,38 M53,21 L31,38"/>' +
       '<circle class="fl" cx="30" cy="41" r="3.6"/>' +
       '<path class="st" d="M30,45 v5 M30,48 l-4,4 M30,48 l4,4"/></svg>';
-    let h = '<div class="trv">' +
+    const stageH =
       '<div class="trv-stage"><div class="trv-sky" id="trv-sky">' +
         '<div class="trv-stars"></div>' +
         '<svg class="trv-rig" viewBox="0 0 900 440" preserveAspectRatio="none" aria-hidden="true">' +
@@ -33212,12 +33389,35 @@
         '</div>' +
       '</div></div>';
 
-    // ── 벽 (집계 먼저 · 카드는 눌렀을 때만) ──
+    // ── 폴더 4개: 무대 / 사분면 / 벽 / 순위판 (기간 세그먼트는 전 폴더 공통) ──
+    let h = '<div class="trv">' + trvFolderHead(rs, kws);
     h += '<div class="trv-bar"><div class="trv-seg" id="trv-seg">' +
       '<button' + (all ? '' : ' class="on"') + ' data-m="half">최근 반년</button>' +
-      '<button' + (all ? ' class="on"' : '') + ' data-m="all">전체 · 달별</button></div>' +
+      '<button' + (all ? ' class="on"' : '') + ' data-m="all">전체' + (_trvFolder === 'wall' ? ' · 달별' : '') + '</button></div>' +
       '<span class="n">트렌드 <b>3점 이상</b>만 이 방에 들어옵니다</span></div>';
 
+    if (_trvFolder === 'stage') {
+      h += stageH;
+      if (!rs.length) {
+        h += '<div class="trv-empty"><b>아직 이 방은 비어 있어요.</b><br>' +
+          '분류(정거장)에서 <b>🔥 트렌드 3점 이상</b>을 주면 그 카드가 여기 쌓입니다.<br>' +
+          '3점을 주면서 <b>「지금 왜?」 한 마디</b>를 적으면 — 저 능선 위에 그 말이 뜹니다.</div>';
+      } else {
+        h += '<div class="trv-thin">능선 위 점 = 내가 적은 <b>「지금 왜?」</b>. 자주 적은 말일수록 높이 떠 있어요. ' +
+          '자세히 보려면 <b>벽</b>이나 <b>순위판</b>으로.</div>';
+      }
+      h += '</div>'; host.innerHTML = h; trvWireTrend(host); trvStartStage(); return;
+    }
+    if (_trvFolder === 'quad') {
+      h += trvQuadHtml(rs);
+      h += '</div>'; host.innerHTML = h; trvWireTrend(host); return;
+    }
+    if (_trvFolder === 'rank') {
+      h += trvRankHtml(rs, kws);
+      h += '</div>'; host.innerHTML = h; trvWireTrend(host); return;
+    }
+
+    // ── ▦ 벽 (집계 먼저 · 카드는 눌렀을 때만) ──
     if (!rs.length) {
       h += '<div class="trv-empty"><b>아직 이 방은 비어 있어요.</b><br>' +
         '분류(정거장)에서 <b>🔥 트렌드 3점 이상</b>을 주면 그 카드가 여기 쌓입니다.<br>' +
@@ -33257,8 +33457,14 @@
     }
     h += '</div>';
     host.innerHTML = h;
+    trvWireTrend(host);
+  }
 
-    // ── 배선 ──
+  // 배선은 폴더 4개가 같이 쓴다 (폴더 전환 · 기간 · 칩 · 카드 · 사분면 점)
+  function trvWireTrend(host) {
+    host.querySelectorAll('[data-trvf]').forEach(function (b) {
+      b.onclick = function () { _trvFolder = b.dataset.trvf; _trvOpenKw = null; st2RenderTrend(); };
+    });
     const seg = document.getElementById('trv-seg');
     if (seg) seg.onclick = function (e) {
       const b = e.target.closest('button'); if (!b) return;
@@ -33271,10 +33477,13 @@
         st2RenderTrend();
       };
     });
+    // 순위판에서 말을 누르면 «벽»으로 건너가 그 말의 카드가 펼쳐진다
+    host.querySelectorAll('[data-trvkw2]').forEach(function (c) {
+      c.onclick = function () { _trvFolder = 'wall'; _trvMode = 'half'; _trvOpenKw = c.dataset.trvkw2; st2RenderTrend(); };
+    });
     host.querySelectorAll('[data-trvrow]').forEach(function (c) {
       c.onclick = function () { try { openDetail(c.dataset.trvrow); } catch (e) { console.error('[trv] 카드 열기 실패:', e); } };
     });
-    trvStartStage();
   }
 
   // 무대 비행 — 패러글라이딩 · 보통 속도 고정. 강해지는 건 색·크기·선명도·아우라 네 가지뿐.
