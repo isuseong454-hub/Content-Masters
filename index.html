@@ -1237,6 +1237,11 @@
   .rd-inp { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 800; text-align: right; width: 96px;
     background: rgba(0,0,0,.3); border: 1px solid var(--line2, rgba(255,255,255,.16)); border-radius: 7px; padding: 4px 8px; color: var(--text-main); }
   .rd-inp:focus { outline: none; border-color: var(--lime, #d7f34b); }
+  /* v556 · 트렌드 키워드 줄 — 점수 3점 이상일 때만 나타나는 «지금 왜?» */
+  .rd-spec .rd-kwr { background: rgba(255,122,69,.05); }
+  .rd-spec .rd-kwr .k { color: #FF9E6E; opacity: .85; }
+  .rd-spec .rd-kwr .v { flex-wrap: wrap; justify-content: flex-end; white-space: normal; font-family: inherit; font-size: 11.5px; gap: 4px; }
+  .rd-kwin { width: 100%; text-align: left; font-family: inherit !important; font-size: 12px !important; font-weight: 700; }
   .rd-memo { width: 100%; font-family: inherit; font-size: 12.5px; line-height: 1.65; color: var(--text-main);
     background: rgba(0,0,0,.24); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; resize: vertical; min-height: 62px; }
   .rd-memo:focus { outline: none; border-color: var(--lime, #d7f34b); }
@@ -20653,6 +20658,12 @@
     .slv-chips .slv-num.fill:first-child{border-radius:999px 0 0 999px}
     .slv-axis[data-ax="fit"] .slv-chip.slv-num.on{background:#F5C84B;color:#2A1E00;box-shadow:0 2px 10px rgba(245,200,75,.36)}
     .slv-axis[data-ax="trend"] .slv-chip.slv-num.on{background:#FF7A45;color:#2A0C00;box-shadow:0 2px 10px rgba(255,122,69,.36)}
+    /* v556 · «지금 왜?» — 트렌드 3점 이상일 때만 열리는 한 줄 */
+    .slv-kwax{margin-bottom:11px}
+    .slv-kwin{width:100%;margin-top:7px;font-family:inherit;font-size:12px;font-weight:700;color:var(--stext);
+      background:#15160F;border:1px solid rgba(255,122,69,.42);border-radius:9px;padding:9px 11px}
+    .slv-kwin::placeholder{color:var(--sfaint);font-weight:600}
+    .slv-kwin:focus{outline:none;border-color:#FF7A45;box-shadow:0 0 0 3px rgba(255,122,69,.14)}
     .slv-chip.addc{border-style:dashed;color:var(--sfaint)}
     /* ✦ 추론으로 미리 켜둔 것 — 내가 고른 것과 구분되게 점선 */
     .slv-chip.gsd{border-style:dashed;box-shadow:none}
@@ -22043,6 +22054,10 @@
   // v470 폐기 — 「호기심」은 거의 모든 후킹에 붙어서 골라도 정보가 안 남는다(사장님 확정)
   const DROP_COPY_TYPES = ['호기심'];
   const BASE_COPY_TYPES = ['문제 제시', '욕구 충족', '권위', '숫자', '상황POV', '공감', '위협/금지'];
+  // v556 · 「분야」 목록 분류는 폐기 (v554~555에서 넣었다가 되돌림 — 사장님 판단)
+  //   이유: AI가 채우는 라벨은 사람이 안 보면 형식만 남는다. 분야를 미리 14개로 나누는 건
+  //   개인이 알아서 할 일이고, 앱이 강제하면 «형식적»이 된다.
+  //   → 트렌드의 재료는 «사람이 직접 적는 트렌드 키워드»(r.trendKw) 하나로 간다.
 
   // 시트의 컨텐츠 유형(r.format) → 원고 기본 가이드 유형(basic.type) 매핑
   function mapFormatToBasicType(format) {
@@ -22961,6 +22976,7 @@
       hasThumb: false, hasCopy: false, hasComment: false,
       funnelStage: '', // '' | 'attract' (유입용) | 'convert' (전환용) | 'retain' (재구매)
       // 8축 재설계 (2026-07-12) — 질문 기반 분류 그릇 (AI 컨텐츠 정리가 채움)
+      trendKw: [],      // 🔥 트렌드 키워드 — «지금 왜 뜬다고 봤나» (v556 · 사람만 적을 수 있다)
       topicMain: '',    // 🎯 무슨 주제? (대표)
       topicSub: '',     // 🎯 보조 주제
       thumbHook: '',    // 🎣 어떻게 주의를 끌었나? (1개: 위협제시/욕구충족/POV(상황)/공감/호기심/비포애프터)
@@ -23018,6 +23034,8 @@
     if (!Array.isArray(r.techniques)) r.techniques = [];
     if (!Array.isArray(r.custMind)) r.custMind = [];
     if (typeof r.copyText !== 'string') r.copyText = '';
+    // v556 · 트렌드 키워드 — «지금 왜 뜬다고 봤나»를 사람이 적는 칸 (AI가 못 채운다)
+    if (!Array.isArray(r.trendKw)) r.trendKw = [];
   }
 
   async function saveRows() {
@@ -27219,6 +27237,7 @@
     const fn = RD_FUNNEL[r.funnelStage] || null;
     const num = v => v > 0 ? '<span class="v">' + Number(v).toLocaleString() + '</span>' : '<span class="v none">—</span>';
     document.getElementById('rd-spec').innerHTML =
+      // v554 · 분야가 맨 위 — 「어느 바닥에서 가져온 것인가」가 이 카드의 첫 정체성
       '<div class="r"><span class="k">조회수</span>' + (r.views > 0 ? '<span class="v" style="color:var(--lime,#d7f34b)">' + fmtViews(r.views) + '</span>' : '<span class="v none">—</span>') + '</div>' +
       '<div class="r"><span class="k">공유</span>' + num(r.shares) + '</div>' +
       '<div class="r"><span class="k">저장</span>' + num(r.saves) + '</div>' +
@@ -27226,8 +27245,9 @@
         (fn ? '<span class="rd-pill solid" style="background:' + fn[1] + '">' + fn[0] + '</span>' : '<span class="rd-pill none">아직</span>') + '</span></div>' +
       '<div class="r"><span class="k">나에게 핏</span><span class="v" style="color:#F5C84B">' +
         (r.rating > 0 ? rdDots(r.rating, '#F5C84B') + r.rating : '<span class="none">—</span>') + '</span></div>' +
-      '<div class="r"><span class="k">트렌드</span><span class="v" style="color:#FF7A45">' +
-        (r.trendScore > 0 ? rdDots(r.trendScore, '#FF7A45') + r.trendScore : '<span class="none">—</span>') + '</span></div>';
+      '<div class="r"><span class="k">트렌드 <i style="font-style:normal;opacity:.6">(선택)</i></span><span class="v" style="color:#FF7A45">' +
+        (r.trendScore > 0 ? rdDots(r.trendScore, '#FF7A45') + r.trendScore : '<span class="none">—</span>') + '</span></div>' +
+      rdKwRow(r);
 
     // ③ 유형 — 읽기 줄 + (수정 모드에서만) 고르는 칩
     const ro = (arr, bg) => (arr || []).length
@@ -27309,8 +27329,10 @@
     if (!_rdEdit) { spec.onclick = null; return; }
     spec.onclick = (e) => {
       const row = e.target.closest('.r'); if (!row) return;
-      const k = row.querySelector('.k').textContent.trim();
-      if (k === '퍼널') {
+      // ⚠️ 라벨에 «(선택)»이 붙은 줄이 있어 그대로 비교하면 안 걸린다
+      const k = row.querySelector('.k').textContent.trim().replace(/\s*\(선택\)\s*$/, '');
+      if (k === '지금 왜?') { rdEditKw(row, r); return; }
+      else if (k === '퍼널') {
         const order = ['attract', 'convert', ''];
         const cur = order.indexOf(formFunnelStage || '');
         formFunnelStage = order[(cur + 1) % order.length];
@@ -27321,6 +27343,27 @@
       else return;
       rdRefreshSpec(r);
     };
+  }
+  // v556 · 트렌드 키워드 줄 — 3점 이상일 때만 나타난다 (그 아래는 트렌드가 아니니까)
+  function rdKwRow(r) {
+    if (!(r.trendScore >= 3)) return '';
+    const kw = Array.isArray(r.trendKw) ? r.trendKw : [];
+    return '<div class="r rd-kwr"><span class="k">지금 왜?</span><span class="v">' +
+      (kw.length ? kw.map(t => '<span class="rd-pill" style="color:#FF9E6E;font-family:inherit">' + esc(t) + '</span>').join(' ')
+                 : '<span class="rd-pill none">한 마디로</span>') + '</span></div>';
+  }
+  function rdEditKw(row, r) {
+    if (row.querySelector('.rd-inp')) return;
+    const v = row.querySelector('.v'); if (!v) return;
+    const cur = (Array.isArray(r.trendKw) ? r.trendKw : []).join(', ');
+    v.outerHTML = '<input type="text" class="rd-inp rd-kwin" value="' + esc(cur) + '" placeholder="예: 3초 안에 답 주는 게 먹힘" />';
+    const inp = row.querySelector('.rd-inp'); inp.focus(); inp.select();
+    const done = () => {
+      r.trendKw = inp.value.split(/[,·]/).map(s => s.trim()).filter(Boolean).slice(0, 3);
+      rdRefreshSpec(r);
+    };
+    inp.onblur = done;
+    inp.onkeydown = (e) => { if (e.key === 'Enter') { e.preventDefault(); inp.blur(); } };
   }
   function rdEditNum(row, k, r) {
     if (row.querySelector('.rd-inp')) return;
@@ -27339,7 +27382,7 @@
   }
   function rdRefreshSpec(r) {
     // 명세만 다시 그린다 (전체 재렌더는 편집 중인 원고를 날린다)
-    const keep = { views: r.views, shares: r.shares, saves: r.saves, trendScore: r.trendScore,
+    const keep = { trendKw: r.trendKw, views: r.views, shares: r.shares, saves: r.saves, trendScore: r.trendScore,
       funnelStage: formFunnelStage, rating: formRating, thumbTypes: r.thumbTypes, copyTypes: r.copyTypes };
     const snap = Object.assign({}, r, keep);
     const spec = document.getElementById('rd-spec');
@@ -27357,8 +27400,9 @@
           (fn ? '<span class="rd-pill solid" style="background:' + fn[1] + '">' + fn[0] + '</span>' : '<span class="rd-pill none">아직</span>') + '</span></div>' +
         '<div class="r"><span class="k">나에게 핏</span><span class="v" style="color:#F5C84B">' +
           (snap.rating > 0 ? rdDots(snap.rating, '#F5C84B') + snap.rating : '<span class="none">—</span>') + '</span></div>' +
-        '<div class="r"><span class="k">트렌드</span><span class="v" style="color:#FF7A45">' +
-          (snap.trendScore > 0 ? rdDots(snap.trendScore, '#FF7A45') + snap.trendScore : '<span class="none">—</span>') + '</span></div>';
+        '<div class="r"><span class="k">트렌드 <i style="font-style:normal;opacity:.6">(선택)</i></span><span class="v" style="color:#FF7A45">' +
+          (snap.trendScore > 0 ? rdDots(snap.trendScore, '#FF7A45') + snap.trendScore : '<span class="none">—</span>') + '</span></div>' +
+        rdKwRow(snap);
     })();
     rdBindSpecEdit();
   }
@@ -41967,6 +42011,26 @@
 
   // 활성 유형 = (기본+커스텀) − 휴지통('keyword') — 정거장·작성카드·분류 폴더가 같은 목록을 봄
   function slvActiveTypes(a) { const h = _trashedSet('keyword'); return [...new Set(a.base().concat(a.custom()))].filter(t => !h.has(t)); }
+  // v556 · 정거장의 «지금 왜?» — 트렌드 3점 이상을 누르는 순간 열린다
+  function slvKwRow(r) {
+    const host = document.getElementById('slv-axes'); if (!host) return;
+    const ax = document.createElement('div');
+    ax.className = 'slv-axis slv-kwax'; ax.dataset.ax = 'kw'; ax.style.display = 'none';
+    ax.innerHTML = '<div class="slv-axh"><span class="d" style="background:#FF7A45"></span>' +
+      '<span class="n">🗣 지금 왜?</span><span class="hint">한 마디로 — 이게 트렌드 방에 쌓입니다</span></div>' +
+      '<input type="text" id="slv-kwin" class="slv-kwin" maxlength="40" placeholder="예: 3초 안에 답 주는 게 먹힘 (쉼표로 여러 개)" ' +
+      'value="' + esc((Array.isArray(r.trendKw) ? r.trendKw : []).join(', ')) + '" />';
+    host.appendChild(ax);
+    // 트렌드 칩을 누를 때마다 3점 이상인지 보고 열고 닫는다
+    const trAx = host.querySelector('.slv-axis[data-ax="trend"]');
+    const sync = () => {
+      const on = trAx && trAx.querySelector('.slv-chip.on');
+      const n = on ? parseInt(on.dataset.tr, 10) || 0 : (r.trendScore || 0);
+      ax.style.display = (n >= 3) ? '' : 'none';
+    };
+    if (trAx) trAx.addEventListener('click', () => setTimeout(sync, 0));
+    sync();
+  }
   function slvBuildAxes() {
     const host = document.getElementById('slv-axes'); host.innerHTML = '';
     const r = _slvQ[0]; if (!r) return;
@@ -42029,8 +42093,10 @@
         [1, 2, 3, 4, 5].map(n => '<button type="button" class="slv-chip slv-num" data-fit="' + n + '" title="' + '★'.repeat(n) + '">' + n + '</button>').join(''));
       // v548 · 트렌드 점수 — 적합도 엔진의 «트렌드» 축이 지금은 «담은 날짜»로만 계산된다.
       //   사람이 매기면 그게 진짜 트렌드가 되어 추천 정확도가 올라간다 (사장님 제안)
-      if (!(r.trendScore > 0)) addSpecial('trend', '#FF7A45', '🔥 트렌드', '지금 이 주제가 뜨고 있나 — 1(지났음) ~ 5(지금 한창)',
+      if (!(r.trendScore > 0)) addSpecial('trend', '#FF7A45', '🔥 트렌드 (선택)', '지금 이 주제가 뜨고 있나 — 1(지났음) ~ 5(지금 한창)',
         [1, 2, 3, 4, 5].map(n => '<button type="button" class="slv-chip slv-num" data-tr="' + n + '">' + n + '</button>').join(''));
+      // v556 · «지금 왜?» — 3점 이상 줄 때만 열린다. 이게 트렌드 방의 유일한 재료(AI가 못 채운다)
+      slvKwRow(r);
       // v550 · 접기 폐기 (사장님 「선택으로 빼면 안 돼, 다 보이게」).
       //   대신 «한 줄짜리 축»으로 납작하게 만들어 다 보이면서도 무대를 지킨다 — 아래 CSS .slv-axis.oneline
       // v547 · 조회수 축 삭제 — 프롬프트가 캡처를 읽어 이미 채운다 (사장님 확정).
@@ -42207,6 +42273,10 @@
     if (_ft) { r.rating = parseInt(_ft.dataset.fit, 10) || 0; picked++; }
     const _tr = host.querySelector('.slv-axis[data-ax="trend"] .slv-chip.on');   // v548
     if (_tr) { r.trendScore = parseInt(_tr.dataset.tr, 10) || 0; picked++; }
+    // v556 · «지금 왜?» 한 마디 (3점 이상일 때만 열려 있다)
+    const _kw = document.getElementById('slv-kwin');
+    if (_kw) { const v = _kw.value.split(/[,·]/).map(s => s.trim()).filter(Boolean).slice(0, 3);
+      if (v.length) { r.trendKw = v; picked++; } }
     const _vw = host.querySelector('.slv-axis[data-ax="views"] .slv-chip.on');
     if (_vw) { r.views = parseInt(_vw.dataset.vw, 10) || 0; picked++; }
     if (!picked) return;
