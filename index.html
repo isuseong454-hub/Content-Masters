@@ -16,6 +16,8 @@
   @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css');
   @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap');
   @import url('https://fonts.googleapis.com/css2?family=Jua&display=swap');
+  /* v566 · 원고 손질 방 전용 명조 — 서재의 «인쇄물» 격 (본문은 여전히 Pretendard) */
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@600;900&display=swap');
 
   :root {
     /* ═══════════════════════════════════════════════════════════════
@@ -16372,7 +16374,16 @@
     --cnv:#48c98a; --cnv-s:rgba(72,201,138,.45); --bone:#EDEAE3; }
   .cus2 .srf{ font-family:Georgia,'Times New Roman',Batang,serif; }
   /* 첫 페이지 */
-  .cus2-first{ text-align:center; padding:8px 0 4px; }
+  .cus2-first{ position:relative; text-align:center; padding:8px 0 4px; }
+  /* v565 · 이름 고치기 «그만두기» — 뒤로는 항상 오른쪽 위(앱 공통 규칙) */
+  .cus2-rnback{ position:absolute; right:0; top:0; z-index:2; width:27px; height:27px; border-radius:99px;
+    display:grid; place-items:center; font-size:14px; font-family:inherit; cursor:pointer; transition:.15s;
+    background:rgba(255,255,255,.045); border:1px solid var(--st2-line); color:var(--st2-sub); }
+  .cus2-rnback:hover{ color:var(--rose); border-color:var(--rose-s); }
+  /* v565 · «없어진 게 아니라 남아 있다»를 먼저 말하는 줄 */
+  .cus2-keep{ margin-top:14px; font-size:10.5px; line-height:1.6; color:#c9c6bf; text-align:center;
+    padding:9px 12px; border-radius:11px; background:rgba(212,115,127,.07); border:1px solid var(--rose-s); }
+  .cus2-keep b{ color:var(--rose); }
   .cus2-eye{ font-family:Georgia,serif; font-size:9px; letter-spacing:.3em; color:var(--st2-faint); text-transform:uppercase; }
   .cus2-stage{ position:relative; display:flex; justify-content:center; margin-top:16px; }
   .cus2-stage::before{ content:''; position:absolute; left:50%; top:46%; transform:translate(-50%,-50%);
@@ -16411,6 +16422,7 @@
     font-family:inherit; flex:none; transition:.15s; }
   .cus2-back:hover{ color:var(--rose); border-color:var(--rose-s); }
   .cus2-back.wide{ width:auto; padding:0 12px; font-size:10.5px; font-weight:700; }
+  .cus2-back.edit{ font-size:12px; }   /* v565 · ✎ 이름 고치기 — 뒤로가기(‹)와 헷갈리지 않게 */
   .cus2-who{ font-size:11.5px; font-weight:700; }
   .cus2-idx{ margin-left:auto; margin-right:2px; font-family:Georgia,serif; font-size:10px; color:var(--st2-faint); letter-spacing:.1em; }
   .cus2-tabs{ display:flex; padding:3px; border-radius:11px; background:rgba(255,255,255,.04);
@@ -20150,6 +20162,7 @@
         <div class="sh-top-bar">
           <span class="sh-asset" id="sh-asset"><i></i>자산 <b>0</b></span>
           <button type="button" class="sh-slbadge" id="sh-slbadge">🦾 미분류 <b>0</b></button>
+          <button type="button" class="sh-slbadge" id="sh-prpbadge">✎ 원고 손질 <b>0</b></button><!-- v566 · AI 분해 라인 마지막 칸 -->
           <button type="button" class="collect-open-btn" id="collect-open-btn" style="display:none;">⚡ 소재 수집</button>
         </div>
         <div class="sh-lb">간단히 담기 <i>3초면 됩니다</i></div>
@@ -20738,6 +20751,210 @@
     .sh-slbadge.show{display:inline-flex}
     .sh-slbadge b{font-family:'JetBrains Mono',monospace}
     </style>
+    <style>
+    /* ═══════════ ✎ 원고 재료 손질 (prp, v566) — 서재×램프×빨랫줄×필름 확정 조합 ═══════════ */
+    #prp{position:fixed;inset:0;z-index:1620;display:none;overflow-y:auto;
+      font-family:'Pretendard',-apple-system,sans-serif;
+      background:
+        radial-gradient(80% 55% at 76% 0%,rgba(255,225,170,.07),transparent 55%),
+        radial-gradient(120% 90% at 50% 110%,#171106,#080603 55%),#080603}
+    #prp.on{display:block}
+    .prp-beam{position:absolute;right:-60px;top:-40px;width:400px;height:500px;pointer-events:none;z-index:1;
+      background:linear-gradient(205deg,rgba(255,232,180,.09),rgba(255,232,180,.025) 45%,transparent 70%);
+      filter:blur(8px);transform:rotate(8deg)}
+    .prp-lamp{position:absolute;left:50%;top:0;transform:translateX(-50%);pointer-events:none;z-index:1}
+    .prp-lamp .cord{width:2px;height:44px;background:linear-gradient(180deg,rgba(255,255,255,.16),rgba(255,255,255,.05));margin:0 auto}
+    .prp-lamp .shade{width:88px;height:28px;background:linear-gradient(180deg,#1d1a14,#0e0c08);
+      clip-path:polygon(24% 0,76% 0,100% 100%,0 100%);margin:0 auto;position:relative}
+    .prp-lamp .shade::after{content:'';position:absolute;left:12%;right:12%;bottom:0;height:5px;border-radius:50%;
+      background:rgba(255,238,190,.9);filter:blur(2px)}
+    .prp-lamp .cone{width:540px;height:400px;margin:-4px auto 0;
+      background:linear-gradient(180deg,rgba(255,238,190,.13),rgba(255,238,190,.045) 46%,transparent 78%);
+      clip-path:polygon(42% 0,58% 0,100% 100%,0 100%);filter:blur(6px)}
+    .prp-deskbg{position:fixed;left:0;right:0;bottom:0;height:170px;pointer-events:none;z-index:1;
+      background:linear-gradient(180deg,transparent,rgba(0,0,0,.3) 30%),
+      repeating-linear-gradient(88deg,#2a1f12 0 6px,#211809 6px 13px,#281e10 13px 21px)}
+    .prp-deskbg::before{content:'';position:absolute;left:0;right:0;top:0;height:2px;
+      background:linear-gradient(90deg,transparent,rgba(255,238,190,.2),transparent)}
+    .prp-ring{position:fixed;right:52px;bottom:38px;width:56px;height:56px;border-radius:50%;z-index:1;
+      border:5px solid rgba(120,80,40,.32);filter:blur(1px);pointer-events:none}
+    .prp-motes{position:absolute;left:0;right:0;top:0;height:480px;pointer-events:none;z-index:2;overflow:hidden}
+    .prp-mote{position:absolute;width:2px;height:2px;border-radius:50%;background:rgba(255,238,190,.6);opacity:0;
+      animation:prpDrift var(--md,9s) linear infinite;animation-delay:var(--mdel,0s)}
+    @keyframes prpDrift{0%{transform:translateY(24px);opacity:0}18%{opacity:var(--mo,.5)}82%{opacity:var(--mo,.5)}100%{transform:translateY(-130px);opacity:0}}
+
+    .prp-in{position:relative;z-index:3;max-width:980px;margin:0 auto;padding:22px 20px 90px}
+    .prp-top{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+    .prp-top .t{font-size:13px;font-weight:800;color:#eae8de}
+    .prp-top .c{font-family:'JetBrains Mono',monospace;font-size:10px;color:#63695f;margin-left:auto;font-variant-numeric:tabular-nums}
+    .prp-x{width:27px;height:27px;border-radius:99px;border:1px solid rgba(255,255,255,.14);display:grid;place-items:center;
+      font-size:12px;color:#9aa094;background:rgba(0,0,0,.3);cursor:pointer;font-family:inherit;flex:none}
+    .prp-x:hover{color:#eae8de;border-color:rgba(255,255,255,.3)}
+
+    .prp-floor{display:grid;grid-template-columns:160px minmax(0,1fr);gap:24px;align-items:start}
+    @media(max-width:780px){.prp-floor{grid-template-columns:1fr;gap:14px}}
+    .prp-qz{position:sticky;top:16px}
+    @media(max-width:780px){.prp-qz{position:static;display:flex;align-items:center;gap:18px}}
+    .prp-qcap{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.16em;color:#63695f;text-transform:uppercase;margin-bottom:12px}
+    @media(max-width:780px){.prp-qcap{margin-bottom:0}}
+    .prp-rope{position:relative;height:190px;width:148px;cursor:pointer;flex:none}
+    @media(max-width:780px){.prp-rope{height:120px}}
+    .prp-rope::before{content:'';position:absolute;left:-8px;right:-8px;top:16px;height:1px;
+      background:rgba(255,255,255,.25);transform:rotate(-2deg)}
+    .prp-rope .hp{position:absolute;top:18px;width:58px;height:80px;border-radius:4px;
+      border:1px solid rgba(255,255,255,.13);transform-origin:top center;
+      box-shadow:0 10px 20px -8px rgba(0,0,0,.9);animation:prpSway 5.5s ease-in-out infinite;
+      background:linear-gradient(158deg,#3a2c30,#1d1518)}
+    @media(max-width:780px){.prp-rope .hp{width:42px;height:58px}}
+    .prp-rope .hp::before{content:'';position:absolute;left:50%;top:-7px;margin-left:-2px;width:4px;height:9px;
+      background:#6b5b46;border-radius:1px}
+    .prp-rope .hp::after{content:'';position:absolute;left:4px;top:0;bottom:0;width:4px;
+      background:repeating-linear-gradient(180deg,rgba(255,255,255,.15) 0 4px,transparent 4px 9px)}
+    @keyframes prpSway{0%,100%{transform:rotate(var(--sr,2deg))}50%{transform:rotate(calc(var(--sr,2deg) * -1))}}
+    .prp-rope .pn{position:absolute;right:0;bottom:6px;font-family:'JetBrains Mono',monospace;font-size:10px;color:#9aa094;
+      background:rgba(0,0,0,.62);border:1px solid rgba(255,255,255,.12);border-radius:99px;padding:4px 10px;white-space:nowrap}
+    .prp-rope.empty .pn{color:#d7f34b;border-color:rgba(215,243,75,.35)}
+
+    .prp-panel{position:relative;border-radius:16px;padding:18px 26px 22px;min-width:0;
+      background:linear-gradient(0deg,rgba(255,238,190,.05),transparent 55%),
+        linear-gradient(160deg,rgba(255,255,255,.045),rgba(255,255,255,.014));
+      border:1px solid rgba(255,255,255,.13);
+      box-shadow:0 26px 60px -30px rgba(0,0,0,.95),inset 0 1px 0 rgba(255,255,255,.09),0 0 80px -20px rgba(255,238,190,.12)}
+    .prp-panel::after{content:'';position:absolute;top:10px;bottom:10px;right:9px;width:7px;
+      background:repeating-linear-gradient(180deg,rgba(255,255,255,.13) 0 7px,transparent 7px 16px)}
+    @keyframes prpFilmIn{from{opacity:0;transform:translateX(38px) rotate(.6deg)}}
+    @keyframes prpFilmOut{to{opacity:0;transform:translateX(-38px) rotate(-.6deg)}}
+    .prp-panel.in{animation:prpFilmIn .42s cubic-bezier(.2,1.05,.35,1)}
+    .prp-panel.out{animation:prpFilmOut .24s ease-in forwards}
+
+    .prp-fhead{display:flex;gap:13px;align-items:center;padding-bottom:13px;margin-bottom:14px;border-bottom:1px solid rgba(255,255,255,.09)}
+    .prp-tt{font-family:'Noto Serif KR',Georgia,serif;font-weight:900;font-size:16.5px;letter-spacing:-.01em;line-height:1.4;color:#eae8de}
+    .prp-eyebrow{font-family:'Noto Serif KR',Georgia,serif;font-weight:600;font-size:9px;letter-spacing:.34em;color:#8a8474;text-transform:uppercase;margin-bottom:4px}
+    .prp-ms{display:flex;flex-wrap:wrap;gap:4px 12px;margin-top:7px;font-family:'JetBrains Mono',monospace;font-size:10px;color:#eae8de}
+    .prp-ms b{font-weight:700}
+    .prp-ms s{text-decoration:none;color:#63695f;letter-spacing:.08em;font-size:8.5px;text-transform:uppercase;margin-right:3px}
+
+    .prp-fbody{display:grid;grid-template-columns:24px minmax(0,1fr);gap:16px}
+    .prp-vlad{display:flex;flex-direction:column;align-items:center;padding:6px 0 10px}
+    .prp-vlad .rung{position:relative;width:18px;height:5px;border-radius:1px;background:var(--c);cursor:pointer;flex:none;transition:transform .18s}
+    .prp-vlad .rung:hover{transform:scaleX(1.25)}
+    .prp-vlad .rung::after{content:'';position:absolute;left:-11px;top:50%;transform:translateY(-50%);
+      width:6px;height:6px;border-radius:50%;opacity:0;transition:.2s}
+    .prp-vlad .rung.k::after{background:#FF4438;box-shadow:0 0 8px rgba(255,68,56,.7);opacity:1}
+    .prp-vlad .rung.r::after{background:#FFA02C;box-shadow:0 0 8px rgba(255,160,44,.6);opacity:1}
+    .prp-vlad .vln{flex:1;width:0;border-left:2px dashed rgba(255,255,255,.18);margin:3px 0;min-height:14px}
+
+    .prp-sg{position:relative;padding:8px 0 14px}
+    .prp-sgl{display:inline-flex;align-items:center;gap:5px;font-size:9.5px;font-weight:800;letter-spacing:.05em;
+      border:1px solid transparent;border-radius:5px;padding:2px 8px;margin-left:-8px;cursor:pointer;
+      background:none;font-family:inherit;color:inherit;transition:.15s}
+    .prp-sgl:hover{border-color:currentColor;background:rgba(255,255,255,.05)}
+    .prp-sgl .cv{font-size:7.5px;opacity:.5}
+    .prp-sgt{font-size:13.5px;line-height:1.95;margin-top:6px;word-break:keep-all;
+      user-select:none;-webkit-user-select:none;color:#eae8de}
+    .prp-sgt .w{border-radius:3px;padding:0 1px;transition:background .1s,color .1s}
+    .prp-sgt .w.k{color:#FF8A7A;font-weight:700;background:rgba(255,68,56,.13);box-shadow:inset 0 -2px 0 rgba(255,68,56,.6)}
+    .prp-sgt .w.r{color:#FFC585;background:rgba(255,160,44,.11);box-shadow:inset 0 -2px 0 rgba(255,160,44,.5)}
+    #prp[data-tool="k"] .prp-sgt,#prp[data-tool="r"] .prp-sgt,#prp[data-tool="e"] .prp-sgt{cursor:crosshair;touch-action:none}
+    #prp[data-tool="t"] .prp-sgt{user-select:text;-webkit-user-select:text;cursor:text}
+    #prp[data-tool="t"] .prp-sgt[contenteditable="true"]{outline:1px dashed rgba(215,243,75,.4);outline-offset:6px;border-radius:4px}
+    #prp.cutting .prp-sgt{cursor:col-resize}
+    #prp.cutting .prp-sgt .w:hover{background:rgba(215,243,75,.25)}
+
+    .prp-tray{position:sticky;bottom:14px;z-index:5;margin-top:16px;
+      display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+      padding:12px 15px;border-radius:16px;
+      background:linear-gradient(180deg,rgba(34,26,16,.93),rgba(23,17,10,.97));
+      border:1px solid rgba(255,238,190,.13);
+      box-shadow:0 18px 40px -18px rgba(0,0,0,.95),inset 0 1px 0 rgba(255,238,190,.08);
+      backdrop-filter:blur(10px)}
+    .prp-pen{display:flex;align-items:center;gap:7px;font-family:inherit;font-size:11px;font-weight:800;
+      padding:9px 12px;border-radius:11px;border:1px solid rgba(255,255,255,.09);background:rgba(0,0,0,.3);
+      color:#9aa094;cursor:pointer;transition:transform .2s cubic-bezier(.2,1.4,.4,1),border-color .2s,color .2s}
+    .prp-pen .nib{width:22px;height:7px;border-radius:2px;flex:none;clip-path:polygon(0 0,80% 0,100% 50%,80% 100%,0 100%)}
+    .prp-pen[data-t="k"] .nib{background:#FF4438} .prp-pen[data-t="r"] .nib{background:#FFA02C}
+    .prp-pen[data-t="e"] .nib{background:#8b9184;clip-path:none;border-radius:3px;height:9px}
+    .prp-pen[data-t="t"] .nib{background:#d7f34b;clip-path:polygon(0 20%,70% 20%,70% 0,100% 50%,70% 100%,70% 80%,0 80%)}
+    .prp-pen.on{transform:translateY(-7px);color:#eae8de}
+    .prp-pen[data-t="k"].on{border-color:#FF4438;box-shadow:0 12px 22px -10px rgba(255,68,56,.5)}
+    .prp-pen[data-t="r"].on{border-color:#FFA02C;box-shadow:0 12px 22px -10px rgba(255,160,44,.45)}
+    .prp-pen[data-t="e"].on{border-color:#8b9184}
+    .prp-pen[data-t="t"].on{border-color:#d7f34b;box-shadow:0 12px 22px -10px rgba(215,243,75,.4)}
+    .prp-hint{font-size:10.5px;color:#63695f;margin-left:auto;line-height:1.5}
+    .prp-hint b{color:#9aa094}
+
+    .prp-foot{display:flex;align-items:center;gap:12px;margin-top:14px;position:relative;z-index:3}
+    .prp-foot .n{font-family:'JetBrains Mono',monospace;font-size:10px;color:#63695f;font-variant-numeric:tabular-nums}
+    .prp-foot .bar{flex:1;height:3px;background:rgba(255,255,255,.09);border-radius:1px;overflow:hidden}
+    .prp-foot .bar i{display:block;height:100%;background:#d7f34b;transition:width .45s cubic-bezier(.2,.9,.3,1)}
+    .prp-go{position:relative;font-family:inherit;font-size:11.5px;font-weight:800;padding:11px 22px;border-radius:99px;
+      color:#d7f34b;cursor:pointer;
+      background:linear-gradient(160deg,rgba(215,243,75,.15),rgba(215,243,75,.04));
+      border:1px solid rgba(215,243,75,.42);backdrop-filter:blur(12px);
+      box-shadow:0 14px 30px -14px rgba(215,243,75,.4),inset 0 1px 0 rgba(255,255,255,.22),inset 0 -8px 16px -10px rgba(215,243,75,.25);
+      transition:transform .2s cubic-bezier(.2,1.3,.4,1),box-shadow .2s}
+    .prp-go::before{content:'';position:absolute;left:14%;right:14%;top:1px;height:38%;border-radius:99px;
+      background:linear-gradient(180deg,rgba(255,255,255,.22),transparent);pointer-events:none}
+    .prp-go:hover{transform:translateY(-2px);
+      box-shadow:0 20px 40px -16px rgba(215,243,75,.55),inset 0 1px 0 rgba(255,255,255,.3),inset 0 -8px 16px -10px rgba(215,243,75,.3)}
+    .prp-go:active{transform:translateY(0) scale(.96)}
+    .prp-go.done{color:#9aa094;border-color:rgba(255,255,255,.18);background:rgba(255,255,255,.05);box-shadow:none}
+
+    .prp-fin{text-align:center;padding:46px 20px 40px}
+    .prp-fin .ic{font-size:32px}
+    .prp-fin b{display:block;font-family:'Noto Serif KR',Georgia,serif;font-weight:900;font-size:17px;margin:14px 0 8px;letter-spacing:-.01em;color:#eae8de}
+    .prp-fin p{margin:0 auto;font-size:12.5px;color:#9aa094;line-height:1.8;max-width:38ch}
+
+    .prp-casc{position:fixed;z-index:1660;min-width:198px;display:none;
+      background:#171310;border:1px solid rgba(255,255,255,.18);border-radius:15px;padding:7px;
+      box-shadow:0 28px 60px rgba(0,0,0,.8);transform-origin:top left}
+    .prp-casc.on{display:block;animation:prpCascIn .3s cubic-bezier(.2,1.25,.35,1)}
+    @keyframes prpCascIn{from{opacity:0;transform:translateY(-10px) scale(.94)}}
+    .prp-ci{display:flex;align-items:center;gap:9px;width:100%;text-align:left;font-family:inherit;
+      font-size:11.5px;font-weight:700;padding:8px 11px;border-radius:9px;border:none;background:none;
+      color:#eae8de;cursor:pointer;opacity:0;transform:translateY(-7px);transition:opacity .3s,transform .3s,background .14s}
+    .prp-casc.on .prp-ci{opacity:1;transform:none}
+    .prp-ci:hover{background:rgba(255,255,255,.07)}
+    .prp-ci .sw{width:9px;height:9px;border-radius:2px;flex:none;background:var(--c)}
+    .prp-cd{height:1px;background:rgba(255,255,255,.09);margin:6px 9px}
+    .prp-cact{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;padding:2px 4px 3px}
+    .prp-cact button{font-family:inherit;font-size:10px;font-weight:800;padding:7px 0;border-radius:8px;
+      border:1px solid rgba(255,255,255,.09);background:rgba(0,0,0,.25);color:#9aa094;cursor:pointer;
+      opacity:0;transform:translateY(-7px);transition:opacity .3s,transform .3s,color .14s,border-color .14s}
+    .prp-casc.on .prp-cact button{opacity:1;transform:none}
+    .prp-cact button:hover{color:#eae8de;border-color:rgba(255,255,255,.22)}
+    @media(prefers-reduced-motion:reduce){.prp-mote,.prp-rope .hp{animation:none!important}}
+    </style>
+    <div id="prp" data-tool="">
+      <div class="prp-beam"></div>
+      <div class="prp-lamp"><div class="cord"></div><div class="shade"></div><div class="cone"></div></div>
+      <div class="prp-deskbg"></div><div class="prp-ring"></div>
+      <div class="prp-motes" id="prp-motes"></div>
+      <div class="prp-in">
+        <div class="prp-top"><span class="t">✎ 원고 손질</span><span class="c" id="prp-idx">— / —</span>
+          <button type="button" class="prp-x" id="prp-x" title="닫기">✕</button></div>
+        <div class="prp-floor">
+          <div class="prp-qz"><div class="prp-qcap">아직 안 한 것</div><div class="prp-rope" id="prp-rope"></div></div>
+          <div style="min-width:0">
+            <div id="prp-host"></div>
+            <div class="prp-tray" id="prp-tray">
+              <button type="button" class="prp-pen" data-t="k"><span class="nib"></span>핵심</button>
+              <button type="button" class="prp-pen" data-t="r"><span class="nib"></span>참고</button>
+              <button type="button" class="prp-pen" data-t="e"><span class="nib"></span>지우개</button>
+              <button type="button" class="prp-pen" data-t="t"><span class="nib"></span>글 고치기</button>
+              <span class="prp-hint" id="prp-hint">펜을 집으세요</span>
+            </div>
+            <div class="prp-foot">
+              <span class="n"><b id="prp-cnt">0</b> 곳</span>
+              <span class="bar"><i id="prp-prog" style="width:0%"></i></span>
+              <button type="button" class="prp-go" id="prp-go">다음 원고 →</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="prp-casc" id="prp-casc"></div>
+
     <div id="slv">
       <div class="slv-wrap">
         <div class="slv-top">
@@ -33690,10 +33907,12 @@
   function trvFolderHead(rs, kws) {
     const cnt = { stage: kws.length, quad: rs.length, wall: rs.length, rank: kws.length };
     const cur = TRV_FOLDERS.find(function (f) { return f.k === _trvFolder; }) || TRV_FOLDERS[0];
+    // v565 · 0이면 숫자를 아예 안 붙인다 — 빈 화면 4법칙 ④ «0으로 겁주지 않기»
+    const num = function (k) { const n = cnt[k] || 0; return n ? '<b>' + n + '</b>' : ''; };
     return '<div class="trv-fhd"><span class="trv-fbig">' + cur.n +
-      '<b>' + (cnt[cur.k] || 0) + '</b></span><span class="trv-fsmall">' +
+      num(cur.k) + '</span><span class="trv-fsmall">' +
       TRV_FOLDERS.filter(function (f) { return f.k !== _trvFolder; }).map(function (f) {
-        return '<button data-trvf="' + f.k + '">' + f.s + '<b>' + (cnt[f.k] || 0) + '</b></button>';
+        return '<button data-trvf="' + f.k + '">' + f.s + num(f.k) + '</button>';
       }).join('') + '</span></div>';
   }
   // ── ◫ 사분면 — 나에게 핏(가로) × 반응(세로) ──
@@ -41314,6 +41533,7 @@
     const sb = document.getElementById('sh-slbadge');
     if (sb) { sb.classList.toggle('show', n > 0); const bb = sb.querySelector('b'); if (bb) bb.textContent = n; }
     const rd = document.getElementById('rs-dot'); if (rd) rd.classList.toggle('on', n > 0); // 방 스위처 알림 점
+    try { prpRefreshBadge(); } catch (e) {}   // v566 · 손질 대기 수도 같은 자리에서 갱신
     // 🧊 자산 큐브 카운터 (채워진 행 = 자산)
     try {
       const as = document.getElementById('sh-asset');
@@ -41838,6 +42058,366 @@
   }
   window.__openSortLine = slvOpen;
   try { document.addEventListener('DOMContentLoaded', () => { slvInit(); slvRefreshEntries(); }); } catch (e) {}
+
+  // ============================================================
+  // ✎ 원고 재료 손질 (prp, v566) — AI 분해 라인의 마지막 칸
+  //   골대 → 정식 분해 → 🦾 정거장(축) → ✎ 손질 → 끝.
+  //   «펜을 든다» 방식 — 드래그 선택을 안 쓰므로 아이폰 복사 메뉴와 부딪히지 않는다.
+  //   저장: r.prep = { marks:{조각i:{단어j:'k'|'r'}}, done:true }
+  // ============================================================
+  const PRP_LBLS = [
+    ['이득&손해', 'gain'], ['공감 상황', 'empathy'], ['원인·이유', ''], ['방법', 'method'],
+    ['증거', ''], ['비교', ''], ['반박', ''], ['소구포인트', 'appeal'], ['CTA', 'cta']
+  ];
+  let _prpQ = [], _prpCur = null, _prpTool = null, _prpPainting = false, _prpInited = false, _prpCut = false;
+
+  // 행 → 조각 배열 [{k라벨, c섹션키, t본문}] (flex 우선, 없으면 5칸에서 만든다)
+  function prpSegsOf(r) {
+    try { mergeIntroFlex(r.scriptSecFlex); } catch (e) {}
+    if (Array.isArray(r.scriptSecFlex) && r.scriptSecFlex.length) {
+      return r.scriptSecFlex.filter(x => (x.t || '').replace(/<[^>]*>/g, '').trim());
+    }
+    const out = [];
+    SCRIPT_SECTIONS.forEach(s => {
+      const v = ((r.scriptSections || {})[s.key] || '').replace(/<[^>]*>/g, '').trim();
+      if (v) out.push({ k: s.label, c: s.key, t: v });
+    });
+    return out;
+  }
+  function prpHasScript(r) { return prpSegsOf(r).length > 0; }
+  function prpPending() { return (rows || []).filter(r => prpHasScript(r) && !(r.prep && r.prep.done)); }
+  function prpColor(seg) {
+    const meta = seg.c ? SCRIPT_SECTIONS.find(s => s.key === seg.c) : null;
+    return meta ? meta.color : flexLabelColor(seg.k);
+  }
+  function prpRefreshBadge() {
+    const el = document.getElementById('sh-prpbadge'); if (!el) return;
+    const n = prpPending().length;
+    el.classList.toggle('show', n > 0);
+    const bb = el.querySelector('b'); if (bb) bb.textContent = n;
+  }
+
+  function prpOpen() {
+    prpInit();
+    _prpQ = prpPending();
+    if (!_prpQ.length) { toast('손질할 원고가 없어요 — 원고가 담긴 카드가 대상입니다'); return; }
+    _prpCur = 0;
+    document.getElementById('prp').classList.add('on');
+    document.body.classList.add('cm-ov-open');
+    window.scrollTo(0, 0);
+    prpRenderFilm(false); prpRenderRope();
+  }
+  function prpClose() {
+    prpSaveCur();
+    document.getElementById('prp').classList.remove('on');
+    document.body.classList.remove('cm-ov-open');
+    prpCascClose();
+    try { renderTable(); } catch (e) {}
+    prpRefreshBadge();
+  }
+
+  function prpInit() {
+    if (_prpInited) return; _prpInited = true;
+    // 램프 빛 속 먼지
+    let h = '';
+    for (let i = 0; i < 10; i++) h += '<span class="prp-mote" style="left:' + (24 + ((i * 37) % 54)) + '%;top:' + (12 + ((i * 23) % 50)) + '%;--md:' + (7 + (i % 5) * 1.7) + 's;--mdel:' + (i * .9) + 's;--mo:' + (.3 + (i % 3) * .18) + '"></span>';
+    document.getElementById('prp-motes').innerHTML = h;
+
+    document.getElementById('prp-x').onclick = prpClose;
+    document.getElementById('prp-go').onclick = prpNext;
+    document.getElementById('prp-rope').onclick = function () { if (_prpCur < _prpQ.length - 1) prpNext(); };
+
+    const HINTS = { k: '<b>핵심 펜</b> — 글 위를 쓸면 빨갛게', r: '<b>참고 펜</b> — 글 위를 쓸면 주황으로',
+      e: '<b>지우개</b> — 문지르면 지워져요', t: '<b>글 고치기</b> — 바로 타이핑하세요' };
+    document.getElementById('prp-tray').addEventListener('click', function (e) {
+      const b = e.target.closest('.prp-pen'); if (!b) return;
+      if (_prpTool === 't' && b.dataset.t !== 't') prpCommitText();   // 글 고치기에서 빠져나올 때 저장
+      _prpTool = (_prpTool === b.dataset.t) ? null : b.dataset.t;
+      document.querySelectorAll('.prp-pen').forEach(p => p.classList.toggle('on', p.dataset.t === _prpTool));
+      const rt = document.getElementById('prp'); rt.dataset.tool = _prpTool || '';
+      rt.classList.remove('cutting'); _prpCut = false;
+      document.getElementById('prp-hint').innerHTML = _prpTool ? HINTS[_prpTool] : '펜을 집으세요';
+      document.querySelectorAll('.prp-sgt').forEach(el => el.contentEditable = (_prpTool === 't') ? 'true' : 'false');
+    });
+
+    const rt = document.getElementById('prp');
+    rt.addEventListener('pointerdown', function (e) {
+      if (_prpCut) return;                       // 자르기 모드는 click으로 처리
+      if (!_prpTool || _prpTool === 't') return;
+      if (!e.target.closest('#prp-host')) return;
+      _prpPainting = true; prpPaintAt(e.clientX, e.clientY); e.preventDefault();
+    });
+    document.addEventListener('pointermove', function (e) { if (_prpPainting) prpPaintAt(e.clientX, e.clientY); });
+    document.addEventListener('pointerup', function () { if (_prpPainting) { _prpPainting = false; prpCollect(); prpSync(); } });
+
+    // 라벨 → 캐스케이드 / 자르기 클릭
+    rt.addEventListener('click', function (e) {
+      if (_prpCut) {
+        const w = e.target.closest('.prp-sgt .w');
+        if (w) { prpDoCut(w); return; }
+      }
+      const lb = e.target.closest('.prp-sgl');
+      if (lb) { prpCascOpen(lb); e.stopPropagation(); }
+    });
+  }
+
+  function prpPaintAt(x, y) {
+    const el = document.elementFromPoint(x, y);
+    if (!el || !el.classList || !el.classList.contains('w')) return;
+    if (!el.closest('#prp-host')) return;
+    el.classList.remove('k', 'r');
+    if (_prpTool !== 'e') el.classList.add(_prpTool);
+  }
+
+  function prpRenderFilm(anim) {
+    const r = _prpQ[_prpCur]; if (!r) return;
+    const segs = prpSegsOf(r);
+    const marks = (r.prep && r.prep.marks) || {};
+    const html = segs.map(function (s, i) {
+      const t = (s.t || '').replace(/<[^>]*>/g, '');
+      const mk = marks[i] || {};
+      const words = t.split(/\s+/).filter(Boolean).map(function (w, j) {
+        const c = mk[j] ? ' ' + mk[j] : '';
+        return '<i class="w' + c + '" data-j="' + j + '">' + esc(w) + '</i>';
+      }).join(' ');
+      const col = prpColor(s);
+      return '<div class="prp-sg" data-i="' + i + '" style="color:' + col + '">' +
+        '<button type="button" class="prp-sgl">' + esc(s.k || (SCRIPT_SECTIONS.find(x => x.key === s.c) || {}).label || '구간') + ' <span class="cv">▾</span></button>' +
+        '<div class="prp-sgt" data-i="' + i + '">' + words + '</div></div>';
+    }).join('');
+
+    const thumb = r.thumb ? '<span class="prp-th" style="width:50px;aspect-ratio:9/13;border-radius:6px;flex:none;background:#20181b center/cover url(' + JSON.stringify(r.thumb) + ')"></span>'
+      : '<span class="prp-th" style="width:50px;aspect-ratio:9/13;border-radius:6px;flex:none;background:linear-gradient(158deg,#4d353b,#251b1f 60%,#140e11)"></span>';
+    const fmt = n => (n == null || n === '') ? '—' : (Number(n) >= 10000 ? (Number(n) / 10000).toFixed(1).replace(/\.0$/, '') + '만' : Number(n).toLocaleString());
+
+    document.getElementById('prp-host').innerHTML =
+      '<div class="prp-panel' + (anim ? ' in' : '') + '">' +
+        '<div class="prp-fhead">' + thumb +
+          '<span style="min-width:0;flex:1">' +
+            '<span class="prp-eyebrow">원고</span>' +
+            '<span class="prp-tt">' + esc(r.hook || r.topicMain || r.idea || '(제목 없음)') + '</span>' +
+            '<span class="prp-ms">' +
+              '<span><s>조회</s><b>' + fmt(r.views) + '</b></span>' +
+              '<span><s>퍼널</s><b style="color:' + (r.funnel === '전환' ? '#2FD07B' : '#F2809A') + '">' + esc(r.funnel || '—') + '</b></span>' +
+              '<span><s>핏</s><b style="color:#d7f34b">' + (r.rating ? '★'.repeat(r.rating) : '—') + '</b></span>' +
+              (r.trendScore ? '<span><s>트렌드</s><b style="color:#FF7A45">' + r.trendScore + '</b></span>' : '') +
+            '</span></span></div>' +
+        '<div class="prp-fbody"><div class="prp-vlad" id="prp-lad"></div><div id="prp-segs">' + html + '</div></div>' +
+      '</div>';
+
+    document.getElementById('prp-idx').textContent =
+      String(_prpCur + 1).padStart(2, '0') + ' / ' + String(_prpQ.length).padStart(2, '0');
+    if (_prpTool === 't') document.querySelectorAll('.prp-sgt').forEach(e => e.contentEditable = 'true');
+    prpSync();
+  }
+
+  function prpRenderRope() {
+    const left = _prpQ.length - _prpCur - 1, q = document.getElementById('prp-rope');
+    let h = '', n = Math.min(left, 3);
+    for (let i = 0; i < n; i++) {
+      const r = _prpQ[_prpCur + 1 + i];
+      const bg = r && r.thumb ? 'center/cover url(' + JSON.stringify(r.thumb) + ')' : 'linear-gradient(158deg,#3a2c30,#1d1518)';
+      h += '<span class="hp" style="left:' + (i * 42) + 'px;background:' + bg + ';--sr:' + ((i % 2 ? -1 : 1) * (2 + i)) + 'deg;animation-delay:' + (i * .7) + 's"></span>';
+    }
+    q.className = 'prp-rope' + (left ? '' : ' empty');
+    q.innerHTML = h + '<span class="pn">' + (left ? left + '장 남음' : '다 했어요') + '</span>';
+  }
+
+  function prpLadder() {
+    const lad = document.getElementById('prp-lad'); if (!lad) return;
+    const sgs = document.querySelectorAll('#prp-segs .prp-sg'), h = [];
+    sgs.forEach(function (sg, i) {
+      const mk = sg.querySelector('.w.k') ? ' k' : sg.querySelector('.w.r') ? ' r' : '';
+      h.push('<span class="rung' + mk + '" data-i="' + i + '" style="--c:' + sg.style.color + '"></span>');
+    });
+    lad.innerHTML = h.join('<span class="vln"></span>');
+    lad.querySelectorAll('.rung').forEach(function (b) {
+      b.onclick = function () {
+        const sg = document.querySelectorAll('#prp-segs .prp-sg')[+b.dataset.i];
+        if (sg) { sg.scrollIntoView({ behavior: 'smooth', block: 'center' }); sg.animate([{ opacity: .4 }, { opacity: 1 }], { duration: 500 }); }
+      };
+    });
+  }
+  function prpSync() {
+    const k = document.querySelectorAll('#prp-segs .w.k').length, r = document.querySelectorAll('#prp-segs .w.r').length;
+    const c = document.getElementById('prp-cnt'); if (c) c.textContent = k + r;
+    const sgs = document.querySelectorAll('#prp-segs .prp-sg');
+    const done = [].filter.call(sgs, s => s.querySelector('.w.k,.w.r')).length;
+    const p = document.getElementById('prp-prog'); if (p) p.style.width = sgs.length ? Math.round(done / sgs.length * 100) + '%' : '0%';
+    prpLadder();
+  }
+
+  // 화면 → 데이터
+  function prpCollect() {
+    const r = _prpQ[_prpCur]; if (!r) return;
+    const marks = {};
+    document.querySelectorAll('#prp-segs .prp-sg').forEach(function (sg) {
+      const i = sg.dataset.i, m = {};
+      sg.querySelectorAll('.w.k,.w.r').forEach(function (w) { m[w.dataset.j] = w.classList.contains('k') ? 'k' : 'r'; });
+      if (Object.keys(m).length) marks[i] = m;
+    });
+    // 칠한 게 하나도 없고 이전 기록도 없으면 prep을 만들지 않는다 (빈 껍데기 저장 방지)
+    if (!Object.keys(marks).length && !r.prep) return;
+    r.prep = r.prep || {}; r.prep.marks = marks;
+  }
+  // 글 고치기 → 본문 저장 (단어 수가 달라지므로 그 조각 마크는 비운다)
+  //   defer=true면 저장을 호출자에게 맡긴다 — saveRows 중복 호출로 스냅샷이 뒤집히는 것 방지
+  function prpCommitText(defer) {
+    const r = _prpQ[_prpCur]; if (!r) return;
+    let changed = false;
+    document.querySelectorAll('#prp-segs .prp-sgt').forEach(function (el) {
+      const i = +el.dataset.i;
+      const t = el.textContent.replace(/\s+/g, ' ').trim();
+      const segs = prpSegsOf(r); const s = segs[i]; if (!s) return;
+      const old = (s.t || '').replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
+      if (t && t !== old) {
+        changed = true;
+        if (Array.isArray(r.scriptSecFlex) && r.scriptSecFlex.length) {
+          const tgt = r.scriptSecFlex.filter(x => (x.t || '').replace(/<[^>]*>/g, '').trim())[i];
+          if (tgt) tgt.t = t;
+        } else if (r.scriptSections && s.c) { r.scriptSections[s.c] = t; }
+        if (r.prep && r.prep.marks) delete r.prep.marks[i];
+      }
+    });
+    if (changed) { if (!defer) saveRows(); prpRenderFilm(false); toast('원고 고침 저장'); }
+    return changed;
+  }
+  function prpSaveCur() {
+    const r = _prpQ[_prpCur]; if (!r) return;
+    if (_prpTool === 't') prpCommitText(true);
+    prpCollect(); saveRows();
+  }
+
+  // ── 구조 캐스케이드 ──
+  let _prpCascSg = null;
+  function prpCascClose() { document.getElementById('prp-casc').classList.remove('on'); _prpCascSg = null; }
+  function prpCascOpen(lb) {
+    const casc = document.getElementById('prp-casc');
+    _prpCascSg = lb.closest('.prp-sg');
+    casc.innerHTML = PRP_LBLS.map(function (L, i) {
+      const col = L[1] ? (SCRIPT_SECTIONS.find(s => s.key === L[1]) || {}).color : flexLabelColor(L[0]);
+      return '<button type="button" class="prp-ci" style="transition-delay:' + (i * 22) + 'ms" data-lb="' + esc(L[0]) + '" data-sk="' + L[1] + '" data-col="' + col + '">' +
+        '<span class="sw" style="--c:' + col + '"></span>' + esc(L[0]) + '</button>';
+    }).join('') +
+      '<div class="prp-cd"></div><div class="prp-cact">' +
+      '<button type="button" data-a="up" style="transition-delay:220ms" title="위로">↑</button>' +
+      '<button type="button" data-a="dn" style="transition-delay:244ms" title="아래로">↓</button>' +
+      '<button type="button" data-a="cut" style="transition-delay:268ms" title="여기서 자르기">✂</button>' +
+      '<button type="button" data-a="del" style="transition-delay:292ms" title="빼기">⌫</button></div>';
+    const rc = lb.getBoundingClientRect();
+    casc.style.left = Math.min(rc.left, innerWidth - 222) + 'px';
+    casc.style.top = (rc.bottom + 6) + 'px';
+    casc.classList.remove('on'); void casc.offsetWidth; casc.classList.add('on');
+  }
+  // flex 배열에서 «보이는 i번째» 조각의 실제 인덱스
+  function prpRealIdx(r, i) {
+    if (!Array.isArray(r.scriptSecFlex) || !r.scriptSecFlex.length) return -1;
+    let n = -1;
+    for (let a = 0; a < r.scriptSecFlex.length; a++) {
+      if ((r.scriptSecFlex[a].t || '').replace(/<[^>]*>/g, '').trim()) { n++; if (n === i) return a; }
+    }
+    return -1;
+  }
+  function prpEnsureFlex(r) {
+    if (Array.isArray(r.scriptSecFlex) && r.scriptSecFlex.length) return;
+    r.scriptSecFlex = prpSegsOf(r).map(s => ({ k: s.k, c: s.c, t: s.t }));
+  }
+  function prpDoCut(w) {
+    const r = _prpQ[_prpCur], sg = w.closest('.prp-sg'); if (!r || !sg) return;
+    const i = +sg.dataset.i, j = +w.dataset.j;
+    prpEnsureFlex(r);
+    const a = prpRealIdx(r, i); if (a < 0) return;
+    const words = (r.scriptSecFlex[a].t || '').replace(/<[^>]*>/g, '').split(/\s+/).filter(Boolean);
+    if (j <= 0 || j >= words.length) { toast('가운데 단어를 눌러주세요'); return; }
+    const before = words.slice(0, j).join(' '), after = words.slice(j).join(' ');
+    const orig = r.scriptSecFlex[a];
+    orig.t = before;
+    r.scriptSecFlex.splice(a + 1, 0, { k: orig.k, c: orig.c, t: after });
+    if (r.prep && r.prep.marks) r.prep.marks = {};   // 조각이 늘었으니 인덱스 초기화
+    saveRows(); prpRenderFilm(false);
+    document.getElementById('prp').classList.remove('cutting'); _prpCut = false;
+    document.getElementById('prp-hint').innerHTML = '<b>잘랐어요</b> — 라벨을 눌러 이름을 정하세요';
+    toast('✂ 여기서 잘랐어요');
+  }
+
+  document.addEventListener('click', function (e) {
+    const ci = e.target.closest('.prp-ci');
+    if (ci && _prpCascSg) {
+      const r = _prpQ[_prpCur]; prpEnsureFlex(r);
+      const a = prpRealIdx(r, +_prpCascSg.dataset.i);
+      if (a >= 0) { r.scriptSecFlex[a].k = ci.dataset.lb; r.scriptSecFlex[a].c = ci.dataset.sk || ''; saveRows(); }
+      _prpCascSg.querySelector('.prp-sgl').innerHTML = esc(ci.dataset.lb) + ' <span class="cv">▾</span>';
+      _prpCascSg.style.color = ci.dataset.col;
+      prpLadder(); prpCascClose(); return;
+    }
+    const act = e.target.closest('.prp-cact button');
+    if (act && _prpCascSg) {
+      const r = _prpQ[_prpCur], i = +_prpCascSg.dataset.i, a2 = act.dataset.a;
+      prpEnsureFlex(r);
+      const a = prpRealIdx(r, i);
+      if (a2 === 'up' || a2 === 'dn') {
+        const b = prpRealIdx(r, i + (a2 === 'up' ? -1 : 1));
+        if (a >= 0 && b >= 0) {
+          const y0 = _prpCascSg.getBoundingClientRect().top;
+          const tmp = r.scriptSecFlex[a]; r.scriptSecFlex[a] = r.scriptSecFlex[b]; r.scriptSecFlex[b] = tmp;
+          if (r.prep && r.prep.marks) {
+            const m = r.prep.marks, j2 = i + (a2 === 'up' ? -1 : 1), t1 = m[i], t2 = m[j2];
+            if (t1 === undefined) delete m[j2]; else m[j2] = t1;
+            if (t2 === undefined) delete m[i]; else m[i] = t2;
+          }
+          saveRows(); prpRenderFilm(false);
+          const sg2 = document.querySelectorAll('#prp-segs .prp-sg')[i + (a2 === 'up' ? -1 : 1)];
+          if (sg2) { const dy = y0 - sg2.getBoundingClientRect().top;
+            sg2.animate([{ transform: 'translateY(' + dy + 'px)' }, { transform: 'none' }], { duration: 380, easing: 'cubic-bezier(.2,1.1,.35,1)' }); }
+        }
+      }
+      if (a2 === 'del' && a >= 0) {
+        r.scriptSecFlex.splice(a, 1);
+        if (r.prep) r.prep.marks = {};
+        saveRows(); prpRenderFilm(false); toast('조각을 뺐어요');
+      }
+      if (a2 === 'cut') {
+        _prpCut = true; document.getElementById('prp').classList.add('cutting');
+        document.getElementById('prp-hint').innerHTML = '<b>자를 자리</b>를 누르세요 — 그 단어 «앞»에서 갈라집니다';
+        prpCascClose(); return;
+      }
+      prpCascClose(); return;
+    }
+    if (!e.target.closest('.prp-casc') && !e.target.closest('.prp-sgl')) prpCascClose();
+  });
+  window.addEventListener('scroll', function () { if (_prpCascSg) prpCascClose(); }, { passive: true });
+
+  function prpNext() {
+    const r = _prpQ[_prpCur];
+    // ⚠️ v566 · saveRows를 연달아 두 번 부르면 «먼저 만든 스냅샷»이 나중에 도착해 done을 지운다.
+    //   모아서 한 번만 저장한다 (prpSaveCur 대신 수집만).
+    if (r) {
+      if (_prpTool === 't') prpCommitText(true);
+      prpCollect();
+      r.prep = r.prep || {}; r.prep.done = true; r.prep.at = Date.now();
+      saveRows();
+    }
+    if (_prpCur >= _prpQ.length - 1) { prpFinish(); return; }
+    const f = document.querySelector('.prp-panel'); if (f) f.classList.add('out');
+    setTimeout(function () { _prpCur++; prpRenderFilm(true); prpRenderRope(); prpRefreshBadge(); }, 220);
+  }
+  function prpFinish() {
+    document.getElementById('prp-host').innerHTML =
+      '<div class="prp-panel in"><div class="prp-fin"><div class="ic">✓</div>' +
+      '<b>오늘 몫, 다 손질했어요</b>' +
+      '<p>칠한 곳은 원고를 쓸 때 같은 구조 칸에서 후보로 떠오릅니다.<br>빨강은 바로 쓸 것, 주황은 훑어볼 것.</p></div></div>';
+    const go = document.getElementById('prp-go');
+    go.textContent = '닫기'; go.classList.add('done'); go.onclick = prpClose;
+    prpRenderRope(); prpRefreshBadge();
+  }
+
+  window.__openPrep = prpOpen;
+  try {
+    document.addEventListener('DOMContentLoaded', function () {
+      const b = document.getElementById('sh-prpbadge'); if (b) b.onclick = prpOpen;
+      prpRefreshBadge();
+    });
+  } catch (e) {}
 
   function maybeShowFork() {
     if (window.__csForkShown) return;
@@ -45247,6 +45827,9 @@
   let _cus2Rec = null, _cus2RecEdit = false;   // v518 · 기록 카드 (상황·감정·속마음)
   let _cus2Proof = false;                      // v519 · 공감댓글 단독 전체 보기
   let _cus2FigN = 0;         // SVG 그라데이션 id 충돌 방지
+  // v565 · 이름 고치기 «모드». 예전엔 targetName을 지워서 첫 화면으로 되돌렸는데,
+  //   오른쪽 위 «‹»를 뒤로가기로 알고 누른 사람에겐 «다 사라졌다»로 보였다. 이제 지우지 않는다.
+  let _cus2Rename = false;
   const CUS2_MATS = [
     { k: 'pain',   n: '문제', q: '지금 뭐가<br>불편하다고 하나요?',   ph: '예) 펌하고 3일 지나면 무너져요' },
     { k: 'desire', n: '욕구', q: '“이렇게 됐으면”<br>가장 원하는 상황은?', ph: '예) 아침에 손 안 대도 자연스러운 머리' },
@@ -45676,10 +46259,13 @@
     const named = !!(p.targetName || '').trim();
     let h = '<div class="cus2">';
 
-    // ── 0의 상태: 타겟 정하기 ──
-    if (!named) {
+    // ── 0의 상태: 타겟 정하기 ── (v565 · 이름 고치기도 이 화면을 재사용 — 기존 이름을 채워둔다)
+    if (!named || _cus2Rename) {
       const g = cus2Guess();
+      const cur = (p.targetName || '').trim();
+      const mats = CUS2_MATS.reduce((n, m) => n + cus2Bask(p, m.k).length, 0);   // 모아둔 재료 수
       h += '<div class="cus2-first">' +
+        (cur ? '<button class="cus2-rnback" id="cus2-rncancel" title="그만두기">‹</button>' : '') +
         '<div class="cus2-eye">My Target</div>' +
         '<div class="cus2-stage">' + cus2Fig(p.gender || 'f', p.gender ? '' : 'dim') + '</div>' +
         '<div class="cus2-floor"></div>' +
@@ -45687,12 +46273,14 @@
         '<div class="cus2-qs">내 콘텐츠가 말을 거는 한 사람 · 페르소나</div>' +
         '<div class="cus2-gseg"><button data-cus2g="f"' + (p.gender === 'f' ? ' class="on"' : '') + '>여성</button>' +
           '<button data-cus2g="m"' + (p.gender === 'm' ? ' class="on"' : '') + '>남성</button></div>' +
-        '<input class="cus2-namef" id="cus2-name" placeholder="누구인가요? 한 줄로" value="">' +
-        (g ? '<div class="cus2-hint"><div class="eb">잘 안 떠오르나요?</div>' +
+        // 모아둔 게 있으면 «남아 있다»고 먼저 말한다 — 빈 화면 4법칙 ④ 0으로 겁주지 않기
+        (mats ? '<div class="cus2-keep">모아둔 재료 <b>' + mats + '개</b>는 그대로 있어요 — 이름만 정하면 다시 열려요</div>' : '') +
+        '<input class="cus2-namef" id="cus2-name" placeholder="누구인가요? 한 줄로" value="' + esc(cur).replace(/"/g, '&quot;') + '">' +
+        (g && !cur ? '<div class="cus2-hint"><div class="eb">잘 안 떠오르나요?</div>' +
           '<div class="q2">담은 <b>' + g.n + '편</b>을 보니 <b>「' + esc(g.text) + '」</b> 이야기가 가장 많아요</div>' +
           '<div class="src">벤치마킹 ' + g.n + '편 키워드 기준</div>' +
           '<button class="use" id="cus2-useguess">이걸로 채우기</button></div>' : '') +
-        '<button class="cus2-go" id="cus2-set" disabled>정하고 카드 만들기</button>' +
+        '<button class="cus2-go" id="cus2-set" disabled>' + (cur ? '이름 바꾸기' : '정하고 카드 만들기') + '</button>' +
         '</div>';
       el.innerHTML = h + '</div>';
       cus2WireFirst(p, cus2Guess());
@@ -45708,7 +46296,8 @@
       '<span class="cus2-idx srf">' + RN[filled] + ' / IV</span>' +
       (_cus2All
         ? '<button class="cus2-back wide" id="cus2-allback" title="통으로 돌아가기">‹ 통으로</button>'
-        : '<button class="cus2-back" id="cus2-back" title="타겟 다시 정하기">‹</button>') +
+        // v565 · «‹»는 뒤로가기로 읽힌다 — 이름 고치기는 연필로. 누른다고 지워지지도 않는다
+        : '<button class="cus2-back edit" id="cus2-back" title="타겟 이름 고치기">✎</button>') +
       '</div>' +
       '<div class="cus2-tabs">' +
       '<button data-cus2t="card"' + (_cus2Tab === 'card' ? ' class="on"' : '') + '>카드</button>' +
@@ -46161,10 +46750,14 @@
     if (ug && g) ug.onclick = () => { if (nameEl) { nameEl.value = g.text; sync(); nameEl.focus(); } };
     if (setBtn) setBtn.onclick = async () => {
       const v = (nameEl.value || '').trim(); if (!v || !p.gender) return;
+      const was = (p.targetName || '').trim();
       p.targetName = v; p.updatedAt = Date.now(); await savePmms();
-      _cus2Tab = 'card'; st2RenderCus();
-      toast('👥 타겟이 정해졌어요 — 이제 재료를 모아요');
+      _cus2Rename = false; _cus2Tab = 'card'; st2RenderCus();
+      toast(was ? '✎ 이름을 바꿨어요' : '👥 타겟이 정해졌어요 — 이제 재료를 모아요');
     };
+    // v565 · 그만두기 — 이름은 손대지 않은 채 카드로 되돌아간다
+    const rnc = document.getElementById('cus2-rncancel');
+    if (rnc) rnc.onclick = () => { _cus2Rename = false; st2RenderCus(); };
     sync();
   }
   function cus2Wire(p) {
@@ -46184,10 +46777,8 @@
       _cus2Tab = g.dataset.cus2go; _cus2Sheet = null; _cus2All = false; st2RenderCus();
     });
     const bk = document.getElementById('cus2-back');
-    if (bk) bk.onclick = async () => {
-      if (!await appConfirm('타겟을 다시 정할까요?\n(모은 재료는 그대로 남아요)', { okText: '다시 정하기', cancelText: '취소' })) return;
-      p.targetName = ''; await savePmms(); st2RenderCus();
-    };
+    // v565 · 확인창도 «지우기»도 없다 — 기존 이름을 담은 편집 화면으로만 간다(그만두면 원래대로)
+    if (bk) bk.onclick = () => { _cus2Rename = true; st2RenderCus(); };
     const nx = document.getElementById('cus2-next');
     if (nx) nx.onclick = () => { const m = CUS2_MATS.find(x => !cus2Bask(p, x.k).length); _cus2Tab = 'mat'; _cus2Sheet = m ? m.k : null; st2RenderCus(); };
     // ⚠️ .cus2-vial로 좁힘 — 시트·전체보기 섹션도 색상용 data-cus2v를 갖고 있어 전역 셀렉터면 오작동
@@ -46920,11 +47511,13 @@
     const cnt = { x: null, lib: (structures || []).length, ana: pxAnalyses.length };
     const NM = { x: '패턴 파악', lib: '📐 구조 모음', ana: '🗂 내 분석 모음' };
     const SH = { x: '패턴 파악', lib: '구조 모음', ana: '내 분석 모음' };
+    // v565 · 0이면 숫자를 안 붙인다 (트렌드 폴더와 같은 규칙) — 0으로 겁주지 않기
+    const num = k => (cnt[k] ? '<b>' + cnt[k] + '</b>' : '');
     let h = '<div class="px">';
     h += '<div class="px-fhd"><span class="px-fbig">' + NM[_pxFolder] +
-      (cnt[_pxFolder] != null ? '<b>' + cnt[_pxFolder] + '</b>' : '') + '</span><span class="px-fsmall">' +
+      num(_pxFolder) + '</span><span class="px-fsmall">' +
       ['x', 'lib', 'ana'].filter(k => k !== _pxFolder).map(k =>
-        '<button data-pxf="' + k + '">' + SH[k] + (cnt[k] != null ? '<b>' + cnt[k] + '</b>' : '') + '</button>').join('') +
+        '<button data-pxf="' + k + '">' + SH[k] + num(k) + '</button>').join('') +
       '</span></div>';
     if (_pxFolder === 'x') h += pxStageHtml();
     else if (_pxFolder === 'ana') h += pxAnaHtml();
