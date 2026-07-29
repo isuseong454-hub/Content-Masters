@@ -20768,9 +20768,14 @@
       clip-path:polygon(24% 0,76% 0,100% 100%,0 100%);margin:0 auto;position:relative}
     .prp-lamp .shade::after{content:'';position:absolute;left:12%;right:12%;bottom:0;height:5px;border-radius:50%;
       background:rgba(255,238,190,.9);filter:blur(2px)}
-    .prp-lamp .cone{width:540px;height:400px;margin:-4px auto 0;
-      background:linear-gradient(180deg,rgba(255,238,190,.13),rgba(255,238,190,.045) 46%,transparent 78%);
-      clip-path:polygon(42% 0,58% 0,100% 100%,0 100%);filter:blur(6px)}
+    /* ⚠️ v567 · 빛기둥은 «끝이 안 보여야» 자연스럽다.
+       옛 값(400px·blur6)은 바닥이 직선으로 뚝 끊겼고, 반투명 판을 그대로 관통해 보였다.
+       → 길이를 늘리고 mask로 아래를 완전히 녹인다. 판에 닿는 밝기는 판 자체 하이라이트가 맡는다. */
+    .prp-lamp .cone{width:620px;height:520px;margin:-4px auto 0;
+      background:linear-gradient(180deg,rgba(255,238,190,.15),rgba(255,238,190,.05) 30%,rgba(255,238,190,.018) 55%,transparent 82%);
+      clip-path:polygon(43% 0,57% 0,100% 100%,0 100%);filter:blur(16px);
+      -webkit-mask-image:linear-gradient(180deg,#000 0 30%,rgba(0,0,0,.55) 58%,transparent 92%);
+      mask-image:linear-gradient(180deg,#000 0 30%,rgba(0,0,0,.55) 58%,transparent 92%)}
     .prp-deskbg{position:fixed;left:0;right:0;bottom:0;height:170px;pointer-events:none;z-index:1;
       background:linear-gradient(180deg,transparent,rgba(0,0,0,.3) 30%),
       repeating-linear-gradient(88deg,#2a1f12 0 6px,#211809 6px 13px,#281e10 13px 21px)}
@@ -20783,7 +20788,8 @@
       animation:prpDrift var(--md,9s) linear infinite;animation-delay:var(--mdel,0s)}
     @keyframes prpDrift{0%{transform:translateY(24px);opacity:0}18%{opacity:var(--mo,.5)}82%{opacity:var(--mo,.5)}100%{transform:translateY(-130px);opacity:0}}
 
-    .prp-in{position:relative;z-index:3;max-width:980px;margin:0 auto;padding:22px 20px 90px}
+    /* ⚠️ v568 · 아래 패딩은 «나무 선반(170px)»보다 커야 한다 — 왼쪽 기둥이 선반을 넘어 걸치면 지저분해진다 */
+    .prp-in{position:relative;z-index:3;max-width:980px;margin:0 auto;padding:22px 20px 204px}
     .prp-top{display:flex;align-items:center;gap:10px;margin-bottom:16px}
     .prp-top .t{font-size:13px;font-weight:800;color:#eae8de}
     .prp-top .c{font-family:'JetBrains Mono',monospace;font-size:10px;color:#63695f;margin-left:auto;font-variant-numeric:tabular-nums}
@@ -20791,17 +20797,48 @@
       font-size:12px;color:#9aa094;background:rgba(0,0,0,.3);cursor:pointer;font-family:inherit;flex:none}
     .prp-x:hover{color:#eae8de;border-color:rgba(255,255,255,.3)}
 
-    .prp-floor{display:grid;grid-template-columns:160px minmax(0,1fr);gap:24px;align-items:start}
+    .prp-floor{display:grid;grid-template-columns:212px minmax(0,1fr);gap:26px;align-items:start}
     @media(max-width:780px){.prp-floor{grid-template-columns:1fr;gap:14px}}
-    .prp-qz{position:sticky;top:16px}
-    @media(max-width:780px){.prp-qz{position:static;display:flex;align-items:center;gap:18px}}
-    .prp-qcap{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.16em;color:#63695f;text-transform:uppercase;margin-bottom:12px}
-    @media(max-width:780px){.prp-qcap{margin-bottom:0}}
-    .prp-rope{position:relative;height:190px;width:148px;cursor:pointer;flex:none}
-    @media(max-width:780px){.prp-rope{height:120px}}
+    /* v568 · 기둥 전체가 «선반 위»에서 끝나게 — 넘치면 안쪽에서 스크롤 */
+    .prp-qz{position:sticky;top:16px;display:flex;flex-direction:column;gap:16px;
+      max-height:calc(100vh - 214px);overflow:auto;scrollbar-width:none}
+    .prp-qz::-webkit-scrollbar{display:none}
+    @media(max-width:780px){.prp-qz{position:static;max-height:none;overflow:visible}}
+
+    /* v567 · 지금 손질 중인 카드 — 판독지와 같은 문법(썸네일 → 제목 → 명세) */
+    .prp-card{display:flex;flex-direction:column;gap:11px}
+    @media(max-width:780px){.prp-card{flex-direction:row;align-items:flex-start;gap:14px}}
+    /* v568 · 크되 세로로 길어지지 않게 — 높이를 먼저 정하고 폭이 따라온다 */
+    .prp-card .th{height:222px;width:auto;aspect-ratio:9/13;border-radius:9px;position:relative;overflow:hidden;
+      flex:none;align-self:flex-start;
+      box-shadow:0 16px 30px -14px rgba(0,0,0,.95),0 0 0 1px rgba(255,255,255,.07)}
+    @media(max-width:780px){.prp-card .th{height:104px}}
+    .prp-card .th::after{content:'';position:absolute;inset:0;
+      background:radial-gradient(66% 40% at 50% 6%,rgba(255,255,255,.15),transparent 72%)}
+    .prp-card .info{min-width:0;flex:1}
+    .prp-card .eyebrow{font-family:'Noto Serif KR',Georgia,serif;font-weight:600;font-size:8.5px;
+      letter-spacing:.34em;color:#8a8474;text-transform:uppercase;display:block;margin-bottom:5px}
+    .prp-card .ct{font-family:'Noto Serif KR',Georgia,serif;font-weight:900;font-size:13.5px;
+      line-height:1.5;letter-spacing:-.01em;color:#eae8de;display:block}
+    .prp-spec{margin-top:11px;border:1px solid rgba(255,255,255,.09);border-radius:10px;overflow:hidden;
+      background:rgba(0,0,0,.26)}
+    .prp-spec .r{display:flex;align-items:center;justify-content:space-between;gap:9px;
+      padding:7px 10px;border-bottom:1px solid rgba(255,255,255,.07)}
+    .prp-spec .r:last-child{border-bottom:none}
+    .prp-spec .k{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.13em;
+      color:#63695f;text-transform:uppercase;white-space:nowrap}
+    .prp-spec .v{font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:700;
+      font-variant-numeric:tabular-nums;color:#eae8de}
+    .prp-spec .v.none{color:#63695f;font-weight:600}
+    .prp-queue{border-top:1px dashed rgba(255,255,255,.12);padding-top:13px;flex:none}
+    @media(max-width:780px){.prp-queue{display:flex;align-items:center;gap:16px}}
+    .prp-qcap{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:.16em;color:#63695f;text-transform:uppercase;margin-bottom:10px}
+    @media(max-width:780px){.prp-qcap{margin-bottom:0;flex:none}}
+    .prp-rope{position:relative;height:132px;width:148px;cursor:pointer;flex:none}
+    @media(max-width:780px){.prp-rope{height:112px}}
     .prp-rope::before{content:'';position:absolute;left:-8px;right:-8px;top:16px;height:1px;
       background:rgba(255,255,255,.25);transform:rotate(-2deg)}
-    .prp-rope .hp{position:absolute;top:18px;width:58px;height:80px;border-radius:4px;
+    .prp-rope .hp{position:absolute;top:16px;width:52px;height:70px;border-radius:4px;
       border:1px solid rgba(255,255,255,.13);transform-origin:top center;
       box-shadow:0 10px 20px -8px rgba(0,0,0,.9);animation:prpSway 5.5s ease-in-out infinite;
       background:linear-gradient(158deg,#3a2c30,#1d1518)}
@@ -20815,17 +20852,29 @@
       background:rgba(0,0,0,.62);border:1px solid rgba(255,255,255,.12);border-radius:99px;padding:4px 10px;white-space:nowrap}
     .prp-rope.empty .pn{color:#d7f34b;border-color:rgba(215,243,75,.35)}
 
-    .prp-panel{position:relative;border-radius:16px;padding:18px 26px 22px;min-width:0;
-      background:linear-gradient(0deg,rgba(255,238,190,.05),transparent 55%),
+    /* v568 · 위 여백을 크게 — 조명이 가장 밝은 자리를 비워두고 그 «아래»에서 원고가 시작된다 */
+    .prp-panel{position:relative;border-radius:16px;padding:56px 26px 24px;min-width:0;
+      /* v567 · 첫 줄 = 램프가 «판에 닿아 퍼진» 자리. 빛기둥이 판을 관통하는 대신 여기서 받는다 */
+      background:radial-gradient(130% 62% at 50% -10%,rgba(255,238,190,.13),rgba(255,238,190,.03) 46%,transparent 68%),
+        linear-gradient(0deg,rgba(255,238,190,.045),transparent 52%),
         linear-gradient(160deg,rgba(255,255,255,.045),rgba(255,255,255,.014));
       border:1px solid rgba(255,255,255,.13);
       box-shadow:0 26px 60px -30px rgba(0,0,0,.95),inset 0 1px 0 rgba(255,255,255,.09),0 0 80px -20px rgba(255,238,190,.12)}
     .prp-panel::after{content:'';position:absolute;top:10px;bottom:10px;right:9px;width:7px;
       background:repeating-linear-gradient(180deg,rgba(255,255,255,.13) 0 7px,transparent 7px 16px)}
-    @keyframes prpFilmIn{from{opacity:0;transform:translateX(38px) rotate(.6deg)}}
-    @keyframes prpFilmOut{to{opacity:0;transform:translateX(-38px) rotate(-.6deg)}}
-    .prp-panel.in{animation:prpFilmIn .42s cubic-bezier(.2,1.05,.35,1)}
-    .prp-panel.out{animation:prpFilmOut .24s ease-in forwards}
+    /* v568 · 넘김 = «필름 감기»(사장님 픽). 위로 감기고 다음 컷이 아래에서 올라온다 */
+    @keyframes prpReelOut{to{transform:translateY(-124%);opacity:.1}}
+    @keyframes prpReelIn{from{transform:translateY(124%);opacity:.1}}
+    .prp-panel.in{animation:prpReelIn .52s cubic-bezier(.15,.9,.3,1)}
+    .prp-panel.out{animation:prpReelOut .46s cubic-bezier(.5,0,.85,.4) forwards}
+    .prp-stage{position:relative;min-width:0;overflow:hidden;border-radius:16px}
+    /* 감기는 동안 스프로킷이 좌우로 흐른다 */
+    .prp-sprock{position:absolute;inset:0;pointer-events:none;z-index:9;opacity:0;
+      background:repeating-linear-gradient(180deg,rgba(255,255,255,.16) 0 6px,transparent 6px 15px);
+      -webkit-mask-image:linear-gradient(90deg,#000 0 5%,transparent 9%,transparent 91%,#000 95%);
+      mask-image:linear-gradient(90deg,#000 0 5%,transparent 9%,transparent 91%,#000 95%)}
+    .prp-sprock.run{animation:prpSprockRun .78s linear}
+    @keyframes prpSprockRun{0%{opacity:0}18%{opacity:.85}82%{opacity:.85}100%{opacity:0;background-position-y:-460px}}
 
     .prp-fhead{display:flex;gap:13px;align-items:center;padding-bottom:13px;margin-bottom:14px;border-bottom:1px solid rgba(255,255,255,.09)}
     .prp-tt{font-family:'Noto Serif KR',Georgia,serif;font-weight:900;font-size:16.5px;letter-spacing:-.01em;line-height:1.4;color:#eae8de}
@@ -20887,18 +20936,19 @@
     .prp-foot .n{font-family:'JetBrains Mono',monospace;font-size:10px;color:#63695f;font-variant-numeric:tabular-nums}
     .prp-foot .bar{flex:1;height:3px;background:rgba(255,255,255,.09);border-radius:1px;overflow:hidden}
     .prp-foot .bar i{display:block;height:100%;background:#d7f34b;transition:width .45s cubic-bezier(.2,.9,.3,1)}
-    .prp-go{position:relative;font-family:inherit;font-size:11.5px;font-weight:800;padding:11px 22px;border-radius:99px;
-      color:#d7f34b;cursor:pointer;
-      background:linear-gradient(160deg,rgba(215,243,75,.15),rgba(215,243,75,.04));
-      border:1px solid rgba(215,243,75,.42);backdrop-filter:blur(12px);
-      box-shadow:0 14px 30px -14px rgba(215,243,75,.4),inset 0 1px 0 rgba(255,255,255,.22),inset 0 -8px 16px -10px rgba(215,243,75,.25);
+    /* v568 · 버튼도 필름 — 양옆에 스프로킷 구멍이 뚫려 있다 */
+    .prp-go{position:relative;font-family:inherit;font-size:11px;font-weight:800;letter-spacing:.04em;
+      padding:11px 28px;border-radius:8px;color:#d7f34b;cursor:pointer;
+      background:linear-gradient(180deg,#191c12,#0f1109);border:1px solid rgba(215,243,75,.4);
+      box-shadow:0 12px 26px -14px rgba(215,243,75,.4);
       transition:transform .2s cubic-bezier(.2,1.3,.4,1),box-shadow .2s}
-    .prp-go::before{content:'';position:absolute;left:14%;right:14%;top:1px;height:38%;border-radius:99px;
-      background:linear-gradient(180deg,rgba(255,255,255,.22),transparent);pointer-events:none}
-    .prp-go:hover{transform:translateY(-2px);
-      box-shadow:0 20px 40px -16px rgba(215,243,75,.55),inset 0 1px 0 rgba(255,255,255,.3),inset 0 -8px 16px -10px rgba(215,243,75,.3)}
+    .prp-go::before,.prp-go::after{content:'';position:absolute;top:5px;bottom:5px;width:4px;
+      background:repeating-linear-gradient(180deg,rgba(215,243,75,.55) 0 3px,transparent 3px 7px)}
+    .prp-go::before{left:6px} .prp-go::after{right:6px}
+    .prp-go:hover{transform:translateY(-2px);box-shadow:0 18px 34px -14px rgba(215,243,75,.55)}
     .prp-go:active{transform:translateY(0) scale(.96)}
     .prp-go.done{color:#9aa094;border-color:rgba(255,255,255,.18);background:rgba(255,255,255,.05);box-shadow:none}
+    .prp-go.done::before,.prp-go.done::after{opacity:.25}
 
     .prp-fin{text-align:center;padding:46px 20px 40px}
     .prp-fin .ic{font-size:32px}
@@ -20934,9 +20984,12 @@
         <div class="prp-top"><span class="t">✎ 원고 손질</span><span class="c" id="prp-idx">— / —</span>
           <button type="button" class="prp-x" id="prp-x" title="닫기">✕</button></div>
         <div class="prp-floor">
-          <div class="prp-qz"><div class="prp-qcap">아직 안 한 것</div><div class="prp-rope" id="prp-rope"></div></div>
+          <div class="prp-qz">
+            <div class="prp-card" id="prp-card"></div><!-- v567 · 지금 카드(썸네일·제목·명세) — 판독지 문법 -->
+            <div class="prp-queue"><div class="prp-qcap">아직 안 한 것</div><div class="prp-rope" id="prp-rope"></div></div>
+          </div>
           <div style="min-width:0">
-            <div id="prp-host"></div>
+            <div class="prp-stage"><div class="prp-sprock" id="prp-sprock"></div><div id="prp-host"></div></div>
             <div class="prp-tray" id="prp-tray">
               <button type="button" class="prp-pen" data-t="k"><span class="nib"></span>핵심</button>
               <button type="button" class="prp-pen" data-t="r"><span class="nib"></span>참고</button>
@@ -20947,7 +21000,7 @@
             <div class="prp-foot">
               <span class="n"><b id="prp-cnt">0</b> 곳</span>
               <span class="bar"><i id="prp-prog" style="width:0%"></i></span>
-              <button type="button" class="prp-go" id="prp-go">다음 원고 →</button>
+              <button type="button" class="prp-go" id="prp-go">손질 완료</button>
             </div>
           </div>
         </div>
@@ -42186,29 +42239,41 @@
         '<div class="prp-sgt" data-i="' + i + '">' + words + '</div></div>';
     }).join('');
 
-    const thumb = r.thumb ? '<span class="prp-th" style="width:50px;aspect-ratio:9/13;border-radius:6px;flex:none;background:#20181b center/cover url(' + JSON.stringify(r.thumb) + ')"></span>'
-      : '<span class="prp-th" style="width:50px;aspect-ratio:9/13;border-radius:6px;flex:none;background:linear-gradient(158deg,#4d353b,#251b1f 60%,#140e11)"></span>';
-    const fmt = n => (n == null || n === '') ? '—' : (Number(n) >= 10000 ? (Number(n) / 10000).toFixed(1).replace(/\.0$/, '') + '만' : Number(n).toLocaleString());
-
+    // v567 · 판에는 기찻길＋원고만. 썸네일·제목·명세는 왼쪽 기둥이 맡는다(조명 아래를 비운다)
     document.getElementById('prp-host').innerHTML =
       '<div class="prp-panel' + (anim ? ' in' : '') + '">' +
-        '<div class="prp-fhead">' + thumb +
-          '<span style="min-width:0;flex:1">' +
-            '<span class="prp-eyebrow">원고</span>' +
-            '<span class="prp-tt">' + esc(r.hook || r.topicMain || r.idea || '(제목 없음)') + '</span>' +
-            '<span class="prp-ms">' +
-              '<span><s>조회</s><b>' + fmt(r.views) + '</b></span>' +
-              '<span><s>퍼널</s><b style="color:' + (r.funnel === '전환' ? '#2FD07B' : '#F2809A') + '">' + esc(r.funnel || '—') + '</b></span>' +
-              '<span><s>핏</s><b style="color:#d7f34b">' + (r.rating ? '★'.repeat(r.rating) : '—') + '</b></span>' +
-              (r.trendScore ? '<span><s>트렌드</s><b style="color:#FF7A45">' + r.trendScore + '</b></span>' : '') +
-            '</span></span></div>' +
         '<div class="prp-fbody"><div class="prp-vlad" id="prp-lad"></div><div id="prp-segs">' + html + '</div></div>' +
       '</div>';
 
+    prpRenderCard();
     document.getElementById('prp-idx').textContent =
       String(_prpCur + 1).padStart(2, '0') + ' / ' + String(_prpQ.length).padStart(2, '0');
     if (_prpTool === 't') document.querySelectorAll('.prp-sgt').forEach(e => e.contentEditable = 'true');
     prpSync();
+  }
+
+  // 왼쪽 기둥 — 지금 손질 중인 카드 (판독지와 같은 «썸네일 → 제목 → 명세» 문법)
+  function prpRenderCard() {
+    const r = _prpQ[_prpCur]; if (!r) return;
+    const fmt = n => (n == null || n === '') ? null : (Number(n) >= 10000 ? (Number(n) / 10000).toFixed(1).replace(/\.0$/, '') + '만' : Number(n).toLocaleString());
+    const bg = r.thumb ? 'center/cover url(' + JSON.stringify(r.thumb) + ')' : 'linear-gradient(158deg,#4d353b,#251b1f 60%,#140e11)';
+    const row = (k, v, col) => '<div class="r"><span class="k">' + k + '</span><span class="v' + (v ? '' : ' none') + '"' +
+      (col && v ? ' style="color:' + col + '"' : '') + '>' + (v || '—') + '</span></div>';
+    const types = (r.thumbTypes || []).slice(0, 2).join(' · ');
+
+    document.getElementById('prp-card').innerHTML =
+      '<span class="th" style="background:' + bg + '"></span>' +
+      '<span class="info">' +
+        '<span class="eyebrow">지금 손질 중</span>' +
+        '<span class="ct">' + esc(r.hook || r.topicMain || r.idea || '(제목 없음)') + '</span>' +
+        '<div class="prp-spec">' +
+          row('조회', fmt(r.views)) +
+          row('퍼널', esc(r.funnel || ''), r.funnel === '전환' ? '#2FD07B' : '#F2809A') +
+          row('핏', r.rating ? '★'.repeat(r.rating) : '', '#d7f34b') +
+          (r.trendScore ? row('트렌드', String(r.trendScore), '#FF7A45') : '') +
+          (types ? row('썸네일', esc(types)) : '') +
+        '</div>' +
+      '</span>';
   }
 
   function prpRenderRope() {
@@ -42398,8 +42463,11 @@
       saveRows();
     }
     if (_prpCur >= _prpQ.length - 1) { prpFinish(); return; }
+    // 필름 감기 — 스프로킷이 흐르는 동안 위로 감기고, 다음 컷이 아래에서 올라온다
+    const sp = document.getElementById('prp-sprock');
+    if (sp) { sp.classList.remove('run'); void sp.offsetWidth; sp.classList.add('run'); }
     const f = document.querySelector('.prp-panel'); if (f) f.classList.add('out');
-    setTimeout(function () { _prpCur++; prpRenderFilm(true); prpRenderRope(); prpRefreshBadge(); }, 220);
+    setTimeout(function () { _prpCur++; prpRenderFilm(true); prpRenderRope(); prpRefreshBadge(); }, 400);
   }
   function prpFinish() {
     document.getElementById('prp-host').innerHTML =
@@ -42408,6 +42476,7 @@
       '<p>칠한 곳은 원고를 쓸 때 같은 구조 칸에서 후보로 떠오릅니다.<br>빨강은 바로 쓸 것, 주황은 훑어볼 것.</p></div></div>';
     const go = document.getElementById('prp-go');
     go.textContent = '닫기'; go.classList.add('done'); go.onclick = prpClose;
+    const card = document.getElementById('prp-card'); if (card) card.innerHTML = '';   // 다 끝났으면 왼쪽도 비운다
     prpRenderRope(); prpRefreshBadge();
   }
 
