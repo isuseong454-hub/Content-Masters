@@ -458,16 +458,23 @@
   #room-rail .rr-btn.here .t{ display:inline; font-size:11.5px; font-weight:800; letter-spacing:-.01em; }
   #room-rail .rr-btn:not(.here) .g{ opacity:.72; }
   #room-rail .rr-btn:not(.here):hover .g{ opacity:1; }
-  #room-rail .rr-ai{ color:var(--law-ai); border-color:rgba(67,224,230,.26); }
-  #room-rail .rr-ai:hover{ background:rgba(67,224,230,.1); border-color:rgba(67,224,230,.5); }
-  #room-rail .rr-mk{ color:var(--law-asset); border-color:rgba(215,243,75,.26); }
-  #room-rail .rr-mk:hover{ background:rgba(215,243,75,.1); border-color:rgba(215,243,75,.5); }
-  #room-rail .rr-home:hover{ border-color:rgba(255,255,255,.3); color:var(--law-focus); }
+  /* ⚠️ v571 · 갈림길 3방 색과 한 혈통으로 맞춘다 — 초록(AI 정리) › 파랑(창고=홈) › 보라(제작소).
+     옛 값(시안·라임)은 갈림길과 어긋나 «어디가 어디인지»가 안 이어졌다 */
+  #room-rail .rr-fork{ color:#9aa094; border-color:rgba(255,255,255,.14); }
+  #room-rail .rr-fork:hover{ background:rgba(255,255,255,.07); color:#eae8de; }
+  #room-rail .rr-fork .g{ font-size:15px; }
+  #room-rail .rr-ai{ color:#2ec76b; border-color:rgba(46,199,107,.28); }
+  #room-rail .rr-ai:hover{ background:rgba(46,199,107,.1); border-color:rgba(46,199,107,.5); }
+  #room-rail .rr-home{ color:#4d9ff0; border-color:rgba(77,159,240,.28); }
+  #room-rail .rr-home:hover{ background:rgba(77,159,240,.1); border-color:rgba(77,159,240,.5); }
+  #room-rail .rr-mk{ color:#b07bf0; border-color:rgba(176,123,240,.28); }
+  #room-rail .rr-mk:hover{ background:rgba(176,123,240,.1); border-color:rgba(176,123,240,.5); }
   /* 지금 있는 방 = 채워진 칩 */
+  #room-rail .rr-home.here{ background:rgba(77,159,240,.14); border-color:rgba(77,159,240,.6); color:#4d9ff0; }
   #room-rail .rr-btn.here{ background:rgba(255,255,255,.09); border-color:rgba(255,255,255,.34);
     color:var(--law-focus); box-shadow:0 0 0 3px rgba(255,255,255,.04); }
-  #room-rail .rr-mk.here{ background:rgba(215,243,75,.14); border-color:rgba(215,243,75,.6); color:var(--law-asset); }
-  #room-rail .rr-ai.here{ background:rgba(67,224,230,.14); border-color:rgba(67,224,230,.6); color:var(--law-ai); }
+  #room-rail .rr-mk.here{ background:rgba(176,123,240,.16); border-color:rgba(176,123,240,.62); color:#b07bf0; }
+  #room-rail .rr-ai.here{ background:rgba(46,199,107,.16); border-color:rgba(46,199,107,.62); color:#2ec76b; }
   #room-rail .rr-back{ display:none; align-items:center; margin-left:8px; border:1px solid rgba(215,243,75,.3);
     background:rgba(215,243,75,.08); color:var(--law-asset); border-radius:999px; padding:6px 12px;
     font-family:inherit; font-size:11px; font-weight:800; cursor:pointer; transition:.18s;
@@ -15166,7 +15173,9 @@
   .cs-ov.show { display:block; }
   /* v559 · 애플식 세로 중앙 — 폰에서 갈림길·빠른담기가 위로 쏠리고 아래 1/3이 비던 것.
      margin:auto 방식이라 콘텐츠가 화면보다 길어지면(AI 정리 방·위저드) 자동으로 상단 스크롤로 복귀. */
-  .cs-air { position:relative; min-height:100%; padding:24px 18px 56px;
+  /* v571 · 위·아래 safe-area — 아이폰 상태바/홈 인디케이터에 안 깔리게 */
+  .cs-air { position:relative; min-height:100%;
+    padding:calc(24px + env(safe-area-inset-top)) 18px calc(56px + env(safe-area-inset-bottom));
     display:flex; flex-direction:column; box-sizing:border-box; }
   .cs-air::before { content:''; position:fixed; inset:0; z-index:-2; background:
     radial-gradient(120% 55% at 50% -6%, rgba(46,199,107,.13), transparent 60%),
@@ -18551,7 +18560,12 @@
       /* v541 · 가운데 정렬을 transform이 아니라 margin으로 — 스와이프 닫기(translateY)와 충돌하지 않게 */
       .cso-feed{position:fixed;left:0;right:0;bottom:0;margin:0 auto;width:min(520px,100%);z-index:61;background:#15160f;border:1px solid var(--cso-line2);border-bottom:none;border-radius:20px 20px 0 0;padding:14px 16px calc(20px + env(safe-area-inset-bottom));display:none;animation:csoUp .28s cubic-bezier(.2,.9,.3,1) both;touch-action:pan-y}
       .cso-feed.on{display:block}
+      /* .cso-feed용 — left:0;right:0;margin:auto 로 가운데를 잡으므로 X는 건드리지 않는다 */
       @keyframes csoUp{0%{transform:translateY(40px);opacity:0}100%{transform:none;opacity:1}}
+      /* ⚠️ v571 · .cso-guide는 left:50% + translateX(-50%)로 가운데를 잡는다.
+         위 csoUp(transform:none)을 그대로 쓰면 -50%가 지워져 «화면 절반만큼 오른쪽으로» 밀린다
+         — 설명서가 잘려 보이던 원인. 그래서 X를 유지하는 전용 키프레임을 쓴다 */
+      @keyframes csoUpC{0%{transform:translate(-50%,40px);opacity:0}100%{transform:translate(-50%,0);opacity:1}}
       .cso-feed .grip{width:38px;height:4px;border-radius:99px;background:var(--cso-line2);margin:0 auto 12px;cursor:grab}
       /* v541 · 시트 탈출구 — 닫는 법이 «보여야» 한다 (배경 클릭만 있으면 아무도 모른다) */
       .cso-feedx{position:absolute;top:9px;right:11px;z-index:3;width:30px;height:30px;border-radius:50%;
@@ -18651,7 +18665,7 @@
       /* 설명서 모달 */
       .cso-gov{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:70;display:none;backdrop-filter:blur(3px)}
       .cso-gov.on{display:block}
-      .cso-guide{position:fixed;left:50%;bottom:0;transform:translateX(-50%);width:min(520px,100%);max-height:84vh;overflow-y:auto;z-index:71;background:#15160f;border:1px solid var(--cso-line2);border-bottom:none;border-radius:22px 22px 0 0;padding:16px 18px calc(24px + env(safe-area-inset-bottom));display:none;animation:csoUp .3s cubic-bezier(.2,.9,.3,1) both}
+      .cso-guide{position:fixed;left:50%;bottom:0;transform:translateX(-50%);width:min(520px,100%);max-height:84vh;overflow-y:auto;z-index:71;background:#15160f;border:1px solid var(--cso-line2);border-bottom:none;border-radius:22px 22px 0 0;padding:16px 18px calc(24px + env(safe-area-inset-bottom));display:none;animation:csoUpC .3s cubic-bezier(.2,.9,.3,1) both}
       .cso-guide.on{display:block}
       .cso-guide .grip{width:38px;height:4px;border-radius:99px;background:var(--cso-line2);margin:0 auto 14px}
       .cso-guide .gt{font-size:15px;font-weight:800;text-align:center}.cso-guide .gt .em{color:var(--cso-lime)}
@@ -19252,7 +19266,8 @@
   <main class="sh-main">
     <!-- 🧭 방 레일 — 어느 방에 있든 항상 보임 (정리 · 홈 · 제작소) -->
     <div id="room-rail" role="navigation" aria-label="방 이동">
-      <button class="rr-btn rr-ai" data-room="sorter" title="AI 컨텐츠 정리"><span class="g">🤖</span><span class="t">AI 정리</span></button>
+      <button class="rr-btn rr-fork" data-room="fork" title="갈림길로"><span class="g">‹</span><span class="t">갈림길</span></button>
+      <button class="rr-btn rr-ai" data-room="sorter" title="AI 컨텐츠 정리"><span class="g">⊞</span><span class="t">AI 정리</span></button>
       <button class="rr-btn rr-home" data-room="home" title="트레이닝 룸"><span class="g">⌂</span><span class="t">홈</span></button>
       <button class="rr-btn rr-mk" data-room="studio" title="컨텐츠 제작소"><span class="g">✎</span><span class="t">제작소</span></button>
       <button class="rr-back" id="rr-back" style="display:none">‹ 제작소로</button>
@@ -20486,7 +20501,9 @@
     <style>
     #slv{position:fixed;inset:0;z-index:1600;display:none;overflow-y:auto;background:#0A0B08;
       --slime:#d7f34b;--sneon:#e6fb62;--sline:rgba(255,255,255,.08);--sline2:rgba(255,255,255,.14);--ssub:#9BA08C;--sfaint:#5A5E4E;
-      background-image:radial-gradient(rgba(255,255,255,.03) 1px,transparent 1.2px);background-size:15px 15px;padding:0 14px calc(34px + env(safe-area-inset-bottom))}
+      background-image:radial-gradient(rgba(255,255,255,.03) 1px,transparent 1.2px);background-size:15px 15px;
+      /* ⚠️ v571 · 위쪽 safe-area가 없어 아이폰 상태바(시계·배터리)에 레일이 깔렸다 — 아래만 넣고 위를 빠뜨렸던 것 */
+      padding:env(safe-area-inset-top) 14px calc(34px + env(safe-area-inset-bottom))}
     #slv.on{display:block}
     .slv-wrap{max-width:520px;margin:0 auto}
     .slv-top{display:flex;align-items:center;gap:10px;position:sticky;top:0;background:rgba(10,11,8,.94);backdrop-filter:blur(12px);margin:0 -14px 12px;padding:13px 16px;border-bottom:1px solid var(--sline);z-index:20}
@@ -20843,7 +20860,9 @@
     @keyframes prpDrift{0%{transform:translateY(24px);opacity:0}18%{opacity:var(--mo,.5)}82%{opacity:var(--mo,.5)}100%{transform:translateY(-130px);opacity:0}}
 
     /* ⚠️ v568 · 아래 패딩은 «나무 선반(170px)»보다 커야 한다 — 왼쪽 기둥이 선반을 넘어 걸치면 지저분해진다 */
-    .prp-in{position:relative;z-index:3;max-width:980px;margin:0 auto;padding:22px 20px 204px}
+    /* v571 · 위 safe-area — 아이폰 상태바 아래에서 시작 */
+    .prp-in{position:relative;z-index:3;max-width:980px;margin:0 auto;
+      padding:calc(22px + env(safe-area-inset-top)) 20px 204px}
     .prp-top{display:flex;align-items:center;gap:10px;margin-bottom:16px}
     .prp-top .t{font-size:13px;font-weight:800;color:#eae8de}
     .prp-top .c{font-family:'JetBrains Mono',monospace;font-size:10px;color:#63695f;margin-left:auto;font-variant-numeric:tabular-nums}
@@ -31797,6 +31816,8 @@
     } catch (e) {}
     rail.querySelectorAll('.rr-btn').forEach(b => b.onclick = () => {
       const r = b.dataset.room;
+      // v571 · 갈림길로 되돌아가는 길 — 지금까진 나가면 다시 못 들어왔다
+      if (r === 'fork') { try { window.__csForkShown = false; maybeShowFork(); } catch (e) {} return; }
       if (r === 'sorter') { if (window.__openSorter) window.__openSorter(); return; }
       switchWorkspace(r === 'studio' ? 'studio' : 'home');
     });
