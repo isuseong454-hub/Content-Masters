@@ -12613,8 +12613,9 @@
   .ac-top .t b{ color:#e6fb62; }
   .ac-top .why{ font-size:10px; color:var(--text-sub,#9aa08a); margin-top:5px; }
   .ac-top .why b{ color:#F5C84B; }
-  .ac-seg{ display:flex; gap:2px; padding:6px; }
-  .ac-seg button{ flex:1; font-family:inherit; font-size:10.5px; font-weight:700; padding:7px 4px; border:none;
+  /* v577 · 갈래가 5개로 늘어 폰에서는 두 줄로 흐른다 (한 줄에 밀어넣어 글자가 깨지지 않게) */
+  .ac-seg{ display:flex; flex-wrap:wrap; gap:2px; padding:6px; }
+  .ac-seg button{ flex:1 1 auto; min-width:82px; font-family:inherit; font-size:10.5px; font-weight:700; padding:7px 4px; border:none;
     border-radius:8px; cursor:pointer; background:none; color:var(--text-faint,#5d6350); }
   .ac-seg button.on{ background:rgba(255,255,255,.11); color:#f3f4ee; font-weight:800;
     box-shadow:inset 0 1px 0 rgba(255,255,255,.14); }
@@ -12723,6 +12724,55 @@
     font-size:9px; font-weight:800; color:var(--law-asset,#d7f34b); flex:0 0 auto; }
   .ac-fx .e{ font-size:10px; color:var(--text-sub,#9aa08a); margin-top:4px;
     overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+
+  /* 🎨 v575 — 자동완성 줄에 «어느 카드에서 왔는지». 시트 보드와 같은 유형색·조회수 티어를 그대로 쓴다.
+     🖼 썸네일·✨ 수식어만 내 카드에서 온 것이라 색·미리보기가 붙는다 (🧬 공식·📋 템플릿은 원본 카드가 없음) */
+  .ac-dot{ width:3px; align-self:stretch; min-height:14px; border-radius:99px; flex:0 0 auto; margin-left:-4px; }
+  .ac-it .v.vt1{ color:#34d77a; }
+  .ac-it .v.vt2{ color:#d7f34b; }
+  .ac-it .v.vt3{ color:#F5C84B; text-shadow:0 0 8px rgba(245,200,75,.45); }
+  .ac-it .v.vt4{ color:#E87AB0; text-shadow:0 0 9px rgba(232,122,176,.6); font-weight:800; }
+  .ac-go{ position:relative; flex:0 0 auto; width:26px; height:26px; border-radius:8px; margin-left:2px;
+    border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.05); color:var(--text-sub,#9aa08a);
+    font-size:11px; font-family:inherit; line-height:1; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; }
+  .ac-go::before{ content:''; position:absolute; inset:-9px; }   /* 손가락 과녁 44px — 눈에 보이는 크기는 26px */
+  .ac-go:hover{ color:#f3f4ee; border-color:rgba(215,243,75,.55); background:rgba(215,243,75,.14); }
+  .ac-go:focus-visible{ outline:2px solid var(--law-asset,#d7f34b); outline-offset:1px; }
+  /* 미리보기는 body에 띄운다 — 자동완성 창은 스크롤되므로 안에 넣으면 잘린다 */
+  .ac-prev{ position:fixed; z-index:5100; width:238px; padding:11px; border-radius:13px;
+    background:#0f1009; border:1px solid rgba(255,255,255,.14); pointer-events:none; display:none;
+    box-shadow:0 20px 46px rgba(0,0,0,.8); opacity:0; transform:translateY(6px) scale(.97);
+    transition:opacity .14s, transform .17s cubic-bezier(.2,1.2,.4,1); }
+  .ac-prev.on{ opacity:1; transform:none; }
+  .ac-prev .ph{ display:flex; gap:9px; }
+  .ac-prev .th{ width:46px; aspect-ratio:9/16; border-radius:6px; object-fit:cover; background:#12130f; flex:0 0 auto; }
+  .ac-prev .z{ min-width:0; flex:1; }
+  .ac-prev .cp{ display:inline-block; font-size:8.5px; font-weight:800; border-radius:99px; padding:2px 7px; white-space:nowrap; }
+  .ac-prev .hk{ font-size:11px; font-weight:700; color:#f1f2ec; line-height:1.42; margin-top:5px;
+    display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+  .ac-prev .rw{ display:flex; justify-content:space-between; gap:8px; font-size:10px; padding:3px 0; }
+  .ac-prev .rw u{ text-decoration:none; color:var(--text-faint,#5d6350); }
+  .ac-prev .rw s{ text-decoration:none; color:var(--text-sub,#9aa08a);
+    font-family:'JetBrains Mono',monospace; font-variant-numeric:tabular-nums; }
+  .ac-prev .rail{ display:flex; gap:3px; margin-top:8px; }
+  .ac-prev .rail i{ height:4px; flex:1; border-radius:99px; }
+  .ac-prev .ft{ margin-top:9px; padding-top:8px; border-top:1px solid rgba(255,255,255,.08);
+    font-size:9.5px; color:var(--text-faint,#5d6350); text-align:center; }
+  .ac-prev .ft b{ color:var(--law-asset,#d7f34b); }
+  @media (hover:none){ .ac-prev{ display:none !important; } }   /* 손가락 기기엔 미리보기 없음 — ↗로 연다 */
+
+  /* 🧭 v576 — 주제 추천(«증거 세 종류»). 후킹 자동완성과 «같은 얼굴»이라 새로 배울 게 없다.
+     다른 점은 색뿐 — ♡고객=전환 초록 / ★내 성과=자산 라임 / ◇빈 자리=유입 캔들 (색의 헌법 그대로) */
+  .hook-ac.tps .ac-top{ background:linear-gradient(180deg,color-mix(in srgb,var(--c) 11%,transparent),transparent); }
+  .hook-ac.tps .ac-top:hover{ background:linear-gradient(180deg,color-mix(in srgb,var(--c) 18%,transparent),transparent); }
+  .hook-ac.tps .ac-top .k{ color:var(--c); }
+  .tps-gold{ font-style:normal; font-size:9px; flex:0 0 auto; margin-left:-4px; }
+  .tps-sub{ margin-left:auto; flex:0 0 auto; font-family:'Pretendard',sans-serif !important;
+    font-size:9.5px; font-weight:600; color:var(--text-faint,#5d6350) !important; white-space:nowrap; }
+  .tps-thin{ padding:9px 13px; font-size:10px; line-height:1.6; color:var(--text-faint,#5d6350);
+    border-top:1px solid rgba(255,255,255,.06); background:rgba(255,255,255,.02); }
+  .tps-thin b{ color:var(--text-sub,#9aa08a); font-weight:800; }
 
 
   /* 🎬 v558 — 제작소 탭 줄을 «하단 유리 도크»로 (B안 확정 · 힉스필드).
@@ -16878,6 +16928,15 @@
     background:radial-gradient(circle at 50% 50%,rgba(255,255,255,.9),transparent 62%); }
   @keyframes cqFlash{ from{ opacity:.9; } to{ opacity:0; } }
   .cq-b.pop .fl{ animation:cqFlash .45s ease both; }
+  /* v577 · 「원고로 만들기」는 체크가 아니라 «문» — 다른 벽돌(코퍼)과 달리 전환 초록으로 선다.
+     답이 없으면 열리지 않는다(먼저 답부터 — 그게 이 방의 순서) */
+  .cq-b.mk{ color:var(--law-cnv,#2FD07B);
+    background:linear-gradient(180deg,rgba(47,208,123,.17),rgba(47,208,123,.06));
+    border-color:rgba(47,208,123,.5); box-shadow:0 3px 0 rgba(47,208,123,.26), inset 0 1px 0 rgba(190,255,220,.14); }
+  .cq-b.mk:hover{ box-shadow:0 5px 0 rgba(47,208,123,.26); }
+  .cq-b.mk:active{ box-shadow:0 0 0 rgba(47,208,123,.26); }
+  .cq-b.mk[disabled]{ opacity:.4; cursor:default; filter:none; transform:none; }
+  .cq-b.mk[disabled]:hover{ filter:none; transform:none; box-shadow:0 3px 0 rgba(47,208,123,.26); }
   .cq-ans{ margin-top:15px; }
   .cq-ta{ width:100%; box-sizing:border-box; font-family:inherit; font-size:11.5px; line-height:1.65; color:var(--st2-txt);
     background:rgba(0,0,0,.32); border:1px solid rgba(255,255,255,.12); border-radius:12px; padding:11px 12px;
@@ -26408,7 +26467,11 @@
   // === 원고 워크스페이스 init ===
   function initScriptsWorkspace() {
     // 주제/제목(썸네일 문구)/본문/메모 입력
-    { const se = document.getElementById('sc-entry-subject'); if (se) se.addEventListener('input', (e) => { scriptEntryState.subject = e.target.value; }); }
+    { const se = document.getElementById('sc-entry-subject');
+      if (se) {
+        se.addEventListener('input', (e) => { scriptEntryState.subject = e.target.value; });
+        if (typeof attachTopicSuggest === 'function') attachTopicSuggest(se);   // v576 · 증거 세 종류
+      } }
     document.getElementById('sc-entry-title').addEventListener('input', (e) => {
       scriptEntryState.title = e.target.value;
     });
@@ -29834,6 +29897,69 @@
   window.__ins = { formulas: insFormulas, clusters: insClusters, vein: insVein,
     len: insLenRule, stale: insStale, ctx: insCtxKw, strong: insStrongLine, top: insTop, idx: insIdx };
 
+  // 🎨 v575 · 자동완성 미리보기 — 「이건 뭐지」에 답한다.
+  //   내 카드에서 온 줄(🖼 썸네일·✨ 수식어)만 뜬다. 🧬 공식은 여러 편에서 뽑은 뼈대라 원본이 한 장이 아니고,
+  //   📋 템플릿은 후킹 100 사전이라 보여줄 카드 자체가 없다.
+  let _acPrevEl = null;
+  const _acPrevThumbs = {};
+  function acPrevBox() {
+    if (_acPrevEl) return _acPrevEl;
+    _acPrevEl = document.createElement('div');
+    _acPrevEl.className = 'ac-prev';
+    document.body.appendChild(_acPrevEl);
+    return _acPrevEl;
+  }
+  function acHidePrev() {
+    if (!_acPrevEl) return;
+    _acPrevEl.classList.remove('on');
+    _acPrevEl.style.display = 'none';
+  }
+  function acShowPrev(rowId, anchor) {
+    const r = (rows || []).find(x => x.id === rowId);
+    if (!r || !anchor) return;
+    const box = acPrevBox();
+    const tc = r.format ? fbTypeColor(r.format) : '#d7f34b';
+    const vt = r.views >= 1000000 ? 'vt4' : r.views >= 500000 ? 'vt3'
+             : r.views >= 100000 ? 'vt2' : r.views >= 10000 ? 'vt1' : '';
+    const hasScript = !!stripHtml(r.script || '').trim();
+    box.style.borderColor = fbHexA(tc, .6);
+    box.innerHTML =
+      '<div class="ph"><img class="th" alt="" />' +
+        '<div class="z">' +
+        (r.format ? '<span class="cp" style="color:' + tc + ';border:1px solid ' + fbHexA(tc, .5) + '">' + esc(r.format) + '</span>' : '') +
+        '<div class="hk">' + esc(r.hook || stripHtml(r.script || '').slice(0, 60) || r.why || '(내용 없음)') + '</div>' +
+        '</div></div>' +
+      '<div class="rw"><u>조회</u><s class="' + vt + '">' + (r.views ? fmtViews(r.views) : '—') + '</s></div>' +
+      '<div class="rw"><u>공유 · 저장</u><s>' + (r.shares ? fmtNum(r.shares) : '—') + ' · ' + (r.saves ? fmtNum(r.saves) : '—') + '</s></div>' +
+      (r.rating ? '<div class="rw"><u>나에게 핏</u><s style="color:#F5E6D3">' + '★'.repeat(r.rating) + '</s></div>' : '') +
+      (hasScript ? '<div class="rail">' + [1, 2, 3, 4, 5].map(function (i) {
+        return '<i style="background:var(--law-sec' + i + ')"></i>'; }).join('') + '</div>' : '') +
+      '<div class="ft">' + (hasScript ? '원고 분해됨 · ' : '') + '<b>↗</b> 누르면 한 장으로</div>';
+    // 조회수 티어색은 .ac-it 안에서만 정의돼 있어 여기선 직접 칠한다
+    const vs = box.querySelector('.rw s');
+    if (vs && vt) vs.style.color = vt === 'vt4' ? '#E87AB0' : vt === 'vt3' ? '#F5C84B' : vt === 'vt2' ? '#d7f34b' : '#34d77a';
+    const im = box.querySelector('.th');
+    if (r.hasThumb) {
+      if (_acPrevThumbs[r.id]) im.src = _acPrevThumbs[r.id];
+      else loadImage(r.id, 'thumb').then(function (u) {
+        if (!u) return; _acPrevThumbs[r.id] = u;
+        if (im.isConnected) im.src = u;
+      }).catch(function () {});
+    } else { im.style.background = fbHexA(tc, .18); }
+    // 자리 = 자동완성 창 오른쪽. 안 들어가면 왼쪽. 그것도 안 되면 아예 안 띄운다(가리면 손해)
+    box.style.display = 'block';
+    const dd = anchor.closest('.hook-ac');
+    const dr = (dd || anchor).getBoundingClientRect();
+    const ar = anchor.getBoundingClientRect();
+    let x = dr.right + 10;
+    if (x + 238 > window.innerWidth - 8) x = dr.left - 248;
+    if (x < 8) { acHidePrev(); return; }
+    let y = Math.max(8, Math.min(ar.top - 8, window.innerHeight - box.offsetHeight - 8));
+    box.style.left = x + 'px';
+    box.style.top = y + 'px';
+    requestAnimationFrame(function () { box.classList.add('on'); });
+  }
+
   // 후킹 문구 자동완성 — 내 벤치마킹(조회수순) + 후킹 100 템플릿
   // 후킹 자동완성 on/off (입력칸 옆 토글, localStorage 기억)
   let hookAcEnabled = (function () { try { return localStorage.getItem('cm-hook-ac-off') !== '1'; } catch (e) { return true; } })();
@@ -29848,8 +29974,15 @@
     if (!input || input._hookAc) return; input._hookAc = true;
     opts = opts || {};
     let dd = null;
-    function ensureDd() { if (dd) return dd; dd = document.createElement('div'); dd.className = 'hook-ac'; document.body.appendChild(dd); dd.addEventListener('mousedown', function (e) { e.preventDefault(); }); return dd; }
-    function close() { if (dd) dd.style.display = 'none'; }
+    function ensureDd() {
+      if (dd) return dd;
+      dd = document.createElement('div'); dd.className = 'hook-ac';
+      document.body.appendChild(dd);
+      dd.addEventListener('mousedown', function (e) { e.preventDefault(); });
+      dd.addEventListener('scroll', acHidePrev, { passive: true });   // v575 · 창이 밀리면 미리보기부터 접는다
+      return dd;
+    }
+    function close() { if (dd) dd.style.display = 'none'; acHidePrev(); }
     function flip() { setHookAcEnabled(!hookAcEnabled); if (!hookAcEnabled) close(); else { try { input.focus(); } catch (er) {} render(); } }
     if (opts.switchEl) {
       // 외부 슬라이드 스위치(파트너 스타일) 사용
@@ -29933,7 +30066,8 @@
           const txt = (r[field] || '').trim(); if (!txt || seen[txt]) return; seen[txt] = 1;
           const v = parseInt(r.views, 10) || 0;
           const sc = acScore(txt, v, r.date || r.createdAt || '', q);
-          if (sc >= 0) arr.push({ text: txt, views: v, score: sc });
+          // v575 · 어느 카드에서 온 문구인지 같이 들고 온다 (색·미리보기·↗의 재료)
+          if (sc >= 0) arr.push({ text: txt, views: v, score: sc, rowId: r.id, format: r.format || '' });
         });
         arr.sort(function (a, b) { return b.score - a.score; });
         return arr.slice(0, 10);
@@ -29959,9 +30093,19 @@
       }
       function itemRow(x, isTpl) {
         const usedNow = !!(acScore._used || {})[String(x.text).trim()];
-        return '<div class="ac-it" data-v="' + esc(x.text) + '"><span class="tx">' + hl(x.text) + '</span>' +
+        // v575 · 유형색 띠 + 조회수 티어색 + ↗(한 장으로 펼치기). 템플릿은 원본 카드가 없어 셋 다 없다
+        const tc = (!isTpl && x.format) ? fbTypeColor(x.format) : '';
+        const vtc = (!isTpl && x.views) ? (x.views >= 1000000 ? ' vt4' : x.views >= 500000 ? ' vt3'
+          : x.views >= 100000 ? ' vt2' : x.views >= 10000 ? ' vt1' : '') : '';
+        return '<div class="ac-it" data-v="' + esc(x.text) + '"' +
+          (!isTpl && x.rowId ? ' data-acrow="' + esc(x.rowId) + '"' : '') + '>' +
+          (tc ? '<i class="ac-dot" style="background:' + tc + '"></i>' : '') +
+          '<span class="tx">' + hl(x.text) + '</span>' +
           (usedNow ? '<span class="v tpl" style="color:#5d6350">이미 씀</span>' : '') +
-          '<span class="v' + (isTpl ? ' tpl' : '') + '">' + (isTpl ? '템플릿' : (x.views ? fmtViews(x.views) : '-')) + '</span></div>';
+          '<span class="v' + (isTpl ? ' tpl' : vtc) + '">' + (isTpl ? '템플릿' : (x.views ? fmtViews(x.views) : '-')) + '</span>' +
+          (!isTpl && x.rowId ? '<button type="button" class="ac-go" data-acgo="' + esc(x.rowId) +
+            '" title="이 카드를 한 장으로 펼치기" aria-label="카드 한 장으로 펼치기">↗</button>' : '') +
+          '</div>';
       }
       // 🧬 내 공식 — 내 데이터에서 반복 검증된 뼈대
       let fx = [];
@@ -29971,9 +30115,11 @@
           return f.pat.indexOf(q) >= 0 || (f.ex[0] || '').toLowerCase().indexOf(q) >= 0;
         }).slice(0, 5);
       } catch (e) { fx = []; }
-      const cols = [fx, thumbs, copies, tpl];
+      // ✎ v577 · 손질에서 «빨강으로 칠한 곳» — 앱이 고른 게 아니라 사장님이 손으로 고른 것이라 맨 앞
+      const prep = prpPhrases('k').filter(function (x) { return !q || x.t.toLowerCase().indexOf(q) >= 0; }).slice(0, 12);
+      const cols = [prep, fx, thumbs, copies, tpl];
       if (!cols[_acSeg].length) { const fi = cols.findIndex(function (c) { return c.length; }); _acSeg = fi < 0 ? 0 : fi; }
-      const names = ['🧬 공식', '🖼 썸네일', '✨ 수식어', '📋 템플릿'];
+      const names = ['✎ 손질', '🧬 공식', '🖼 썸네일', '✨ 수식어', '📋 템플릿'];
       let html = '';
       // 근거 한 줄 — «왜 이게 떴는지» (알고리즘은 안 보인다)
       const ctxNow = acScore._ctx;
@@ -29981,9 +30127,15 @@
         ctxNow.kws.slice(0, 3).map(esc).join(' · ') + '</b></div>';
       // ✍ 본문 역주행 — 이미 쓴 글에서 가장 센 한 줄
       if (!q) {
-        let sl = null; try { sl = insStrongLine(); } catch (e) {}
-        if (sl) html += '<div class="ac-back" data-v="' + esc(sl) + '"><div class="k">✍ 내 본문에서</div>' +
-          '<div class="t">' + esc(sl) + '</div><div class="w">이 문장이 제일 셌어요 — 썸네일로 올려볼까요?</div></div>';
+        // v577 · 내가 손으로 칠한 빨강이 있으면 그게 이긴다 — 앱의 추측보다 사람이 고른 것이 위다
+        let sl = null, slK = '✍ 내 본문에서', slW = '이 문장이 제일 셌어요 — 썸네일로 올려볼까요?';
+        if (prep.length) {
+          sl = prep[0].t;
+          slK = '✎ 내가 빨강으로 칠한 곳';
+          slW = '손질에서 «핵심»이라고 직접 고르신 문장이에요' + (prep[0].seg ? ' · ' + prep[0].seg : '');
+        } else { try { sl = insStrongLine(); } catch (e) {} }
+        if (sl) html += '<div class="ac-back" data-v="' + esc(sl) + '"><div class="k">' + slK + '</div>' +
+          '<div class="t">' + esc(sl) + '</div><div class="w">' + slW + '</div></div>';
       }
       if (top) {
         acPushRecent(String(top.x.text).trim());   // 다음엔 다른 게 뜨도록 기록
@@ -30012,9 +30164,26 @@
           '<span style="margin-left:' + (insPatGlue(f.pat) ? '4px' : '-6px') + '">' + esc(f.pat.trim()) + '</span><u>' + (f.vn ? f.vn + '편 중 ' + f.hit + ' · ' + pct : f.n + '편') + '</u></div>' +
           '<div class="e">예 · ' + esc(f.ex[0] || '') + '</div></div>';
       }
+      // ✎ 손질 줄 — 어느 구간에서 칠했는지까지 보여준다(같은 말이라도 도입부와 CTA는 다르니까)
+      function prepRow(x) {
+        const r0 = (rows || []).find(function (y) { return y.id === x.rowId; });
+        const tc = (r0 && r0.format) ? fbTypeColor(r0.format) : '';
+        return '<div class="ac-it" data-v="' + esc(x.t) + '"' +
+          (x.rowId ? ' data-acrow="' + esc(x.rowId) + '"' : '') + '>' +
+          (tc ? '<i class="ac-dot" style="background:' + tc + '"></i>' : '') +
+          '<span class="tx">' + hl(x.t) + '</span>' +
+          (x.seg ? '<span class="v tpl">' + esc(x.seg) + '</span>' : '') +
+          (x.rowId ? '<button type="button" class="ac-go" data-acgo="' + esc(x.rowId) +
+            '" title="이 카드를 한 장으로 펼치기" aria-label="카드 한 장으로 펼치기">↗</button>' : '') +
+          '</div>';
+      }
       html += '<div class="ac-list">' + (cols[_acSeg].length
-        ? (_acSeg === 0 ? cols[0].map(fxRow).join('') : cols[_acSeg].map(function (x) { return itemRow(x, _acSeg === 3); }).join(''))
+        ? (_acSeg === 0 ? cols[0].map(prepRow).join('')
+          : _acSeg === 1 ? cols[1].map(fxRow).join('')
+          : cols[_acSeg].map(function (x) { return itemRow(x, _acSeg === 4); }).join(''))
         : '<div class="ac-none2">' + (_acSeg === 0
+            ? '아직 빨강으로 칠한 곳이 없어요 — 원고 손질에서 핵심을 칠해보세요'
+            : _acSeg === 1
             ? '아직 공식이 없어요 — 같은 뼈대가 3편 쌓이면 나타납니다'
             : '여기엔 관련된 게 없어요') + '</div>') + '</div>';
       d.innerHTML = html;
@@ -30025,6 +30194,166 @@
       d.querySelectorAll('[data-v]').forEach(function (it) {
         it.addEventListener('click', function () {
           input.value = it.dataset.v; input.dispatchEvent(new Event('input', { bubbles: true }));
+          close(); try { input.focus(); } catch (e) {}
+        });
+      });
+      // v575 · 줄을 «누르는 것»은 지금처럼 문구 넣기 그대로. 카드를 펼치는 건 ↗ 하나로 따로 뺀다
+      d.querySelectorAll('[data-acgo]').forEach(function (b) {
+        b.addEventListener('click', function (e) {
+          e.stopPropagation(); e.preventDefault();
+          const id = b.dataset.acgo;
+          close();
+          try { openDetail(id); } catch (er) { console.warn('acgo', er); }
+        });
+      });
+      d.querySelectorAll('[data-acrow]').forEach(function (it) {
+        it.addEventListener('mouseenter', function () { acShowPrev(it.dataset.acrow, it); });
+        it.addEventListener('mouseleave', acHidePrev);
+      });
+      const _acL = d.querySelector('.ac-list');
+      if (_acL) _acL.addEventListener('scroll', acHidePrev, { passive: true });
+      const r = input.getBoundingClientRect();
+      const w = Math.min(Math.max(r.width, 300), window.innerWidth - 24);
+      d.style.left = Math.max(12, Math.min(r.left, window.innerWidth - w - 12)) + 'px';
+      d.style.top = (r.bottom + 6) + 'px'; d.style.width = w + 'px'; d.style.display = 'block';
+    }
+    input.addEventListener('focus', render);
+    input.addEventListener('input', render);
+    input.addEventListener('blur', function () { setTimeout(close, 160); });
+  }
+
+  // 🧭 v576 · 주제 추천 — 「증거 세 종류」
+  //   주제는 증거와 곱할 때 세진다. 증거는 세 종류밖에 없다:
+  //     ♡ 사람의 증거(고객이 실제로 한 말)  — 돈에 제일 가깝고 아무도 못 베낀다
+  //     ★ 내 증거(내가 올려서 통한 것)      — 복리가 붙는 유일한 축
+  //     ◇ 남의 증거(빈 광맥)                — 가장 빠르다. 다만 이것만 보면 영원히 따라간다
+  //   순서가 곧 위계다. 있는 것 중 «가장 위»가 Top으로 올라온다.
+  const TPS_SEG = [
+    { k: 'cus',  n: '♡ 고객',    c: 'var(--law-cnv,#2FD07B)' },
+    { k: 'mine', n: '★ 내 성과',  c: 'var(--law-asset,#d7f34b)' },
+    { k: 'gap',  n: '◇ 빈 자리',  c: 'var(--law-att,#E0B27A)' }
+  ];
+  const TPS_BASK = { resist: '망설인 말', pain: '불편', desire: '원함', fear: '겁냄' };
+  const TPS_ORD  = { resist: 0, pain: 1, desire: 2, fear: 3 };
+  // ♡ 고객이 실제로 한 말 — ⭐핵심 먼저, 그다음 «돈에 가까운 순»(저항→문제→욕구→회피)
+  function tpsCus(q) {
+    const out = [], seen = {};
+    (pmms || []).forEach(function (p) {
+      (p.collect || []).forEach(function (c) {
+        const t = String(c.quote || '').trim();
+        if (!t || seen[t]) return;
+        if (q && t.toLowerCase().indexOf(q) < 0) return;
+        seen[t] = 1;
+        const b = c.basket || 'pain';
+        out.push({ t: t, lb: TPS_BASK[b] || '', gold: !!c.gold,
+          who: String(p.targetName || '').trim(),
+          ans: String(c.answer || '').trim(),
+          ord: (TPS_ORD[b] === undefined ? 9 : TPS_ORD[b]) });
+      });
+    });
+    out.sort(function (a, b) { return (b.gold - a.gold) || (a.ord - b.ord); });
+    return out.slice(0, 12);
+  }
+  // 앱이 붙인 껍데기 말 — 주제가 될 수 없다 («자유 형식» 원고의 제목 「자유」가 후보로 뜨던 것)
+  const TPS_SKIP = { '자유': 1, '제목': 1, '원고': 1, '없음': 1, '무제': 1, '초안': 1, '복사': 1, '테스트': 1, '새글': 1 };
+  // ★ 내가 올려서 실제로 통한 것 — 그 말이 다시 주제가 된다
+  function tpsMine(q) {
+    const ups = (scripts || []).filter(function (s) { return (s.uploadViews || 0) > 0; });
+    if (!ups.length) return [];
+    const m = {};
+    ups.forEach(function (s) {
+      const seen = {};
+      // 주제를 묻는 자리다 — 주제가 적혀 있으면 그것만 본다(제목은 껍데기일 때가 많다)
+      insTok((s.subject || '').trim() || (s.title || '')).forEach(function (w) {
+        if (seen[w] || TPS_SKIP[w]) return; seen[w] = 1;
+        if (!m[w]) m[w] = { t: w, n: 0, sum: 0, best: 0 };
+        m[w].n++; m[w].sum += (s.uploadViews || 0);
+        if ((s.uploadViews || 0) > m[w].best) m[w].best = s.uploadViews || 0;
+      });
+    });
+    return Object.keys(m).map(function (k) {
+      const x = m[k]; return { t: x.t, n: x.n, avg: Math.round(x.sum / x.n), best: x.best };
+    }).filter(function (x) { return !q || x.t.indexOf(q) >= 0; })
+      .sort(function (a, b) { return (b.n - a.n) || (b.avg - a.avg); }).slice(0, 10);
+  }
+  // ◇ 남은 팠는데 나는 안 판 자리
+  function tpsGap(q) {
+    let cl = []; try { cl = insClusters(); } catch (e) { return []; }
+    return cl.filter(function (c) { return c.n >= 3 && (!q || c.kw.indexOf(q) >= 0); })
+      .map(function (c) { return { t: c.kw, n: c.n, avg: c.avg, mine: c.mine, hot: c.hot }; })
+      .slice(0, 10);
+  }
+  let _tpsSeg = 0;
+  function attachTopicSuggest(input) {
+    if (!input || input._tps) return; input._tps = true;
+    let dd = null;
+    function ensureDd() {
+      if (dd) return dd;
+      dd = document.createElement('div'); dd.className = 'hook-ac tps';
+      document.body.appendChild(dd);
+      dd.addEventListener('mousedown', function (e) { e.preventDefault(); });
+      return dd;
+    }
+    function close() { if (dd) dd.style.display = 'none'; }
+    function render() {
+      const q = (input.value || '').trim().toLowerCase();
+      const cols = [tpsCus(q), tpsMine(q), tpsGap(q)];
+      if (!cols[0].length && !cols[1].length && !cols[2].length) { close(); return; }
+      if (!cols[_tpsSeg].length) {
+        const fi = cols.findIndex(function (c) { return c.length; });
+        _tpsSeg = fi < 0 ? 0 : fi;
+      }
+      const d = ensureDd();
+      // ── Top = 있는 것 중 «가장 위» (고객 → 내 성과 → 빈 자리) ──
+      let top = null;
+      if (cols[0].length) {
+        const x = cols[0][0];
+        top = { c: TPS_SEG[0].c, k: '고객이 한 말', t: x.t,
+          why: (x.who ? '<b>' + esc(x.who) + '</b>님이 ' : '') + (x.lb ? esc(x.lb) : '한 말') +
+               ' — <b style="color:#e6fb62">이 말에 답하는 한 편</b>이 곧 전환이에요' };
+      } else if (cols[1].length) {
+        const x = cols[1][0];
+        top = { c: TPS_SEG[1].c, k: '내가 통한 자리', t: x.t,
+          why: '내가 올린 <b>' + x.n + '편</b>에 있던 말 · 평균 <b>' + fmtViews(x.avg) + '</b>' +
+               ' — <b style="color:#e6fb62">여기를 더 파세요</b>' };
+      } else if (cols[2].length) {
+        const x = cols[2][0];
+        top = { c: TPS_SEG[2].c, k: '아직 안 판 자리', t: x.t,
+          why: '남의 것 <b>' + x.n + '편</b>' + (x.avg ? '이 평균 <b>' + fmtViews(x.avg) + '</b>' : '') +
+               ' — 그런데 <b>내 원고는 ' + x.mine + '편</b>이에요' };
+      }
+      let h = '<div class="ac-why">지금 창고가 말하는 것 — <b>고객 ' + cols[0].length +
+        ' · 내 성과 ' + cols[1].length + ' · 빈 자리 ' + cols[2].length + '</b></div>';
+      if (top) h += '<div class="ac-top tps-top" style="--c:' + top.c + '" data-tv="' + esc(top.t) + '">' +
+        '<div class="k">' + top.k + '</div><div class="t">' + esc(top.t) + '</div>' +
+        '<div class="why">' + top.why + '</div></div>';
+      h += '<div class="ac-seg">' + TPS_SEG.map(function (s, i) {
+        return '<button type="button" data-tseg="' + i + '"' + (i === _tpsSeg ? ' class="on"' : '') +
+          (cols[i].length ? '' : ' disabled style="opacity:.35"') + '>' + s.n +
+          '<s>' + cols[i].length + '</s></button>';
+      }).join('') + '</div>';
+      const col = TPS_SEG[_tpsSeg].c;
+      h += '<div class="ac-list">' + (cols[_tpsSeg].length ? cols[_tpsSeg].map(function (x) {
+        let sub = '', star = '';
+        if (_tpsSeg === 0) { sub = x.lb + (x.who ? ' · ' + x.who : ''); star = x.gold ? '<em class="tps-gold">⭐</em>' : ''; }
+        else if (_tpsSeg === 1) sub = x.n + '편 · 평균 ' + fmtViews(x.avg);
+        else sub = '남 ' + x.n + '편' + (x.avg ? ' 평균 ' + fmtViews(x.avg) : '') + ' · 내 ' + x.mine + '편';
+        return '<div class="ac-it" data-tv="' + esc(x.t) + '">' +
+          '<i class="ac-dot" style="background:' + col + '"></i>' + star +
+          '<span class="tx">' + esc(x.t) + '</span>' +
+          '<span class="v tps-sub">' + esc(sub) + '</span></div>';
+      }).join('') : '<div class="ac-none2">여기엔 아직 없어요</div>') + '</div>';
+      // 셋 다 얇을 때 — 0으로 겁주지 않고 «어디를 채우면 되는지»만 한 줄
+      if (cols[0].length + cols[1].length + cols[2].length < 4)
+        h += '<div class="tps-thin">고객 방에 <b>들은 말</b>을 담고, 올린 원고에 <b>조회수</b>를 적으면 여기가 두꺼워져요</div>';
+      d.innerHTML = h;
+      d.querySelectorAll('[data-tseg]').forEach(function (b) {
+        b.addEventListener('click', function () { _tpsSeg = +b.dataset.tseg; render(); });
+      });
+      d.querySelectorAll('[data-tv]').forEach(function (it) {
+        it.addEventListener('click', function () {
+          input.value = it.dataset.tv;
+          input.dispatchEvent(new Event('input', { bubbles: true }));
           close(); try { input.focus(); } catch (e) {}
         });
       });
@@ -42345,6 +42674,34 @@
     return out;
   }
   function prpHasScript(r) { return prpSegsOf(r).length > 0; }
+  // ✎ v577 · 손질에서 «직접 칠한» 곳을 다시 꺼내 쓴다.
+  //   앱이 추측한 게 아니라 사장님이 손으로 고른 것 — 이보다 확실한 신호는 없다.
+  //   ⚠️ 클래스 이름이 뜻과 반대다: 'k' = 빨강(핵심) / 'r' = 주황(참고). CSS .w.k/.w.r 참고
+  function prpPhrases(kind) {
+    const out = [], seen = {};
+    (rows || []).forEach(function (r) {
+      const marks = (r.prep && r.prep.marks) || {};
+      if (!Object.keys(marks).length) return;
+      let segs = []; try { segs = prpSegsOf(r); } catch (e) { return; }
+      Object.keys(marks).forEach(function (i) {
+        const s = segs[+i]; if (!s) return;
+        const words = String(s.t || '').replace(/<[^>]*>/g, '').split(/\s+/).filter(Boolean);
+        const mk = marks[i] || {};
+        let cur = [];
+        const flush = function () {
+          if (!cur.length) return;
+          const t = cur.join(' ').trim();
+          cur = [];
+          if (t.length < 2 || seen[t]) return;
+          seen[t] = 1;
+          out.push({ t: t, rowId: r.id, seg: s.k || '', at: (r.prep && r.prep.at) || 0 });
+        };
+        words.forEach(function (w, j) { if (mk[j] === kind) cur.push(w); else flush(); });
+        flush();
+      });
+    });
+    return out.sort(function (a, b) { return b.at - a.at; });   // 최근에 손질한 것부터
+  }
   function prpPending() { return (rows || []).filter(r => prpHasScript(r) && !(r.prep && r.prep.done)); }
   function prpColor(seg) {
     const meta = seg.c ? SCRIPT_SECTIONS.find(s => s.key === seg.c) : null;
@@ -46996,9 +47353,15 @@
           '<div class="cq-c srf' + (n >= 5 ? ' done' : '') + '" id="cq-c">' + n + ' / 5</div>' +
           '<div class="cq-btns">' + CUS2_BREAK.map((b, i) => {
             const on = i === 0 ? !!(c.answer || '').trim() : !!s[b.k];
-            return '<button class="cq-b' + (on ? ' on' : '') + '"' +
-              (i === 0 ? ' data-cus2focus="' + c.id + '"' : ' data-cus2brk="' + c.id + '|' + b.k + '"') +
-              '><span class="fl"></span>' + b.n + '<span class="s">' + b.d + '</span></button>';
+            // v577 · 「컨텐츠화」는 체크가 아니라 «진짜로 원고가 시작되는» 문. 답이 있어야 열린다
+            const isMake = (b.k === 'content');
+            const hasAns = !!(c.answer || '').trim();
+            const attr = i === 0 ? ' data-cus2focus="' + c.id + '"'
+              : isMake ? ' data-cus2script="' + c.id + '"' + (hasAns ? '' : ' disabled')
+              : ' data-cus2brk="' + c.id + '|' + b.k + '"';
+            return '<button class="cq-b' + (on ? ' on' : '') + (isMake ? ' mk' : '') + '"' + attr +
+              '><span class="fl"></span>' + (isMake ? (on ? '원고 만들었음' : '원고로 만들기 →') : b.n) +
+              '<span class="s">' + (isMake && !hasAns ? '먼저 위에 답을 적어주세요' : b.d) + '</span></button>';
           }).join('') + '</div>' +
           '<div class="cq-ans"><textarea class="cq-ta" id="cq-ta" data-cus2qans="' + c.id + '" rows="2" ' +
             'placeholder="→ 이 말에 뭐라고 답하시겠어요?">' + esc(c.answer || '') + '</textarea>' +
@@ -47014,6 +47377,35 @@
       h += '</div></div>';
     }
     return h;
+  }
+  // 💚 v577 · 벽 → 원고. 「비싸요」에 내가 준비한 답이 그대로 한 편이 된다.
+  //   고객 방에 모아둔 저항이 여기서 처음으로 «만드는 쪽»으로 넘어간다 — 닫힌 고리의 마지막 칸.
+  function cus2ToScript(cid) {
+    let target = null;
+    (pmms || []).forEach(function (p) {
+      (p.collect || []).forEach(function (c) { if (c.id === cid) target = c; });
+    });
+    if (!target) return;
+    const q = String(target.quote || '').trim();
+    const a = String(target.answer || '').trim();
+    if (!a) {
+      toast('먼저 이 말에 답을 적어주세요');
+      const ta = document.getElementById('cq-ta'); if (ta) ta.focus();
+      return;
+    }
+    switchWorkspace('scripts');
+    resetScriptEntryState();
+    scriptEntryState.subject = q;                                  // 주제 = 고객이 실제로 한 말
+    scriptEntryState.title = a.split('\n')[0].trim().slice(0, 60);  // 후킹 = 내가 준비한 답
+    scriptEntryState.content = a;
+    applyScriptEntryToUI();
+    target.brk = target.brk || {}; target.brk.content = true;       // 두 번째 벽돌이 깨진다
+    savePmms();
+    setTimeout(function () {
+      const el = document.querySelector('.sc-entry-card');
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 250);
+    toast('「' + (q.length > 12 ? q.slice(0, 12) + '…' : q) + '」에 답하는 원고 시작! 💚');
   }
   // ── 배선 ──
   function cus2WireFirst(p, g) {
@@ -47115,6 +47507,18 @@
     document.querySelectorAll('[data-cus2focus]').forEach(b => b.onclick = () => {
       const ta = document.getElementById('cq-ta'); if (ta) ta.focus();
     });
+    // 🧱 v577 · 벽 부수기 3~5단계 — 배선이 «아예 없어» 눌러도 아무 일도 안 일어나던 버튼들을 살린다
+    document.querySelectorAll('[data-cus2brk]').forEach(b => b.onclick = () => {
+      const parts = String(b.dataset.cus2brk).split('|'), cid = parts[0], k = parts[1];
+      (pmms || []).forEach(p => (p.collect || []).forEach(c => {
+        if (c.id !== cid) return;
+        c.brk = c.brk || {};
+        c.brk[k] = !c.brk[k];
+      }));
+      savePmms(); st2RenderCus();
+    });
+    // 💚 v577 · 「컨텐츠화」 = 실제로 원고가 시작된다 (저항 → 답 → 한 편, 닫힌 고리)
+    document.querySelectorAll('[data-cus2script]').forEach(b => b.onclick = () => cus2ToScript(b.dataset.cus2script));
     // 퀘스트 이동
     const qprev = document.getElementById('cq-prev'), qnext = document.getElementById('cq-next');
     const rN = cus2Bask(p, 'resist').length;
