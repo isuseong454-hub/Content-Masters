@@ -11984,6 +11984,26 @@
   .wz3-kwpool .entry-format-chip.gold { border-color:rgba(233,200,75,.5); color:#E9C84B; }
   .wz3-kwpool .entry-format-chip.gold.on { background:#E9C84B; color:#1a1503; border-color:#E9C84B; }
   .wz3-kwempty { font-size:11.5px; color:var(--text-faint); line-height:1.55; }
+  /* 🔎 v581 · 유형 찾기 — 유형이 쌓이면 눈으로 훑는 게 느려진다. 치는 대로 바로 좁혀진다 */
+  .tsr { display:flex; align-items:center; gap:7px; margin:0 0 8px;
+    background:var(--bg-input,#12130F); border:1px solid var(--line,#232323); border-radius:9px; padding:7px 10px; }
+  .tsr:focus-within { border-color:var(--emerald-line,rgba(215,243,75,.4)); }
+  .tsr .ic { font-size:11px; opacity:.55; flex:0 0 auto; line-height:1; }
+  .tsr-in { flex:1; min-width:0; background:none; border:none; outline:none;
+    color:var(--text-main,#fff); font-family:inherit; font-size:12.5px; padding:0; }
+  .tsr-in::placeholder { color:var(--text-faint,#4A4A4A); }
+  .tsr-x { flex:0 0 auto; width:20px; height:20px; border-radius:6px; border:none; cursor:pointer;
+    background:rgba(255,255,255,.06); color:var(--text-mute,#6B6B6B); font-size:10px; line-height:1;
+    display:none; align-items:center; justify-content:center; font-family:inherit; }
+  .tsr.has .tsr-x { display:flex; }
+  .tsr-x:hover { color:var(--text-main,#fff); background:rgba(255,255,255,.12); }
+  .tsr-n { flex:0 0 auto; font-family:'JetBrains Mono',monospace; font-size:9.5px; color:var(--text-faint,#4A4A4A); }
+  /* 빠른담기(cs 톤)에서는 밝은 유리로 */
+  .qcw-fld .tsr { background:rgba(255,255,255,.04); border-color:rgba(255,255,255,.13); max-width:360px; margin:0 auto 8px; }
+  .qcw-fld .tsr-in { color:var(--cs-ink,#eaf1ea); font-size:13px; }
+  .qcw-fld .tsr-in::placeholder { color:var(--cs-faint,#5a685f); }
+  .qcw-fld .tsr:focus-within { border-color:rgba(90,170,255,.55); }
+  .qcw-none { font-size:12px; color:var(--cs-faint,#5a685f); line-height:1.6; padding:4px 0 2px; }
 
   /* v456 · 퍼널 3칸 */
   .wz3-fns { display:grid; grid-template-columns:repeat(3,1fr); gap:7px; }
@@ -20494,12 +20514,14 @@
                       <div class="entry-format-row">
                         <label class="entry-mini-label">&#128248; 썸네일 유형 <span class="be-opt">첫 화면이 사람을 멈춘 방식 · 여러 개 OK</span></label>
                       </div>
+                      <div class="tsr" id="wz3-thumb-tsr"><span class="ic">&#128269;</span><input type="text" class="tsr-in" id="wz3-thumb-q" placeholder="유형 찾기 — 치는 대로 좁혀져요" autocomplete="off" /><span class="tsr-n" id="wz3-thumb-n"></span><button type="button" class="tsr-x" data-tsrx="thumb" title="지우기">&#10005;</button></div>
                       <div class="entry-format-picker" id="wz3-thumb-pick"></div>
                     </div>
                     <div class="entry-section">
                       <div class="entry-format-row">
                         <label class="entry-mini-label">&#9997;&#65039; 수식어 유형 <span class="be-opt">그 표현이 쓴 무기 · 여러 개 OK</span></label>
                       </div>
+                      <div class="tsr" id="wz3-copy-tsr"><span class="ic">&#128269;</span><input type="text" class="tsr-in" id="wz3-copy-q" placeholder="유형 찾기 — 치는 대로 좁혀져요" autocomplete="off" /><span class="tsr-n" id="wz3-copy-n"></span><button type="button" class="tsr-x" data-tsrx="copy" title="지우기">&#10005;</button></div>
                       <div class="entry-format-picker" id="wz3-copy-pick"></div>
                     </div>
                     <div class="entry-section">
@@ -24322,6 +24344,35 @@
 
   // === 썸네일/수식어 몰아보기 보드 (썸네일 뷰) + 키워드·댓글·아이디어·오디오(분류 뷰로 이동) ===
   let tbViewMode = 'thumb'; // 썸네일 뷰 자체 토글: 'thumb' | 'copy'
+  // 🔎 v581 · 저장소 몰아보기 — 모드마다 «찾는 대상»이 다르다
+  let _tbLastMode = null;
+  const TB_SEARCH_PH = {
+    thumb:   '🔍 썸네일 검색 — 후킹·유형·키워드로 빨리 찾기',
+    copy:    '🔍 수식어 검색 — 문구·유형으로 빠르게 찾기',
+    audio:   '🔍 오디오 검색 — 곡 제목·가수·유형',
+    kw:      '🔍 키워드 검색 — 말 그대로',
+    idea:    '🔍 아이디어 검색 — 메모 내용',
+    comment: '🔍 공감댓글 검색 — 댓글 내용·유형·키워드'
+  };
+  // ⚠️ 키워드·공감댓글·아이디어·오디오는 «분류 보드(fb-columns)»에 그려진다 — 그 화면의 검색바는 #fb-search다.
+  //    그래서 어느 검색칸을 봐야 하는지는 «어디에 그리는가»로 갈린다. (이걸 몰라 그 넷은 검색이 안 먹고 있었다)
+  function tbQ() {
+    return ((_matCtx && _matCtx.el === 'fb-columns') ? _fbSearch : _tbCopySearch) || '';
+  }
+  // 띄어쓴 말 중 «하나만» 걸려도 보인다 (분류 보드 fbHit과 같은 문법)
+  function tbHit(text) {
+    const qs = tbQ().trim().toLowerCase().split(/\s+/).filter(Boolean);
+    if (!qs.length) return true;
+    const t = String(text || '').toLowerCase();
+    return qs.some(function (w) { return t.indexOf(w) >= 0; });
+  }
+  function tbNoHit(what) {
+    // 받침이 있으면 «이», 없으면 «가» (「키워드이」처럼 어색해지지 않게)
+    const c = what.charCodeAt(what.length - 1);
+    const josa = (c >= 0xAC00 && c <= 0xD7A3 && (c - 0xAC00) % 28) ? '이' : '가';
+    return '<div class="tb-empty">「' + esc(tbQ().trim()) + '」에 맞는 ' + what + josa +
+      ' 없어요.<br>다른 말로 찾아보시거나 ×로 지우세요.</div>';
+  }
   // 현재 몰아보기 보드가 그려지는 컨텍스트 (썸네일 뷰=tb-body / 분류 뷰=fb-columns)
   let _matCtx = { mode: 'thumb', el: 'tb-body' };
   function refreshCurrentBoard() { try { renderThumbBoard(_matCtx.mode, _matCtx.el); } catch (e) {} }
@@ -24523,15 +24574,21 @@
     const thumbMode = overrideMode || tbViewMode; // 로컬: 이 렌더에 쓸 모드
     _matCtx = { mode: thumbMode, el: targetId };
     const rerender = () => renderThumbBoard(thumbMode, targetId);
-    // v500 · 검색창 = 썸네일·수식어 모드 공용 (placeholder만 모드별)
+    // 🔎 v581 · 검색창 = 여섯 모드 «전부» (v500엔 썸네일·수식어에만 있었다).
+    //   모아둔 게 많아질수록 눈으로 훑는 게 느려진다 — 모드마다 찾는 대상이 다르므로 안내문도 다르다.
+    if (_tbLastMode !== thumbMode) { _tbLastMode = thumbMode; _tbCopySearch = ''; }   // 탭을 옮기면 검색어는 비운다
     const _searchWrap = document.getElementById('tb-copy-search-wrap');
     if (_searchWrap) {
-      _searchWrap.style.display = (targetId === 'tb-body' && (thumbMode === 'copy' || thumbMode === 'thumb')) ? '' : 'none';
+      _searchWrap.style.display = (targetId === 'tb-body') ? '' : 'none';
       const _si = document.getElementById('tb-copy-search');
-      if (_si) _si.placeholder = thumbMode === 'thumb' ? '🔍 썸네일 검색 — 후킹·유형·키워드로 빨리 찾기' : '🔍 수식어 검색 — 문구·유형으로 빠르게 찾기';
+      if (_si) {
+        _si.placeholder = TB_SEARCH_PH[thumbMode] || '🔍 검색';
+        if (_si.value !== _tbCopySearch) _si.value = _tbCopySearch;
+      }
     }
     if (thumbMode === 'audio') {
-      const audioRows = rows.filter(r => isFilled(r) && (r.audioType || r.audioTitle || r.audioLink));
+      const audioRows = rows.filter(r => isFilled(r) && (r.audioType || r.audioTitle || r.audioLink))
+        .filter(r => tbHit((r.audioTitle || '') + ' ' + (r.audioArtist || '') + ' ' + (r.audioType || '') + ' ' + (r.hook || '')));
       const groups = activeAudio().concat(['__none__']);
       let html = '';
       groups.forEach(g => {
@@ -24547,7 +24604,8 @@
             return '<div class="tb-audio-item" data-row="' + r.id + '"><div class="tb-audio-info"><span class="tb-audio-title">♪ ' + esc(t) + a + '</span><span class="tb-audio-no">NO.' + String(r.no).padStart(3, '0') + '</span></div>' + link + '</div>';
           }).join('') + '</div></div>';
       });
-      el.innerHTML = html || '<div class="tb-empty">오디오를 기록한 카드가 없어요. 분해하기에서 오디오·링크를 남겨보세요.</div>';
+      el.innerHTML = html || (tbQ().trim() ? tbNoHit('오디오')
+        : '<div class="tb-empty">오디오를 기록한 카드가 없어요. 분해하기에서 오디오·링크를 남겨보세요.</div>');
       el.querySelectorAll('.tb-audio-item').forEach(it => { it.onclick = (e) => { if (e.target.closest('a')) return; openDetail(it.dataset.row); }; });
       bindTbToggle();
       return;
@@ -24558,16 +24616,19 @@
       rows.forEach(r => { if (isFilled(r)) (r.keywords || []).forEach(l => { used[l] = (used[l] || 0) + 1; }); });
       const pool = sortedKeywords();
       const poolLabels = new Set(pool.map(k => k.label));
-      const goldList = pool.filter(k => k.gold);
-      const normList = pool.filter(k => !k.gold);
-      Object.keys(used).forEach(l => { if (!poolLabels.has(l)) normList.push({ label: l, gold: false }); });
+      const goldList = pool.filter(k => k.gold && tbHit(k.label));
+      const normList = pool.filter(k => !k.gold && tbHit(k.label));
+      Object.keys(used).forEach(l => { if (!poolLabels.has(l) && tbHit(l)) normList.push({ label: l, gold: false }); });
       const inPool = (label) => keywords.some(k => k.label === label);
       const chip = k => '<span class="tb-kw-chip' + (k.gold ? ' gold' : '') + '">' + esc(k.label) + '<span class="tb-kw-cnt">' + (used[k.label] || 0) + '</span>' + (inPool(k.label) ? '<button class="tb-kw-star' + (k.gold ? ' on' : '') + '" data-kwgold="' + esc(k.label) + '" title="황금 키워드 토글">★</button>' : '') + '</span>';
       let h = '';
-      h += '<div class="es-hint" style="margin:0 0 10px;">★ 를 눌러 <b>황금 키워드</b>로 올리거나 내릴 수 있어요.</div>';
+      if (!tbQ().trim())
+        h += '<div class="es-hint" style="margin:0 0 10px;">★ 를 눌러 <b>황금 키워드</b>로 올리거나 내릴 수 있어요.</div>';
       if (goldList.length) h += '<div class="tb-sec"><div class="tb-sec-head">★ 황금 키워드 <span class="tb-sec-cnt">' + goldList.length + '</span></div><div class="tb-kw-wrap">' + goldList.map(chip).join('') + '</div></div>';
       if (normList.length) h += '<div class="tb-sec"><div class="tb-sec-head">키워드 <span class="tb-sec-cnt">' + normList.length + '</span></div><div class="tb-kw-wrap">' + normList.map(chip).join('') + '</div></div>';
-      el.innerHTML = h || '<div class="tb-empty">아직 키워드가 없어요. 분해하기에서 키워드를 입력하거나, 고객 분석에서 추가해보세요.</div>';
+      el.innerHTML = (goldList.length || normList.length) ? h
+        : (tbQ().trim() ? tbNoHit('키워드')
+          : '<div class="tb-empty">아직 키워드가 없어요. 분해하기에서 키워드를 입력하거나, 고객 분석에서 추가해보세요.</div>');
       el.querySelectorAll('.tb-kw-star').forEach(b => {
         b.onclick = async (e) => {
           e.stopPropagation();
@@ -24580,7 +24641,7 @@
     }
     // 💡 아이디어 몰아보기 — 사진+메모(또는 둘 중 하나)를 최신순으로
     if (thumbMode === 'idea') {
-      const ideaList = collects.filter(c => c.kind === 'idea').slice().sort((a, b) => {
+      const ideaList = collects.filter(c => c.kind === 'idea' && tbHit((c.memo || '') + ' ' + (c.type || ''))).slice().sort((a, b) => {
         const ax = a.executed ? 1 : 0, bx = b.executed ? 1 : 0; // 대기중 먼저, 실행함 뒤로
         if (ax !== bx) return ax - bx;
         return (b.createdAt || 0) - (a.createdAt || 0);
@@ -24632,7 +24693,8 @@
             : '<div class="ide-empty2">아직 안 한 게 없네요. <b>다 해내셨어요.</b></div>') : '';
       el.innerHTML = total
         ? '<div class="tb-sec">' + seg + ach + (emptySeg || '<div class="ide-grid">' + shown.map(ideaCard).join('') + '</div>') + '</div>'
-        : '<div class="tb-empty">아직 모은 아이디어가 없어요.<br/>⚡ 소재 수집의 <b>💡 아이디어</b> 칸에서 사진·메모를 모아보세요.</div>';
+        : (tbQ().trim() ? tbNoHit('아이디어')
+          : '<div class="tb-empty">아직 모은 아이디어가 없어요.<br/>⚡ 소재 수집의 <b>💡 아이디어</b> 칸에서 사진·메모를 모아보세요.</div>');
       el.querySelectorAll('[data-cimg]').forEach(async box => {
         const id = box.dataset.cimg; try { const u = await loadImage(id, 'c'); if (u) box.innerHTML = '<img src="' + u + '" alt="" />'; } catch (e) {}
       });
@@ -24733,7 +24795,8 @@
     }
     // 댓글 모드 — 저장한 공감댓글 이미지를 유형별로 모아보기
     if (thumbMode === 'comment') {
-      const cRows = rows.filter(r => isFilled(r) && r.hasComment);
+      const cRows = rows.filter(r => isFilled(r) && r.hasComment)
+        .filter(r => tbHit((r.hook || '') + ' ' + (r.commentType || '') + ' ' + (r.keywords || []).join(' ') + ' ' + (r.memo || '')));
       const cGroups = activeComment().concat(['__none__']);
       const cCard = r => {
         const hookText = (r.hook || stripHtml(r.script || '').slice(0, 60) || r.why || '');
@@ -24743,11 +24806,13 @@
       cGroups.forEach(g => {
         const isNone = g === '__none__';
         const list = cRows.filter(r => isNone ? !r.commentType : r.commentType === g);
-        const colList = collects.filter(c => c.kind === 'comment' && (isNone ? !c.type : c.type === g));
+        const colList = collects.filter(c => c.kind === 'comment' && (isNone ? !c.type : c.type === g))
+          .filter(c => tbHit((c.text || '') + ' ' + (c.memo || '') + ' ' + (c.type || '') + ' ' + (c.keywords || []).join(' ')));
         if (!list.length && !colList.length) return;
         chtml += '<div class="tb-sec"><div class="tb-sec-head">💬 ' + (isNone ? '유형 미지정' : esc(g)) + ' <span class="tb-sec-cnt">' + (list.length + colList.length) + '</span></div><div class="tg-grid">' + colList.map(collectCard).join('') + list.map(cCard).join('') + '</div></div>';
       });
-      el.innerHTML = chtml || '<div class="tb-empty">저장한 공감댓글이 없어요.<br/>⚡ 소재 수집으로 공감댓글을 모아보세요.</div>';
+      el.innerHTML = chtml || (tbQ().trim() ? tbNoHit('공감댓글')
+        : '<div class="tb-empty">저장한 공감댓글이 없어요.<br/>⚡ 소재 수집으로 공감댓글을 모아보세요.</div>');
       el.querySelectorAll('.tg-card[data-row]').forEach(c => { c.onclick = () => openDetail(c.dataset.row); });
       el.querySelectorAll('.tg-thumb[data-img]').forEach(async box => {
         const id = box.dataset.img; const r = rows.find(x => x.id === id);
@@ -24770,7 +24835,7 @@
     }
     types = types.filter(t => !isTypeTrashed('keyword', t)); // 휴지통 유형은 숨김 (정거장·작성카드와 연동)
     // v500 · 검색 — 썸네일·수식어 모드 공용, 단어 단위로 "두루" 매칭(한 단어라도 들어가면 노출)
-    const qWords = ((thumbMode === 'copy' || thumbMode === 'thumb') ? (_tbCopySearch || '').trim().toLowerCase().split(/\s+/).filter(Boolean) : []);
+    const qWords = ((thumbMode === 'copy' || thumbMode === 'thumb') ? tbQ().trim().toLowerCase().split(/\s+/).filter(Boolean) : []);
     const matchAny = hay => !qWords.length || qWords.some(w => hay.indexOf(w) !== -1);
     const matchCol = c => matchAny(((c.text || '') + ' ' + (c.type || '') + ' ' + (c.memo || '')).toLowerCase());
     const matchRow = r => matchAny(((r.hook || '') + ' ' + stripHtml(r.script || '') + ' ' + (r.why || '') + ' ' + (r.copyTypes || []).join(' ') + ' ' +
@@ -30817,6 +30882,27 @@
     wzsArrive(n === 3 && beType === 'thumb');
     if (typeof beRenderProgress === 'function') beRenderProgress();
   }
+  // 🔎 v581 · 유형 찾기 검색어 (썸네일·수식어 따로). 화면을 다시 그려도 남는다
+  const _wz3TQ = { thumb: '', copy: '' };
+  function wz3BindTypeSearch() {
+    ['thumb', 'copy'].forEach(function (ax) {
+      const inp = document.getElementById('wz3-' + ax + '-q');
+      if (!inp || inp._tsr) return; inp._tsr = true;
+      inp.addEventListener('input', function () { _wz3TQ[ax] = inp.value || ''; wz3RenderTypes(ax); });
+      inp.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') { e.stopPropagation(); inp.value = ''; _wz3TQ[ax] = ''; wz3RenderTypes(ax); }
+      });
+    });
+    document.querySelectorAll('[data-tsrx]').forEach(function (b) {
+      if (b._tsr) return; b._tsr = true;
+      b.onclick = function () {
+        const ax = b.dataset.tsrx;
+        const inp = document.getElementById('wz3-' + ax + '-q');
+        if (inp) { inp.value = ''; inp.focus(); }
+        _wz3TQ[ax] = ''; wz3RenderTypes(ax);
+      };
+    });
+  }
   // v456 · 3단계 축 고정 픽커 (1단계 것과 달리 «썸네일/수식어» 둘 다 항상 보인다)
   function wz3RenderTypes(axis) {
     const elId = (axis === 'copy') ? 'wz3-copy-pick' : 'wz3-thumb-pick';
@@ -30829,7 +30915,19 @@
     const seen = new Set();
     const all = base.concat(custom).filter(function (f) { if (seen.has(f)) return false; seen.add(f); return true; })
       .filter(function (f) { return !isTypeTrashed('keyword', f); });
-    el.innerHTML = all.map(function (f) {
+    // 🔎 v581 · 찾기 — 고른 것은 검색어와 상관없이 항상 남긴다(안 보이면 «지워진 줄» 안다)
+    const ax = (axis === 'copy') ? 'copy' : 'thumb';
+    const q = (_wz3TQ[ax] || '').trim().toLowerCase();
+    const list = q ? all.filter(function (f) { return f.toLowerCase().indexOf(q) >= 0 || sel.indexOf(f) >= 0; }) : all;
+    const box = document.getElementById('wz3-' + ax + '-tsr');
+    if (box) box.classList.toggle('has', !!q);
+    const nEl = document.getElementById('wz3-' + ax + '-n');
+    if (nEl) nEl.textContent = q ? (list.length + ' / ' + all.length) : '';
+    if (!list.length) {
+      el.innerHTML = '<div class="wz3-kwempty">「' + esc(q) + '」에 맞는 유형이 없어요 — 아래 <b>+ 유형 추가</b>로 새로 만들 수 있어요.</div>';
+      return;
+    }
+    el.innerHTML = list.map(function (f) {
       return '<button type="button" class="entry-format-chip ' + (sel.indexOf(f) >= 0 ? 'on' : '') +
              '" data-wz3t="' + esc(f) + '">' + esc(f) + '</button>';
     }).join('');
@@ -30897,7 +30995,7 @@
       b.classList.toggle('on', (entryState.funnelStage || '') === b.dataset.fn);
     });
   }
-  function wz3RenderAll() { wz3RenderTypes('thumb'); wz3RenderTypes('copy'); wz3RenderFunnel(); wz3RenderKw(); }
+  function wz3RenderAll() { wz3BindTypeSearch(); wz3RenderTypes('thumb'); wz3RenderTypes('copy'); wz3RenderFunnel(); wz3RenderKw(); }
 
   // v456 · 3단계에 «닿았다»는 신호 — 레일에 빛이 흐르고, 한 번은 카드 위로 스친다
   let _wzArrived = false;
@@ -43944,6 +44042,7 @@
   //   사장님: 「들어가는 문만 나눈 거지, 들어가면 필요한 정보를 한 번에 적을 수 있게」
   //   옛 QCW_FLOWS(2~5단계 위저드)를 접고, 문마다 필요한 칸을 한 화면에 세로로 쌓는다.
   let _qcw = null;
+  const _qcwTQ = { thumb: '', copy: '' };   // 🔎 v581 · 유형 찾기 검색어
   // v561 · 문마다 색(--qc)이 있고, 그 색이 폼 «안»까지 포인트로 들어간다
   const QCW_TINT = { shot: '72,201,138', decomp: '215,243,75', copy: '168,123,224',
                      idea: '245,200,75', comment: '91,141,239', cus: '224,120,140' };
@@ -44189,8 +44288,19 @@
       catch (e) { list = isThumb ? BASE_THUMB_TYPES : BASE_COPY_TYPES; }
       const picked = isThumb ? (_qcw.stype || '') : (_qcw.ctypeCopy || '');
       const at = isThumb ? 'qst' : 'qct';
-      return '<div class="qcw-chips">' + list.map(x =>
-        '<button type="button" class="qcw-chip' + (picked === x ? ' on' : '') + '" data-' + at + '="' + esc(x) + '">' + esc(x) + '</button>').join('') + '</div>';
+      // 🔎 v581 · 유형 찾기 — 고른 것은 검색어와 상관없이 남긴다
+      const ax = isThumb ? 'thumb' : 'copy';
+      const q = (_qcwTQ[ax] || '').trim().toLowerCase();
+      const shown = q ? list.filter(x => x.toLowerCase().indexOf(q) >= 0 || x === picked) : list;
+      return '<div class="tsr' + (q ? ' has' : '') + '"><span class="ic">&#128269;</span>' +
+        '<input type="text" class="tsr-in" data-qtsr="' + ax + '" value="' + esc(q ? _qcwTQ[ax] : '') +
+        '" placeholder="유형 찾기 — 치는 대로 좁혀져요" autocomplete="off" />' +
+        (q ? '<span class="tsr-n">' + shown.length + ' / ' + list.length + '</span>' : '') +
+        '<button type="button" class="tsr-x" data-qtsrx="' + ax + '" title="지우기">&#10005;</button></div>' +
+        (shown.length
+          ? '<div class="qcw-chips">' + shown.map(x =>
+              '<button type="button" class="qcw-chip' + (picked === x ? ' on' : '') + '" data-' + at + '="' + esc(x) + '">' + esc(x) + '</button>').join('') + '</div>'
+          : '<div class="qcw-none">「' + esc(q) + '」에 맞는 유형이 없어요</div>');
     }
     if (f.t === 'ctype') {
       let cts = []; try { cts = activeComment(); } catch (e) {}
@@ -44271,6 +44381,25 @@
     chip('[data-qct]', b => _qcw.ctypeCopy = (_qcw.ctypeCopy === b.dataset.qct ? '' : b.dataset.qct));  // 수식어 유형
     chip('[data-qc2]', b => _qcw.ctype  = (_qcw.ctype === b.dataset.qc2 ? '' : b.dataset.qc2));
     chip('[data-qb]',  b => { _qcw.basket = b.dataset.qb; _qcw.basketTouched = true; });   // 손으로 고르면 자동추측 정지
+    // 🔎 v581 · 유형 찾기 — 화면을 다시 그리므로 «그 칸으로 돌아가» 계속 칠 수 있게 한다
+    w.querySelectorAll('[data-qtsr]').forEach(function (inp) {
+      inp.addEventListener('input', function () {
+        const ax = inp.dataset.qtsr;
+        _qcwTQ[ax] = inp.value || '';
+        qcwSaveField(); qcwRender();
+        const again = document.querySelector('[data-qtsr="' + ax + '"]');
+        if (again) { again.focus(); const v = again.value; again.value = ''; again.value = v; }
+      });
+      inp.addEventListener('keydown', function (e) { if (e.key === 'Escape') { e.stopPropagation(); inp.value = ''; inp.dispatchEvent(new Event('input')); } });
+    });
+    w.querySelectorAll('[data-qtsrx]').forEach(function (b) {
+      b.onclick = function () {
+        _qcwTQ[b.dataset.qtsrx] = '';
+        qcwSaveField(); qcwRender();
+        const again = document.querySelector('[data-qtsr="' + b.dataset.qtsrx + '"]');
+        if (again) again.focus();
+      };
+    });
     // v561 · 정식 분해 3단계(분해) — 퍼널·핏·트렌드
     chip('[data-qfn]', b => _qcw.funnel = (_qcw.funnel === b.dataset.qfn ? '' : b.dataset.qfn));
     chip('[data-qrt]', b => _qcw.rating = (_qcw.rating === +b.dataset.qrt ? 0 : +b.dataset.qrt));
