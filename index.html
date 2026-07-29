@@ -20506,9 +20506,18 @@
       padding:env(safe-area-inset-top) 14px calc(34px + env(safe-area-inset-bottom))}
     #slv.on{display:block}
     .slv-wrap{max-width:520px;margin:0 auto}
-    .slv-top{display:flex;align-items:center;gap:10px;position:sticky;top:0;background:rgba(10,11,8,.94);backdrop-filter:blur(12px);margin:0 -14px 12px;padding:13px 16px;border-bottom:1px solid var(--sline);z-index:20}
-    .slv-back{background:#1A1B16;border:1px solid var(--sline2);color:var(--ssub);border-radius:9px;padding:7px 11px;font-family:inherit;font-size:12px;cursor:pointer;flex:none}
-    .slv-tt{font-size:14px;font-weight:800;flex:1}
+    .slv-top{display:flex;align-items:center;gap:10px;position:sticky;top:0;background:rgba(10,11,8,.94);backdrop-filter:blur(12px);margin:0 -14px 10px;padding:9px 16px;border-bottom:1px solid var(--sline);z-index:20}
+    /* v574 · 토스식 상단 — 제목 큼직하게(왼쪽) · 숫자는 부제로 · 닫기는 오른쪽 끝 44px */
+    .slv-back{background:rgba(255,255,255,.045);border:1px solid var(--sline2);color:var(--ssub);
+      border-radius:12px;width:40px;height:40px;display:grid;place-items:center;
+      font-family:inherit;font-size:15px;cursor:pointer;flex:none;margin-left:auto;
+      -webkit-tap-highlight-color:transparent;transition:.16s}
+    .slv-back:hover{background:rgba(255,255,255,.09);color:#eae8de}
+    .slv-back:active{transform:scale(.94)}
+    .slv-ttw{min-width:0;flex:1;display:flex;flex-direction:column;gap:2px}
+    .slv-tt{font-size:16px;font-weight:800;letter-spacing:-.02em;line-height:1.25}
+    .slv-sub{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--sfaint);letter-spacing:.04em}
+    .slv-sub b{color:var(--sneon);font-weight:700}
     .slv-led{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:10.5px;font-weight:800;letter-spacing:.08em;color:var(--sneon);text-shadow:0 0 8px rgba(230,251,98,.5);
       background:#0a0b06;border:1px solid rgba(230,251,98,.25);border-radius:8px;padding:6px 10px;white-space:nowrap}
     .slv-led .dim{color:rgba(230,251,98,.4)}
@@ -20777,7 +20786,24 @@
     .sh-slbadge b{font-family:'JetBrains Mono',monospace}
     </style>
     <style>
-    /* ═══════════ 🚪 갈림길 현황판 (v570) — 인사말 → 큰 숫자 + 레일 + 방 뱃지 ═══════════ */
+      /* ═══════════ 📱 아이폰 위화감 제거 (v572) — 앱 전체 공통 ═══════════
+       ⚠️ ① iOS Safari는 «글자 16px 미만인 입력칸»에 커서가 가면 화면을 제멋대로 확대한다.
+            (사장님 제보: 트렌드·핏 누르면 «지금 왜?» 칸이 열리며 갑자기 확대됨)
+            앱 전체에 16px 미만 입력칸이 49곳 — 하나씩 고칠 게 아니라 폰에서만 한 번에 올린다.
+            maximum-scale=1로 막는 건 «사용자가 확대를 못 하게» 하는 접근성 위반이라 쓰지 않는다. */
+    @media (max-width: 768px) {
+      input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]):not([type="file"]),
+      textarea, select, [contenteditable="true"] { font-size: 16px !important; }
+    }
+    /* ② 화면 끝에서 더 당길 때 뒤 화면이 딸려오는 «고무줄» 차단 (오버레이가 겹쳐 보이던 것) */
+    html, body { overscroll-behavior-y: none; }
+    #slv, #prp, .cs-ov, #rd { overscroll-behavior: contain; }
+    /* ③ 가로 화면·확대 시 글자만 제멋대로 커지는 iOS 기본 동작 끄기 */
+    html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+    /* ④ 버튼·칩을 눌렀을 때 파란 사각형이 번쩍이는 것 (일부만 꺼져 있었다) */
+    button, .rr-btn, .cs-chip, [role="button"] { -webkit-tap-highlight-color: transparent; }
+
+  /* ═══════════ 🚪 갈림길 현황판 (v570) — 인사말 → 큰 숫자 + 레일 + 방 뱃지 ═══════════ */
     .fork-dash{text-align:left !important}
     .fork-dash .hi{font-size:11px}
     .fork-hero{padding:12px 2px 2px}
@@ -20795,30 +20821,39 @@
     .fork-bd:empty{display:none}
 
     /* ═══════════ 🚏 공정 레일 (cmr, v569) — 세 방 공통 한 줄 ═══════════ */
-    .cmr{display:flex;align-items:center;gap:0;padding:9px 12px;position:relative;
+    /* v573 · 흐르는 알·선은 «버튼 위 띠»로 올린다 — 버튼에 배경이 생겨 가로지르면 지저분하다 */
+    .cmr{display:flex;align-items:stretch;gap:6px;padding:12px 12px 8px;position:relative;
       border-bottom:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.022)}
-    .cmr-ln{position:absolute;left:calc(16.6% + 8px);right:78px;top:19px;height:1px;
+    .cmr-ln{position:absolute;left:16px;right:76px;top:6px;height:1px;
       background:rgba(255,255,255,.1);pointer-events:none}
     /* ★ 알 한 개가 계속 왼쪽 → 오른쪽 (사장님 픽) */
-    .cmr-fl{position:absolute;top:16px;width:6px;height:6px;border-radius:50%;background:#d7f34b;
+    .cmr-fl{position:absolute;top:3.5px;width:6px;height:6px;border-radius:50%;background:#d7f34b;
       box-shadow:0 0 9px rgba(215,243,75,.85);pointer-events:none;z-index:3;
       animation:cmrFlow 5.2s linear infinite}
     @keyframes cmrFlow{
-      0%{left:calc(16.6% + 8px);opacity:0}
+      0%{left:16px;opacity:0}
       9%{opacity:1}
       88%{opacity:1}
-      100%{left:calc(100% - 84px);opacity:0}}
-    .cmr-nd{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:3px;
-      position:relative;z-index:2;cursor:pointer;background:none;border:none;font-family:inherit;padding:0}
-    .cmr-nd .d{width:8px;height:8px;border-radius:50%;background:#0b0c09;border:2px solid var(--c);display:block}
+      100%{left:calc(100% - 82px);opacity:0}}
+    /* ⚠️ v573 · 칸을 «눌러서 오가는 버튼»으로. 옛 값은 높이 33px·눌린 티 없음·글자 7.5px이라
+       버튼인 줄 모르고 지나쳤다(사장님 제보). 최소 44px + 누르면 들어가는 느낌 + 테두리로 «칸» 표시 */
+    .cmr-nd{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+      position:relative;z-index:2;cursor:pointer;font-family:inherit;padding:6px 2px;min-height:46px;
+      background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.09);border-radius:11px;
+      -webkit-tap-highlight-color:transparent;
+      transition:background .18s,border-color .18s,transform .16s cubic-bezier(.2,1.3,.4,1)}
+    .cmr-nd:hover{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.18)}
+    .cmr-nd:active{transform:scale(.95)}
+    .cmr-nd .d{width:7px;height:7px;border-radius:50%;background:#0b0c09;border:2px solid var(--c);display:block}
+    .cmr-nd.here{background:color-mix(in srgb,var(--c) 13%,transparent);border-color:var(--c)}
     .cmr-nd.here .d{background:var(--c);box-shadow:0 0 10px var(--c)}
-    .cmr-nd .v{font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:700;color:var(--c);
-      font-variant-numeric:tabular-nums;font-style:normal}
-    .cmr-nd .k{font-size:7.5px;color:#63695f;font-style:normal;text-decoration:none;white-space:nowrap}
-    .cmr-nd.here .k{color:#eae8de}
-    .cmr-nd:hover .k{color:#9aa094}
-    .cmr-tot{flex:none;padding-left:9px;margin-left:5px;border-left:1px solid rgba(255,255,255,.09);
-      text-align:right;display:flex;flex-direction:column;gap:2px}
+    .cmr-nd .v{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:var(--c);
+      font-variant-numeric:tabular-nums;font-style:normal;line-height:1.1}
+    .cmr-nd .k{font-size:8.5px;color:#8a9083;font-style:normal;text-decoration:none;white-space:nowrap}
+    .cmr-nd.here .k{color:#eae8de;font-weight:700}
+    .cmr-nd:hover .k{color:#c4c9bd}
+    .cmr-tot{flex:none;padding-left:10px;margin-left:2px;border-left:1px solid rgba(255,255,255,.09);
+      text-align:right;display:flex;flex-direction:column;justify-content:center;gap:2px}
     .cmr-tot b{font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:700;color:#d7f34b;line-height:1}
     .cmr-tot s{font-size:7.5px;color:#63695f;text-decoration:none}
     @media(prefers-reduced-motion:reduce){.cmr-fl{animation:none;opacity:0}}
@@ -20863,12 +20898,16 @@
     /* v571 · 위 safe-area — 아이폰 상태바 아래에서 시작 */
     .prp-in{position:relative;z-index:3;max-width:980px;margin:0 auto;
       padding:calc(22px + env(safe-area-inset-top)) 20px 204px}
+    /* v574 · 정거장과 같은 문법 — 제목 16px · 숫자는 부제 · 닫기 40px 오른쪽 끝 */
     .prp-top{display:flex;align-items:center;gap:10px;margin-bottom:16px}
-    .prp-top .t{font-size:13px;font-weight:800;color:#eae8de}
-    .prp-top .c{font-family:'JetBrains Mono',monospace;font-size:10px;color:#63695f;margin-left:auto;font-variant-numeric:tabular-nums}
-    .prp-x{width:27px;height:27px;border-radius:99px;border:1px solid rgba(255,255,255,.14);display:grid;place-items:center;
-      font-size:12px;color:#9aa094;background:rgba(0,0,0,.3);cursor:pointer;font-family:inherit;flex:none}
-    .prp-x:hover{color:#eae8de;border-color:rgba(255,255,255,.3)}
+    .prp-ttw{min-width:0;flex:1;display:flex;flex-direction:column;gap:2px}
+    .prp-top .t{font-size:16px;font-weight:800;color:#eae8de;letter-spacing:-.02em;line-height:1.25}
+    .prp-top .c{font-family:'JetBrains Mono',monospace;font-size:10px;color:#63695f;font-variant-numeric:tabular-nums;letter-spacing:.04em}
+    .prp-x{width:40px;height:40px;border-radius:12px;border:1px solid rgba(255,255,255,.14);display:grid;place-items:center;
+      font-size:15px;color:#9aa094;background:rgba(255,255,255,.045);cursor:pointer;font-family:inherit;flex:none;
+      margin-left:auto;-webkit-tap-highlight-color:transparent;transition:.16s}
+    .prp-x:hover{color:#eae8de;background:rgba(255,255,255,.09);border-color:rgba(255,255,255,.3)}
+    .prp-x:active{transform:scale(.94)}
 
     .prp-floor{display:grid;grid-template-columns:212px minmax(0,1fr);gap:26px;align-items:start}
     @media(max-width:780px){.prp-floor{grid-template-columns:1fr;gap:14px}}
@@ -21055,7 +21094,8 @@
       <div class="prp-motes" id="prp-motes"></div>
       <div class="prp-in">
         <div id="prp-rail"></div><!-- v569 · 공정 레일 -->
-        <div class="prp-top"><span class="t">✎ 원고 손질</span><span class="c" id="prp-idx">— / —</span>
+        <div class="prp-top">
+          <div class="prp-ttw"><span class="t">원고 손질</span><span class="c" id="prp-idx">— / —</span></div>
           <button type="button" class="prp-x" id="prp-x" title="닫기">✕</button></div>
         <div class="prp-floor">
           <div class="prp-qz">
@@ -21086,13 +21126,17 @@
       <div class="slv-wrap">
         <div id="slv-rail" style="margin:0 -14px 10px"></div><!-- v569 · 공정 레일 -->
         <div class="slv-top">
-          <button class="slv-back" id="slv-back">←</button>
-          <div class="slv-tt">미분류 정리</div>
+          <!-- v574 · 토스식 정리: 제목+부제 한 덩어리(왼쪽) · 도구(가운데) · 닫기는 오른쪽 끝 44px -->
+          <div class="slv-ttw">
+            <div class="slv-tt">미분류 정리</div>
+            <div class="slv-sub">대기 <b id="slv-in">00</b> · 완료 <b id="slv-out">00</b></div>
+          </div>
           <!-- v544 · 방금 것 되돌리기 — 반복 작업에서 Undo는 없으면 안 되는 것 -->
           <button type="button" class="slv-undo" id="slv-undo"><span class="ic">↩</span><span class="t" id="slv-undo-t">되돌리기</span></button>
           <!-- v548 · 자동배정 = 큰 바에서 «작은 버튼»으로 (기능은 유지, 화면은 안 먹게) -->
           <button type="button" class="slv-automini" id="slv-automini" title="문구만 봐도 확실한 것을 한 번에 배정">✨ <b id="slv-auton">0</b></button>
-          <div class="slv-led">대기 <b id="slv-in">00</b> <span class="dim">→</span> 완료 <b id="slv-out">00</b></div>
+          <!-- ⬆️➡️ 닫기는 항상 오른쪽 끝 (앱 공통 규칙) · 44px -->
+          <button class="slv-back" id="slv-back" title="닫기">✕</button>
         </div>
         <div class="slv-machine">
           <div class="slv-floor" id="slv-floor">
@@ -42222,11 +42266,14 @@
     });
     return { sort: sort, prep: prep, ready: ready, month: month };
   }
+  // v573 · 칸은 «버튼»이어야 한다 — span은 눌러도 눌린 티가 안 나고 키보드로도 못 간다
   function cmrHtml(here) {
     const c = cmrCounts();
     const nodes = CMR_STEPS.map(function (s) {
-      return '<span class="cmr-nd' + (s.k === here ? ' here' : '') + '" style="--c:' + s.c + '" data-cmr="' + s.k + '">' +
-        '<i class="d"></i><b class="v">' + c[s.k] + '</b><s class="k">' + s.n + '</s></span>';
+      const on = (s.k === here);
+      return '<button type="button" class="cmr-nd' + (on ? ' here' : '') + '" style="--c:' + s.c + '"' +
+        ' data-cmr="' + s.k + '" title="' + esc(s.n) + '으로 이동"' + (on ? ' aria-current="step"' : '') + '>' +
+        '<i class="d"></i><b class="v">' + c[s.k] + '</b><s class="k">' + s.n + '</s></button>';
     }).join('');
     return '<div class="cmr"><i class="cmr-ln"></i><i class="cmr-fl"></i>' + nodes +
       '<span class="cmr-tot"><b>' + c.month + '</b><s>이번 달</s></span></div>';
@@ -42237,10 +42284,18 @@
     if (!el) return;
     el.innerHTML = cmrHtml(here);
     el.querySelectorAll('[data-cmr]').forEach(function (b) {
+      // v573 · 「준비 끝」도 갈 데가 있다(시트). 지금 방이면 아무 일도 안 일어난다
       b.onclick = function () {
         const k = b.dataset.cmr;
-        if (k === 'sort' && window.__openSortLine) { window.__openSortLine(); }
-        else if (k === 'prep' && window.__openPrep) { window.__openPrep(); }
+        if (k === here) return;                       // 이미 그 방이면 무시
+        if (k === 'sort') { if (window.__openSortLine) window.__openSortLine(); return; }
+        if (k === 'prep') { if (window.__openPrep) window.__openPrep(); return; }
+        if (k === 'ready') {                          // 준비 끝 = 시트로 (오버레이 닫고)
+          try { prpClose(); } catch (e) {}
+          try { slvClose(); } catch (e) {}
+          try { csCloseRoom(); } catch (e) {}
+          try { switchWorkspace('sheet'); } catch (e) {}
+        }
       };
     });
   }
