@@ -18117,11 +18117,16 @@
 <div class="cs-ov" id="cs-fork">
   <div class="cs-air">
     <div class="cs-wrap">
-      <div class="cs-greet">
+      <!-- v570 · 갈림길 = 현황판 (Vaulta 구조 문법 × 우리 색 헌법). 인사말 절반 → 내 숫자 -->
+      <div class="cs-greet fork-dash">
         <div class="hi">👋 <span id="cs-fork-name">환영합니다</span></div>
-        <div class="q">오늘은 <span class="em">어디로</span> 갈까요?</div>
-        <div class="s">세 방은 <b>한 앱 안에</b> 있어요 — 언제든 오가면서.</div>
+        <div class="fork-hero">
+          <div class="k">모은 자산</div>
+          <div class="n"><b id="fork-asset">0</b><s>개</s></div>
+          <div class="d" id="fork-delta"></div>
+        </div>
       </div>
+      <div id="fork-rail" class="fork-rail"></div><!-- v570 · 공정 레일 (알 흐르는 그것) -->
       <!-- v526 · 흐름 3타일 (담다 › 이해하다 › 만들다) -->
       <div class="qcf-flow" id="qcf-flow">
         <div class="qcf-t" style="--qc:46,199,107" data-cs-go="sorter">
@@ -18132,11 +18137,13 @@
         <div class="qcf-t" style="--qc:77,159,240" data-cs-go="ware">
           <div class="ob"><svg viewBox="0 0 24 24"><path class="g" d="M3.4 9.2L12 4.6l8.6 4.6v9.8H3.4z"/><path class="g" d="M8.2 19V12h7.6v7"/></svg></div>
           <div class="nm">내 창고</div><div class="vb">이해하다</div>
+          <div class="fork-bd" id="fork-bd-ware" style="color:#4d9ff0;background:rgba(77,159,240,.1)"></div>
         </div>
         <div class="qcf-sep s2">›</div>
         <div class="qcf-t" style="--qc:176,123,240" data-cs-go="prod">
           <div class="ob"><svg viewBox="0 0 24 24"><path class="g" d="M12 3.2l2.2 6.4 6.6.3-5.2 4.1 1.8 6.4L12 16.7l-5.4 3.7 1.8-6.4L3.2 9.9l6.6-.3z"/></svg></div>
           <div class="nm">제작소</div><div class="vb">만들다</div>
+          <div class="fork-bd" id="fork-bd-prod" style="color:#b07bf0;background:rgba(176,123,240,.1)"></div>
         </div>
       </div>
       <!-- v526 · 큰 네온 카트 = 빠르게 담기 -->
@@ -20753,6 +20760,23 @@
     .sh-slbadge b{font-family:'JetBrains Mono',monospace}
     </style>
     <style>
+    /* ═══════════ 🚪 갈림길 현황판 (v570) — 인사말 → 큰 숫자 + 레일 + 방 뱃지 ═══════════ */
+    .fork-dash{text-align:left !important}
+    .fork-dash .hi{font-size:11px}
+    .fork-hero{padding:12px 2px 2px}
+    .fork-hero .k{font-size:10.5px;color:var(--text-sub,#aab29a)}
+    .fork-hero .n{font-family:'Noto Serif KR',Georgia,serif;font-weight:900;font-size:38px;
+      letter-spacing:-.02em;color:#d7f34b;line-height:1.05;margin-top:4px}
+    .fork-hero .n b{font-weight:900}
+    .fork-hero .n s{text-decoration:none;font-size:15px;color:#8fa03a;font-weight:600;margin-left:3px}
+    .fork-hero .d{font-size:10px;color:var(--text-faint,#6b7268);margin-top:5px;min-height:1em}
+    .fork-hero .d b{color:var(--text-sub,#aab29a)}
+    .fork-rail{margin:12px 0 2px;border:1px solid rgba(255,255,255,.09);border-radius:13px;overflow:hidden}
+    .fork-rail .cmr{border-bottom:none}
+    .fork-bd{display:inline-block;margin-top:6px;font-family:'JetBrains Mono',monospace;font-size:8.5px;
+      font-weight:700;padding:2px 8px;border-radius:999px}
+    .fork-bd:empty{display:none}
+
     /* ═══════════ 🚏 공정 레일 (cmr, v569) — 세 방 공통 한 줄 ═══════════ */
     .cmr{display:flex;align-items:center;gap:0;padding:9px 12px;position:relative;
       border-bottom:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.022)}
@@ -41567,6 +41591,7 @@
 
   // ---- 갈림길 / 방 열닫 ----
   function csOpenFork() {
+    try { forkDash(); } catch (e) {}   // v570 · 현황판 숫자·레일 최신화
     const ov = document.getElementById('cs-fork'); if (!ov) return;
     const nm = document.getElementById('cs-fork-name');
     if (nm) nm.textContent = (_currentUser && _currentUser.name ? _currentUser.name + '님, ' : '') + '환영합니다';
@@ -41624,6 +41649,7 @@
       const as = document.getElementById('sh-asset');
       if (as) { const total = (rows || []).filter(r => isFilled(r)).length; as.classList.toggle('show', total > 0); const ab = as.querySelector('b'); if (ab) ab.textContent = total; }
     } catch (e) {}
+    try { forkDash(); } catch (e) {}   // v570 · 갈림길 현황판도 같은 흐름에서 최신화 (rows 로드 후 자동 반영)
   }
   let _slvQ = [], _slvDone = 0, _slvT0 = null, _slvBusy = false, _slvInited = false, _slvCard = null;
   let _slvHand = 0;   // v551 · «손으로 넘긴» 장수 (자동배정은 안 셈) — 연출 속도 판정용
@@ -42198,6 +42224,30 @@
     });
   }
   window.__cmrPaint = cmrPaint;
+
+  // v570 · 갈림길 현황판 — 문을 열자마자 «내가 얼마 모았고 어디까지 왔는지»
+  function forkDash() {
+    try {
+      const rs = rows || [];
+      const total = rs.filter(function (r) { return isFilled(r); }).length;
+      const a = document.getElementById('fork-asset'); if (a) a.textContent = total;
+      // 이번 달 담은 수 — createdAt 있는 행만 (없으면 조용히 생략)
+      const now = new Date(), y = now.getFullYear(), m = now.getMonth();
+      let month = 0, has = false;
+      rs.forEach(function (r) {
+        const at = r.createdAt || r.at;
+        if (at) { has = true; const d = new Date(at); if (d.getFullYear() === y && d.getMonth() === m) month++; }
+      });
+      const dl = document.getElementById('fork-delta');
+      if (dl) dl.innerHTML = (has && month) ? '이번 달 <b>+' + month + '</b>' : '';
+      // 방 뱃지 — 내 창고=자산 · 제작소=LV(담은 개수 사다리 v469)
+      const bw = document.getElementById('fork-bd-ware'); if (bw) bw.textContent = total ? total + ' 자산' : '';
+      const LV = [0, 1, 10, 30, 100, 300, 1000, 3000];
+      let lv = 0; LV.forEach(function (x, i) { if (rs.length >= x) lv = i; });
+      const bp = document.getElementById('fork-bd-prod'); if (bp) bp.textContent = 'LV ' + lv;
+      cmrPaint('fork-rail', '');
+    } catch (e) {}
+  }
 
   const PRP_LBLS = [
     ['이득&손해', 'gain'], ['공감 상황', 'empathy'], ['원인·이유', ''], ['방법', 'method'],
