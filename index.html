@@ -8843,7 +8843,8 @@
   .cm-add-basket { flex:1; padding:8px 6px; border-radius:9px; border:1px solid var(--line); background:var(--bg-card); color:var(--text-mute); font-size:12px; font-weight:800; cursor:pointer; font-family:inherit; transition:all .15s; }
   .cm-add-basket.pain.on { border-color:rgba(224,123,123,.6); background:rgba(224,123,123,.12); color:#E8908F; }
   .cm-add-basket.fear.on { border-color:rgba(245,170,70,.6); background:rgba(245,170,70,.12); color:#F0B24E; }
-  .cm-add-basket.desire.on { border-color:var(--emerald); background:var(--emerald-faint); color:var(--emerald); }
+  /* v579 · 욕구 = 세이지. 라임은 «자산»이고 「그 순간」도 라임이라 한 색이 세 뜻을 지고 있었다 */
+  .cm-add-basket.desire.on { border-color:rgba(126,155,114,.6); background:rgba(126,155,114,.14); color:#9DBB90; }
   /* v470 — 구매저항(막힌 벽) · 그 순간(결심 = 자산이라 라임) */
   .cm-add-basket.resist.on { border-color:rgba(143,160,201,.6); background:rgba(143,160,201,.12); color:#A9BADF; }
   .cm-add-basket.moment.on { border-color:rgba(215,243,75,.6); background:rgba(215,243,75,.12); color:#D7F34B; }
@@ -8869,7 +8870,7 @@
   .cm-basket { background:var(--bg-deep); border:1px solid var(--line); border-radius:13px; padding:12px; border-top:3px solid var(--line); }
   .cm-basket.pain { border-top-color:#E07B7B; }
   .cm-basket.fear { border-top-color:#F0B24E; }
-  .cm-basket.desire { border-top-color:var(--emerald); }
+  .cm-basket.desire { border-top-color:var(--law-type-desire,#7E9B72); }   /* v579 · 라임 → 세이지 */
   .cm-basket.resist { border-top-color:#8FA0C9; }
   .cm-basket.moment { border-top-color:#D7F34B; }
   .cm-basket-head { display:flex; align-items:center; gap:7px; font-size:13px; font-weight:800; color:var(--text-main); margin-bottom:11px; }
@@ -15500,6 +15501,30 @@
     color:#c9cdc2; background:rgba(255,255,255,.045); border:1px solid rgba(255,255,255,.12); transition:.15s; }
   .qcw-chip.on { color:#0b0c06; background:#8fc6ff; border-color:#8fc6ff; font-weight:800; box-shadow:0 0 14px rgba(90,170,255,.4); }
   .qcw-chip:active { transform:scale(.94); }
+  /* 🎭 v578 — 고객 4칸은 «색이 먼저 차오르고, 그림이 말한다». 글자는 없다(사장님 확정).
+     색은 새로 만든 게 아니라 고객 방(.cm-basket)에 이미 있던 그 색 그대로 —
+     문제 #E07B7B · 욕구 라임 · 회피 #F0B24E · 저항 #8FA0C9
+     그림 = 표정(감정) + 그 대상(종류). 표정만으로는 «어느 칸인지»가 안 읽혀서 대상을 붙였다. */
+  .qcw-chips.bk { gap:8px; max-width:400px; flex-wrap:nowrap; }
+  .qcw-chip.bk { flex:1 1 0; min-width:0; position:relative; overflow:hidden; padding:0;
+    height:80px; border-radius:15px; display:flex; align-items:center; justify-content:center;
+    color:var(--cs-sub,#93a39a); background:#0b0e0d; border:1px solid rgba(255,255,255,.11);
+    box-shadow:none; font-weight:400;
+    transition:color .2s, border-color .2s, transform .16s cubic-bezier(.2,1.2,.4,1); }
+  .qcw-chip.bk .band { position:absolute; inset:0; pointer-events:none;
+    background:linear-gradient(180deg,color-mix(in srgb,var(--bc) 30%,transparent),transparent 74%);
+    opacity:.3; transition:opacity .32s cubic-bezier(.3,.9,.3,1); }
+  .qcw-chip.bk svg { position:relative; z-index:2; display:block; }
+  .qcw-chip.bk .g { stroke:currentColor; fill:none; stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round; }
+  .qcw-chip.bk .g .dim { opacity:.34; }
+  .qcw-chip.bk .g .fill { fill:currentColor; stroke:none; }
+  .qcw-chip.bk .g .hot { opacity:0; transition:opacity .3s; }
+  .qcw-chip.bk.on { color:var(--bc); background:#0b0e0d;
+    border-color:color-mix(in srgb,var(--bc) 58%,transparent); font-weight:400; }
+  .qcw-chip.bk.on .band { opacity:1; }
+  .qcw-chip.bk.on .g .hot { opacity:1; }
+  .qcw-chip.bk:active { transform:scale(.95); }
+  @media (max-width:400px){ .qcw-chip.bk { height:70px; } }
   .qcw-go { display:block; width:100%; max-width:340px; margin:18px auto 0; border:none; border-radius:13px; padding:14px;
     font-family:inherit; font-size:13.5px; font-weight:800; color:#0b0c06; cursor:pointer;
     background:linear-gradient(96deg,#5aaaff,#8fc6ff); box-shadow:0 10px 26px -8px rgba(90,170,255,.4); transition:transform .15s; }
@@ -16530,12 +16555,14 @@
     padding:0 2px 11px; border-bottom:1px solid rgba(255,255,255,.1); position:relative; margin-top:6px; }
   .cus2-organ::after{ content:''; position:absolute; left:0; right:0; bottom:-1px; height:1px;
     background:linear-gradient(90deg,transparent,rgba(212,115,127,.5),transparent); }
-  /* v507 · 통마다 네온 색 (문제=로즈 · 욕구=앰버 · 회피=바이올렛 · 저항=코퍼) */
-  /* 통·시트·전체보기 섹션 어디에 붙어도 같은 색이 나오게 (요소 무관, 속성으로만) */
-  [data-cus2v="pain"]  { --vc:224,120,140; }
-  [data-cus2v="desire"]{ --vc:245,200,75; }
-  [data-cus2v="fear"]  { --vc:168,123,224; }
-  [data-cus2v="resist"]{ --vc:200,122,74; }
+  /* v580 · 통 색 = 바구니(.cm-basket) 색과 «한 벌»로 통일 (사장님 A안 확정).
+     그전엔 같은 네 바구니가 화면마다 달랐다 — 회피가 통에선 바이올렛·바구니에선 앰버,
+     저항이 통에선 코퍼·바구니에선 블루그레이. 이제 어디서 보든 같은 색이다.
+     문제=로즈 #E07B7B · 욕구=세이지 #7E9B72 · 회피=앰버 #F0B24E · 저항=블루그레이 #8FA0C9 */
+  [data-cus2v="pain"]  { --vc:224,123,123; }
+  [data-cus2v="desire"]{ --vc:126,155,114; }
+  [data-cus2v="fear"]  { --vc:240,178,78; }
+  [data-cus2v="resist"]{ --vc:143,160,201; }
   .cus2-vial .liq{ background:linear-gradient(180deg,rgba(var(--vc),.8),rgba(var(--vc),.3)) !important; }
   .cus2-vial.has .body{ border-color:rgba(var(--vc),.5); box-shadow:0 0 14px rgba(var(--vc),.18),inset -5px 0 10px rgba(0,0,0,.35); }
   .cus2-vial.on .body{ border-color:rgba(var(--vc),.85) !important;
@@ -43977,6 +44004,44 @@
   const QCW_FUNNEL = [['🧲 유입', 'attract'], ['💚 전환', 'convert'], ['🔁 관계', 'retain']];
   // v519 · 고객 분석 — 어느 통에 담을지 (자동 추측 + 손으로 바꾸기)
   const QCW_BASKETS = [['문제', 'pain'], ['욕구', 'desire'], ['회피', 'fear'], ['저항', 'resist']];
+  // 🎭 v578 · 고객 4칸의 «얼굴 + 그 대상».
+  //   원리: 표정 하나로는 «어느 칸»이 안 읽힌다(슬픈 얼굴은 문제일 수도 회피일 수도 있다).
+  //   그래서 «무엇을 향하는가»를 같이 그렸다 —
+  //     문제 = 이미 나에게 떨어진 것 / 욕구 = 저 앞의 것 / 회피 = 오면 안 되는 것 / 저항 = 사이를 막은 것
+  //   색은 고객 방 .cm-basket 과 같은 값(새로 만들지 않았다).
+  const QCW_BK = {
+    pain: { n: '문제 · 불편', c: '#E07B7B', d:
+      '<circle class="dim" cx="16" cy="24" r="9.5"/>' +
+      '<path d="M11.6 21.6 L14.6 22.8"/><path d="M20.4 21.6 L17.4 22.8"/>' +
+      '<circle class="fill" cx="13.2" cy="25.4" r=".95"/><circle class="fill" cx="18.8" cy="25.4" r=".95"/>' +
+      '<path d="M12.8 29.6 Q16 28 19.2 29.6"/>' +
+      '<path d="M28 6 v7"/><path d="M33 9 v5"/><path d="M23.5 8 v5"/>' +
+      '<path class="hot" d="M25.5 16.5 l2.5 3 l2.5-3"/>' },
+    desire: { n: '욕구', c: '#7E9B72', d:   // v579 · 세이지(= --law-type-desire). 라임은 «자산»이라 양보
+      '<circle class="dim" cx="15" cy="24" r="9.5"/>' +
+      '<path d="M10.6 22.4 Q12.8 21 14.8 22.2"/><path d="M19.4 22.4 Q17.2 21 15.2 22.2"/>' +
+      '<circle class="fill" cx="12.6" cy="24.4" r=".95"/><circle class="fill" cx="17.8" cy="24.4" r=".95"/>' +
+      '<path d="M12 28.4 Q15 30.4 18 28.4"/>' +
+      '<path d="M31 12 l1.9 4 4.1.6-3 2.9.7 4.1-3.7-2-3.7 2 .7-4.1-3-2.9 4.1-.6z"/>' +
+      '<path class="hot" d="M22.5 20.5 h4.5"/>' },
+    fear: { n: '회피', c: '#F0B24E', d:
+      '<circle class="dim" cx="24" cy="24" r="9.5"/>' +
+      '<path d="M19.6 22.6 Q21.6 20.4 24 22.2"/><path d="M28.4 22.6 Q26.4 20.4 24 22.2"/>' +
+      '<path d="M20.6 26.2 Q22.3 24.9 24 26.2"/><path d="M24 26.2 Q25.7 24.9 27.4 26.2"/>' +
+      '<path d="M22 30 h4"/>' +
+      '<path d="M11 15 v13"/><path d="M6.5 19 l4.5-4 4.5 4"/>' +
+      '<path class="hot" d="M14 21.5 h3"/>' },
+    resist: { n: '저항', c: '#8FA0C9', d:
+      '<circle class="dim" cx="12" cy="24" r="9"/>' +
+      '<path d="M8 22 h3.6"/><path d="M14.6 21.4 L17.4 22.4"/>' +
+      '<circle class="fill" cx="9.8" cy="25" r=".9"/><circle class="fill" cx="15" cy="24.8" r=".85"/>' +
+      '<path d="M9.4 29.4 Q12 29.8 14.8 28.6"/>' +
+      '<path d="M26 8 v26"/><path d="M26 14 h9 M26 21 h9 M26 28 h9"/><path d="M30.5 8 v6 M33 14 v7 M30 21 v7"/>' }
+  };
+  function qcwBkArt(k) {
+    const b = QCW_BK[k]; if (!b) return '';
+    return '<svg class="g" width="38" height="38" viewBox="0 0 40 40" aria-hidden="true" focusable="false">' + b.d + '</svg>';
+  }
   // v504 · 올라온 시기 → 대략 시각 (트렌드가 «담은 날» 대신 이걸 씀)
   const QCW_POSTED = [['이번 주', 3], ['이번 달', 15], ['3개월 안', 60], ['올해', 200], ['오래됨', 500]];
   // v504 · 고객 말 → 어느 바구니인지 로컬 추론 (AI 0원)
@@ -44057,8 +44122,15 @@
     if (f.t === 'basket') {
       const guess = _qcw.basket || cmGuessBasket(_qcw.quote);
       _qcw.basket = guess;
-      return '<div class="qcw-chips">' + QCW_BASKETS.map(v =>
-        '<button type="button" class="qcw-chip' + (guess === v[1] ? ' on' : '') + '" data-qb="' + v[1] + '">' + v[0] + '</button>').join('') + '</div>';
+      // v578 · 글자 없이 «색 + 그림»만. 이름은 눈엔 안 보이지만 스크린리더·툴팁에는 남긴다
+      return '<div class="qcw-chips bk">' + QCW_BASKETS.map(v => {
+        const b = QCW_BK[v[1]] || { n: v[0], c: '#8fc6ff' };
+        return '<button type="button" class="qcw-chip bk' + (guess === v[1] ? ' on' : '') +
+          '" data-qb="' + v[1] + '" style="--bc:' + b.c + '"' +
+          ' title="' + esc(b.n) + '" aria-label="' + esc(b.n) + '"' +
+          (guess === v[1] ? ' aria-pressed="true"' : ' aria-pressed="false"') + '>' +
+          '<span class="band"></span>' + qcwBkArt(v[1]) + '</button>';
+      }).join('') + '</div>';
     }
     if (f.t === 'text' || f.t === 'memo' || f.t === 'quote' || f.t === 'situation' || f.t === 'hook'
         || f.t === 'topic' || f.t === 'url' || f.t === 'trendkw') {
