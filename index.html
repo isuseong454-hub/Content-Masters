@@ -11984,6 +11984,16 @@
   .wz3-kwpool .entry-format-chip.gold { border-color:rgba(233,200,75,.5); color:#E9C84B; }
   .wz3-kwpool .entry-format-chip.gold.on { background:#E9C84B; color:#1a1503; border-color:#E9C84B; }
   .wz3-kwempty { font-size:11.5px; color:var(--text-faint); line-height:1.55; }
+  /* 📦 v582 · 정리해서 받기 — 기계용 JSON 옆에 «사람이 열어보는» 백업 */
+  .settings-btn.bkz-btn { border-color:rgba(215,243,75,.42); background:rgba(215,243,75,.10); color:var(--emerald); }
+  .settings-btn.bkz-btn:hover:not(:disabled) { background:rgba(215,243,75,.18); }
+  .settings-btn.bkz-btn:disabled { opacity:.6; cursor:progress; }
+  .bkz-note { margin-top:10px; font-size:11.5px; line-height:1.75; color:var(--text-mute);
+    background:var(--bg-deep,#0F100C); border:1px solid var(--line); border-radius:11px; padding:11px 13px; }
+  .bkz-note b { color:var(--text-sub); }
+  .bkz-prog { display:block; margin-top:7px; font-family:'JetBrains Mono',monospace; font-size:11px;
+    color:var(--emerald); font-weight:700; }
+  .bkz-prog:empty { display:none; }
   /* 🔎 v581 · 유형 찾기 — 유형이 쌓이면 눈으로 훑는 게 느려진다. 치는 대로 바로 좁혀진다 */
   .tsr { display:flex; align-items:center; gap:7px; margin:0 0 8px;
     background:var(--bg-input,#12130F); border:1px solid var(--line,#232323); border-radius:9px; padding:7px 10px; }
@@ -19865,6 +19875,10 @@
                 <button class="settings-btn settings-btn-primary" id="settings-export-btn">
                   <span>⬇</span> 전체 내보내기 (.json)
                 </button>
+                <!-- 📦 v582 · 사람이 열어보는 백업 — 보고서 + 사진 + 글이 폴더째 -->
+                <button class="settings-btn bkz-btn" id="settings-export-zip-btn">
+                  <span>📦</span> <b>정리해서 받기 (.zip)</b>
+                </button>
                 <button class="settings-btn" id="settings-export-rows-btn">
                   벤치마킹만 내보내기
                 </button>
@@ -19872,6 +19886,8 @@
                   원고만 내보내기
                 </button>
               </div>
+              <div class="bkz-note">📦 <b>정리해서 받기</b>는 <b>보고서 한 장 · 사진 폴더 · 글 폴더</b>가 든 압축 파일이에요.
+                풀어서 <b>보고서.html</b>을 열면 그동안 한 게 한눈에 보입니다. <span class="bkz-prog" id="bkz-prog"></span></div>
               <div class="backup-status" id="backup-status"></div>
               <button type="button" id="settings-backup-guide" onclick="if(window.__openBackupGuide)window.__openBackupGuide()" style="margin-top:9px;background:none;border:none;color:var(--emerald);font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;padding:2px 0;text-decoration:underline;">📖 백업 방법 자세히 보기</button>
             </div>
@@ -28710,6 +28726,413 @@
     toast('CSV 다운로드');
   }
 
+  // ════════════════════════════════════════════════════════════════
+  // 📦 v582 · 「정리해서 받기」 — 보고서 + 사진 + 글을 폴더째 묶은 .zip
+  //   라이브러리 0. ZIP은 «묶기»만 하고 압축은 안 한다(store) —
+  //   사진(JPEG/PNG)은 이미 압축돼 있어 다시 눌러도 안 줄고 시간만 먹는다.
+  // ════════════════════════════════════════════════════════════════
+  const BKZ_CRC = (function () {
+    const t = new Uint32Array(256);
+    for (let i = 0; i < 256; i++) { let c = i; for (let k = 0; k < 8; k++) c = (c & 1) ? (0xEDB88320 ^ (c >>> 1)) : (c >>> 1); t[i] = c >>> 0; }
+    return t;
+  })();
+  function bkzCrc32(u8) {
+    let c = 0xFFFFFFFF;
+    for (let i = 0; i < u8.length; i++) c = BKZ_CRC[(c ^ u8[i]) & 255] ^ (c >>> 8);
+    return (c ^ 0xFFFFFFFF) >>> 0;
+  }
+  function bkzZip(files) {           // files = [{name, data:Uint8Array}]
+    const enc = new TextEncoder(), parts = [], cen = [];
+    const d = new Date();
+    const tm = ((d.getHours() << 11) | (d.getMinutes() << 5) | ((d.getSeconds() / 2) | 0)) & 0xFFFF;
+    const dt = (((d.getFullYear() - 1980) << 9) | ((d.getMonth() + 1) << 5) | d.getDate()) & 0xFFFF;
+    let off = 0;
+    files.forEach(function (f) {
+      const nm = enc.encode(f.name), data = f.data, crc = bkzCrc32(data);
+      const lh = new DataView(new ArrayBuffer(30));
+      lh.setUint32(0, 0x04034b50, true); lh.setUint16(4, 20, true);
+      lh.setUint16(6, 0x0800, true);     // 파일명이 UTF-8이라고 알린다(한글 안 깨지게)
+      lh.setUint16(8, 0, true);          // 0 = store(무압축)
+      lh.setUint16(10, tm, true); lh.setUint16(12, dt, true);
+      lh.setUint32(14, crc, true); lh.setUint32(18, data.length, true); lh.setUint32(22, data.length, true);
+      lh.setUint16(26, nm.length, true); lh.setUint16(28, 0, true);
+      parts.push(new Uint8Array(lh.buffer), nm, data);
+      const ch = new DataView(new ArrayBuffer(46));
+      ch.setUint32(0, 0x02014b50, true); ch.setUint16(4, 20, true); ch.setUint16(6, 20, true);
+      ch.setUint16(8, 0x0800, true); ch.setUint16(10, 0, true);
+      ch.setUint16(12, tm, true); ch.setUint16(14, dt, true);
+      ch.setUint32(16, crc, true); ch.setUint32(20, data.length, true); ch.setUint32(24, data.length, true);
+      ch.setUint16(28, nm.length, true);
+      ch.setUint16(30, 0, true); ch.setUint16(32, 0, true); ch.setUint16(34, 0, true);
+      ch.setUint16(36, 0, true); ch.setUint32(38, 0, true); ch.setUint32(42, off, true);
+      cen.push(new Uint8Array(ch.buffer), nm);
+      off += 30 + nm.length + data.length;
+    });
+    const cenSize = cen.reduce(function (s, p) { return s + p.length; }, 0);
+    const eo = new DataView(new ArrayBuffer(22));
+    eo.setUint32(0, 0x06054b50, true);
+    eo.setUint16(8, files.length, true); eo.setUint16(10, files.length, true);
+    eo.setUint32(12, cenSize, true); eo.setUint32(16, off, true);
+    return new Blob(parts.concat(cen, [new Uint8Array(eo.buffer)]), { type: 'application/zip' });
+  }
+  function bkzText(s) { return new TextEncoder().encode(String(s)); }
+  function bkzFromDataUrl(durl) {
+    const i = String(durl).indexOf(',');
+    const head = String(durl).slice(0, i), b64 = String(durl).slice(i + 1);
+    const bin = atob(b64), u8 = new Uint8Array(bin.length);
+    for (let k = 0; k < bin.length; k++) u8[k] = bin.charCodeAt(k);
+    const m = /image\/(\w+)/.exec(head);
+    let ext = m ? m[1].toLowerCase() : 'jpg';
+    if (ext === 'jpeg') ext = 'jpg';
+    return { data: u8, ext: ext };
+  }
+  // 파일명에 못 쓰는 글자만 걷어낸다 — 한글은 그대로 살린다(폴더만 열어도 뭔지 알게)
+  function bkzSafe(s, max) {
+    let t = String(s || '').replace(/[\\/:*?"<>|\r\n\t]/g, ' ').replace(/\s+/g, ' ').trim();
+    t = t.replace(/\s/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+    if (!t) t = '제목없음';
+    return t.slice(0, max || 40);
+  }
+  // ── 보고서 한 장 (인터넷 없이 열리고, 인쇄하면 종이에 맞게 밝아진다) ──
+  function bkzReportCss() {
+    return ':root{--void:#0B0C0A;--card:#15170F;--line:rgba(255,255,255,.09);--ink:#F3F4EE;--sub:#9AA08A;--faint:#5D6350;--lime:#D7F34B}' +
+      '*{box-sizing:border-box}body{margin:0;background:#0B0C0A;color:#F3F4EE;' +
+      "font-family:-apple-system,BlinkMacSystemFont,'Pretendard','Malgun Gothic',sans-serif;-webkit-font-smoothing:antialiased}" +
+      '.doc{max-width:760px;margin:0 auto;padding:0 26px 70px}' +
+      '.cover{padding:64px 0 40px;border-bottom:1px solid var(--line);position:relative;overflow:hidden}' +
+      '.cover:after{content:"";position:absolute;left:-10%;top:-40%;width:70%;height:150%;background:radial-gradient(ellipse at 50% 50%,rgba(215,243,75,.10),transparent 66%)}' +
+      ".eb{font-family:ui-monospace,monospace;font-size:10px;letter-spacing:.26em;color:var(--faint);text-transform:uppercase}" +
+      '.cover h1{font-size:34px;font-weight:800;letter-spacing:-.03em;line-height:1.24;margin:14px 0 0;position:relative}' +
+      '.cover h1 em{font-style:normal;color:var(--lime)}' +
+      '.when{font-family:ui-monospace,monospace;font-size:12px;color:var(--sub);margin-top:16px}' +
+      '.big{display:flex;align-items:flex-end;gap:12px;margin-top:30px;position:relative;flex-wrap:wrap}' +
+      '.big .n{font-family:ui-monospace,monospace;font-size:76px;font-weight:800;line-height:.86;letter-spacing:-.05em;color:var(--lime);text-shadow:0 0 46px rgba(215,243,75,.28)}' +
+      '.big .u{font-size:15px;font-weight:800;padding-bottom:8px}.big .d{font-size:12px;color:var(--faint);padding-bottom:9px;margin-left:auto;text-align:right;line-height:1.6}' +
+      'section{padding:38px 0;border-bottom:1px solid var(--line)}' +
+      '.sh{display:flex;align-items:baseline;gap:10px;margin-bottom:19px;flex-wrap:wrap}' +
+      '.sh .no{font-family:ui-monospace,monospace;font-size:10px;color:var(--faint);letter-spacing:.18em}' +
+      '.sh h2{font-size:18px;font-weight:800;margin:0}.sh .note{font-size:11.5px;color:var(--faint);margin-left:auto}' +
+      '.lead{font-size:13px;color:var(--sub);line-height:1.78;margin:0 0 18px}.lead b{color:var(--ink)}' +
+      '.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:10px}' +
+      '.tile{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 17px}' +
+      '.tile .n{font-family:ui-monospace,monospace;font-size:29px;font-weight:800;line-height:1;color:var(--c,#F3F4EE)}' +
+      '.tile .l{font-size:12px;font-weight:700;margin-top:9px}.tile .s{font-size:11px;color:var(--faint);margin-top:5px;line-height:1.55}' +
+      '.months{display:flex;align-items:flex-end;gap:9px;height:132px;padding:10px 0 0}' +
+      '.mo{flex:1;display:flex;flex-direction:column;align-items:center;gap:7px;height:100%;justify-content:flex-end}' +
+      '.mo u{display:block;width:100%;max-width:44px;border-radius:6px 6px 2px 2px;background:linear-gradient(180deg,var(--lime),rgba(215,243,75,.28))}' +
+      '.mo.now u{box-shadow:0 0 20px rgba(215,243,75,.34)}' +
+      '.mo .lb{font-family:ui-monospace,monospace;font-size:9.5px;color:var(--faint)}' +
+      '.mo .v{font-family:ui-monospace,monospace;font-size:11px;font-weight:800;color:var(--sub)}.mo.now .v{color:var(--lime)}' +
+      '.best{display:flex;flex-direction:column;gap:9px}' +
+      '.bi{display:flex;gap:13px;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:13px;padding:11px 14px 11px 11px}' +
+      '.bi .rk{font-family:ui-monospace,monospace;font-size:11px;font-weight:800;color:var(--faint);width:16px;flex:0 0 auto}' +
+      '.bi .th{width:44px;aspect-ratio:9/16;border-radius:7px;flex:0 0 auto;object-fit:cover;background:#191A14}' +
+      '.bi .z{flex:1;min-width:0}.bi .hk{font-size:13px;font-weight:700;line-height:1.42}' +
+      '.bi .mt{display:flex;gap:7px;align-items:center;margin-top:6px;flex-wrap:wrap}' +
+      '.chip{font-size:9px;font-weight:800;padding:2px 8px;border-radius:99px}' +
+      '.v{font-family:ui-monospace,monospace;font-size:12px;font-weight:800;flex:0 0 auto}' +
+      '.v.vt2{color:#D7F34B}.v.vt3{color:#F5C84B}.v.vt4{color:#E87AB0;text-shadow:0 0 12px rgba(232,122,176,.5)}' +
+      '.two{display:grid;grid-template-columns:1fr 1fr;gap:11px}' +
+      '.bx{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:17px 18px;border-left:2px solid var(--c)}' +
+      '.bx .k{font-family:ui-monospace,monospace;font-size:9.5px;letter-spacing:.16em;color:var(--c)}' +
+      '.bx .t{font-size:16px;font-weight:800;margin-top:9px;line-height:1.4}.bx .t em{font-style:normal;color:var(--c)}' +
+      '.bx .d{font-size:12px;color:var(--sub);line-height:1.7;margin-top:8px}.bx .d b{color:var(--ink)}' +
+      '.rate{display:flex;align-items:center;gap:9px;margin-top:11px}' +
+      '.rate .trk{flex:1;height:6px;border-radius:99px;background:rgba(255,255,255,.07);overflow:hidden}' +
+      '.rate .trk u{display:block;height:100%;background:var(--c);border-radius:99px}' +
+      '.rate .p{font-family:ui-monospace,monospace;font-size:11px;font-weight:800;color:var(--c)}' +
+      '.says{display:flex;flex-direction:column;gap:8px}' +
+      '.say{display:flex;gap:12px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 15px}' +
+      '.say i{width:3px;align-self:stretch;min-height:26px;border-radius:99px;background:var(--c);flex:0 0 auto;font-style:normal}' +
+      '.say .q{font-size:13.5px;font-weight:700;line-height:1.5}.say .w{font-size:11px;color:var(--faint);margin-top:5px}.say .w b{color:var(--c);font-weight:800}' +
+      '.tree{background:#0C0E08;border:1px solid var(--line);border-radius:14px;padding:18px 20px;' +
+      'font-family:ui-monospace,monospace;font-size:12px;line-height:2;color:var(--sub);white-space:pre-wrap}' +
+      '.tree b{color:var(--ink)}.tree .c{color:var(--faint)}.tree .hi{color:var(--lime)}' +
+      '.foot{padding:30px 0 0;font-size:11.5px;color:var(--faint);line-height:1.8;text-align:center}.foot b{color:var(--sub)}' +
+      '@media(max-width:640px){.two{grid-template-columns:1fr}.cover h1{font-size:25px}.big .n{font-size:58px}}' +
+      '@media print{body{background:#fff;color:#111}.cover:after{display:none}' +
+      '.tile,.bi,.bx,.say,.tree{background:#fff;border-color:#ddd}.big .n{color:#5B7A00;text-shadow:none}' +
+      '.tree{color:#333}section{break-inside:avoid;border-color:#eee}}';
+  }
+  function bkzBuildReport(ctx) {
+    const R = ctx.rows, sc = ctx.scripts || [];
+    const withV = R.filter(function (r) { return (r.views || 0) > 0; });
+    const deco = R.filter(function (r) { return (r.scriptSecFlex || []).length || Object.keys(r.scriptSections || {}).length; });
+    const kwSet = {}; R.forEach(function (r) { (r.keywords || []).forEach(function (k) { kwSet[k] = 1; }); });
+    // 달마다
+    const mo = {}; R.forEach(function (r) {
+      const t = r.createdAt || (r.date ? new Date(r.date).getTime() : 0); if (!t) return;
+      const d = new Date(t); const k = (d.getMonth() + 1) + '월'; mo[k] = (mo[k] || 0) + 1;
+    });
+    const moKeys = Object.keys(mo); const moMax = Math.max(1, ...moKeys.map(function (k) { return mo[k]; }));
+    const thisMo = (new Date().getMonth() + 1) + '월';
+    const moHtml = moKeys.length ? moKeys.map(function (k) {
+      const n = mo[k], h = Math.max(3, Math.round(n / moMax * 100));
+      return '<div class="mo' + (k === thisMo ? ' now' : '') + '"><span class="v">' + n + '</span>' +
+        '<u style="height:' + h + '%' + (n ? '' : ';opacity:.35') + '"></u><span class="lb">' + k + '</span></div>';
+    }).join('') : '';
+    // 베스트
+    const best = withV.slice().sort(function (a, b) { return (b.views || 0) - (a.views || 0); }).slice(0, 5);
+    const vt = function (n) { return n >= 1000000 ? 'vt4' : n >= 500000 ? 'vt3' : n >= 100000 ? 'vt2' : ''; };
+    const bestHtml = best.map(function (r, i) {
+      const tc = r.format ? fbTypeColor(r.format) : '';
+      const img = ctx.picMap[r.id];
+      return '<div class="bi"><span class="rk">' + (i + 1) + '</span>' +
+        (img ? '<img class="th" src="' + esc(img) + '" alt="" />' : '<span class="th"></span>') +
+        '<span class="z"><span class="hk">' + esc(r.hook || stripHtml(r.script || '').slice(0, 50) || '(제목 없음)') + '</span>' +
+        '<span class="mt">' + (r.format ? '<span class="chip" style="color:' + tc + ';border:1px solid ' + fbHexA(tc, .5) + '">' + esc(r.format) + '</span>' : '') +
+        ((r.keywords || []).length ? '<span style="font-size:10.5px;color:#5D6350">' + esc((r.keywords || []).map(function (k) { return '#' + k; }).join(' ')) + '</span>' : '') +
+        '</span></span><span class="v ' + vt(r.views) + '">' + fmtViews(r.views) + '</span></div>';
+    }).join('') || '<div class="lead">아직 조회수를 적은 카드가 없어요 — 숫자를 넣으면 여기가 채워집니다.</div>';
+    // 앱이 찾아낸 것
+    let fx = [], gap = null;
+    try { fx = insFormulas() || []; } catch (e) {}
+    try { gap = insVein(); } catch (e) {}
+    const f0 = fx[0];
+    const fxBx = f0
+      ? '<div class="bx" style="--c:#D7F34B"><div class="k">반복해서 통한 뼈대</div>' +
+        '<div class="t"><em>「' + esc(f0.pat.trim()) + '」</em></div>' +
+        '<div class="d">이 뼈대를 쓴 <b>' + (f0.vn || f0.n) + '편 중 ' + (f0.hit || 0) + '편</b>이 평균을 넘었어요. 주제가 달라도 같은 틀입니다.</div>' +
+        '<div class="rate"><span class="trk"><u style="width:' + Math.round((f0.rate || 0) * 100) + '%"></u></span>' +
+        '<span class="p">' + Math.round((f0.rate || 0) * 100) + '%</span></div></div>'
+      : '<div class="bx" style="--c:#5D6350"><div class="k">반복해서 통한 뼈대</div><div class="t">아직 없어요</div>' +
+        '<div class="d">같은 뼈대가 <b>3편</b> 이상 쌓이면 여기에 나타납니다. 우연과 구별하려면 그만큼은 필요해요.</div></div>';
+    const gapBx = gap
+      ? '<div class="bx" style="--c:#E0B27A"><div class="k">아직 안 판 자리</div>' +
+        '<div class="t"><em>' + esc(gap.kw) + '</em></div>' +
+        '<div class="d">남의 것 <b>' + gap.n + '편</b>' + (gap.avg ? '이 평균 <b>' + fmtViews(gap.avg) + '</b>' : '') +
+        '인데, <b>내 원고는 ' + gap.mine + '편</b>이에요. 시장이 이미 검증해준 자리입니다.</div>' +
+        '<div class="rate"><span class="trk"><u style="width:' + Math.max(4, Math.round(gap.mine / Math.max(1, gap.n) * 100)) + '%"></u></span>' +
+        '<span class="p">내 ' + gap.mine + ' / 남 ' + gap.n + '</span></div></div>'
+      : '<div class="bx" style="--c:#5D6350"><div class="k">아직 안 판 자리</div><div class="t">아직 없어요</div>' +
+        '<div class="d">같은 말이 붙은 카드가 <b>3편</b> 이상 모이면 «여기를 파세요»라고 알려드려요.</div></div>';
+    // 고객이 한 말
+    const BK = { pain: ['문제', '#E07B7B', '지금 겪고 있는 일'], desire: ['욕구', '#7E9B72', '되고 싶은 그림'],
+      fear: ['회피', '#F0B24E', '절대 안 됐으면 하는 것'], resist: ['저항', '#8FA0C9', '사기 직전에 멈춘 자리'] };
+    const says = [];
+    (ctx.pmms || []).forEach(function (p) {
+      (p.collect || []).forEach(function (c) {
+        const q = String(c.quote || '').trim(); if (!q) return;
+        const b = BK[c.basket || 'pain'] || BK.pain;
+        says.push('<div class="say" style="--c:' + b[1] + '"><i></i><div class="z"><div class="q">“' + esc(q) + '”</div>' +
+          '<div class="w"><b>' + b[0] + '</b> — ' + b[2] + (c.situation ? ' · ' + esc(c.situation) : '') + '</div></div></div>');
+      });
+    });
+    const target = ((ctx.pmms || [])[0] || {}).targetName || '';
+    // 폴더 안내
+    const tree = '<b>' + esc(ctx.zipName) + '</b>\n│\n' +
+      '├── <span class="hi">📄 보고서.html</span>          <span class="c">← 지금 보고 계신 이 장</span>\n│\n' +
+      '├── <b>📁 사진/</b>                <span class="c">' + ctx.picCount + '장 · 후킹 문구가 파일 이름</span>\n' +
+      '├── <b>📁 글/</b>                 <span class="c">벤치마킹 · 내 원고 · 고객이 한 말</span>\n' +
+      '└── <b>📁 복원용/</b>\n     └── data.json            <span class="c">앱에 다시 불러올 때 쓰는 파일</span>';
+
+    return '<!doctype html><html lang="ko"><head><meta charset="utf-8">' +
+      '<meta name="viewport" content="width=device-width,initial-scale=1">' +
+      '<title>컨텐츠 마스터즈 — ' + esc(ctx.dateStr) + ' 기록</title><style>' + bkzReportCss() + '</style></head><body><div class="doc">' +
+      '<div class="cover"><div class="eb">CONTENT MASTERS · BACKUP REPORT</div>' +
+      '<h1>담고 · 이해하고 · 만든<br><em>기록</em></h1>' +
+      '<div class="when">' + esc(ctx.dateStr) + '까지' + (target ? ' · 고객: ' + esc(target) : '') + '</div>' +
+      '<div class="big"><span class="n">' + R.length + '</span><span class="u">개의 자산</span>' +
+      '<span class="d">' + (mo[thisMo] ? '이번 달에만 <b style="color:#D7F34B">' + mo[thisMo] + '개</b><br>' : '') +
+      '꾸준히 쌓이고 있어요</span></div></div>' +
+
+      '<section><div class="sh"><span class="no">01</span><h2>한눈에</h2>' +
+      '<span class="note">비어 있는 칸은 앞으로 채울 자리입니다</span></div><div class="tiles">' +
+      '<div class="tile" style="--c:#D7F34B"><div class="n">' + R.length + '</div><div class="l">모은 자산</div><div class="s">벤치마킹 카드</div></div>' +
+      '<div class="tile" style="--c:#F5C84B"><div class="n">' + withV.length + '</div><div class="l">조회수 기록</div><div class="s">숫자가 들어간 카드</div></div>' +
+      '<div class="tile" style="--c:#7E9B72"><div class="n">' + deco.length + '</div><div class="l">원고 분해</div><div class="s">구조까지 뜯어본 것</div></div>' +
+      '<div class="tile" style="--c:#E07B7B"><div class="n">' + says.length + '</div><div class="l">고객이 한 말</div><div class="s">직접 들은 그대로</div></div>' +
+      '<div class="tile" style="--c:#8FA0C9"><div class="n">' + Object.keys(kwSet).length + '</div><div class="l">키워드</div><div class="s">내 밭의 이름들</div></div>' +
+      '<div class="tile" style="--c:#6B7E96"><div class="n">' + sc.length + '</div><div class="l">내 원고</div><div class="s">직접 쓴 것</div></div>' +
+      '</div></section>' +
+
+      (moHtml ? '<section><div class="sh"><span class="no">02</span><h2>달마다 쌓인 것</h2></div>' +
+        '<div class="months">' + moHtml + '</div></section>' : '') +
+
+      '<section><div class="sh"><span class="no">03</span><h2>가장 크게 터진 것</h2>' +
+      '<span class="note">사진은 «사진/» 폴더에 따로 들어 있습니다</span></div><div class="best">' + bestHtml + '</div></section>' +
+
+      '<section><div class="sh"><span class="no">04</span><h2>앱이 찾아낸 것</h2></div>' +
+      '<p class="lead">모은 자료를 앱이 계산해서 찾아낸 것입니다. <b>지어낸 게 아니라 내 데이터에서 나온 것</b>입니다.</p>' +
+      '<div class="two">' + fxBx + gapBx + '</div></section>' +
+
+      (says.length ? '<section><div class="sh"><span class="no">05</span><h2>고객이 한 말</h2>' +
+        (target ? '<span class="note">' + esc(target) + '</span>' : '') + '</div>' +
+        '<p class="lead">상담에서 <b>직접 들은 말 그대로</b>입니다. 조회수는 남들도 다 보지만 이건 나만 갖고 있습니다.</p>' +
+        '<div class="says">' + says.join('') + '</div></section>' : '') +
+
+      '<section><div class="sh"><span class="no">06</span><h2>이 폴더에 들어 있는 것</h2></div>' +
+      '<div class="tree">' + tree + '</div></section>' +
+
+      '<div class="foot">이 보고서는 <b>' + esc(ctx.dateStr) + '</b>에 컨텐츠 마스터즈에서 자동으로 만들어졌습니다.<br>' +
+      '인터넷 없이 열립니다 · 인쇄하면 종이에 맞게 바뀝니다</div></div></body></html>';
+  }
+  // ── 글 문서 (읽는 용도. 카드 하나가 한 덩어리) ──
+  function bkzDocCss() {
+    return 'body{margin:0;background:#0B0C0A;color:#F3F4EE;' +
+      "font-family:-apple-system,BlinkMacSystemFont,'Pretendard','Malgun Gothic',sans-serif;-webkit-font-smoothing:antialiased}" +
+      '.w{max-width:760px;margin:0 auto;padding:44px 26px 70px}' +
+      'h1{font-size:26px;font-weight:800;letter-spacing:-.02em;margin:0 0 6px}' +
+      '.sub{font-size:12.5px;color:#9AA08A;margin:0 0 30px}' +
+      '.it{background:#15170F;border:1px solid rgba(255,255,255,.09);border-radius:15px;padding:20px 22px;margin-bottom:13px}' +
+      '.no{font-family:ui-monospace,monospace;font-size:10px;letter-spacing:.16em;color:#5D6350}' +
+      '.hk{font-size:17px;font-weight:800;line-height:1.45;margin:8px 0 0}' +
+      '.mt{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:11px}' +
+      '.chip{font-size:10px;font-weight:800;padding:3px 9px;border-radius:99px}' +
+      '.v{font-family:ui-monospace,monospace;font-size:12px;font-weight:800;color:#F5C84B}' +
+      '.kw{font-size:11px;color:#5D6350}' +
+      '.sec{display:flex;gap:11px;padding:11px 0;border-top:1px solid rgba(255,255,255,.06);margin-top:4px}' +
+      '.sec .bar{width:3px;border-radius:99px;background:var(--c,#5D6350);flex:0 0 auto}' +
+      '.sec .nm{font-size:10px;font-weight:800;color:var(--c,#9AA08A);letter-spacing:.03em}' +
+      '.sec .tx{font-size:13px;color:#C9CDC2;line-height:1.72;margin-top:5px;white-space:pre-wrap}' +
+      '.memo{font-size:12.5px;color:#9AA08A;line-height:1.7;margin-top:12px;padding-top:11px;border-top:1px dashed rgba(255,255,255,.08)}' +
+      '.pic{font-size:11px;color:#5D6350;margin-top:10px;font-family:ui-monospace,monospace}' +
+      '.none{color:#5D6350;font-size:13px;line-height:1.8}' +
+      '@media print{body{background:#fff;color:#111}.it{background:#fff;border-color:#ddd;break-inside:avoid}.sec .tx{color:#333}}';
+  }
+  function bkzDocWrap(title, sub, body) {
+    return '<!doctype html><html lang="ko"><head><meta charset="utf-8">' +
+      '<meta name="viewport" content="width=device-width,initial-scale=1"><title>' + esc(title) + '</title>' +
+      '<style>' + bkzDocCss() + '</style></head><body><div class="w"><h1>' + esc(title) + '</h1>' +
+      '<p class="sub">' + esc(sub) + '</p>' + body + '</div></body></html>';
+  }
+  const BKZ_SEC = { gain: '#E25C5C', empathy: '#5B8DEF', method: '#D8B23A', appeal: '#A9C437', cta: '#2FD07B' };
+  function bkzRowsDoc(ctx) {
+    const body = ctx.rows.map(function (r) {
+      const tc = r.format ? fbTypeColor(r.format) : '';
+      let segs = []; try { segs = prpSegsOf(r); } catch (e) {}
+      return '<div class="it"><div class="no">NO.' + String(r.no || 0).padStart(3, '0') +
+        (r.author ? ' · ' + esc(r.author) : '') + (r.date ? ' · ' + esc(r.date) : '') + '</div>' +
+        '<div class="hk">' + esc(r.hook || stripHtml(r.script || '').slice(0, 60) || '(제목 없음)') + '</div>' +
+        '<div class="mt">' +
+        (r.format ? '<span class="chip" style="color:' + tc + ';border:1px solid ' + fbHexA(tc, .5) + '">' + esc(r.format) + '</span>' : '') +
+        (r.views ? '<span class="v">▶ ' + fmtViews(r.views) + '</span>' : '') +
+        ((r.keywords || []).length ? '<span class="kw">' + esc(r.keywords.map(function (k) { return '#' + k; }).join(' ')) + '</span>' : '') +
+        '</div>' +
+        segs.map(function (s) {
+          return '<div class="sec" style="--c:' + (BKZ_SEC[s.c] || '#6B7A70') + '"><span class="bar"></span>' +
+            '<div><div class="nm">' + esc(s.k || '구간') + '</div><div class="tx">' + esc(String(s.t || '').replace(/<[^>]*>/g, '')) + '</div></div></div>';
+        }).join('') +
+        (r.memo ? '<div class="memo">💭 ' + esc(r.memo) + '</div>' : '') +
+        (ctx.picName[r.id] ? '<div class="pic">📷 사진/' + esc(ctx.picName[r.id]) + '</div>' : '') +
+        '</div>';
+    }).join('') || '<p class="none">아직 담은 벤치마킹이 없어요.</p>';
+    return bkzDocWrap('벤치마킹 ' + ctx.rows.length + '장', ctx.dateStr + ' 기준 · 담은 순서대로', body);
+  }
+  function bkzScriptsDoc(ctx) {
+    const sc = ctx.scripts || [];
+    const body = sc.map(function (s) {
+      let txt = ''; try { txt = stripHtml(s.content || ''); } catch (e) { txt = ''; }
+      return '<div class="it"><div class="no">' + (s.subject ? esc(s.subject) : '주제 없음') +
+        (s.uploadViews ? ' · 올린 뒤 ' + fmtViews(s.uploadViews) : '') + '</div>' +
+        '<div class="hk">' + esc(s.title || '(제목 없음)') + '</div>' +
+        (txt ? '<div class="sec" style="--c:#A9C437"><span class="bar"></span><div><div class="nm">원고</div>' +
+          '<div class="tx">' + esc(txt) + '</div></div></div>' : '') +
+        (s.memo ? '<div class="memo">💭 ' + esc(s.memo) + '</div>' : '') + '</div>';
+    }).join('') || '<p class="none">아직 쓴 원고가 없어요.</p>';
+    return bkzDocWrap('내 원고 ' + sc.length + '편', ctx.dateStr + ' 기준', body);
+  }
+  function bkzCusDoc(ctx) {
+    const BK = { pain: ['문제 · 불편', '#E07B7B'], desire: ['욕구', '#7E9B72'], fear: ['회피', '#F0B24E'], resist: ['저항', '#8FA0C9'] };
+    let body = '';
+    (ctx.pmms || []).forEach(function (p) {
+      const list = (p.collect || []).filter(function (c) { return String(c.quote || '').trim(); });
+      if (!list.length && !p.targetName) return;
+      body += '<div class="it"><div class="no">고객</div><div class="hk">' + esc(p.targetName || '(이름 없음)') + '</div>' +
+        list.map(function (c) {
+          const b = BK[c.basket || 'pain'] || BK.pain;
+          return '<div class="sec" style="--c:' + b[1] + '"><span class="bar"></span><div>' +
+            '<div class="nm">' + b[0] + '</div><div class="tx">“' + esc(c.quote) + '”' +
+            (c.situation ? '\n· 그 순간: ' + esc(c.situation) : '') +
+            (c.answer ? '\n· 내 답: ' + esc(c.answer) : '') + '</div></div></div>';
+        }).join('') + '</div>';
+    });
+    return bkzDocWrap('고객이 한 말', ctx.dateStr + ' 기준 · 들은 그대로', body || '<p class="none">아직 담은 고객의 말이 없어요.</p>');
+  }
+
+  // ── 메인: 정리해서 받기 ──
+  let _bkzBusy = false;
+  async function exportZipBackup() {
+    if (_bkzBusy) return;
+    _bkzBusy = true;
+    const btn = document.getElementById('settings-export-zip-btn');
+    const prog = document.getElementById('bkz-prog');
+    const say = function (s) { if (prog) prog.textContent = s; };
+    if (btn) { btn.disabled = true; btn.innerHTML = '<span>📦</span> 만드는 중…'; }
+    try {
+      const R = (rows || []).filter(isFilled);
+      const d = new Date();
+      const dateStr = d.getFullYear() + '년 ' + (d.getMonth() + 1) + '월 ' + d.getDate() + '일';
+      const stamp = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+      const zipName = '컨텐츠마스터즈-백업-' + stamp + '.zip';
+      const files = [], picName = {}, picMap = {};
+      // 1) 사진 — 하나씩 창고에서 꺼내온다 (여기가 제일 오래 걸린다)
+      const shots = [];
+      R.forEach(function (r) {
+        if (r.hasThumb) shots.push({ r: r, kind: 'thumb' });
+        if (r.hasComment) shots.push({ r: r, kind: 'comment' });
+      });
+      let done = 0, no = 0;
+      for (const s of shots) {
+        done++;
+        say('사진 ' + done + ' / ' + shots.length + ' 가져오는 중…');
+        let durl = null;
+        try { durl = await loadImage(s.r.id, s.kind); } catch (e) {}
+        if (!durl) continue;
+        const bin = bkzFromDataUrl(durl);
+        no++;
+        const label = bkzSafe(s.r.hook || s.r.why || ('NO' + (s.r.no || no)));
+        const fn = String(no).padStart(3, '0') + '_' + label + (s.kind === 'comment' ? '_댓글' : '') + '.' + bin.ext;
+        files.push({ name: '사진/' + fn, data: bin.data });
+        if (s.kind === 'thumb') { picName[s.r.id] = fn; picMap[s.r.id] = durl; }
+      }
+      const ctx = { rows: R, scripts: (scripts || []), pmms: (pmms || []), dateStr: dateStr,
+        zipName: zipName, picCount: no, picName: picName, picMap: picMap };
+      // 2) 보고서 · 글
+      say('보고서 만드는 중…');
+      files.unshift({ name: '보고서.html', data: bkzText(bkzBuildReport(ctx)) });
+      files.push({ name: '글/벤치마킹-' + R.length + '장.html', data: bkzText(bkzRowsDoc(ctx)) });
+      files.push({ name: '글/내-원고-' + (scripts || []).length + '편.html', data: bkzText(bkzScriptsDoc(ctx)) });
+      files.push({ name: '글/고객이-한-말.html', data: bkzText(bkzCusDoc(ctx)) });
+      // 3) 복원용 — 앱에 다시 불러올 수 있는 원본 (텍스트 전부)
+      say('복원용 데이터 담는 중…');
+      const dump = {};
+      try {
+        const keys = (Array.isArray(window.__cmExportKeys) ? window.__cmExportKeys : []);   // 배열이다(함수 아님)
+        for (const k of keys) {
+          try { const v = await window.storage.get(k); if (v && v.value != null) dump[k] = v.value; } catch (e) {}
+        }
+      } catch (e) {}
+      files.push({ name: '복원용/data.json', data: bkzText(JSON.stringify({ version: 5, exportedAt: Date.now(), keys: dump }, null, 2)) });
+      files.push({ name: '복원용/읽어주세요.txt', data: bkzText(
+        '이 파일은 앱에 다시 불러올 때 쓰는 원본입니다.\n\n' +
+        '· 되돌리려면: 설정 → 가져오기 → data.json 선택\n' +
+        '· 사진은 「사진/」 폴더에 따로 들어 있습니다.\n' +
+        '  사진까지 한 번에 되돌리려면 설정의 「전체 내보내기(.json)」로 받아둔 파일을 쓰세요.\n\n' +
+        '만든 날: ' + dateStr + '\n') });
+      // 4) 묶어서 내려주기
+      say('묶는 중…');
+      const blob = bkzZip(files);
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = zipName;
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
+      const mb = (blob.size / 1048576);
+      say('끝났어요 · ' + files.length + '개 파일 · ' + (mb < 1 ? Math.round(blob.size / 1024) + 'KB' : mb.toFixed(1) + 'MB'));
+      toast('📦 정리해서 받았어요 — 압축을 풀고 보고서.html을 열어보세요');
+      // 백업 리마인더도 «했다»고 알아야 한다 (전체 내보내기와 같은 키)
+      try { localStorage.setItem('hmv1-lastbackup', String(Date.now())); } catch (e) {}
+      try { renderBackupStatus(); } catch (e) {}
+    } catch (e) {
+      console.warn('bkz', e);
+      say('');
+      toast('만들다 막혔어요 — 사진이 너무 많으면 나눠서 받아야 해요');
+    } finally {
+      _bkzBusy = false;
+      if (btn) { btn.disabled = false; btn.innerHTML = '<span>📦</span> <b>정리해서 받기 (.zip)</b>'; }
+    }
+  }
   async function exportBackup() {
     const allImages = {};
     for (const r of rows) {
@@ -39038,6 +39461,8 @@
 
     const exportBtn = document.getElementById('settings-export-btn');
     if (exportBtn) exportBtn.onclick = exportAll;
+    const exportZip = document.getElementById('settings-export-zip-btn');   // 📦 v582
+    if (exportZip) exportZip.onclick = exportZipBackup;
     const exportRows = document.getElementById('settings-export-rows-btn');
     if (exportRows) exportRows.onclick = exportRowsOnly;
     const exportScripts = document.getElementById('settings-export-scripts-btn');
