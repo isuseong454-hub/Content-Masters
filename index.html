@@ -12756,6 +12756,17 @@
   .ac-fx .e{ font-size:10px; color:var(--text-sub,#9aa08a); margin-top:4px;
     overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 
+  /* 🚦 숫자의 원칙 — 지금 적는 문구를 세 칸으로 잰다 (숫자 · 15자 · 손실). 후보 줄엔 안 붙인다 */
+  .ac-sig{ display:flex; align-items:center; gap:5px; padding:8px 13px;
+    border-bottom:1px solid rgba(255,255,255,.06); background:rgba(255,255,255,.02); }
+  .ac-sig i{ font-style:normal; font-size:8.5px; font-weight:800; letter-spacing:.04em;
+    padding:3px 8px; border-radius:99px; color:var(--text-faint,#5d6350);
+    border:1px solid rgba(255,255,255,.09); background:rgba(255,255,255,.03); }
+  .ac-sig i.on{ color:#0e1408; background:var(--law-asset,#d7f34b); border-color:transparent; }
+  .ac-sig span{ flex:1; min-width:0; text-align:right; font-size:9.5px; color:var(--text-sub,#9aa08a);
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .ac-sig.full span{ color:var(--law-asset,#d7f34b); font-weight:700; }
+
   /* 🎨 v575 — 자동완성 줄에 «어느 카드에서 왔는지». 시트 보드와 같은 유형색·조회수 티어를 그대로 쓴다.
      🖼 썸네일·✨ 수식어만 내 카드에서 온 것이라 색·미리보기가 붙는다 (🧬 공식·📋 템플릿은 원본 카드가 없음) */
   .ac-dot{ width:3px; align-self:stretch; min-height:14px; border-radius:99px; flex:0 0 auto; margin-left:-4px; }
@@ -17006,6 +17017,20 @@
   .cq-save button:disabled{ background:rgba(255,255,255,.06); color:var(--st2-faint); cursor:default; }
   .cq-save .st{ flex:1; font-size:9.5px; color:var(--st2-faint); }
   .cq-save .st.ok{ color:var(--cnv); }
+  /* 🪚 답에 «어디서나 하는 말»이 섞이면 — 혼내는 게 아니라 더 센 재료를 알려주는 줄 */
+  .cq-saw{ margin-top:7px; font-size:9.5px; line-height:1.6; color:#c9a98a;
+    padding:7px 10px; border-radius:9px; background:rgba(200,122,74,.08);
+    border:1px solid rgba(200,122,74,.18); }
+  .cq-saw b{ color:#e8c49a; font-weight:800; }
+  /* 📷 오늘 폰으로 찍을 것 — 3열표의 「찍는 법」. 답(말) 다음은 장면(증거)이다 */
+  .cq-shoot{ display:flex; align-items:center; gap:8px; margin-top:10px; }
+  .cq-shoot .cap{ flex:0 0 auto; font-size:9.5px; font-weight:800; color:var(--st2-sub); }
+  .cq-sh{ flex:1; min-width:0; box-sizing:border-box; font-family:inherit; font-size:11.5px; line-height:1.4;
+    color:var(--st2-txt); padding:8px 11px; border-radius:9px; outline:none;
+    background:rgba(0,0,0,.28); border:1px solid var(--st2-line); transition:border-color .15s; }
+  /* 아이폰 자동확대는 v572 전역 규칙(모바일 입력칸 16px)이 처리한다 */
+  .cq-sh:focus{ border-color:var(--cnv-s); }
+  .cq-sh::placeholder{ color:var(--st2-faint); }
   .cq-nav{ display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:14px;
     border-top:1px solid var(--st2-line); padding-top:11px; }
   .cq-nav button{ font-family:inherit; font-size:10.5px; color:var(--st2-sub); background:none; border:none; cursor:pointer; }
@@ -21138,8 +21163,11 @@
     .prp-sgt{font-size:13.5px;line-height:1.95;margin-top:6px;word-break:keep-all;
       user-select:none;-webkit-user-select:none;color:#eae8de}
     .prp-sgt .w{border-radius:3px;padding:0 1px;transition:background .1s,color .1s}
-    .prp-sgt .w.k{color:#FF8A7A;font-weight:700;background:rgba(255,68,56,.13);box-shadow:inset 0 -2px 0 rgba(255,68,56,.6)}
-    .prp-sgt .w.r{color:#FFC585;background:rgba(255,160,44,.11);box-shadow:inset 0 -2px 0 rgba(255,160,44,.5)}
+    /* 🪚 «어디서나 하는 말» — 자랑 상투어 자리. 점선 = 여기에 숫자·장면이 들어갈 자리라는 표시.
+       칠하면(k/r) 점선이 사라지고, 지우면 다시 나타난다 — border 유무로만 구분 */
+    .prp-sgt .w.sd{color:#8f8983;border-bottom:1px dashed rgba(160,150,136,.55)}
+    .prp-sgt .w.k{color:#FF8A7A;font-weight:700;background:rgba(255,68,56,.13);box-shadow:inset 0 -2px 0 rgba(255,68,56,.6);border-bottom:none}
+    .prp-sgt .w.r{color:#FFC585;background:rgba(255,160,44,.11);box-shadow:inset 0 -2px 0 rgba(255,160,44,.5);border-bottom:none}
     #prp[data-tool="k"] .prp-sgt,#prp[data-tool="r"] .prp-sgt,#prp[data-tool="e"] .prp-sgt{cursor:crosshair;touch-action:none}
     #prp[data-tool="t"] .prp-sgt{user-select:text;-webkit-user-select:text;cursor:text}
     #prp[data-tool="t"] .prp-sgt[contenteditable="true"]{outline:1px dashed rgba(215,243,75,.4);outline-offset:6px;border-radius:4px}
@@ -26137,7 +26165,7 @@
         const c = document.createElement('canvas');
         c.width = maxW; c.height = Math.round(h * maxW / w);
         c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
-        try { res(c.toDataURL('image/jpeg', 0.82)); } catch (e) { res(dataUrl); }
+        try { res(c.toDataURL('image/jpeg', 0.80)); } catch (e) { res(dataUrl); }   // v583 · 0.82 → 0.80
       };
       img.onerror = function () { res(dataUrl); };
       img.src = dataUrl;
@@ -26276,7 +26304,7 @@
       fileInput.onchange = () => {
         const f = fileInput.files && fileInput.files[0]; if (!f) return;
         const fr = new FileReader();
-        fr.onload = async () => { pullFields(); s.thumb = await structDownscale(fr.result, 900); render(); };
+        fr.onload = async () => { pullFields(); s.thumb = await structDownscale(fr.result, 800); render(); };
         fr.readAsDataURL(f);
       };
       if (s.kind === 'formula') {
@@ -27865,7 +27893,9 @@
     activeImgTarget = null;
   }
 
-  function resizeImage(file, maxDim) {
+  // v583 · 품질을 인자로 받는다. 기본 0.72(그림용) / 글자를 읽어야 하는 사진은 부르는 쪽에서 0.82를 준다.
+  //        base64는 원본보다 33% 크므로, 여기서 줄인 만큼이 그대로 서버 용량으로 돌아온다.
+  function resizeImage(file, maxDim, q) {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.onload = (e) => {
@@ -27879,7 +27909,7 @@
           }
           canvas.width = w; canvas.height = h;
           canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-          resolve(canvas.toDataURL('image/jpeg', 0.78));
+          resolve(canvas.toDataURL('image/jpeg', (typeof q === 'number' ? q : 0.80)));
         };
         img.onerror = reject;
         img.src = e.target.result;
@@ -30592,7 +30622,8 @@
       const tpl = tplAll.map(function (t) { return { text: t, views: 0, score: acScore(t, 0, '', q) }; })
         .filter(function (x) { return x.score >= 0; })
         .sort(function (a, b) { return b.score - a.score; }).slice(0, 10);
-      if (!thumbs.length && !copies.length && !tpl.length) { close(); return; }
+      // 🚦 후보가 없어도 5자 이상 적는 중이면 신호등은 떠야 한다 — «내 문구»를 쓰는 순간이 채점이 제일 필요한 순간
+      if (!thumbs.length && !copies.length && !tpl.length && (input.value || '').trim().length < 5) { close(); return; }
       // ── Top Hit = 내 데이터 중 최고점만 (템플릿은 실적이 없어 «가장 잘 터진»이라 할 수 없음) ──
       const pool = thumbs.map(function (x) { return { x: x, src: '내 썸네일 문구' }; })
         .concat(copies.map(function (x) { return { x: x, src: '수식어' }; }))
@@ -30636,6 +30667,22 @@
       if (!cols[_acSeg].length) { const fi = cols.findIndex(function (c) { return c.length; }); _acSeg = fi < 0 ? 0 : fi; }
       const names = ['✎ 손질', '🧬 공식', '🖼 썸네일', '✨ 수식어', '📋 템플릿'];
       let html = '';
+      // 🚦 숫자의 원칙 — 지금 적고 있는 «내 문구»를 세 칸으로 잰다 (후보 줄엔 조회수라는 진짜 실적이 이미 있다)
+      //   ① 숫자가 있나 ② 15자 안인가 ③ 손실·위협을 건드리나 — 셋 다 갖추면 센 문구
+      const rawQ = (input.value || '').trim();
+      if (rawQ.length >= 5) {
+        const sNum = /[0-9０-９]/.test(rawQ);
+        const sLen = rawQ.length <= 15;
+        const sLoss = /(마세요|마라|하지\s?마|절대|손해|망하|망친|잃|떨어졌|떨어진|떨어져|실수|후회|위험|큰일|무너|사라지|없어지|놓치|낭비|버리|깨지|최악|실패|경고|함정|금지|당하|속지|호구|늦기\s?전|모르면|틀렸)/.test(rawQ);
+        const miss = !sNum ? '숫자를 하나 넣으면 세져요'
+          : !sLen ? '지금 ' + rawQ.length + '자 — 15자 안이 더 세요'
+          : !sLoss ? '손실·위협이 있으면 멈춰 세워요' : '';
+        html += '<div class="ac-sig' + (miss ? '' : ' full') + '">' +
+          '<i class="' + (sNum ? 'on' : '') + '">숫자</i>' +
+          '<i class="' + (sLen ? 'on' : '') + '">15자</i>' +
+          '<i class="' + (sLoss ? 'on' : '') + '">손실</i>' +
+          '<span>' + (miss || '셋 다 갖췄어요 — 센 문구예요') + '</span></div>';
+      }
       // 근거 한 줄 — «왜 이게 떴는지» (알고리즘은 안 보인다)
       const ctxNow = acScore._ctx;
       if (ctxNow) html += '<div class="ac-why">' + esc(ctxNow.src) + ' — <b>' +
@@ -30669,7 +30716,9 @@
                    ' — 그대로 쓰지 말고 <b style="color:#e6fb62">이 뼈대만 빌려</b> 새 주제로 바꿔보세요'))
             : '아직 내 기록이 없어 템플릿에서 골랐어요 — 「~~」에 주제를 넣어 쓰세요') + '</div></div>';
       }
-      html += '<div class="ac-seg">' + names.map(function (n, k) {
+      // 🚦 후보가 하나도 없는데 신호등만 떠 있으면 — 빈 세그먼트 줄은 접는다 (신호등 단독 모드)
+      const acAnyCol = cols.some(function (c2) { return c2.length; });
+      if (acAnyCol) html += '<div class="ac-seg">' + names.map(function (n, k) {
         return '<button type="button" data-acs="' + k + '"' + (k === _acSeg ? ' class="on"' : '') +
           (cols[k].length ? '' : ' disabled style="opacity:.35"') + '>' + n + '<s>' + cols[k].length + '</s></button>';
       }).join('') + '</div>';
@@ -30692,7 +30741,7 @@
             '" title="이 카드를 한 장으로 펼치기" aria-label="카드 한 장으로 펼치기">↗</button>' : '') +
           '</div>';
       }
-      html += '<div class="ac-list">' + (cols[_acSeg].length
+      if (acAnyCol) html += '<div class="ac-list">' + (cols[_acSeg].length
         ? (_acSeg === 0 ? cols[0].map(prepRow).join('')
           : _acSeg === 1 ? cols[1].map(fxRow).join('')
           : cols[_acSeg].map(function (x) { return itemRow(x, _acSeg === 4); }).join(''))
@@ -30701,6 +30750,7 @@
             : _acSeg === 1
             ? '아직 공식이 없어요 — 같은 뼈대가 3편 쌓이면 나타납니다'
             : '여기엔 관련된 게 없어요') + '</div>') + '</div>';
+      if (!html) { close(); return; }   // 신호등도 후보도 없으면 닫는다
       d.innerHTML = html;
       d.querySelectorAll('[data-acs]').forEach(function (b) {
         b.addEventListener('mousedown', function (e) { e.preventDefault(); });
@@ -31009,7 +31059,8 @@
         if (!file || !file.type.startsWith('image/')) return;
         // 자동 압축: 글자 있는 수식어·댓글은 또렷하게 900px, 썸네일·아이디어는 720px
         const maxDim = (q === 'copy' || q === 'comment') ? 900 : 720;
-        try { _clImg[q] = await resizeImage(file, maxDim); }
+        // v583 · 카피·댓글 사진은 «글자를 읽는» 것이라 화질을 지킨다(0.82). 나머지 그림은 0.72.
+        try { _clImg[q] = await resizeImage(file, maxDim, maxDim >= 900 ? 0.85 : 0.80); }
         catch (e) { const rd = new FileReader(); rd.onload = ev => { _clImg[q] = ev.target.result; renderCollectSection(q); }; rd.readAsDataURL(file); return; }
         renderCollectSection(q);
       };
@@ -31698,7 +31749,7 @@
         if (!file || !file.type.startsWith('image/')) return;
         // 자동 압축: 글자 있는 공감댓글은 또렷하게 900px, 썸네일은 720px
         const maxDim = (kind === 'comm' || kind === 'copy') ? 900 : 720;
-        try { applyDataUrl(await resizeImage(file, maxDim)); }
+        try { applyDataUrl(await resizeImage(file, maxDim, maxDim >= 900 ? 0.85 : 0.80)); }
         catch (e) { const reader = new FileReader(); reader.onload = ev => applyDataUrl(ev.target.result); reader.readAsDataURL(file); }
       };
 
@@ -43224,6 +43275,27 @@
     return out;
   }
   function prpHasScript(r) { return prpSegsOf(r).length > 0; }
+  // 🪚 «어디서나 하는 말» 사전 — 사장이 하고 싶은 말이지, 손님이 묻고 싶은 말이 아닌 상투어.
+  //   손님은 이 단어들을 광고로 읽고 지나간다 — 그 자리에 숫자·장면(증거)이 들어가야 세진다.
+  //   원고 손질(회색 점선)과 벽 부수기(답변 검사)가 같이 쓴다. 표시만 하고 저장하지 않는다.
+  const SAW_PATS = [/^정성/, /^최고/, /^최상/, /^최선/, /^만족/, /^친절/, /^믿고$/, /^맡겨/,
+    /^전통/, /^완벽/, /^프리미엄/, /^고품질/, /^성심/, /^꼼꼼/, /^신뢰/, /^책임지/];
+  function sawWord(w, next) {
+    const t = String(w || '').replace(/[^가-힣a-zA-Z]/g, '');
+    if (!t) return false;
+    if (t === '가족' && /^같/.test(String(next || ''))) return true;   // «가족 같은»은 두 단어
+    for (let i = 0; i < SAW_PATS.length; i++) if (SAW_PATS[i].test(t)) return true;
+    return false;
+  }
+  function sawFind(text) {   // 문장에서 걸린 단어들 (중복 없이, 나온 순서대로)
+    const out = [], ws = String(text || '').split(/\s+/);
+    ws.forEach(function (w, i) {
+      if (!sawWord(w, ws[i + 1])) return;
+      const t = w.replace(/[^가-힣a-zA-Z]/g, '');
+      if (t && out.indexOf(t) < 0) out.push(t);
+    });
+    return out;
+  }
   // ✎ v577 · 손질에서 «직접 칠한» 곳을 다시 꺼내 쓴다.
   //   앱이 추측한 게 아니라 사장님이 손으로 고른 것 — 이보다 확실한 신호는 없다.
   //   ⚠️ 클래스 이름이 뜻과 반대다: 'k' = 빨강(핵심) / 'r' = 주황(참고). CSS .w.k/.w.r 참고
@@ -43304,7 +43376,11 @@
       document.querySelectorAll('.prp-pen').forEach(p => p.classList.toggle('on', p.dataset.t === _prpTool));
       const rt = document.getElementById('prp'); rt.dataset.tool = _prpTool || '';
       rt.classList.remove('cutting'); _prpCut = false;
-      document.getElementById('prp-hint').innerHTML = _prpTool ? HINTS[_prpTool] : '펜을 집으세요';
+      // 🪚 펜을 내려놓으면 — 점선 안내가 다시 (있을 때만)
+      const sdN0 = document.querySelectorAll('#prp-segs .w.sd').length;
+      document.getElementById('prp-hint').innerHTML = _prpTool ? HINTS[_prpTool]
+        : sdN0 ? '점선 ' + sdN0 + '곳 = <b>어디서나 하는 말</b> — 숫자·장면으로 바꾸면 세져요'
+        : '펜을 집으세요';
       document.querySelectorAll('.prp-sgt').forEach(el => el.contentEditable = (_prpTool === 't') ? 'true' : 'false');
     });
 
@@ -43344,8 +43420,10 @@
     const html = segs.map(function (s, i) {
       const t = (s.t || '').replace(/<[^>]*>/g, '');
       const mk = marks[i] || {};
-      const words = t.split(/\s+/).filter(Boolean).map(function (w, j) {
-        const c = mk[j] ? ' ' + mk[j] : '';
+      const wArr = t.split(/\s+/).filter(Boolean);
+      const words = wArr.map(function (w, j) {
+        // 🪚 «어디서나 하는 말»은 점선으로 자리를 비워둔다. 칠하면(k/r) 점선은 CSS에서 사라진다
+        const c = (mk[j] ? ' ' + mk[j] : '') + (sawWord(w, wArr[j + 1]) ? ' sd' : '');
         return '<i class="w' + c + '" data-j="' + j + '">' + esc(w) + '</i>';
       }).join(' ');
       const col = prpColor(s);
@@ -43361,6 +43439,14 @@
       '</div>';
 
     prpRenderCard();
+    // 🪚 점선 단어가 있으면 — 펜을 안 든 동안 힌트 줄이 이유를 말해준다 (질책이 아니라 «자리» 안내)
+    if (!_prpTool) {
+      const sdN = document.querySelectorAll('#prp-segs .w.sd').length;
+      const hint = document.getElementById('prp-hint');
+      if (hint) hint.innerHTML = sdN
+        ? '점선 ' + sdN + '곳 = <b>어디서나 하는 말</b> — 숫자·장면으로 바꾸면 세져요'
+        : '펜을 집으세요';
+    }
     document.getElementById('prp-idx').textContent =
       String(_prpCur + 1).padStart(2, '0') + ' / ' + String(_prpQ.length).padStart(2, '0');
     if (_prpTool === 't') document.querySelectorAll('.prp-sgt').forEach(e => e.contentEditable = 'true');
@@ -44129,12 +44215,12 @@
       rd.onload = e => {
         const img = new Image();
         img.onload = () => {
-          const MAX = 900;
+          const MAX = 800;                      // v583 · 900 → 800 (화질 거의 그대로, 용량 −38%)
           let w = img.width, h = img.height;
           if (w > MAX) { h = Math.round(h * MAX / w); w = MAX; }
           const cv = document.createElement('canvas'); cv.width = w; cv.height = h;
           cv.getContext('2d').drawImage(img, 0, 0, w, h);
-          resolve(cv.toDataURL('image/jpeg', 0.85));
+          resolve(cv.toDataURL('image/jpeg', 0.82));
         };
         img.onerror = () => resolve(null);
         img.src = e.target.result;
@@ -44869,7 +44955,7 @@
     return new Promise(res => {
       const rd = new FileReader();
       rd.onload = () => { const img = new Image();
-        img.onload = () => { const M = 900, sc = Math.min(1, M / Math.max(img.width, img.height));
+        img.onload = () => { const M = 800, sc = Math.min(1, M / Math.max(img.width, img.height));   // v583 · 900 → 800
           const cv = document.createElement('canvas'); cv.width = Math.round(img.width * sc); cv.height = Math.round(img.height * sc);
           cv.getContext('2d').drawImage(img, 0, 0, cv.width, cv.height); res(cv.toDataURL('image/jpeg', .82)); };
         img.onerror = () => res(null); img.src = rd.result; };
@@ -45560,7 +45646,7 @@
       fin.onchange = async function () {
         const f = fin.files && fin.files[0]; if (!f) return;
         try {
-          scriptEntryState.thumb = await resizeImage(f, 900);
+          scriptEntryState.thumb = await resizeImage(f, 800);
           rwPaint(); toast('📸 썸네일 담김');
         } catch (e) { toast('이미지 처리 실패'); }
         fin.value = '';
@@ -47985,16 +48071,23 @@
             const attr = i === 0 ? ' data-cus2focus="' + c.id + '"'
               : isMake ? ' data-cus2script="' + c.id + '"' + (hasAns ? '' : ' disabled')
               : ' data-cus2brk="' + c.id + '|' + b.k + '"';
+            // 📷 「비포애프터」 벽돌엔 «오늘 찍기로 한 것»이 그대로 실린다 — 계획이 벽돌에 붙는다
+            const sub = (b.k === 'visual' && (c.shoot || '').trim()) ? '📷 ' + esc(c.shoot)
+              : (isMake && !hasAns ? '먼저 위에 답을 적어주세요' : b.d);
             return '<button class="cq-b' + (on ? ' on' : '') + (isMake ? ' mk' : '') + '"' + attr +
               '><span class="fl"></span>' + (isMake ? (on ? '원고 만들었음' : '원고로 만들기 →') : b.n) +
-              '<span class="s">' + (isMake && !hasAns ? '먼저 위에 답을 적어주세요' : b.d) + '</span></button>';
+              '<span class="s">' + sub + '</span></button>';
           }).join('') + '</div>' +
           '<div class="cq-ans"><textarea class="cq-ta" id="cq-ta" data-cus2qans="' + c.id + '" rows="2" ' +
             'placeholder="→ 이 말에 뭐라고 답하시겠어요?">' + esc(c.answer || '') + '</textarea>' +
+            '<div class="cq-saw" id="cq-saw" hidden></div>' +
             '<div class="cq-save"><button id="cq-save" disabled>저장</button>' +
             '<span class="st' + ((c.answer || '').trim() ? ' ok' : '') + '" id="cq-st">' +
             ((c.answer || '').trim() ? '저장됨 — 첫 벽돌이 깨졌습니다' : '적고 저장을 누르면 첫 벽돌이 깨집니다') +
-            '</span></div></div>' +
+            '</span></div>' +
+            '<div class="cq-shoot"><span class="cap">📷 오늘 폰으로 찍을 것</span>' +
+            '<input class="cq-sh" id="cq-sh" placeholder="예: 손님 카톡 후기 화면 · 작업 직후 모습" value="' +
+            esc(c.shoot || '') + '"></div></div>' +
           (resist.length > 1 ? '<div class="cq-nav"><button id="cq-prev">‹ 이전 벽</button>' +
             '<span class="dots">' + resist.map((x, i) => '<i class="' + (cus2Broke(x) >= 5 ? 'cleared' :
               (i === _cus2Q ? 'on' : '')) + '"></i>').join('') + '</span>' +
@@ -48150,24 +48243,48 @@
     const rN = cus2Bask(p, 'resist').length;
     if (qprev) qprev.onclick = () => { _cus2Q = (_cus2Q + rN - 1) % rN; st2RenderCus(); };
     if (qnext) qnext.onclick = () => { _cus2Q = (_cus2Q + 1) % rN; st2RenderCus(); };
-    // 답변은 «저장 버튼»으로 (자동저장 X — 사장님 요청)
+    // 답변은 «저장 버튼»으로 (자동저장 X — 사장님 요청) · 📷 찍을 것도 같은 버튼이 같이 저장
     const qta = document.getElementById('cq-ta'), qsave = document.getElementById('cq-save');
+    const qsh = document.getElementById('cq-sh');
     if (qta && qsave) {
       const cur = () => (p.collect || []).find(x => x.id === qta.dataset.cus2qans);
-      const sync = () => { const c = cur(); qsave.disabled = !c || (qta.value.trim() === (c.answer || '').trim()); };
+      // 🪚 답에 «어디서나 하는 말»이 섞이면 — 지우라는 게 아니라 더 센 재료를 알려준다
+      const sawSync = () => {
+        const sw = document.getElementById('cq-saw'); if (!sw) return;
+        const hits = sawFind(qta.value);
+        if (hits.length) {
+          sw.hidden = false;
+          sw.innerHTML = '「<b>' + hits.map(esc).join(' · ') + '</b>」 — 손님 귀엔 광고로 들려요. ' +
+            '그 자리에 <b>숫자·장면</b>을 넣으면 증거가 됩니다';
+        } else sw.hidden = true;
+      };
+      const sync = () => {
+        const c = cur();
+        const ansSame = !c || qta.value.trim() === (c.answer || '').trim();
+        const shSame = !c || !qsh || qsh.value.trim() === (c.shoot || '').trim();
+        qsave.disabled = ansSame && shSame;
+        sawSync();
+      };
       qta.oninput = sync;
+      if (qsh) qsh.oninput = sync;
       qsave.onclick = async () => {
         const c = cur(); if (!c) return;
         const was = !!(c.answer || '').trim();
+        const ansChanged = qta.value.trim() !== (c.answer || '').trim();
         c.answer = qta.value.trim();
+        if (qsh) c.shoot = qsh.value.trim();
         const chip = document.querySelector('[data-cus2focus="' + c.id + '"]');
         if (chip) chip.classList.toggle('on', !!c.answer);
-        const n = cus2PaintWall(p, c, !was && !!c.answer);
+        // 📷 비포애프터 벽돌 밑줄도 그 자리에서 (재렌더하면 타이핑이 끊긴다)
+        const vb = document.querySelector('[data-cus2brk="' + c.id + '|visual"] .s');
+        if (vb) vb.textContent = (c.shoot || '').trim() ? '📷 ' + c.shoot : '눈으로 보이는 자료(사진·화면)';
+        const n = cus2PaintWall(p, c, ansChanged && !was && !!c.answer);
         const st = document.getElementById('cq-st');
         if (st) { st.textContent = c.answer ? '저장됨 — 첫 벽돌이 깨졌습니다' : '적고 저장을 누르면 첫 벽돌이 깨집니다';
           st.classList.toggle('ok', !!c.answer); }
         qsave.disabled = true;
-        toast(c.answer ? (n >= 5 ? '🎉 벽이 완전히 무너졌어요' : '🧱 벽돌이 부서졌어요 · ' + n + '/5') : '답을 지웠어요');
+        toast(!ansChanged ? '📷 오늘 찍을 것 저장 — 찍으면 「비포애프터」를 눌러주세요'
+          : c.answer ? (n >= 5 ? '🎉 벽이 완전히 무너졌어요' : '🧱 벽돌이 부서졌어요 · ' + n + '/5') : '답을 지웠어요');
         p.updatedAt = Date.now(); await savePmms();
       };
       sync();
