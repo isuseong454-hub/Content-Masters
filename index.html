@@ -858,7 +858,15 @@
   .sh-card-media .sh-slot-sm { aspect-ratio: 1/1; }
   .sh-slot-empty { display: flex; flex-direction: column; align-items: center; gap: 3px; }
   .sh-slot-lbl { font-size: 9.5px; color: var(--text-faint); font-weight: 700; }
-  .sh-card-vbadge { position: absolute; top: 6px; left: 6px; z-index: 3; background: rgba(6,10,8,.72); border-radius: 7px; padding: 2px 7px; font-size: 10px; font-weight: 800; color: #fff; }
+  /* v591 · 조회수 = 필름 크레딧처럼 «아래 띠» — 폰(76px)에선 위 배지가 썸네일을 통째로 덮었다.
+     아래 그라데 스크림 위에 얹혀 그림을 안 가리고, 삭제 ✕는 작고 옅게(누르면 진해짐) */
+  .sh-card-vbadge { position: absolute; top: auto; bottom: 0; left: 0; right: 0; z-index: 3;
+    border-radius: 0; padding: 14px 7px 5px; font-size: 10px; font-weight: 800; color: #fff;
+    background: linear-gradient(180deg, transparent, rgba(4,7,5,.88) 76%);
+    text-shadow: 0 1px 3px rgba(0,0,0,.85); }
+  .sh-card-media .sh-slot { overflow: hidden; }
+  .sh-card-media .sh-slot-rm { width: 15px; height: 15px; font-size: 10px; opacity: .55; transition: opacity .15s; }
+  .sh-card-media .sh-slot-rm:hover, .sh-card-media .sh-slot-rm:active { opacity: 1; }
   .sh-card-content { flex: 1; min-width: 0; }
   .sh-card-head { display: flex; align-items: center; gap: 7px; margin-bottom: 8px; flex-wrap: wrap; }
   .sh-card-head .sh-no { font-size: 11px; font-weight: 800; color: var(--text-faint); font-family: 'SF Mono', monospace; }
@@ -11550,6 +11558,19 @@
   }
   .fb-page .em { color: var(--emerald); }
 
+  /* ═══ v588 · 머리 다이어트 — 자료가 쌓이면 강의는 끝, 한 줄 머리로 ═══
+     02/03 페이지 표시·설명 3줄은 «자료 0개(첫 방문)»에만 보인다.
+     자료가 있으면 제목+토글이 한 줄로 붙고 내용물이 위로 올라온다.
+     .fb-slim은 renderThumbBoard/renderFormatBoard가 rows 수를 보고 단다 — 마크업은 그대로. */
+  .fb-wrap.fb-slim .fb-header { display: flex; align-items: center; gap: 8px 14px; flex-wrap: wrap;
+    padding: 13px 20px 11px; background-image: none; }
+  .fb-wrap.fb-slim .fb-page, .fb-wrap.fb-slim .fb-eyebrow, .fb-wrap.fb-slim .fb-sub { display: none; }
+  .fb-wrap.fb-slim .fb-title { font-size: 17px; line-height: 1.2; }
+  .fb-wrap.fb-slim .fb-toggle { margin-top: 0; }
+  .fb-wrap.fb-slim .fb-header .tb-search-wrap { flex: 1 1 100%; margin-top: 0; }
+  .fb-wrap.fb-slim .fb-sortline { flex: 1 1 100%; }
+  @media (max-width: 480px) { .fb-wrap.fb-slim .fb-header { padding: 11px 14px 9px; } }
+
   .fb-board {
     flex: 1;
     overflow: auto;
@@ -12443,9 +12464,16 @@
   .ide-empty2 b { color:var(--neon) }
   /* 담기 위저드 — 여러 장 슬롯 */
   .qcw-multi { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
-  .qcw-multi .mslot { position:relative; aspect-ratio:1/1; border-radius:12px; overflow:hidden;
-    border:1px dashed rgba(255,255,255,.18); background:rgba(255,255,255,.03); display:grid; place-items:center;
-    cursor:pointer; font-size:19px; color:var(--text-mute); }
+  /* v591 · 카드 슬롯이 «버젓이» — 점 하나가 아니라 세로 카드 모양 (썸네일 슬롯과 한 혈통) */
+  .qcw-multi .mslot { position:relative; aspect-ratio:9/13; border-radius:14px; overflow:hidden;
+    border:1.5px dashed rgba(255,255,255,.2); background:rgba(255,255,255,.03);
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px;
+    cursor:pointer; font-size:19px; color:var(--text-mute);
+    transition:border-color .18s, box-shadow .18s; }
+  .qcw-multi .mslot:hover { border-color:rgba(var(--qc,245,200,75),.7); box-shadow:0 0 18px rgba(var(--qc,245,200,75),.16); }
+  .qcw-multi .mslot .pl { width:30px; height:30px; border-radius:50%; background:rgba(255,255,255,.07);
+    display:grid; place-items:center; font-size:16px; color:var(--cs-sub,#93a39a); }
+  .qcw-multi .mslot .s { font-size:9.5px; font-weight:700; color:var(--cs-faint,#5a685f); }
   .qcw-multi .mslot.has { border-style:solid; border-color:rgba(215,243,75,.45) }
   .qcw-multi .mslot img { width:100%; height:100%; object-fit:cover; display:block }
   .qcw-multi .mslot .x { position:absolute; right:4px; top:4px; width:19px; height:19px; border-radius:50%;
@@ -15519,14 +15547,18 @@
   .qcw-kind { font-size:12.5px; font-weight:800; color:var(--cs-ink); }
   .qcw-one { margin-left:auto; font-size:10px; font-weight:700; color:var(--cs-faint); }
   /* v560 · 한 판 폼 — 단계 없이 필요한 칸을 세로로 / v561 · 문 색(--qc)이 포인트로 스밈 */
-  .qcw-form { display:flex; flex-direction:column; gap:17px; }
-  .qcw-fld { display:flex; flex-direction:column; gap:8px; }
+  /* v591 · 애플 라인 정돈 — 칸 사이 숨(22px)·왼쪽 정렬 한 줄기·라운드 14 통일 */
+  .qcw-form { display:flex; flex-direction:column; gap:22px; }
+  .qcw-fld { display:flex; flex-direction:column; gap:9px; }
+  #qcw .qcw-ta { border-radius:14px; }
   .qcw-lb { font-size:13.5px; font-weight:800; color:var(--cs-ink); letter-spacing:-.01em; line-height:1.4; }
   .qcw-lb i { display:block; font-style:normal; font-size:10.5px; font-weight:600; color:var(--cs-faint); margin-top:3px; }
   .qcw-fld .qcw-ta { max-width:none; }
   .qcw-fld .qcw-chips { max-width:none; justify-content:flex-start; }
   /* 사진 카드는 어느 문에서나 «가운데» — 6개 문이 같은 자리에서 시작한다 */
-  .qcw-fld .qcw-slot, .qcw-fld .qcw-multi { align-self:center; }
+  /* v591 · 라벨과 같은 왼쪽 줄기에 — 가운데 뭉침(라벨 왼쪽 · 슬롯 가운데 지그재그)을 편다 */
+  .qcw-fld .qcw-slot, .qcw-fld .qcw-multi { align-self:flex-start; }
+  .qcw-fld .qcw-multi { width:100%; max-width:380px; }
   .qcw-slot.sm { width:124px; aspect-ratio:9/13; border-radius:16px;
     border-color:rgba(var(--qc,90,170,255),.5); background:rgba(var(--qc,90,170,255),.05); }
   .qcw-slot.sm:hover { border-color:rgba(var(--qc,90,170,255),.9); box-shadow:0 0 22px rgba(var(--qc,90,170,255),.2); }
@@ -15621,6 +15653,35 @@
   .qcw-chip.bk.on .g .hot { opacity:1; }
   .qcw-chip.bk:active { transform:scale(.95); }
   @media (max-width:400px){ .qcw-chip.bk { height:70px; } }
+  /* ═══ v591 · 고객 분석 = 큰 얼굴 무대 + 작은 4선택 ═══
+     얼굴이 메인(고르면 즉시 교체), 선택은 아래 작은 칩. 색은 4바구니 헌법 그대로(--bc). */
+  #qcw .qcw-cush { display:flex; align-items:center; gap:15px; color:var(--bc,#E07B7B);
+    border:1px solid color-mix(in srgb,var(--bc,#E07B7B) 38%,transparent); border-radius:18px; padding:15px 17px;
+    background:linear-gradient(160deg,color-mix(in srgb,var(--bc,#E07B7B) 12%,transparent),transparent 72%);
+    transition:border-color .28s, background .28s, color .28s; }
+  #qcw .qcw-cush .art { flex:none; display:grid; place-items:center; }
+  #qcw .qcw-cush .g { stroke:currentColor; fill:none; stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round; display:block; }
+  #qcw .qcw-cush .g .dim { opacity:.34; }
+  #qcw .qcw-cush .g .fill { fill:currentColor; stroke:none; }
+  #qcw .qcw-cush .g .hot { opacity:1; }
+  #qcw .qcw-cush .meta { display:flex; flex-direction:column; gap:4px; min-width:0; }
+  #qcw .qcw-cush .nm { font-size:15.5px; font-weight:900; letter-spacing:-.01em;
+    color:color-mix(in srgb,var(--bc,#E07B7B) 80%,#fff); }
+  #qcw .qcw-cush .ds { font-style:normal; font-size:11px; font-weight:700; color:var(--cs-sub,#93a39a); line-height:1.5; }
+  #qcw .qcw-bkrow { display:grid; grid-template-columns:repeat(4,1fr); gap:6px; margin-top:8px; }
+  #qcw .qcw-bks { border:1px solid rgba(255,255,255,.13); background:rgba(255,255,255,.035); color:var(--cs-sub,#93a39a);
+    border-radius:11px; padding:10px 2px; font-family:inherit; font-size:11.5px; font-weight:800; cursor:pointer;
+    transition:color .18s, border-color .18s, background .18s, transform .16s; }
+  #qcw .qcw-bks:active { transform:scale(.95); }
+  #qcw .qcw-bks.on { border-color:var(--bc); color:color-mix(in srgb,var(--bc) 85%,#fff);
+    background:color-mix(in srgb,var(--bc) 15%,transparent);
+    box-shadow:0 0 12px color-mix(in srgb,var(--bc) 22%,transparent); }
+  /* 유형색이 칸 프레임까지 — 라벨·테두리에 «어느 정도 컬러감» */
+  #qcw .qcw-fld.cusf .qcw-lb { color:color-mix(in srgb,var(--bc,#E07B7B) 72%,#fff); }
+  #qcw .qcw-fld.cusf .qcw-lb i { color:var(--cs-faint,#5a685f); }
+  #qcw .qcw-fld.cusf .qcw-ta { border-color:color-mix(in srgb,var(--bc,#E07B7B) 34%,transparent); }
+  #qcw .qcw-fld.cusf .qcw-ta:focus { border-color:color-mix(in srgb,var(--bc,#E07B7B) 68%,transparent);
+    box-shadow:0 0 16px color-mix(in srgb,var(--bc,#E07B7B) 16%,transparent); }
   .qcw-go { display:block; width:100%; max-width:340px; margin:18px auto 0; border:none; border-radius:13px; padding:14px;
     font-family:inherit; font-size:13.5px; font-weight:800; color:#0b0c06; cursor:pointer;
     background:linear-gradient(96deg,#5aaaff,#8fc6ff); box-shadow:0 10px 26px -8px rgba(90,170,255,.4); transition:transform .15s; }
@@ -19642,9 +19703,12 @@
         background:linear-gradient(160deg,#3d4a2f,#141a0e);box-shadow:0 0 12px rgba(215,243,75,.14)}
       .dch-prog{font-size:11px;color:var(--law-sub);margin-top:11px;font-variant-numeric:tabular-nums}
       .dch-prog b{color:var(--law-asset)}
-      .dch-zcta{margin-top:18px;font-family:inherit;font-size:12.5px;font-weight:800;color:#0b0c06;
+      .dch-zcta{display:block;margin:18px auto 0;font-family:inherit;font-size:12.5px;font-weight:800;color:#0b0c06;
         background:var(--law-asset);border:none;border-radius:12px;padding:12px 22px;cursor:pointer;
         box-shadow:0 0 22px rgba(215,243,75,.26)}
+      /* v591 · 보조 CTA — 주연(기록하러) 아래 유리 알약 */
+      .dch-zcta.sub{margin-top:9px;background:none;color:#d7f34b;border:1px solid rgba(215,243,75,.4);
+        box-shadow:none;padding:10px 20px}
       @media(prefers-reduced-motion:reduce){.dch-seed *{animation:none !important}}
       /* 힉스필드 톤 — 0의 상태 안내 */
       .dch-zwrap{position:relative}
@@ -19666,6 +19730,42 @@
       .dch-num{font-family:'Pretendard','Apple SD Gothic Neo',sans-serif;font-size:60px;font-weight:900;letter-spacing:-2px;line-height:.98;margin:6px 0 2px;color:#e6fb62;text-shadow:0 0 40px rgba(230,251,98,.3),0 3px 20px rgba(0,0,0,.5);font-variant-numeric:tabular-nums}
       .dch-num .u{font-size:22px;font-weight:800;color:#EEF0E4;font-family:'Pretendard','Apple SD Gothic Neo',sans-serif}
       .dch-cap{font-size:14px;font-weight:700;margin-top:6px;color:#EEF0E4}.dch-cap b{color:#d7f34b}
+      /* v589 · ㉮ 이번 주 한 줄 — 누적(129만)은 안 움직이지만 «이번 주»는 매일 다르다. 0 항목은 숨김 */
+      .dch-wk{display:flex;justify-content:center;align-items:center;gap:5px;flex-wrap:wrap;margin-top:14px}
+      .dch-wk i{flex:1 1 100%;font-style:normal;font-size:9px;font-weight:700;letter-spacing:.16em;color:#5A5E4E}
+      .dch-wk .c{display:inline-flex;align-items:center;gap:4px;border-radius:999px;padding:5px 11px;font-size:10.5px;font-weight:800;color:#9BA08C;border:1px solid rgba(255,255,255,.1);background:rgba(0,0,0,.3)}
+      .dch-wk .c b{font-variant-numeric:tabular-nums}
+      .dch-wk .c.g{border-color:rgba(47,208,123,.4)}.dch-wk .c.g b{color:#2fd07b}
+      .dch-wk .c.p{border-color:rgba(176,123,240,.4)}.dch-wk .c.p b{color:#b07bf0}
+      .dch-wk .c.l{border-color:rgba(215,243,75,.4)}.dch-wk .c.l b{color:#d7f34b}
+      /* v590 · ㉠ 스파크라인 머리 — 성장 기록의 문이 구석 칩에서 카드 머리로 승격.
+         모듈(기록·그래프 모달)은 그대로, «문»만 커진다. id=gl-open 유지라 기존 배선 그대로 연다 */
+      .dch-spark{margin:13px 14px 0;border:1px solid rgba(215,243,75,.24);border-radius:15px;padding:11px 12px 9px;cursor:pointer;
+        background:linear-gradient(180deg,rgba(215,243,75,.05),transparent);
+        transition:border-color .18s, box-shadow .18s, transform .18s}
+      .dch-spark:hover{border-color:rgba(215,243,75,.45);box-shadow:0 0 16px rgba(215,243,75,.1)}
+      .dch-spark:active{transform:scale(.98)}
+      .dch-spark .gt{display:flex;align-items:baseline;gap:7px;font-size:11px;font-weight:800;color:#9BA08C}
+      .dch-spark .gt .dl{font-size:11.5px;font-weight:900;color:#2fd07b;font-variant-numeric:tabular-nums}
+      .dch-spark .gt .dl s{text-decoration:none;color:#5A5E4E;font-weight:700;font-size:9.5px}
+      .dch-spark .gt .go{margin-left:auto;font-size:10px;font-weight:800;color:#d7f34b;display:inline-flex;align-items:center;gap:5px}
+      .dch-spark svg{display:block;width:100%;height:44px;margin-top:7px}
+      .dch-spark polyline{fill:none;stroke:#d7f34b;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;
+        filter:drop-shadow(0 0 5px rgba(215,243,75,.5))}
+      .dch-spark polygon{fill:rgba(215,243,75,.1)}
+      .dch-spark circle{fill:#e6fb62;filter:drop-shadow(0 0 6px rgba(230,251,98,.9))}
+      .dch-spark .gx{display:flex;justify-content:space-between;font-size:8.5px;color:#5A5E4E;font-weight:700;margin-top:4px}
+      .dch-spark .ge{font-size:11px;color:#9BA08C;line-height:1.6;padding:8px 2px 6px;text-align:center}
+      .dch-spark .ge b{color:#d7f34b}
+      /* v590 · ㉡ 말하는 리마인더 — 마지막 기록 7일째부터 «그때만» 나타난다. 평소엔 침묵 */
+      .dch-duechip{display:flex;align-items:center;gap:9px;margin:0 0 10px;border:1px solid rgba(240,178,78,.4);border-radius:14px;
+        background:linear-gradient(180deg,rgba(240,178,78,.08),transparent);padding:11px 13px;cursor:pointer;transition:transform .16s,border-color .16s}
+      .dch-duechip:hover{border-color:rgba(240,178,78,.65)}
+      .dch-duechip:active{transform:scale(.98)}
+      .dch-duechip .ic{font-size:15px}
+      .dch-duechip .tx{flex:1;font-size:11px;font-weight:800;line-height:1.5;color:#EEF0E4}
+      .dch-duechip .tx i{display:block;font-style:normal;font-size:9px;font-weight:700;color:#5A5E4E}
+      .dch-duechip .go{font-size:10px;font-weight:800;color:#f0b24e;white-space:nowrap}
       .dch-whisper2{font-size:12px;color:#9BA08C;margin-top:12px;line-height:1.6}.dch-whisper2 b{color:#d7f34b;font-weight:800}
       /* 여정 스파인 */
       .dch-journey{position:relative;margin-top:16px;padding-bottom:62px}
@@ -20449,6 +20549,9 @@
       <div class="sh-top">
         <div class="sh-top-bar">
           <span class="sh-asset" id="sh-asset"><i></i>자산 <b>0</b></span>
+          <!-- v588 · 시간축+보상 칩 — 꾸준함이 숫자로 보인다. 0이면 조용히 숨는다(겁주지 않기) -->
+          <span class="sh-asset sh-week" id="sh-week" title="이번 주에 담은 수">🌱 이번 주 <b>+0</b></span>
+          <span class="sh-asset sh-made" id="sh-made" title="담은 재료 중 원고까지 남긴 수">✦ 원고가 된 것 <b>0</b></span>
           <button type="button" class="sh-slbadge" id="sh-slbadge">🦾 미분류 <b>0</b></button>
           <button type="button" class="sh-slbadge" id="sh-prpbadge">✎ 원고 손질 <b>0</b></button><!-- v566 · AI 분해 라인 마지막 칸 -->
           <button type="button" class="collect-open-btn" id="collect-open-btn" style="display:none;">⚡ 소재 수집</button>
@@ -21049,6 +21152,11 @@
     .sh-asset.show{display:inline-flex}
     .sh-asset i{width:9px;height:9px;border-radius:2.5px;background:linear-gradient(160deg,rgba(230,251,98,.5),rgba(230,251,98,.15));border:1px solid rgba(230,251,98,.6);box-shadow:0 0 6px rgba(215,243,75,.3)}
     .sh-asset b{font-family:'JetBrains Mono',monospace;color:#d7f34b}
+    /* v588 · 시간축+보상 칩 — 이번 주(에메랄드)=흐름 · 원고가 된 것(보라)=결실. 큐브는 자산만 */
+    .sh-week{border-color:rgba(47,208,123,.32)}
+    .sh-week b{color:#2fd07b}
+    .sh-made{border-color:rgba(176,123,240,.3)}
+    .sh-made b{color:#b07bf0}
     .sh-slbadge.show{display:inline-flex}
     .sh-slbadge b{font-family:'JetBrains Mono',monospace}
     </style>
@@ -24361,6 +24469,8 @@
     try { slvRefreshEntries(); } catch (e) {} // 🦾 미분류 배너 갱신
     const el = document.getElementById('fb-columns');
     if (!el) return;
+    // v588 · 머리 다이어트 — 자료가 있으면 강의문(02/03·설명 3줄)을 접고 한 줄 머리로
+    try { const fv = document.getElementById('fb-view'); if (fv) fv.classList.toggle('fb-slim', (rows || []).length > 0); } catch (e) {}
     // v500 · 보드 검색바 — 시트 보드 모드(유형/퍼널/조회수)에서만 표시
     try {
       const sw = document.getElementById('fb-search-wrap');
@@ -24741,6 +24851,8 @@
   function renderThumbBoard(overrideMode, targetId) {
     targetId = targetId || 'tb-body';
     const el = document.getElementById(targetId); if (!el) return;
+    // v588 · 머리 다이어트 — 자료가 있으면 강의문을 접고 한 줄 머리로 (썸네일 뷰에 그릴 때만)
+    try { const tv = document.getElementById('thumb-view'); if (tv && targetId === 'tb-body') tv.classList.toggle('fb-slim', (rows || []).length > 0); } catch (e) {}
     const thumbMode = overrideMode || tbViewMode; // 로컬: 이 렌더에 쓸 모드
     _matCtx = { mode: thumbMode, el: targetId };
     const rerender = () => renderThumbBoard(thumbMode, targetId);
@@ -34338,6 +34450,85 @@
     var cur = 0, step = Math.max(1, Math.round(target / 26));
     var iv = setInterval(function () { cur += step; if (cur >= target) { cur = target; clearInterval(iv); } el.textContent = cur; }, 30);
   }
+  // v589 · ㉮ 이번 주 한 줄 — 히어로 큰 숫자는 누적이라 어제와 오늘이 같다.
+  //   그 아래 «이번 주에 움직인 것»만 세 칩: 담음(월요일부터 담은 행)·원고(이번 주 새 원고)·업로드.
+  //   전부 0이면 통째로 사라진다 — 0으로 겁주지 않기.
+  function dchWeekHtml() {
+    try {
+      const now = new Date();
+      const mon = new Date(now.getFullYear(), now.getMonth(), now.getDate() - ((now.getDay() + 6) % 7));
+      const inWk = function (t) { if (!t) return false; const d = new Date(t); return !isNaN(d) && d >= mon; };
+      let got = 0; (rows || []).forEach(function (r) { if (inWk(r.createdAt || r.at)) got++; });
+      let wrote = 0, up = 0;
+      (scripts || []).forEach(function (s) {
+        if (inWk(s.createdAt)) wrote++;
+        const isUp = s.uploaded || s.state === 'uploaded' || s.uploadUrl;
+        // 업로드 시각 필드가 따로 없어 편성일(targetDate) 우선, 없으면 작성일로 어림
+        if (isUp && ((s.targetDate && inWk(s.targetDate)) || (!s.targetDate && inWk(s.createdAt)))) up++;
+      });
+      const parts = [];
+      if (got) parts.push('<span class="c g">🌱 담음 <b>+' + got + '</b></span>');
+      if (wrote) parts.push('<span class="c p">✎ 원고 <b>+' + wrote + '</b></span>');
+      if (up) parts.push('<span class="c l">🚀 업로드 <b>+' + up + '</b></span>');
+      if (!parts.length) return '';
+      return '<div class="dch-wk"><i>이번 주에 움직인 것</i>' + parts.join('') + '</div>';
+    } catch (e) { return ''; }
+  }
+  // v590 · ㉠㉡ — «지하실의 금고를 카드 머리로».
+  //   ㉠ 스파크라인: growthData.weekly(내 업로드 9개 평균의 주간 스냅샷)를 카드 머리에 항상 그린다.
+  //   ㉡ 말하는 칩: 마지막 성장 기록에서 7일째(glDue)부터 «그때만» 카드 위에 나타나고, 저장하면 사라진다.
+  //   기록·그래프 모달(glOpen)은 그대로 — 문만 커졌다.
+  function dchSparkPaint() {
+    // 성장 데이터가 아직이면 읽고 다시 (loadGrowth는 _growthLoaded를 반드시 세운다 — 무한루프 없음)
+    if (!_growthLoaded) { loadGrowth().then(function () { try { dchSparkPaint(); } catch (e) {} }); return; }
+    // ㉡ 리마인더 — 기한 지난 그때만
+    try {
+      var dw = document.getElementById('dch-duewrap');
+      if (dw) {
+        if (glDue()) {
+          var l = glLast(), lastTxt = '아직 한 번도 안 적었어요';
+          if (l && l.d) { var p = String(l.d).split('-'); lastTxt = '마지막 기록 ' + (+p[1]) + '월 ' + (+p[2]) + '일'; }
+          dw.innerHTML = '<div class="dch-duechip" id="dch-duechip" role="button" tabindex="0">' +
+            '<span class="ic">📈</span><span class="tx">이번 주 조회수, 아직 안 적었어요<i>' + lastTxt + ' — 톡톡 30초면 끝</i></span>' +
+            '<span class="go">적으러 가기 ›</span></div>';
+          var dc = document.getElementById('dch-duechip');
+          dc.onclick = glOpen;
+          dc.onkeydown = function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); glOpen(); } };
+        } else dw.innerHTML = '';
+      }
+    } catch (e) {}
+    // ㉠ 스파크라인 — 주간 평균 조회수 최근 8회
+    try {
+      var gb = document.getElementById('dchg-body'); if (!gb) return;
+      var dl = document.getElementById('dchg-dl');
+      var wk = ((growthData && growthData.weekly) || []).slice(-8);
+      if (wk.length < 2) {
+        gb.innerHTML = '<div class="ge">조회수 기록이 <b>두 번</b> 쌓이면 여기 곡선이 자라요</div>';
+        if (dl) dl.textContent = '';
+        return;
+      }
+      var vals = wk.map(function (x) { return x.avg || 0; });
+      var mx = Math.max.apply(null, vals), mn = Math.min.apply(null, vals), span = (mx - mn) || 1;
+      var W = 280, H = 40, pad = 4;
+      var pts = vals.map(function (v, i) {
+        var x = pad + i * (W - pad * 2) / (vals.length - 1);
+        var y = pad + (1 - (v - mn) / span) * (H - pad * 2);
+        return Math.round(x * 10) / 10 + ',' + Math.round(y * 10) / 10;
+      });
+      var lastPt = pts[pts.length - 1].split(',');
+      var d = vals[vals.length - 1] - vals[vals.length - 2];
+      if (dl) dl.innerHTML = d ? ((d > 0 ? '▲' : '▼') + growthFmt(Math.abs(d)) + ' <s>· 지난 기록 대비</s>') : '';
+      var lab0 = (wk[0].ymd || '').slice(5).replace('-', '/');
+      var lab1 = (wk[wk.length - 1].ymd || '').slice(5).replace('-', '/');
+      gb.innerHTML =
+        '<svg viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="none" aria-hidden="true">' +
+          '<polygon points="' + pad + ',' + (H - 2) + ' ' + pts.join(' ') + ' ' + lastPt[0] + ',' + (H - 2) + '"/>' +
+          '<polyline points="' + pts.join(' ') + '"/>' +
+          '<circle cx="' + lastPt[0] + '" cy="' + lastPt[1] + '" r="3"/>' +
+        '</svg>' +
+        '<div class="gx"><span>' + lab0 + '</span><span>평소 재생 · 최근 ' + wk.length + '주</span><span>' + lab1 + '</span></div>';
+    } catch (e) {}
+  }
   function computeNextStep(c) {
     var analyzed = c.analyzed || 0, done = c.done || 0, uploaded = c.uploaded || 0, week = c.weekCards || 0;
     var upWaiting = Math.max(0, done - uploaded);
@@ -34586,6 +34777,7 @@
           ? '<div class="dch-eyebrow">당신의 콘텐츠를 본 사람</div>' +
             '<div class="dch-num"><span id="dch-num-v">0</span><span class="u"> 명</span></div>' +
             '<div class="dch-cap">' + heroCap + '</div>' +
+            dchWeekHtml() +   // v589 · ㉮ 이번 주 한 줄 (전부 0이면 빈 문자열)
             '<div class="dch-whisper2">' + heroWhisper + '</div>'
           // ▸ 0의 상태 — v527: 씨앗(힉스필드 라임) + 안내 복구. 「0명이 봤다」가 아니라 「여기가 뭘로 채워지는지」를 말한다.
           : '<div class="dch-zwrap">' +
@@ -34598,8 +34790,10 @@
               '<div class="dch-prog">' + (analyzed > 0
                   ? '지금까지 <b>' + analyzed + '개</b> 담았어요 — 재료는 이미 있어요'
                   : '좋은 걸 봤을 때, 그때 <b>3초</b>면 담깁니다') + '</div>' +
-              // v527b · 담긴 게 없으면 원고를 쓸 수 없다 — 0의 상태에서 갈 곳은 «담기» 하나뿐
-              '<button type="button" class="dch-zcta" id="dch-zero-cta">⚡ 컨텐츠 담으러 가기 →</button>' +
+              // v591 · «첫 한 편을 올리면 시작돼요»라면서 담으러만 보내는 건 말이 안 맞았다 (사장님 지적)
+              //   주연 = 내 콘텐츠 기록(성장 기록·glOpen) · 보조 = 재료 담기
+              '<button type="button" class="dch-zcta" id="dch-zero-rec">📈 내 콘텐츠 기록하러 가기 →</button>' +
+              '<button type="button" class="dch-zcta sub" id="dch-zero-cta">⚡ 컨텐츠 담으러 가기 →</button>' +
             '</div>') +
       '</div>' +
       '<div class="dch-scroll">당신이 어떻게 여기까지 왔는지<span class="ar">↓</span></div>' +
@@ -34613,8 +34807,16 @@
           '</div></div>' +
         '</div>' +
         '<div class="dch-act dch-a2"><div class="dch-ab"><span class="no">02</span><span class="tt">만들다<span class="d">— 내가 실제로 한 것</span></span><span class="ln"></span></div>' +
-          '<div class="dch-card"><div class="gl-toprow"><button type="button" class="gl-topbtn" id="gl-open"><span class="gl-dot" id="gl-due"></span>성장 기록 <span class="ch">›</span></button></div>' +
+          // v590 · ㉡ 기한 지난 «그때만» 말하는 칩이 여기 그려진다 (평소엔 빈 자리)
+          '<div id="dch-duewrap"></div>' +
+          // v590 · ㉠ 구석 칩(gl-toprow) → 카드 머리 스파크라인으로 승격. id=gl-open 유지 = 기존 glOpen 배선 그대로
+          '<div class="dch-card">' +
             '<div class="dch-mhd"><div class="k">내가 올린 콘텐츠, 지금까지</div><div class="n">' + mineHead + '</div></div>' +
+            '<div class="dch-spark" id="gl-open" role="button" tabindex="0" title="성장 기록 열기">' +
+              '<div class="gt"><span>📈 내 성장</span><span class="dl" id="dchg-dl"></span>' +
+              '<span class="go"><span class="gl-dot" id="gl-due"></span>기록 열기 ›</span></div>' +
+              '<div id="dchg-body"></div>' +
+            '</div>' +
             (nUp > 0 ? '<div class="dch-bestlab">🏆 <b>내 잘된 콘텐츠</b> · 조회수 순</div><div class="th2n-mq"><div class="th2n-track" id="th2n-track"></div><div class="th2n-mq-fade"></div></div>' : '<div class="th2n-empty">첫 콘텐츠를 올리면 여기에 흐르기 시작해요 🎞</div>') +
             '<div class="dch-a2acts"><button class="dch-chip shop" id="dch-shop">🛍 콘텐츠 쇼핑 →</button></div>' +
           '</div>' +
@@ -34627,7 +34829,10 @@
       '</div>';
     try { th2CountUp(document.getElementById('dch-refnum'), analyzed); } catch (e) { var rn = document.getElementById('dch-refnum'); if (rn) rn.textContent = analyzed; }
     try { dchArmReach(reach); } catch (e) { var nv0 = document.getElementById('dch-num-v'); if (nv0) nv0.textContent = reach > 0 ? fmtViews(reach) : '0'; }
-    // v527b · 0의 상태 CTA = 시트 맨 위 «컨텐츠 담기» 카드로 (담긴 게 없으면 원고를 못 쓴다)
+    // v591 · 0의 상태 주연 CTA = 내 콘텐츠 기록 (이번에 만든 성장 기록으로 직행)
+    var zr = document.getElementById('dch-zero-rec');
+    if (zr) zr.onclick = function () { try { glOpen(); } catch (e) {} };
+    // v527b · 보조 CTA = 시트 맨 위 «컨텐츠 담기» 카드로 (담긴 게 없으면 원고를 못 쓴다)
     var zc = document.getElementById('dch-zero-cta');
     if (zc) zc.onclick = function () {
       try { switchWorkspace('sheet'); } catch (e) {}
@@ -34648,8 +34853,16 @@
     // 📈 성장 기록 한 줄 (통합 시트)
     try {
       glCss();
-      var gro = document.getElementById('gl-open'); if (gro) gro.onclick = glOpen;
-      var glMark = function () { var dd = document.getElementById('gl-due'); if (dd) dd.classList.toggle('on', glDue()); };
+      var gro = document.getElementById('gl-open');
+      if (gro) {
+        gro.onclick = glOpen;
+        // v590 · 버튼이 div가 되어 키보드 길을 직접 낸다
+        gro.onkeydown = function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); glOpen(); } };
+      }
+      var glMark = function () {
+        var dd = document.getElementById('gl-due'); if (dd) dd.classList.toggle('on', glDue());
+        try { dchSparkPaint(); } catch (e) {}   // v590 · ㉠곡선 + ㉡리마인더도 같은 흐름에서
+      };
       if (!_glLoaded) glLoad().then(glMark); else glMark();
     } catch (e) {}
     try { renderFutureDash(); } catch (e) {}
@@ -36172,6 +36385,7 @@
     ov.classList.remove('show');
     try { renderGrowthPanel(); } catch (e) {}
     try { renderFutureDash(); } catch (e) {}
+    try { dchSparkPaint(); } catch (e) {}   // v590 · 저장 즉시 ㉡칩 내려가고 ㉠곡선 갱신
     try { toast('📈 성장 기록 저장!' + (changed ? ' · 조회수 ' + changed + '개 반영' : '')); } catch (e) {}
   }
   // ---- 그래프 모드 ----
@@ -42879,6 +43093,21 @@
       const as = document.getElementById('sh-asset');
       if (as) { const total = (rows || []).filter(r => isFilled(r)).length; as.classList.toggle('show', total > 0); const ab = as.querySelector('b'); if (ab) ab.textContent = total; }
     } catch (e) {}
+    // v588 · 시간축+보상 칩 — «이번 주 +N»(월요일부터) · «원고가 된 것 N». 0이면 숨긴다
+    try {
+      const now = new Date();
+      const mon = new Date(now.getFullYear(), now.getMonth(), now.getDate() - ((now.getDay() + 6) % 7));
+      let wk = 0, made = 0;
+      (rows || []).forEach(function (r) {
+        const at = r.createdAt || r.at;
+        if (at && new Date(at) >= mon) wk++;
+        try { if (prpHasScript(r)) made++; } catch (e) {}
+      });
+      const we = document.getElementById('sh-week');
+      if (we) { we.classList.toggle('show', wk > 0); const wb = we.querySelector('b'); if (wb) wb.textContent = '+' + wk; }
+      const me = document.getElementById('sh-made');
+      if (me) { me.classList.toggle('show', made > 0); const mb = me.querySelector('b'); if (mb) mb.textContent = made; }
+    } catch (e) {}
     try { forkDash(); } catch (e) {}   // v570 · 갈림길 현황판도 같은 흐름에서 최신화 (rows 로드 후 자동 반영)
   }
   let _slvQ = [], _slvDone = 0, _slvT0 = null, _slvBusy = false, _slvInited = false, _slvCard = null;
@@ -44814,10 +45043,12 @@
       { t: 'ctype', lb: '어떤 반응이었어요?', s: '댓글 유형 하나만' }
     ],
     // v561 · 통을 먼저 고르고 → 그 속마음을 적는다 (사장님 확정 순서)
+    // v591 · 얼굴이 메인(무대) + 작은 4선택 + 3칸(유형 칸·상황&감정·속말). quote 라벨은 고른 통을 따라간다
     cus: [
-      { t: 'basket',    lb: '어느 쪽 이야기예요?', s: '문제 · 욕구 · 회피 · 저항' },
-      { t: 'quote',     lb: '고객의 속마음', s: '들은 말 그대로 — 고객 분석에 바로 담겨요', ph: '예) 펌하고 3일은 좋았는데 그 뒤로 어색해요' },
-      { t: 'situation', lb: '그 순간, 언제·어디서였대요?', s: '비워도 돼요', ph: '예) 아침 출근 준비하다 거울 앞에서' }
+      { t: 'basket',    lb: '어느 쪽 이야기예요?', s: '고르면 위 무대가 바뀌어요' },
+      { t: 'quote',     lb: '', s: '' },
+      { t: 'situation', lb: '상황 & 감정 묘사', s: '언제·어디서, 어떤 기분이었대요? — 비워도 돼요', ph: '예) 아침 출근 준비하다 거울 앞에서, 한숨부터' },
+      { t: 'inner',     lb: '속으로 하는 말', s: '입 밖엔 안 냈지만 — 비워도 돼요', ph: '예) 이번에도 망하면 어떡하지…' }
     ]
   };
   // v561 · ▣ 컨텐츠 정식 분해 — 시트 「컨텐츠 담기」와 같은 3단계를, 빠른 담기 톤으로.
@@ -44855,37 +45086,38 @@
   //     문제 = 이미 나에게 떨어진 것 / 욕구 = 저 앞의 것 / 회피 = 오면 안 되는 것 / 저항 = 사이를 막은 것
   //   색은 고객 방 .cm-basket 과 같은 값(새로 만들지 않았다).
   const QCW_BK = {
-    pain: { n: '문제 · 불편', c: '#E07B7B', d:
+    pain: { n: '문제 · 불편', c: '#E07B7B', ds: '이미 나에게 떨어진 것', d:
       '<circle class="dim" cx="16" cy="24" r="9.5"/>' +
       '<path d="M11.6 21.6 L14.6 22.8"/><path d="M20.4 21.6 L17.4 22.8"/>' +
       '<circle class="fill" cx="13.2" cy="25.4" r=".95"/><circle class="fill" cx="18.8" cy="25.4" r=".95"/>' +
       '<path d="M12.8 29.6 Q16 28 19.2 29.6"/>' +
       '<path d="M28 6 v7"/><path d="M33 9 v5"/><path d="M23.5 8 v5"/>' +
       '<path class="hot" d="M25.5 16.5 l2.5 3 l2.5-3"/>' },
-    desire: { n: '욕구', c: '#7E9B72', d:   // v579 · 세이지(= --law-type-desire). 라임은 «자산»이라 양보
+    desire: { n: '욕구', c: '#7E9B72', ds: '저 앞에 바라는 것', d:   // v579 · 세이지(= --law-type-desire). 라임은 «자산»이라 양보
       '<circle class="dim" cx="15" cy="24" r="9.5"/>' +
       '<path d="M10.6 22.4 Q12.8 21 14.8 22.2"/><path d="M19.4 22.4 Q17.2 21 15.2 22.2"/>' +
       '<circle class="fill" cx="12.6" cy="24.4" r=".95"/><circle class="fill" cx="17.8" cy="24.4" r=".95"/>' +
       '<path d="M12 28.4 Q15 30.4 18 28.4"/>' +
       '<path d="M31 12 l1.9 4 4.1.6-3 2.9.7 4.1-3.7-2-3.7 2 .7-4.1-3-2.9 4.1-.6z"/>' +
       '<path class="hot" d="M22.5 20.5 h4.5"/>' },
-    fear: { n: '회피', c: '#F0B24E', d:
+    fear: { n: '회피', c: '#F0B24E', ds: '오면 안 되는 것', d:
       '<circle class="dim" cx="24" cy="24" r="9.5"/>' +
       '<path d="M19.6 22.6 Q21.6 20.4 24 22.2"/><path d="M28.4 22.6 Q26.4 20.4 24 22.2"/>' +
       '<path d="M20.6 26.2 Q22.3 24.9 24 26.2"/><path d="M24 26.2 Q25.7 24.9 27.4 26.2"/>' +
       '<path d="M22 30 h4"/>' +
       '<path d="M11 15 v13"/><path d="M6.5 19 l4.5-4 4.5 4"/>' +
       '<path class="hot" d="M14 21.5 h3"/>' },
-    resist: { n: '저항', c: '#8FA0C9', d:
+    resist: { n: '저항', c: '#8FA0C9', ds: '사이를 막아선 벽', d:
       '<circle class="dim" cx="12" cy="24" r="9"/>' +
       '<path d="M8 22 h3.6"/><path d="M14.6 21.4 L17.4 22.4"/>' +
       '<circle class="fill" cx="9.8" cy="25" r=".9"/><circle class="fill" cx="15" cy="24.8" r=".85"/>' +
       '<path d="M9.4 29.4 Q12 29.8 14.8 28.6"/>' +
       '<path d="M26 8 v26"/><path d="M26 14 h9 M26 21 h9 M26 28 h9"/><path d="M30.5 8 v6 M33 14 v7 M30 21 v7"/>' }
   };
-  function qcwBkArt(k) {
+  function qcwBkArt(k, size) {   // v591 · size — 무대(크게)와 칩(작게)이 같은 그림을 쓴다
     const b = QCW_BK[k]; if (!b) return '';
-    return '<svg class="g" width="38" height="38" viewBox="0 0 40 40" aria-hidden="true" focusable="false">' + b.d + '</svg>';
+    const s = size || 38;
+    return '<svg class="g" width="' + s + '" height="' + s + '" viewBox="0 0 40 40" aria-hidden="true" focusable="false">' + b.d + '</svg>';
   }
   // v504 · 올라온 시기 → 대략 시각 (트렌드가 «담은 날» 대신 이걸 씀)
   const QCW_POSTED = [['이번 주', 3], ['이번 달', 15], ['3개월 안', 60], ['올해', 200], ['오래됨', 500]];
@@ -44919,9 +45151,32 @@
     if (r) { const t = r.querySelector('.qc-tiles'), g = r.querySelector('.cs-greet'), hn = document.getElementById('qc-hint');
       if (t) t.style.display = ''; if (g) g.style.display = ''; if (hn) hn.style.display = ''; }
   }
+  // v591 · 뒤로 한 곳(#qc-back) — 폼에선 «한 걸음만» 물러난다: 분해 2·3단계→앞 단계, 아니면 유형 선택으로
+  function qcwBack() {
+    try { qcwSaveField(); } catch (e) {}
+    if (_qcw && _qcw.kind === 'decomp' && _qcw.step > 0) { _qcw.step--; qcwRender(); } else qcwHome();
+  }
+  // v591 · 고객 분석 무대 갱신 — «타이핑 중»엔 화면을 다시 그리면 포커스가 날아가므로 조각만 바꾼다
+  function qcwCusPaint() {
+    const w = document.getElementById('qcw'); if (!w || !_qcw || _qcw.kind !== 'cus') return;
+    const b = QCW_BK[_qcw.basket] || QCW_BK.pain;
+    const hero = document.getElementById('qcw-cush');
+    if (hero) {
+      hero.style.setProperty('--bc', b.c);
+      const a = hero.querySelector('.art'); if (a) a.innerHTML = qcwBkArt(_qcw.basket, 88);
+      const n = hero.querySelector('.nm'); if (n) n.textContent = b.n;
+      const d = hero.querySelector('.ds'); if (d) d.textContent = b.ds || '';
+    }
+    w.querySelectorAll('[data-qb]').forEach(x => x.classList.toggle('on', x.dataset.qb === _qcw.basket));
+    w.querySelectorAll('.qcw-fld.cusf').forEach(x => x.style.setProperty('--bc', b.c));
+    const lb = document.getElementById('qcw-cuslb');
+    if (lb && lb.firstChild) lb.firstChild.textContent = '「' + b.n + '」 — 들은 말 그대로';
+    w.style.setProperty('--qc',
+      parseInt(b.c.slice(1, 3), 16) + ',' + parseInt(b.c.slice(3, 5), 16) + ',' + parseInt(b.c.slice(5, 7), 16));
+  }
   function qcwStart(kind) {
     _qcw = { kind: kind, step: 0, img: null, imgs: [], hook: '', text: '', memo: '', views: 0, format: '', ctype: '', quote: '', posted: 0,
-      basket: '', situation: '', stype: '',     // v561 · stype = 썸네일/수식어 «유형»
+      basket: '', situation: '', inner: '', stype: '',     // v561 · stype = 썸네일/수식어 «유형» · v591 · inner = 속으로 하는 말
       // v561 · 정식 분해 3단계(1정리·2원고·3분해)가 쓰는 칸들
       topic: '', url: '', script: '', sections: {}, ctypeThumb: '', ctypeCopy: '',
       funnel: '', rating: 0, trend: 0, trendkw: '',
@@ -44956,7 +45211,8 @@
       for (let i = 0; i < Math.min(6, imgs.length + 1); i++) {
         slots.push(imgs[i]
           ? '<div class="mslot has"><img src="' + imgs[i] + '" alt=""/><button type="button" class="x" data-qmx="' + i + '">×</button></div>'
-          : '<div class="mslot" data-qmadd="1">＋</div>');
+          // v591 · 점 하나가 아니라 «카드 슬롯이 버젓이» — 썸네일 슬롯과 같은 얼굴
+          : '<div class="mslot" data-qmadd="1"><span class="pl">＋</span><span class="s">캡처 담기</span></div>');
       }
       return '<div class="qcw-multi">' + slots.join('') + '</div>';
     }
@@ -44965,19 +45221,23 @@
         (_qcw.img ? '<img src="' + _qcw.img + '" alt=""/>' : '<span class="pl">＋</span><span class="s">사진 담기</span>') + '</div>';
     }
     if (f.t === 'basket') {
-      const guess = _qcw.basket || cmGuessBasket(_qcw.quote);
+      // v591 · 얼굴이 «메인 무대»로 — 고르면 무대가 즉시 바뀐다. 선택은 아래 작은 4칩
+      let guess = _qcw.basket || cmGuessBasket(_qcw.quote);
+      if (!QCW_BK[guess]) guess = 'pain';   // cmGuessBasket이 'moment'를 줄 수 있다 — 4통엔 없는 값
       _qcw.basket = guess;
-      // v578 · 글자 없이 «색 + 그림»만. 이름은 눈엔 안 보이지만 스크린리더·툴팁에는 남긴다
-      return '<div class="qcw-chips bk">' + QCW_BASKETS.map(v => {
-        const b = QCW_BK[v[1]] || { n: v[0], c: '#8fc6ff' };
-        return '<button type="button" class="qcw-chip bk' + (guess === v[1] ? ' on' : '') +
-          '" data-qb="' + v[1] + '" style="--bc:' + b.c + '"' +
-          ' title="' + esc(b.n) + '" aria-label="' + esc(b.n) + '"' +
-          (guess === v[1] ? ' aria-pressed="true"' : ' aria-pressed="false"') + '>' +
-          '<span class="band"></span>' + qcwBkArt(v[1]) + '</button>';
-      }).join('') + '</div>';
+      const cur = QCW_BK[guess];
+      return '<div class="qcw-cush" id="qcw-cush" style="--bc:' + cur.c + '">' +
+          '<div class="art">' + qcwBkArt(guess, 88) + '</div>' +
+          '<div class="meta"><b class="nm">' + esc(cur.n) + '</b><i class="ds">' + esc(cur.ds || '') + '</i></div>' +
+        '</div>' +
+        '<div class="qcw-bkrow">' + QCW_BASKETS.map(v => {
+          const b = QCW_BK[v[1]];
+          return '<button type="button" class="qcw-bks' + (guess === v[1] ? ' on' : '') +
+            '" data-qb="' + v[1] + '" style="--bc:' + b.c + '"' +
+            (guess === v[1] ? ' aria-pressed="true"' : ' aria-pressed="false"') + '>' + esc(v[0]) + '</button>';
+        }).join('') + '</div>';
     }
-    if (f.t === 'text' || f.t === 'memo' || f.t === 'quote' || f.t === 'situation' || f.t === 'hook'
+    if (f.t === 'text' || f.t === 'memo' || f.t === 'quote' || f.t === 'situation' || f.t === 'inner' || f.t === 'hook'
         || f.t === 'topic' || f.t === 'url' || f.t === 'trendkw') {
       return '<textarea data-qta="' + f.t + '" class="qcw-ta" rows="1" placeholder="' + esc(f.ph || '') + '">' + esc(_qcw[f.t] || '') + '</textarea>';
     }
@@ -45061,6 +45321,10 @@
     const form = deco ? QCW_DECOMP[_qcw.step].f : (QCW_FORMS[_qcw.kind] || []);
     const hint = _qcw.kind === 'idea' && (_qcw.imgs || []).length ? '<b>' + _qcw.imgs.length + '</b>/6장 담김' : '';
     w.style.setProperty('--qc', QCW_TINT[_qcw.kind] || '90,170,255');   // v561 · 문 색이 폼 안까지
+    // v591 · 고객 분석은 고른 통의 색이 폼 전체(담기 버튼까지)를 물들인다
+    const cusB = (_qcw.kind === 'cus') ? (QCW_BK[_qcw.basket] || QCW_BK.pain) : null;
+    if (cusB) w.style.setProperty('--qc',
+      parseInt(cusB.c.slice(1, 3), 16) + ',' + parseInt(cusB.c.slice(3, 5), 16) + ',' + parseInt(cusB.c.slice(5, 7), 16));
     // v562 · 시트 「컨텐츠 담기」의 가로 진행 레일(.wzs)을 그대로 — 글자만 정리·원고·분해
     const rail = deco ? '<div class="wzs qcw-wzs">' +
       '<div class="wzs-rail"><i style="width:' + (_qcw.step === 0 ? 0 : _qcw.step === 1 ? 50 : 100) + '%"></i></div>' +
@@ -45069,22 +45333,24 @@
         '" data-w="' + (i + 1) + '" data-qstep="' + i + '">' +
         '<span class="n">' + (i < _qcw.step ? '✓' : s.n) + '</span>' +
         '<span class="t">' + s.t + '</span><span class="s">' + s.s + '</span></button>').join('') + '</div>' : '';
-    w.innerHTML = '<div class="qcw-top"><button type="button" class="qcw-back" id="qcw-back">‹ 뒤로</button>' +
+    // v591 · 왼쪽 ‹뒤로 제거 — 뒤로는 우상단 하나(#qc-back)로 (뒤로가기 우상단 규칙 · 두 개는 헷갈림)
+    w.innerHTML = '<div class="qcw-top">' +
       '<span class="qcw-kind">' + QCW_NAMES[_qcw.kind] + '</span>' +
       '<span class="qcw-one">' + (deco ? '3단계로 정식 분해' : '한 판에 다 적고 담기') + '</span></div>' + rail +
-      '<div class="qcw-form">' + form.map(f =>
-        '<div class="qcw-fld"><div class="qcw-lb">' + f.lb +
-        (f.s ? '<i>' + f.s + '</i>' : '') + '</div>' + qcwFieldHtml(f) + '</div>').join('') +
+      '<div class="qcw-form">' + form.map(f => {
+        // v591 · 고객 분석 — 속마음 라벨은 고른 통을 따라가고, 칸마다 유형색 프레임(--bc)
+        let lb = f.lb, sub = f.s, lbId = '';
+        if (cusB && f.t === 'quote') { lb = '「' + cusB.n + '」 — 들은 말 그대로'; sub = '고객 분석에 바로 담겨요'; lbId = ' id="qcw-cuslb"'; }
+        const tint = (cusB && f.t !== 'basket') ? ' cusf" style="--bc:' + cusB.c : '';
+        return '<div class="qcw-fld' + tint + '"><div class="qcw-lb"' + lbId + '>' + lb +
+          (sub ? '<i>' + sub + '</i>' : '') + '</div>' + qcwFieldHtml(f) + '</div>';
+      }).join('') +
       (hint ? '<div class="qcw-mhint">' + hint + '</div>' : '') + '</div>' +
       (deco && _qcw.step < QCW_DECOMP.length - 1
         ? '<button type="button" class="qcw-go" id="qcw-next">다음 →</button>' +
           '<button type="button" class="qcw-skip" id="qcw-go">여기까지만 담기 ⚡</button>'
         : '<button type="button" class="qcw-go" id="qcw-go">⚡ 시트에 담기</button>');
-    // 배선 — v561 · «뒤로» = 정식 분해 2·3단계면 앞 단계로, 아니면 빠른 담기 타일로
-    document.getElementById('qcw-back').onclick = () => {
-      qcwSaveField();
-      if (deco && _qcw.step > 0) { _qcw.step--; qcwRender(); } else qcwHome();
-    };
+    // 배선 — v591 · 뒤로는 우상단 #qc-back이 qcwBack()으로 처리 (왼쪽 버튼은 제거됨)
     const nx = document.getElementById('qcw-next');
     if (nx) nx.onclick = () => { qcwSaveField(); _qcw.step++; qcwRender(); };
     w.querySelectorAll('[data-qstep]').forEach(b => b.onclick = () => {
@@ -45099,10 +45365,11 @@
       if (_qcw.kind === 'cus' && ta.dataset.qta === 'quote') {
         ta.addEventListener('input', () => {
           if (_qcw.basketTouched) return;
-          const g = cmGuessBasket(ta.value);
+          let g = cmGuessBasket(ta.value);
+          if (!QCW_BK[g]) g = 'pain';   // 'moment'는 4통에 없다
           if (g === _qcw.basket) return;
           _qcw.basket = g;
-          w.querySelectorAll('[data-qb]').forEach(b => b.classList.toggle('on', b.dataset.qb === g));
+          qcwCusPaint();   // v591 · 무대·칩·칸 색·라벨까지 통째로 (rerender 없이 — 포커스 보존)
         });
       }
     });
@@ -45212,6 +45479,7 @@
     if (!_qcw) return;
     const k = _qcw.kind;
     const any = _qcw.img || _qcw.hook || _qcw.text || _qcw.memo || _qcw.views || _qcw.format || _qcw.ctype || _qcw.quote
+      || _qcw.situation || _qcw.inner   // v591 · 상황·속말만 적었어도 담긴다
       || _qcw.stype || _qcw.ctypeCopy || _qcw.topic || _qcw.script || _qcw.url || _qcw.funnel || _qcw.rating || _qcw.trend
       || Object.keys(_qcw.sections || {}).some(k => (_qcw.sections[k] || '').trim());
     if (!any) { toast('아직 아무것도 없어요 — 사진이나 한 줄만 넣어주세요'); return; }
@@ -45224,7 +45492,7 @@
         const cid = 'cm_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7);
         p2.collect.push({ id: cid,
           basket: _qcw.basket || cmGuessBasket(_qcw.quote), quote: _qcw.quote, insight: '',
-          situation: _qcw.situation || '', emotion: '', inner: '',
+          situation: _qcw.situation || '', emotion: '', inner: _qcw.inner || '',   // v591 · 속으로 하는 말
           source: '빠른 담기', gold: false, createdAt: Date.now() });
         p2.updatedAt = Date.now(); await savePmms();
         cmSaved = true;
@@ -45317,7 +45585,11 @@
       });
     });
     // ⚡ 빠른 담기 방 — B안: 타일 = 위저드 시작 (분해만 AI 정리 방으로)
-    const qb = document.getElementById('qc-back'); if (qb) qb.onclick = () => { qcClose(); csOpenFork(); };
+    // v591 · 뒤로 = 한 걸음만 — 폼이 열려 있으면 «유형 선택»으로 (갈림길로 통째로 튕기던 것 수리)
+    const qb = document.getElementById('qc-back'); if (qb) qb.onclick = () => {
+      if (_qcw) { qcwBack(); return; }
+      qcClose(); csOpenFork();
+    };
     document.querySelectorAll('#qc-room [data-qc]').forEach(t => t.addEventListener('click', () => {
       const k = t.dataset.qc;
       if (k === 'ai') { qcClose(); csOpenRoom(); return; }
