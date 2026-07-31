@@ -1235,6 +1235,40 @@
   .rd-dots i.on { background: currentColor; box-shadow: 0 0 7px currentColor; }
   .rd-blk .k { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; letter-spacing: .12em; color: var(--text-faint);
     text-transform: uppercase; display: block; margin-bottom: 7px; }
+  /* 🔟 v583 · 조회수는 만 단위로 — 0을 다섯 개 세지 않게 */
+  .rd-numwrap { display: inline-flex; align-items: baseline; gap: 5px; }
+  .rd-inp.man { width: 88px; text-align: right; }
+  .rd-man { font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 800; color: var(--lime,#d7f34b); }
+  .rd-conv { text-decoration: none; font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    color: var(--text-faint); white-space: nowrap; }
+  .rd-conv:empty { display: none; }
+  /* 📦 v583 · 유형 둘은 접어둔다. 열면 그때 칩이 나온다 */
+  .rd-fold { border: 1px solid var(--line); border-radius: 11px; padding: 9px 12px; background: var(--bg-card,#14171b); }
+  .rd-fold > summary { cursor: pointer; list-style: none; margin: 0; display: flex; align-items: center; gap: 7px; }
+  .rd-fold > summary::-webkit-details-marker { display: none; }
+  .rd-fold > summary::after { content: '▾'; margin-left: auto; font-size: 10px; color: var(--text-faint);
+    transition: transform .18s; }
+  .rd-fold[open] > summary::after { transform: rotate(180deg); }
+  .rd-fold[open] > summary { margin-bottom: 9px; }
+  .rd-fold > summary:hover { color: var(--text-sub); }
+  .rd-cnt { font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 800; color: var(--lime,#d7f34b);
+    text-transform: none; letter-spacing: 0; }
+  .rd-cnt:empty { display: none; }
+  /* ★ v583 · «왜 터졌나»가 오른쪽 제목 아래로 왔다 — 읽는 순서: 무엇 → 왜 → 어떻게 */
+  /* v586 · 썸네일 한 덩어리 안의 두 칸 */
+  .rd-sec2 + .rd-sec2 { margin-top: 13px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,.06); }
+  .rd-sk { display: block; font-size: 10.5px; font-weight: 700; color: var(--text-mute); margin-bottom: 7px; }
+  .rd-sk i { font-style: normal; font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    color: var(--text-faint); letter-spacing: .08em; margin-left: 5px; }
+  /* v586 · 컨텐츠 유형 — 제목 위 */
+  .rd-fmt { margin-bottom: 9px; }
+  .rd-fmt.editable { cursor: pointer; }
+  .rd-fchip { display: inline-block; font-size: 11px; font-weight: 800; border-radius: 999px;
+    padding: 4px 12px; border: 1px solid currentColor; line-height: 1.3; }
+  .rd-fchip.none { color: var(--text-faint); border-style: dashed; background: none; }
+  .rd-fmt.editable:hover .rd-fchip { filter: brightness(1.18); }
+  .rd-why { border-left: 2px solid rgba(245,200,75,.5); padding-left: 12px; }
+  .rd-why .k { color: #F5C84B; opacity: .9; }
   .rd-pills { display: flex; flex-wrap: wrap; gap: 5px; }
   .rd-pill { border-radius: 999px; padding: 4px 10px; font-size: 11.5px; font-weight: 800; line-height: 1.2;
     border: 1px solid currentColor; background: rgba(255,255,255,.03); display: inline-block; }
@@ -1268,6 +1302,11 @@
     background: transparent; border: 1px solid var(--line2, rgba(255,255,255,.14)); border-radius: 8px; padding: 6px 12px; transition: .15s; }
   .rd-edit:hover { color: var(--lime, #d7f34b); border-color: rgba(215,243,75,.5); }
   .rd-edit.live { background: var(--lime, #d7f34b); border-color: var(--lime, #d7f34b); color: #12140a; }
+  /* 🗑 v586 · 삭제 — 있지만 «먼저 보이지는» 않게. 되돌릴 수 없는 일이라 조용히 둔다 */
+  .rd-del { font-family: inherit; font-size: 11.5px; font-weight: 700; cursor: pointer;
+    background: transparent; border: 1px solid transparent; border-radius: 8px; padding: 6px 11px;
+    color: var(--text-faint); transition: .15s; }
+  .rd-del:hover { color: #E25C5C; border-color: rgba(226,92,92,.45); background: rgba(226,92,92,.08); }
 
   /* ── 수정 모드: 읽는 화면이 «그 자리에서» 고치는 화면이 된다 (레이아웃은 안 움직인다) ── */
   #rd.editing .rd-fx { border-style: dashed; border-color: var(--line2, rgba(255,255,255,.18)); cursor: text; }
@@ -11994,6 +12033,22 @@
   .bkz-prog { display:block; margin-top:7px; font-family:'JetBrains Mono',monospace; font-size:11px;
     color:var(--emerald); font-weight:700; }
   .bkz-prog:empty { display:none; }
+  /* 📷 v587 · 쓴 만큼 — 평소엔 조용히, 빠듯할 때만 색 */
+  .usg-top { display:flex; align-items:baseline; gap:6px; }
+  .usg-n { font-family:'JetBrains Mono',monospace; font-size:30px; font-weight:800; letter-spacing:-.03em;
+    line-height:1; color:var(--text-main); }
+  .usg-u { font-size:13px; font-weight:800; color:var(--text-sub); }
+  .usg-b { margin-left:auto; font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--text-mute); }
+  .usg-bar { height:7px; border-radius:99px; background:rgba(255,255,255,.07); overflow:hidden; margin-top:12px; }
+  .usg-bar u { display:block; height:100%; border-radius:99px; background:var(--text-faint);
+    transition:width .5s cubic-bezier(.2,.9,.3,1); }
+  .usg-bar[data-lv="warm"] u { background:#F0B24E; }
+  .usg-bar[data-lv="hot"] u { background:#E07B7B; box-shadow:0 0 12px rgba(224,123,123,.4); }
+  .usg-say { font-size:12px; font-weight:700; color:var(--text-mute); margin-top:9px; }
+  .usg-say[data-lv="warm"] { color:#F0B24E; }
+  .usg-say[data-lv="hot"] { color:#E07B7B; }
+  .usg-note { font-size:11px; line-height:1.65; color:var(--text-faint); margin-top:6px; }
+  .usg-note b { color:var(--text-mute); }
   /* 🔎 v581 · 유형 찾기 — 유형이 쌓이면 눈으로 훑는 게 느려진다. 치는 대로 바로 좁혀진다 */
   .tsr { display:flex; align-items:center; gap:7px; margin:0 0 8px;
     background:var(--bg-input,#12130F); border:1px solid var(--line,#232323); border-radius:9px; padding:7px 10px; }
@@ -17446,6 +17501,62 @@
   .st2i-c.open .im{ height:150px; }
   .st2i-empty{ padding:26px 14px; text-align:center; font-size:11px; line-height:1.8; color:var(--st2-faint); }
   .st2i-empty b{ color:var(--law-asset); }
+  /* 🎯 v585 · 이번 달 목표 — 애플(그 자리 편집·저장 버튼 없음) × 힉스필드(목표 줄 뒤 광원) */
+  .stg{ position:relative; overflow:hidden; margin:0 0 18px; padding:18px 20px 20px;
+    border:1px solid rgba(255,255,255,.09); border-radius:18px;
+    background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.012)); }
+  .stg::before{ content:''; position:absolute; left:8%; top:-58%; width:52%; height:150%; pointer-events:none;
+    background:radial-gradient(ellipse at 50% 50%,rgba(215,243,75,.13),transparent 66%); opacity:.9; }
+  .stg[data-when="past"]::before{ background:radial-gradient(ellipse at 50% 50%,rgba(154,160,138,.10),transparent 66%); }
+  .stg[data-when="next"]::before{ background:radial-gradient(ellipse at 50% 50%,rgba(90,170,255,.11),transparent 66%); }
+  .stg-hd{ position:relative; display:flex; align-items:center; gap:9px; }
+  .stg-nav{ width:30px; height:30px; border-radius:9px; border:1px solid rgba(255,255,255,.12);
+    background:rgba(255,255,255,.04); color:var(--st2-faint,#7b8478); font-family:inherit; font-size:14px;
+    cursor:pointer; line-height:1; transition:color .15s, border-color .15s, transform .15s; }
+  .stg-nav:hover{ color:var(--st2-tx,#e8e9e6); border-color:rgba(255,255,255,.24); }
+  .stg-nav:active{ transform:scale(.94); }
+  .stg-mo{ font-size:15px; font-weight:700; color:var(--st2-sub,#9aa39c); letter-spacing:-.01em; }
+  .stg-mo b{ color:var(--st2-tx,#e8e9e6); font-weight:800; }
+  .stg-when{ font-family:'JetBrains Mono',monospace; font-size:9.5px; letter-spacing:.1em;
+    color:var(--st2-faint,#7b8478); border:1px solid rgba(255,255,255,.1); border-radius:99px; padding:3px 9px; }
+  .stg[data-when="now"] .stg-when{ color:var(--law-asset,#d7f34b); border-color:rgba(215,243,75,.34); }
+  .stg[data-when="next"] .stg-when{ color:#7FB4FF; border-color:rgba(127,180,255,.3); }
+  .stg-today{ margin-left:auto; font-family:inherit; font-size:11px; font-weight:700; cursor:pointer;
+    background:none; border:none; color:var(--law-asset,#d7f34b); padding:4px 2px; }
+  .stg-goal{ position:relative; margin-top:15px; }
+  .stg-k{ display:block; font-family:'JetBrains Mono',monospace; font-size:9.5px; letter-spacing:.13em;
+    color:var(--st2-faint,#7b8478); margin-bottom:7px; }
+  .stg-in{ outline:none; color:var(--st2-tx,#e8e9e6); font-size:13px; line-height:1.68; word-break:break-word;
+    border-radius:10px; padding:8px 11px; border:1px solid transparent; transition:background .15s, border-color .15s; }
+  .stg-in:hover{ background:rgba(255,255,255,.03); }
+  .stg-in:focus{ background:rgba(255,255,255,.05); border-color:rgba(215,243,75,.34); }
+  .stg-in:empty::before{ content:attr(data-ph); color:var(--st2-faint,#7b8478); opacity:.72; }
+  .stg-in.big{ font-size:19px; font-weight:800; line-height:1.42; letter-spacing:-.015em; padding:10px 12px; }
+  .stg[data-when="now"] .stg-in.big:not(:empty){ color:var(--law-asset,#d7f34b); }
+  .stg-grid{ position:relative; display:grid; grid-template-columns:repeat(3,1fr); gap:11px; margin-top:15px; }
+  .stg-cell{ border-left:2px solid color-mix(in srgb,var(--c) 55%,transparent); padding-left:11px; }
+  .stg-cell .stg-k{ color:var(--c); opacity:.9; }
+  .stg-cell .stg-in{ font-size:12.5px; min-height:44px; }
+  .stg-tip{ position:relative; margin-top:14px; font-size:11.5px; line-height:1.7; color:var(--st2-faint,#7b8478); }
+  .stg-tip b{ color:var(--st2-sub,#9aa39c); }
+  /* 저장은 «항목별 버튼» — 이 앱의 규칙(자동저장 폐기) */
+  .stg-foot{ position:relative; display:flex; align-items:center; gap:10px; margin-top:15px; }
+  .stg-st{ font-size:11px; color:var(--st2-faint,#7b8478); }
+  .stg-st.warn{ color:#F0B24E; }
+  .stg-st.ok{ color:var(--law-asset,#d7f34b); }
+  .stg-save{ margin-left:auto; font-family:inherit; font-size:12px; font-weight:800; cursor:pointer;
+    padding:9px 20px; border-radius:11px; border:1px solid rgba(255,255,255,.12);
+    background:rgba(255,255,255,.05); color:var(--st2-faint,#7b8478); transition:all .16s; }
+  .stg-save.on{ background:var(--law-asset,#d7f34b); border-color:var(--law-asset,#d7f34b); color:#0b0c06;
+    box-shadow:0 0 18px rgba(215,243,75,.28); }
+  .stg-save:disabled{ cursor:default; }
+  .stg-save.on:active{ transform:scale(.96); }
+  @media (max-width:760px){
+    .stg{ padding:15px 15px 17px; }
+    .stg-grid{ grid-template-columns:1fr; gap:13px; }
+    .stg-in.big{ font-size:17px; }
+    .stg-when{ display:none; }        /* 폰에선 달 이름만 — 머리를 가볍게 */
+  }
   .st2-calsum{ text-align:center; font-size:9.5px; color:var(--st2-faint); margin-top:5px; }
   .st2-calsum b{ color:var(--lc,#37d67a); }
   .st2-week{ padding:12px 0 14px; border-top:1px solid rgba(255,255,255,.07); margin-top:2px; }
@@ -19892,6 +20003,13 @@
           </div>
           <div class="settings-modal-body">
 
+            <!-- 📷 v587 · 쓴 만큼 -->
+            <div class="settings-section">
+              <h4 class="settings-section-title">📷 사진 · 쓴 만큼</h4>
+              <p class="settings-section-desc">사진은 한 장이 여러 화면에 보여도 <b>저장은 한 번</b>이에요. 아래는 지금까지 담은 양입니다.</p>
+              <div class="usg" id="usg"></div>
+            </div>
+
             <!-- 백업/내보내기 -->
             <div class="settings-section">
               <h4 class="settings-section-title">📦 백업 / 내보내기</h4>
@@ -22062,6 +22180,7 @@
       <div class="sh-modal-head">
         <h2 class="sh-modal-title">컨텐츠 <span class="em">분해</span><span class="sh-modal-no" id="sh-modal-no"></span></h2>
         <div style="display:flex;gap:8px;align-items:center;">
+          <button type="button" class="rd-del" id="rd-del" title="이 카드를 지웁니다">삭제</button><!-- v586 -->
           <button type="button" class="rd-edit" id="rd-edit">수정하기</button>
           <button class="sh-close sh-back" id="sh-modal-close">← 뒤로</button>
         </div>
@@ -22074,21 +22193,28 @@
           <div class="rd-L">
             <div class="rd-thumb" id="rd-thumb"></div>
             <div class="rd-spec" id="rd-spec"></div>
-            <div class="rd-blk"><span class="k">📸 썸네일 유형</span>
-              <div class="rd-pills rd-ro" id="rd-th-ro"></div>
-              <div class="rd-pick" id="rd-th-pick"></div></div>
-            <div class="rd-blk"><span class="k">💬 수식어 유형</span>
-              <div class="rd-pills rd-ro" id="rd-cp-ro"></div>
-              <div class="rd-pick" id="rd-cp-pick"></div></div>
-            <div class="rd-blk"><span class="k">왜 터졌나 · 메모</span>
-              <div class="rd-ro" id="rd-memo-ro"></div>
-              <div class="rd-pick" style="display:none" id="rd-memo-wrap"><textarea class="rd-memo" id="rd-memo" placeholder="이건 왜 통했을까 — 한 줄로"></textarea></div></div>
+            <!-- v586 · 썸네일 유형 + 수식어 유형을 «썸네일» 한 덩어리로 (사장님 확정).
+                 평소엔 접혀 있고, 필요할 때만 편다 — 칩이 열댓 개라 왼쪽 기둥을 다 먹었다 -->
+            <details class="rd-blk rd-fold" id="rd-th-fold"><summary class="k">📸 썸네일 <span class="rd-cnt" id="rd-th-n"></span></summary>
+              <div class="rd-sec2"><span class="rd-sk">첫 화면이 멈춘 방식</span>
+                <div class="rd-pills rd-ro" id="rd-th-ro"></div>
+                <div class="rd-pick" id="rd-th-pick"></div></div>
+              <div class="rd-sec2"><span class="rd-sk">그 표현이 쓴 무기 <i>수식어</i></span>
+                <div class="rd-pills rd-ro" id="rd-cp-ro"></div>
+                <div class="rd-pick" id="rd-cp-pick"></div></div>
+            </details>
           </div>
           <div class="rd-R">
             <div>
+              <!-- v586 · 컨텐츠 유형(문제 해결·욕구 충족·스토리형…)이 어디에도 없었다 → 제목 위로 -->
+              <div class="rd-fmt" id="rd-fmt"></div>
               <h2 class="rd-hook" id="rd-hook"></h2>
               <div class="rd-sub" id="rd-sub" style="margin-top:9px"></div>
             </div>
+            <!-- v583 · «왜 터졌나»는 제목·키워드 바로 아래로 (읽는 순서: 무엇 → 왜 → 어떻게) -->
+            <div class="rd-blk rd-why"><span class="k">★ 왜 터졌나 · 메모</span>
+              <div class="rd-ro" id="rd-memo-ro"></div>
+              <div class="rd-pick" style="display:none" id="rd-memo-wrap"><textarea class="rd-memo" id="rd-memo" placeholder="이건 왜 통했을까 — 한 줄로"></textarea></div></div>
             <div id="rd-script"></div>
             <div class="rd-foot">
               <button type="button" class="rd-btn" id="rd-open-script">✎ 원고 열기</button>
@@ -22331,7 +22457,7 @@
       'shv4-gj-milestones',
       'mbv2-meta', 'mbv2-cards',
       'hmv1-home', 'hmv1-challenges', 'hmv1-seen',
-      'hmv1-acc', 'hmv1-ach', 'hmv1-weekcounts', 'hmv1-funnelcounts', 'hmv1-uploadgoal', 'hmv1-funnelup', 'hmv1-goalperiod', 'hmv1-uploadmanual', 'st2-goldkw', 'st2-focus', 'st2-plan', 'st2-osmu',
+      'hmv1-acc', 'hmv1-ach', 'hmv1-weekcounts', 'hmv1-funnelcounts', 'hmv1-uploadgoal', 'hmv1-funnelup', 'hmv1-goalperiod', 'hmv1-uploadmanual', 'st2-goldkw', 'st2-focus', 'st2-plan', 'st2-osmu', 'st2-goals',
       'hmv1-northstars', 'hmv1-visitdays', 'hmv1-ideaboards', 'hmv1-structures',
       'hmv1-growth', 'shv4-custom-thumb-types', 'shv4-custom-copy-types', 'hmv1-dash'
     ]);
@@ -27979,15 +28105,25 @@
     const ro = (arr, bg) => (arr || []).length
       ? arr.map(t => '<span class="rd-pill solid" style="background:' + bg + '">' + esc(t) + '</span>').join('')
       : '<span class="rd-pill none">아직 없음</span>';
+    // v586 · 둘이 한 덩어리라 카운트도 하나 — 접힌 채로 «몇 개 골랐는지»만 보인다
+    const rdN = () => {
+      const e = document.getElementById('rd-th-n'); if (!e) return;
+      const a = (_rdEdit ? formThumbTypes : r.thumbTypes) || [], b = (_rdEdit ? formCopyTypes : r.copyTypes) || [];
+      const n = a.length + b.length;
+      e.textContent = n ? (n + '개') : '';
+    };
     document.getElementById('rd-th-ro').innerHTML = ro(r.thumbTypes, '#a7e3c4');
     document.getElementById('rd-cp-ro').innerHTML = ro(r.copyTypes, '#9fd0e8');
+    rdN();
     const thList = rdTypeList('thumb'), cpList = rdTypeList('copy');
     function thAgain() {
       document.getElementById('rd-th-ro').innerHTML = ro(formThumbTypes, '#a7e3c4');
+      rdN();
       rdChips('rd-th-pick', thList, formThumbTypes, '#a7e3c4', thAgain);
     }
     function cpAgain() {
       document.getElementById('rd-cp-ro').innerHTML = ro(formCopyTypes, '#9fd0e8');
+      rdN();
       rdChips('rd-cp-pick', cpList, formCopyTypes, '#9fd0e8', cpAgain);
     }
     rdChips('rd-th-pick', thList, formThumbTypes, '#a7e3c4', thAgain);
@@ -28002,6 +28138,7 @@
 
     // ⑤ 제목 · 키워드 · 원본
     document.getElementById('rd-hook').textContent = r.hook || r.copyText || '(제목 없음)';
+    rdPaintFmt(r);
     const kws = (r.keywords || []).concat(r.format ? ['#' + r.format] : []);
     document.getElementById('rd-sub').innerHTML =
       (kws.length ? kws.map(k => '<span class="rd-pill" style="color:#43E0E6">' + esc(k) + '</span>').join('') : '') +
@@ -28049,6 +28186,25 @@
     // 수정 모드에선 명세 줄이 «누르는 것»이 된다
     rdBindSpecEdit();
   }
+  // 🏷 v586 · 컨텐츠 유형 — 어디에도 없던 것을 제목 위로. 수정 모드면 눌러서 바꾼다.
+  //   ⚠️ 여기서 rdRender를 다시 부르면 «편집 중인 원고»가 날아간다 → 이 칩만 다시 그린다
+  function rdPaintFmt(r) {
+    const el = document.getElementById('rd-fmt'); if (!el) return;
+    const f = _rdEdit ? (formFormat || '') : (r.format || '');
+    const c = f ? fbTypeColor(f) : '';
+    el.innerHTML = f
+      ? '<span class="rd-fchip" style="color:' + c + ';border-color:' + fbHexA(c, .5) + ';background:' + fbHexA(c, .12) + '">' + esc(f) + '</span>'
+      : '<span class="rd-fchip none">' + (_rdEdit ? '눌러서 유형 고르기' : '유형 없음') + '</span>';
+    el.classList.toggle('editable', !!_rdEdit);
+    el.onclick = !_rdEdit ? null : function () {
+      let list = []; try { list = activeFormats(); } catch (e) { list = []; }
+      const order = list.concat(['']);
+      const i = order.indexOf(formFormat || '');
+      formFormat = order[(i + 1) % order.length];
+      try { renderFormatPicker(); } catch (e) {}
+      rdPaintFmt(r);
+    };
+  }
   function rdBindSpecEdit() {
     const spec = document.getElementById('rd-spec'); if (!spec) return;
     const r = rows.find(x => x.id === editingRowId); if (!r) return;
@@ -28093,12 +28249,32 @@
   }
   function rdEditNum(row, k, r) {
     if (row.querySelector('.rd-inp')) return;
-    const cur = k === '조회수' ? (r.views || 0) : k === '공유' ? (r.shares || 0) : (r.saves || 0);
+    // 🔟 v583 · 조회수는 «만 단위»로 받는다. 「12.5」라고 치면 125,000.
+    //    0을 다섯 개 세는 일이 없어지고, 칸 옆에 「만」이 붙어 헷갈리지 않는다.
+    const isViews = (k === '조회수');
+    const raw = isViews ? (r.views || 0) : k === '공유' ? (r.shares || 0) : (r.saves || 0);
+    // ⚠️ toFixed(2)면 10회 같은 작은 값이 «0.00»이 되어 편집만 해도 날아간다 → 4자리까지 보존
+    const cur = isViews ? (raw ? String(+(raw / 10000).toFixed(4)) : '') : (raw || '');
     const v = row.querySelector('.v');
-    v.outerHTML = '<input type="text" class="rd-inp" inputmode="numeric" value="' + (cur || '') + '" placeholder="0" />';
+    v.outerHTML = '<span class="rd-numwrap"><input type="text" class="rd-inp' + (isViews ? ' man' : '') + '" inputmode="decimal" value="' +
+      esc(String(cur)) + '" placeholder="0" />' +
+      (isViews ? '<b class="rd-man">만</b><s class="rd-conv"></s>' : '') + '</span>';
     const inp = row.querySelector('.rd-inp'); inp.focus(); inp.select();
+    // 치는 동안 «= 125,000회»로 환산해 보여준다 (0을 잘못 세지 않게)
+    if (isViews) {
+      const conv = row.querySelector('.rd-conv');
+      const upd = function () {
+        const f = parseFloat(String(inp.value).replace(/[^0-9.]/g, ''));
+        conv.textContent = isFinite(f) && f > 0 ? '= ' + Math.round(f * 10000).toLocaleString() + '회' : '';
+      };
+      inp.addEventListener('input', upd); upd();
+    }
     const done = () => {
-      const n = parseNum(inp.value) || 0;
+      let n;
+      if (isViews) {
+        const f = parseFloat(String(inp.value).replace(/[^0-9.]/g, ''));
+        n = isFinite(f) ? Math.round(f * 10000) : 0;
+      } else { n = parseNum(inp.value) || 0; }
       if (k === '조회수') { r.views = n; const fv = document.getElementById('f-views'); if (fv) fv.value = n; }
       else if (k === '공유') r.shares = n; else r.saves = n;
       rdRefreshSpec(r);
@@ -28757,6 +28933,42 @@
   }
 
   // ════════════════════════════════════════════════════════════════
+  // 📷 v587 · 「쓴 만큼」 — 겁주는 게 아니라 «감각»을 준다.
+  //   한계를 들이밀지 않는다. 넉넉할 땐 조용히 회색, 진짜 빠듯할 때만 색이 든다.
+  // ════════════════════════════════════════════════════════════════
+  const USG_AVG = 137 * 1024;      // 사진 한 장 평균(실측 · 800px·0.82 압축 기준)
+  const USG_FREE = 1024 * 1024 * 1024;  // 무료 저장소 1GB
+  function usgCount() {
+    let n = 0;
+    (rows || []).forEach(function (r) { if (r.hasThumb) n++; if (r.hasComment) n++; });
+    (collects || []).forEach(function (c) {
+      if (c.hasImg === false) return;
+      n += Math.max(c.hasImg || c.hasImg === undefined ? 1 : 0, Math.min(6, c.imgN || 0));
+    });
+    return n;
+  }
+  function usgFmt(b) {
+    if (b < 1024 * 1024) return Math.max(1, Math.round(b / 1024)) + 'KB';
+    if (b < 1024 * 1024 * 1024) return (b / 1048576).toFixed(b < 10485760 ? 1 : 0) + 'MB';
+    return (b / 1073741824).toFixed(2) + 'GB';
+  }
+  function renderUsage() {
+    const el = document.getElementById('usg'); if (!el) return;
+    const n = usgCount(), bytes = n * USG_AVG, pct = Math.min(100, bytes / USG_FREE * 100);
+    // 60%까지는 색을 안 쓴다 — 잘 하고 있는 걸 경고처럼 그리지 않는다
+    const lv = pct >= 85 ? 'hot' : pct >= 60 ? 'warm' : 'calm';
+    const say = lv === 'hot' ? '슬슬 정리하거나 백업해둘 때예요'
+      : lv === 'warm' ? '아직 괜찮아요 — 절반 넘었어요'
+      : n ? '넉넉해요' : '아직 담은 사진이 없어요';
+    el.innerHTML =
+      '<div class="usg-top"><span class="usg-n">' + n.toLocaleString() + '</span><span class="usg-u">장</span>' +
+        '<span class="usg-b">약 ' + usgFmt(bytes) + '</span></div>' +
+      '<div class="usg-bar" data-lv="' + lv + '"><u style="width:' + Math.max(n ? 1.5 : 0, pct).toFixed(1) + '%"></u></div>' +
+      '<div class="usg-say" data-lv="' + lv + '">' + say + '</div>' +
+      '<div class="usg-note">여유 공간의 <b>' + (pct < 1 && n ? '1% 미만' : Math.round(pct) + '%') + '</b>를 쓰고 있어요 · ' +
+        '한 장 평균 ' + Math.round(USG_AVG / 1024) + 'KB로 어림한 값이라 실제와 조금 다를 수 있어요</div>';
+  }
+  // ════════════════════════════════════════════════════════════════
   // 📦 v582 · 「정리해서 받기」 — 보고서 + 사진 + 글을 폴더째 묶은 .zip
   //   라이브러리 0. ZIP은 «묶기»만 하고 압축은 안 한다(store) —
   //   사진(JPEG/PNG)은 이미 압축돼 있어 다시 눌러도 안 줄고 시간만 먹는다.
@@ -29287,6 +29499,22 @@
     document.getElementById('sh-save').addEventListener('click', rdCollect, true);  // capture = saveDetail보다 먼저
     const _rdE = document.getElementById('rd-edit');
     if (_rdE) _rdE.onclick = function () { rdSetEdit(!_rdEdit); };
+    // 🗑 v586 · 삭제 — 수정하기는 있는데 지우는 길이 없었다. 두 번 묻고 지운다(되돌릴 수 없으므로)
+    const _rdD = document.getElementById('rd-del');
+    if (_rdD) _rdD.onclick = async function () {
+      const r = rows.find(function (x) { return x.id === editingRowId; }); if (!r) return;
+      const nm = (r.hook || stripHtml(r.script || '').slice(0, 24) || ('NO.' + String(r.no || 0).padStart(3, '0'))).slice(0, 28);
+      if (!confirm('「' + nm + '」\n\n이 카드를 지웁니다. 되돌릴 수 없어요.\n계속할까요?')) return;
+      const idx = rows.findIndex(function (x) { return x.id === editingRowId; });
+      if (idx < 0) return;
+      rows.splice(idx, 1);
+      try { await saveRows(); } catch (e) {}
+      try { insInvalidate(); } catch (e) {}
+      closeModal();
+      try { renderTable(); } catch (e) {}          // 시트 다시 그리기
+      try { renderThumbBoard(); } catch (e) {}     // 몰아보기·분류 보드
+      toast('🗑 「' + nm + '」 지웠어요');
+    };
     const _rdOs = document.getElementById('rd-open-script');
     if (_rdOs) _rdOs.onclick = function () {
       const id = editingRowId; closeModal();
@@ -39114,6 +39342,7 @@
     document.getElementById('settings-modal').classList.add('show');
     renderSettingsStats();
     try { renderBackupStatus(); } catch (e) {}
+    try { renderUsage(); } catch (e) {}          // 📷 v587 · 쓴 만큼
     const result = document.getElementById('settings-import-result');
     if (result) { result.textContent = ''; result.className = 'settings-import-result'; }
   }
@@ -42265,6 +42494,12 @@
       '',
       '=== 규칙 ===',
       '1. 안 보이거나 모르는 항목은 비워두거나 0. 절대 지어내지 마.',
+      '1-1. ★단, «주제»만은 예외다 — 절대 비우지 마.',
+      '     화면에 «주제»라고 적혀 있을 리 없지만, 후킹 문구만 읽어도 «무엇에 대한 컨텐츠인가»는 알 수 있다.',
+      '     그걸 명사 한 단어로 적어라. 지어내는 게 아니라 «읽어내는» 것이다.',
+      '     예) "앞머리 자르기 전에 이것부터" → 주제: 앞머리 / 상담',
+      '         "펌이 일주일 만에 풀리는 이유" → 주제: 펌 / 관리',
+      '     보조주제가 애매하면 대표주제만 적고 뒤는 비워도 된다.',
       '2. 판단 항목(유형·썸네일유형·수식어유형·오래보기·고객·퍼널·왜터졌나)은 반드시 위 보기 중에서만 골라.',
       '2-1. ★썸네일유형·수식어유형은 «복수»가 정상이야. 무의식 트리거는 겹쳐서 작동해 —',
       '     예: "20년차가 말하는 90%가 모르는 3가지" → 수식어유형: 권위, 숫자, 문제 제시.',
@@ -46174,6 +46409,94 @@
   // ── 홈 렌더 (2026-07-19 확정판: 골대 → 성장기록 4지표 → 초점 → 맵 미니 → 달력+쇼핑) ──
   // 무대·유형 인사이트·접이식 제거 — 성장기록은 정직한 4지표(팔로워·조회·DM·예약)만, 전부 자기비교.
   const ST2_FOCUS_KEY = 'st2-focus', ST2_PLAN_KEY = 'st2-plan';
+  // 🎯 v585 · 이번 달 목표 — 달을 앞뒤로 넘기며 «그때의 기록»을 본다. 미래도 미리 적어둘 수 있다.
+  //   달마다 한 벌: { goal:한 줄, dead:데드라인, todo:해야 할 것, tried:시도한 것 }
+  const ST2_GOAL_KEY = 'st2-goals';
+  const STG_F = [
+    { k: 'dead',  n: '데드라인',    ph: '예) 7월 31일까지 · 8편 업로드', ic: '📅', c: '#F0B24E' },
+    { k: 'todo',  n: '해야 할 것',  ph: '한 줄에 하나씩 적어보세요',      ic: '✅', c: '#7E9B72' },
+    { k: 'tried', n: '시도한 것',   ph: '해본 것 · 결과가 어땠는지',      ic: '🔬', c: '#8FA0C9' }
+  ];
+  let st2Goals = {}, _stgLoaded = false, _stgOff = 0;   // _stgOff = 이번 달 기준 ±개월 (제한 없음)
+  async function st2GoalLoad() {
+    try {
+      const r = await window.storage.get(ST2_GOAL_KEY);
+      if (r) { const v = JSON.parse(r.value !== undefined ? r.value : r); if (v && typeof v === 'object') st2Goals = v; }
+    } catch (e) {}
+    _stgLoaded = true;
+  }
+  async function st2GoalSave() { try { await window.storage.set(ST2_GOAL_KEY, JSON.stringify(st2Goals)); } catch (e) {} }
+  // 애플 × 힉스필드 합의 — 편집 버튼 없이 «그 자리에서» 고치고(애플), 목표 줄 뒤에서 빛이 올라온다(힉스필드)
+  function st2RenderGoal() {
+    const el = document.getElementById('st2-goalbox'); if (!el) return;
+    const t = stgYM(_stgOff), g = st2Goals[t.ym] || {};
+    const when = _stgOff === 0 ? { k: 'now', t: '이번 달' }
+      : _stgOff < 0 ? { k: 'past', t: '지난 기록' } : { k: 'next', t: '미리 적어두기' };
+    const filled = STG_F.filter(function (f) { return (g[f.k] || '').trim(); }).length + ((g.goal || '').trim() ? 1 : 0);
+    el.innerHTML =
+      '<div class="stg" data-when="' + when.k + '">' +
+        '<div class="stg-hd">' +
+          '<button type="button" class="stg-nav" id="stg-prev" aria-label="이전 달">‹</button>' +
+          '<span class="stg-mo">' + t.y + '년 <b>' + t.m + '월</b></span>' +
+          '<button type="button" class="stg-nav" id="stg-next" aria-label="다음 달">›</button>' +
+          '<span class="stg-when">' + when.t + '</span>' +
+          (_stgOff !== 0 ? '<button type="button" class="stg-today" id="stg-today">이번 달로</button>' : '') +
+        '</div>' +
+        '<div class="stg-goal">' +
+          '<span class="stg-k">🎯 목표</span>' +
+          '<div class="stg-in big" contenteditable="true" data-stg="goal" data-ph="' +
+            (_stgOff > 0 ? '그 달엔 뭘 이루고 싶으세요?' : '이번 달, 뭘 이루고 싶으세요?') + '">' + esc(g.goal || '') + '</div>' +
+        '</div>' +
+        '<div class="stg-grid">' +
+          STG_F.map(function (f) {
+            return '<div class="stg-cell" style="--c:' + f.c + '">' +
+              '<span class="stg-k">' + f.ic + ' ' + f.n + '</span>' +
+              '<div class="stg-in" contenteditable="true" data-stg="' + f.k + '" data-ph="' + esc(f.ph) + '">' +
+              esc(g[f.k] || '').replace(/\n/g, '<br>') + '</div></div>';
+          }).join('') +
+        '</div>' +
+        '<div class="stg-foot"><span class="stg-st" id="stg-st">' +
+          (filled ? '' : '적어두면 이 달 내내 여기서 볼 수 있어요') + '</span>' +
+          '<button type="button" class="stg-save" id="stg-save" disabled>저장</button></div>' +
+      '</div>';
+    // ⚠️ 저장은 «항목별 버튼»이 이 앱의 규칙이다 (자동저장 폐기 — v504 확정).
+    //    치는 동안 저장 버튼이 살아나고, 누르는 순간 저장된다.
+    let _dirty = false;
+    const sbtn = document.getElementById('stg-save'), sst = document.getElementById('stg-st');
+    const mark = function () {
+      if (_dirty) return;
+      _dirty = true;
+      if (sbtn) { sbtn.disabled = false; sbtn.classList.add('on'); }
+      if (sst) { sst.textContent = '아직 저장 안 됨'; sst.className = 'stg-st warn'; }
+    };
+    el.querySelectorAll('[data-stg]').forEach(function (b) {
+      b.addEventListener('input', mark);
+      b.addEventListener('keydown', function (e) {
+        if (b.dataset.stg === 'goal' && e.key === 'Enter') { e.preventDefault(); b.blur(); }
+      });
+    });
+    if (sbtn) sbtn.onclick = async function () {
+      const cur = st2Goals[t.ym] || (st2Goals[t.ym] = {});
+      el.querySelectorAll('[data-stg]').forEach(function (b) {
+        cur[b.dataset.stg] = (b.innerText || '').replace(/ /g, ' ').trim();
+      });
+      cur.at = Date.now();
+      await st2GoalSave();
+      _dirty = false;
+      sbtn.disabled = true; sbtn.classList.remove('on');
+      if (sst) { sst.textContent = '저장됐어요 · ' + t.m + '월'; sst.className = 'stg-st ok'; }
+      try { toast('🎯 ' + t.m + '월 목표 저장'); } catch (e) {}
+    };
+    const pv = document.getElementById('stg-prev'), nx = document.getElementById('stg-next'), td = document.getElementById('stg-today');
+    if (pv) pv.onclick = function () { _stgOff--; st2RenderGoal(); };
+    if (nx) nx.onclick = function () { _stgOff++; st2RenderGoal(); };
+    if (td) td.onclick = function () { _stgOff = 0; st2RenderGoal(); };
+  }
+  function stgYM(off) {
+    const d = new Date(); d.setDate(1); d.setMonth(d.getMonth() + (off || 0));
+    return { ym: d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0'),
+             y: d.getFullYear(), m: d.getMonth() + 1 };
+  }
   let st2Focus = { mode: '', ym: '' }, st2Plan = {}, _st2FLoaded = false, _st2PLoaded = false;
   let _st2Per = 'w4', _st2CalOff = 0, _st2EditWk = -1, st2Cart = [];
   function st2Ym(off) { const d = new Date(); d.setDate(1); d.setMonth(d.getMonth() + (off || 0)); return d.getFullYear() + '-' + (d.getMonth() + 1); }
@@ -46605,6 +46928,8 @@
     // ── 3막 · 실행 — 그래서 뭘 할까 (달력 + 쇼핑) ──
     h += '<div class="st2-act st2-rv"><span class="n">02</span><span class="t">실행</span>' +
       '<span class="d">알아본 걸 <b>이번 달 어느 주에</b> 놓을지 정해요. 오른쪽 쇼핑에서 골라 담습니다.</span></div>';
+    // 🎯 v585 · 실행의 «맨 위» = 이번 달 목표. 달을 넘기면 그때의 기록이 나온다(미래도 미리)
+    h += '<div class="st2-rv" id="st2-goalbox"></div>';
     // ✦ #3 이번 주 자동 기획 — 실행의 첫 줄: 뭘 만들지 내 데이터가 먼저 내민다
     h += '<div class="st2-rv" id="st2-week"></div>';
     // 🛍 쇼핑 = 달력 헤더 우측 라임 버튼 → 그 자리에서 팝오버로 두 개의 문 (B안)
@@ -46626,6 +46951,9 @@
       '<div class="st2-endcap st2-rv">곡선은 계속한 사람 뒤에서 옵니다.</div>';
     el.innerHTML = h;
     st2RenderGrowth(); st2RenderFocap(); st2RenderMini(); st2RenderCal(); st2RenderLean();
+    // 🎯 v585 · 저장소에서 한 번만 읽고 그린다 (읽기 전이면 읽은 뒤 다시)
+    if (_stgLoaded) { try { st2RenderGoal(); } catch (e) {} }
+    else { st2GoalLoad().then(function () { try { st2RenderGoal(); } catch (e) {} }); }
     try { st2RenderWeek(); } catch (e) {}
     st2WireHome(goal, done);
   }
