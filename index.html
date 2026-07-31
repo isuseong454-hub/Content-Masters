@@ -18984,8 +18984,19 @@
       .cso-guide .gt{font-size:15px;font-weight:800;text-align:center}.cso-guide .gt .em{color:var(--cso-lime)}
       .cso-guide .gs{font-size:10.5px;color:var(--cso-sub2);text-align:center;margin:4px 0 14px}
       .cso-vers{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
-      .cso-ver{border:1px solid var(--cso-line2);background:#141511;border-radius:13px;padding:11px;cursor:pointer;text-align:center;transition:.15s}
-      .cso-ver.on{border-color:var(--cso-limeln);background:var(--cso-limeft);box-shadow:0 0 0 1px var(--cso-limeln)}
+      .cso-ver{border:1px solid var(--cso-line2);background:#141511;border-radius:13px;padding:11px;cursor:pointer;text-align:center;
+        transition:transform .16s cubic-bezier(.2,1.2,.4,1), border-color .15s, background .15s, box-shadow .15s;
+        -webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
+      .cso-ver:hover{transform:translateY(-2px);border-color:rgba(255,255,255,.24)}
+      .cso-ver:active{transform:scale(.93)}
+      .cso-ver.on{border-color:var(--cso-limeln);background:var(--cso-limeft);box-shadow:0 0 0 1px var(--cso-limeln),0 0 16px rgba(215,243,75,.18)}
+      /* v593 · 누른 맛 — 스프링 팝 (골랐다는 게 손에 남게) */
+      @keyframes csoVerPop{0%{transform:scale(.93)}55%{transform:scale(1.06)}100%{transform:scale(1)}}
+      .cso-ver.pop{animation:csoVerPop .38s cubic-bezier(.2,1.4,.4,1)}
+      /* v593 · 시트가 내려간 직후 무대가 «내가 바꾼 그곳»임을 한 번 짚어준다 */
+      @keyframes csoStageSwap{0%{box-shadow:0 0 0 2px rgba(230,251,98,.7),0 0 44px rgba(215,243,75,.32)}100%{box-shadow:0 0 0 0 rgba(230,251,98,0)}}
+      #cso-stage.swap{animation:csoStageSwap .9s ease-out both;border-radius:18px}
+      @media(prefers-reduced-motion:reduce){.cso-ver.pop,#cso-stage.swap{animation:none}}
       .cso-ver .vi{font-size:24px}
       .cso-ver .vn{font-size:11px;font-weight:800;margin-top:5px}
       .cso-ver .vd{font-size:8.5px;color:var(--cso-sub2);margin-top:2px}
@@ -25136,7 +25147,13 @@
       const list = strongRows.filter(r => (r[typesKey] || []).includes(t)).filter(matchRow);
       const colList = collects.filter(c => c.kind === ckind && ((c.types || []).includes(t) || c.type === t)).filter(matchCol);
       if (!list.length && !colList.length) return;
-      html += '<div class="tb-sec"><div class="tb-sec-head">' + esc(t) + ' <span class="tb-sec-cnt">' + (list.length + colList.length) + '</span><button type="button" class="fb-sec-del" data-t="' + esc(t) + '" title="유형 휴지통으로">🗑</button></div><div class="tg-grid">' + colList.map(collectCard).join('') + list.map(renderCard).join('') + '</div></div>';
+      // v593 · 분류(유형별) 보드와 같은 문법 — 헌법 색이 있는 유형(욕구 충족·문제제시·공감…)은
+      //   윗선 3px + 점 + 색 칩으로 «아, 이런 모음이구나»가 바로 보인다. (색 없는 유형은 중립 그대로 — 색 발명 금지)
+      const secC = FB_TYPE_COLORS[t] || '';
+      const secStyle = secC ? ' style="border:1px solid ' + fbHexA(secC, .22) + ';border-top:3px solid ' + secC + ';border-radius:14px;padding:11px;background:rgba(255,255,255,.015)"' : '';
+      const dot = secC ? '<span class="fb-sec-dot" style="background:' + secC + '"></span>' : '';
+      const cntStyle = secC ? ' style="background:' + secC + ';border-color:' + secC + ';color:#0b0c06"' : '';
+      html += '<div class="tb-sec"' + secStyle + '><div class="tb-sec-head">' + dot + esc(t) + ' <span class="tb-sec-cnt"' + cntStyle + '>' + (list.length + colList.length) + '</span><button type="button" class="fb-sec-del" data-t="' + esc(t) + '" title="유형 휴지통으로">🗑</button></div><div class="tg-grid">' + colList.map(collectCard).join('') + list.map(renderCard).join('') + '</div></div>';
     });
     const noneList = strongRows.filter(r => !((r[typesKey] || []).length)).filter(matchRow);
     const noneCol = collects.filter(c => c.kind === ckind && !((c.types || []).length) && !c.type).filter(matchCol);
@@ -43058,6 +43075,13 @@
   function csCloseFork() { const ov = document.getElementById('cs-fork'); if (ov) ov.classList.remove('show'); document.body.style.overflow = ''; ovFreeze(false); }
   function csOpenRoom() { csCloseFork(); const r = document.getElementById('cs-room'); if (r) { r.classList.add('show'); document.body.style.overflow = 'hidden'; ovFreeze(true); csGoStep(_csStep || 1); try { csoShow(); } catch (e) {} try { csoSyncNext(); } catch (e) {} try { cmrPaint('cs-rail', 'in'); } catch (e) {} } }   // v593 · AI 정리 방 = «넣기» 칸
   function csCloseRoom() { const r = document.getElementById('cs-room'); if (r) r.classList.remove('show'); document.body.style.overflow = ''; ovFreeze(false); }
+  // v593 · 🏛 창고로 나갈 때 아래층에 깔린 방(분류 1600·손질 1620)을 쓸어 닫는다.
+  //   안 닫으면 위층(정리 방 6000)이 걷히는 순간 «내 창고 눌렀는데 분류하기 화면» — 사장님이 잡은 버그.
+  //   열려 있을 때만 닫는다 (prpClose는 저장·렌더까지 하므로 함부로 부르면 낭비)
+  function cmSweepRooms() {
+    try { const s = document.getElementById('slv'); if (s && s.classList.contains('on')) slvClose(); } catch (e) {}
+    try { const p = document.getElementById('prp'); if (p && p.classList.contains('on')) prpClose(); } catch (e) {}
+  }
   window.__openSorter = csOpenRoom; // 외부 진입용
   // 🔍 v412 상태 노출 — 콘솔에서 __cm.dash() 로 확인. IIFE 안이라 원래는 못 봤음.
   //    읽기 전용 스냅샷이 아니라 게터라서 항상 최신값이 나온다.
@@ -43697,17 +43721,26 @@
     el.innerHTML = cmrHtml(here);
     el.querySelectorAll('[data-cmr]').forEach(function (b) {
       // v593 · 누르면 그 공정으로 바로 — 넣기=AI 정리 방 · 분류=정리 라인 · 손질=원고 손질 방
+      // ⚠️ 층수 함정: AI 정리 방(cs-ov z6000) › 손질(#prp 1620) › 분류(#slv 1600).
+      //   지금 있는 방을 «먼저 닫지 않으면» 새 방이 아래에 깔려 아무 일도 안 일어난 것처럼 보인다
+      //   (v569부터 있던 버그 — 사장님이 잡아냄). 그래서 어느 칸이든 «다른 방 전부 닫고 → 연다».
+      const closeOthers = function () {
+        try { prpClose(); } catch (e) {}
+        try { slvClose(); } catch (e) {}
+        try { csCloseRoom(); } catch (e) {}
+        try { csCloseFork(); } catch (e) {}
+      };
       b.onclick = function () {
         const k = b.dataset.cmr;
         if (k === here) return;                       // 이미 그 방이면 무시
-        if (k === 'in') {                             // 넣기 = AI 정리 방 (다른 오버레이는 닫고)
-          try { prpClose(); } catch (e) {}
-          try { slvClose(); } catch (e) {}
-          if (window.__openSorter) window.__openSorter();
-          return;
+        if (k === 'in') { closeOthers(); if (window.__openSorter) window.__openSorter(); return; }
+        if (k === 'sort') { closeOthers(); if (window.__openSortLine) window.__openSortLine(); return; }
+        if (k === 'prep') {
+          // 손질감이 없으면 방을 닫기 전에 알리고 제자리에 (닫고 나서 실패하면 낙동강 오리알)
+          let n = 0; try { n = prpPending().length; } catch (e) {}
+          if (!n) { try { toast('손질할 원고가 없어요 — 원고가 담긴 카드가 대상입니다'); } catch (e) {} return; }
+          closeOthers(); if (window.__openPrep) window.__openPrep();
         }
-        if (k === 'sort') { if (window.__openSortLine) window.__openSortLine(); return; }
-        if (k === 'prep') { if (window.__openPrep) window.__openPrep(); return; }
       };
     });
   }
@@ -44628,7 +44661,20 @@
     var gc = csoQ('cso-gclose'); if (gc) gc.onclick = function(){ csoQ('cso-guide').classList.remove('on'); csoQ('cso-gov').classList.remove('on'); };
     var gov = csoQ('cso-gov'); if (gov) gov.onclick = function(){ csoQ('cso-guide').classList.remove('on'); gov.classList.remove('on'); };
     // 버전 선택
-    document.querySelectorAll('#cso-vers .cso-ver').forEach(function(v){ v.onclick = function(){ csoSetTheme(v.dataset.ver); csToast('무대를 ' + v.querySelector('.vn').textContent + '로 바꿨어요'); }; });
+    // v593 · 무대 버전 — «누른 맛»(스프링 팝) → 시트가 내려가며 바뀐 무대가 바로 보인다.
+    //   (전엔 시트가 화면을 덮고 있어 무대가 바뀌어도 안 보였다 — 사장님 지적)
+    document.querySelectorAll('#cso-vers .cso-ver').forEach(function(v){ v.onclick = function(){
+      csoSetTheme(v.dataset.ver);
+      v.classList.remove('pop'); void v.offsetWidth; v.classList.add('pop');
+      csToast('무대를 ' + v.querySelector('.vn').textContent + '로 바꿨어요');
+      setTimeout(function(){
+        var g = csoQ('cso-guide'), go = csoQ('cso-gov');
+        if (g) g.classList.remove('on'); if (go) go.classList.remove('on');
+        var st = csoQ('cso-stage');
+        if (st){ st.classList.remove('swap'); void st.offsetWidth; st.classList.add('swap');
+          setTimeout(function(){ st.classList.remove('swap'); }, 950); }
+      }, 340);
+    }; });
     // 붓기 시트 — 붙여넣으면 즉시 분해 (버튼 없음)
     // v541 · 시트에서 나가는 길 4개 — ✕ · 배경 · ESC · 아래로 스와이프
     //   배경 클릭만 있으면 «닫는 법이 안 보여서» 막다른 길이 된다 (사장님 제보)
@@ -45597,9 +45643,9 @@
       el.addEventListener('click', () => {
         const go = el.dataset.csGo;
         if (go === 'sorter') csOpenRoom();
-        else if (go === 'prod') { csCloseFork(); try { switchWorkspace('studio'); } catch (e) {} } // v413 제작소 홈으로
+        else if (go === 'prod') { csCloseFork(); cmSweepRooms(); try { switchWorkspace('studio'); } catch (e) {} } // v413 제작소 홈으로
         else if (go === 'qc') qcOpen(); // ⚡ 빠른 담기
-        else csCloseFork(); // ware/skip
+        else { csCloseFork(); cmSweepRooms(); } // ware/skip — v593 · 깔린 분류·손질 방까지 쓸어 닫는다
       });
     });
     // ⚡ 빠른 담기 방 — B안: 타일 = 위저드 시작 (분해만 AI 정리 방으로)
@@ -45621,7 +45667,7 @@
     try { mzArm(); setInterval(mzArm, 4000); } catch (e) {}
     // 정리 방
     const bk = document.getElementById('cs-room-back'); if (bk) bk.onclick = () => { csCloseRoom(); csOpenFork(); };
-    const ww = document.getElementById('cs-room-ware'); if (ww) ww.onclick = () => csCloseRoom();
+    const ww = document.getElementById('cs-room-ware'); if (ww) ww.onclick = () => { csCloseRoom(); cmSweepRooms(); };   // v593 · 깔린 방 쓸기
     const cp = document.getElementById('cs-copy-prompt'); if (cp) cp.onclick = () => csCopyText(csBuildPrompt());
     const vp = document.getElementById('cs-view-prompt'); if (vp) vp.onclick = () => {
       const pre = document.getElementById('cs-prompt-pre'); if (pre) pre.textContent = csBuildPrompt();
