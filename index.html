@@ -6815,7 +6815,7 @@
     position: fixed;
     inset: 0;
     background: rgba(0, 0, 0, 0.75);
-    z-index: 1800;
+    z-index: 6500;   /* v596 · 갈림길(6000) 위에서도 열린다 — 갈림길 우상단 ⚙ */
     backdrop-filter: blur(6px);
     align-items: center;
     justify-content: center;
@@ -12984,6 +12984,48 @@
     background:radial-gradient(60% 70% at 50% 0%,color-mix(in srgb,var(--troom) 32%,transparent),transparent 72%); }
   @media(prefers-reduced-motion:reduce){ body.in-studio::after{ transition:none; } }
 
+  /* ═══ v596 · 도크 네온 각색 (사장님) — 칸마다 제 능력 색, 꺼져 있어도 은은히 물든다 ═══
+     (아래 규칙이 v594 --troom 도크 규칙보다 뒤라 이긴다 · 방 테두리 튜브는 --troom 그대로) */
+  body.in-studio #st2-ws button[data-st2tab="home"]{ --bc:#d7f34b; }
+  body.in-studio #st2-ws button[data-st2tab="3sec"]{ --bc:#43e0e6; }
+  body.in-studio #st2-ws button[data-st2tab="thumbgo"]{ --bc:#E0788C; }
+  body.in-studio #st2-ws button[data-st2tab="emp"]{ --bc:#2FD07B; }
+  body.in-studio #st2-ws button[data-st2tab="scripts"]{ --bc:#b07bf0; }
+  body.in-studio #st2-ws button[data-st2tab="osmu"]{ --bc:#d7f34b; }
+  body.in-studio #st2-ws button{ color:color-mix(in srgb, var(--bc,#6b715c) 44%, #454b42); }
+  body.in-studio #st2-ws button .g{ text-shadow:0 0 8px color-mix(in srgb, var(--bc,#6b715c) 26%, transparent); }
+  body.in-studio #st2-ws button.on{ color:var(--bc,#d7f34b); }
+  body.in-studio #st2-ws button.on .g{ text-shadow:0 0 12px color-mix(in srgb, var(--bc) 70%, transparent); }
+  body.in-studio #st2-ws button.on::before{ background:var(--bc,#d7f34b); }
+  body.in-studio #st2-ws button.on::after{
+    background:radial-gradient(60% 70% at 50% 0%, color-mix(in srgb, var(--bc,#d7f34b) 32%, transparent), transparent 72%); }
+  body.in-studio[data-troom="emp"]{ --troom:#2FD07B; }   /* ♡ 공감 방 테두리 튜브 */
+
+  /* v596 · 트레이닝 홈 다이어트 — 코어·인사이트 지표·맵은 나침반으로 이사, 여기선 접는다 (마크업 보존) */
+  #st2-home.st2-slim > .st2-scene1 .hcore,
+  #st2-home.st2-slim > .st2-scene1 .st2-hint,
+  #st2-home.st2-slim > .st2-scene1 + .st2-act,
+  #st2-home.st2-slim > .st2-sechd,
+  #st2-home.st2-slim > .st2-fuse,
+  #st2-home.st2-slim > .st2-focap{ display:none; }
+
+  /* v596 · ♡ 공감의 방 — 나눔률(공유+저장÷조회) 진열대 */
+  .emp-list{ display:flex; flex-direction:column; gap:8px; }
+  .emp-c{ display:flex; align-items:center; gap:12px; width:100%; text-align:left; padding:12px 13px;
+    border-radius:13px; font-family:inherit; cursor:pointer; color:var(--st2-txt,#e8e9e6);
+    background:rgba(47,208,123,.05); border:1px solid rgba(47,208,123,.18);
+    -webkit-tap-highlight-color:transparent; transition:transform .16s, border-color .2s; }
+  .emp-c:hover{ transform:translateY(-1px); border-color:rgba(47,208,123,.4); }
+  .emp-c:active{ transform:scale(.98); }
+  .emp-c .pct{ flex:none; min-width:58px; font-family:'JetBrains Mono',monospace; font-size:15px; font-weight:800;
+    color:#2FD07B; text-align:center; text-shadow:0 0 10px rgba(47,208,123,.35); }
+  .emp-c .tx{ min-width:0; }
+  .emp-c .tx b{ display:block; font-size:12px; font-weight:800; line-height:1.45; }
+  .emp-c .tx i{ font-style:normal; font-size:10px; color:var(--st2-sub,#9aa39c); }
+  .emp-c .bd{ margin-left:auto; flex:none; font-size:9px; font-weight:800; color:#0a1f12; background:#2FD07B;
+    border-radius:999px; padding:3px 8px; }
+  .emp-c.hit{ border-color:rgba(47,208,123,.45); box-shadow:0 0 16px -6px rgba(47,208,123,.5); }
+
   /* ═══ v595 · 🧭 나침반 (cp) — 밤하늘·별 공기 (사장님 픽) ═══
      트레이닝(v594 라임 튜브)과 같은 공법·반대 체온: 저긴 뜨겁고 빠르게, 여긴 차갑고 느리게(모션 0).
      별을 보고 방향을 잡던 원래 방법 — 별은 위쪽 하늘에만, 아래는 어둠. */
@@ -13059,6 +13101,21 @@
   body.in-compass #cp-ws button.on[data-cptab="trend"]::before{ background:#FF7A45; }
   /* v595g · 발열 보험 — 백그라운드에선 모든 CSS 애니메이션 일시정지 (visibilitychange가 스위치) */
   body.app-sleep *, body.app-sleep *::before, body.app-sleep *::after{ animation-play-state:paused !important; }
+
+  /* ═══ v596 · 더보기·워크스페이스 서랍 소멸 (사장님 확정 · 마크업·배선 보존) ═══
+     방 이동은 갈림길·방 레일·하단 탭이 다 하고, 라이벌·알고리즘·진단은 나침반 안에 문이 있다.
+     서랍은 시트 필터·정렬 전용으로만 남는다(시트 상단 버거로 열림). 설정은 갈림길 우상단 ⚙. */
+  #bn-more{ display:none !important; }
+  #ws-home, #ws-sheet, #ws-customer, #ws-sorter, #ws-compass,
+  #ws-northstar, #ws-diagnose, #ws-engine{ display:none !important; }
+  #sh-sidebar .sh-sb-section:first-of-type > .sh-sb-section-title{ display:none; }
+  /* 갈림길 우상단 ⚙ — 작게, 조용히 (설정=내보내기·백업 문) */
+  .cs-set{ position:absolute; top:calc(12px + env(safe-area-inset-top)); right:14px; z-index:8;
+    width:38px; height:38px; border-radius:50%; font-size:17px; line-height:1; cursor:pointer;
+    background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.13); color:#8a968e;
+    -webkit-tap-highlight-color:transparent; transition:color .18s, border-color .18s, transform .16s; }
+  .cs-set:hover{ color:#e6fb62; border-color:rgba(215,243,75,.4); }
+  .cs-set:active{ transform:scale(.92); }
   /* 바늘 카드 — «나는 ___에게 ___라고 말하는 사람이다» */
   .cp-needle{ border-radius:18px; padding:20px 16px; text-align:center; margin-top:12px;
     background:radial-gradient(90% 120% at 50% 0%, rgba(167,139,250,.13), rgba(167,139,250,.02));
@@ -18741,6 +18798,8 @@
 <!-- ============ 🤖 AI 컨텐츠 정리 — 갈림길 (로그인 후) ============ -->
 <div class="cs-ov" id="cs-fork">
   <div class="cs-air">
+    <!-- v596 · 설정 문 = 갈림길 우상단 ⚙ 하나 (더보기·서랍 소멸 — 내보내기·백업·약관·로그아웃은 이 안) -->
+    <button class="cs-set" id="cs-set" title="설정" aria-label="설정">⚙</button>
     <div class="cs-wrap">
       <!-- v570 · 갈림길 = 현황판 (Vaulta 구조 문법 × 우리 색 헌법). 인사말 절반 → 내 숫자 -->
       <div class="cs-greet fork-dash">
@@ -20490,6 +20549,10 @@
               <p class="settings-section-desc">동의하신 약관 전문을 언제든 다시 볼 수 있어요.</p>
               <div class="settings-actions">
                 <button class="settings-btn" id="settings-terms-btn"><span>📜</span> 이용약관 전문 보기</button>
+                <!-- v596 · 서랍 소멸로 로그아웃·휴지통·운영자 문이 설정 안으로 이사 -->
+                <button class="settings-btn" id="settings-trash-btn"><span>🗑</span> 유형 휴지통</button>
+                <button class="settings-btn" id="settings-admin-btn" style="display:none;"><span>🔥</span> 운영자 채널</button>
+                <button class="settings-btn" id="settings-logout-btn"><span>⏻</span> 로그아웃</button>
               </div>
             </div>
           </div>
@@ -22475,20 +22538,36 @@
     <div id="cp-view" style="display:none;">
       <div class="cp-wrap">
         <div class="cp-sign"><s>COMPASS</s><b>나침반</b><i>누구에게 · 무슨 말을 하는가</i></div>
-        <div id="cp-me"></div>
-        <div id="cp-insight" style="display:none;">
+        <div id="cp-me" style="display:none;"></div>
+        <!-- v596 · 나침반 홈(사장님 확정) = 알고리즘 코어 + 지표 + 3차원 맵 + 인사이트 합침
+             («알고리즘을 통해 어떻게 진행되고 있는지» — 트레이닝 옛 홈에서 통째로 이사) -->
+        <div id="cp-insight">
+          <div id="cp-corebox"></div>
+          <div class="st2-fuse">
+            <div id="st2-growth"></div>
+            <div class="st2-mapmini" id="st2-mapmini"><span class="mv"></span>
+              <span><div class="m1" id="st2-mapm1"></div><div class="m2">탭해서 크게 — 3차원이 바로 열려요</div></span><span class="go">›</span></div>
+          </div>
           <button class="cp-engine" id="cp-engine"><span>◎</span> 내 컨텐츠 알고리즘 — 이 판은 뭘 밀어주는가 <span style="margin-left:auto">→</span></button>
           <div id="st2-insight-host"></div>
         </div>
-        <div id="st2-cus" style="display:none;"></div><!-- v595 · 트레이닝 룸에서 이사 (JS 렌더 st2RenderCus) -->
+        <div id="st2-cus" style="display:none;"></div><!-- (v596 · 고객은 ◉ 고객 분석 방으로 문 연결 — 이 pane은 마크업 보존) -->
         <div id="st2-trend" style="display:none;"></div><!-- v595 · 트레이닝 룸에서 이사 (JS 렌더 st2RenderTrend) -->
       </div>
+      <!-- v596 · 도크: 홈(알고리즘·인사이트)이 첫 칸 · 고객 = ◉ 고객 분석 방(통·축구공·저항 벽)으로 가는 문 -->
       <div class="cp-ws" id="cp-ws">
-        <button class="on" data-cptab="me"><span class="g">⌖</span><span class="t">나</span></button>
-        <button data-cptab="insight"><span class="g">◎</span><span class="t">인사이트</span></button>
+        <button class="on" data-cptab="insight"><span class="g">◎</span><span class="t">홈</span></button>
+        <button data-cptab="me"><span class="g">⌖</span><span class="t">나</span></button>
         <button data-cptab="cus"><span class="g">◉</span><span class="t">고객</span></button>
         <button data-cptab="trend"><span class="g">↗</span><span class="t">트렌드</span></button>
       </div>
+    </div>
+    <!-- v596 · 맵 풀스크린(fixed·z5650)을 st2-view 밖으로 — 나침반 홈에서도 열려야 한다 (몸통 그대로 이동) -->
+    <div class="st2-mapov" id="st2-mapov">
+      <div class="hd"><span class="t">맵</span>
+        <span class="st2-mtg" id="st2-mtg"><button class="on" data-st2m="m2">스윗스팟</button><button data-st2m="m3">3차원</button></span>
+        <button class="x" id="st2-mapx">×</button></div>
+      <div class="bd"><div id="st2-map-m3"></div><div id="st2-map-m2" style="display:none"></div></div>
     </div>
     <!-- ═══════════════ 🎬 제작소 v2 (st2) — 홈+고객 셸 (내용은 JS 렌더) ═══════════════ -->
     <div id="st2-view" style="display:none;">
@@ -22503,27 +22582,24 @@
              트렌드는 💚맥락 안 세그로 이사(방 자체는 그대로) · 구성=원고 문 · 썸네일=창고 썸네일 문 -->
         <!-- v595 · 도크 6칸 → 4칸 (사장님 확정) — 인사이트·맥락은 🧭 나침반으로 이사.
              버튼은 숨김만(마크업·배선 보존) · st2SetTab('home')은 이제 로비(st2RenderLobby)를 연다 -->
+        <!-- v596 · 도크 확정(사장님): [홈|초반 3초|썸네일|공감|원고|배포] — 칸마다 제 능력 색 네온 -->
         <div class="st2-ws" id="st2-ws">
-          <button data-st2tab="home" style="display:none"><span class="g">◎</span><span class="t">인사이트</span></button>
-          <button data-st2tab="3sec"><span class="g">◔</span><span class="t">3초</span></button>
-          <button data-st2tab="scripts"><span class="g">✎</span><span class="t">구성</span></button>
+          <button class="on" data-st2tab="home"><span class="g">⌂</span><span class="t">홈</span></button>
+          <button data-st2tab="3sec"><span class="g">◔</span><span class="t">초반 3초</span></button>
           <button data-st2tab="thumbgo"><span class="g">▣</span><span class="t">썸네일</span></button>
+          <button data-st2tab="emp"><span class="g">♡</span><span class="t">공감</span></button>
+          <button data-st2tab="scripts"><span class="g">✎</span><span class="t">원고</span></button>
           <button data-st2tab="cus" style="display:none"><span class="g">◉</span><span class="t">맥락</span></button>
           <button data-st2tab="osmu"><span class="g">⬡</span><span class="t">배포</span></button>
         </div>
         <div id="st2-home"></div>
         <div id="st2-3sec" style="display:none;"></div><!-- v593 · 👁 초반 3초 실 (JS 렌더 st2Render3sec) -->
+        <div id="st2-emp" style="display:none;"></div><!-- v596 · ♡ 공감의 방 (JS 렌더 st2RenderEmp) -->
         <!-- (v595 · #st2-cus·#st2-trend는 🧭 나침반(cp-view)으로 이사 — 몸통 그대로) -->
         <div id="st2-osmu" style="display:none;"></div>
       </div>
       <div class="st2-sheet" id="st2-sheet"><div class="bx" id="st2-sheet-bx"></div></div>
-      <!-- 맵 풀스크린 오버레이 -->
-      <div class="st2-mapov" id="st2-mapov">
-        <div class="hd"><span class="t">맵</span>
-          <span class="st2-mtg" id="st2-mtg"><button class="on" data-st2m="m2">스윗스팟</button><button data-st2m="m3">3차원</button></span>
-          <button class="x" id="st2-mapx">×</button></div>
-        <div class="bd"><div id="st2-map-m3"></div><div id="st2-map-m2" style="display:none"></div></div>
-      </div>
+      <!-- (v596 · 맵 풀스크린 오버레이는 cp-view 뒤 최상위로 이사 — 나침반에서도 열려야 해서) -->
       <!-- 🛍 쇼핑 풀스크린 -->
       <div class="st2-shop" id="st2-shop">
         <div class="top"><button class="backb" id="st2-shopback">← 홈</button>
@@ -40031,6 +40107,11 @@
   // ============================================================
   function openSettingsModal() {
     document.getElementById('settings-modal').classList.add('show');
+    // v596 · 운영자 채널 문 — 마스터일 때만 보인다 (서랍의 ws-admin 표시 상태를 그대로 따름)
+    try {
+      const a = document.getElementById('ws-admin'), sa = document.getElementById('settings-admin-btn');
+      if (sa) sa.style.display = (a && a.style.display !== 'none') ? '' : 'none';
+    } catch (e) {}
     renderSettingsStats();
     try { renderBackupStatus(); } catch (e) {}
     try { renderUsage(); } catch (e) {}          // 📷 v587 · 쓴 만큼
@@ -40416,6 +40497,13 @@
     if (wsSettings) wsSettings.onclick = openSettingsModal;
     const wsTrash = document.getElementById('ws-trash');
     if (wsTrash) wsTrash.onclick = openTrashModal;
+    // v596 · 서랍 소멸 — 설정 안의 새 문 3개 (휴지통·운영자·로그아웃)
+    { const b = document.getElementById('settings-trash-btn');
+      if (b) b.onclick = function () { closeSettingsModal(); openTrashModal(); }; }
+    { const b = document.getElementById('settings-logout-btn');
+      if (b) b.onclick = function () { closeSettingsModal(); try { if (window.__logout) window.__logout(); } catch (e) {} }; }
+    { const b = document.getElementById('settings-admin-btn');
+      if (b) b.onclick = function () { closeSettingsModal(); try { const a = document.getElementById('ws-admin'); if (a) a.click(); } catch (e) {} }; }
 
     const close = document.getElementById('settings-modal-close');
     if (close) close.onclick = closeSettingsModal;
@@ -46124,6 +46212,9 @@
 
   // ---- 배선 (1회) ----
   (function csWire() {
+    // v596 · 갈림길 우상단 ⚙ = 설정 모달 (갈림길 위에서 바로 열림 — z 6500)
+    { const cst = document.getElementById('cs-set');
+      if (cst) cst.onclick = function () { try { openSettingsModal(); } catch (e) {} }; }
     // 갈림길 칩
     document.querySelectorAll('[data-cs-go]').forEach(el => {
       el.addEventListener('click', () => {
@@ -47961,6 +48052,9 @@
       '<div class="st2-rv" id="st2-calbox"></div>' +
       '<div class="st2-endcap st2-rv">곡선은 계속한 사람 뒤에서 옵니다.</div>';
     el.innerHTML = h;
+    // v596 · 홈 다이어트(사장님 확정) — 홈 = 전술보드+올린횟수 그래프+월간 계획+목표.
+    //   코어·지표·맵은 🧭 나침반 홈으로 이사(cpRenderInsight) — 여기선 CSS(.st2-slim)로 접는다 (마크업·로직 보존)
+    el.classList.add('st2-slim');
     st2RenderGrowth(); st2RenderFocap(); st2RenderMini(); st2RenderCal(); st2RenderLean();
     // 🎯 v585 · 저장소에서 한 번만 읽고 그린다 (읽기 전이면 읽은 뒤 다시)
     if (_stgLoaded) { try { st2RenderGoal(); } catch (e) {} }
@@ -50279,11 +50373,13 @@
     document.getElementById('st2-home').style.display = (tab === 'home') ? 'block' : 'none';
     document.getElementById('st2-cus').style.display = (tab === 'cus') ? 'block' : 'none';
     const s3El = document.getElementById('st2-3sec'); if (s3El) s3El.style.display = (tab === '3sec') ? 'block' : 'none';
+    const empEl = document.getElementById('st2-emp'); if (empEl) empEl.style.display = (tab === 'emp') ? 'block' : 'none';   // v596 · ♡ 공감
     const osmuEl = document.getElementById('st2-osmu'); if (osmuEl) osmuEl.style.display = (tab === 'osmu') ? 'block' : 'none';
     const trdEl = document.getElementById('st2-trend'); if (trdEl) trdEl.style.display = (tab === 'trend') ? 'block' : 'none';
     window.scrollTo({ top: 0 });
     if (tab === 'cus') st2RenderCus();
     if (tab === '3sec') { try { st2Render3sec(); } catch (e) { console.error('[3sec] render 실패:', e); } }
+    if (tab === 'emp') { try { st2RenderEmp(); } catch (e) { console.error('[emp] render 실패:', e); } }   // v596
     if (tab === 'osmu') st2RenderOsmu();
     if (tab === 'trend') { try { st2RenderTrend(); } catch (e) { console.error('[trend] render 실패:', e); } }
   }
@@ -50291,7 +50387,7 @@
   //   새로 만든 건 «바늘»(cm-needle) 하나뿐. 나머지는 전부 있던 몸통에 문만 이사:
   //   인사이트=renderInsightPanel(#st2-insight-host 고리) · 고객=st2RenderCus · 트렌드=st2RenderTrend · 라이벌=northstar 방
   const NEEDLE_KEY = 'cm-needle';
-  let needle = { to: '', msg: '' }, _needleLoaded = false, _cpInited = false, _cpTab = 'me';
+  let needle = { to: '', msg: '' }, _needleLoaded = false, _cpInited = false, _cpTab = 'insight';   // v596 · 홈(알고리즘+인사이트)이 첫 화면
   async function needleLoad() {
     try {
       const r = await window.storage.get(NEEDLE_KEY);
@@ -50325,17 +50421,66 @@
     if (rv) rv.onclick = function () { window.__rrFrom = 'compass'; try { switchWorkspace('northstar'); } catch (e) {} };
   }
   function cpSetTab(tab) {
+    // v596 · 고객 = ◉ 고객 분석 방(4바구니 통·축구공 전환·저항 벽 — 사장님이 정한 그 메뉴들)으로 가는 문
+    if (tab === 'cus') { window.__rrFrom = 'compass'; try { switchWorkspace('customer'); } catch (e) {} return; }
     _cpTab = tab;
     document.querySelectorAll('#cp-ws button').forEach(b => b.classList.toggle('on', b.dataset.cptab === tab));
     const me = document.getElementById('cp-me'); if (me) me.style.display = (tab === 'me') ? 'block' : 'none';
     const ih = document.getElementById('cp-insight'); if (ih) ih.style.display = (tab === 'insight') ? 'block' : 'none';
-    const cu = document.getElementById('st2-cus'); if (cu) cu.style.display = (tab === 'cus') ? 'block' : 'none';
     const tr = document.getElementById('st2-trend'); if (tr) tr.style.display = (tab === 'trend') ? 'block' : 'none';
     window.scrollTo({ top: 0 });
     if (tab === 'me') cpRenderMe();
-    if (tab === 'insight') { try { renderInsightPanel(); } catch (e) { console.error('[cp] insight', e); } }
-    if (tab === 'cus') { try { st2RenderCus(); } catch (e) { console.error('[cp] cus', e); } }
+    if (tab === 'insight') { try { cpRenderInsight(); } catch (e) { console.error('[cp] insight', e); } }
     if (tab === 'trend') { try { st2RenderTrend(); } catch (e) { console.error('[cp] trend', e); } }
+  }
+  // v596 · 나침반 홈 — 알고리즘 코어(LV·학습 수) + 지표 + 3차원 맵 + 인사이트 (트레이닝 옛 홈에서 이사)
+  function cpRenderInsight() {
+    const cb = document.getElementById('cp-corebox');
+    if (cb) {
+      const HS = egStats();
+      cb.innerHTML = '<div class="hcore" style="--hk:' + HS.col + '">' +
+        '<canvas class="hcore-cv" id="hcore-cv"></canvas>' +
+        '<div class="hcore-lv" id="hcore-lv">' +
+          '<span class="hcore-b"><span class="l">LV</span><span class="v">' + HS.lv + '</span></span>' +
+          '<span class="hcore-trk"><i style="width:' + (HS.prog * 100).toFixed(1) + '%"></i>' +
+            '<b class="hcore-hd" style="left:' + (HS.prog * 100).toFixed(1) + '%"></b></span>' +
+          '<span class="hcore-rest">' + (HS.next ? (HS.rest.toLocaleString() + '개') : '끝') + '</span>' +
+        '</div>' +
+        '<button class="hcore-l" id="cp-hcore-l">컨텐츠 알고리즘 · <b class="cyn">' + HS.saved.toLocaleString() + '개</b> 학습 중 — 어떻게 진행되나 <span class="cv">›</span></button>' +
+      '</div>';
+      const l = document.getElementById('cp-hcore-l');
+      if (l) l.onclick = function () { try { if (window.__openEngine) window.__openEngine(); } catch (e) {} };
+      try { hcoreDraw(); } catch (e) {}
+    }
+    try { st2RenderGrowth(); } catch (e) {}
+    try { st2RenderMini(); } catch (e) {}
+    // 맵 미니 → 풀맵. 사장님: «바로 3차원도 보여주고» — 나침반에선 3차원이 기본으로 열린다
+    const mini = document.getElementById('st2-mapmini');
+    if (mini) mini.onclick = function () {
+      const ov = document.getElementById('st2-mapov'); if (!ov) return;
+      ov.classList.add('show');
+      try {
+        const m3 = document.getElementById('st2-map-m3'), m2 = document.getElementById('st2-map-m2');
+        if (m3) m3.style.display = 'block';
+        if (m2) m2.style.display = 'none';
+        st2RenderMap3();
+        document.querySelectorAll('#st2-mtg button').forEach(x => x.classList.toggle('on', x.dataset.st2m === 'm3'));
+        document.querySelectorAll('#st2-mapov .st2-rv, #st2-mapov .st2-m3, #st2-mapov .st2-m2').forEach(x => x.classList.add('on'));
+      } catch (e) {}
+    };
+    // 맵 오버레이의 닫기·토글 — 트레이닝을 안 거쳐도 살아 있게 (같은 배선을 여기서도 건다)
+    { const mapx = document.getElementById('st2-mapx');
+      if (mapx) mapx.onclick = function () { document.getElementById('st2-mapov').classList.remove('show'); }; }
+    document.querySelectorAll('#st2-mtg button').forEach(function (b) {
+      b.onclick = function () {
+        document.querySelectorAll('#st2-mtg button').forEach(x => x.classList.remove('on')); b.classList.add('on');
+        const m3 = document.getElementById('st2-map-m3'), m2 = document.getElementById('st2-map-m2');
+        if (b.dataset.st2m === 'm3') { m3.style.display = 'block'; m2.style.display = 'none'; st2RenderMap3(); }
+        else { m3.style.display = 'none'; m2.style.display = 'block'; st2RenderMap2(); }
+        document.querySelectorAll('#st2-mapov .st2-m3, #st2-mapov .st2-m2').forEach(x => x.classList.add('on'));
+      };
+    });
+    try { renderInsightPanel(); } catch (e) { console.error('[cp] insight panel', e); }
   }
   function renderCompass() {
     if (!_cpInited) {
@@ -50344,10 +50489,11 @@
       const eg = document.getElementById('cp-engine');
       if (eg) eg.onclick = function () { try { if (window.__openEngine) window.__openEngine(); } catch (e) {} };
     }
-    // 고객 탭 재료(황금 키워드 등)는 트레이닝을 안 거쳐도 준비되게 — renderStudio2와 같은 로더를 같은 가드로
-    try { if (!_st2KwLoaded) st2KwLoad().then(function () { if (_cpTab === 'cus') try { st2RenderCus(); } catch (e) {} }); } catch (e) {}
+    // 홈(코어·지표·초점) 재료는 트레이닝을 안 거쳐도 준비되게 — renderStudio2와 같은 로더를 같은 가드로
+    try { if (!_st2KwLoaded) st2KwLoad().catch(function () {}); } catch (e) {}
+    try { if (!_st2FLoaded) st2FocusLoad().then(function () { if (_cpTab === 'insight') try { cpRenderInsight(); } catch (e) {} }); } catch (e) {}
     if (!_needleLoaded) needleLoad().then(function () { if (_cpTab === 'me') cpRenderMe(); });
-    cpSetTab(_cpTab || 'me');
+    cpSetTab(_cpTab || 'insight');
   }
 
   // v595 · 🏋️ 트레이닝 로비 — 사장님 확정: 전술 보드(위 tgym) + 4문 안내. 분석·기록은 🧭 나침반으로.
@@ -50384,6 +50530,39 @@
     };
   }
 
+  // ═══════════ ♡ v596 · 공감의 방 — 저장·보내기(나눔) 훈련 ═══════════
+  //   재료는 전부 있던 것: v470 나눔(r.shares + r.saves) · 목표 = 전술 보드의 emp(조회수의 N%)
+  function st2RenderEmp() {
+    const el = document.getElementById('st2-emp'); if (!el) return;
+    const cand = (rows || []).filter(isFilled).filter(r => ((r.shares || 0) + (r.saves || 0)) > 0);
+    cand.sort(function (a, b) {
+      const ra = ((a.shares || 0) + (a.saves || 0)) / Math.max(1, a.views || 0);
+      const rb = ((b.shares || 0) + (b.saves || 0)) / Math.max(1, b.views || 0);
+      return rb - ra;
+    });
+    let h = '<div class="s3-hd"><div class="t">저장·보내기를 <em style="color:#2FD07B;text-shadow:0 0 12px rgba(47,208,123,.4)">부르는</em> 컨텐츠</div>' +
+      '<div class="g" style="color:#2FD07B;border-color:rgba(47,208,123,.35);background:rgba(47,208,123,.06)">목표 — 조회수의 <b>' + tGoals.emp + '%</b> <s>저장+보내기 · 전술 보드에서 ✎</s></div></div>';
+    h += '<div class="s3-k">나눔률 진열대 <i>(공유+저장) ÷ 조회수 — 높은 순</i></div>';
+    if (!cand.length) {
+      h += '<div class="s3-empty">아직 <b style="color:#2FD07B">나눔(공유·저장)</b> 숫자가 적힌 카드가 없어요.<br>' +
+        '판독지에서 공유·저장 수를 넣으면 여기 진열됩니다 — 나눠지는 컨텐츠가 100만의 첫 조건이에요.</div>';
+    } else {
+      h += '<div class="emp-list">' + cand.slice(0, 12).map(function (r) {
+        const nr = (r.views > 0) ? (((r.shares || 0) + (r.saves || 0)) / r.views * 100) : 0;
+        const hit = (r.views > 0) && nr >= tGoals.emp;
+        return '<button type="button" class="emp-c' + (hit ? ' hit' : '') + '" data-empr="' + r.id + '">' +
+          '<span class="pct">' + (r.views > 0 ? (nr >= 10 ? Math.round(nr) : nr.toFixed(1)) + '%' : '—') + '</span>' +
+          '<span class="tx"><b>' + esc(String(r.hook || r.intro || '제목 없음').slice(0, 44)) + '</b>' +
+          '<i>▶ ' + fmtNum(r.views || 0) + ' · 공유 ' + fmtNum(r.shares || 0) + ' · 저장 ' + fmtNum(r.saves || 0) + '</i></span>' +
+          (hit ? '<span class="bd">목표 달성</span>' : '') + '</button>';
+      }).join('') + '</div>';
+    }
+    el.innerHTML = '<div class="s3">' + h + '</div>';
+    el.querySelectorAll('[data-empr]').forEach(function (b) {
+      b.onclick = function () { try { openDetail(b.dataset.empr); } catch (e) {} };
+    });
+  }
+
   function renderStudio2() {
     if (!_st2Inited) {
       _st2Inited = true;
@@ -50403,14 +50582,14 @@
       ]).then(() => {
         const v = document.getElementById('st2-view');
         if (v && v.style.display !== 'none') {
-          st2RenderLobby();   // v595 · 홈 → 로비
+          st2RenderHome();   // v596 · 홈 복원(사장님) — 전술보드+올린횟수 그래프+월간 계획+목표 (코어·지표·맵은 나침반으로)
           if (_st2Tab === 'osmu') st2RenderOsmu();
         }
       });
     }
-    // v595 · 고객·트렌드는 나침반 소속 — 옛 탭 상태로 돌아오면 로비로
+    // v595 · 고객·트렌드는 나침반 소속 — 옛 탭 상태로 돌아오면 홈으로
     if (_st2Tab === 'cus' || _st2Tab === 'trend') _st2Tab = 'home';
-    st2RenderLobby();
+    st2RenderHome();
     st2SetTab(_st2Tab === 'cus' ? 'cus' : 'home');
   }
 
