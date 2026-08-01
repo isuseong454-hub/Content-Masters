@@ -12984,6 +12984,124 @@
     background:radial-gradient(60% 70% at 50% 0%,color-mix(in srgb,var(--troom) 32%,transparent),transparent 72%); }
   @media(prefers-reduced-motion:reduce){ body.in-studio::after{ transition:none; } }
 
+  /* ═══ v595 · 🧭 나침반 (cp) — 밤하늘·별 공기 (사장님 픽) ═══
+     트레이닝(v594 라임 튜브)과 같은 공법·반대 체온: 저긴 뜨겁고 빠르게, 여긴 차갑고 느리게(모션 0).
+     별을 보고 방향을 잡던 원래 방법 — 별은 위쪽 하늘에만, 아래는 어둠. */
+  /* v595b · 사장님 지시: 나침반 = 보라 (그림의 보라 나침반과 한 혈통) */
+  #cp-view{ min-height:100vh;
+    background:radial-gradient(120% 70% at 50% -8%, #191330, #0e0a1e 55%, #070610 100%); }
+  .cp-wrap{ max-width:560px; margin:0 auto; padding:14px 16px 90px; color:#E8EDE9; }
+  .cp-sign{ text-align:center; padding:12px 0 4px; }
+  .cp-sign s{ display:block; text-decoration:none; font-family:'JetBrains Mono',monospace; font-size:8.5px;
+    letter-spacing:.5em; color:rgba(190,170,240,.55); }
+  .cp-sign b{ font-size:20px; font-weight:900; letter-spacing:.05em; color:#EDE6FF;
+    text-shadow:0 0 18px rgba(167,139,250,.5),0 0 44px rgba(140,100,240,.2); }
+  .cp-sign i{ display:block; font-style:normal; font-size:9.5px; color:#8d82b8; font-weight:700; margin-top:2px; }
+  /* 별 + 은빛 테두리 — 트레이닝 튜브와 같은 fixed 오버레이 한 장 (z:55 · 방 오버레이엔 안 걸림) */
+  body.in-compass::after{
+    content:''; position:fixed; inset:0; z-index:55; pointer-events:none;
+    background:
+      radial-gradient(1.2px 1.2px at 14% 9%, rgba(255,255,255,.8), transparent),
+      radial-gradient(1px 1px at 68% 5%, rgba(255,255,255,.55), transparent),
+      radial-gradient(1.3px 1.3px at 87% 16%, rgba(255,255,255,.7), transparent),
+      radial-gradient(1px 1px at 32% 20%, rgba(255,255,255,.4), transparent),
+      radial-gradient(1px 1px at 52% 12%, rgba(255,255,255,.5), transparent),
+      radial-gradient(1.1px 1.1px at 8% 26%, rgba(255,255,255,.45), transparent),
+      radial-gradient(1px 1px at 78% 30%, rgba(255,255,255,.35), transparent);
+    box-shadow:
+      inset 0 0 0 1px rgba(167,139,250,.2),
+      inset 0 0 44px -14px rgba(140,100,240,.55); }
+  body.in-compass .bottom-nav{ display:none !important; }
+  body.in-compass{ --cp-dock:calc(62px + env(safe-area-inset-bottom)); }
+  body.in-compass .cp-wrap{ padding-bottom:calc(var(--cp-dock) + 28px); }
+  /* 나침반 안에선 고객 폼의 (고객|트렌드) 세그 숨김 — 도크가 그 역할을 대신한다 */
+  body.in-compass .cus2-ctx{ display:none; }
+  /* 도크 — 트레이닝 유리 도크(v558)와 같은 문법, 불빛만 은빛 */
+  #cp-ws{ display:none; }
+  body.in-compass #cp-ws{
+    display:flex; gap:0; position:fixed; left:0; right:0; bottom:0; z-index:60;
+    justify-content:center; box-sizing:border-box;
+    padding:11px 6px calc(11px + env(safe-area-inset-bottom));
+    background:linear-gradient(180deg,rgba(12,9,22,.62),rgba(12,9,22,.96));
+    backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
+    border-top:1px solid rgba(167,139,250,.14); }
+  @supports not (backdrop-filter: blur(1px)){ body.in-compass #cp-ws{ background:rgba(12,9,22,.97); } }
+  body.in-compass #cp-ws button{ position:relative; flex:1 1 0; max-width:96px; display:flex; flex-direction:column;
+    align-items:center; gap:4px; padding:3px 0 0; font-family:inherit; font-size:8.5px; font-weight:800;
+    letter-spacing:.01em; color:#66707e; background:none; border:none; white-space:nowrap; cursor:pointer;
+    transition:color .2s ease; -webkit-tap-highlight-color:transparent; }
+  body.in-compass #cp-ws button .g{ font-size:16px; line-height:1; }
+  body.in-compass #cp-ws button::before{ content:''; position:absolute; left:50%; top:-11px; width:26px; height:2px;
+    margin-left:-13px; border-radius:0 0 4px 4px; background:#A78BFA; opacity:0; transform:scaleX(.3);
+    transition:opacity .26s ease, transform .3s cubic-bezier(.2,1.2,.3,1); }
+  body.in-compass #cp-ws button::after{ content:''; position:absolute; left:50%; top:-11px; width:52px; height:46px;
+    margin-left:-26px; background:radial-gradient(60% 70% at 50% 0%,rgba(167,139,250,.3),transparent 72%);
+    opacity:0; transition:opacity .3s ease; pointer-events:none; }
+  body.in-compass #cp-ws button.on{ color:#C9B8FF; }
+  body.in-compass #cp-ws button.on::before{ opacity:1; transform:scaleX(1); }
+  body.in-compass #cp-ws button.on::after{ opacity:1; }
+  /* 고객·트렌드는 켜졌을 때 그 방 색 — 색의 헌법(초록=공감·오렌지=트렌드) */
+  body.in-compass #cp-ws button.on[data-cptab="cus"]{ color:#2FD07B; }
+  body.in-compass #cp-ws button.on[data-cptab="cus"]::before{ background:#2FD07B; }
+  body.in-compass #cp-ws button.on[data-cptab="trend"]{ color:#FF7A45; }
+  body.in-compass #cp-ws button.on[data-cptab="trend"]::before{ background:#FF7A45; }
+  /* 바늘 카드 — «나는 ___에게 ___라고 말하는 사람이다» */
+  .cp-needle{ border-radius:18px; padding:20px 16px; text-align:center; margin-top:12px;
+    background:radial-gradient(90% 120% at 50% 0%, rgba(167,139,250,.13), rgba(167,139,250,.02));
+    border:1px solid rgba(167,139,250,.3); box-shadow:inset 0 1px 0 rgba(255,255,255,.14); }
+  .cp-needle .k{ font-family:'JetBrains Mono',monospace; font-size:8.5px; letter-spacing:.26em; color:#9b8fc4; }
+  .cp-needle .line{ font-size:16px; font-weight:800; line-height:2; margin-top:12px; color:#F3EFFC; word-break:keep-all; }
+  .cp-needle input{ font-family:inherit; font-size:16px; font-weight:800; color:#fff; background:none; border:none;
+    border-bottom:2px solid rgba(167,139,250,.45); outline:none; text-align:center; padding:2px 4px; max-width:100%; }
+  .cp-needle input:focus{ border-bottom-color:#C9B8FF; }
+  .cp-needle input.to{ width:11em; } .cp-needle input.msg{ width:min(320px,80vw); }
+  .cp-needle .hint{ font-size:10px; color:#8d82b8; margin-top:12px; }
+  .cp-save{ margin-top:14px; font-family:inherit; font-size:12.5px; font-weight:800; padding:11px 26px;
+    border-radius:12px; border:none; cursor:pointer; color:#150b2e;
+    background:linear-gradient(96deg,#c9b8ff,#9b6cff); box-shadow:0 8px 24px -10px rgba(155,108,255,.55);
+    -webkit-tap-highlight-color:transparent; }
+  .cp-save:active{ transform:scale(.96); }
+  .cp-k{ font-family:'JetBrains Mono',monospace; font-size:9.5px; letter-spacing:.16em; color:#8579ad; margin:22px 2px 4px; }
+  .cp-card{ display:flex; align-items:center; gap:12px; width:100%; text-align:left; margin-top:10px; padding:14px 15px;
+    border-radius:15px; cursor:pointer; font-family:inherit;
+    background:rgba(16,12,28,.6); border:1px solid rgba(167,139,250,.18); color:#EFEAF8;
+    transition:transform .18s ease, border-color .2s; -webkit-tap-highlight-color:transparent; }
+  .cp-card:hover{ transform:translateY(-2px); border-color:rgba(167,139,250,.45); }
+  .cp-card:active{ transform:scale(.97); }
+  .cp-card .ic{ flex:none; font-size:18px; }
+  .cp-card .tt{ font-size:13px; font-weight:800; }
+  .cp-card .dd{ font-size:10.5px; color:#8d82b8; margin-top:2px; }
+  .cp-card .ar{ margin-left:auto; color:#9b8fc4; }
+  .cp-engine{ display:flex; align-items:center; gap:10px; width:100%; margin:12px 0; padding:13px 15px;
+    border-radius:14px; font-family:inherit; font-size:12.5px; font-weight:800; text-align:left; cursor:pointer;
+    background:rgba(16,12,28,.6); border:1px solid rgba(167,139,250,.18); color:#EFEAF8;
+    -webkit-tap-highlight-color:transparent; }
+  .cp-engine:active{ transform:scale(.98); }
+
+  /* ═══ v595 · 🏋️ 트레이닝 로비 — 전술 보드(tgym) 아래 4문 (사장님 확정) ═══ */
+  .st2-lobby{ display:grid; grid-template-columns:1fr 1fr; gap:9px; margin-top:14px; }
+  .st2-lobby .door{ display:flex; flex-direction:column; align-items:flex-start; gap:3px; padding:14px 13px 12px;
+    border-radius:15px; text-align:left; cursor:pointer; font-family:inherit;
+    background:rgba(8,11,10,.72); border:1px solid color-mix(in srgb,var(--c) 46%,transparent);
+    box-shadow:0 0 18px -7px color-mix(in srgb,var(--c) 55%,transparent), inset 0 1px 0 rgba(255,255,255,.1);
+    transition:transform .18s cubic-bezier(.2,1.3,.4,1), box-shadow .2s; -webkit-tap-highlight-color:transparent; }
+  .st2-lobby .door:hover{ transform:translateY(-2px); }
+  .st2-lobby .door:active{ transform:scale(.96); }
+  .st2-lobby .door .g{ font-size:19px; color:var(--c); filter:drop-shadow(0 0 7px color-mix(in srgb,var(--c) 65%,transparent)); }
+  .st2-lobby .door .nm{ font-size:13px; font-weight:900; color:#F0F3EC; letter-spacing:-.02em; margin-top:2px; }
+  .st2-lobby .door .dd{ font-size:9.5px; color:#8f9a86; }
+  .st2-lobby .door .tg{ font-family:'JetBrains Mono',monospace; font-size:9px; font-weight:700; color:var(--c); margin-top:5px; }
+  .st2-cpnote{ display:block; width:100%; margin-top:10px; padding:11px 13px; border-radius:13px; text-align:left;
+    font-family:inherit; font-size:11px; font-weight:700; cursor:pointer;
+    background:rgba(167,139,250,.06); border:1px solid rgba(167,139,250,.2); color:#b3a8d6;
+    -webkit-tap-highlight-color:transparent; }
+  .st2-cpnote b{ color:#C9B8FF; }
+  .st2-cpnote:active{ transform:scale(.98); }
+  .st2-oldfold{ margin-top:18px; }
+  .st2-oldfold .ofb{ width:100%; padding:9px 4px; background:none; border:none;
+    border-top:1px dashed rgba(255,255,255,.12); color:#6b715c; font-family:inherit; font-size:10.5px;
+    font-weight:700; cursor:pointer; text-align:center; }
+
 
   /* 🪟 v435 — 상단이 스크롤에 반응한다 (모션 위계 2층: 전환).
      v558 · 탭 줄이 하단으로 내려가서, 이제 걷히는 건 방 레일 하나뿐이다 (도크는 늘 그 자리). */
@@ -15871,10 +15989,16 @@
      제작소가 라임이라 «간단히 담기» 버튼과 색이 겹쳐 헷갈리던 것을 여기서 끊는다.
      타일 뒤에 흐르는 그라데이션 레일 — «담다 › 이해하다 › 만들다»가 한 줄기로 보이게 */
   .qcf-flow { display:flex; align-items:stretch; gap:0; margin-top:22px; position:relative; }
-  .qcf-flow::before { content:''; position:absolute; left:16%; right:16%; top:50%; height:2px; margin-top:-1px;
+  /* v595 · C-2: 4타일이 됐지만 레일은 «트레이닝»에서 끝난다 — 나침반은 순서(담다›이해하다›만들다)에 없다.
+     left 12% = 1번 타일 중심, right 34% = 3번 타일 중심 (4등분 기준) */
+  .qcf-flow::before { content:''; position:absolute; left:12%; right:34%; top:50%; height:2px; margin-top:-1px;
     border-radius:2px; z-index:0; pointer-events:none;
-    background:linear-gradient(90deg, rgba(46,199,107,.55), rgba(77,159,240,.55) 50%, rgba(176,123,240,.55));
+    background:linear-gradient(90deg, rgba(46,199,107,.55), rgba(77,159,240,.55) 50%, rgba(255,61,166,.55));
     filter:blur(.2px); }
+  /* v595 · 나침반 앞 이음새 = «›»가 아니라 얇은 세로 실선 — 「여기부터는 다른 것」 */
+  .qcf-sep.cut { width:16px; }
+  .qcf-sep.cut::before { content:''; width:1px; height:26px;
+    background:linear-gradient(transparent, rgba(255,255,255,.18), transparent); }
   .qcf-t, .qcf-sep { position:relative; z-index:1; }
   .qcf-t { flex:1; min-width:0; position:relative; border-radius:18px; padding:14px 8px 12px; cursor:pointer; text-align:center;
     background:linear-gradient(160deg,rgba(255,255,255,.055),rgba(255,255,255,.015));
@@ -15883,8 +16007,24 @@
   .qcf-t:hover { transform:translateY(-4px); border-color:rgba(var(--qc),.85);
     box-shadow:0 0 30px rgba(var(--qc),.5), 0 14px 30px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.24); }
   .qcf-t:active { transform:translateY(-1px) scale(.97); }
-  .qcf-t .ob { height:40px; display:flex; align-items:center; justify-content:center; }
+  .qcf-t .ob { height:48px; display:flex; align-items:center; justify-content:center; }
   .qcf-t .ob svg { width:34px; height:34px; }
+  /* v595b · 사장님 네온 그림 — 검은 배경 png라 다크 타일에 그대로 녹는다 */
+  .qcf-t .ob img { display:block; max-height:48px; max-width:86px; object-fit:contain;
+    filter:drop-shadow(0 0 10px rgba(var(--qc),.4)); }
+  /* 짧은 모션 — 등장 때 한 번, 뜻 있는 것만 (매일 보는 화면 · 1초 안) */
+  .qcf-t.in .ob img { animation:qcfPopI .5s cubic-bezier(.2,1.4,.4,1) both; }
+  @keyframes qcfPopI { from { transform:scale(.55); opacity:0; } to { transform:scale(1); opacity:1; } }
+  .qcf-t[data-cs-go="compass"].in .ob img { animation:qcfNeedle 1.05s cubic-bezier(.2,.9,.3,1) both; }
+  @keyframes qcfNeedle { 0% { transform:rotate(-80deg) scale(.7); opacity:0; } 55% { opacity:1; }
+    72% { transform:rotate(13deg) scale(1); } 88% { transform:rotate(-5deg); } 100% { transform:rotate(0); } }
+  .qcf-t[data-cs-go="prod"].in .ob img { animation:qcfLift .8s cubic-bezier(.3,1.5,.4,1) both; }
+  @keyframes qcfLift { 0% { transform:translateY(10px) scale(.8); opacity:0; }
+    55% { transform:translateY(-5px) scale(1); opacity:1; } 100% { transform:none; } }
+  .qcf-t[data-cs-go="sorter"].in .ob img { animation:qcfBob .7s cubic-bezier(.2,1.3,.4,1) both; }
+  @keyframes qcfBob { 0% { transform:rotate(-13deg) translateY(6px) scale(.8); opacity:0; }
+    60% { transform:rotate(6deg) scale(1); opacity:1; } 100% { transform:none; } }
+  @media (prefers-reduced-motion:reduce) { .qcf-t.in .ob img { animation:none; } }
   .qcf-t .ob .g { fill:none; stroke:rgb(var(--qc)); stroke-width:1.9; stroke-linecap:round; stroke-linejoin:round;
     filter:drop-shadow(0 0 6px rgba(var(--qc),.8)); }
   .qcf-t .nm { font-size:12px; font-weight:900; letter-spacing:-.03em; color:#F3F5EC; margin-top:6px; }
@@ -15893,7 +16033,7 @@
   .qcf-t { background:linear-gradient(160deg,#0e1310,#0a0d0b); }
   .qcf-sep { flex:none; width:20px; display:flex; align-items:center; justify-content:center;
     font-size:15px; color:var(--cs-faint); }
-  .qcf-sep.s1 { color:#3fb389; } .qcf-sep.s2 { color:#7f8ff0; }   /* 이음새도 그 구간의 색 */
+  .qcf-sep.s1 { color:#3fb389; } .qcf-sep.s2 { color:#c56ac4; }   /* 이음새도 그 구간의 색 (파랑→핑크 중간) */
   @media (max-width:380px){ .qcf-t { padding:12px 4px 10px; } .qcf-t .nm { font-size:10.5px; } .qcf-sep { width:12px; font-size:12px; } }
 
   /* ── 갈림길: 큰 카트 CTA ── */
@@ -18593,24 +18733,31 @@
       </div>
       <div id="fork-rail" class="fork-rail"></div><!-- v570 · 공정 레일 (알 흐르는 그것) -->
       <!-- v526 · 흐름 3타일 (담다 › 이해하다 › 만들다) -->
+      <!-- v595b · 사장님이 만든 네온 그림 4장(fork-*.png)으로 교체 — 색도 그림을 따라간다:
+           트레이닝=핑크 · 나침반=보라 (사장님 지시). png가 없으면 옛 선화 SVG로 폴백 -->
       <div class="qcf-flow" id="qcf-flow">
-        <div class="qcf-t" style="--qc:46,199,107" data-cs-go="sorter">
-          <div class="ob"><svg viewBox="0 0 24 24"><path class="g" d="M4.5 7.5h15v11h-15z"/><path class="g" d="M4.5 12.2h15M12 7.5v11"/><path class="g" d="M8 4.6l1 1.4M16 4.6l-1 1.4"/></svg></div>
+        <div class="qcf-t" style="--qc:120,210,80" data-cs-go="sorter">
+          <div class="ob"><img src="fork-sorter.png" alt="" onerror="this.style.display='none';var s=this.nextElementSibling;if(s)s.style.display='';"><svg style="display:none" viewBox="0 0 24 24"><path class="g" d="M4.5 7.5h15v11h-15z"/><path class="g" d="M4.5 12.2h15M12 7.5v11"/><path class="g" d="M8 4.6l1 1.4M16 4.6l-1 1.4"/></svg></div>
           <div class="nm">AI 정리</div><div class="vb">담다</div>
         </div>
         <div class="qcf-sep s1">›</div>
-        <div class="qcf-t" style="--qc:77,159,240" data-cs-go="ware">
-          <div class="ob"><svg viewBox="0 0 24 24"><path class="g" d="M3.4 9.2L12 4.6l8.6 4.6v9.8H3.4z"/><path class="g" d="M8.2 19V12h7.6v7"/></svg></div>
+        <div class="qcf-t" style="--qc:66,150,244" data-cs-go="ware">
+          <div class="ob"><img src="fork-ware.png" alt="" onerror="this.style.display='none';var s=this.nextElementSibling;if(s)s.style.display='';"><svg style="display:none" viewBox="0 0 24 24"><path class="g" d="M3.4 9.2L12 4.6l8.6 4.6v9.8H3.4z"/><path class="g" d="M8.2 19V12h7.6v7"/></svg></div>
           <div class="nm">내 창고</div><div class="vb">이해하다</div>
           <div class="fork-bd" id="fork-bd-ware" style="color:#4d9ff0;background:rgba(77,159,240,.1)"></div>
         </div>
         <div class="qcf-sep s2">›</div>
-        <div class="qcf-t" style="--qc:176,123,240" data-cs-go="prod">
-          <!-- v594 · 별 ★ → 덤벨 (사장님 픽 A). 별은 앱에서 이미 «★ 내 성과»라 뜻이 겹쳤다.
-               획 다섯 개 — 옆의 상자(AI 정리)·집(창고)과 무게가 같아야 셋이 «문»으로 읽힌다 -->
-          <div class="ob"><svg viewBox="0 0 24 24"><path class="g" d="M8 12h8"/><path class="g" d="M6.2 9v6M3.8 10.4v3.2M17.8 9v6M20.2 10.4v3.2"/></svg></div>
-          <div class="nm">트레이닝 룸</div><div class="vb">만들다</div>
-          <div class="fork-bd" id="fork-bd-prod" style="color:#b07bf0;background:rgba(176,123,240,.1)"></div>
+        <div class="qcf-t" style="--qc:255,61,166" data-cs-go="prod">
+          <div class="ob"><img src="fork-gym.png" alt="" onerror="this.style.display='none';var s=this.nextElementSibling;if(s)s.style.display='';"><svg style="display:none" viewBox="0 0 24 24"><path class="g" d="M8 12h8"/><path class="g" d="M6.2 9v6M3.8 10.4v3.2M17.8 9v6M20.2 10.4v3.2"/></svg></div>
+          <div class="nm">트레이닝</div><div class="vb">만들다</div>
+          <div class="fork-bd" id="fork-bd-prod" style="color:#FF3DA6;background:rgba(255,61,166,.1)"></div>
+        </div>
+        <!-- v595 · C-2 (사장님 픽) — 🧭 나침반 = 네 번째 문. 레일에서 끊긴 보라 타일.
+             동사 자리엔 명사 «내 기준» — 순서에서 완전히 빠진다 -->
+        <div class="qcf-sep cut"></div>
+        <div class="qcf-t" style="--qc:155,108,255" data-cs-go="compass" title="나침반 — 내 기준">
+          <div class="ob"><img src="fork-compass.png" alt="" onerror="this.style.display='none';var s=this.nextElementSibling;if(s)s.style.display='';"><svg style="display:none" viewBox="0 0 24 24"><path class="g" d="M12 3.4a8.6 8.6 0 1 1 0 17.2 8.6 8.6 0 1 1 0-17.2"/><path class="g" d="M15.4 8.6l-2 4.8-4.8 2 2-4.8z"/></svg></div>
+          <div class="nm">나침반</div><div class="vb">내 기준</div>
         </div>
       </div>
       <!-- v526 · 큰 네온 카트 = 빠르게 담기 -->
@@ -19563,6 +19710,10 @@
       <button class="sh-sb-item sh-sb-main" id="ws-sorter" title="AI 컨텐츠 정리">
         <span class="sh-sb-icon">🤖</span><span class="sh-sb-label">AI 컨텐츠 정리</span>
       </button>
+      <!-- v595 · 🧭 나침반 — 내 기준(바늘·고객·트렌드·인사이트)이 모이는 방 -->
+      <button class="sh-sb-item sh-sb-main" data-ws="compass" id="ws-compass" title="나침반 — 내 기준">
+        <span class="sh-sb-icon">⌖</span><span class="sh-sb-label">나침반</span>
+      </button>
       <!-- (v557 · 패턴 파악은 원고 탭 안으로 이사 — 사이드바 버튼 제거) -->
       <button class="sh-sb-item" data-ws="northstar" id="ws-northstar">
         <span class="sh-sb-icon">🥊</span><span class="sh-sb-label">라이벌 멘토</span>
@@ -19740,6 +19891,7 @@
       <button class="rr-btn rr-ai" data-room="sorter" title="AI 컨텐츠 정리"><span class="g">⊞</span><span class="t">AI 정리</span></button>
       <button class="rr-btn rr-home" data-room="home" title="홈"><span class="g">⌂</span><span class="t">홈</span></button>
       <button class="rr-btn rr-mk" data-room="studio" title="트레이닝 룸"><span class="g">✎</span><span class="t">트레이닝</span></button>
+      <button class="rr-btn rr-cp" data-room="compass" title="나침반"><span class="g">⌖</span><span class="t">나침반</span></button><!-- v595 -->
       <button class="rr-back" id="rr-back" style="display:none">‹ 제작소로</button>
       <span class="rr-where" id="rr-where"></span>
     </div>
@@ -22294,6 +22446,29 @@
     </div>
 
     <!-- ===== 패턴 파악 (작전도) VIEW ===== -->
+    <!-- ═══════════════ 🧭 v595 · 나침반 (cp) — 내 기준이 모이는 방 ═══════════════
+         사장님 확정: 도크 = [⌖나] [◎인사이트] [◉고객] [↗트렌드].
+         고객(#st2-cus)·트렌드(#st2-trend)는 트레이닝 룸에서 «몸통 그대로» 이사(데이터·렌더러 무변경).
+         인사이트는 renderInsightPanel()이 원래부터 #st2-insight-host를 먼저 찾게 되어 있어(v413 고리)
+         여기에 그 id를 놓는 것만으로 이사가 끝난다. -->
+    <div id="cp-view" style="display:none;">
+      <div class="cp-wrap">
+        <div class="cp-sign"><s>COMPASS</s><b>나침반</b><i>누구에게 · 무슨 말을 하는가</i></div>
+        <div id="cp-me"></div>
+        <div id="cp-insight" style="display:none;">
+          <button class="cp-engine" id="cp-engine"><span>◎</span> 내 컨텐츠 알고리즘 — 이 판은 뭘 밀어주는가 <span style="margin-left:auto">→</span></button>
+          <div id="st2-insight-host"></div>
+        </div>
+        <div id="st2-cus" style="display:none;"></div><!-- v595 · 트레이닝 룸에서 이사 (JS 렌더 st2RenderCus) -->
+        <div id="st2-trend" style="display:none;"></div><!-- v595 · 트레이닝 룸에서 이사 (JS 렌더 st2RenderTrend) -->
+      </div>
+      <div class="cp-ws" id="cp-ws">
+        <button class="on" data-cptab="me"><span class="g">⌖</span><span class="t">나</span></button>
+        <button data-cptab="insight"><span class="g">◎</span><span class="t">인사이트</span></button>
+        <button data-cptab="cus"><span class="g">◉</span><span class="t">고객</span></button>
+        <button data-cptab="trend"><span class="g">↗</span><span class="t">트렌드</span></button>
+      </div>
+    </div>
     <!-- ═══════════════ 🎬 제작소 v2 (st2) — 홈+고객 셸 (내용은 JS 렌더) ═══════════════ -->
     <div id="st2-view" style="display:none;">
       <div class="st2-wrap">
@@ -22305,19 +22480,20 @@
         <!-- v558 · 하단 유리 도크. 글리프는 앱 하단바 문법(⌂ ▤ ✎ ▣ ▦)과 한 혈통 — 이모지 금지 -->
         <!-- v593 · 트레이닝 룸 도크(사장님 확정) — 인사이트는 그대로, 훈련실 문법으로 재편.
              트렌드는 💚맥락 안 세그로 이사(방 자체는 그대로) · 구성=원고 문 · 썸네일=창고 썸네일 문 -->
+        <!-- v595 · 도크 6칸 → 4칸 (사장님 확정) — 인사이트·맥락은 🧭 나침반으로 이사.
+             버튼은 숨김만(마크업·배선 보존) · st2SetTab('home')은 이제 로비(st2RenderLobby)를 연다 -->
         <div class="st2-ws" id="st2-ws">
-          <button class="on" data-st2tab="home"><span class="g">◎</span><span class="t">인사이트</span></button>
+          <button data-st2tab="home" style="display:none"><span class="g">◎</span><span class="t">인사이트</span></button>
           <button data-st2tab="3sec"><span class="g">◔</span><span class="t">3초</span></button>
           <button data-st2tab="scripts"><span class="g">✎</span><span class="t">구성</span></button>
           <button data-st2tab="thumbgo"><span class="g">▣</span><span class="t">썸네일</span></button>
-          <button data-st2tab="cus"><span class="g">◉</span><span class="t">맥락</span></button>
+          <button data-st2tab="cus" style="display:none"><span class="g">◉</span><span class="t">맥락</span></button>
           <button data-st2tab="osmu"><span class="g">⬡</span><span class="t">배포</span></button>
         </div>
         <div id="st2-home"></div>
         <div id="st2-3sec" style="display:none;"></div><!-- v593 · 👁 초반 3초 실 (JS 렌더 st2Render3sec) -->
-        <div id="st2-cus" style="display:none;"></div>
+        <!-- (v595 · #st2-cus·#st2-trend는 🧭 나침반(cp-view)으로 이사 — 몸통 그대로) -->
         <div id="st2-osmu" style="display:none;"></div>
-        <div id="st2-trend" style="display:none;"></div><!-- v557 · 🔥 트렌드 (JS 렌더 st2RenderTrend) -->
       </div>
       <div class="st2-sheet" id="st2-sheet"><div class="bx" id="st2-sheet-bx"></div></div>
       <!-- 맵 풀스크린 오버레이 -->
@@ -33350,23 +33526,27 @@
   // 🧭 방 레일 — 어느 방/어느 화면인지 항상 표시
   const RR_LABELS = { home: '홈', sheet: '벤치마킹 시트', customer: '고객 분석',
     formatboard: '분류', northstar: '라이벌 멘토', diagnose: '릴스 진단',
-    scripts: '내 원고', thumb: '썸네일', studio: '트레이닝 룸' };
+    scripts: '내 원고', thumb: '썸네일', studio: '트레이닝 룸', compass: '나침반' };
   function rrUpdate(ws) {
     const rail = document.getElementById('room-rail'); if (!rail) return;
-    if (ws === 'studio' || ws === 'home') window.__rrFrom = null;      // 방에 도착하면 출신 초기화
+    if (ws === 'studio' || ws === 'home' || ws === 'compass') window.__rrFrom = null;      // 방에 도착하면 출신 초기화
     const from = window.__rrFrom;
-    const room = (ws === 'studio' || from === 'studio') ? 'studio' : 'home';
+    // v595 · 나침반 = 세 번째 방 — 나침반에서 나간 화면(라이벌 멘토 등)도 나침반 소속으로 표시
+    const room = (ws === 'studio' || from === 'studio') ? 'studio'
+      : (ws === 'compass' || from === 'compass') ? 'compass' : 'home';
     rail.querySelectorAll('.rr-btn').forEach(b => b.classList.toggle('here', b.dataset.room === room));
     const w = document.getElementById('rr-where');
-    if (w) w.textContent = (room === 'studio' ? '트레이닝 룸' : '내 창고') + (RR_LABELS[ws] && ws !== 'studio' ? ' · ' + RR_LABELS[ws] : '');
+    if (w) w.textContent = (room === 'studio' ? '트레이닝 룸' : room === 'compass' ? '나침반' : '내 창고') +
+      (RR_LABELS[ws] && ws !== 'studio' && ws !== 'compass' ? ' · ' + RR_LABELS[ws] : '');
     // 제작소 소속이면 탭 줄이 따라온다 (A안 v434) — 되돌아가기 버튼은 필요 없어짐
     document.body.classList.toggle('in-studio', room === 'studio');
+    document.body.classList.toggle('in-compass', room === 'compass');   // v595 · 밤하늘 공기 + 은빛 도크
     try { st2SyncBar(ws); } catch (e) {}
     rrSlide();
   }
   // 새로 열린 화면이 옆에서 밀려 들어오게 (뒤로 갈 땐 반대 방향)
   const RR_VIEWS = ['home-view','sh-sheet-view','sh-stats-view','mb-view','fb-view','thumb-view',
-    'sc-view','customer-view','northstar-view','diagnose-view','st2-view'];
+    'sc-view','customer-view','northstar-view','diagnose-view','st2-view','cp-view'];
   function rrSlide() {
     const cls = window.__rrDir === 'back' ? 'rr-pop' : 'rr-push';
     window.__rrDir = null;
@@ -33396,7 +33576,7 @@
       // v571 · 갈림길로 되돌아가는 길 — 지금까진 나가면 다시 못 들어왔다
       if (r === 'fork') { try { window.__csForkShown = false; maybeShowFork(); } catch (e) {} return; }
       if (r === 'sorter') { if (window.__openSorter) window.__openSorter(); return; }
-      switchWorkspace(r === 'studio' ? 'studio' : 'home');
+      switchWorkspace(r === 'studio' ? 'studio' : r === 'compass' ? 'compass' : 'home');   // v595
     });
     const back = document.getElementById('rr-back');
     if (back) back.onclick = () => { window.__rrFrom = null; window.__rrDir = 'back'; switchWorkspace('studio'); };
@@ -33424,6 +33604,7 @@
     const nsView = document.getElementById('northstar-view');
     const dgView = document.getElementById('diagnose-view');
     const st2View = document.getElementById('st2-view'); // 🎬 제작소 v2
+    const cpView = document.getElementById('cp-view');   // 🧭 v595 · 나침반
     const sheetSb = document.getElementById('sb-sheet-sections');
     const mbSb = { style: {} };     // v530 · 무드보드 삭제
     const cuSb = document.getElementById('sb-customer-sections');
@@ -33446,6 +33627,7 @@
       if (nsView) nsView.style.display = 'none';
       if (dgView) dgView.style.display = 'none';
       if (st2View) st2View.style.display = 'none';
+      if (cpView) cpView.style.display = 'none';   // v595
     };
 
     if (ws === 'home') {
@@ -33494,6 +33676,15 @@
       if (cuSb) cuSb.style.display = 'none';
       topbar.style.display = 'none';
       try { renderStudio2(); } catch (e) { console.error('[st2] render 실패:', e); }
+    } else if (ws === 'compass') {
+      // 🧭 v595 · 나침반 — 바늘·인사이트·고객·트렌드
+      hideAll();
+      if (cpView) cpView.style.display = 'block';
+      sheetSb.style.display = 'none';
+      mbSb.style.display = 'none';
+      if (cuSb) cuSb.style.display = 'none';
+      topbar.style.display = 'none';
+      try { renderCompass(); } catch (e) { console.error('[cp] render 실패:', e); }
     } else if (ws === 'scripts') {
       hideAll();
       if (scView) {
@@ -45910,6 +46101,7 @@
         const go = el.dataset.csGo;
         if (go === 'sorter') csOpenRoom();
         else if (go === 'prod') { csCloseFork(); cmSweepRooms(); try { switchWorkspace('studio'); } catch (e) {} } // v413 제작소 홈으로
+        else if (go === 'compass') { csCloseFork(); cmSweepRooms(); try { switchWorkspace('compass'); } catch (e) {} } // v595 · 🧭 나침반
         else if (go === 'qc') qcOpen(); // ⚡ 빠른 담기
         else { csCloseFork(); cmSweepRooms(); } // ware/skip — v593 · 깔린 분류·손질 방까지 쓸어 닫는다
       });
@@ -47649,7 +47841,8 @@
     });
   }
   function st2RenderHome() {
-    const el = document.getElementById('st2-home'); if (!el) return;
+    // v595 · 홈 자리는 로비가 차지 — 옛 홈은 로비의 «이전 홈» 접이(#st2-oldhome) 안에 그대로 산다 (기능 삭제 0)
+    const el = document.getElementById('st2-oldhome') || document.getElementById('st2-home'); if (!el) return;
     const mode = st2Mode();
     const v = document.getElementById('st2-view');
     v.classList.toggle('lens-att', mode === 'att');
@@ -50021,6 +50214,11 @@
     document.querySelectorAll('#st2-ws button').forEach(b => b.classList.toggle('on', b.dataset.st2tab === cur));
   }
   function st2SetTab(tab) {
+    // v595 · 고객·트렌드는 🧭 나침반으로 이사 — 옛 경로(추천 엔진·세그 등)로 와도 그리로 안내
+    if (tab === 'cus' || tab === 'trend') {
+      try { switchWorkspace('compass'); cpSetTab(tab); } catch (e) {}
+      return;
+    }
     // v594 · 🏋️ 통일감 ① — 지금 켜 있는 튜브 색. 맨 앞에 둬야 워크스페이스로 나가는
     //   방(구성·썸네일)도 색을 물고 나간다 (아래 return 경로들보다 먼저).
     try { document.body.setAttribute('data-troom', tab === 'pattern' ? 'scripts' : tab); } catch (e) {}
@@ -50050,6 +50248,103 @@
     if (tab === 'osmu') st2RenderOsmu();
     if (tab === 'trend') { try { st2RenderTrend(); } catch (e) { console.error('[trend] render 실패:', e); } }
   }
+  // ═══════════ 🧭 v595 · 나침반 (cp) — 내 기준이 모이는 방 ═══════════
+  //   새로 만든 건 «바늘»(cm-needle) 하나뿐. 나머지는 전부 있던 몸통에 문만 이사:
+  //   인사이트=renderInsightPanel(#st2-insight-host 고리) · 고객=st2RenderCus · 트렌드=st2RenderTrend · 라이벌=northstar 방
+  const NEEDLE_KEY = 'cm-needle';
+  let needle = { to: '', msg: '' }, _needleLoaded = false, _cpInited = false, _cpTab = 'me';
+  async function needleLoad() {
+    try {
+      const r = await window.storage.get(NEEDLE_KEY);
+      if (r) { const v = JSON.parse(r.value !== undefined ? r.value : r); if (v && typeof v === 'object') needle = { to: v.to || '', msg: v.msg || '' }; }
+    } catch (e) {}
+    _needleLoaded = true;
+  }
+  async function needleSave() { try { await window.storage.set(NEEDLE_KEY, JSON.stringify(needle)); } catch (e) {} }
+  function cpRenderMe() {
+    const el = document.getElementById('cp-me'); if (!el) return;
+    const rivalN = (typeof northStars !== 'undefined' && Array.isArray(northStars)) ? northStars.length : 0;
+    el.innerHTML =
+      '<div class="cp-needle">' +
+        '<div class="k">THE NEEDLE · 바늘</div>' +
+        '<div class="line">나는 <input class="to" id="cp-to" placeholder="누구" value="' + esc(needle.to).replace(/"/g, '&quot;') + '">에게<br>' +
+        '“<input class="msg" id="cp-msg" placeholder="무슨 말" value="' + esc(needle.msg).replace(/"/g, '&quot;') + '">”라고<br>말하는 사람이다.</div>' +
+        '<div class="hint">이 한 문장이 바뀌면, 아래 재료가 전부 다시 읽힙니다.</div>' +
+        '<button class="cp-save" id="cp-save">바늘 고정</button>' +
+      '</div>' +
+      '<div class="cp-k">내 기준의 재료</div>' +
+      '<button class="cp-card" id="cp-rival"><span class="ic">🥊</span><span><span class="tt">라이벌 멘토</span><br><span class="dd">' +
+        (rivalN ? '내가 겨누는 채널 ' + rivalN + '개' : '내가 겨누는 사람 — 아직 비어 있어요') + '</span></span><span class="ar">→</span></button>';
+    const sv = document.getElementById('cp-save');
+    if (sv) sv.onclick = async function () {
+      const to = document.getElementById('cp-to'), ms = document.getElementById('cp-msg');
+      needle.to = to ? to.value.trim() : ''; needle.msg = ms ? ms.value.trim() : '';
+      await needleSave();
+      try { toast('🧭 바늘 고정 — 흔들리면 여기로 돌아오세요'); } catch (e) {}
+    };
+    const rv = document.getElementById('cp-rival');
+    if (rv) rv.onclick = function () { window.__rrFrom = 'compass'; try { switchWorkspace('northstar'); } catch (e) {} };
+  }
+  function cpSetTab(tab) {
+    _cpTab = tab;
+    document.querySelectorAll('#cp-ws button').forEach(b => b.classList.toggle('on', b.dataset.cptab === tab));
+    const me = document.getElementById('cp-me'); if (me) me.style.display = (tab === 'me') ? 'block' : 'none';
+    const ih = document.getElementById('cp-insight'); if (ih) ih.style.display = (tab === 'insight') ? 'block' : 'none';
+    const cu = document.getElementById('st2-cus'); if (cu) cu.style.display = (tab === 'cus') ? 'block' : 'none';
+    const tr = document.getElementById('st2-trend'); if (tr) tr.style.display = (tab === 'trend') ? 'block' : 'none';
+    window.scrollTo({ top: 0 });
+    if (tab === 'me') cpRenderMe();
+    if (tab === 'insight') { try { renderInsightPanel(); } catch (e) { console.error('[cp] insight', e); } }
+    if (tab === 'cus') { try { st2RenderCus(); } catch (e) { console.error('[cp] cus', e); } }
+    if (tab === 'trend') { try { st2RenderTrend(); } catch (e) { console.error('[cp] trend', e); } }
+  }
+  function renderCompass() {
+    if (!_cpInited) {
+      _cpInited = true;
+      document.querySelectorAll('#cp-ws button').forEach(b => b.onclick = () => cpSetTab(b.dataset.cptab));
+      const eg = document.getElementById('cp-engine');
+      if (eg) eg.onclick = function () { try { if (window.__openEngine) window.__openEngine(); } catch (e) {} };
+    }
+    // 고객 탭 재료(황금 키워드 등)는 트레이닝을 안 거쳐도 준비되게 — renderStudio2와 같은 로더를 같은 가드로
+    try { if (!_st2KwLoaded) st2KwLoad().then(function () { if (_cpTab === 'cus') try { st2RenderCus(); } catch (e) {} }); } catch (e) {}
+    if (!_needleLoaded) needleLoad().then(function () { if (_cpTab === 'me') cpRenderMe(); });
+    cpSetTab(_cpTab || 'me');
+  }
+
+  // v595 · 🏋️ 트레이닝 로비 — 사장님 확정: 전술 보드(위 tgym) + 4문 안내. 분석·기록은 🧭 나침반으로.
+  //   옛 홈(골대·맵·목표·쇼핑)은 삭제가 아니라 «접힘» — 기능 삭제 금지 원칙. 다음 판들에서 차근차근 이사.
+  function st2RenderLobby() {
+    const el = document.getElementById('st2-home'); if (!el) return;
+    const DOORS = [
+      ['3sec', '◔', '초반 3초', '시선을 붙잡는 훈련', '목표 ' + tGoals.eye + '%', '#43e0e6'],
+      ['scripts', '✎', '내용 구성', '끝까지 보게 만드는 훈련', '목표 ' + tGoals.stay + '초', '#b07bf0'],
+      ['thumbgo', '▣', '썸네일', '클릭하게 만드는 훈련', '목표 ' + tGoals.clk + '%', '#E0788C'],
+      ['osmu', '⬡', '배포', '만든 걸 다섯 곳에서 일하게', '저장·보내기 ' + tGoals.emp + '%', '#d7f34b']
+    ];
+    el.innerHTML =
+      '<div class="st2-lobby">' +
+        DOORS.map(function (d) {
+          return '<button class="door" data-st2go="' + d[0] + '" style="--c:' + d[5] + '">' +
+            '<span class="g">' + d[1] + '</span><span class="nm">' + d[2] + '</span>' +
+            '<span class="dd">' + d[3] + '</span><span class="tg">' + d[4] + '</span></button>';
+        }).join('') +
+      '</div>' +
+      '<button class="st2-cpnote" id="st2-cpnote">🧭 고객·트렌드·인사이트는 <b>나침반</b>으로 이사했어요 →</button>' +
+      '<div class="st2-oldfold"><button class="ofb" id="st2-oldopen">▾ 이전 홈 잠깐 보기 — 골대·맵·목표·쇼핑 (이사 준비 중)</button>' +
+      '<div id="st2-oldhome" style="display:none;"></div></div>';
+    el.querySelectorAll('[data-st2go]').forEach(function (b) { b.onclick = function () { st2SetTab(b.dataset.st2go); }; });
+    const cn = document.getElementById('st2-cpnote');
+    if (cn) cn.onclick = function () { try { switchWorkspace('compass'); } catch (e) {} };
+    const oo = document.getElementById('st2-oldopen');
+    if (oo) oo.onclick = function () {
+      const oh = document.getElementById('st2-oldhome'); if (!oh) return;
+      const open = oh.style.display !== 'none';
+      oh.style.display = open ? 'none' : 'block';
+      oo.textContent = open ? '▾ 이전 홈 잠깐 보기 — 골대·맵·목표·쇼핑 (이사 준비 중)' : '▴ 이전 홈 접기';
+      if (!open) { try { st2RenderHome(); } catch (e) { console.error('[st2] oldhome', e); } }
+    };
+  }
+
   function renderStudio2() {
     if (!_st2Inited) {
       _st2Inited = true;
@@ -50069,13 +50364,14 @@
       ]).then(() => {
         const v = document.getElementById('st2-view');
         if (v && v.style.display !== 'none') {
-          st2RenderHome();
-          if (_st2Tab === 'cus') st2RenderCus();
+          st2RenderLobby();   // v595 · 홈 → 로비
           if (_st2Tab === 'osmu') st2RenderOsmu();
         }
       });
     }
-    st2RenderHome();
+    // v595 · 고객·트렌드는 나침반 소속 — 옛 탭 상태로 돌아오면 로비로
+    if (_st2Tab === 'cus' || _st2Tab === 'trend') _st2Tab = 'home';
+    st2RenderLobby();
     st2SetTab(_st2Tab === 'cus' ? 'cus' : 'home');
   }
 
