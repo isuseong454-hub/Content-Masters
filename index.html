@@ -12954,6 +12954,36 @@
   .sc-backhome{ display:none !important; }                  /* 「← 홈」 폐기 (마크업 보존) */
   #rr-back{ display:none !important; }                      /* 「‹ 제작소로」 폐기 (마크업 보존) */
 
+  /* ═══ v594 · 🏋️ 트레이닝 룸 통일감 — 사장님 픽 ① 「네온 튜브 & 고무 바닥」 ═══
+     여섯 방을 한 건물로 묶는 건 «색 맞추기»가 아니라 «모든 방이 같은 문장을 반복하는 것».
+     여기서 그 문장은 빛의 굵기다 — 방마다 색은 달라도 테두리 한 줄·번짐 반경이 똑같다.
+     ⚖️ 색 규칙: 지표가 있는 방만 색을 가진다. 인사이트·배포는 훈련 종목이 아니라
+        드나드는 «통로»라서 앱 기본색(라임) 그대로 둔다.
+     ⚠️ 변수명은 --troom / data-troom — data-room은 방 레일 버튼(rr-btn)이 이미 쓰고 있다. */
+  body.in-studio{ --troom:#d7f34b; }                        /* 통로 = 라임 */
+  body.in-studio[data-troom="3sec"]   { --troom:#43e0e6; }  /* 👁 초반 3초 · 시선 */
+  body.in-studio[data-troom="scripts"]{ --troom:#b07bf0; }  /* ✎ 내용 구성 · 지속 */
+  body.in-studio[data-troom="thumbgo"]{ --troom:#E0788C; }  /* ▣ 썸네일 · 클릭 */
+  body.in-studio[data-troom="cus"]    { --troom:#2FD07B; }  /* ◉ 맥락 · 공감 */
+  body.in-studio[data-troom="trend"]  { --troom:#FF7A45; }  /* 🔥 트렌드 (맥락 안 세그) */
+  /* 튜브 한 줄 + 고무 바닥 격자.
+     z:55 — 도크(60)보다 아래, 본문보다 위. 방 오버레이(분류 1600·손질 1620·정리 6000)엔 안 걸린다. */
+  body.in-studio::after{
+    content:''; position:fixed; inset:0; z-index:55; pointer-events:none;
+    background:
+      linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px) 0 0/26px 26px,
+      linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px) 0 0/26px 26px;
+    box-shadow:
+      inset 0 0 0 1px color-mix(in srgb,var(--troom) 20%,transparent),
+      inset 0 0 44px -14px color-mix(in srgb,var(--troom) 62%,transparent);
+    transition:box-shadow .45s ease; }
+  /* 도크도 같은 빛을 쓴다 — 활성 탭 = 지금 켜져 있는 튜브 */
+  body.in-studio #st2-ws button.on{ color:var(--troom); }
+  body.in-studio #st2-ws button.on::before{ background:var(--troom); }
+  body.in-studio #st2-ws button.on::after{
+    background:radial-gradient(60% 70% at 50% 0%,color-mix(in srgb,var(--troom) 32%,transparent),transparent 72%); }
+  @media(prefers-reduced-motion:reduce){ body.in-studio::after{ transition:none; } }
+
 
   /* 🪟 v435 — 상단이 스크롤에 반응한다 (모션 위계 2층: 전환).
      v558 · 탭 줄이 하단으로 내려가서, 이제 걷히는 건 방 레일 하나뿐이다 (도크는 늘 그 자리). */
@@ -17065,6 +17095,88 @@
     cursor:pointer; color:#c87a4a; background:rgba(200,122,74,.09); border:1px dashed rgba(200,122,74,.45); }
   .cus2-objempty .cands button:hover{ border-style:solid; background:rgba(200,122,74,.16); }
   /* ══ v517 · 세그먼트 한 줄 → 그 자리 확장 ══ */
+  /* ═══ v593 · 🏋️ 트레이닝 룸 — 네온 간판 + 전술 보드(목표 4 ✎) ═══ */
+  .tgym{ max-width:var(--shfw,900px); margin:4px auto 0; padding:14px 16px 2px; }
+  .tgym .sign{ text-align:center; }
+  .tgym .sign s{ display:block; text-decoration:none; font-family:'JetBrains Mono',monospace; font-size:8.5px;
+    letter-spacing:.5em; color:rgba(215,243,75,.55); }
+  .tgym .sign b{ font-size:20px; font-weight:900; letter-spacing:.05em; color:#e6fb62;
+    text-shadow:0 0 16px rgba(230,251,98,.5),0 0 40px rgba(215,243,75,.22); animation:tgymFlick 6s infinite; }
+  @keyframes tgymFlick{ 0%,94%,98%,100%{opacity:1} 96%{opacity:.6} }
+  .tgym .sign i{ display:block; font-style:normal; font-size:9.5px; color:var(--st2-faint,#7b8478); font-weight:700; margin-top:2px; }
+  .tgym .board{ display:grid; grid-template-columns:repeat(4,1fr); gap:7px; margin-top:12px; }
+  .tgym .tg{ position:relative; display:flex; flex-direction:column; align-items:center; gap:2px; padding:9px 4px 8px;
+    border-radius:12px; font-family:inherit; cursor:pointer; -webkit-tap-highlight-color:transparent;
+    background:color-mix(in srgb,var(--c) 8%,transparent); border:1px solid color-mix(in srgb,var(--c) 34%,transparent);
+    transition:transform .16s cubic-bezier(.2,1.3,.4,1), box-shadow .18s; }
+  .tgym .tg:hover{ transform:translateY(-2px); box-shadow:0 0 14px color-mix(in srgb,var(--c) 20%,transparent); }
+  .tgym .tg:active{ transform:scale(.95); }
+  .tgym .tg b{ font-family:'JetBrains Mono',monospace; font-size:14px; font-weight:800; color:var(--c);
+    text-shadow:0 0 8px color-mix(in srgb,var(--c) 50%,transparent); line-height:1.1; }
+  .tgym .tg s{ text-decoration:none; font-size:8.5px; font-weight:800; color:var(--st2-sub,#9aa39c); white-space:nowrap; }
+  .tgym .tg i{ position:absolute; right:6px; top:5px; font-style:normal; font-size:8px; opacity:.5; }
+  @media(max-width:480px){ .tgym .board{ grid-template-columns:repeat(2,1fr); } }
+  @media(prefers-reduced-motion:reduce){ .tgym .sign b{ animation:none; } }
+  /* v593 · 💚 맥락의 방 세그 (고객 | 트렌드) */
+  .cus2-ctx{ display:flex; gap:4px; padding:3px; border-radius:11px; background:rgba(255,255,255,.04);
+    border:1px solid var(--st2-line); margin-bottom:12px; }
+  .cus2-ctx button{ flex:1; font-family:inherit; font-size:11px; font-weight:800; padding:8px 0; border:none;
+    border-radius:9px; background:none; color:var(--st2-sub,#9aa39c); cursor:pointer; -webkit-tap-highlight-color:transparent; }
+  .cus2-ctx button.on{ background:rgba(212,115,127,.14); color:var(--rose,#D4737F); }
+  /* ═══ v593 · 👁 초반 3초 실 (s3) — 진열대 · 시험대 · 오늘의 세트 ═══ */
+  .s3{ max-width:var(--shfw,900px); margin:0 auto; padding:6px 16px 40px; }
+  .s3-hd{ text-align:center; padding:6px 0 2px; }
+  .s3-hd .t{ font-size:17px; font-weight:900; letter-spacing:-.01em; }
+  .s3-hd .t em{ font-style:normal; color:#43e0e6; text-shadow:0 0 12px rgba(67,224,230,.4); }
+  .s3-hd .g{ display:inline-flex; align-items:center; gap:6px; margin-top:7px; font-size:10.5px; font-weight:800;
+    color:#43e0e6; border:1px solid rgba(67,224,230,.35); border-radius:999px; padding:5px 12px;
+    background:rgba(67,224,230,.06); }
+  .s3-hd .g s{ text-decoration:none; color:var(--st2-faint,#7b8478); font-weight:700; }
+  .s3-k{ font-family:'JetBrains Mono',monospace; font-size:9.5px; letter-spacing:.16em; color:var(--st2-faint,#7b8478);
+    margin:20px 2px 9px; display:flex; align-items:baseline; gap:8px; }
+  .s3-k i{ font-style:normal; letter-spacing:.02em; font-size:9px; opacity:.85; }
+  /* 시험대 — 릴스처럼 크게 띄우는 무대 */
+  .s3-ta{ width:100%; min-height:54px; font-family:inherit; font-size:16px; line-height:1.6; color:var(--st2-tx,#e8e9e6);
+    background:rgba(255,255,255,.04); border:1px solid var(--st2-line); border-radius:14px; padding:12px 13px; resize:none; outline:none; }
+  .s3-ta:focus{ border-color:rgba(67,224,230,.5); }
+  .s3-go{ margin-top:9px; width:100%; font-family:inherit; font-size:12.5px; font-weight:800; padding:12px 0; border:none;
+    border-radius:12px; cursor:pointer; color:#06181a; background:linear-gradient(96deg,#43e0e6,#7de9ec);
+    box-shadow:0 8px 24px -10px rgba(67,224,230,.6); -webkit-tap-highlight-color:transparent; }
+  .s3-go:active{ transform:scale(.97); }
+  .s3-go:disabled{ opacity:.4; cursor:default; }
+  .s3-stage{ position:relative; margin-top:12px; border-radius:18px; overflow:hidden; min-height:240px;
+    display:none; align-items:center; justify-content:center; text-align:center; padding:28px 18px;
+    background:radial-gradient(110% 90% at 50% 0%,#10181a,#070b0c 75%); border:1px solid rgba(67,224,230,.25); }
+  .s3-stage.on{ display:flex; }
+  .s3-stage .line{ font-size:21px; font-weight:900; line-height:1.5; letter-spacing:-.01em; word-break:keep-all;
+    text-shadow:0 2px 12px rgba(0,0,0,.6); }
+  .s3-cnt{ position:absolute; right:12px; top:10px; font-family:'JetBrains Mono',monospace; font-size:26px; font-weight:800;
+    color:#43e0e6; text-shadow:0 0 14px rgba(67,224,230,.6); }
+  .s3-judge{ display:none; gap:8px; margin-top:12px; }
+  .s3-judge.on{ display:flex; }
+  .s3-judge button{ flex:1; font-family:inherit; font-size:12px; font-weight:800; padding:12px 0; border-radius:12px;
+    cursor:pointer; background:rgba(255,255,255,.05); border:1px solid var(--st2-line); color:var(--st2-tx,#e8e9e6);
+    -webkit-tap-highlight-color:transparent; }
+  .s3-judge button:active{ transform:scale(.96); }
+  .s3-judge .stop{ border-color:rgba(67,224,230,.5); color:#43e0e6; }
+  .s3-saw{ margin-top:10px; font-size:11px; line-height:1.7; color:#F0B24E; }
+  .s3-saw b{ color:#f5cf8e; }
+  .s3-sets{ margin-top:10px; text-align:center; font-size:11px; font-weight:800; color:var(--st2-sub,#9aa39c); }
+  .s3-sets b{ font-family:'JetBrains Mono',monospace; color:#43e0e6; }
+  /* 진열대 — 첫 3초만 잘라 몰아보기 */
+  .s3-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:9px; }
+  .s3-c{ position:relative; border-radius:13px; overflow:hidden; cursor:pointer; border:1px solid rgba(255,255,255,.1);
+    background:#0d1112; aspect-ratio:9/12; -webkit-tap-highlight-color:transparent; transition:transform .16s, border-color .2s; }
+  .s3-c:hover{ transform:translateY(-2px); border-color:rgba(67,224,230,.45); }
+  .s3-c img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.8; display:none; }
+  .s3-c .sc{ position:absolute; inset:0; background:linear-gradient(180deg,rgba(0,0,0,.1) 30%,rgba(5,8,9,.92)); }
+  .s3-c .tx{ position:absolute; left:9px; right:9px; bottom:8px; }
+  .s3-c .hk{ font-size:11px; font-weight:800; line-height:1.45; color:#fff; text-shadow:0 1px 4px rgba(0,0,0,.8); }
+  .s3-c .in3{ margin-top:4px; font-size:9.5px; line-height:1.5; color:#9fd0d8; }
+  .s3-c .vw{ position:absolute; left:9px; top:8px; font-family:'JetBrains Mono',monospace; font-size:9.5px; font-weight:800;
+    color:#e6fb62; text-shadow:0 1px 4px rgba(0,0,0,.8); }
+  .s3-empty{ text-align:center; font-size:12px; line-height:1.8; color:var(--st2-sub,#9aa39c); padding:26px 10px; }
+  .s3-empty b{ color:#43e0e6; }
   .cus2-seg{ display:flex; gap:4px; padding:4px; margin-top:12px; border-radius:14px;
     background:rgba(0,0,0,.34); border:1px solid var(--st2-line); }
   .cus2-seg button{ flex:1; font-family:inherit; font-size:10.5px; font-weight:700; padding:9px 3px; border:none;
@@ -18494,8 +18606,10 @@
         </div>
         <div class="qcf-sep s2">›</div>
         <div class="qcf-t" style="--qc:176,123,240" data-cs-go="prod">
-          <div class="ob"><svg viewBox="0 0 24 24"><path class="g" d="M12 3.2l2.2 6.4 6.6.3-5.2 4.1 1.8 6.4L12 16.7l-5.4 3.7 1.8-6.4L3.2 9.9l6.6-.3z"/></svg></div>
-          <div class="nm">제작소</div><div class="vb">만들다</div>
+          <!-- v594 · 별 ★ → 덤벨 (사장님 픽 A). 별은 앱에서 이미 «★ 내 성과»라 뜻이 겹쳤다.
+               획 다섯 개 — 옆의 상자(AI 정리)·집(창고)과 무게가 같아야 셋이 «문»으로 읽힌다 -->
+          <div class="ob"><svg viewBox="0 0 24 24"><path class="g" d="M8 12h8"/><path class="g" d="M6.2 9v6M3.8 10.4v3.2M17.8 9v6M20.2 10.4v3.2"/></svg></div>
+          <div class="nm">트레이닝 룸</div><div class="vb">만들다</div>
           <div class="fork-bd" id="fork-bd-prod" style="color:#b07bf0;background:rgba(176,123,240,.1)"></div>
         </div>
       </div>
@@ -18541,10 +18655,10 @@
         </div>
         <div class="cs-chip prod" data-cs-go="prod">
           <div class="glow"></div>
-          <div class="ic2"><svg viewBox="0 0 24 24"><path class="g" d="M12 2.5l2.1 6.4L20.5 11l-6.4 2.1L12 19.5l-2.1-6.4L3.5 11l6.4-2.1z"/></svg></div>
+          <div class="ic2"><svg viewBox="0 0 24 24"><path class="g" d="M8 12h8"/><path class="g" d="M6.2 9v6M3.8 10.4v3.2M17.8 9v6M20.2 10.4v3.2"/></svg></div>
           <div class="tx">
-            <div class="eb">🏭 만들기</div>
-            <div class="nm">컨텐츠 제작소</div>
+            <div class="eb">🏋️ 훈련</div>
+            <div class="nm">트레이닝 룸</div>
             <div class="ds">쌓인 재료로 내 콘텐츠 만들기</div>
           </div>
           <div class="arrow">→</div>
@@ -19438,7 +19552,7 @@
     <div class="sh-sb-section">
       <div class="sh-sb-section-title">워크스페이스</div>
       <button class="sh-sb-item sh-sb-main active" data-ws="home" id="ws-home">
-        <span class="sh-sb-icon">⌂</span><span class="sh-sb-label">트레이닝 룸</span>
+        <span class="sh-sb-icon">⌂</span><span class="sh-sb-label">홈</span>
       </button>
       <button class="sh-sb-item sh-sb-main" data-ws="sheet" id="ws-sheet">
         <span class="sh-sb-icon">▤</span><span class="sh-sb-label">벤치마킹 시트</span>
@@ -19480,8 +19594,9 @@
 
     <!-- SHEET-ONLY SIDEBAR -->
     <div id="sb-sheet-sections">
-    <!-- VIEW MODE -->
-    <div class="sh-sb-section">
+    <!-- VIEW MODE — v593 · 사장님 동의로 숨김: 같은 스위치가 좁혀보기 칩(v538)에 이미 있어 중복 문이었다.
+         마크업·배선 보존 (걸려 있던 «작성된 행만»은 시트 위 칩 ✕로 해제 가능) -->
+    <div class="sh-sb-section" style="display:none;">
       <div class="sh-sb-section-title">보기</div>
       <div class="sh-sb-toggle-row">
         <button class="sh-sb-toggle active" data-view="all" id="vt-all">전체 보기</button>
@@ -19623,8 +19738,8 @@
     <div id="room-rail" role="navigation" aria-label="방 이동">
       <button class="rr-btn rr-fork" data-room="fork" title="갈림길로"><span class="g">‹</span><span class="t">갈림길</span></button>
       <button class="rr-btn rr-ai" data-room="sorter" title="AI 컨텐츠 정리"><span class="g">⊞</span><span class="t">AI 정리</span></button>
-      <button class="rr-btn rr-home" data-room="home" title="트레이닝 룸"><span class="g">⌂</span><span class="t">홈</span></button>
-      <button class="rr-btn rr-mk" data-room="studio" title="컨텐츠 제작소"><span class="g">✎</span><span class="t">제작소</span></button>
+      <button class="rr-btn rr-home" data-room="home" title="홈"><span class="g">⌂</span><span class="t">홈</span></button>
+      <button class="rr-btn rr-mk" data-room="studio" title="트레이닝 룸"><span class="g">✎</span><span class="t">트레이닝</span></button>
       <button class="rr-back" id="rr-back" style="display:none">‹ 제작소로</button>
       <span class="rr-where" id="rr-where"></span>
     </div>
@@ -19902,7 +20017,7 @@
       <div id="room-switch" role="navigation" aria-label="방 이동">
         <button class="rs-btn rs-ai" title="AI 컨텐츠 정리" onclick="if(window.__openSorter)window.__openSorter()"><span class="rs-g">🤖</span><span class="rs-t">정리</span><span class="rs-dot" id="rs-dot"></span></button>
         <span class="rs-mid"><span class="rs-g">⌂</span>홈</span>
-        <button class="rs-btn rs-mk" title="컨텐츠 제작소" onclick="if(window.__goWs)window.__goWs('studio')"><span class="rs-g">✎</span><span class="rs-t">제작소</span></button>
+        <button class="rs-btn rs-mk" title="트레이닝 룸" onclick="if(window.__goWs)window.__goWs('studio')"><span class="rs-g">✎</span><span class="rs-t">트레이닝</span></button>
       </div>
       <section class="home-hero">
         <div class="home-hero-page"><span class="em">01</span> / 03</div>
@@ -22182,15 +22297,24 @@
     <!-- ═══════════════ 🎬 제작소 v2 (st2) — 홈+고객 셸 (내용은 JS 렌더) ═══════════════ -->
     <div id="st2-view" style="display:none;">
       <div class="st2-wrap">
+        <!-- v593 · 🏋️ 네온 간판 + 전술 보드(목표 4수치 ✎) — 사장님 픽 A 네온 짐 -->
+        <div class="tgym" id="tgym">
+          <div class="sign"><s>TRAINING</s><b>트레이닝 룸</b><i>반복하는 만큼 강해집니다</i></div>
+          <div class="board" id="tgym-board"></div>
+        </div>
         <!-- v558 · 하단 유리 도크. 글리프는 앱 하단바 문법(⌂ ▤ ✎ ▣ ▦)과 한 혈통 — 이모지 금지 -->
+        <!-- v593 · 트레이닝 룸 도크(사장님 확정) — 인사이트는 그대로, 훈련실 문법으로 재편.
+             트렌드는 💚맥락 안 세그로 이사(방 자체는 그대로) · 구성=원고 문 · 썸네일=창고 썸네일 문 -->
         <div class="st2-ws" id="st2-ws">
           <button class="on" data-st2tab="home"><span class="g">◎</span><span class="t">인사이트</span></button>
-          <button data-st2tab="cus"><span class="g">◉</span><span class="t">고객</span></button>
-          <button data-st2tab="trend"><span class="g">△</span><span class="t">트렌드</span></button>
-          <button data-st2tab="scripts"><span class="g">✎</span><span class="t">원고</span></button>
+          <button data-st2tab="3sec"><span class="g">◔</span><span class="t">3초</span></button>
+          <button data-st2tab="scripts"><span class="g">✎</span><span class="t">구성</span></button>
+          <button data-st2tab="thumbgo"><span class="g">▣</span><span class="t">썸네일</span></button>
+          <button data-st2tab="cus"><span class="g">◉</span><span class="t">맥락</span></button>
           <button data-st2tab="osmu"><span class="g">⬡</span><span class="t">배포</span></button>
         </div>
         <div id="st2-home"></div>
+        <div id="st2-3sec" style="display:none;"></div><!-- v593 · 👁 초반 3초 실 (JS 렌더 st2Render3sec) -->
         <div id="st2-cus" style="display:none;"></div>
         <div id="st2-osmu" style="display:none;"></div>
         <div id="st2-trend" style="display:none;"></div><!-- v557 · 🔥 트렌드 (JS 렌더 st2RenderTrend) -->
@@ -25397,7 +25521,7 @@
       return [`안녕하세요! 저는 관점이에요`, '왼쪽에서 벤치마킹 시트부터 시작해봐요.\n분석한 영상이 카드가 되어 여기로 옵니다.'];
     }
     if (ctx.space === 'scripts' && ctx.isEmpty) {
-      return ['아직 원고가 없네요', '트레이닝 룸의 카드에서 시작하거나,\n바로 위에서 새 원고를 써보세요.'];
+      return ['아직 원고가 없네요', '홈의 카드에서 시작하거나,\n바로 위에서 새 원고를 써보세요.'];
     }
     if (ctx.space === 'formatboard' && ctx.isEmpty) {
       return ['카드를 유형별로 정리해볼까요?', '시트에서 분석한 행을 드래그해서\n유형 칸에 옮길 수 있어요.'];
@@ -33224,9 +33348,9 @@
   }
 
   // 🧭 방 레일 — 어느 방/어느 화면인지 항상 표시
-  const RR_LABELS = { home: '트레이닝 룸', sheet: '벤치마킹 시트', customer: '고객 분석',
+  const RR_LABELS = { home: '홈', sheet: '벤치마킹 시트', customer: '고객 분석',
     formatboard: '분류', northstar: '라이벌 멘토', diagnose: '릴스 진단',
-    scripts: '내 원고', thumb: '썸네일', studio: '컨텐츠 제작소' };
+    scripts: '내 원고', thumb: '썸네일', studio: '트레이닝 룸' };
   function rrUpdate(ws) {
     const rail = document.getElementById('room-rail'); if (!rail) return;
     if (ws === 'studio' || ws === 'home') window.__rrFrom = null;      // 방에 도착하면 출신 초기화
@@ -33234,7 +33358,7 @@
     const room = (ws === 'studio' || from === 'studio') ? 'studio' : 'home';
     rail.querySelectorAll('.rr-btn').forEach(b => b.classList.toggle('here', b.dataset.room === room));
     const w = document.getElementById('rr-where');
-    if (w) w.textContent = (room === 'studio' ? '제작소' : '내 창고') + (RR_LABELS[ws] && ws !== 'studio' ? ' · ' + RR_LABELS[ws] : '');
+    if (w) w.textContent = (room === 'studio' ? '트레이닝 룸' : '내 창고') + (RR_LABELS[ws] && ws !== 'studio' ? ' · ' + RR_LABELS[ws] : '');
     // 제작소 소속이면 탭 줄이 따라온다 (A안 v434) — 되돌아가기 버튼은 필요 없어짐
     document.body.classList.toggle('in-studio', room === 'studio');
     try { st2SyncBar(ws); } catch (e) {}
@@ -34530,7 +34654,7 @@
     }
     trSection.parentNode.insertBefore(cont, trSection.nextSibling);
     // week는 링크칩 — 혹시 펼쳐져도 안내만
-    try { const wpb = document.getElementById('week-panel-body'); if (wpb) wpb.innerHTML = '<div style="font-size:12px;color:var(--text-sub);padding:2px 2px 4px;">📅 편성 보드는 <b>컨텐츠 제작소</b>로 이사했어요 — 이 줄을 누르면 바로 이동해요 →</div>'; } catch (e) {}
+    try { const wpb = document.getElementById('week-panel-body'); if (wpb) wpb.innerHTML = '<div style="font-size:12px;color:var(--text-sub);padding:2px 2px 4px;">📅 편성 보드는 <b>트레이닝 룸</b>으로 이사했어요 — 이 줄을 누르면 바로 이동해요 →</div>'; } catch (e) {}
     _accBuilt = true;
     renderJourneyRail();
     applyAccordionState();
@@ -48599,6 +48723,7 @@
     cus2Ensure(p);
     const named = !!(p.targetName || '').trim();
     let h = '<div class="cus2">';
+    // (v593 후반 · 타겟 세그먼트 줄은 사장님 기각 — «우리 채널의 단 한 명» 원칙. 멀티 타겟은 ◉ 고객 분석 방에만)
 
     // ── 0의 상태: 타겟 정하기 ── (v565 · 이름 고치기도 이 화면을 재사용 — 기존 이름을 채워둔다)
     if (!named || _cus2Rename) {
@@ -48610,8 +48735,9 @@
         '<div class="cus2-eye">My Target</div>' +
         '<div class="cus2-stage">' + cus2Fig(p.gender || 'f', p.gender ? '' : 'dim') + '</div>' +
         '<div class="cus2-floor"></div>' +
-        '<div class="cus2-q">내 컨텐츠가 닿았으면 하는<br><span>목표 타겟</span>은 누구인가요?</div>' +
-        '<div class="cus2-qs">내 콘텐츠가 말을 거는 한 사람 · 페르소나</div>' +
+        // v593 · 사장님 확정 — «여러 명»이 아니라 단 한 명. 질문부터 못 박는다
+        '<div class="cus2-q">우리 채널의 <span>단 한 명</span>,<br>구체적인 고객은 누구인가요?</div>' +
+        '<div class="cus2-qs">여러 명이 아니라 얼굴이 떠오르는 한 사람 — 그 사람에게만 말을 겁니다</div>' +
         '<div class="cus2-gseg"><button data-cus2g="f"' + (p.gender === 'f' ? ' class="on"' : '') + '>여성</button>' +
           '<button data-cus2g="m"' + (p.gender === 'm' ? ' class="on"' : '') + '>남성</button></div>' +
         // 모아둔 게 있으면 «남아 있다»고 먼저 말한다 — 빈 화면 4법칙 ④ 0으로 겁주지 않기
@@ -48628,6 +48754,9 @@
       return;
     }
 
+    // v593 · 💚 맥락의 방 = 고객 + 트렌드 (사장님 확정) — 위 세그로 오간다. 트렌드 방 몸은 그대로
+    h += '<div class="cus2-ctx"><button type="button" class="on">👤 고객</button>' +
+      '<button type="button" data-cus2ctxtr>🔥 트렌드</button></div>';
     // ── 상단: 뒤로 + 3탭 ──
     const filled = CUS2_MATS.filter(m => cus2Bask(p, m.k).length).length;
     const RN = ['0', 'I', 'II', 'III', 'IV'];
@@ -48653,6 +48782,8 @@
 
     el.innerHTML = h + '</div>';
     cus2Wire(p);
+    // v593 · 맥락 세그 — 🔥 트렌드로 (도크 하이라이트는 맥락에 남는다)
+    { const tr = el.querySelector('[data-cus2ctxtr]'); if (tr) tr.onclick = function () { st2SetTab('trend'); }; }
     // v521 · 전환 탭에서만 캔버스 무대를 돌린다 (다른 탭이면 정지)
     if (_cus2Tab === 'cnv') cus2StageInit(p); else cus2StageStop();
   }
@@ -49762,31 +49893,160 @@
     ta.remove();
   }
 
+  // ═══════════ 🏋️ v593 · 전술 보드 — 목표 4수치 (사장님 확정 기본값 · ✎로 수시 변경) ═══════════
+  //   3초 유지 60% · 평균 시청 12초 · 탐색 클릭 10% · 저장+보내기 5%. 저장 = 계정 저장소(cm-tgoals)
+  const TG_KEY = 'cm-tgoals';
+  let tGoals = { eye: 60, stay: 12, clk: 10, emp: 5 }, _tgLoaded = false;
+  async function tgLoad() {
+    try {
+      const r = await window.storage.get(TG_KEY);
+      if (r) { const v = JSON.parse(r.value !== undefined ? r.value : r); if (v && typeof v === 'object') tGoals = Object.assign(tGoals, v); }
+    } catch (e) {}
+    _tgLoaded = true;
+  }
+  async function tgSave() { try { await window.storage.set(TG_KEY, JSON.stringify(tGoals)); } catch (e) {} }
+  function tgymRender() {
+    const el = document.getElementById('tgym-board'); if (!el) return;
+    const G = [
+      ['eye',  '👁 3초 유지',   '%', '#43e0e6'],
+      ['stay', '⏱ 평균 시청',  '초', '#b07bf0'],
+      ['clk',  '🧲 탐색 클릭', '%', '#E0788C'],
+      ['emp',  '💚 저장·보내기', '%', '#2FD07B']
+    ];
+    el.innerHTML = G.map(function (g) {
+      return '<button type="button" class="tg" style="--c:' + g[3] + '" data-tg="' + g[0] + '" data-u="' + g[2] + '"' +
+        ' title="목표 — 눌러서 바꾸기"><b>' + tGoals[g[0]] + g[2] + '</b><s>' + g[1] + '</s><i>✎</i></button>';
+    }).join('');
+    el.querySelectorAll('[data-tg]').forEach(function (b) {
+      b.onclick = async function () {
+        const k = b.dataset.tg, u = b.dataset.u;
+        const v = prompt('목표 (' + u + ') — 언제든 다시 바꿀 수 있어요', tGoals[k]);
+        if (v == null) return;
+        const n = parseFloat(String(v).replace(/[^0-9.]/g, ''));
+        if (!(n > 0)) return;
+        tGoals[k] = n; await tgSave(); tgymRender();
+        try { toast('🎯 목표 저장 — ' + n + u); } catch (e) {}
+      };
+    });
+  }
+  // ═══════════ 👁 v593 · 초반 3초 실 (s3) — 진열대 · 시험대 · 오늘의 세트 ═══════════
+  //   재료는 전부 있던 것: 시트의 인트로·후킹 + sawWord 상투어 감지기. 새로 만든 건 «훈련 동선»뿐.
+  const S3_KEY = 'cm-3sec-sets';
+  let _s3Sets = 0, _s3Loaded = false, _s3Timer = null;
+  async function s3Load() {
+    try {
+      const r = await window.storage.get(S3_KEY);
+      if (r) { const v = JSON.parse(r.value !== undefined ? r.value : r); if (v && v.n > 0) _s3Sets = v.n; }
+    } catch (e) {}
+    _s3Loaded = true;
+  }
+  async function s3Save() { try { await window.storage.set(S3_KEY, JSON.stringify({ n: _s3Sets, at: Date.now() })); } catch (e) {} }
+  function st2Render3sec() {
+    const el = document.getElementById('st2-3sec'); if (!el) return;
+    if (!_s3Loaded) { s3Load().then(function () { try { st2Render3sec(); } catch (e) {} }); }
+    // 진열대 재료 — 첫 3초(인트로, 없으면 후킹)가 있는 카드를 조회수순으로
+    const shelf = (rows || []).filter(function (r) { return isFilled(r) && ((r.intro || '').trim() || (r.hook || '').trim()); })
+      .sort(function (a, b) { return (b.views || 0) - (a.views || 0); }).slice(0, 12);
+    el.innerHTML =
+      '<div class="s3">' +
+        '<div class="s3-hd"><div class="t">👁 초반 <em>3초</em> — 시선의 방</div>' +
+          '<div class="g">🎯 3초 유지 <b>' + tGoals.eye + '%</b><s>· 이탈을 막는 훈련</s></div></div>' +
+        '<div class="s3-k">② 3초 시험대 <i>내 첫 문장을 릴스처럼 띄워봅니다</i></div>' +
+        '<textarea class="s3-ta" id="s3-line" rows="2" placeholder="내 원고의 첫 문장을 붙여넣으세요 — 3초 안에 멈추게 하는가?"></textarea>' +
+        '<button type="button" class="s3-go" id="s3-run" disabled>▶ 3초 시험 시작</button>' +
+        '<div class="s3-stage" id="s3-stage"><span class="s3-cnt" id="s3-cnt">3</span><div class="line" id="s3-big"></div></div>' +
+        '<div class="s3-judge" id="s3-judge">' +
+          '<button type="button" class="stop" id="s3-y">🛑 멈추게 한다</button>' +
+          '<button type="button" id="s3-n">😴 스쳐간다 — 다시 쓰기</button></div>' +
+        '<div class="s3-saw" id="s3-saw"></div>' +
+        '<div class="s3-sets" id="s3-sets">' + (_s3Sets ? '지금까지 훈련 <b>' + _s3Sets + '</b>세트' : '오늘 첫 세트를 시작해보세요 — 보기 3개 + 내 것 1개 = 1세트') + '</div>' +
+        '<div class="s3-k">① 3초 진열대 <i>잘 된 첫 3초만 잘라서 — 조회수순</i></div>' +
+        (shelf.length
+          ? '<div class="s3-grid">' + shelf.map(function (r) {
+              const line = String((r.intro || r.hook || '')).split(/[.!?\n]/)[0].slice(0, 42);
+              return '<div class="s3-c" data-s3open="' + r.id + '">' +
+                (r.hasThumb ? '<img data-s3img="' + r.id + '" alt=""/>' : '') +
+                '<span class="sc"></span>' +
+                '<span class="vw">▶ ' + (r.views ? fmtViews(r.views) : '—') + '</span>' +
+                '<div class="tx"><div class="hk">' + esc(r.hook || '') + '</div>' +
+                (r.intro ? '<div class="in3">“' + esc(line) + '”</div>' : '') + '</div></div>';
+            }).join('') + '</div>'
+          : '<div class="s3-empty">인트로(첫 3초)를 적은 카드가 여기 모여요.<br>분해할 때 <b>인트로 칸</b>을 채우면 진열대가 자랍니다.</div>') +
+      '</div>';
+    // ── 배선 ──
+    const ta = document.getElementById('s3-line'), run = document.getElementById('s3-run');
+    const stage = document.getElementById('s3-stage'), big = document.getElementById('s3-big');
+    const cnt = document.getElementById('s3-cnt'), judge = document.getElementById('s3-judge');
+    const saw = document.getElementById('s3-saw'), sets = document.getElementById('s3-sets');
+    if (ta) ta.addEventListener('input', function () { run.disabled = !ta.value.trim(); });
+    if (run) run.onclick = function () {
+      const txt = ta.value.trim(); if (!txt) return;
+      if (_s3Timer) { clearInterval(_s3Timer); _s3Timer = null; }
+      big.textContent = txt;
+      stage.classList.add('on'); judge.classList.remove('on'); saw.innerHTML = '';
+      let n = 3; cnt.textContent = n;
+      _s3Timer = setInterval(function () {
+        n--;
+        if (n > 0) { cnt.textContent = n; return; }
+        clearInterval(_s3Timer); _s3Timer = null;
+        cnt.textContent = '⏱';
+        judge.classList.add('on');
+        // 상투어 검사 — «어디서나 하는 말»은 광고로 읽힌다 (sawWord 재사용)
+        try {
+          const hits = sawFind(txt);
+          if (hits.length) saw.innerHTML = '🪚 <b>' + hits.map(esc).join(' · ') + '</b> — 어디서나 하는 말이에요. 그 자리에 <b>숫자·장면</b>을 넣으면 멈춥니다.';
+        } catch (e) {}
+      }, 1000);
+    };
+    const done = async function (ok) {
+      _s3Sets++; await s3Save();
+      judge.classList.remove('on'); stage.classList.remove('on');
+      if (sets) sets.innerHTML = '지금까지 훈련 <b>' + _s3Sets + '</b>세트';
+      try { toast(ok ? '🛑 멈추게 하는 첫 문장! +1세트' : '✍️ 다시 쓰는 것도 훈련 — +1세트'); } catch (e) {}
+      if (!ok && ta) { ta.focus(); }
+    };
+    { const y = document.getElementById('s3-y'); if (y) y.onclick = function () { done(true); }; }
+    { const nb = document.getElementById('s3-n'); if (nb) nb.onclick = function () { done(false); }; }
+    // 진열대 — 썸네일 비동기 + 카드 클릭 = 판독지
+    el.querySelectorAll('img[data-s3img]').forEach(function (img) {
+      loadImage(img.dataset.s3img, 'thumb').then(function (u) { if (u) { img.src = u; img.style.display = 'block'; } }).catch(function () {});
+    });
+    el.querySelectorAll('[data-s3open]').forEach(function (c) { c.onclick = function () { openDetail(c.dataset.s3open); }; });
+  }
   // ── 진입점 + 탭 ──
   // 지금 보고 있는 화면에 맞춰 탭 줄의 활성 표시를 맞춘다 (화면이 바뀌어도 탭은 제자리)
   function st2SyncBar(ws) {
-    const map = { pattern: 'pattern', scripts: 'scripts' };
+    const map = { pattern: 'pattern', scripts: 'scripts', thumb: 'thumbgo' };   // v593 · 썸네일 문도 도크가 따라감
     const cur = map[ws] || _st2Tab;
     document.querySelectorAll('#st2-ws button').forEach(b => b.classList.toggle('on', b.dataset.st2tab === cur));
   }
   function st2SetTab(tab) {
+    // v594 · 🏋️ 통일감 ① — 지금 켜 있는 튜브 색. 맨 앞에 둬야 워크스페이스로 나가는
+    //   방(구성·썸네일)도 색을 물고 나간다 (아래 return 경로들보다 먼저).
+    try { document.body.setAttribute('data-troom', tab === 'pattern' ? 'scripts' : tab); } catch (e) {}
     // 패턴·원고는 제작소의 탭이면서 화면은 워크스페이스를 쓴다 — 탭 줄이 따라가므로 나간 티가 없다
     // v557 · 패턴·구조 탭은 🔥 트렌드로 교체 — 옛 'pattern' 호출은 원고 탭 안 패턴 파악으로 넘어간다
     if (tab === 'pattern') { window.__rrFrom = 'studio'; try { switchWorkspace('pattern'); } catch (e) {} return; }
     if (tab === 'scripts') { _st2Tab = tab; window.__rrFrom = 'studio'; try { switchWorkspace('scripts'); } catch (e) {} return; }
+    // v593 · 🧲 썸네일 = 창고 썸네일 탭으로 가는 문 (몸은 그대로 — 이사 0 원칙)
+    if (tab === 'thumbgo') { _st2Tab = tab; window.__rrFrom = 'studio'; try { switchWorkspace('thumb'); } catch (e) {} return; }
     // 워크스페이스 화면(원고·패턴)에 있다가 제작소 자체 탭으로 돌아올 때는 st2-view를 먼저 되살린다
     try {
       const sv = document.getElementById('st2-view');
       if (sv && sv.style.display === 'none') { _st2Tab = tab; switchWorkspace('studio'); }
     } catch (e) {}
     _st2Tab = tab;
-    document.querySelectorAll('#st2-ws button').forEach(b => b.classList.toggle('on', b.dataset.st2tab === tab));
+    // v593 · 트렌드는 💚맥락 소속(세그로 진입) — 도크 하이라이트는 맥락에 남는다
+    const hl = (tab === 'trend') ? 'cus' : tab;
+    document.querySelectorAll('#st2-ws button').forEach(b => b.classList.toggle('on', b.dataset.st2tab === hl));
     document.getElementById('st2-home').style.display = (tab === 'home') ? 'block' : 'none';
     document.getElementById('st2-cus').style.display = (tab === 'cus') ? 'block' : 'none';
+    const s3El = document.getElementById('st2-3sec'); if (s3El) s3El.style.display = (tab === '3sec') ? 'block' : 'none';
     const osmuEl = document.getElementById('st2-osmu'); if (osmuEl) osmuEl.style.display = (tab === 'osmu') ? 'block' : 'none';
     const trdEl = document.getElementById('st2-trend'); if (trdEl) trdEl.style.display = (tab === 'trend') ? 'block' : 'none';
     window.scrollTo({ top: 0 });
     if (tab === 'cus') st2RenderCus();
+    if (tab === '3sec') { try { st2Render3sec(); } catch (e) { console.error('[3sec] render 실패:', e); } }
     if (tab === 'osmu') st2RenderOsmu();
     if (tab === 'trend') { try { st2RenderTrend(); } catch (e) { console.error('[trend] render 실패:', e); } }
   }
@@ -49796,6 +50056,10 @@
       document.querySelectorAll('#st2-ws button').forEach(b => b.onclick = () => st2SetTab(b.dataset.st2tab));
       try { st2SyncBar('studio'); } catch (e) {}
     }
+    // v594 · 트레이닝 룸에 들어오는 순간의 튜브 색 (탭을 안 눌러도 켜져 있어야 한다)
+    try { document.body.setAttribute('data-troom', _st2Tab || 'home'); } catch (e) {}
+    // v593 · 🏋️ 전술 보드 (목표 4수치) — 들어올 때마다 최신으로
+    try { if (!_tgLoaded) tgLoad().then(tgymRender); else tgymRender(); } catch (e) {}
     if (!_st2KwLoaded || !_st2FLoaded || !_st2PLoaded || !_st2OLoaded) {
       Promise.all([
         _st2KwLoaded ? null : st2KwLoad(),
