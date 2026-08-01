@@ -1344,9 +1344,13 @@
   #sh-modal.rd-mode .sh-field,
   #sh-modal.rd-mode .fmt-block,
   #sh-modal.rd-mode .audio-block { display: none !important; }
-  /* 읽는 동안엔 저장·초기화 줄도 안 보인다. 「수정하기」를 눌러야 나온다 */
+  /* v593 · 저장·초기화 = «위»(수정하기 자리) — 저장하러 스크롤을 끝까지 내려야 했다(사장님).
+     취소 버튼은 제거 — ← 뒤로가 그 역할. 고치는 중엔 수정하기 대신 저장·초기화가 그 자리를 차지 */
   #sh-modal.rd-mode .sh-modal-btns { display: none; }
   #sh-modal.rd-mode.rd-editing .sh-modal-btns { display: flex; }
+  .sh-modal-head .sh-modal-btns { margin: 0; padding: 0; border: none; gap: 8px; }
+  .sh-modal-head .sh-btn { padding: 8px 13px; }
+  #sh-modal.rd-mode.rd-editing #rd-edit { display: none; }
 
   .sh-close {
     background: none;
@@ -21215,43 +21219,85 @@
       font-weight:700;padding:2px 8px;border-radius:999px}
     .fork-bd:empty{display:none}
 
-    /* ═══════════ 🚏 공정 레일 (cmr, v569) — 세 방 공통 한 줄 ═══════════ */
-    /* v573 · 흐르는 알·선은 «버튼 위 띠»로 올린다 — 버튼에 배경이 생겨 가로지르면 지저분하다 */
-    .cmr{display:flex;align-items:stretch;gap:6px;padding:12px 12px 8px;position:relative;
-      border-bottom:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.022)}
-    .cmr-ln{position:absolute;left:16px;right:76px;top:6px;height:1px;
-      background:rgba(255,255,255,.1);pointer-events:none}
-    /* ★ 알 한 개가 계속 왼쪽 → 오른쪽 (사장님 픽) */
-    .cmr-fl{position:absolute;top:3.5px;width:6px;height:6px;border-radius:50%;background:#d7f34b;
-      box-shadow:0 0 9px rgba(215,243,75,.85);pointer-events:none;z-index:3;
-      animation:cmrFlow 5.2s linear infinite}
-    @keyframes cmrFlow{
-      0%{left:16px;opacity:0}
-      9%{opacity:1}
-      88%{opacity:1}
-      100%{left:calc(100% - 82px);opacity:0}}
-    /* ⚠️ v573 · 칸을 «눌러서 오가는 버튼»으로. 옛 값은 높이 33px·눌린 티 없음·글자 7.5px이라
-       버튼인 줄 모르고 지나쳤다(사장님 제보). 최소 44px + 누르면 들어가는 느낌 + 테두리로 «칸» 표시 */
-    .cmr-nd{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
-      position:relative;z-index:2;cursor:pointer;font-family:inherit;padding:6px 2px;min-height:46px;
-      background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.09);border-radius:11px;
+    /* ═══════════ 🏭 공정 레일 (cmr, v593) — 컨베이어 벨트 (사장님 픽 ①) ═══════════
+       네모 3개 → 돌아가는 라인. 벨트가 흐르고 재료가 «단계를 지날 때마다 그 단계 색으로 물든다»:
+       넣기(시안) → 분류(골드) → 손질(코랄) → 🏁(라임). 버튼 배선(data-cmr)은 그대로. */
+    .cmr{position:relative;height:106px;overflow:hidden;
+      border-bottom:1px solid rgba(255,255,255,.09);
+      background:radial-gradient(120% 90% at 50% 0%,rgba(215,243,75,.05),transparent 62%),rgba(255,255,255,.015)}
+    /* 벨트 + 롤러 */
+    .cmr-belt{position:absolute;left:0;right:0;bottom:15px;height:16px;
+      background:linear-gradient(180deg,#191b14,#101208);
+      border-top:1.5px solid rgba(255,255,255,.13);border-bottom:1px solid rgba(0,0,0,.8)}
+    .cmr-belt::before{content:'';position:absolute;inset:2px 0;opacity:.5;
+      background:repeating-linear-gradient(90deg,transparent 0 14px,rgba(255,255,255,.08) 14px 16px);
+      animation:cmrBelt 1.5s linear infinite}
+    @keyframes cmrBelt{to{background-position:30px 0}}
+    .cmr-rl{position:absolute;bottom:6px;width:8px;height:8px;border-radius:50%;border:1.5px solid rgba(255,255,255,.2);
+      background:#0c0d09;animation:cmrRoll 1.2s linear infinite;pointer-events:none}
+    .cmr-rl::before{content:'';position:absolute;left:50%;top:0;width:1.5px;height:100%;background:rgba(255,255,255,.18);transform:translateX(-50%)}
+    @keyframes cmrRoll{to{transform:rotate(360deg)}}
+    /* 재료 — 단계 통과마다 그 단계 색으로 물듦 (스테이션 위치 15%·44%·73%에 맞춤) */
+    .cmr-it{position:absolute;bottom:29px;width:14px;height:14px;border-radius:4px;z-index:1;pointer-events:none;
+      animation:cmrIt 7s linear infinite}
+    @keyframes cmrIt{
+      0%{left:2%;opacity:0;background:#10292c;border:1px solid #43e0e6;box-shadow:0 0 8px rgba(67,224,230,.5)}
+      5%{opacity:1}
+      40%{background:#10292c;border-color:#43e0e6;box-shadow:0 0 8px rgba(67,224,230,.5)}
+      45%{background:#2e2712;border-color:#D8B23A;box-shadow:0 0 10px rgba(216,178,58,.65)}
+      68%{background:#2e2712;border-color:#D8B23A;box-shadow:0 0 10px rgba(216,178,58,.65)}
+      73%{background:#33200f;border-color:#FF8A5B;box-shadow:0 0 11px rgba(255,138,91,.7)}
+      86%{background:#33200f;border-color:#FF8A5B;box-shadow:0 0 11px rgba(255,138,91,.7)}
+      90%{background:#3d4a17;border-color:#e6fb62;box-shadow:0 0 14px rgba(230,251,98,.9)}
+      94%{left:calc(100% - 56px);opacity:1;background:#3d4a17;border-color:#e6fb62;box-shadow:0 0 14px rgba(230,251,98,.9)}
+      100%{left:calc(100% - 52px);opacity:0;background:#3d4a17;border-color:#e6fb62}}
+    /* 스테이션 (버튼 = 그 방으로 이동, v573 배선 그대로) */
+    .cmr-stns{position:absolute;left:0;right:58px;top:5px;bottom:31px;display:flex;justify-content:space-around;z-index:2}
+    .cmr-nd{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:1px;
+      min-width:64px;padding:3px 10px;background:none;border:none;border-radius:12px;cursor:pointer;font-family:inherit;
       -webkit-tap-highlight-color:transparent;
-      transition:background .18s,border-color .18s,transform .16s cubic-bezier(.2,1.3,.4,1)}
-    .cmr-nd:hover{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.18)}
-    .cmr-nd:active{transform:scale(.95)}
-    .cmr-nd .d{width:7px;height:7px;border-radius:50%;background:#0b0c09;border:2px solid var(--c);display:block}
-    .cmr-nd.here{background:color-mix(in srgb,var(--c) 13%,transparent);border-color:var(--c)}
-    .cmr-nd.here .d{background:var(--c);box-shadow:0 0 10px var(--c)}
-    .cmr-nd .v{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:var(--c);
+      transition:background .18s,transform .16s cubic-bezier(.2,1.3,.4,1)}
+    .cmr-nd:hover{transform:translateY(-2px);background:rgba(255,255,255,.045)}
+    .cmr-nd:active{transform:scale(.92)}
+    .cmr-nd.here{background:color-mix(in srgb,var(--c) 11%,transparent);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--c) 45%,transparent)}
+    .cmr-nd .v{font-family:'JetBrains Mono',monospace;font-size:12.5px;font-weight:800;color:var(--c);
+      text-shadow:0 0 9px color-mix(in srgb,var(--c) 60%,transparent);
       font-variant-numeric:tabular-nums;font-style:normal;line-height:1.1}
-    .cmr-nd .k{font-size:8.5px;color:#8a9083;font-style:normal;text-decoration:none;white-space:nowrap}
-    .cmr-nd.here .k{color:#eae8de;font-weight:700}
+    .cmr-nd .k{font-size:9px;color:#8a9083;font-style:normal;text-decoration:none;white-space:nowrap}
+    .cmr-nd.here .k{color:#eae8de;font-weight:800}
     .cmr-nd:hover .k{color:#c4c9bd}
-    .cmr-tot{flex:none;padding-left:10px;margin-left:2px;border-left:1px solid rgba(255,255,255,.09);
-      text-align:right;display:flex;flex-direction:column;justify-content:center;gap:2px}
-    .cmr-tot b{font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:700;color:#d7f34b;line-height:1}
-    .cmr-tot s{font-size:7.5px;color:#63695f;text-decoration:none}
-    @media(prefers-reduced-motion:reduce){.cmr-fl{animation:none;opacity:0}}
+    /* 기계들 */
+    .cmr-nd .m{width:40px;height:25px;position:relative;display:block}
+    .cmr-mh{position:absolute;left:50%;top:1px;transform:translateX(-50%);width:28px;height:17px;
+      clip-path:polygon(0 0,100% 0,66% 100%,34% 100%);background:linear-gradient(180deg,#1f2a30,#12191d);
+      border:1px solid rgba(67,224,230,.5)}
+    .cmr-md{position:absolute;left:50%;width:7px;height:7px;margin-left:-3.5px;border-radius:2px;background:#43e0e6;
+      opacity:0;animation:cmrDrop 2.4s ease-in infinite;pointer-events:none}
+    @keyframes cmrDrop{0%{top:-5px;opacity:0}12%{opacity:1}45%{top:16px;opacity:1}55%{top:21px;opacity:0}100%{opacity:0}}
+    .cmr-mgb{position:absolute;left:50%;bottom:0;width:18px;height:4px;margin-left:-9px;border-radius:3px;
+      background:#20221a;border:1px solid rgba(216,178,58,.4)}
+    .cmr-mg{position:absolute;left:50%;bottom:2px;width:2.5px;height:19px;margin-left:-1.25px;border-radius:2px;
+      background:linear-gradient(180deg,#D8B23A,#8a7020);transform-origin:50% 100%;
+      animation:cmrGate 2.2s ease-in-out infinite;box-shadow:0 0 7px rgba(216,178,58,.4)}
+    @keyframes cmrGate{0%,18%{transform:rotate(-26deg)}50%,68%{transform:rotate(26deg)}100%{transform:rotate(-26deg)}}
+    .cmr-mc{position:absolute;left:50%;top:0;transform:translateX(-50%);width:30px;height:23px;
+      clip-path:polygon(42% 0,58% 0,100% 100%,0 100%);
+      background:linear-gradient(180deg,rgba(255,138,91,.34),rgba(255,138,91,.03));
+      animation:cmrLamp 2.8s ease-in-out infinite}
+    @keyframes cmrLamp{50%{opacity:.55}}
+    .cmr-mp{position:absolute;left:50%;bottom:0;transform:translateX(-50%) rotate(-32deg);font-size:11px;font-style:normal;
+      animation:cmrPen 1.4s ease-in-out infinite}
+    @keyframes cmrPen{50%{transform:translateX(-46%) rotate(-18deg)}}
+    /* 🏁 마무리 더미 */
+    .cmr-tot{position:absolute;right:5px;bottom:31px;width:52px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:1px}
+    .cmr-tot .fl{font-size:11px;line-height:1}
+    .cmr-tot b{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:800;color:#e6fb62;line-height:1;
+      text-shadow:0 0 9px rgba(230,251,98,.5)}
+    .cmr-tot s{font-size:7.5px;color:#63695f;text-decoration:none;white-space:nowrap}
+    .cmr-tot .pile{display:flex;justify-content:center;align-items:flex-end;gap:2px;margin-top:1px}
+    .cmr-tot .pile i{width:7px;height:7px;border-radius:2px;background:linear-gradient(160deg,#4a5537,#1a200f);border:1px solid rgba(230,251,98,.55)}
+    .cmr-tot .pile i:nth-child(2){height:10px}
+    @media(prefers-reduced-motion:reduce){.cmr-belt::before,.cmr-rl,.cmr-it,.cmr-md,.cmr-mg,.cmr-mc,.cmr-mp{animation:none}.cmr-it{opacity:0}}
 
     /* ═══════════ ✎ 원고 재료 손질 (prp, v566) — 서재×램프×빨랫줄×필름 확정 조합 ═══════════ */
     #prp{position:fixed;inset:0;z-index:1620;display:none;overflow-y:auto;
@@ -21553,7 +21599,7 @@
             <button class="slv-skip" id="slv-skip">건너뛰고 다음 →</button>
           </div>
         </div>
-        <div class="slv-note">요소는 복수 선택 · 빈 축만 보여요 · [＋ 편집]에서 유형 추가·정리 (내용 있는 유형 삭제는 창고 &gt; 분류)</div>
+        <div class="slv-note">요소는 복수 선택 · 채워진 유형 축은 숨어요 (⭐핏은 항상 — 매긴 값이 켜져 있어요) · [＋ 편집]에서 유형 추가·정리</div>
       </div>
       <div class="slv-em" id="slv-em">
         <div class="slv-em-box">
@@ -22310,6 +22356,11 @@
         <div style="display:flex;gap:8px;align-items:center;">
           <button type="button" class="rd-del" id="rd-del" title="이 카드를 지웁니다">삭제</button><!-- v586 -->
           <button type="button" class="rd-edit" id="rd-edit">수정하기</button>
+          <!-- v593 · 저장·초기화가 위로 이사 (아래 있던 줄) — 고치는 중에만 보인다 -->
+          <div class="sh-modal-btns">
+            <button class="sh-btn sh-btn-del" id="sh-clear-row">초기화</button>
+            <button class="sh-btn sh-btn-save" id="sh-save">저장</button>
+          </div>
           <button class="sh-close sh-back" id="sh-modal-close">← 뒤로</button>
         </div>
       </div>
@@ -22517,11 +22568,7 @@
       </div>
 
       <button class="sh-write-from-bench" id="sh-write-from-bench" type="button">✍️ 이걸로 원고 쓰기</button>
-      <div class="sh-modal-btns">
-        <button class="sh-btn sh-btn-del" id="sh-clear-row">초기화</button>
-        <button class="sh-btn sh-btn-cancel" id="sh-cancel">취소</button>
-        <button class="sh-btn sh-btn-save" id="sh-save">저장</button>
-      </div>
+      <!-- v593 · 저장·초기화·취소 줄 → 위로 이사(초기화·저장만, 취소는 ←뒤로가 대신) -->
     </div>
   </div>
 
@@ -23500,6 +23547,44 @@
     try { if (typeof renderFormatBoard === 'function') renderFormatBoard(); } catch (e) {}
     try { if (typeof refreshCurrentBoard === 'function') refreshCurrentBoard(); } catch (e) {}
     toast('🗑 휴지통으로 이동 (설정에서 복구)');
+  }
+  // v593 · 사장님 확정 «휴지통 없이 바로 삭제» — 유형을 그 자리에서 지운다.
+  //   커스텀 = 목록·행 딱지에서 완전 제거 / 기본 유형(코드 상수)은 지울 수 없어 숨김 기록으로 같은 효과.
+  //   카드(행) 자체는 남는다 — 지워지는 건 «유형 딱지»뿐.
+  async function deleteTypeNow(sys, label, skipConfirm) {
+    // 되돌릴 수 없으므로 여기서 한 번 묻는다 (보드 버튼은 개수까지 보여주는 자기 확인창이 있어 skipConfirm)
+    if (!skipConfirm && !confirm('「' + label + '」 유형을 바로 삭제합니다.\n카드에 붙은 이 유형 딱지도 함께 지워져요 (카드 자체는 남아요).\n되돌릴 수 없어요 — 삭제할까요?')) return;
+    try {
+      if (sys === 'keyword') {
+        customKeywords = (customKeywords || []).filter(x => x !== label);
+        customThumbTypes = (customThumbTypes || []).filter(x => x !== label);
+        customCopyTypes = (customCopyTypes || []).filter(x => x !== label);
+        (rows || []).forEach(r => {
+          r.thumbTypes = (r.thumbTypes || []).filter(x => x !== label);
+          r.copyTypes = (r.copyTypes || []).filter(x => x !== label);
+          r.keywords = (r.keywords || []).filter(x => x !== label);
+        });
+        try { await saveCustomKeywords(); } catch (e) {}
+        try { await saveCustomThumbTypes(); } catch (e) {}
+        try { await saveCustomCopyTypes(); } catch (e) {}
+        const isBase = (typeof BASE_THUMB_TYPES !== 'undefined' && BASE_THUMB_TYPES.indexOf(label) >= 0)
+                    || (typeof BASE_COPY_TYPES !== 'undefined' && BASE_COPY_TYPES.indexOf(label) >= 0);
+        if (isBase) { if (!isTypeTrashed(sys, label)) typeTrash.push({ sys: sys, label: label }); }
+        else typeTrash = (typeTrash || []).filter(t => !(t && t.sys === sys && t.label === label));
+        await saveTypeTrash();
+        await saveRows();
+      } else {
+        // 다른 계열(format·audio·comment·tag·viral) — 기존 영구삭제 경로로 커스텀·행 딱지 정리 후,
+        // 숨김 기록을 남긴다(기본 유형은 코드 상수라 이 기록이 곧 «삭제». 커스텀엔 무해한 잔여)
+        await purgeType(sys, label);
+        if (!isTypeTrashed(sys, label)) { typeTrash.push({ sys: sys, label: label }); await saveTypeTrash(); }
+      }
+    } catch (e) {}
+    try { renderSidebarCounts(); } catch (e) {}
+    try { renderTable(); } catch (e) {}
+    try { if (typeof renderFormatBoard === 'function') renderFormatBoard(); } catch (e) {}
+    try { if (typeof refreshCurrentBoard === 'function') refreshCurrentBoard(); } catch (e) {}
+    toast('🗑 「' + label + '」 삭제됨');
   }
   // 휴지통에서 복구
   async function restoreType(sys, label) {
@@ -24631,8 +24716,9 @@
         const t = b.dataset.t;
         const tk = fbGroupMode === 'thumb' ? 'thumbTypes' : 'copyTypes';
         const n = rows.filter(r => (r[tk] || []).includes(t)).length;
-        if (!confirm('"' + t + '" 유형에 컨텐츠 ' + n + '개가 들어있어요.\n휴지통으로 보내면 폴더·선택지에서 숨겨지고 데이터는 보존돼요. (설정 > 휴지통에서 복구)\n보낼까요?')) return;
-        await trashType('keyword', t);
+        // v593 · 휴지통 경유 없이 바로 삭제 (사장님 확정)
+        if (!confirm('「' + t + '」 유형을 바로 삭제합니다.\n카드 ' + n + '개에 붙은 이 유형 딱지도 함께 지워져요 (카드 자체는 남아요).\n되돌릴 수 없어요 — 삭제할까요?')) return;
+        await deleteTypeNow('keyword', t, true);
       };
     });
     // 토글 버튼 (형식별/목적별)
@@ -25169,11 +25255,12 @@
         const t = b.dataset.t;
         const n = strongRows.filter(r => (r[typesKey] || []).includes(t)).length
           + collects.filter(c => c.kind === ckind && ((c.types || []).includes(t) || c.type === t)).length;
+        // v593 · 휴지통 경유 없이 바로 삭제 (사장님 확정)
         const msg = n
-          ? '"' + t + '" 유형에 컨텐츠 ' + n + '개가 들어있어요.\n휴지통으로 보내면 보드·선택지에서 숨겨지고 데이터는 보존돼요. (설정 > 휴지통에서 복구)\n보낼까요?'
-          : '"' + t + '" 유형을 휴지통으로 보낼까요? (설정 > 휴지통에서 복구)';
+          ? '「' + t + '」 유형을 바로 삭제합니다.\n카드 ' + n + '개에 붙은 이 유형 딱지도 함께 지워져요 (카드 자체는 남아요).\n되돌릴 수 없어요 — 삭제할까요?'
+          : '「' + t + '」 유형을 바로 삭제할까요? 되돌릴 수 없어요.';
         if (!confirm(msg)) return;
-        await trashType('keyword', t);
+        await deleteTypeNow('keyword', t, true);
         rerender();
       };
     });
@@ -27794,7 +27881,7 @@
           const r = rows.find(x => x.id === id);
           if (r) { r.favorite = !r.favorite; r.updatedAt = Date.now(); await saveRows(); renderTable(); }
         } else if (act === 'detail') {
-          openDetail(id);
+          openDetail(id, true);   // v593 · 시트 ⚙(수정) 진입 = 바로 고치는 모드 (사장님)
         } else if (act === 'struct-edit') {
           openRowStruct(id);
         } else if (act === 'addlink' || act === 'editlink') {
@@ -28463,7 +28550,7 @@
     });
   }
 
-  function openDetail(rowId) {
+  function openDetail(rowId, startEdit) {   // v593 · startEdit=true면 열자마자 고치는 모드 (시트 ⚙ 진입)
     editingRowId = rowId;
     const r = rows.find(x => x.id === rowId);
     if (!r) return;
@@ -28523,6 +28610,7 @@
       document.getElementById('sh-modal').classList.add('rd-mode');
       rdSetEdit(false);
       try { rdRender(r); } catch (e) { console.warn('rd', e); }
+      if (startEdit) rdSetEdit(true);   // v593 · 수정하기 한 번 더 누를 필요 없이 바로 (사장님)
     }
 
     const _shm = document.getElementById('sh-modal');
@@ -28574,7 +28662,7 @@
           e.stopPropagation();
           const f = del.dataset.del;
           if (formFormat === f) formFormat = '';
-          await trashType('format', f);
+          await deleteTypeNow('format', f);
           renderFormatPicker();
           return;
         }
@@ -28602,7 +28690,7 @@
           e.stopPropagation();
           const a = del.dataset.del;
           if (formAudioType === a) formAudioType = '';
-          await trashType('audio', a);
+          await deleteTypeNow('audio', a);
           renderAudioPicker();
           return;
         }
@@ -28631,7 +28719,7 @@
           e.stopPropagation();
           const a = del.dataset.del;
           if (formCommentType === a) formCommentType = '';
-          await trashType('comment', a);
+          await deleteTypeNow('comment', a);
           renderCommentPicker();
           return;
         }
@@ -28684,7 +28772,7 @@
           e.stopPropagation();
           const t = del.dataset.del;
           const fi = formTags.indexOf(t); if (fi >= 0) formTags.splice(fi, 1);
-          await trashType('tag', t);
+          await deleteTypeNow('tag', t);
           renderTagsPicker();
           return;
         }
@@ -28716,7 +28804,7 @@
           e.stopPropagation();
           const t = del.dataset.vdel;
           const fi = formViralTypes.indexOf(t); if (fi >= 0) formViralTypes.splice(fi, 1);
-          await trashType('viral', t);
+          await deleteTypeNow('viral', t);
           renderViralPicker();
           return;
         }
@@ -29631,7 +29719,7 @@
     if (addTopBtn) addTopBtn.onclick = addRow;
 
     document.getElementById('sh-modal-close').onclick = closeModal;
-    document.getElementById('sh-cancel').onclick = closeModal;
+    { const _shc = document.getElementById('sh-cancel'); if (_shc) _shc.onclick = closeModal; }   // v593 · 취소 버튼 제거됨(←뒤로가 대신) — 가드만 남김
     document.getElementById('sh-save').onclick = saveDetail;
     // ── v553 · 판독지 배선 ──
     document.getElementById('sh-save').addEventListener('click', rdCollect, true);  // capture = saveDetail보다 먼저
@@ -31335,7 +31423,7 @@
       const types = card.querySelector('.es-types');
       if (types) types.onclick = async (e) => {
         const del = e.target.closest('.es-chip-x');
-        if (del) { e.stopPropagation(); const t = del.dataset.del; if (_qType[q] === t) _qType[q] = ''; await trashType(_qSys(q), t); renderEntryStrength(); return; }
+        if (del) { e.stopPropagation(); const t = del.dataset.del; if (_qType[q] === t) _qType[q] = ''; await deleteTypeNow(_qSys(q), t); renderEntryStrength(); return; }
         if (e.target.closest('.es-type-add')) { _qAddOpen[q] = !_qAddOpen[q]; renderEntryStrength(); return; }
         if (e.target.closest('.es-add-ok')) { return; } // handled below
         const chip = e.target.closest('.es-type-chip'); if (!chip) return;
@@ -31442,7 +31530,7 @@
       if (typesEl) {
         typesEl.addEventListener('click', async (e) => {
           const del = e.target.closest('.es-chip-x');
-          if (del) { e.stopPropagation(); const t = del.dataset.del; if (_clType[q] === t) _clType[q] = ''; await trashType(q === 'comment' ? 'comment' : (q === 'thumb' ? 'format' : 'keyword'), t); renderCollectSection(q); return; }
+          if (del) { e.stopPropagation(); const t = del.dataset.del; if (_clType[q] === t) _clType[q] = ''; await deleteTypeNow(q === 'comment' ? 'comment' : (q === 'thumb' ? 'format' : 'keyword'), t); renderCollectSection(q); return; }
           if (e.target.closest('.es-type-add')) { _clAddOpen[q] = !_clAddOpen[q]; renderCollectSection(q); return; }
           if (e.target.closest('.es-add-ok')) { await _clAdd(q); return; }
           const chip = e.target.closest('.es-type-chip'); if (!chip) return;
@@ -43311,14 +43399,17 @@
           paint();
           btn.disabled = !host.querySelector('.slv-chip.on');
         }; });
+        paint();   // v593 · 미리 켜진 값(이미 매긴 별점)도 트랙이 차오른 채로 보이게
       }
       // v547 · 앱 전체가 쓰는 표기로 통일 (🧲 유입 / 💚 전환) — 정거장만 🚪🌱로 달랐다
       if (!r.funnelStage) addSpecial('funnel', 'linear-gradient(135deg,#E0788C,#2FD07B)', '🧭 퍼널', '처음 본 사람도 끝까지 볼까? 예=유입 · 아니오=전환',
         '<button type="button" class="slv-chip fn-in" data-fn="attract">🧲 유입<span class="sub"> — 누구나 볼 것</span></button>' +
         '<button type="button" class="slv-chip fn-cv" data-fn="convert">💚 전환<span class="sub"> — 내 고객용 (CTA·예약·DM)</span></button>');
       // v545 · 별 5개(★★★★★)는 칸을 너무 먹어서 폰에서 줄바꿈이 났다 → 숫자 한 자리로 (사장님 확정)
-      if (!(r.rating > 0)) addSpecial('fit', '#F5C84B', '⭐ 나에게 핏', '내 고객·내 방향에 맞나 — 1(아님) ~ 5(딱 맞음)',
-        [1, 2, 3, 4, 5].map(n => '<button type="button" class="slv-chip slv-num" data-fit="' + n + '" title="' + '★'.repeat(n) + '">' + n + '</button>').join(''));
+      // v593 · «어떤 카드는 핏이 나오고 어떤 건 안 나온다»(사장님) — 이미 별점 있는 카드가 숨던 것.
+      //   핏은 «항상» 보이고, 매겨둔 값은 켜진 채로 나온다(다시 눌러 바꿀 수 있음)
+      addSpecial('fit', '#F5C84B', '⭐ 나에게 핏', '내 고객·내 방향에 맞나 — 1(아님) ~ 5(딱 맞음)',
+        [1, 2, 3, 4, 5].map(n => '<button type="button" class="slv-chip slv-num' + (r.rating === n ? ' on' : '') + '" data-fit="' + n + '" title="' + '★'.repeat(n) + '">' + n + '</button>').join(''));
       // v548 · 트렌드 점수 — 적합도 엔진의 «트렌드» 축이 지금은 «담은 날짜»로만 계산된다.
       //   사람이 매기면 그게 진짜 트렌드가 되어 추천 정확도가 올라간다 (사장님 제안)
       if (!(r.trendScore > 0)) addSpecial('trend', '#FF7A45', '🔥 트렌드 (선택)', '지금 이 주제가 뜨고 있나 — 1(지났음) ~ 5(지금 한창)',
@@ -43364,8 +43455,8 @@
           const cl = a.custom(); const i = cl.indexOf(t); if (i >= 0) cl.splice(i, 1);
           try { await a.save(); } catch (e) {}
           toast('"' + t + '" 삭제됨');
-        } else { // 기본 유형 = 휴지통 이동 (설정에서 복구)
-          await trashType('keyword', t);
+        } else { // v593 · 기본 유형도 바로 삭제 (숨김 기록 방식 — 화면에선 즉시 사라짐)
+          await deleteTypeNow('keyword', t);
         }
         slvEmRender(); slvBuildAxes();
       };
@@ -43699,20 +43790,31 @@
   // v573 · 칸은 «버튼»이어야 한다 — span은 눌러도 눌린 티가 안 나고 키보드로도 못 간다
   function cmrHtml(here) {
     const c = cmrCounts();
+    // v593 · 컨베이어 — 스테이션마다 «기계»가 붙는다: 넣기=호퍼(상자 떨어짐)·분류=게이트(척척)·손질=작업등+펜
+    const MACH = {
+      in:   '<span class="m"><i class="cmr-mh"></i><i class="cmr-md"></i></span>',
+      sort: '<span class="m"><i class="cmr-mgb"></i><i class="cmr-mg"></i></span>',
+      prep: '<span class="m"><i class="cmr-mc"></i><i class="cmr-mp">✎</i></span>'
+    };
     const nodes = CMR_STEPS.map(function (s) {
       const on = (s.k === here);
-      // v593 · 넣기 = 시작점 — 대기 수가 없는 «행동 칸»이라 숫자 대신 + (던져 넣는 곳)
-      const val = s.k === 'in' ? '+' : c[s.k];
+      const val = s.k === 'in' ? '+' : c[s.k];   // 넣기 = 행동 칸이라 숫자 대신 +
       const lab = s.k === 'in' ? '▶ ' + s.n : s.n;
       const ce = s.n.charCodeAt(s.n.length - 1);
       const josa = (ce >= 0xAC00 && ce <= 0xD7A3 && (ce - 0xAC00) % 28) ? '으로' : '로';
       return '<button type="button" class="cmr-nd' + (on ? ' here' : '') + '" style="--c:' + s.c + '"' +
         ' data-cmr="' + s.k + '" title="' + esc(s.n) + josa + ' 이동"' + (on ? ' aria-current="step"' : '') + '>' +
-        '<i class="d"></i><b class="v">' + val + '</b><s class="k">' + lab + '</s></button>';
+        '<b class="v">' + val + '</b>' + (MACH[s.k] || '') + '<s class="k">' + lab + '</s></button>';
     }).join('');
-    // v593 · 오른쪽 끝 = 🏁 마무리 — 이번 달 끝낸 수 (늘기만 하는 숫자)
-    return '<div class="cmr"><i class="cmr-ln"></i><i class="cmr-fl"></i>' + nodes +
-      '<span class="cmr-tot"><b>' + c.month + '</b><s>🏁 이번 달 끝</s></span></div>';
+    // 벨트 + 롤러 4개 + 재료 3개(색 물듦) + 🏁 완성 더미
+    return '<div class="cmr">' +
+      '<div class="cmr-stns">' + nodes + '</div>' +
+      '<div class="cmr-belt"></div>' +
+      '<i class="cmr-rl" style="left:9%"></i><i class="cmr-rl" style="left:34%"></i>' +
+      '<i class="cmr-rl" style="left:59%"></i><i class="cmr-rl" style="left:82%"></i>' +
+      '<i class="cmr-it"></i><i class="cmr-it" style="animation-delay:-2.33s"></i><i class="cmr-it" style="animation-delay:-4.66s"></i>' +
+      '<span class="cmr-tot"><span class="fl">🏁</span><b>' + c.month + '</b><s>이번 달 끝</s>' +
+      '<span class="pile"><i></i><i></i><i></i></span></span></div>';
   }
   // 방에 들어갈 때/카운트가 바뀔 때 다시 그린다 (해당 방의 레일만)
   function cmrPaint(host, here) {
