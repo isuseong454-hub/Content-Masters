@@ -17602,6 +17602,33 @@
   .stg-cell{ border-left:2px solid color-mix(in srgb,var(--c) 55%,transparent); padding-left:11px; }
   .stg-cell .stg-k{ color:var(--c); opacity:.9; }
   .stg-cell .stg-in{ font-size:12.5px; min-height:44px; }
+  /* ═══ v593 · A 포스터형 (사장님 픽) — 목표=헤드라인 · D-day=도장 · 할 일=줄 · 시도한 것=접힘 ═══ */
+  .stg-goal{ padding-right:92px; }
+  .stg-stamp{ position:absolute; right:0; top:-2px; display:flex; flex-direction:column; align-items:center; gap:2px;
+    padding:8px 12px 7px; border:1.5px solid rgba(215,243,75,.4); border-radius:12px;
+    background:rgba(215,243,75,.05); transform:rotate(2deg); cursor:pointer; overflow:hidden;
+    transition:border-color .2s, box-shadow .2s; }
+  .stg-stamp:hover{ box-shadow:0 0 14px rgba(215,243,75,.15); }
+  .stg-stamp .n{ font-family:'JetBrains Mono',monospace; font-size:18px; font-weight:800; letter-spacing:-.02em;
+    color:var(--st2-tx,#e8e9e6); line-height:1; white-space:nowrap; }
+  .stg-stamp .n b{ color:var(--law-asset,#d7f34b); font-weight:800; }
+  .stg-stamp .dt{ font-size:9px; font-weight:700; color:var(--st2-faint,#7b8478); white-space:nowrap;
+    max-width:96px; overflow:hidden; text-overflow:ellipsis; }
+  .stg-stamp.soon{ border-color:rgba(240,178,78,.55); background:rgba(240,178,78,.07); }   /* 7일 안 — 앰버 (겁주지 않기: 로즈는 안 쓴다) */
+  .stg-stamp.soon .n b{ color:#F0B24E; }
+  .stg-stamp.past{ opacity:.55; }
+  .stg-stamp .stg-date{ position:absolute; inset:0; opacity:0; cursor:pointer; border:0; width:100%; height:100%; }
+  .stg-todo{ position:relative; margin-top:15px; border-left:2px solid rgba(126,155,114,.55); padding-left:11px; }
+  .stg-fold{ position:relative; margin-top:13px; border-top:1px dashed rgba(255,255,255,.1); padding-top:9px; }
+  .stg-fold .fh{ display:flex; align-items:center; gap:7px; width:100%; background:none; border:none;
+    color:var(--st2-faint,#7b8478); font-family:inherit; font-size:11px; font-weight:800; cursor:pointer; padding:2px 0;
+    -webkit-tap-highlight-color:transparent; }
+  .stg-fold .fh b{ color:#8FA0C9; font-size:8px; }
+  .stg-fold .fh .ar{ margin-left:auto; transition:transform .25s; }
+  .stg-fold.open .fh .ar{ transform:rotate(180deg); }
+  .stg-fold .fin{ max-height:0; overflow:hidden; transition:max-height .35s cubic-bezier(.2,.9,.3,1); }
+  .stg-fold.open .fin{ max-height:260px; }
+  .stg-fold .fin .stg-in{ margin-top:6px; border-left:2px solid rgba(143,160,201,.45); border-radius:0 8px 8px 0; }
   .stg-tip{ position:relative; margin-top:14px; font-size:11.5px; line-height:1.7; color:var(--st2-faint,#7b8478); }
   .stg-tip b{ color:var(--st2-sub,#9aa39c); }
   /* 저장은 «항목별 버튼» — 이 앱의 규칙(자동저장 폐기) */
@@ -43167,6 +43194,7 @@
   //   안 닫으면 위층(정리 방 6000)이 걷히는 순간 «내 창고 눌렀는데 분류하기 화면» — 사장님이 잡은 버그.
   //   열려 있을 때만 닫는다 (prpClose는 저장·렌더까지 하므로 함부로 부르면 낭비)
   function cmSweepRooms() {
+    try { _cmrFromFork = false; } catch (e) {}   // v593 · 창고로 나가면 갈림길 출신 표식도 끝
     try { const s = document.getElementById('slv'); if (s && s.classList.contains('on')) slvClose(); } catch (e) {}
     try { const p = document.getElementById('prp'); if (p && p.classList.contains('on')) prpClose(); } catch (e) {}
   }
@@ -43714,6 +43742,7 @@
   }
 
   function slvOpen() {
+    _cmrFromFork = false;   // v593 · 갈림길 출신 표식은 레일 클릭만 단다 (다른 입구의 묵은 표식 방지)
     slvInit();
     slvApplyProcessTone();
     _slvQ = slvUnsorted(); _slvDone = 0; _slvT0 = null; _slvBusy = false;
@@ -43737,7 +43766,10 @@
   }
   function slvInit() {
     if (_slvInited) return; _slvInited = true;
-    document.getElementById('slv-back').onclick = slvClose;
+    document.getElementById('slv-back').onclick = function () {   // v593 · 갈림길에서 왔으면 갈림길로 (왔다갔다 흐름)
+      slvClose();
+      if (_cmrFromFork) { _cmrFromFork = false; try { csOpenFork(); } catch (e) {} }
+    };
     var _ub = document.getElementById('slv-undo'); if (_ub) _ub.onclick = slvDoUndo;   // v544
     document.getElementById('slv-assign').onclick = function () { slvAssign(); setTimeout(function () { try { slvAutoBar(); } catch (e) {} }, 700); };
     document.getElementById('slv-skip').onclick = () => { if (_slvBusy || _slvQ.length < 2) return; _slvQ.push(_slvQ.shift()); slvSpawn(true); slvAutoBar(); };
@@ -43772,6 +43804,8 @@
     { k: 'sort', n: '분류', c: '#D8B23A' },
     { k: 'prep', n: '손질', c: '#FF8A5B' }
   ];
+  // v593 · «갈림길에서 레일로 들어왔다»를 기억 — 그 방의 ✕(뒤로)가 갈림길로 되돌린다 (사장님: 왔다갔다 흐름)
+  let _cmrFromFork = false;
   function cmrCounts() {
     const rs = rows || [];
     let sort = 0, prep = 0, ready = 0, month = 0;
@@ -43835,13 +43869,15 @@
       b.onclick = function () {
         const k = b.dataset.cmr;
         if (k === here) return;                       // 이미 그 방이면 무시
+        // 갈림길 레일에서 출발했거나, 갈림길 출신으로 방 사이를 오가는 중이면 «갈림길 출신»을 이어간다
+        const keepFork = (el && el.id === 'fork-rail') || _cmrFromFork;
         if (k === 'in') { closeOthers(); if (window.__openSorter) window.__openSorter(); return; }
-        if (k === 'sort') { closeOthers(); if (window.__openSortLine) window.__openSortLine(); return; }
+        if (k === 'sort') { closeOthers(); if (window.__openSortLine) window.__openSortLine(); _cmrFromFork = keepFork; return; }
         if (k === 'prep') {
           // 손질감이 없으면 방을 닫기 전에 알리고 제자리에 (닫고 나서 실패하면 낙동강 오리알)
           let n = 0; try { n = prpPending().length; } catch (e) {}
           if (!n) { try { toast('손질할 원고가 없어요 — 원고가 담긴 카드가 대상입니다'); } catch (e) {} return; }
-          closeOthers(); if (window.__openPrep) window.__openPrep();
+          closeOthers(); if (window.__openPrep) window.__openPrep(); _cmrFromFork = keepFork;
         }
       };
     });
@@ -43954,6 +43990,7 @@
   }
 
   function prpOpen() {
+    _cmrFromFork = false;   // v593 · 갈림길 출신 표식은 레일 클릭만 단다
     prpInit();
     _prpQ = prpPending();
     if (!_prpQ.length) { toast('손질할 원고가 없어요 — 원고가 담긴 카드가 대상입니다'); return; }
@@ -43980,7 +44017,10 @@
     for (let i = 0; i < 10; i++) h += '<span class="prp-mote" style="left:' + (24 + ((i * 37) % 54)) + '%;top:' + (12 + ((i * 23) % 50)) + '%;--md:' + (7 + (i % 5) * 1.7) + 's;--mdel:' + (i * .9) + 's;--mo:' + (.3 + (i % 3) * .18) + '"></span>';
     document.getElementById('prp-motes').innerHTML = h;
 
-    document.getElementById('prp-x').onclick = prpClose;
+    document.getElementById('prp-x').onclick = function () {   // v593 · 갈림길에서 왔으면 갈림길로
+      prpClose();
+      if (_cmrFromFork) { _cmrFromFork = false; try { csOpenFork(); } catch (e) {} }
+    };
     document.getElementById('prp-go').onclick = prpNext;
     document.getElementById('prp-rope').onclick = function () { if (_prpCur < _prpQ.length - 1) prpNext(); };
 
@@ -46999,11 +47039,8 @@
   // 🎯 v585 · 이번 달 목표 — 달을 앞뒤로 넘기며 «그때의 기록»을 본다. 미래도 미리 적어둘 수 있다.
   //   달마다 한 벌: { goal:한 줄, dead:데드라인, todo:해야 할 것, tried:시도한 것 }
   const ST2_GOAL_KEY = 'st2-goals';
-  const STG_F = [
-    { k: 'dead',  n: '데드라인',    ph: '예) 7월 31일까지 · 8편 업로드', ic: '📅', c: '#F0B24E' },
-    { k: 'todo',  n: '해야 할 것',  ph: '한 줄에 하나씩 적어보세요',      ic: '✅', c: '#7E9B72' },
-    { k: 'tried', n: '시도한 것',   ph: '해본 것 · 결과가 어땠는지',      ic: '🔬', c: '#8FA0C9' }
-  ];
+  // v593 · A 포스터형(사장님 픽) — 4칸 같은 위계 폐기. 목표=헤드라인 · 데드라인=날짜(D-day 도장) · 시도한 것=접힘.
+  //   저장 키는 그대로(goal·todo·tried) + deadDate(날짜) 신설. 옛 dead(자유 글)는 날짜 없을 때 도장 밑에 보여준다.
   let st2Goals = {}, _stgLoaded = false, _stgOff = 0;   // _stgOff = 이번 달 기준 ±개월 (제한 없음)
   async function st2GoalLoad() {
     try {
@@ -47014,12 +47051,33 @@
   }
   async function st2GoalSave() { try { await window.storage.set(ST2_GOAL_KEY, JSON.stringify(st2Goals)); } catch (e) {} }
   // 애플 × 힉스필드 합의 — 편집 버튼 없이 «그 자리에서» 고치고(애플), 목표 줄 뒤에서 빛이 올라온다(힉스필드)
+  // 데드라인 날짜 → 도장 속 HTML (D-N · 날짜). 색은 7일 안일 때만 앰버 — 겁주지 않기
+  function stgDdHtml(ds, legacyText) {
+    if (!ds) {
+      return '<span class="n"><b>D-?</b></span><span class="dt">' +
+        (legacyText ? esc(String(legacyText).slice(0, 16)) : '날짜 정하기') + '</span>';
+    }
+    const today = new Date(); today.setHours(0, 0, 0, 0);
+    const dt = new Date(ds + 'T00:00:00');
+    if (isNaN(dt)) return '<span class="n"><b>D-?</b></span><span class="dt">날짜 정하기</span>';
+    const n = Math.round((dt - today) / 86400000);
+    const label = n > 0 ? 'D-<b>' + n + '</b>' : (n === 0 ? '<b>D-DAY</b>' : '지남 <b>' + Math.abs(n) + '</b>일');
+    return '<span class="n">' + label + '</span><span class="dt">~ ' + (dt.getMonth() + 1) + '/' + dt.getDate() + '</span>';
+  }
+  function stgStampCls(ds) {
+    if (!ds) return '';
+    const today = new Date(); today.setHours(0, 0, 0, 0);
+    const n = Math.round((new Date(ds + 'T00:00:00') - today) / 86400000);
+    if (isNaN(n)) return '';
+    return n < 0 ? ' past' : (n <= 7 ? ' soon' : '');
+  }
   function st2RenderGoal() {
     const el = document.getElementById('st2-goalbox'); if (!el) return;
     const t = stgYM(_stgOff), g = st2Goals[t.ym] || {};
     const when = _stgOff === 0 ? { k: 'now', t: '이번 달' }
       : _stgOff < 0 ? { k: 'past', t: '지난 기록' } : { k: 'next', t: '미리 적어두기' };
-    const filled = STG_F.filter(function (f) { return (g[f.k] || '').trim(); }).length + ((g.goal || '').trim() ? 1 : 0);
+    const filled = ['goal', 'todo', 'tried'].filter(function (k) { return (g[k] || '').trim(); }).length + (g.deadDate ? 1 : 0);
+    const hasTried = (g.tried || '').trim();
     el.innerHTML =
       '<div class="stg" data-when="' + when.k + '">' +
         '<div class="stg-hd">' +
@@ -47030,17 +47088,25 @@
           (_stgOff !== 0 ? '<button type="button" class="stg-today" id="stg-today">이번 달로</button>' : '') +
         '</div>' +
         '<div class="stg-goal">' +
-          '<span class="stg-k">🎯 목표</span>' +
+          '<span class="stg-k">🎯 ' + t.m + '월의 목표</span>' +
+          // D-day 도장 — 누르면 그 자리에서 날짜를 고른다 (투명 date 입력이 도장 전체를 덮음)
+          '<label class="stg-stamp' + stgStampCls(g.deadDate) + '" title="데드라인 — 눌러서 날짜 고르기">' +
+            '<span id="stg-dd">' + stgDdHtml(g.deadDate, g.dead) + '</span>' +
+            '<input type="date" class="stg-date" id="stg-date" value="' + esc(g.deadDate || '') + '">' +
+          '</label>' +
           '<div class="stg-in big" contenteditable="true" data-stg="goal" data-ph="' +
             (_stgOff > 0 ? '그 달엔 뭘 이루고 싶으세요?' : '이번 달, 뭘 이루고 싶으세요?') + '">' + esc(g.goal || '') + '</div>' +
         '</div>' +
-        '<div class="stg-grid">' +
-          STG_F.map(function (f) {
-            return '<div class="stg-cell" style="--c:' + f.c + '">' +
-              '<span class="stg-k">' + f.ic + ' ' + f.n + '</span>' +
-              '<div class="stg-in" contenteditable="true" data-stg="' + f.k + '" data-ph="' + esc(f.ph) + '">' +
-              esc(g[f.k] || '').replace(/\n/g, '<br>') + '</div></div>';
-          }).join('') +
+        '<div class="stg-todo">' +
+          '<span class="stg-k" style="color:#7E9B72">✅ 해야 할 것</span>' +
+          '<div class="stg-in" contenteditable="true" data-stg="todo" data-ph="한 줄에 하나씩 적어보세요">' +
+          esc(g.todo || '').replace(/\n/g, '<br>') + '</div>' +
+        '</div>' +
+        // 시도한 것 — 평소엔 접혀서 위계에서 물러난다 (내용 있으면 ● 점)
+        '<div class="stg-fold' + (hasTried && _stgOff < 0 ? ' open' : '') + '" id="stg-fold">' +
+          '<button type="button" class="fh" id="stg-fold-btn">🔬 시도한 것' + (hasTried ? ' <b>●</b>' : '') + '<span class="ar">▾</span></button>' +
+          '<div class="fin"><div class="stg-in" contenteditable="true" data-stg="tried" data-ph="해본 것 · 결과가 어땠는지">' +
+          esc(g.tried || '').replace(/\n/g, '<br>') + '</div></div>' +
         '</div>' +
         '<div class="stg-foot"><span class="stg-st" id="stg-st">' +
           (filled ? '' : '적어두면 이 달 내내 여기서 볼 수 있어요') + '</span>' +
@@ -47062,11 +47128,23 @@
         if (b.dataset.stg === 'goal' && e.key === 'Enter') { e.preventDefault(); b.blur(); }
       });
     });
+    // v593 · D-day 도장 — 날짜를 고르면 그 자리에서 도장이 다시 찍힌다 (rerender 없음 — 다른 칸 입력 보존)
+    const di = document.getElementById('stg-date');
+    if (di) di.addEventListener('change', function () {
+      mark();
+      const dd = document.getElementById('stg-dd'); if (dd) dd.innerHTML = stgDdHtml(di.value, g.dead);
+      const st = di.closest('.stg-stamp');
+      if (st) { st.classList.remove('soon', 'past'); const c = stgStampCls(di.value).trim(); if (c) st.classList.add(c); }
+    });
+    // v593 · 시도한 것 접기 (지난 달 회고는 펼친 채로 열린다)
+    const fb2 = document.getElementById('stg-fold-btn');
+    if (fb2) fb2.onclick = function () { document.getElementById('stg-fold').classList.toggle('open'); };
     if (sbtn) sbtn.onclick = async function () {
       const cur = st2Goals[t.ym] || (st2Goals[t.ym] = {});
       el.querySelectorAll('[data-stg]').forEach(function (b) {
         cur[b.dataset.stg] = (b.innerText || '').replace(/ /g, ' ').trim();
       });
+      cur.deadDate = (document.getElementById('stg-date') || {}).value || '';   // v593 · D-day 날짜
       cur.at = Date.now();
       await st2GoalSave();
       _dirty = false;
