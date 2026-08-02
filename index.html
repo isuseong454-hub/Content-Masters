@@ -17365,6 +17365,216 @@
   .tgym-hero::after{ content:''; position:absolute; inset:0; pointer-events:none;
     box-shadow:inset 0 0 40px -12px rgba(0,0,0,.92); }
   @media(max-width:480px){ .tgym-hero canvas{ height:164px; } }
+  /* ═══ v605 · 🎯 썸네일 대진 — 극장 마키에서 두 장이 맞붙는다 (사장님 확정 C안) ═══ */
+  #tq{ position:fixed; inset:0; z-index:6200; display:none;
+    background:linear-gradient(180deg,#080b13 0%,#070910 55%,#05070b 100%); }
+  #tq.on{ display:block; }
+  #tq .tq-sky{ position:absolute; left:0; right:0; top:0; height:44%; pointer-events:none;
+    background:radial-gradient(58% 90% at 22% 4%,rgba(224,120,140,.13),transparent 62%),
+               radial-gradient(52% 88% at 82% 12%,rgba(67,224,230,.075),transparent 62%),
+               radial-gradient(40% 70% at 55% 0%,rgba(240,178,78,.05),transparent 60%); }
+  #tq .tq-road{ position:absolute; left:0; right:0; bottom:0; height:26%; pointer-events:none;
+    background:linear-gradient(transparent,rgba(224,120,140,.07) 60%,rgba(224,120,140,.11));
+    -webkit-mask-image:linear-gradient(transparent,#000 55%); mask-image:linear-gradient(transparent,#000 55%); }
+  #tq .tq-road::after{ content:''; position:absolute; inset:0;
+    background:repeating-linear-gradient(90deg,rgba(255,255,255,.028) 0 1px,transparent 1px 34px); }
+  #tq .tq-wk{ position:absolute; bottom:4%; width:7px; border-radius:4px 4px 0 0;
+    background:rgba(0,0,0,.78); box-shadow:0 0 16px rgba(0,0,0,.95); pointer-events:none; z-index:1; }
+  #tq .tq-w1{ height:25px; animation:tqWalk 15s linear infinite; }
+  #tq .tq-w2{ height:21px; animation:tqWalk 19s linear infinite 5s; }
+  #tq .tq-w3{ height:28px; animation:tqWalk 24s linear infinite 11s; }
+  @keyframes tqWalk{ from{ left:-12px } to{ left:104% } }
+
+  #tq .tq-scr{ position:absolute; inset:0; z-index:2; display:none; flex-direction:column;
+    padding:calc(env(safe-area-inset-top,0px) + 18px) 17px calc(env(safe-area-inset-bottom,0px) + 16px);
+    max-width:460px; margin:0 auto; }
+  #tq .tq-scr.on{ display:flex; animation:tqIn .32s cubic-bezier(.2,.9,.3,1) both; }
+  @keyframes tqIn{ from{ opacity:0; transform:translateY(8px) } }
+  #tq .tq-x{ position:absolute; right:14px; top:calc(env(safe-area-inset-top,0px) + 12px); z-index:9;
+    width:34px; height:34px; border-radius:50%; font-size:16px; line-height:1;
+    background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); color:var(--st2-sub,#9aa39c); }
+
+  #tq .tq-top{ text-align:center; flex:none; }
+  #tq .tq-top s{ display:block; text-decoration:none; font-family:'JetBrains Mono',monospace;
+    font-size:7.5px; letter-spacing:.34em; color:rgba(224,120,140,.5); }
+  #tq .tq-top b{ display:block; font-size:19px; font-weight:900; margin-top:3px; color:#ffdce4;
+    text-shadow:0 0 18px rgba(224,120,140,.5); animation:tqFlick 7s infinite; }
+  @keyframes tqFlick{ 0%,94%,97.5%,100%{opacity:1} 96%{opacity:.6} }
+  #tq .tq-sh{ font-family:'JetBrains Mono',monospace; font-size:8px; letter-spacing:.2em;
+    color:rgba(224,120,140,.4); margin:11px 0 6px; flex:none; }
+
+  /* 극장 마키 */
+  #tq .tq-stage{ position:relative; flex:none; padding:11px 10px 12px; border-radius:12px;
+    background:linear-gradient(180deg,rgba(255,255,255,.038),rgba(255,255,255,.008));
+    border:1px solid rgba(255,255,255,.11); }
+  #tq .tq-bulbs{ position:absolute; left:9px; right:9px; top:5px; display:flex; justify-content:space-between; }
+  #tq .tq-bulbs i{ width:3.5px; height:3.5px; border-radius:50%; background:#F0B24E;
+    box-shadow:0 0 7px #F0B24E; animation:tqBlink 2.6s infinite; }
+  #tq .tq-bulbs i:nth-child(2n){ animation-delay:.42s; }
+  #tq .tq-bulbs i:nth-child(3n){ animation-delay:.86s; }
+  @keyframes tqBlink{ 0%,100%{opacity:1} 50%{opacity:.34} }
+  #tq .tq-mkhd{ text-align:center; font-family:'JetBrains Mono',monospace; font-size:8px;
+    letter-spacing:.3em; color:rgba(240,178,78,.72); margin:7px 0 9px; }
+  #tq .tq-duo{ display:flex; align-items:center; justify-content:center; gap:10px; }
+  #tq .tq-bd{ position:relative; border-radius:6px; overflow:hidden; aspect-ratio:9/16;
+    border:1px solid rgba(255,255,255,.12); display:flex; flex-direction:column; background:#0c1013;
+    transition:box-shadow .3s, filter .3s, opacity .3s; padding:0; }
+  #tq .tq-bd .im{ flex:1; position:relative; overflow:hidden; }
+  #tq .tq-bd .im img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+  #tq .tq-bd .im .noimg{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    font-size:19px; color:rgba(255,255,255,.16); }
+  #tq .tq-bd .ft{ padding:5px 5px 6px; background:rgba(0,0,0,.5); text-align:center; }
+  #tq .tq-bd .ft .t{ font-size:8.5px; font-weight:800; color:rgba(255,255,255,.55); }
+  #tq .tq-bd .ft .v{ font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:800;
+    color:rgba(255,255,255,.32); margin-top:1px; }
+  #tq .tq-bd.L{ box-shadow:0 0 24px -12px rgba(224,120,140,.9); }
+  #tq .tq-bd.R{ box-shadow:0 0 24px -12px rgba(67,224,230,.7); }
+  #tq .tq-bd.win{ box-shadow:0 0 0 2px #D7F34B, 0 0 34px -6px rgba(215,243,75,.85) !important; }
+  #tq .tq-bd.win .ft .v{ color:#D7F34B; }
+  #tq .tq-bd.lose{ filter:grayscale(.75) brightness(.48); opacity:.6; }
+  #tq .tq-vs{ flex:none; font-family:'JetBrains Mono',monospace; font-size:14px; font-weight:900;
+    color:#E0788C; text-shadow:0 0 15px rgba(224,120,140,.85); letter-spacing:.05em; }
+
+  /* 시작 화면 */
+  #tq-s0 .tq-stage{ margin-top:20px; }
+  #tq-s0 .tq-bd{ width:26%; }
+  #tq .tq-gap{ flex:1 1 0; min-height:6px; max-height:34px; }
+  #tq .tq-signs{ display:grid; grid-template-columns:repeat(4,1fr); gap:6px; }
+  #tq .tq-sg{ padding:8px 3px; border-radius:6px; text-align:center; position:relative;
+    background:rgba(255,255,255,.016); border:1px solid rgba(255,255,255,.075); transition:.2s; }
+  #tq .tq-sg::before{ content:''; position:absolute; left:50%; top:-6px; width:1px; height:6px;
+    background:rgba(255,255,255,.14); }
+  #tq .tq-sg .n{ font-size:10px; font-weight:800; color:rgba(255,255,255,.4); line-height:1.2; }
+  #tq .tq-sg .c{ font-family:'JetBrains Mono',monospace; font-size:7.5px; color:var(--st2-faint,#7b8478); margin-top:2px; }
+  #tq .tq-sg.on{ background:rgba(224,120,140,.1); border-color:#E0788C;
+    box-shadow:0 0 20px -7px rgba(224,120,140,.85), inset 0 0 16px -10px rgba(224,120,140,.9); }
+  #tq .tq-sg.on .n{ color:#fff; text-shadow:0 0 10px rgba(255,150,175,.85); }
+  #tq .tq-sg.on .c{ color:#E0788C; }
+  #tq .tq-sg.few{ opacity:.4; }
+  #tq .tq-tray{ display:flex; gap:6px; margin-top:8px; }
+  #tq .tq-tray button{ flex:1; padding:9px 3px; border-radius:8px; font-size:11px; font-weight:800;
+    background:rgba(255,255,255,.028); border:1px solid rgba(255,255,255,.075); color:var(--st2-sub,#9aa39c); }
+  #tq .tq-tray button.on{ background:rgba(224,120,140,.16); border-color:#E0788C; color:#fff; }
+  #tq .tq-go{ margin-top:auto; flex:none; padding:14px; border-radius:14px; font-size:15px; font-weight:900;
+    background:linear-gradient(180deg,#ff9fb4,#dd6f85); border:none; color:#2a0d13;
+    box-shadow:0 0 30px -11px rgba(224,120,140,.85); }
+  #tq .tq-go:active{ transform:scale(.976); }
+  #tq .tq-go:disabled{ background:rgba(255,255,255,.06); color:var(--st2-faint,#7b8478); box-shadow:none; }
+  #tq .tq-go.ghost{ background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1);
+    color:var(--st2-tx,#e8e9e6); box-shadow:none; }
+  #tq .tq-warn{ font-size:10.5px; color:var(--st2-faint,#7b8478); text-align:center; margin-top:9px; line-height:1.5; }
+  #tq .tq-warn b{ color:#E0788C; }
+
+  /* 카운트다운 */
+  #tq-cd{ position:absolute; inset:0; z-index:9; display:none; align-items:center; justify-content:center;
+    background:rgba(5,7,11,.93); }
+  #tq-cd.on{ display:flex; }
+  #tq-cd b{ font-family:'JetBrains Mono',monospace; font-size:78px; font-weight:900; color:#E0788C;
+    text-shadow:0 0 46px rgba(224,120,140,.65); animation:tqPop .58s cubic-bezier(.2,1.5,.4,1) both; }
+  @keyframes tqPop{ from{ transform:scale(.4); opacity:0 } }
+
+  /* 진행 */
+  #tq .tq-hud{ display:flex; align-items:center; gap:9px; flex:none; }
+  #tq .tq-hud .q{ font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--st2-sub,#9aa39c); }
+  #tq .tq-hud .q b{ color:var(--st2-tx,#e8e9e6); font-size:14px; }
+  #tq .tq-hud .sc{ margin-left:auto; font-family:'JetBrains Mono',monospace; font-size:11px;
+    color:#D7F34B; font-weight:800; }
+  #tq .tq-bar{ height:4px; border-radius:3px; background:rgba(255,255,255,.07); overflow:hidden; margin:7px 0 2px; flex:none; }
+  #tq .tq-bar i{ display:block; height:100%; background:#E0788C; border-radius:3px; transition:width .1s linear; }
+  #tq .tq-bar.warn i{ background:#ff6b6b; }
+  #tq-s1 .tq-mkhd{ font-family:inherit; font-size:12px; font-weight:800; letter-spacing:0;
+    color:rgba(255,205,215,.75); }
+  #tq-s1 .tq-bd{ width:38%; cursor:pointer; }
+  #tq-stamp{ position:absolute; left:50%; top:44%; transform:translateX(-50%); z-index:6;
+    font-size:70px; font-weight:900; pointer-events:none; display:none; }
+  #tq-stamp.on{ display:block; animation:tqSt .52s cubic-bezier(.2,1.7,.35,1) both; }
+  #tq-stamp.o{ color:#D7F34B; text-shadow:0 0 40px rgba(215,243,75,.75); }
+  #tq-stamp.x{ color:#ff6b6b; text-shadow:0 0 40px rgba(255,107,107,.7); }
+  @keyframes tqSt{ 0%{ transform:translateX(-50%) scale(2.5) rotate(-15deg); opacity:0 }
+    55%{ transform:translateX(-50%) scale(.86) rotate(4deg); opacity:1 }
+    100%{ transform:translateX(-50%) scale(1) rotate(0) } }
+  #tq.shake{ animation:tqShk .34s; }
+  @keyframes tqShk{ 0%,100%{transform:translateX(0)} 20%{transform:translateX(-7px)} 45%{transform:translateX(6px)} 70%{transform:translateX(-3px)} }
+
+  #tq .tq-res{ flex:none; height:104px; display:flex; flex-direction:column; justify-content:flex-end; }
+  #tq .tq-gapbar{ display:flex; align-items:center; gap:8px; }
+  #tq .tq-gapbar .t{ flex:1; height:9px; border-radius:5px; background:rgba(255,255,255,.06); overflow:hidden; }
+  #tq .tq-gapbar .t i{ display:block; height:100%; border-radius:5px; width:0;
+    transition:width .65s cubic-bezier(.2,.9,.3,1); }
+  #tq .tq-gapbar .t.a i{ background:linear-gradient(90deg,#D7F34B,#8fa832); }
+  #tq .tq-gapbar .t.b i{ background:#39404a; }
+  #tq .tq-gapbar .x{ font-family:'JetBrains Mono',monospace; font-size:15px; font-weight:900;
+    color:#D7F34B; text-shadow:0 0 16px rgba(215,243,75,.5); flex:none; }
+  #tq .tq-say{ margin-top:9px; padding:10px 12px; border-radius:12px; font-size:11.8px; line-height:1.55;
+    background:rgba(215,243,75,.07); border:1px solid rgba(215,243,75,.26); color:var(--st2-tx,#e8e9e6); }
+  #tq .tq-say.miss{ background:rgba(255,107,107,.07); border-color:rgba(255,107,107,.28); }
+  #tq .tq-say b{ color:#D7F34B; } #tq .tq-say.miss b{ color:#ff9f9f; }
+  #tq .tq-acts{ display:flex; gap:7px; margin-top:8px; flex:none; }
+  #tq .tq-acts .pin{ flex:none; width:50px; border-radius:12px; font-size:16px;
+    background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1); color:var(--st2-sub,#9aa39c); }
+  #tq .tq-acts .pin.on{ background:rgba(240,178,78,.18); border-color:#F0B24E; color:#F0B24E; }
+  #tq .tq-acts .nx{ flex:1; padding:12px; border-radius:12px; font-size:14px; font-weight:900;
+    background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12); color:var(--st2-tx,#e8e9e6); }
+  #tq .tq-acts .nx:active{ transform:scale(.98); }
+
+  /* 마무리 */
+  #tq .tq-fin{ text-align:center; padding:8px 0 2px; flex:none; }
+  #tq .tq-fin .rate{ font-family:'JetBrains Mono',monospace; font-size:58px; font-weight:900; line-height:1;
+    color:#D7F34B; text-shadow:0 0 34px rgba(215,243,75,.45); animation:tqPop .55s cubic-bezier(.2,1.5,.4,1) both; }
+  #tq .tq-fin .sub{ font-size:12.5px; color:var(--st2-sub,#9aa39c); margin-top:7px; }
+  #tq .tq-fin .sub b{ color:var(--st2-tx,#e8e9e6); }
+  #tq .tq-rd{ display:flex; align-items:center; gap:9px; padding:8px 10px; border-radius:10px;
+    background:rgba(255,255,255,.02); border:1px solid rgba(255,255,255,.07); margin-bottom:5px; font-size:11.5px; }
+  #tq .tq-rd .n{ font-family:'JetBrains Mono',monospace; font-size:9.5px; color:var(--st2-faint,#7b8478); width:52px; flex:none; }
+  #tq .tq-rd .g{ flex:1; height:5px; border-radius:3px; background:rgba(255,255,255,.07); overflow:hidden; }
+  #tq .tq-rd .g i{ display:block; height:100%; background:#E0788C; border-radius:3px; }
+  #tq .tq-rd.now .g i{ background:#D7F34B; }
+  #tq .tq-rd .p{ font-family:'JetBrains Mono',monospace; font-size:10.5px; font-weight:800;
+    color:var(--st2-sub,#9aa39c); width:38px; text-align:right; flex:none; }
+  #tq .tq-rd.now .p{ color:#D7F34B; }
+  #tq .tq-weak{ margin-top:11px; padding:11px 12px; border-radius:12px; font-size:11.8px; line-height:1.55;
+    background:rgba(224,120,140,.08); border:1px solid rgba(224,120,140,.3); flex:none; color:var(--st2-tx,#e8e9e6); }
+  #tq .tq-weak b{ color:#E0788C; }
+  #tq .tq-btns2{ display:flex; gap:7px; margin-top:10px; flex:none; }
+  #tq .tq-btns2 button{ flex:1; padding:11px 4px; border-radius:12px; font-size:12px; font-weight:800;
+    background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1); color:var(--st2-tx,#e8e9e6); }
+
+  /* 다시 보기 · 수집방 */
+  #tq .tq-list{ flex:1; overflow-y:auto; display:flex; flex-direction:column; gap:5px; padding-right:2px; }
+  #tq .tq-it{ display:flex; align-items:center; gap:8px; padding:8px 10px; border-radius:10px;
+    background:rgba(255,255,255,.02); border:1px solid rgba(255,255,255,.07); font-size:11.2px; text-align:left; }
+  #tq .tq-it.miss{ border-color:rgba(255,107,107,.3); background:rgba(255,107,107,.05); }
+  #tq .tq-it .n{ font-family:'JetBrains Mono',monospace; font-size:9px; color:var(--st2-faint,#7b8478); width:18px; flex:none; }
+  #tq .tq-it .mk{ width:16px; height:16px; border-radius:50%; flex:none; display:flex; align-items:center;
+    justify-content:center; font-size:9.5px; font-weight:900; }
+  #tq .tq-it .mk.o{ background:rgba(215,243,75,.16); color:#D7F34B; }
+  #tq .tq-it .mk.x{ background:rgba(255,107,107,.16); color:#ff8f8f; }
+  #tq .tq-it .t{ flex:1; color:var(--st2-sub,#9aa39c); } #tq .tq-it .t b{ color:var(--st2-tx,#e8e9e6); }
+  #tq .tq-it .g{ font-family:'JetBrains Mono',monospace; font-size:9px; color:var(--st2-faint,#7b8478); flex:none; }
+  #tq .tq-keep{ display:grid; grid-template-columns:repeat(3,1fr); gap:7px; flex:1;
+    align-content:start; overflow-y:auto; padding-right:2px; }
+  #tq .tq-kc{ aspect-ratio:9/16; border-radius:9px; position:relative; overflow:hidden;
+    background:#0c1013; border:1px solid rgba(255,255,255,.08); }
+  #tq .tq-kc img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+  #tq .tq-kc .pin{ position:absolute; top:4px; right:4px; font-size:10px; }
+  #tq .tq-kc .nm{ position:absolute; left:0; right:0; bottom:0; padding:5px 6px; font-size:8.5px;
+    font-weight:800; color:#fff; background:linear-gradient(transparent,rgba(0,0,0,.8)); }
+  #tq .tq-empty{ grid-column:1/-1; text-align:center; padding:40px 14px; font-size:12px; line-height:1.7;
+    color:var(--st2-faint,#7b8478); border:1px dashed rgba(255,255,255,.12); border-radius:13px; }
+  #tq .tq-empty b{ color:var(--st2-sub,#9aa39c); }
+
+  /* 클릭의 방 진입 버튼 */
+  .ck-quiz{ display:flex; align-items:center; gap:10px; width:100%; margin-top:12px; padding:13px 14px;
+    border-radius:14px; font-family:inherit; text-align:left; cursor:pointer;
+    background:linear-gradient(150deg,rgba(224,120,140,.14),rgba(224,120,140,.03));
+    border:1px solid rgba(224,120,140,.36); -webkit-tap-highlight-color:transparent; }
+  .ck-quiz:active{ transform:scale(.985); }
+  .ck-quiz .g{ font-size:19px; flex:none; }
+  .ck-quiz .tx{ flex:1; }
+  .ck-quiz .tx b{ display:block; font-size:13px; font-weight:900; color:var(--st2-tx,#e8e9e6); }
+  .ck-quiz .tx s{ display:block; text-decoration:none; font-size:10.5px; color:var(--st2-sub,#9aa39c); margin-top:2px; }
+  .ck-quiz .ar{ flex:none; color:#E0788C; font-weight:900; }
+  @media(prefers-reduced-motion:reduce){ #tq *{ animation:none !important; } }
   /* ═══ v602 · 100만 조회수 공식 두 줄 (사장님 확정 문구 — 부연설명 없음) ═══ */
   .tgym-law{ margin:10px 0 2px; display:flex; flex-direction:column; gap:6px; }
   .tgym-law s{ display:block; text-decoration:none; font-family:'JetBrains Mono',monospace;
@@ -22829,6 +23039,93 @@
         <button data-cptab="cus"><span class="g">◉</span><span class="t">고객</span></button>
         <button data-cptab="trend"><span class="g">↗</span><span class="t">트렌드</span></button>
       </div>
+    </div>
+    <!-- ═══════════ 🎯 v605 · 썸네일 대진 (극장 마키) ═══════════ -->
+    <div id="tq">
+      <div class="tq-sky"></div><div class="tq-road"></div>
+      <div class="tq-wk tq-w1"></div><div class="tq-wk tq-w2"></div><div class="tq-wk tq-w3"></div>
+      <button class="tq-x" id="tq-close">✕</button>
+      <div id="tq-cd"><b>3</b></div>
+      <div id="tq-stamp"></div>
+
+      <section class="tq-scr on" id="tq-s0">
+        <div class="tq-top"><s>TONIGHT</s><b>썸네일 대진</b></div>
+        <div class="tq-stage">
+          <div class="tq-bulbs"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="tq-mkhd">TONIGHT · 오늘의 대진</div>
+          <div class="tq-duo">
+            <div class="tq-bd L"><div class="im"><div class="noimg">?</div></div></div>
+            <span class="tq-vs">VS</span>
+            <div class="tq-bd R"><div class="im"><div class="noimg">?</div></div></div>
+          </div>
+        </div>
+        <div class="tq-gap"></div>
+        <div class="tq-sh">간판 고르기</div>
+        <div class="tq-signs" id="tq-signs"></div>
+        <div class="tq-sh">한 문제에 몇 초</div>
+        <div class="tq-tray" id="tq-sec"></div>
+        <div class="tq-gap"></div>
+        <button class="tq-go" id="tq-start">시작하기</button>
+        <div class="tq-warn" id="tq-warn"></div>
+      </section>
+
+      <section class="tq-scr" id="tq-s1">
+        <div class="tq-hud"><span class="q"><b id="tq-qi">1</b> / <span id="tq-qt">20</span></span>
+          <span class="sc" id="tq-sc">0 맞음</span></div>
+        <div class="tq-bar" id="tq-barw"><i id="tq-bar" style="width:100%"></i></div>
+        <div class="tq-gap"></div>
+        <div class="tq-stage">
+          <div class="tq-bulbs"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+          <div class="tq-mkhd">어느 쪽이 사람을 세웠을까</div>
+          <div class="tq-duo">
+            <div class="tq-bd L" id="tq-L"></div>
+            <span class="tq-vs">VS</span>
+            <div class="tq-bd R" id="tq-R"></div>
+          </div>
+        </div>
+        <div class="tq-gap"></div>
+        <div class="tq-res">
+          <div class="tq-gapbar" id="tq-gapbar" style="visibility:hidden">
+            <span class="t a"><i id="tq-ga"></i></span>
+            <span class="x" id="tq-gx">—</span>
+            <span class="t b"><i id="tq-gb"></i></span>
+          </div>
+          <div class="tq-say" id="tq-say" style="visibility:hidden"></div>
+          <div class="tq-acts" id="tq-acts" style="visibility:hidden">
+            <button class="pin" id="tq-pin" title="담아두기">📌</button>
+            <button class="nx" id="tq-nx">다음 →</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="tq-scr" id="tq-s2">
+        <div class="tq-top"><s>ROUND CLEAR</s><b id="tq-fttl">끝</b></div>
+        <div class="tq-fin"><div class="rate" id="tq-frate">0%</div>
+          <div class="sub" id="tq-fsub"></div></div>
+        <div class="tq-sh">회차 기록</div>
+        <div id="tq-rounds"></div>
+        <div class="tq-weak" id="tq-weak"></div>
+        <div class="tq-btns2">
+          <button id="tq-toReview">다시 보기</button>
+          <button id="tq-toKeep">담아둔 것</button>
+        </div>
+        <button class="tq-go" id="tq-again" style="margin-top:8px">한 판 더</button>
+        <button class="tq-go ghost" id="tq-toStart" style="margin-top:6px">간판 바꾸기</button>
+      </section>
+
+      <section class="tq-scr" id="tq-s3">
+        <div class="tq-top"><s>REVIEW</s><b>내가 뭘 틀렸나</b></div>
+        <div class="tq-sh" id="tq-rvsub">문제 전체</div>
+        <div class="tq-list" id="tq-list"></div>
+        <button class="tq-go ghost" id="tq-rvBack" style="margin-top:10px">돌아가기</button>
+      </section>
+
+      <section class="tq-scr" id="tq-s4">
+        <div class="tq-top"><s>KEEP</s><b>담아둔 썸네일</b></div>
+        <div class="tq-sh"><span id="tq-kcount">0</span>장 · 내가 써먹을 것들</div>
+        <div class="tq-keep" id="tq-keep"></div>
+        <button class="tq-go ghost" id="tq-kpBack" style="margin-top:10px">돌아가기</button>
+      </section>
     </div>
     <!-- v596 · 맵 풀스크린(fixed·z5650)을 st2-view 밖으로 — 나침반 홈에서도 열려야 한다 (몸통 그대로 이동) -->
     <div class="st2-mapov" id="st2-mapov">
@@ -30371,7 +30668,8 @@
     await loadRows();
     await loadScripts();
     await loadPmms();
-    try { await rmLoad(); } catch (e) { console.warn('[rm] load', e); }   // v599 · 방 기록(눈·시간·클릭) — 로그인 확정 후 한 번
+    try { await rmLoad(); } catch (e) { console.warn('[rm] load', e); }
+    try { await tqLoad(); tqWire(); } catch (e) { console.warn('[tq] load', e); }   // v599 · 방 기록(눈·시간·클릭) — 로그인 확정 후 한 번
     await loadKeywords();
     await loadFunnelSlots();
     await loadWeekSlots();
@@ -51448,6 +51746,7 @@
         rmLogHtml('clk', '이번 편 탐색 클릭률 %', goal, 100) +
         '<div class="rm-say">' + ckSayHtml(has, now, goal, tops) + '</div>' +
       '</div></div>' +
+      tqEntryHtml() +
       rmTrainHtml('ck', [['go', '▣', '썸네일 보러', '창고 썸네일로'],
                          ['type', '⚔', '유형별 성적', '뭐가 눌리나'],
                          ['word', '✎', '수식어 사전', '잘 된 후킹 모음']], _ckTrain) +
@@ -51455,6 +51754,7 @@
       '</div>';
     el.innerHTML = h;
     rmWireLog('clk', st2RenderClk, '%', 100);
+    (function () { const q = document.getElementById('ck-quiz'); if (q) q.onclick = tqOpen; })();
     el.querySelectorAll('[data-ck]').forEach(function (b) { b.onclick = function () { _ckTrain = b.dataset.ck; st2RenderClk(); }; });
     ckRenderTrain(tops);
   }
@@ -51474,6 +51774,301 @@
         '<br>👉 다음 썸네일은 <b>' + esc(tops[0].k) + '</b> 결로 만들어보세요.';
     } else s += '<br>썸네일 <b>유형</b>을 적은 카드가 쌓이면, 어떤 결이 눌리는지 알려드릴게요.';
     return s;
+  }
+  /* ═══ 🎯 v605 · 썸네일 대진 — 담아둔 카드로 «어느 쪽이 더 잘 됐나»를 맞힌다 ═══
+     정답은 담을 때 적어둔 조회수. 1.5배 미만 차이는 찍기가 되므로 출제하지 않는다. */
+  const TQ_KEY = 'cm-tq';
+  const TQ = { rounds: [], keep: [] };
+  let _tqLoaded = false;
+  let _tqPick = 'all', _tqSecs = 15;
+  const TQ_N = 20;                       // 한 판 = 20문제 (사장님 확정)
+  let tqDeck = [], tqI = 0, tqOk = 0, tqTimer = null, tqLeft = 0, tqAnswered = false;
+  let tqByType = {}, tqLog = [], _tqImg = {};
+
+  async function tqLoad() {
+    if (_tqLoaded) return;
+    try {
+      const r = await window.storage.get(TQ_KEY);
+      if (r) { const v = JSON.parse(r.value !== undefined ? r.value : r);
+        if (v && typeof v === 'object') { TQ.rounds = v.rounds || []; TQ.keep = v.keep || []; } }
+    } catch (e) {}
+    _tqLoaded = true;
+  }
+  async function tqSave() { try { await window.storage.set(TQ_KEY, JSON.stringify(TQ)); } catch (e) {} }
+
+  // 출제 가능한 카드 — 썸네일 사진이 있고 조회수가 적힌 것만
+  function tqPool(type) {
+    return (rows || []).filter(function (r) {
+      if (!r.hasThumb || !(r.views > 0)) return false;
+      if (type === 'all') return true;
+      return (r.thumbTypes || []).indexOf(type) >= 0;
+    });
+  }
+  function tqMaxQ(n) { return Math.min(TQ_N, Math.floor(n * (n - 1) / 2)); }
+
+  function tqRenderStart() {
+    const box = document.getElementById('tq-signs'); if (!box) return;
+    const list = [{ n: '🎲 전부', k: 'all' }].concat(
+      BASE_THUMB_TYPES.concat(customThumbTypes || []).map(function (t) {
+        return { n: t, k: t };
+      }));
+    box.innerHTML = list.map(function (t) {
+      const c = tqPool(t.k).length;
+      return '<button type="button" class="tq-sg' + (c < 4 ? ' few' : '') + (_tqPick === t.k ? ' on' : '') +
+        '" data-tqt="' + t.k + '"><div class="n">' + t.n + '</div><div class="c">' + c + '장</div></button>';
+    }).join('');
+    box.querySelectorAll('[data-tqt]').forEach(function (b) {
+      b.onclick = function () { _tqPick = b.dataset.tqt; tqRenderStart(); };
+    });
+    const sec = document.getElementById('tq-sec');
+    if (sec) {
+      sec.innerHTML = [15, 30].map(function (v) {
+        return '<button type="button" data-tqs="' + v + '"' + (_tqSecs === v ? ' class="on"' : '') + '>' + v + '초</button>';
+      }).join('');
+      sec.querySelectorAll('[data-tqs]').forEach(function (b) {
+        b.onclick = function () { _tqSecs = parseInt(b.dataset.tqs, 10); tqRenderStart(); };
+      });
+    }
+    const n = tqPool(_tqPick).length, mx = tqMaxQ(n);
+    const go = document.getElementById('tq-start'), warn = document.getElementById('tq-warn');
+    if (go) go.disabled = (n < 4);
+    if (warn) warn.innerHTML = n < 4
+      ? '이 간판은 <b>사진 있는 카드가 ' + n + '장</b>뿐이에요 — 4장부터 시작할 수 있어요'
+      : (mx < TQ_N ? '카드가 적어 <b>' + mx + '문제</b>까지 나옵니다' : '');
+  }
+
+  function tqMakeDeck() {
+    const pool = tqPool(_tqPick), qs = [];
+    let guard = 0;
+    const want = tqMaxQ(pool.length);
+    while (qs.length < want && guard++ < 3000) {
+      const a = pool[Math.floor(Math.random() * pool.length)];
+      const b = pool[Math.floor(Math.random() * pool.length)];
+      if (!a || !b || a.id === b.id) continue;
+      const hi = Math.max(a.views, b.views), lo = Math.min(a.views, b.views);
+      if (!(lo > 0) || hi < lo * 1.5) continue;               // 차이가 작으면 문제가 안 된다
+      if (qs.some(function (q) {
+        return (q.a.id === a.id && q.b.id === b.id) || (q.a.id === b.id && q.b.id === a.id);
+      })) continue;
+      qs.push({ a: a, b: b, win: a.views > b.views ? 0 : 1, gap: hi / lo });
+    }
+    return qs;
+  }
+
+  async function tqPreload(deck) {
+    const ids = {};
+    deck.forEach(function (q) { ids[q.a.id] = 1; ids[q.b.id] = 1; });
+    const keys = Object.keys(ids).filter(function (id) { return !_tqImg[id]; });
+    await Promise.all(keys.map(async function (id) {
+      try { _tqImg[id] = await loadImage(id, 'thumb'); } catch (e) { _tqImg[id] = null; }
+    }));
+  }
+  function tqTypeOf(r) { const t = (r.thumbTypes || []); return t.length ? t[0] : '유형 없음'; }
+  function tqCardHtml(r) {
+    const u = _tqImg[r.id];
+    return '<div class="im">' + (u ? '<img src="' + u + '" alt="">' : '<div class="noimg">▣</div>') + '</div>' +
+      '<div class="ft"><div class="t">' + esc(tqTypeOf(r)) + '</div><div class="v">조회수 ?</div></div>';
+  }
+
+  function tqShow(id) {
+    ['tq-s0', 'tq-s1', 'tq-s2', 'tq-s3', 'tq-s4'].forEach(function (s) {
+      const el = document.getElementById(s); if (el) el.classList.toggle('on', s === id);
+    });
+  }
+  async function tqOpen() {
+    await tqLoad();
+    const ov = document.getElementById('tq'); if (!ov) return;
+    ov.classList.add('on');
+    document.body.style.overflow = 'hidden';
+    tqRenderStart(); tqShow('tq-s0');
+  }
+  function tqClose() {
+    clearInterval(tqTimer);
+    const ov = document.getElementById('tq'); if (ov) ov.classList.remove('on');
+    document.body.style.overflow = '';
+    try { st2RenderClk(); } catch (e) {}
+  }
+  function tqCountdown(done) {
+    let reduce = false;
+    try { reduce = matchMedia('(prefers-reduced-motion:reduce)').matches; } catch (e) {}
+    if (reduce) { done(); return; }
+    const el = document.getElementById('tq-cd'), b = el.querySelector('b');
+    let n = 3; el.classList.add('on'); b.textContent = n;
+    const iv = setInterval(function () {
+      n--;
+      if (n <= 0) { clearInterval(iv); b.textContent = '시작';
+        setTimeout(function () { el.classList.remove('on'); done(); }, 400); return; }
+      b.textContent = n; b.style.animation = 'none'; void b.offsetWidth; b.style.animation = '';
+    }, 600);
+  }
+  async function tqBegin() {
+    clearInterval(tqTimer);
+    tqDeck = tqMakeDeck(); tqI = 0; tqOk = 0; tqByType = {}; tqLog = [];
+    if (!tqDeck.length) { try { toast('문제를 만들 카드가 모자랍니다'); } catch (e) {} return; }
+    const go = document.getElementById('tq-start');
+    if (go) { go.disabled = true; go.textContent = '사진 불러오는 중…'; }
+    await tqPreload(tqDeck);
+    if (go) { go.disabled = false; go.textContent = '시작하기'; }
+    document.getElementById('tq-qt').textContent = tqDeck.length;
+    tqCountdown(function () { tqShow('tq-s1'); tqRender(); });
+  }
+  function tqRender() {
+    tqAnswered = false;
+    const q = tqDeck[tqI];
+    document.getElementById('tq-qi').textContent = tqI + 1;
+    document.getElementById('tq-sc').textContent = tqOk + ' 맞음';
+    document.getElementById('tq-stamp').className = '';
+    document.getElementById('tq-gapbar').style.visibility = 'hidden';
+    document.getElementById('tq-say').style.visibility = 'hidden';
+    document.getElementById('tq-acts').style.visibility = 'hidden';
+    document.getElementById('tq-pin').classList.remove('on');
+    [['tq-L', q.a, 0], ['tq-R', q.b, 1]].forEach(function (p) {
+      const el = document.getElementById(p[0]);
+      el.className = 'tq-bd ' + (p[2] === 0 ? 'L' : 'R');
+      el.innerHTML = tqCardHtml(p[1]);
+      el.onclick = function () { tqAnswer(p[2]); };
+    });
+    tqStartTimer();
+  }
+  function tqStartTimer() {
+    clearInterval(tqTimer); tqLeft = _tqSecs * 10;
+    const bw = document.getElementById('tq-barw'), b = document.getElementById('tq-bar');
+    bw.classList.remove('warn'); b.style.width = '100%';
+    tqTimer = setInterval(function () {
+      tqLeft--;
+      const p = Math.max(0, tqLeft / (_tqSecs * 10)) * 100;
+      b.style.width = p + '%';
+      bw.classList.toggle('warn', p < 25);
+      if (tqLeft <= 0) { clearInterval(tqTimer); tqAnswer(-1); }
+    }, 100);
+  }
+  function tqAnswer(sel) {
+    if (tqAnswered) return; tqAnswered = true; clearInterval(tqTimer);
+    const q = tqDeck[tqI], ok = (sel === q.win);
+    if (ok) tqOk++;
+    const winC = q.win === 0 ? q.a : q.b, losC = q.win === 0 ? q.b : q.a;
+    const wt = tqTypeOf(winC), lt = tqTypeOf(losC);
+    tqByType[wt] = tqByType[wt] || { o: 0, n: 0 }; tqByType[wt].n++; if (ok) tqByType[wt].o++;
+    tqLog.push({ i: tqI + 1, ok: ok, win: winC, lose: losC, gap: q.gap, wt: wt, lt: lt });
+
+    const L = document.getElementById('tq-L'), R = document.getElementById('tq-R');
+    (q.win === 0 ? L : R).classList.add('win');
+    (q.win === 0 ? R : L).classList.add('lose');
+    L.querySelector('.v').textContent = '조회수 ' + fmtViews(q.a.views);
+    R.querySelector('.v').textContent = '조회수 ' + fmtViews(q.b.views);
+    L.onclick = null; R.onclick = null;
+
+    const st = document.getElementById('tq-stamp');
+    st.className = ''; void st.offsetWidth;
+    st.textContent = ok ? 'O' : 'X';
+    st.className = 'on ' + (ok ? 'o' : 'x');
+    if (!ok) { const ov = document.getElementById('tq');
+      ov.classList.remove('shake'); void ov.offsetWidth; ov.classList.add('shake'); }
+    setTimeout(function () { st.className = ''; }, 1400);
+
+    document.getElementById('tq-gapbar').style.visibility = 'visible';
+    document.getElementById('tq-ga').style.width = '0%';
+    document.getElementById('tq-gb').style.width = '0%';
+    setTimeout(function () {
+      document.getElementById('tq-ga').style.width = '100%';
+      document.getElementById('tq-gb').style.width = Math.max(8, 100 / q.gap).toFixed(0) + '%';
+    }, 60);
+    document.getElementById('tq-gx').textContent = q.gap.toFixed(1) + '배';
+
+    const s = document.getElementById('tq-say'); s.style.visibility = 'visible';
+    const head = sel === -1 ? '시간 초과 — ' : (ok ? '맞혔어요 — ' : '아쉽네요 — ');
+    s.innerHTML = head + (wt === lt
+      ? '<b>같은 유형인데 ' + q.gap.toFixed(1) + '배</b>. 글자·얼굴·색을 비교해보세요.'
+      : '<b>' + esc(wt) + '</b>가 <b>' + esc(lt) + '</b>를 ' + q.gap.toFixed(1) + '배로 이겼어요.');
+    s.classList.toggle('miss', !ok);
+    document.getElementById('tq-sc').textContent = tqOk + ' 맞음';
+    document.getElementById('tq-acts').style.visibility = 'visible';
+    document.getElementById('tq-nx').textContent = (tqI + 1 >= tqDeck.length) ? '결과 보기 →' : '다음 →';
+  }
+  function tqStep() { tqI++; if (tqI >= tqDeck.length) { tqFinish(); return; } tqRender(); }
+
+  async function tqFinish() {
+    const rate = Math.round(tqOk / tqDeck.length * 100);
+    TQ.rounds.push({ d: ymdFromDate(new Date()), r: rate, n: tqDeck.length, t: _tqPick });
+    if (TQ.rounds.length > 40) TQ.rounds = TQ.rounds.slice(-40);
+    await tqSave();
+    document.getElementById('tq-fttl').textContent = TQ.rounds.length + '회차 끝';
+    document.getElementById('tq-frate').textContent = rate + '%';
+    document.getElementById('tq-fsub').innerHTML = tqDeck.length + '문제 중 <b>' + tqOk + '개</b>';
+    const last = TQ.rounds.slice(-5);
+    document.getElementById('tq-rounds').innerHTML = last.map(function (x, i) {
+      const now = (i === last.length - 1), no = TQ.rounds.length - last.length + i + 1;
+      return '<div class="tq-rd' + (now ? ' now' : '') + '"><span class="n">' + no + '회차</span>' +
+        '<span class="g"><i style="width:' + x.r + '%"></i></span><span class="p">' + x.r + '%</span></div>';
+    }).join('');
+    let worst = null;
+    Object.keys(tqByType).forEach(function (k) {
+      const b = tqByType[k]; if (b.n < 2) return;
+      const r = b.o / b.n; if (!worst || r < worst.r) worst = { k: k, r: r, n: b.n, o: b.o };
+    });
+    document.getElementById('tq-weak').innerHTML = worst
+      ? '가장 많이 틀린 건 <b>' + esc(worst.k) + '</b>예요 — ' + worst.n + '문제 중 ' + worst.o + '개.<br>다음은 이 간판만 골라보세요.'
+      : '더 풀어보면 <b>약한 간판</b>을 짚어드릴게요.';
+    tqShow('tq-s2');
+  }
+
+  function tqWire() {
+    const on = function (id, fn) { const e = document.getElementById(id); if (e) e.onclick = fn; };
+    on('tq-close', tqClose);
+    on('tq-start', tqBegin);
+    on('tq-again', tqBegin);
+    on('tq-toStart', function () { tqRenderStart(); tqShow('tq-s0'); });
+    on('tq-nx', tqStep);
+    on('tq-pin', async function (ev) {
+      ev.stopPropagation();
+      const c = tqLog[tqLog.length - 1].win;
+      const i = TQ.keep.indexOf(c.id);
+      if (i >= 0) { TQ.keep.splice(i, 1); document.getElementById('tq-pin').classList.remove('on'); }
+      else { TQ.keep.push(c.id); document.getElementById('tq-pin').classList.add('on'); }
+      await tqSave();
+    });
+    on('tq-toReview', function () {
+      const miss = tqLog.filter(function (l) { return !l.ok; }).length;
+      document.getElementById('tq-rvsub').textContent = miss ? miss + '개 틀렸어요' : '전부 맞혔어요';
+      document.getElementById('tq-list').innerHTML = tqLog.map(function (l) {
+        return '<div class="tq-it' + (l.ok ? '' : ' miss') + '"><span class="n">' + l.i + '</span>' +
+          '<span class="mk ' + (l.ok ? 'o' : 'x') + '">' + (l.ok ? 'O' : 'X') + '</span>' +
+          '<span class="t"><b>' + esc(l.wt) + '</b> vs ' + esc(l.lt) + '</span>' +
+          '<span class="g">' + l.gap.toFixed(1) + '배</span></div>';
+      }).join('');
+      tqShow('tq-s3');
+    });
+    on('tq-rvBack', function () { tqShow('tq-s2'); });
+    on('tq-toKeep', async function () {
+      document.getElementById('tq-kcount').textContent = TQ.keep.length;
+      const box = document.getElementById('tq-keep');
+      if (!TQ.keep.length) {
+        box.innerHTML = '<div class="tq-empty">대진 중에 <b>📌</b>를 누르면<br>여기 담깁니다.<br><br>「이건 나도 써야지」 싶은 것만요.</div>';
+      } else {
+        await Promise.all(TQ.keep.map(async function (id) {
+          if (!_tqImg[id]) { try { _tqImg[id] = await loadImage(id, 'thumb'); } catch (e) { _tqImg[id] = null; } }
+        }));
+        box.innerHTML = TQ.keep.map(function (id) {
+          const r = (rows || []).find(function (x) { return x.id === id; });
+          const u = _tqImg[id];
+          return '<div class="tq-kc">' + (u ? '<img src="' + u + '" alt="">' : '') +
+            '<span class="pin">📌</span>' +
+            '<span class="nm">' + esc(r ? tqTypeOf(r) : '') + '</span></div>';
+        }).join('');
+      }
+      tqShow('tq-s4');
+    });
+    on('tq-kpBack', function () { tqShow('tq-s2'); });
+  }
+  // 클릭의 방 → 썸네일 대진 문
+  function tqEntryHtml() {
+    const n = (rows || []).filter(function (r) { return r.hasThumb && r.views > 0; }).length;
+    const last = TQ.rounds.length ? TQ.rounds[TQ.rounds.length - 1] : null;
+    return '<button type="button" class="ck-quiz" id="ck-quiz">' +
+      '<span class="g">🎯</span><span class="tx"><b>썸네일 대진 — 20문제</b>' +
+      '<s>' + (last ? '지난 회차 ' + last.r + '% · 카드 ' + n + '장'
+                    : (n >= 4 ? '카드 ' + n + '장으로 바로 시작' : '사진 있는 카드가 4장부터')) +
+      '</s></span><span class="ar">›</span></button>';
   }
   function ckRenderTrain(tops) {
     const el = document.getElementById('ck-body'); if (!el) return;
