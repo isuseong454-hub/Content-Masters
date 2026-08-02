@@ -16085,7 +16085,6 @@
   /* v595c · 사장님 네온 그림. mix-blend-mode:screen = 검정 배경 투명화(네온만 남음).
      v595e · 누끼 완료라 살짝 키움 + 그림마다 비율이 달라(덤벨=납작·나침반=길쭉) 시각 무게를 개별 보정 */
   .qcf-t .ob img { display:block; max-height:36px; max-width:60px; object-fit:contain;
-    mix-blend-mode:screen;
     filter:drop-shadow(0 0 8px rgba(var(--qc),.38)); }
   .qcf-t[data-cs-go="prod"] .ob img { max-width:68px; }       /* 덤벨 — 가로로 넓게 */
   .qcf-t[data-cs-go="compass"] .ob img { max-height:40px; }   /* 나침반 — 세로가 본체 */
@@ -17366,6 +17365,34 @@
   .tgym-hero::after{ content:''; position:absolute; inset:0; pointer-events:none;
     box-shadow:inset 0 0 40px -12px rgba(0,0,0,.92); }
   @media(max-width:480px){ .tgym-hero canvas{ height:164px; } }
+  /* ═══ v602 · 100만 조회수 공식 두 줄 (사장님 확정 문구 — 부연설명 없음) ═══ */
+  .tgym-law{ margin:10px 0 2px; display:flex; flex-direction:column; gap:6px; }
+  .tgym-law s{ display:block; text-decoration:none; font-family:'JetBrains Mono',monospace;
+    font-size:8.5px; letter-spacing:.26em; color:var(--st2-faint,#7b8478); text-align:center; margin-bottom:2px; }
+  .tgym-law .lw{ display:flex; align-items:center; gap:9px; width:100%; padding:10px 12px; border-radius:12px;
+    font-family:inherit; font-size:11.5px; font-weight:700; text-align:left; cursor:pointer; line-height:1.45;
+    background:rgba(255,255,255,.022); border:1px solid rgba(255,255,255,.07);
+    color:var(--st2-sub,#9aa39c); -webkit-tap-highlight-color:transparent; transition:border-color .18s,background .18s; }
+  .tgym-law .lw:active{ transform:scale(.985); }
+  .tgym-law .lw b{ flex:none; font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--st2-faint,#7b8478); }
+  .tgym-law .lw span{ flex:1; }
+  .tgym-law .lw em{ font-style:normal; color:var(--st2-tx,#e8e9e6); }
+  .tgym-law .lw i{ flex:none; font-style:normal; font-family:'JetBrains Mono',monospace; font-size:11.5px;
+    font-weight:800; color:var(--st2-faint,#7b8478); }
+  .tgym-law .lw.hit{ background:rgba(215,243,75,.07); border-color:rgba(215,243,75,.32); color:var(--st2-tx,#e8e9e6); }
+  .tgym-law .lw.hit b, .tgym-law .lw.hit i, .tgym-law .lw.hit em{ color:#D7F34B; }
+  /* 시간의 방 · 영상 길이 칸 */
+  .st-len{ display:flex; align-items:center; gap:7px; margin-top:7px; flex-wrap:wrap; }
+  .st-len input{ flex:1; min-width:120px; font-family:inherit; font-size:16px; font-weight:700;
+    padding:9px 11px; border-radius:10px; background:rgba(255,255,255,.03);
+    border:1px solid rgba(255,255,255,.1); color:var(--st2-tx,#e8e9e6); }
+  .st-len button{ flex:none; font-family:inherit; font-size:11.5px; font-weight:800; padding:9px 13px;
+    border-radius:10px; cursor:pointer; background:rgba(176,123,240,.12);
+    border:1px solid rgba(176,123,240,.35); color:#b07bf0; }
+  .st-len .p{ flex:none; width:100%; font-family:'JetBrains Mono',monospace; font-size:10.5px; font-weight:800;
+    color:var(--st2-faint,#7b8478); }
+  .st-len .p.hit{ color:#D7F34B; }
+  .st-len .p i{ font-style:normal; opacity:.7; margin-left:5px; }
   @media(max-width:480px){ .tgym .board{ grid-template-columns:repeat(2,1fr); } }
   @media(prefers-reduced-motion:reduce){ .tgym .sign b{ animation:none; } }
   /* v593 · 💚 맥락의 방 세그 (고객 | 트렌드) */
@@ -22817,6 +22844,7 @@
         <div class="tgym" id="tgym">
           <div class="sign"><s>TRAINING</s><b>트레이닝 룸</b><i>반복하는 만큼 강해집니다</i></div>
           <div class="tgym-hero"><canvas id="tgym-hero-cv"></canvas></div>
+          <div class="tgym-law" id="tgym-law"></div>
           <div class="board" id="tgym-board"></div>
           <button type="button" class="tgym-weak" id="tgym-weak" style="display:none"></button>
         </div>
@@ -50468,7 +50496,8 @@
   // ═══════════ 🏋️ v593 · 전술 보드 — 목표 4수치 (사장님 확정 기본값 · ✎로 수시 변경) ═══════════
   //   3초 유지 60% · 평균 시청 12초 · 탐색 클릭 10% · 저장+보내기 5%. 저장 = 계정 저장소(cm-tgoals)
   const TG_KEY = 'cm-tgoals';
-  let tGoals = { eye: 60, stay: 12, clk: 10, emp: 5 }, _tgLoaded = false;
+  // v602 · stayp = 시청지속 %(100만 공식 ②). stay(초)는 시간의 방 곡선이 계속 쓴다
+  let tGoals = { eye: 60, stay: 12, stayp: 70, clk: 10, emp: 5 }, _tgLoaded = false;
   async function tgLoad() {
     try {
       const r = await window.storage.get(TG_KEY);
@@ -50606,26 +50635,47 @@
     if (!TGH.raf) TGH.raf = requestAnimationFrame(tgHeroDraw);
   }
   function tgHeroStop() { if (TGH.raf) { cancelAnimationFrame(TGH.raf); TGH.raf = 0; } }
+  // v602 · 100만 조회수 공식 — 사장님이 확정한 두 줄 그대로. 부연설명은 붙이지 않는다
+  function tgymLawRender() {
+    const el = document.getElementById('tgym-law'); if (!el) return;
+    let emp = null, stay = null;
+    try { const s = epStats(); if (s.n && (s.sh + s.sa)) emp = Math.round(s.tot * 10) / 10; } catch (e) {}
+    try { stay = rmPctNow('stay'); } catch (e) {}
+    const row = function (no, txt, now, goal, tab) {
+      const hit = now !== null && now >= goal;
+      return '<button type="button" class="lw' + (hit ? ' hit' : '') + '" data-lawgo="' + tab + '">' +
+        '<b>' + no + '</b><span>' + txt + '</span>' +
+        '<i>' + (now === null ? '—' : now + '%') + '</i></button>';
+    };
+    el.innerHTML = '<s>100만 조회수 공식</s>' +
+      row('①', '조회수 대비 공유와 저장 비율이 <em>5%</em>가 되는가?', emp, 5, 'emp') +
+      row('②', '시청지속 시간 <em>70%</em> 유지', stay, tGoals.stayp || 70, 'stay');
+    el.querySelectorAll('[data-lawgo]').forEach(function (b) {
+      b.onclick = function () { try { st2SetTab(b.dataset.lawgo); } catch (e) {} };
+    });
+  }
   // v599 · 전술 보드 = 4방 현황판. 목표만 있던 칸에 «지금»과 게이지를 넣고, 누르면 그 방으로 간다
   function tgymRender() {
     const el = document.getElementById('tgym-board'); if (!el) return;
     if (!_rmLoaded) { rmLoad().then(function () { try { tgymRender(); } catch (e) {} }); }
     // [키, 라벨, 단위, 색, 도크탭, 방이름]
+    // v602 · 7번째 = 목표 키. 시간만 «초 기록»과 «% 목표»가 달라서 stayp를 본다(100만 공식 ②)
     const G = [
-      ['eye',  '👁 3초 유지',    '%', '#43e0e6', '3sec', '시선'],
-      ['stay', '⏱ 평균 시청',   '초', '#b07bf0', 'stay', '시간'],
-      ['clk',  '🧲 탐색 클릭',   '%', '#E0788C', 'clk',  '클릭'],
-      ['emp',  '💚 저장·보내기', '%', '#2FD07B', 'emp',  '공감']
+      ['eye',  '👁 3초 유지',    '%', '#43e0e6', '3sec', '시선', 'eye'],
+      ['stay', '⏱ 시청지속',    '%', '#b07bf0', 'stay', '시간', 'stayp'],
+      ['clk',  '🧲 탐색 클릭',   '%', '#E0788C', 'clk',  '클릭', 'clk'],
+      ['emp',  '💚 저장·보내기', '%', '#2FD07B', 'emp',  '공감', 'emp']
     ];
     // 지금 값 — eye·stay·clk는 손기록, emp는 시트에서 자동 계산
     const nowOf = function (k) {
       if (k === 'emp') { try { const s = epStats(); return (s.n && (s.sh + s.sa)) ? Math.round(s.tot * 10) / 10 : null; } catch (e) { return null; } }
+      if (k === 'stay') return rmPctNow('stay');   // v602 · 초가 아니라 «시청지속 %»
       return rmNow(k);
     };
     let worst = null;
     const _hr = [0, 0, 0, 0];
     el.innerHTML = G.map(function (g, gi) {
-      const goal = tGoals[g[0]] || 0, now = nowOf(g[0]), has = now !== null;
+      const goal = tGoals[g[6] || g[0]] || 0, now = nowOf(g[0]), has = now !== null;
       const rate = has && goal ? Math.max(0, Math.min(1, now / goal)) : 0;
       _hr[gi] = rate;
       if (has && goal) {
@@ -50637,9 +50687,10 @@
         '<span class="goal">목표 ' + goal + g[2] + '</span>' +
         '<s>' + g[1] + '</s>' +
         '<span class="gg"><i style="width:' + (rate * 100).toFixed(0) + '%"></i></span>' +
-        '<i class="pen" data-tg="' + g[0] + '" data-u="' + g[2] + '" title="목표 바꾸기">✎</i></button>';
+        '<i class="pen" data-tg="' + (g[6] || g[0]) + '" data-u="' + g[2] + '" title="목표 바꾸기">✎</i></button>';
     }).join('');
     TGH.rates = _hr; tgHeroStart();          // v600 · 원판 크기가 곧 달성률
+    tgymLawRender();                         // v602 · 100만 조회수 공식 두 줄
     // 칸 클릭 = 그 방으로 · ✎ = 목표 수정 (버블 차단)
     el.querySelectorAll('[data-tgo]').forEach(function (b) {
       b.onclick = function () { try { st2SetTab(b.dataset.tgo); } catch (e) {} };
@@ -50668,13 +50719,22 @@
         w.dataset.go = worst.g[4];
         w.style.display = '';
       } else {
-        const anyRec = G.some(function (g) { return nowOf(g[0]) !== null; });
+        // v602 · 기록이 없는 능력을 «달성»으로 세면 안 된다 — 넷 다 있을 때만 🏆
+        const recN = G.filter(function (g) { return nowOf(g[0]) !== null; }).length;
+        const blank = G.filter(function (g) { return nowOf(g[0]) === null; });
         w.classList.add('done');
         w.style.setProperty('--wc', '#d7f34b');
-        w.innerHTML = anyRec
-          ? '<span>🏆</span><span>네 능력 모두 <b>목표를 넘겼어요</b> — 목표를 조금 올려볼까요?</span><span class="ar">✎</span>'
-          : '<span>◔</span><span>각 방에서 <b>내 수치를 하나만</b> 넣어보세요 — 여기 현황판이 켜집니다</span><span class="ar">→</span>';
-        w.dataset.go = anyRec ? '' : '3sec';
+        if (recN === 0) {
+          w.innerHTML = '<span>◔</span><span>각 방에서 <b>내 수치를 하나만</b> 넣어보세요 — 여기 현황판이 켜집니다</span><span class="ar">→</span>';
+          w.dataset.go = '3sec';
+        } else if (blank.length) {
+          w.innerHTML = '<span>' + blank[0][1].slice(0, 2) + '</span><span>적어둔 <b>' + recN + '가지</b>는 목표를 넘겼어요 — 다음은 <b>' +
+            blank[0][5] + '</b>을 재볼까요?</span><span class="ar">→</span>';
+          w.dataset.go = blank[0][4];
+        } else {
+          w.innerHTML = '<span>🏆</span><span>네 능력 모두 <b>목표를 넘겼어요</b> — 목표를 조금 올려볼까요?</span><span class="ar">✎</span>';
+          w.dataset.go = '';
+        }
         w.style.display = '';
       }
       w.onclick = function () { if (w.dataset.go) { try { st2SetTab(w.dataset.go); } catch (e) {} } };
@@ -50704,7 +50764,19 @@
   function rmEnsure(rerender) { if (!_rmLoaded) { rmLoad().then(function () { try { rerender(); } catch (e) {} }); return false; } return true; }
   function rmNow(k) { const a = RM_LOG[k]; return (a && a.length) ? (a[a.length - 1].p || 0) : null; }
   function rmPrev(k) { const a = RM_LOG[k]; return (a && a.length > 1) ? (a[a.length - 2].p || 0) : null; }
-  async function rmPut(k, v) { RM_LOG[k].push({ d: ymdFromDate(new Date()), p: Math.round(v * 10) / 10 }); await rmSave(k); }
+  async function rmPut(k, v, len) {
+    const it = { d: ymdFromDate(new Date()), p: Math.round(v * 10) / 10 };
+    if (len > 0) it.len = Math.round(len * 10) / 10;   // v602 · 영상 길이가 있으면 %를 낼 수 있다
+    RM_LOG[k].push(it); await rmSave(k);
+  }
+  // v602 · 시청지속 % — 뒤에서부터 «길이가 적힌» 첫 기록을 쓴다. 길이 없는 옛 기록은 %를 못 낸다
+  function rmPctNow(k) {
+    const a = RM_LOG[k] || [];
+    for (let i = a.length - 1; i >= 0; i--) {
+      if (a[i] && a[i].len > 0) return Math.round((a[i].p / a[i].len) * 1000) / 10;
+    }
+    return null;
+  }
   // 기록 입력칸 + 최근 8개 칩 (네 방 공통)
   function rmLogHtml(k, ph, goal, hi) {
     return '<div class="rm-log">' +
@@ -51054,14 +51126,16 @@
     if (rv) rv.onclick = function () { window.__rrFrom = 'compass'; try { switchWorkspace('northstar'); } catch (e) {} };
   }
   function cpSetTab(tab) {
-    // v596 · 고객 = ◉ 고객 분석 방(4바구니 통·축구공 전환·저항 벽 — 사장님이 정한 그 메뉴들)으로 가는 문
-    if (tab === 'cus') { window.__rrFrom = 'compass'; try { switchWorkspace('customer'); } catch (e) {} return; }
+    // v601 🚨 여기가 새고 있었다 — switchWorkspace('customer')는 «셀링포인트 껍데기»(v510에 고객이 이사 나간 방)로 간다.
+    //   진짜 고객 분석 방은 #st2-cus(4바구니·벽 부수기)이고 이미 나침반 안에 있다. 그걸 그대로 연다.
     _cpTab = tab;
     document.querySelectorAll('#cp-ws button').forEach(b => b.classList.toggle('on', b.dataset.cptab === tab));
     const me = document.getElementById('cp-me'); if (me) me.style.display = (tab === 'me') ? 'block' : 'none';
     const ih = document.getElementById('cp-insight'); if (ih) ih.style.display = (tab === 'insight') ? 'block' : 'none';
     const tr = document.getElementById('st2-trend'); if (tr) tr.style.display = (tab === 'trend') ? 'block' : 'none';
+    const cu = document.getElementById('st2-cus'); if (cu) cu.style.display = (tab === 'cus') ? 'block' : 'none';
     window.scrollTo({ top: 0 });
+    if (tab === 'cus') { try { st2RenderCus(); } catch (e) { console.error('[cp] cus', e); } }
     if (tab === 'me') cpRenderMe();
     if (tab === 'insight') { try { cpRenderInsight(); } catch (e) { console.error('[cp] insight', e); } }
     if (tab === 'trend') { try { st2RenderTrend(); } catch (e) { console.error('[cp] trend', e); } }
@@ -51225,6 +51299,7 @@
               : '목표까지 <b>' + Math.round((goal - now) * 10) / 10 + '초</b> — 문장 한두 개가 더 버텨주면 됩니다')
           : '릴스 인사이트의 <b>평균 시청 시간</b>을 넣어보세요 — 목표선과 나란히 놓입니다') + '</div>' +
         rmLogHtml('stay', '이번 편 평균 시청 (초)', goal, 120) +
+        stLenHtml() +
         '<div class="rm-say">' + stSayHtml(has, now, goal) + '</div>' +
       '</div></div>' +
       rmTrainHtml('st', [['go', '✎', '원고 쓰러', '기찻길로 이동'],
@@ -51233,9 +51308,38 @@
       '<div class="rm-foot">기록 <b>' + RM_LOG.stay.length + '</b>편<span style="margin-left:auto">✎ 시간</span></div>' +
       '</div>';
     el.innerHTML = h;
+    stWireLen();
     rmWireLog('stay', st2RenderStay, '초', 120);
     el.querySelectorAll('[data-st]').forEach(function (b) { b.onclick = function () { _stTrain = b.dataset.st; st2RenderStay(); }; });
     stRenderTrain();
+  }
+  // v602 · 100만 공식 ② — «평균 시청 ÷ 영상 길이 = 70%». 길이를 알아야 %가 나온다
+  function stLenHtml() {
+    const pct = rmPctNow('stay'), gp = tGoals.stayp || 70;
+    const last = RM_LOG.stay.length ? RM_LOG.stay[RM_LOG.stay.length - 1] : null;
+    return '<div class="st-len">' +
+      '<input id="st-len-in" type="number" inputmode="decimal" min="1" max="600" placeholder="영상 길이 (초)"' +
+        (last && last.len > 0 ? ' value="' + last.len + '"' : '') + '>' +
+      '<button type="button" id="st-len-go">길이 적용</button>' +
+      '<span class="p' + (pct !== null && pct >= gp ? ' hit' : '') + '">' +
+        (pct === null ? '시청지속 —' : '시청지속 ' + pct + '%') + ' <i>목표 ' + gp + '%</i></span>' +
+      '</div>';
+  }
+  function stWireLen() {
+    const inp = document.getElementById('st-len-in'), go = document.getElementById('st-len-go');
+    const apply = async function () {
+      const L = parseFloat(String(inp.value || ''));
+      if (!(L > 0 && L <= 600)) { try { toast('영상 길이를 초로 넣어주세요'); } catch (e) {} return; }
+      if (!RM_LOG.stay.length) { try { toast('평균 시청 시간을 먼저 기록해주세요'); } catch (e) {} return; }
+      RM_LOG.stay[RM_LOG.stay.length - 1].len = Math.round(L * 10) / 10;   // 마지막 기록에 길이를 붙인다
+      await rmSave('stay');
+      const p = rmPctNow('stay');
+      try { toast('시청지속 ' + p + '% — 목표 ' + (tGoals.stayp || 70) + '%'); } catch (e) {}
+      st2RenderStay();
+      try { tgymRender(); } catch (e) {}
+    };
+    if (go) go.onclick = apply;
+    if (inp) inp.onkeydown = function (e) { if (e.key === 'Enter') apply(); };
   }
   function stSayHtml(has, now, goal) {
     if (!has) return '알아낸 것 — <span class="q">아직 기록이 없어요.</span><br>릴스 하나의 <b>평균 시청 시간</b>만 적어두면, 다음 편부터 «더 오래 데려갔나»를 말해드릴게요.';
