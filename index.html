@@ -51069,9 +51069,9 @@
     const hl = (tab === 'trend') ? 'cus' : tab;
     document.querySelectorAll('#st2-ws button').forEach(b => b.classList.toggle('on', b.dataset.st2tab === hl));
     document.getElementById('st2-home').style.display = (tab === 'home') ? 'block' : 'none';
-    // v600 · 히어로는 홈 전용. 방마다 자기 직감 그림이 있으므로 겹치면 어지럽다 (+ 안 보이면 캔버스도 쉰다)
-    try { const _hw = document.querySelector('.tgym-hero');
-      if (_hw) { _hw.style.display = (tab === 'home') ? '' : 'none'; if (tab === 'home') tgHeroStart(); } } catch (e) {}
+    // v604 · 로비(간판·히어로·공식·현황판)는 홈 전용 — 각 방엔 자기 간판과 자기 그림이 이미 있다
+    try { const _lb = document.getElementById('tgym');
+      if (_lb) { _lb.style.display = (tab === 'home') ? '' : 'none'; if (tab === 'home') tgHeroStart(); } } catch (e) {}
     document.getElementById('st2-cus').style.display = (tab === 'cus') ? 'block' : 'none';
     const s3El = document.getElementById('st2-3sec'); if (s3El) s3El.style.display = (tab === '3sec') ? 'block' : 'none';
     const empEl = document.getElementById('st2-emp'); if (empEl) empEl.style.display = (tab === 'emp') ? 'block' : 'none';   // v596 · ♡ 공감
