@@ -17356,6 +17356,16 @@
   .tgym-weak b{ color:var(--wc,#d7f34b); }
   .tgym-weak .ar{ margin-left:auto; color:var(--wc,#d7f34b); }
   .tgym-weak.done{ --wc:#d7f34b; }
+  /* ═══ v600 · 히어로 — 데드리프트 × 역광 실루엣 ═══ */
+  .tgym-hero{ position:relative; margin:11px 0 2px; border-radius:15px; overflow:hidden;
+    background:#0a0e0d; border:1px solid rgba(255,255,255,.07);
+    background-image:linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),
+                     linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);
+    background-size:26px 26px; }
+  .tgym-hero canvas{ display:block; width:100%; height:180px; }
+  .tgym-hero::after{ content:''; position:absolute; inset:0; pointer-events:none;
+    box-shadow:inset 0 0 40px -12px rgba(0,0,0,.92); }
+  @media(max-width:480px){ .tgym-hero canvas{ height:164px; } }
   @media(max-width:480px){ .tgym .board{ grid-template-columns:repeat(2,1fr); } }
   @media(prefers-reduced-motion:reduce){ .tgym .sign b{ animation:none; } }
   /* v593 · 💚 맥락의 방 세그 (고객 | 트렌드) */
@@ -22806,6 +22816,7 @@
         <!-- v593 · 🏋️ 네온 간판 + 전술 보드(목표 4수치 ✎) — 사장님 픽 A 네온 짐 -->
         <div class="tgym" id="tgym">
           <div class="sign"><s>TRAINING</s><b>트레이닝 룸</b><i>반복하는 만큼 강해집니다</i></div>
+          <div class="tgym-hero"><canvas id="tgym-hero-cv"></canvas></div>
           <div class="board" id="tgym-board"></div>
           <button type="button" class="tgym-weak" id="tgym-weak" style="display:none"></button>
         </div>
@@ -50466,6 +50477,135 @@
     _tgLoaded = true;
   }
   async function tgSave() { try { await window.storage.set(TG_KEY, JSON.stringify(tGoals)); } catch (e) {} }
+  /* ═══ v600 · 히어로 엔진 — 데드리프트 × 역광 실루엣 ═══
+     몸은 어둡게 두고 라임은 «빛»으로만 쓴다(라임 = 자산이라는 뜻을 지키기 위해).
+     원판 4장이 네 능력이고, 달성률만큼 커진다. 화면에 없으면 스스로 잠든다. */
+  const TGH = { rates: [0, 0, 0, 0], raf: 0, t0: 0, w: 0, h: 0 };
+  const TGH_L = { thigh: 24, shin: 24, torso: 34, upper: 17, fore: 17, neck: 10, head: 6.2 };
+  const TGH_C = ['#43e0e6', '#b07bf0', '#E0788C', '#2FD07B'];
+  function tghEase(t) { return t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2; }
+  function tghIk(root, tgt, l1, l2, s) {
+    const dx = tgt[0] - root[0], dy = tgt[1] - root[1], d = Math.hypot(dx, dy) || .001;
+    const m = Math.min(d, l1 + l2 - .01), a = Math.atan2(dy, dx);
+    const c = (l1 * l1 + m * m - l2 * l2) / (2 * l1 * m);
+    const e = a + s * Math.acos(Math.max(-1, Math.min(1, c)));
+    return [root[0] + Math.cos(e) * l1, root[1] + Math.sin(e) * l1];
+  }
+  function tghReach(root, tgt, mx) {
+    const dx = tgt[0] - root[0], dy = tgt[1] - root[1], d = Math.hypot(dx, dy) || .001;
+    return d <= mx ? tgt : [root[0] + dx / d * mx, root[1] + dy / d * mx];
+  }
+  function tghPolar(p, deg, l) { const r = deg * Math.PI / 180; return [p[0] + Math.cos(r) * l, p[1] + Math.sin(r) * l]; }
+  function tghSolve(hip, td, hands, feet) {
+    const L = TGH_L, neck = tghPolar(hip, td, L.torso), head = tghPolar(neck, td, L.neck);
+    const am = L.upper + L.fore - 1, lm = L.thigh + L.shin - 1;
+    const hA = tghReach(neck, hands[0], am), hB = tghReach(neck, hands[1], am);
+    const fA = tghReach(hip, feet[0], lm), fB = tghReach(hip, feet[1], lm);
+    return { head: head, neck: neck, hip: hip,
+      elbowA: tghIk(neck, hA, L.upper, L.fore, 1), handA: hA,
+      elbowB: tghIk(neck, hB, L.upper, L.fore, -1), handB: hB,
+      kneeA: tghIk(hip, fA, L.thigh, L.shin, -1), footA: fA,
+      kneeB: tghIk(hip, fB, L.thigh, L.shin, -1), footB: fB };
+  }
+  function tghBones(J) {
+    return [[J.hip, J.neck, 16],
+      [J.hip, J.kneeA, 12], [J.kneeA, J.footA, 8.5],
+      [J.hip, J.kneeB, 12], [J.kneeB, J.footB, 8.5],
+      [J.neck, J.elbowA, 9], [J.elbowA, J.handA, 7],
+      [J.neck, J.elbowB, 9], [J.elbowB, J.handB, 7]];
+  }
+  function tghSeg(x, a, b, c, w, g) {
+    x.strokeStyle = c; x.lineWidth = w; x.lineCap = 'round'; x.lineJoin = 'round';
+    x.shadowColor = c; x.shadowBlur = g || 0;
+    x.beginPath(); x.moveTo(a[0], a[1]); x.lineTo(b[0], b[1]); x.stroke(); x.shadowBlur = 0;
+  }
+  function tghCirc(x, p, r, c, g) {
+    x.fillStyle = c; x.shadowColor = c; x.shadowBlur = g || 0;
+    x.beginPath(); x.arc(p[0], p[1], r, 0, 6.2832); x.fill(); x.shadowBlur = 0;
+  }
+  function tghSil(x, J, c, k, glow) {
+    tghBones(J).forEach(function (b) { tghSeg(x, b[0], b[1], c, b[2] * k, glow); });
+    tghCirc(x, J.head, 9 * k, c, glow);
+  }
+  function tghLift(T) {
+    const cyc = (T % 3.4) / 3.4;
+    if (cyc < .38) return tghEase(cyc / .38);
+    if (cyc < .56) return 1;
+    return 1 - tghEase((cyc - .56) / .44);
+  }
+  function tghFrame(x, w, h, T) {
+    // 폰 기준(360)으로 그린 뒤, 화면이 넓으면 무대째로 키운다 — 데스크탑에서 허전해지지 않게
+    const k = Math.max(1, Math.min(1.5, w / 360));
+    if (k > 1.01) {
+      x.save(); x.translate(w / 2, h); x.scale(k, k); x.translate(-w / (2 * k), -h / k);
+      tghFrame(x, w / k, h / k, T); x.restore(); return;
+    }
+    const lift = tghLift(T);
+    const cx = w * .5, ground = h - 24, barY = ground - 14 - lift * 46;
+    const g = x.createRadialGradient(w / 2, h * 1.04, 0, w / 2, h * 1.04, w * .62);
+    g.addColorStop(0, 'rgba(215,243,75,.05)'); g.addColorStop(1, 'rgba(215,243,75,0)');
+    x.fillStyle = g; x.fillRect(0, 0, w, h);
+    tghSeg(x, [16, ground + 3], [w - 16, ground + 3], '#333c37', 1.5, 0);
+    // 원판 — 가벼운 것부터 안쪽, 색은 능력색 그대로
+    const halfW = Math.min(56, w * .19), order = [3, 1, 0, 2];
+    [-1, 1].forEach(function (s, si) {
+      [0, 1].forEach(function (j) {
+        const idx = order[si * 2 + j], c = TGH_C[idx];
+        const rr = 11 + 12 * Math.max(0, Math.min(1, TGH.rates[idx] || 0));
+        const px = cx + s * (halfW - j * 15);
+        x.globalAlpha = .20; tghCirc(x, [px, barY], rr, c, 18); x.globalAlpha = 1;
+        x.strokeStyle = c; x.lineWidth = 2; x.shadowColor = c; x.shadowBlur = 12;
+        x.beginPath(); x.arc(px, barY, rr, 0, 6.2832); x.stroke(); x.shadowBlur = 0;
+      });
+    });
+    tghSeg(x, [cx - halfW - 17, barY], [cx + halfW + 17, barY], '#cfd6cd', 3.5, 7);
+    // 사람 — 뒤에서 빛이 오고 몸은 어둡다
+    const hip = [cx - 1 + (1 - lift) * 7, ground - 50 + (1 - lift) * 13];
+    const J = tghSolve(hip, -90 + (1 - lift) * 44,
+      [[cx - 26, barY], [cx + 22, barY]], [[cx - 13, ground], [cx + 11, ground]]);
+    tghSil(x, J, '#D7F34B', 1.2, 32);
+    tghSil(x, J, '#D7F34B', 1.2, 17);
+    tghSil(x, J, '#D7F34B', 1.2, 9);
+    tghSil(x, J, '#0d1211', 1, 0);
+  }
+  function tghFit(cv) {
+    const r = cv.getBoundingClientRect(); if (!r.width) return false;
+    const d = Math.min(2, window.devicePixelRatio || 1);
+    TGH.w = r.width; TGH.h = r.height;
+    cv.width = Math.round(r.width * d); cv.height = Math.round(r.height * d);
+    cv.getContext('2d').setTransform(d, 0, 0, d, 0, 0);
+    return true;
+  }
+  function tgHeroDraw(ts) {
+    const cv = document.getElementById('tgym-hero-cv');
+    if (!cv) { TGH.raf = 0; return; }
+    // 화면에 없거나 앱이 잠들면 스스로 쉰다 — 700ms마다만 깨어나 확인
+    const _r = cv.getBoundingClientRect();
+    const _off = document.hidden || cv.offsetParent === null ||
+                 _r.bottom < -40 || _r.top > (window.innerHeight || 800) + 40;
+    if (_off) {
+      TGH.raf = 0;
+      setTimeout(function () { if (!TGH.raf) TGH.raf = requestAnimationFrame(tgHeroDraw); }, 700);
+      return;
+    }
+    if (!TGH.t0) TGH.t0 = ts;
+    if (Math.abs(_r.width - TGH.w) > 1) tghFit(cv);
+    try { const _x = cv.getContext('2d'); _x.clearRect(0, 0, TGH.w, TGH.h);
+      tghFrame(_x, TGH.w, TGH.h, (ts - TGH.t0) / 1000); } catch (e) {}
+    TGH.raf = requestAnimationFrame(tgHeroDraw);
+  }
+  function tgHeroStart() {
+    const cv = document.getElementById('tgym-hero-cv'); if (!cv) return;
+    if (!tghFit(cv)) { setTimeout(tgHeroStart, 120); return; }
+    let reduce = false;
+    try { reduce = matchMedia('(prefers-reduced-motion:reduce)').matches; } catch (e) {}
+    // 첫 프레임은 rAF를 기다리지 않고 바로 그린다 — 빈 상자가 잠깐 보이는 걸 막는다
+    try { const _x = cv.getContext('2d'); _x.clearRect(0, 0, TGH.w, TGH.h);
+      tghFrame(_x, TGH.w, TGH.h, 1.5); } catch (e) {}
+    if (reduce) return;
+    if (!TGH.raf) TGH.raf = requestAnimationFrame(tgHeroDraw);
+  }
+  function tgHeroStop() { if (TGH.raf) { cancelAnimationFrame(TGH.raf); TGH.raf = 0; } }
   // v599 · 전술 보드 = 4방 현황판. 목표만 있던 칸에 «지금»과 게이지를 넣고, 누르면 그 방으로 간다
   function tgymRender() {
     const el = document.getElementById('tgym-board'); if (!el) return;
@@ -50483,9 +50623,11 @@
       return rmNow(k);
     };
     let worst = null;
-    el.innerHTML = G.map(function (g) {
+    const _hr = [0, 0, 0, 0];
+    el.innerHTML = G.map(function (g, gi) {
       const goal = tGoals[g[0]] || 0, now = nowOf(g[0]), has = now !== null;
       const rate = has && goal ? Math.max(0, Math.min(1, now / goal)) : 0;
+      _hr[gi] = rate;
       if (has && goal) {
         const lack = Math.max(0, goal - now);
         if (lack > 0 && (!worst || (lack / goal) > (worst.lack / worst.goal))) worst = { g: g, now: now, goal: goal, lack: Math.round(lack * 10) / 10 };
@@ -50497,6 +50639,7 @@
         '<span class="gg"><i style="width:' + (rate * 100).toFixed(0) + '%"></i></span>' +
         '<i class="pen" data-tg="' + g[0] + '" data-u="' + g[2] + '" title="목표 바꾸기">✎</i></button>';
     }).join('');
+    TGH.rates = _hr; tgHeroStart();          // v600 · 원판 크기가 곧 달성률
     // 칸 클릭 = 그 방으로 · ✎ = 목표 수정 (버블 차단)
     el.querySelectorAll('[data-tgo]').forEach(function (b) {
       b.onclick = function () { try { st2SetTab(b.dataset.tgo); } catch (e) {} };
@@ -50854,6 +50997,9 @@
     const hl = (tab === 'trend') ? 'cus' : tab;
     document.querySelectorAll('#st2-ws button').forEach(b => b.classList.toggle('on', b.dataset.st2tab === hl));
     document.getElementById('st2-home').style.display = (tab === 'home') ? 'block' : 'none';
+    // v600 · 히어로는 홈 전용. 방마다 자기 직감 그림이 있으므로 겹치면 어지럽다 (+ 안 보이면 캔버스도 쉰다)
+    try { const _hw = document.querySelector('.tgym-hero');
+      if (_hw) { _hw.style.display = (tab === 'home') ? '' : 'none'; if (tab === 'home') tgHeroStart(); } } catch (e) {}
     document.getElementById('st2-cus').style.display = (tab === 'cus') ? 'block' : 'none';
     const s3El = document.getElementById('st2-3sec'); if (s3El) s3El.style.display = (tab === '3sec') ? 'block' : 'none';
     const empEl = document.getElementById('st2-emp'); if (empEl) empEl.style.display = (tab === 'emp') ? 'block' : 'none';   // v596 · ♡ 공감
