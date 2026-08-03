@@ -22298,6 +22298,38 @@
       -webkit-tap-highlight-color:transparent;transition:color .16s,background .16s}
     .slv-del:hover{color:#E0788C;background:rgba(224,120,140,.08)}
     .slv-del:active{transform:scale(.96)}
+    /* v618 · 대기 줄 목록 — 남은 카드가 뭐인지 한눈에 */
+    .slv-q, .slv-qlbl{cursor:pointer}
+    #slv-lp{position:fixed;inset:0;z-index:340;display:none;background:rgba(4,7,6,.78);backdrop-filter:blur(6px)}
+    #slv-lp.on{display:flex;align-items:flex-end;justify-content:center}
+    @media(min-width:640px){ #slv-lp.on{align-items:center} }
+    #slv-lp .box{width:100%;max-width:430px;max-height:78vh;display:flex;flex-direction:column;
+      background:#10130e;border:1px solid rgba(215,243,75,.22);border-radius:20px 20px 0 0;
+      box-shadow:0 -18px 60px rgba(0,0,0,.6)}
+    @media(min-width:640px){ #slv-lp .box{border-radius:20px} }
+    #slv-lp .hd{display:flex;align-items:center;gap:9px;padding:15px 16px 11px;flex:none}
+    #slv-lp .hd b{font-size:14px;font-weight:800}
+    #slv-lp .hd s{text-decoration:none;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--sfaint)}
+    #slv-lp .hd button{margin-left:auto;width:34px;height:34px;border-radius:10px;border:1px solid rgba(255,255,255,.1);
+      background:none;color:var(--ssub,#9aa39c);font-size:14px;cursor:pointer}
+    #slv-lp .bd{flex:1;overflow-y:auto;padding:0 12px 14px;display:flex;flex-direction:column;gap:7px}
+    #slv-lp .it{display:flex;align-items:center;gap:11px;width:100%;text-align:left;font-family:inherit;
+      background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:13px;
+      padding:9px 10px;cursor:pointer;-webkit-tap-highlight-color:transparent;
+      transition:transform .15s cubic-bezier(.2,1.3,.4,1),border-color .16s}
+    #slv-lp .it:active{transform:scale(.985)}
+    #slv-lp .it:hover{border-color:rgba(215,243,75,.3)}
+    #slv-lp .it .th{width:40px;height:62px;border-radius:7px;flex:none;overflow:hidden;position:relative;
+      background:rgba(255,255,255,.05);display:grid;place-items:center;font-size:13px}
+    #slv-lp .it .th img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+    #slv-lp .it .tx{min-width:0;flex:1}
+    #slv-lp .it .tx b{display:block;font-size:12px;font-weight:700;line-height:1.4;
+      overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+    #slv-lp .it .tx s{display:block;text-decoration:none;font-family:'JetBrains Mono',monospace;
+      font-size:9px;color:var(--sfaint);margin-top:3px}
+    #slv-lp .it .del{flex:none;width:32px;height:32px;border-radius:9px;border:none;background:none;
+      color:rgba(224,120,140,.55);font-size:13px;cursor:pointer;font-family:inherit}
+    #slv-lp .it .del:hover{color:#E0788C;background:rgba(224,120,140,.1)}
     .slv-note{font-size:9.5px;color:var(--sfaint);text-align:center;margin-top:11px;line-height:1.6}
     body.cm-ov-open .slv-hide{display:none}
     /* 진입점: 분류 탭 배너 · 시트 배지 */
@@ -44884,6 +44916,21 @@
     slvEmRender(); slvBuildAxes();
     toast('"' + v + '" 추가됨');
   }
+  /* ═══ v618 · 카드 이름 폴백 — 후킹이 없어도 무엇을 담았는지 보이게 ═══ */
+  function slvTitleOf(r) {
+    if (!r) return '(카드)';
+    const pick = function (v) { return (typeof v === 'string' && v.trim()) ? v.trim() : ''; };
+    let t = pick(r.hook) || pick(r.topicMain) ||
+            ((r.keywords || [])[0] ? '#' + r.keywords[0] : '') ||
+            pick(r.memo) || pick(r.why) || pick(r.inner);
+    if (!t) { const sc = String(r.script || '').replace(/<[^>]*>/g, ' ').trim(); if (sc) t = sc; }
+    if (!t && r.scriptSections) {
+      const k = Object.keys(r.scriptSections).find(function (k2) { return String(r.scriptSections[k2] || '').trim(); });
+      if (k) t = String(r.scriptSections[k]).replace(/<[^>]*>/g, ' ').trim();
+    }
+    if (!t) t = r.hasThumb ? '📷 사진 카드' : '(빈 카드)';
+    return t.slice(0, 30);
+  }
   function slvSpawn(smooth) {
     if (_slvCard) { _slvCard.remove(); _slvCard = null; }
     const r = _slvQ[0];
@@ -44894,7 +44941,7 @@
     const f = document.getElementById('slv-floor');
     const c = document.createElement('div'); c.className = 'slv-cc';
     c.style.background = SLV_GRADS[(r.no || 0) % 6];
-    c.innerHTML = '<span class="hk">' + esc((r.hook || '(제목 없음)').slice(0, 30)) + '</span>' + (r.views ? '<span class="vw">▶ ' + fmtViews(r.views) + '</span>' : '');
+    c.innerHTML = '<span class="hk">' + esc(slvTitleOf(r)) + '</span>' + (r.views ? '<span class="vw">▶ ' + fmtViews(r.views) + '</span>' : '');
     c.style.top = SLV_CARD_TOP + 'px';
     if (smooth) { // 🧊 한 공장: 벨트에서 큐브로 들어와 카드로 펼쳐짐
       c.style.transition = 'none'; c.style.left = '-130px'; c.style.transform = 'scale(.22)'; c.style.borderRadius = '10px';
@@ -45126,6 +45173,76 @@
     const g = document.getElementById('slv-autogo'); if (g) g.onclick = slvAutoAll;
   }
 
+  /* ═══ v618 · 대기 줄 목록 — 클릭=맨 앞으로 · 🗑=바로 삭제 ═══
+     사진이 있는데 못 불러오면 「로드 실패」로 표시 — 서버 문제인지 데이터 문제인지 가릅 */
+  function slvOpenList() {
+    let host = document.getElementById('slv-lp');
+    if (!host) {
+      host = document.createElement('div'); host.id = 'slv-lp';
+      host.innerHTML = '<div class="box"><div class="hd"><b>대기 중인 카드</b>' +
+        '<s id="slv-lp-n"></s><button type="button" id="slv-lp-x">✕</button></div>' +
+        '<div class="bd" id="slv-lp-bd"></div></div>';
+      document.body.appendChild(host);
+      host.onclick = function (e) { if (e.target === host) host.classList.remove('on'); };
+      document.getElementById('slv-lp-x').onclick = function () { host.classList.remove('on'); };
+    }
+    const bd = document.getElementById('slv-lp-bd');
+    document.getElementById('slv-lp-n').textContent = _slvQ.length + '장';
+    bd.innerHTML = _slvQ.map(function (r, i) {
+      return '<button type="button" class="it" data-slvgo="' + r.id + '">' +
+        '<span class="th" data-slvth="' + r.id + '">' + (r.hasThumb ? '⏳' : '—') + '</span>' +
+        '<span class="tx"><b>' + esc(slvTitleOf(r)) + '</b>' +
+        '<s>' + (i === 0 ? '지금 보는 카드' : (i + 1) + '번째') +
+        (r.views ? ' · ▶ ' + fmtViews(r.views) : '') + '</s></span>' +
+        '<button type="button" class="del" data-slvdel="' + r.id + '" title="이 카드 삭제">🗑</button>' +
+        '</button>';
+    }).join('') || '<div style="padding:26px;text-align:center;color:var(--sfaint);font-size:12px">대기 중인 카드가 없어요</div>';
+    // 썸네일 — 있다고 적힌 것만 불러오고, 실패하면 «로드 실패»로 솔직하게
+    bd.querySelectorAll('[data-slvth]').forEach(function (el) {
+      const r = _slvQ.find(function (x) { return x.id === el.dataset.slvth; });
+      if (!r || !r.hasThumb) return;
+      loadImage(r.id, 'thumb').then(function (u) {
+        if (u) el.innerHTML = '<img src="' + u + '" alt=""/>';
+        else { el.textContent = '📷✕'; el.title = '사진이 있다고 기록됐는데 못 불러왔어요'; }
+      }).catch(function () { el.textContent = '📷✕'; el.title = '사진 로드 실패'; });
+    });
+    // 클릭 = 맨 앞으로
+    bd.querySelectorAll('[data-slvgo]').forEach(function (b) {
+      b.onclick = function (e) {
+        if (e.target.closest('[data-slvdel]')) return;
+        const r = _slvQ.find(function (x) { return x.id === b.dataset.slvgo; });
+        if (!r) return;
+        _slvQ = _slvQ.filter(function (x) { return x !== r; });
+        _slvQ.unshift(r);
+        host.classList.remove('on');
+        slvSpawn(true); slvAutoBar();
+      };
+    });
+    // 🗑 = 바로 삭제 (한 번 물어봄)
+    bd.querySelectorAll('[data-slvdel]').forEach(function (d) {
+      d.onclick = async function (e) {
+        e.stopPropagation();
+        const r = _slvQ.find(function (x) { return x.id === d.dataset.slvdel; });
+        if (!r) return;
+        const nm = slvTitleOf(r).slice(0, 24);
+        if (!confirm('「' + nm + '」\n\n이 카드를 지웁니다. 되돌릴 수 없어요.\n계속할까요?')) return;
+        const wasFirst = _slvQ[0] === r;
+        const idx = (rows || []).findIndex(function (x) { return x && x.id === r.id; });
+        if (idx >= 0) rows.splice(idx, 1);
+        _slvQ = _slvQ.filter(function (x) { return x !== r; });
+        _slvUndo = null; try { slvUndoBar(false); } catch (e2) {}
+        try { await saveRows(); } catch (e2) {}
+        try { insInvalidate(); } catch (e2) {}
+        try { renderTable(); } catch (e2) {}
+        try { renderThumbBoard(); } catch (e2) {}
+        if (wasFirst) slvSpawn(true);
+        slvHud(); try { slvAutoBar(); } catch (e2) {}
+        slvOpenList();   // 목록 새로 그림
+        try { csToast('🗑 「' + nm + '」 지웠어요'); } catch (e2) {}
+      };
+    });
+    host.classList.add('on');
+  }
   function slvOpen() {
     _cmrFromFork = false;   // v593 · 갈림길 출신 표식은 레일 클릭만 단다 (다른 입구의 묵은 표식 방지)
     slvInit();
@@ -45158,11 +45275,16 @@
     var _ub = document.getElementById('slv-undo'); if (_ub) _ub.onclick = slvDoUndo;   // v544
     document.getElementById('slv-assign').onclick = function () { slvAssign(); setTimeout(function () { try { slvAutoBar(); } catch (e) {} }, 700); };
     document.getElementById('slv-skip').onclick = () => { if (slvBusyNow() || _slvQ.length < 2) return; _slvQ.push(_slvQ.shift()); slvSpawn(true); slvAutoBar(); };
+    // v618 · 대기 줄을 누르면 남은 카드 전부 목록으로 — «뭐가 남았는지» 한눈에
+    ['slv-q'].forEach(function (id) {
+      const el = document.getElementById(id); if (el) el.onclick = slvOpenList;
+    });
+    document.querySelectorAll('#slv .slv-qlbl').forEach(function (el) { el.onclick = slvOpenList; });
     // v616 · 이 카드 지우기 — 니즈가 안 맞는 것을 정리하다 말고 바로 뺀다
     document.getElementById('slv-del').onclick = async function () {
       if (slvBusyNow() || !_slvQ.length) return;
       const r = _slvQ[0];
-      const nm = String(r.hook || r.topicMain || '\uce74\ub4dc').slice(0, 24);
+      const nm = slvTitleOf(r).slice(0, 24);
       if (!confirm('\u300c' + nm + '\u300d\n\n\uc774 \uce74\ub4dc\ub97c \uc9c0\uc6c1\ub2c8\ub2e4. \ub418\ub3cc\ub9b4 \uc218 \uc5c6\uc5b4\uc694.\n\uacc4\uc18d\ud560\uae4c\uc694?')) return;
       const idx = (rows || []).findIndex(function (x) { return x && x.id === r.id; });
       if (idx >= 0) rows.splice(idx, 1);
