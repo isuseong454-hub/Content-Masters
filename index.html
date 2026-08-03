@@ -12964,7 +12964,7 @@
   body.in-studio[data-troom="3sec"]   { --troom:#43e0e6; }  /* 👁 초반 3초 · 시선 */
   body.in-studio[data-troom="scripts"]{ --troom:#b07bf0; }  /* ✎ 내용 구성 · 지속 */
   body.in-studio[data-troom="thumbgo"]{ --troom:#E0788C; }  /* ▣ 썸네일 화면(창고)으로 나갔을 때 */
-  body.in-studio[data-troom="cus"]    { --troom:#2FD07B; }  /* ◉ 맥락 · 공감 */
+  body.in-studio[data-troom="cus"]    { --troom:#2FD07B; }  /* ◉ 고객 분석 */
   body.in-studio[data-troom="trend"]  { --troom:#FF7A45; }  /* 🔥 트렌드 (맥락 안 세그) */
   /* 튜브 한 줄 + 고무 바닥 격자.
      z:55 — 도크(60)보다 아래, 본문보다 위. 방 오버레이(분류 1600·손질 1620·정리 6000)엔 안 걸린다. */
@@ -17758,17 +17758,7 @@
     color:var(--st2-faint,#7b8478); border:1px dashed rgba(255,255,255,.12); border-radius:13px; }
   #tq .tq-empty b{ color:var(--st2-sub,#9aa39c); }
 
-  /* 클릭의 방 진입 버튼 */
-  .ck-quiz{ display:flex; align-items:center; gap:10px; width:100%; margin-top:12px; padding:13px 14px;
-    border-radius:14px; font-family:inherit; text-align:left; cursor:pointer;
-    background:linear-gradient(150deg,rgba(224,120,140,.14),rgba(224,120,140,.03));
-    border:1px solid rgba(224,120,140,.36); -webkit-tap-highlight-color:transparent; }
-  .ck-quiz:active{ transform:scale(.985); }
-  .ck-quiz .g{ font-size:19px; flex:none; }
-  .ck-quiz .tx{ flex:1; }
-  .ck-quiz .tx b{ display:block; font-size:13px; font-weight:900; color:var(--st2-tx,#e8e9e6); }
-  .ck-quiz .tx s{ display:block; text-decoration:none; font-size:10.5px; color:var(--st2-sub,#9aa39c); margin-top:2px; }
-  .ck-quiz .ar{ flex:none; color:#E0788C; font-weight:900; }
+  /* v612 · 클릭의 방 진입 버튼은 .rm-pill(가운데 알약)로 갈아탔다 — 옛 .ck-quiz 스타일 제거 */
   @media(prefers-reduced-motion:reduce){ #tq *{ animation:none !important; } }
   /* ═══ v602 · 100만 조회수 공식 두 줄 (사장님 확정 문구 — 부연설명 없음) ═══ */
   .tgym-law{ margin:10px 0 2px; display:flex; flex-direction:column; gap:6px; }
@@ -17800,13 +17790,36 @@
   .st-len .p i{ font-style:normal; opacity:.7; margin-left:5px; }
   @media(max-width:480px){ .tgym .board{ grid-template-columns:repeat(2,1fr); } }
   @media(prefers-reduced-motion:reduce){ .tgym .sign b{ animation:none; } }
-  /* v593 · 💚 맥락의 방 세그 (고객 | 트렌드) */
+  /* v593→v614 · 💚 고객 분석 세그 (고객 | 트렌드) — «맥락»은 ROOM 04 이름으로 갔다 */
   .cus2-ctx{ display:flex; gap:4px; padding:3px; border-radius:11px; background:rgba(255,255,255,.04);
     border:1px solid var(--st2-line); margin-bottom:12px; }
   .cus2-ctx button{ flex:1; font-family:inherit; font-size:11px; font-weight:800; padding:8px 0; border:none;
     border-radius:9px; background:none; color:var(--st2-sub,#9aa39c); cursor:pointer; -webkit-tap-highlight-color:transparent; }
   .cus2-ctx button.on{ background:rgba(212,115,127,.14); color:var(--rose,#D4737F); }
   /* ═══ v593 · 👁 초반 3초 실 (s3) — 진열대 · 시험대 · 오늘의 세트 ═══ */
+  /* ═══ v611 · 트레이닝 기록 — 🎬 3초 트레이닝으로 뜼어본 카드가 여기 쌓인다 ═══ */
+  .rm-rec{ display:flex; flex-direction:column; gap:7px; }
+  .rm-rec-c{ display:block; width:100%; text-align:left; font-family:inherit; cursor:pointer;
+    background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.07); border-radius:13px;
+    padding:11px 12px; -webkit-tap-highlight-color:transparent;
+    transition:transform .16s cubic-bezier(.2,1.3,.4,1), border-color .18s; }
+  .rm-rec-c:hover{ transform:translateY(-2px); border-color:rgba(67,224,230,.3); }
+  .rm-rec-c:active{ transform:scale(.985); }
+  .rm-rec-c .hd{ display:flex; align-items:baseline; gap:8px; }
+  .rm-rec-c .d{ font-family:'JetBrains Mono',monospace; font-size:9px; color:var(--st2-faint,#7b8478); }
+  .rm-rec-c .v{ margin-left:auto; font-family:'JetBrains Mono',monospace; font-size:9.5px;
+    color:var(--st2-sub,#9aa39c); }
+  .rm-rec-c .hk{ font-size:12.5px; font-weight:800; color:var(--st2-tx,#e8e9e6);
+    margin-top:5px; line-height:1.45; }
+  .rm-rec-c .tp{ display:flex; gap:4px; flex-wrap:wrap; margin-top:7px; }
+  .rm-rec-c .tp span{ font-size:9.5px; font-weight:800; color:#43e0e6;
+    background:rgba(67,224,230,.1); border:1px solid rgba(67,224,230,.24);
+    border-radius:999px; padding:4px 8px; }
+  .rm-rec-c .wy{ font-size:11px; color:var(--st2-sub,#9aa39c); margin-top:7px; line-height:1.55; }
+  .rm-rec-0{ padding:20px 14px; border-radius:13px; border:1px dashed rgba(255,255,255,.1);
+    font-size:11.5px; line-height:1.75; color:var(--st2-faint,#7b8478); text-align:center; }
+  .rm-rec-0 b{ color:var(--st2-sub,#9aa39c); }
+  .rm-rec-m{ font-size:10.5px; color:var(--st2-faint,#7b8478); text-align:center; padding:5px 0 0; }
   .s3{ max-width:var(--shfw,900px); margin:0 auto; padding:6px 16px 40px; }
   .s3-hd{ text-align:center; padding:6px 0 2px; }
   .s3-hd .t{ font-size:17px; font-weight:900; letter-spacing:-.01em; }
@@ -17872,7 +17885,52 @@
   /* ═══ v597 · 🏋️ 훈련실 3층 뼈대 (사장님 확정: ①직감 → ②내 인사이트 → ③훈련) ═══
      방마다 ①만 갈아 끼운다. ②③은 네 방이 같은 규격 — 목표 눈금·지금 값·알아낸 것 한 줄 */
   .rm{ max-width:var(--shfw,900px); margin:0 auto; padding:0 0 40px; }
-  .rm-sgn{ text-align:center; padding:14px 16px 12px; }
+  /* v612 · 간판 = 왼쪽 이름 + 오른쪽 «내가 한 숫자» (트레이닝 홈과 같은 포맷) */
+  .rm-sgn{ display:flex; align-items:center; gap:11px; text-align:left; padding:14px 16px 12px; }
+  .rm-sgn .txt{ min-width:0; }
+  .rm-sgn .cnt{ margin-left:auto; flex:none; text-align:right; }
+  .rm-sgn .cnt u{ display:block; text-decoration:none; font-family:'JetBrains Mono',monospace;
+    font-size:26px; font-weight:900; line-height:1; letter-spacing:-.03em; color:var(--rc);
+    font-variant-numeric:tabular-nums;
+    text-shadow:0 0 18px color-mix(in srgb,var(--rc) 42%,transparent); }
+  .rm-sgn .cnt em{ display:block; font-style:normal; font-size:9px; font-weight:700;
+    color:var(--st2-faint,#7b8478); margin-top:2px; }
+  .rm-sgn .cnt.zero u{ color:var(--st2-faint,#7b8478); text-shadow:none; }
+  /* 훈련 버튼 = 가운데 알약. 화면 폭을 다 먹으면 «마지못해 누르는 것»처럼 보인다 */
+  .rm-pill{ display:block; max-width:262px; width:100%; margin:14px auto 0; padding:13px 18px;
+    border-radius:999px; text-align:center; border:0; font-family:inherit; cursor:pointer;
+    background:linear-gradient(120deg,var(--rc),color-mix(in srgb,var(--rc) 52%,#ffffff));
+    color:#1a0a10; box-shadow:0 10px 28px color-mix(in srgb,var(--rc) 34%,transparent);
+    -webkit-tap-highlight-color:transparent;
+    transition:transform .18s cubic-bezier(.2,1.3,.4,1); }
+  .rm-pill:active{ transform:scale(.96); }
+  .rm-pill .t{ display:block; font-size:13.5px; font-weight:900; letter-spacing:-.01em; }
+  .rm-pill .s{ display:block; font-size:9.5px; font-weight:700; opacity:.6; margin-top:2px; }
+  /* 회차 링 */
+  .rm-rec-c.row{ display:flex; align-items:center; gap:11px; cursor:default; }
+  .rm-rec-c.row:hover{ transform:none; border-color:rgba(255,255,255,.07); }
+  .rm-ring{ position:relative; width:36px; height:36px; flex:none; }
+  .rm-ring svg{ transform:rotate(-90deg); }
+  .rm-ring .bgc{ fill:none; stroke:rgba(255,255,255,.08); stroke-width:4; }
+  .rm-ring .fgc{ fill:none; stroke:var(--rc); stroke-width:4; stroke-linecap:round;
+    filter:drop-shadow(0 0 5px color-mix(in srgb,var(--rc) 60%,transparent)); }
+  .rm-ring b{ position:absolute; inset:0; display:grid; place-items:center;
+    font-family:'JetBrains Mono',monospace; font-size:10.5px; font-weight:900; color:var(--st2-tx,#e8e9e6); }
+  .rm-rec-c .no{ margin-left:auto; font-family:'JetBrains Mono',monospace; font-size:9px;
+    font-weight:900; color:var(--st2-faint,#7b8478); flex:none; }
+  /* 베스트 썸네일 — 세로 카드 그대로 */
+  .rm-best{ display:flex; gap:8px; padding:0 16px; overflow-x:auto; scrollbar-width:none; }
+  .rm-best::-webkit-scrollbar{ display:none; }
+  .rm-bt{ flex:0 0 auto; width:62px; cursor:pointer; }
+  .rm-bt .im{ position:relative; width:62px; height:110px; border-radius:9px; overflow:hidden;
+    background:linear-gradient(160deg,#2a1a22,#140b10); border:1px solid rgba(255,255,255,.1); }
+  .rm-bt .im img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .rm-bt .im .pin{ position:absolute; right:4px; top:4px; font-size:9px; }
+  .rm-bt .nm{ font-size:8.5px; color:var(--st2-faint,#7b8478); margin-top:5px; line-height:1.35;
+    display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+  .rm-best0{ padding:18px 14px; border-radius:13px; border:1px dashed rgba(255,255,255,.1);
+    font-size:11.5px; line-height:1.75; color:var(--st2-faint,#7b8478); text-align:center; }
+  .rm-best0 b{ color:var(--st2-sub,#9aa39c); }
   .rm-sgn s{ display:block; text-decoration:none; font-family:'JetBrains Mono',monospace; font-size:8px;
     letter-spacing:.44em; color:color-mix(in srgb,var(--rc) 62%,transparent); }
   .rm-sgn b{ display:block; font-size:19px; font-weight:900; letter-spacing:.02em; color:#F0F3EC; margin-top:3px; }
@@ -18021,14 +18079,32 @@
   .nsign .sg.mine{ border-color:var(--rc); color:#fff;
     background:linear-gradient(160deg,rgba(224,120,140,.3),rgba(224,120,140,.08));
     box-shadow:0 0 22px -3px rgba(224,120,140,.9),0 0 46px -8px rgba(224,120,140,.55);
-    animation:nsB 2.6s ease-in-out infinite; }
+    animation:nsB 2.6s ease-in-out infinite, nsIn 9s linear infinite; }
   @keyframes nsB{ 0%,100%{ filter:brightness(1); } 50%{ filter:brightness(1.32); } }
   .nsign .pw{ position:absolute; bottom:44px; font-size:14px; opacity:.5; animation:nsP 9s linear infinite; }
   @keyframes nsP{ 0%{ left:-8%; } 100%{ left:106%; } }
+  /* v612 · 번 보고 멈췄다가 «내 썸네일» 네모 안으로 들어간다.
+     클릭은 «멈춤»이 아니라 «들어감»이다. 크기는 줄이지 않는다(사장님 확정). */
   .nsign .sp{ position:absolute; bottom:44px; font-size:15px; animation:nsS 9s linear infinite; }
-  @keyframes nsS{ 0%{ left:-8%; opacity:.55; } 38%{ left:40%; opacity:.55; }
-    42%{ left:43%; opacity:1; transform:scale(1.08); } 56%{ left:43%; opacity:1; transform:scale(1.08); }
-    60%{ left:44%; transform:scale(1); } 100%{ left:106%; opacity:.55; } }
+  @keyframes nsS{
+    0%  { left:-8%;   bottom:44px;  opacity:.55; transform:scale(1); }
+    38% { left:40%;   bottom:44px;  opacity:.55; transform:scale(1); }
+    42% { left:43%;   bottom:44px;  opacity:1;   transform:scale(1.08); }
+    54% { left:43%;   bottom:44px;  opacity:1;   transform:scale(1.08); }
+    64% { left:43.6%; bottom:74px;  opacity:1;   transform:scale(1.08); }
+    72% { left:44%;   bottom:104px; opacity:.55; transform:scale(1.08); }
+    78% { left:44%;   bottom:118px; opacity:0;   transform:scale(1.08); }
+    100%{ left:44%;   bottom:118px; opacity:0;   transform:scale(1.08); } }
+  /* 들어간 자리에 선 하나가 한 번 퍼진다 — «받았다»는 신호 */
+  .nsign .rp{ position:absolute; left:39%; top:36px; width:64px; height:36px; border-radius:4px;
+    border:1px solid rgba(255,206,218,.85); opacity:0; pointer-events:none; z-index:5;
+    animation:nsRp 9s linear infinite; }
+  @keyframes nsRp{ 0%,74%{ opacity:0; transform:scale(1); }
+    78%{ opacity:.85; transform:scale(1); }
+    90%,100%{ opacity:0; transform:scale(1.34); } }
+  @keyframes nsIn{ 0%,72%{ box-shadow:0 0 22px -3px rgba(224,120,140,.9),0 0 46px -8px rgba(224,120,140,.55); }
+    79%{ box-shadow:0 0 30px -1px rgba(255,206,218,.98),0 0 58px -6px rgba(224,120,140,.7); }
+    88%,100%{ box-shadow:0 0 22px -3px rgba(224,120,140,.9),0 0 46px -8px rgba(224,120,140,.55); } }
   .nsign .lk{ position:absolute; bottom:68px; left:43%; font-size:12px; opacity:0; animation:nsL 9s linear infinite; }
   @keyframes nsL{ 0%,40%{ opacity:0; } 46%,54%{ opacity:1; } 60%,100%{ opacity:0; } }
   .nsign .cnt{ position:absolute; left:0; right:0; bottom:12px; text-align:center; font-size:11px; color:#8a8f88; z-index:6; }
@@ -23417,7 +23493,7 @@
           <button data-st2tab="clk"><span class="g">▣</span><span class="t">썸네일</span></button>
           <button data-st2tab="emp"><span class="g">♡</span><span class="t">공감</span></button>
           <button data-st2tab="stay"><span class="g">✎</span><span class="t">원고</span></button>
-          <button data-st2tab="cus" style="display:none"><span class="g">◉</span><span class="t">맥락</span></button>
+          <button data-st2tab="cus" style="display:none"><span class="g">◉</span><span class="t">고객 분석</span></button>
           <button data-st2tab="osmu"><span class="g">⬡</span><span class="t">배포</span></button>
         </div>
         <div id="st2-home"></div>
@@ -49916,7 +49992,7 @@
       return;
     }
 
-    // v593 · 💚 맥락의 방 = 고객 + 트렌드 (사장님 확정) — 위 세그로 오간다. 트렌드 방 몸은 그대로
+    // v593→v614 · 💚 고객 분석 = 고객 + 트렌드 (사장님 확정) — 위 세그로 오간다. 트렌드 방 몸은 그대로
     h += '<div class="cus2-ctx"><button type="button" class="on">👤 고객</button>' +
       '<button type="button" data-cus2ctxtr>🔥 트렌드</button></div>';
     // ── 상단: 뒤로 + 3탭 ──
@@ -49944,7 +50020,7 @@
 
     el.innerHTML = h + '</div>';
     cus2Wire(p);
-    // v593 · 맥락 세그 — 🔥 트렌드로 (도크 하이라이트는 맥락에 남는다)
+    // v593→v614 · 고객 분석 세그 — 🔥 트렌드로 (도크 하이라이트는 그대로)
     { const tr = el.querySelector('[data-cus2ctxtr]'); if (tr) tr.onclick = function () { st2SetTab('trend'); }; }
     // v521 · 전환 탭에서만 캔버스 무대를 돌린다 (다른 탭이면 정지)
     if (_cus2Tab === 'cnv') cus2StageInit(p); else cus2StageStop();
@@ -51411,21 +51487,9 @@
   async function eyeSave() { return rmSave('eye'); }
   async function eyeLoad() { return rmLoad(); }
 
-  const S3_KEY = 'cm-3sec-sets';
-  let _s3Sets = 0, _s3Loaded = false, _s3Timer = null;
-  async function s3Load() {
-    try {
-      const r = await window.storage.get(S3_KEY);
-      if (r) { const v = JSON.parse(r.value !== undefined ? r.value : r); if (v && v.n > 0) _s3Sets = v.n; }
-    } catch (e) {}
-    _s3Loaded = true;
-  }
-  async function s3Save() { try { await window.storage.set(S3_KEY, JSON.stringify({ n: _s3Sets, at: Date.now() })); } catch (e) {} }
-  // v597 · ◔ 시선의 방 — 3층(①직감 절벽 · ②내 인사이트 · ③훈련). 훈련 3칸은 s3RenderTrain이 그린다
-  let _s3Train = 'test';   // test(시험대) · shelf(진열대) · dict(여는 말 사전)
+  // v597→v611 · ◔ 시선의 방 — 그림 · 내 인사이트 · 🎬 트레이닝 · 기록 넷만 남긴다
   function st2Render3sec() {
     const el = document.getElementById('st2-3sec'); if (!el) return;
-    if (!_s3Loaded) { s3Load().then(function () { try { st2Render3sec(); } catch (e) {} }); }
     if (!_rmLoaded) { rmLoad().then(function () { try { st2Render3sec(); } catch (e) {} }); }
     const goal = tGoals.eye || 60;
     const now = eyeNow();                       // 최근 기록 (없으면 null — 0으로 겁주지 않기)
@@ -51439,7 +51503,7 @@
       ' C130,' + (nowY + (118 - nowY) * 0.4).toFixed(0) + ' 190,' + tail + ' 260,' + (nowY + (118 - nowY) * 0.62).toFixed(0);
     const crossN = has ? Math.round(now) : 0;
     let h = '<div class="rm" style="--rc:#43e0e6">' +
-      '<div class="rm-sgn"><s>ROOM 01</s><b>시선의 방</b><i>3초 안에 멈추게 하는가</i></div>' +
+      '<div class="rm-sgn"><div class="txt"><s>ROOM 01</s><b>초반 3초의 방</b><i>3초 안에 멈추게 하는가</i></div>' + rmCntHtml(s3RecRows().length, '장') + '</div>' +
       // ① 직감 — 절벽 건너기
       '<div class="rm-z"><span class="rm-tag">① 직감</span>' +
         '<div class="rm-stage eyecl">' +
@@ -51489,16 +51553,8 @@
         '<div class="rm-say">' + s3SayHtml(has, now, goal) + '</div>' +
       '</div></div>' +
       s3tEntryHtml() +
-      // ③ 훈련
-      '<div class="rm-z" style="margin-top:12px"><span class="rm-tag" style="top:-3px">③ 훈련</span>' +
-        '<div class="rm-tr" style="margin-top:20px">' +
-          '<button type="button" data-s3t="test"' + (_s3Train === 'test' ? ' class="on"' : '') + '><div class="g">◷</div><div class="n">3초 시험대</div><div class="d">카운트다운 · 판정</div></button>' +
-          '<button type="button" data-s3t="shelf"' + (_s3Train === 'shelf' ? ' class="on"' : '') + '><div class="g">▤</div><div class="n">3초 진열대</div><div class="d">첫 3초만 몰아보기</div></button>' +
-          '<button type="button" data-s3t="dict"' + (_s3Train === 'dict' ? ' class="on"' : '') + '><div class="g">🪚</div><div class="n">여는 말 사전</div><div class="d">상투어 · 대체 문장</div></button>' +
-        '</div>' +
-        '<div class="rm-body" id="s3-train"></div>' +
-      '</div>' +
-      '<div class="rm-foot">오늘 <b>' + _s3Sets + '</b>세트<span style="margin-left:auto">◔ 시선</span></div>' +
+      s3RecHtml() +
+      '<div class="rm-foot">뜼어본 카드 <b>' + s3RecRows().length + '</b>장<span style="margin-left:auto">◔ 시선</span></div>' +
       '</div>';
     el.innerHTML = h;
     // 기록 배선
@@ -51514,11 +51570,10 @@
       if (add) add.onclick = put;
       if (inp) inp.onkeydown = function (e) { if (e.key === 'Enter') put(); };
     }
-    el.querySelectorAll('[data-s3t]').forEach(function (b) {
-      b.onclick = function () { _s3Train = b.dataset.s3t; st2Render3sec(); };
-    });
     { const g = document.getElementById('s3-tr-go'); if (g) g.onclick = s3tOpen; }
-    s3RenderTrain();
+    el.querySelectorAll('[data-s3rec]').forEach(function (c) {
+      c.onclick = function () { try { openDetail(c.dataset.s3rec); } catch (e) {} };
+    });
   }
   /* ═══ 🎬 v607 · 3초 트레이닝 — 좋은 걸 한 편씩 열어보고 «왜 터졌나»를 내 손으로 남긴다
      결과는 카드에 붙는다(r.sec3) → 판독지에서도 같이 보인다. AI가 대신 판단하지 않는다. */
@@ -51731,106 +51786,36 @@
     return s;
   }
   // ③ 훈련층 — 한 번에 하나만 (시험대 / 진열대 / 여는 말 사전)
-  function s3RenderTrain() {
-    const el = document.getElementById('s3-train'); if (!el) return;
-    if (_s3Train === 'shelf') { s3RenderShelf(el); return; }
-    if (_s3Train === 'dict') { s3RenderDict(el); return; }
-    el.innerHTML =
-      '<div class="s3" style="padding:6px 0 0">' +
-        '<div class="s3-k">◷ 3초 시험대 <i>내 첫 문장을 릴스처럼 띄워봅니다</i></div>' +
-        '<textarea class="s3-ta" id="s3-line" rows="2" placeholder="내 원고의 첫 문장을 붙여넣으세요 — 3초 안에 멈추게 하는가?"></textarea>' +
-        '<button type="button" class="s3-go" id="s3-run" disabled>▶ 3초 시험 시작</button>' +
-        '<div class="s3-stage" id="s3-stage"><span class="s3-cnt" id="s3-cnt">3</span><div class="line" id="s3-big"></div></div>' +
-        '<div class="s3-judge" id="s3-judge">' +
-          '<button type="button" class="stop" id="s3-y">🛑 멈추게 한다</button>' +
-          '<button type="button" id="s3-n">😴 스쳐간다 — 다시 쓰기</button></div>' +
-        '<div class="s3-saw" id="s3-saw"></div>' +
-        '<div class="s3-sets" id="s3-sets">' + (_s3Sets ? '지금까지 훈련 <b>' + _s3Sets + '</b>세트' : '오늘 첫 세트를 시작해보세요 — 보기 3개 + 내 것 1개 = 1세트') + '</div>' +
-      '</div>';
-    s3WireTest();
+  /* ═══ v611 · 트레이닝 기록 — 내가 뜼어본 카드가 쌓인 자리 ═══
+     🎬 3초 트레이닝에서 저장하면 r.sec3 에 붙는다. 누르면 판독지가 열린다. */
+  function s3RecRows() {
+    return (rows || []).filter(function (r) { return r && r.sec3 && r.sec3.d; })
+      .sort(function (a, b) { return String(b.sec3.d).localeCompare(String(a.sec3.d)); });
   }
-  function s3RenderShelf(el) {
-    const shelf = (rows || []).filter(function (r) { return isFilled(r) && ((r.intro || '').trim() || (r.hook || '').trim()); })
-      .sort(function (a, b) { return (b.views || 0) - (a.views || 0); }).slice(0, 12);
-    el.innerHTML = '<div class="s3" style="padding:6px 0 0">' +
-      '<div class="s3-k">▤ 3초 진열대 <i>잘 된 첫 3초만 잘라서 — 조회수순</i></div>' +
-      (shelf.length
-        ? '<div class="s3-grid">' + shelf.map(function (r) {
-            const line = String((r.intro || r.hook || '')).split(/[.!?\n]/)[0].slice(0, 42);
-            return '<div class="s3-c" data-s3open="' + r.id + '">' +
-              (r.hasThumb ? '<img data-s3img="' + r.id + '" alt="">' : '') +
-              '<span class="sc"></span>' +
-              '<span class="vw">▶ ' + (r.views ? fmtViews(r.views) : '—') + '</span>' +
-              '<div class="tx"><div class="hk">' + esc(r.hook || '') + '</div>' +
-              (r.intro ? '<div class="in3">“' + esc(line) + '”</div>' : '') + '</div></div>';
-          }).join('') + '</div>'
-        : '<div class="s3-empty">인트로(첫 3초)를 적은 카드가 여기 모여요.<br>분해할 때 <b>인트로 칸</b>을 채우면 진열대가 자랍니다.</div>') +
-      '</div>';
-    el.querySelectorAll('img[data-s3img]').forEach(function (img) {
-      loadImage(img.dataset.s3img, 'thumb').then(function (u) { if (u) { img.src = u; img.style.display = 'block'; } }).catch(function () {});
-    });
-    el.querySelectorAll('[data-s3open]').forEach(function (c) { c.onclick = function () { openDetail(c.dataset.s3open); }; });
-  }
-  // v597 · 여는 말 사전 — 상투어를 «왜 안 되는지 + 뭘 넣을지»로 바꿔준다
-  const S3_DICT = [
-    { bad: '안녕하세요 / 여러분', why: '누구에게나 하는 인사 — 3초를 그냥 버립니다',
-      fix: '첫 마디를 <b>상대의 상황</b>으로: “펌이 3일 만에 무너지셨죠?”' },
-    { bad: '오늘은 ~에 대해', why: '«설명하겠다»는 예고 — 예고편은 넘겨집니다',
-      fix: '예고 말고 <b>결론부터</b>: “뿌리 각도만 바꾸면 3주 갑니다”' },
-    { bad: '많은 분들이 / 요즘', why: '주어가 흐려서 내 얘기로 안 들립니다',
-      fix: '<b>숫자·장면</b>으로: “아침 7시, 거울 앞에서 세 번 묶는 분”' },
-    { bad: '꿀팁 / 총정리 / 필수', why: '어디서나 쓰는 말 — 눈이 미끄러집니다',
-      fix: '<b>손해</b>를 먼저: “이거 모르면 매달 4만원 버립니다”' },
-    { bad: '~해보세요 / 추천드려요', why: '권유는 끝에 와야 할 말입니다',
-      fix: '첫 3초엔 <b>질문이나 단언</b>: “펌은 기술이 아니라 각도입니다”' }
-  ];
-  function s3RenderDict(el) {
-    el.innerHTML = '<div class="s3" style="padding:6px 0 0">' +
-      '<div class="s3-k">🪚 여는 말 사전 <i>어디서나 하는 말 → 멈추게 하는 말</i></div>' +
-      '<div class="s3d">' + S3_DICT.map(function (d) {
-        return '<div class="s3d-c"><div class="bad">✕ ' + esc(d.bad) + '</div>' +
-          '<div class="why">' + esc(d.why) + '</div>' +
-          '<div class="fix">→ ' + d.fix + '</div></div>';
-      }).join('') + '</div>' +
-      '<div class="s3-sets">첫 문장이 여기 걸리면 <b>시험대</b>에서 바꿔보세요</div>' +
-      '</div>';
-  }
-  // 시험대 배선 (기존 로직 그대로 — 렌더가 나뉘어 함수로 뺐다)
-  function s3WireTest() {
-    // ── 배선 ──
-    const ta = document.getElementById('s3-line'), run = document.getElementById('s3-run');
-    const stage = document.getElementById('s3-stage'), big = document.getElementById('s3-big');
-    const cnt = document.getElementById('s3-cnt'), judge = document.getElementById('s3-judge');
-    const saw = document.getElementById('s3-saw'), sets = document.getElementById('s3-sets');
-    if (ta) ta.addEventListener('input', function () { run.disabled = !ta.value.trim(); });
-    if (run) run.onclick = function () {
-      const txt = ta.value.trim(); if (!txt) return;
-      if (_s3Timer) { clearInterval(_s3Timer); _s3Timer = null; }
-      big.textContent = txt;
-      stage.classList.add('on'); judge.classList.remove('on'); saw.innerHTML = '';
-      let n = 3; cnt.textContent = n;
-      _s3Timer = setInterval(function () {
-        n--;
-        if (n > 0) { cnt.textContent = n; return; }
-        clearInterval(_s3Timer); _s3Timer = null;
-        cnt.textContent = '⏱';
-        judge.classList.add('on');
-        // 상투어 검사 — «어디서나 하는 말»은 광고로 읽힌다 (sawWord 재사용)
-        try {
-          const hits = sawFind(txt);
-          if (hits.length) saw.innerHTML = '🪚 <b>' + hits.map(esc).join(' · ') + '</b> — 어디서나 하는 말이에요. 그 자리에 <b>숫자·장면</b>을 넣으면 멈춥니다.';
-        } catch (e) {}
-      }, 1000);
-    };
-    const done = async function (ok) {
-      _s3Sets++; await s3Save();
-      judge.classList.remove('on'); stage.classList.remove('on');
-      if (sets) sets.innerHTML = '지금까지 훈련 <b>' + _s3Sets + '</b>세트';
-      try { toast(ok ? '🛑 멈추게 하는 첫 문장! +1세트' : '✍️ 다시 쓰는 것도 훈련 — +1세트'); } catch (e) {}
-      if (!ok && ta) { ta.focus(); }
-    };
-    { const y = document.getElementById('s3-y'); if (y) y.onclick = function () { done(true); }; }
-    { const nb = document.getElementById('s3-n'); if (nb) nb.onclick = function () { done(false); }; }
+  function s3RecHtml() {
+    const R = s3RecRows();
+    let h = '<div class="rm-z" style="margin-top:14px">' +
+      '<span class="rm-tag" style="top:-3px">트레이닝 기록</span>' +
+      '<div class="rm-rec" style="margin-top:20px">';
+    if (!R.length) {
+      // 아직 없는 건 고장이 아니다 — 여기 뭔가 쌓인다는 예고로 보여준다
+      h += '<div class="rm-rec-0">아직 없어요 — 위 <b>3초 트레이닝</b>을 한 판 하면<br>' +
+           '뜼어본 카드가 여기 한 장씩 쌓입니다</div>';
+    } else {
+      h += R.slice(0, 6).map(function (r) {
+        return '<button type="button" class="rm-rec-c" data-s3rec="' + r.id + '">' +
+          '<div class="hd"><span class="d">' + esc(r.sec3.d) + '</span>' +
+          (r.views ? '<span class="v">▶ ' + fmtViews(r.views) + '</span>' : '') + '</div>' +
+          '<div class="hk">' + esc(r.hook || '제목 없음') + '</div>' +
+          ((r.sec3.t || []).length
+            ? '<div class="tp">' + r.sec3.t.map(function (t) { return '<span>' + esc(t) + '</span>'; }).join('') + '</div>'
+            : '') +
+          (r.sec3.w ? '<div class="wy">' + esc(r.sec3.w) + '</div>' : '') +
+          '</button>';
+      }).join('');
+      if (R.length > 6) h += '<div class="rm-rec-m">그 전에 뜼은 ' + (R.length - 6) + '장은 시트에 있어요</div>';
+    }
+    return h + '</div></div>';
   }
   // ── 진입점 + 탭 ──
   // 지금 보고 있는 화면에 맞춰 탭 줄의 활성 표시를 맞춘다 (화면이 바뀌어도 탭은 제자리)
@@ -51861,7 +51846,7 @@
       if (sv && sv.style.display === 'none') { _st2Tab = tab; switchWorkspace('studio'); }
     } catch (e) {}
     _st2Tab = tab;
-    // v593 · 트렌드는 💚맥락 소속(세그로 진입) — 도크 하이라이트는 맥락에 남는다
+    // v593→v614 · 트렌드는 💚고객 분석 소속(세그로 진입) — 도크 하이라이트는 그대로
     const hl = (tab === 'trend') ? 'cus' : tab;
     document.querySelectorAll('#st2-ws button').forEach(b => b.classList.toggle('on', b.dataset.st2tab === hl));
     document.getElementById('st2-home').style.display = (tab === 'home') ? 'block' : 'none';
@@ -52055,7 +52040,7 @@
     const rate = has ? Math.max(0, Math.min(1, now / goal)) : 0;
     const stay4 = has ? Math.max(1, Math.round(rate * 4)) : 0;
     let h = '<div class="rm" style="--rc:#b07bf0">' +
-      '<div class="rm-sgn"><s>ROOM 02</s><b>시간의 방</b><i>같이 가다가 조용히 뒤처진다</i></div>' +
+      '<div class="rm-sgn"><div class="txt"><s>ROOM 02</s><b>시청지속 시간의 방</b><i>같이 가다가 조용히 뒤처진다</i></div></div>' +
       '<div class="rm-z"><span class="rm-tag">① 직감</span>' +
         '<div class="rm-stage gtour">' +
           '<div class="road"></div>' +
@@ -52192,10 +52177,10 @@
   }
 
   // ═══════════ v598 · ▣ 클릭의 방 — ①네온 간판 거리 ②클릭률 ③훈련 ═══════════
-  let _ckTrain = 'go';
   function st2RenderClk() {
     const el = document.getElementById('st2-clk'); if (!el) return;
     if (!_rmLoaded) { rmLoad().then(function () { try { st2RenderClk(); } catch (e) {} }); }
+    if (!_tqLoaded) { tqLoad().then(function () { try { st2RenderClk(); } catch (e) {} }); }
     const goal = tGoals.clk || 10;
     const now = rmNow('clk'), has = now !== null;
     const pct = has ? Math.max(3, Math.min(100, (now / Math.max(goal, now)) * 100)) : 0;
@@ -52211,7 +52196,7 @@
     const tops = Object.keys(agg).map(function (k) { return { k: k, v: Math.round(agg[k].s / Math.max(1, agg[k].n)) }; })
       .filter(function (x) { return x.v > 0; }).sort(function (a, b) { return b.v - a.v; }).slice(0, 3);
     let h = '<div class="rm" style="--rc:#E0788C">' +
-      '<div class="rm-sgn"><s>ROOM 03</s><b>클릭의 방</b><i>남의 것들 사이에서 선택받게</i></div>' +
+      '<div class="rm-sgn"><div class="txt"><s>ROOM 03</s><b>클릭률의 방</b><i>남의 것들 사이에서 선택받게</i></div>' + rmCntHtml(TQ.rounds.length, '회차') + '</div>' +
       '<div class="rm-z"><span class="rm-tag">① 직감</span>' +
         '<div class="rm-stage nsign">' +
           '<div class="st"></div>' +
@@ -52225,9 +52210,10 @@
           '<span class="pw" style="animation-delay:-6.1s;opacity:.45">🚶‍♂️</span>' +
           '<span class="sp" style="animation-delay:-1.4s">🚶‍♀️</span>' +
           '<span class="lk" style="animation-delay:-1.4s">👀</span>' +
+          '<span class="rp" style="animation-delay:-1.4s"></span>' +
           '<div class="cnt">' + (has
-            ? '지나가는 <b>100명</b> 중 <b>' + Math.round(now) + '명</b>이 고개를 돌려요'
-            : '밤거리에 내 간판이 걸려 있어요 — <b>탐색 클릭률</b>을 넣으면 몇 명이 멈추는지 보여요') + '</div>' +
+            ? '지나가는 <b>100명</b> 중 <b>' + Math.round(now) + '명</b>이 들어와요'
+            : '밤거리에 내 간판이 걸려 있어요 — <b>탐색 클릭률</b>을 넣으면 몇 명이 들어오는지 보여요') + '</div>' +
         '</div></div>' +
       '<div class="rm-z"><div class="rm-ins"><span class="rm-tag">② 내 인사이트</span>' +
         '<div class="rm-bar"><div class="h">▣ 탐색 클릭률 <b>' + (has ? now + '%' : '—') + '</b><s>목표 ' + goal + '%</s></div>' +
@@ -52245,16 +52231,14 @@
         '<div class="rm-say">' + ckSayHtml(has, now, goal, tops) + '</div>' +
       '</div></div>' +
       tqEntryHtml() +
-      rmTrainHtml('ck', [['go', '▣', '썸네일 보러', '창고 썸네일로'],
-                         ['type', '⚔', '유형별 성적', '뭐가 눌리나'],
-                         ['word', '✎', '수식어 사전', '잘 된 후킹 모음']], _ckTrain) +
+      ckRecHtml() +
+      ckBestHtml() +
       '<div class="rm-foot">기록 <b>' + RM_LOG.clk.length + '</b>편<span style="margin-left:auto">▣ 클릭</span></div>' +
       '</div>';
     el.innerHTML = h;
     rmWireLog('clk', st2RenderClk, '%', 100);
     (function () { const q = document.getElementById('ck-quiz'); if (q) q.onclick = tqOpen; })();
-    el.querySelectorAll('[data-ck]').forEach(function (b) { b.onclick = function () { _ckTrain = b.dataset.ck; st2RenderClk(); }; });
-    ckRenderTrain(tops);
+    ckWireBest(el);
   }
   function ckSayHtml(has, now, goal, tops) {
     let s = '';
@@ -52562,43 +52546,75 @@
   function tqEntryHtml() {
     const n = (rows || []).filter(function (r) { return r.hasThumb && r.views > 0; }).length;
     const last = TQ.rounds.length ? TQ.rounds[TQ.rounds.length - 1] : null;
-    return '<button type="button" class="ck-quiz" id="ck-quiz">' +
-      '<span class="g">🎯</span><span class="tx"><b>썸네일 대진 — 20문제</b>' +
-      '<s>' + (last ? '지난 회차 ' + last.r + '% · 카드 ' + n + '장'
-                    : (n >= 4 ? '카드 ' + n + '장으로 바로 시작' : '사진 있는 카드가 4장부터')) +
-      '</s></span><span class="ar">›</span></button>';
+    return '<button type="button" class="rm-pill" id="ck-quiz">' +
+      '<span class="t">🎯 썸네일 대진</span><span class="s">' +
+      (last ? '20문제 · 지난 회차 ' + last.r + '%'
+            : (n >= 4 ? '20문제 · 카드 ' + n + '장' : '사진 있는 카드가 4장부터')) +
+      '</span></button>';
   }
-  function ckRenderTrain(tops) {
-    const el = document.getElementById('ck-body'); if (!el) return;
-    if (_ckTrain === 'go') {
-      el.innerHTML = '<button type="button" class="rm-door" id="ck-godoor"><span>▣</span> 썸네일 보러 가기 — 유형별로 모아둔 곳<span class="ar">→</span></button>' +
-        '<div class="rm-empty">썸네일은 <b>밤거리의 간판</b>이에요. 남의 것들 사이에 걸어두고 눈이 어디로 가는지 보세요.</div>';
-      const d = document.getElementById('ck-godoor');
-      if (d) d.onclick = function () { window.__rrFrom = 'studio'; try { switchWorkspace('thumb'); } catch (e) {} };
-      return;
+  /* ═══ v612 · 간판 오른쪽 숫자 (네 방 공용) ═══ */
+  function rmCntHtml(n, unit) {
+    return '<div class="cnt' + (n ? '' : ' zero') + '"><u>' + (n || 0) + '</u><em>' + unit + '</em></div>';
+  }
+  /* ═══ v612 · 트레이닝 기록 = 대진 회차 ═══ */
+  function ckRecHtml() {
+    const all = TQ.rounds || [];
+    const R = all.slice(-6).reverse();
+    let h = '<div class="rm-z" style="margin-top:14px">' +
+      '<span class="rm-tag" style="top:-3px">\ud2b8\ub808\uc774\ub2dd \uae30\ub85d</span>' +
+      '<div class="rm-rec" style="margin-top:20px">';
+    if (!R.length) {
+      h += '<div class="rm-rec-0">\uc544\uc9c1 \uc5c6\uc5b4\uc694 — \uc704 <b>\uc378\ub124\uc77c \ub300\uc9c4</b>\uc744 \ud55c \ud310 \ud558\uba74<br>' +
+           '\ud68c\ucc28\uac00 \uc5ec\uae30 \ud55c \uc904\uc529 \uc313\uc785\ub2c8\ub2e4</div>';
+    } else {
+      const C = 2 * Math.PI * 15;
+      h += R.map(function (r, i) {
+        const p = Math.max(0, Math.min(100, Math.round(r.r || 0)));
+        const n = r.n || 0;
+        return '<div class="rm-rec-c row">' +
+          '<span class="rm-ring"><svg width="36" height="36" viewBox="0 0 36 36">' +
+          '<circle class="bgc" cx="18" cy="18" r="15"></circle>' +
+          '<circle class="fgc" cx="18" cy="18" r="15" stroke-dasharray="' + C.toFixed(1) +
+          '" stroke-dashoffset="' + (C * (1 - p / 100)).toFixed(1) + '"></circle></svg>' +
+          '<b>' + p + '</b></span>' +
+          '<span class="tx"><b>' + esc(r.d || '') + '</b><s>' + n + '\ubb38\uc81c \uc911 ' +
+            Math.round(n * p / 100) + '\uac1c' +
+            (r.t && r.t !== 'all' ? ' · ' + esc(r.t) : '') + '</s></span>' +
+          '<span class="no">' + (all.length - i) + '\ud68c\ucc28</span></div>';
+      }).join('');
     }
-    if (_ckTrain === 'type') {
-      el.innerHTML = '<div class="s3-k">⚔ 유형별 성적 <i>어떤 결이 더 눌렸나 — 평균 조회수</i></div>' +
-        (tops && tops.length
-          ? '<div class="rm-list">' + tops.map(function (t, i) {
-              return '<div class="rm-li"><div class="t">' + (i === 0 ? '🥇 ' : '') + esc(t.k) + '</div>' +
-                '<div class="s">평균 <b>' + fmtNum(t.v) + '</b> 조회</div></div>';
-            }).join('') + '</div>'
-          : '<div class="rm-empty">썸네일 <b>유형</b>이 적힌 카드가 아직 없어요.<br>분해할 때 유형을 고르면 여기서 성적이 갈립니다.</div>');
-      return;
+    return h + '</div></div>';
+  }
+  /* ═══ v612 · 베스트 썸네일 = 대진에서 📌 로 담은 것 ═══
+     새로 모을 게 없다 — TQ.keep 이 이미 쌀고 있는데 대진 안에만 있었다. */
+  function ckBestHtml() {
+    const K = (TQ.keep || []).slice(-12).reverse();
+    let h = '<div class="rm-z" style="margin-top:14px">' +
+      '<span class="rm-tag" style="top:-3px">\ubca0\uc2a4\ud2b8 \uc378\ub124\uc77c</span>' +
+      '<div style="margin-top:20px">';
+    if (!K.length) {
+      h += '<div class="rm-best0">\ub300\uc9c4\ud558\ub2e4\uac00 <b>📌</b>\ub97c \ub204\ub974\uba74 \uc5ec\uae30 \ub2f4\uae43\ub2c8\ub2e4<br>' +
+           '「\uc774\uac74 \ub098\ub3c4 \uc368\uc57c\uc9c0」 \uc2f6\uc740 \uac83\ub9cc\uc694</div>';
+    } else {
+      h += '<div class="rm-best">' + K.map(function (id) {
+        const r = (rows || []).find(function (x) { return x.id === id; });
+        return '<div class="rm-bt" data-ckbest="' + id + '"><div class="im">' +
+          '<img data-ckimg="' + id + '" alt="" style="display:none">' +
+          '<span class="pin">📌</span></div>' +
+          '<div class="nm">' + esc(r ? String(r.hook || '') : '') + '</div></div>';
+      }).join('') + '</div>';
     }
-    // 수식어 사전 — 조회수 상위 카드의 후킹 모음
-    const best = (rows || []).filter(function (r) { return isFilled(r) && (r.hook || '').trim() && (r.views || 0) > 0; })
-      .sort(function (a, b) { return (b.views || 0) - (a.views || 0); }).slice(0, 6);
-    el.innerHTML = '<div class="s3-k">✎ 수식어 사전 <i>잘 눌린 후킹만 모아서 — 조회수순</i></div>' +
-      (best.length
-        ? '<div class="rm-list">' + best.map(function (r) {
-            return '<div class="rm-li" data-ckopen="' + r.id + '" style="cursor:pointer">' +
-              '<div class="t">' + esc(String(r.hook).slice(0, 60)) + '</div>' +
-              '<div class="s">▶ <b>' + fmtNum(r.views) + '</b>' + (r.thumbTypes && r.thumbTypes.length ? ' · ' + esc(r.thumbTypes[0]) : '') + '</div></div>';
-          }).join('') + '</div>'
-        : '<div class="rm-empty">후킹과 조회수가 적힌 카드가 모이면<br>여기가 <b>내 수식어 사전</b>이 됩니다.</div>');
-    el.querySelectorAll('[data-ckopen]').forEach(function (c) { c.onclick = function () { try { openDetail(c.dataset.ckopen); } catch (e) {} }; });
+    return h + '</div></div>';
+  }
+  function ckWireBest(el) {
+    el.querySelectorAll('[data-ckbest]').forEach(function (c) {
+      c.onclick = function () { try { openDetail(c.dataset.ckbest); } catch (e) {} };
+    });
+    el.querySelectorAll('img[data-ckimg]').forEach(function (im) {
+      loadImage(im.dataset.ckimg, 'thumb').then(function (u) {
+        if (u) { im.src = u; im.style.display = 'block'; }
+      }).catch(function () {});
+    });
   }
 
   // ═══════════ v598 · ♡ 공감의 방 — ①두 갈래 ②저장/공유 ③훈련 ═══════════
@@ -52619,7 +52635,7 @@
     const w = function (p, g) { return Math.max(2, Math.min(100, (p / Math.max(g, p || g)) * 100)); };
     const gm = function (p, g) { return Math.min(97, (g / Math.max(g, p || g)) * 100); };
     let h = '<div class="rm" style="--rc:#2FD07B">' +
-      '<div class="rm-sgn"><s>ROOM 04</s><b>공감의 방</b><i>보고 지나치지 않고 챙겨 가게</i></div>' +
+      '<div class="rm-sgn"><div class="txt"><s>ROOM 04</s><b>맥락의 방</b><i>보고 지나치지 않고 챙겨 가게</i></div></div>' +
       '<div class="rm-z"><span class="rm-tag">① 직감</span>' +
         '<div class="rm-stage esplit">' +
           '<div class="flow"></div>' +
