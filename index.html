@@ -26259,7 +26259,10 @@
     const idx = document.getElementById('csh-idx'); if (idx) idx.textContent = (center + 1) + ' / ' + N;
     if (center !== _cshLastC) { _cshLastC = center; if (navigator.vibrate) try { navigator.vibrate(7); } catch (e) { } }
   }
-  function cshTick() { if (!_cshOpen) return; if (_cshTarget !== null) { _cshPos += (_cshTarget - _cshPos) * 0.2; if (Math.abs(_cshTarget - _cshPos) < 0.001) { _cshPos = _cshTarget; _cshTarget = null; } } else if (!_cshDrag) { if (Math.abs(_cshVel) > 0.0015) { _cshPos += _cshVel; _cshVel *= 0.86; } else { const t = Math.round(_cshPos); _cshPos += (t - _cshPos) * 0.22; if (Math.abs(t - _cshPos) < 0.0008) _cshPos = t; } } cshLayout(); _cshRaf = requestAnimationFrame(cshTick); }
+  function cshTick() { if (!_cshOpen) return; if (_cshTarget !== null) { _cshPos += (_cshTarget - _cshPos) * 0.2; if (Math.abs(_cshTarget - _cshPos) < 0.001) { _cshPos = _cshTarget; _cshTarget = null; } } else if (!_cshDrag) { if (Math.abs(_cshVel) > 0.0015) { _cshPos += _cshVel; _cshVel *= 0.86; } else { const t = Math.round(_cshPos); _cshPos += (t - _cshPos) * 0.22; if (Math.abs(t - _cshPos) < 0.0008) _cshPos = t; } } cshLayout();
+    // v617 · 발열 — 완전히 멈추면 루프도 쉼다 (만지면 기존 경로가 다시 켠다)
+    if (_cshTarget === null && !_cshDrag && Math.abs(_cshVel) <= 0.0015 && _cshPos === Math.round(_cshPos)) { _cshRaf = 0; return; }
+    _cshRaf = requestAnimationFrame(cshTick); }
   function cshWireDrag(wrap) {
     let downX = 0, downY = 0, lastX = 0, curY = 0, axis = null, moved = false;
     wrap.addEventListener('pointerdown', function (e) { _cshDrag = true; downX = lastX = e.clientX; downY = curY = e.clientY; _cshVel = 0; _cshTarget = null; axis = null; moved = false; _cshCarry = null; try { wrap.setPointerCapture(e.pointerId); } catch (_) { } });
@@ -37159,11 +37162,14 @@
     const LINE = 0.5, AMP = 0.19, LIME = [215, 243, 75], COLD = [94, 130, 166];
     const mix = function (a, b, t) { return 'rgb(' + Math.round(a[0] + (b[0] - a[0]) * t) + ',' + Math.round(a[1] + (b[1] - a[1]) * t) + ',' + Math.round(a[2] + (b[2] - a[2]) * t) + ')'; };
     const rgba2 = function (a, b, t, al) { return 'rgba(' + Math.round(a[0] + (b[0] - a[0]) * t) + ',' + Math.round(a[1] + (b[1] - a[1]) * t) + ',' + Math.round(a[2] + (b[2] - a[2]) * t) + ',' + al + ')'; };
-    let acc = 0, last = null, upWas = null;
+    let acc = 0, last = null, upWas = null, _fLast = 0, _ptCache = null;
     function frame(ts) {
       const sky = document.getElementById('trv-sky');
       // 탭을 벗어났거나 다시 그려졌으면 스스로 멈춘다 — 숨은 화면에서 헛돌지 않기
       if (!sky || sky.offsetParent === null) { _trvRun = false; return; }
+      // v617 · 발열 — 30fps 캐프
+      if (_fLast && ts - _fLast < 33) { requestAnimationFrame(frame); return; }
+      _fLast = ts;
       if (last === null) last = ts;
       acc += (ts - last) / 1000; last = ts;
       const me = document.getElementById('trv-me'), aura = document.getElementById('trv-aura');
@@ -37198,9 +37204,15 @@
       if (upWas === null) upWas = isUp;
       else if (isUp !== upWas) { upWas = isUp; me.classList.remove('fire', 'chill'); void me.offsetWidth; me.classList.add(isUp ? 'fire' : 'chill'); }
       // 가까이 지나는 키워드 점은 살짝 밝아진다
-      document.querySelectorAll('#trv-sky .trv-pt').forEach(function (p) {
-        const px = parseFloat(p.style.left) / 100, py = parseFloat(p.style.top) / 100;
-        p.classList.toggle('near', Math.abs(px - x) < 0.07 && Math.abs(py - y) < 0.13);
+      // v617 · 점은 안 움직이므로 위치를 한 번만 읽어둔다 (매 프레임 DOM 순회 제거)
+      if (!_ptCache) {
+        _ptCache = [].map.call(sky.querySelectorAll('.trv-pt'), function (p) {
+          return { el: p, x: parseFloat(p.style.left) / 100, y: parseFloat(p.style.top) / 100, on: false };
+        });
+      }
+      _ptCache.forEach(function (c) {
+        const near = Math.abs(c.x - x) < 0.07 && Math.abs(c.y - y) < 0.13;
+        if (near !== c.on) { c.on = near; c.el.classList.toggle('near', near); }
       });
       requestAnimationFrame(frame);
     }
@@ -43518,7 +43530,11 @@
       if (document.hidden || cv.offsetParent === null) {
         _egRaf = 0; setTimeout(function () { if (!_egRaf) _egRaf = requestAnimationFrame(draw); }, 700); return;
       }
-      t += 0.016; ctx.clearRect(0, 0, W, H);
+      // v617 · 발열 — 30fps 캐프
+      const _now = performance.now();
+      if (draw._l && _now - draw._l < 33) { _egRaf = requestAnimationFrame(draw); return; }
+      draw._l = _now;
+      t += 0.032; ctx.clearRect(0, 0, W, H);
       pt.x += (ptg.x - pt.x) * 0.08; pt.y += (ptg.y - pt.y) * 0.08;   // v482 · 시차 스프링
       const R = Math.min(W, H) * 0.42;
       const CX = W / 2 + pt.x * 26, CY = H / 2 + pt.y * 16;           // 마우스 따라 통째로 이동
@@ -43637,7 +43653,11 @@
       if (document.hidden || cv.offsetParent === null) {
         _hcRaf = 0; setTimeout(function () { if (!_hcRaf) _hcRaf = requestAnimationFrame(draw); }, 700); return;
       }
-      t += 0.016; ctx.clearRect(0, 0, W, H);
+      // v617 · 발열 — 30fps 캐프
+      const _now = performance.now();
+      if (draw._l && _now - draw._l < 33) { _hcRaf = requestAnimationFrame(draw); return; }
+      draw._l = _now;
+      t += 0.032; ctx.clearRect(0, 0, W, H);
       tilt.x += (tgt.x - tilt.x) * 0.08; tilt.y += (tgt.y - tilt.y) * 0.08;   // 시차 스프링
       const R = Math.min(W, H) * 0.42;
       const shx = tilt.x * 16, shy = tilt.y * 8, skew = Math.max(0.12, 0.5 + tilt.y * 0.5);
@@ -44619,7 +44639,9 @@
     } catch (e) {}
     try { forkDash(); } catch (e) {}   // v570 · 갈림길 현황판도 같은 흐름에서 최신화 (rows 로드 후 자동 반영)
   }
-  let _slvQ = [], _slvDone = 0, _slvT0 = null, _slvBusy = false, _slvInited = false, _slvCard = null;
+  let _slvQ = [], _slvDone = 0, _slvT0 = null, _slvBusy = false, _slvBusyAt = 0, _slvInited = false, _slvCard = null;
+  // v617 · 배정 연출 중 예외가 나도 영원히 안 잠기게 — 4초 지나면 busy를 풀린 것으로 본다
+  function slvBusyNow() { if (_slvBusy && Date.now() - _slvBusyAt > 4000) _slvBusy = false; return _slvBusy; }
   let _slvHand = 0;   // v551 · «손으로 넘긴» 장수 (자동배정은 안 셈) — 연출 속도 판정용
   // v544 · 무대 높이에 카드 위치를 맞춘다 (폰에선 floor가 낮아져 카드가 잘리던 것)
   let SLV_CARD_TOP = 92;
@@ -44964,7 +44986,7 @@
     try { csToast('↩ 되돌렸어요 — 다시 골라주세요'); } catch (e) {}
   }
   async function slvAssign() {
-    if (_slvBusy || !_slvQ.length || !_slvCard) return;
+    if (slvBusyNow() || !_slvQ.length || !_slvCard) return;
     const host = document.getElementById('slv-axes');
     const r = _slvQ[0];
     const _snap = slvSnap(r);        // 배정 «전» 상태 보관
@@ -44987,7 +45009,7 @@
     const _vw = host.querySelector('.slv-axis[data-ax="views"] .slv-chip.on');
     if (_vw) { r.views = parseInt(_vw.dataset.vw, 10) || 0; picked++; }
     if (!picked) return;
-    _slvBusy = true; if (!_slvT0) _slvT0 = Date.now();
+    _slvBusy = true; _slvBusyAt = Date.now(); if (!_slvT0) _slvT0 = Date.now();
     r.updatedAt = Date.now();
     _slvUndo = _snap;                                        // v544 · 방금 것 되돌리기 준비
     slvUndoBar(true, '방금 «' + String(r.hook || r.topicMain || '카드').slice(0, 14) + '» 배정함');
@@ -45011,15 +45033,18 @@
       arm.classList.add('open');
       el.style.top = (SLV_CARD_TOP + 60) + 'px'; el.classList.add('release');
       setTimeout(() => {
-        const t = document.getElementById('slv-tray'); t.classList.remove('bump'); void t.offsetWidth; t.classList.add('bump');
-        const rg = document.getElementById('slv-ring'); if (rg) { rg.classList.remove('go'); void rg.offsetWidth; rg.classList.add('go'); } // 받는 순간 링 퍼짐
-        el.remove();
-        _slvQ.shift(); _slvDone++; _slvHand++;
-        arm.classList.remove('work');
-        slvSpawn(true);
-        slvRefreshEntries();
-        try { cmrPaint('slv-rail', 'sort'); } catch (e) {}   // v569 · 배정할 때마다 레일도 함께
-        _slvBusy = false;
+        // v617 · 어느 한 줄이 터져도 busy는 반드시 풀린다 — «다음으로 안 넘어감» 영구 멈춤 방지
+        try {
+          const t = document.getElementById('slv-tray'); t.classList.remove('bump'); void t.offsetWidth; t.classList.add('bump');
+          const rg = document.getElementById('slv-ring'); if (rg) { rg.classList.remove('go'); void rg.offsetWidth; rg.classList.add('go'); }
+          el.remove();
+          _slvQ.shift(); _slvDone++; _slvHand++;
+          arm.classList.remove('work');
+          slvSpawn(true);
+          slvRefreshEntries();
+          try { cmrPaint('slv-rail', 'sort'); } catch (e) {}
+        } catch (e) { console.error('[slv] 배정 사이클', e); try { _slvQ.shift(); slvSpawn(false); } catch (e2) {} }
+        finally { _slvBusy = false; }
       }, _t2);
     }, _t1);
   }
@@ -45132,10 +45157,10 @@
     };
     var _ub = document.getElementById('slv-undo'); if (_ub) _ub.onclick = slvDoUndo;   // v544
     document.getElementById('slv-assign').onclick = function () { slvAssign(); setTimeout(function () { try { slvAutoBar(); } catch (e) {} }, 700); };
-    document.getElementById('slv-skip').onclick = () => { if (_slvBusy || _slvQ.length < 2) return; _slvQ.push(_slvQ.shift()); slvSpawn(true); slvAutoBar(); };
+    document.getElementById('slv-skip').onclick = () => { if (slvBusyNow() || _slvQ.length < 2) return; _slvQ.push(_slvQ.shift()); slvSpawn(true); slvAutoBar(); };
     // v616 · 이 카드 지우기 — 니즈가 안 맞는 것을 정리하다 말고 바로 뺀다
     document.getElementById('slv-del').onclick = async function () {
-      if (_slvBusy || !_slvQ.length) return;
+      if (slvBusyNow() || !_slvQ.length) return;
       const r = _slvQ[0];
       const nm = String(r.hook || r.topicMain || '\uce74\ub4dc').slice(0, 24);
       if (!confirm('\u300c' + nm + '\u300d\n\n\uc774 \uce74\ub4dc\ub97c \uc9c0\uc6c1\ub2c8\ub2e4. \ub418\ub3cc\ub9b4 \uc218 \uc5c6\uc5b4\uc694.\n\uacc4\uc18d\ud560\uae4c\uc694?')) return;
@@ -51194,7 +51219,7 @@
      출발선에 몰렸다가 초반 3초에서 갈린다. 넘은 사람에게만 라임 «빛»이 붙는다.
      몸은 언제나 어둡게 — 라임 = 자산이라는 뜻을 지키기 위해.
      화면에 없으면 스스로 잠든다(tgHeroDraw 의 3중 가드). */
-  const TGH = { keep: null, goal: 60, raf: 0, t0: 0, w: 0, h: 0 };
+  const TGH = { keep: null, goal: 60, raf: 0, t0: 0, w: 0, h: 0, last: 0 };
   const TGH_N = 15;                                   // 사람 수 — 더 늘리면 팔다리가 뭉개진다
   function tghTxt(x, t, px, py, c, size, align) {
     x.font = '700 ' + (size || 8) + 'px ui-monospace,Consolas,monospace';
@@ -51216,11 +51241,12 @@
       x.moveTo(0, sh + hh * .05);  x.lineTo(off * 1.6 + s * st * .9, sh + hh * .30);
     };
     if (rim) {                                        // 뒤에서 오는 빛 = 윤곽에만
-      x.strokeStyle = rim; x.lineWidth = lw * 1.75;
-      x.shadowColor = rim; x.shadowBlur = hh * .55;
-      body(); x.stroke();
+      // v617 · shadowBlur는 캔버스에서 제일 비싼 연산 — 넓고 엷은 이중 스트로크로 같은 느낌을 낸다
+      x.save(); x.globalAlpha = alpha * .3;
+      x.strokeStyle = rim; x.lineWidth = lw * 3.4; body(); x.stroke();
+      x.restore();
+      x.strokeStyle = rim; x.lineWidth = lw * 1.75; body(); x.stroke();
       x.fillStyle = rim; x.beginPath(); x.arc(0, hy, hr * 1.3, 0, 6.2832); x.fill();
-      x.shadowBlur = 0;
     }
     x.strokeStyle = '#0d1211'; x.lineWidth = lw; body(); x.stroke();
     x.fillStyle = '#0d1211'; x.beginPath(); x.arc(0, hy, hr, 0, 6.2832); x.fill();
@@ -51290,7 +51316,7 @@
   }
   function tghFit(cv) {
     const r = cv.getBoundingClientRect(); if (!r.width) return false;
-    const d = Math.min(2, window.devicePixelRatio || 1);
+    const d = Math.min(1.5, window.devicePixelRatio || 1);   // v617 · 발열 — 그림 캔버스는 1.5배면 충분
     TGH.w = r.width; TGH.h = r.height;
     cv.width = Math.round(r.width * d); cv.height = Math.round(r.height * d);
     cv.getContext('2d').setTransform(d, 0, 0, d, 0, 0);
@@ -51309,6 +51335,9 @@
       return;
     }
     if (!TGH.t0) TGH.t0 = ts;
+    // v617 · 발열 — 30fps면 충분하다 (60fps 대비 일 절반)
+    if (TGH.last && ts - TGH.last < 33) { TGH.raf = requestAnimationFrame(tgHeroDraw); return; }
+    TGH.last = ts;
     if (Math.abs(_r.width - TGH.w) > 1) tghFit(cv);
     try { const _x = cv.getContext('2d'); _x.clearRect(0, 0, TGH.w, TGH.h);
       tghFrame(_x, TGH.w, TGH.h, (ts - TGH.t0) / 1000); } catch (e) {}
