@@ -12991,7 +12991,12 @@
   body.in-studio #st2-ws button[data-st2tab="clk"]{ --bc:#E0788C; }
   body.in-studio #st2-ws button[data-st2tab="emp"]{ --bc:#2FD07B; }
   body.in-studio #st2-ws button[data-st2tab="stay"]{ --bc:#b07bf0; }
+  body.in-studio #st2-ws button[data-st2tab="scripts"]{ --bc:#cfd6cd; }   /* v615 · 실행 = 능력색이 아닌 은은한 흰빛 */
   body.in-studio #st2-ws button[data-st2tab="osmu"]{ --bc:#d7f34b; }
+  /* v615 · 훈련 │ 실행 을 가르는 가느다란 선 — 칸이 아니므로 눌리지 않는다 */
+  body.in-studio #st2-ws .st2-sep{ flex:0 0 auto; align-self:stretch; width:1px;
+    margin:5px 4px 3px; pointer-events:none;
+    background:linear-gradient(180deg,transparent,rgba(120,190,185,.34),transparent); }
   body.in-studio #st2-ws button{ color:color-mix(in srgb, var(--bc,#6b715c) 44%, #454b42); }
   body.in-studio #st2-ws button .g{ text-shadow:0 0 8px color-mix(in srgb, var(--bc,#6b715c) 26%, transparent); }
   body.in-studio #st2-ws button.on{ color:var(--bc,#d7f34b); }
@@ -22287,6 +22292,12 @@
       background:linear-gradient(135deg,var(--sneon),#a9c437);color:#0B0C0A;box-shadow:0 8px 22px rgba(215,243,75,.2)}
     .slv-assign:disabled{background:#1A1B16;color:var(--sfaint);box-shadow:none}
     .slv-skip{display:block;margin:9px auto 0;background:none;border:none;color:var(--sfaint);font-size:10.5px;font-family:inherit;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+    /* v616 · 이 카드 지우기 — 건너뛰기보다 더 작게, 색으로만 위험을 알린다 */
+    .slv-del{display:block;margin:7px auto 0;background:none;border:none;font-family:inherit;
+      font-size:10px;color:rgba(224,120,140,.62);cursor:pointer;padding:5px 9px;border-radius:8px;
+      -webkit-tap-highlight-color:transparent;transition:color .16s,background .16s}
+    .slv-del:hover{color:#E0788C;background:rgba(224,120,140,.08)}
+    .slv-del:active{transform:scale(.96)}
     .slv-note{font-size:9.5px;color:var(--sfaint);text-align:center;margin-top:11px;line-height:1.6}
     body.cm-ov-open .slv-hide{display:none}
     /* 진입점: 분류 탭 배너 · 시트 배지 */
@@ -22724,6 +22735,7 @@
             <div id="slv-axes"></div>
             <button class="slv-assign" id="slv-assign" disabled>🏷 배정 — 다음</button>
             <button class="slv-skip" id="slv-skip">건너뛰고 다음 →</button>
+            <button type="button" class="slv-del" id="slv-del" title="이 카드를 지웁니다">🗑 이 카드 지우기</button>
           </div>
         </div>
         <div class="slv-note">요소는 복수 선택 · 채워진 유형 축은 숨어요 (⭐핏은 항상 — 매긴 값이 켜져 있어요) · [＋ 편집]에서 유형 추가·정리</div>
@@ -23486,15 +23498,19 @@
              트렌드는 💚맥락 안 세그로 이사(방 자체는 그대로) · 구성=원고 문 · 썸네일=창고 썸네일 문 -->
         <!-- v595 · 도크 6칸 → 4칸 (사장님 확정) — 인사이트·맥락은 🧭 나침반으로 이사.
              버튼은 숨김만(마크업·배선 보존) · st2SetTab('home')은 이제 로비(st2RenderLobby)를 연다 -->
-        <!-- v596 · 도크 확정(사장님): [홈|초반 3초|썸네일|공감|원고|배포] — 칸마다 제 능력 색 네온 -->
+        <!-- v615 · 도크 A안(사장님): 훈련 넷 │ 실행 둘 —
+             [홈|3초|지속|클릭률|맥락] │ [원고|배포]. 왼쪽은 연습, 오른쪽은 진짜 일.
+             이름과 속이 같아야 한다 — 「원고」를 눌렀는데 훈련방이 열리던 것을 바로잡음 -->
         <div class="st2-ws" id="st2-ws">
           <button class="on" data-st2tab="home"><span class="g">⌂</span><span class="t">홈</span></button>
-          <button data-st2tab="3sec"><span class="g">◔</span><span class="t">초반 3초</span></button>
-          <button data-st2tab="clk"><span class="g">▣</span><span class="t">썸네일</span></button>
-          <button data-st2tab="emp"><span class="g">♡</span><span class="t">공감</span></button>
-          <button data-st2tab="stay"><span class="g">✎</span><span class="t">원고</span></button>
-          <button data-st2tab="cus" style="display:none"><span class="g">◉</span><span class="t">고객 분석</span></button>
+          <button data-st2tab="3sec"><span class="g">◔</span><span class="t">3초</span></button>
+          <button data-st2tab="stay"><span class="g">⏱</span><span class="t">지속</span></button>
+          <button data-st2tab="clk"><span class="g">▣</span><span class="t">클릭률</span></button>
+          <button data-st2tab="emp"><span class="g">♡</span><span class="t">맥락</span></button>
+          <span class="st2-sep" aria-hidden="true"></span>
+          <button data-st2tab="scripts"><span class="g">✎</span><span class="t">원고</span></button>
           <button data-st2tab="osmu"><span class="g">⬡</span><span class="t">배포</span></button>
+          <button data-st2tab="cus" style="display:none"><span class="g">◉</span><span class="t">고객 분석</span></button>
         </div>
         <div id="st2-home"></div>
         <div id="st2-3sec" style="display:none;"></div><!-- v593 · 👁 초반 3초 실 (JS 렌더 st2Render3sec) -->
@@ -45117,6 +45133,24 @@
     var _ub = document.getElementById('slv-undo'); if (_ub) _ub.onclick = slvDoUndo;   // v544
     document.getElementById('slv-assign').onclick = function () { slvAssign(); setTimeout(function () { try { slvAutoBar(); } catch (e) {} }, 700); };
     document.getElementById('slv-skip').onclick = () => { if (_slvBusy || _slvQ.length < 2) return; _slvQ.push(_slvQ.shift()); slvSpawn(true); slvAutoBar(); };
+    // v616 · 이 카드 지우기 — 니즈가 안 맞는 것을 정리하다 말고 바로 뺀다
+    document.getElementById('slv-del').onclick = async function () {
+      if (_slvBusy || !_slvQ.length) return;
+      const r = _slvQ[0];
+      const nm = String(r.hook || r.topicMain || '\uce74\ub4dc').slice(0, 24);
+      if (!confirm('\u300c' + nm + '\u300d\n\n\uc774 \uce74\ub4dc\ub97c \uc9c0\uc6c1\ub2c8\ub2e4. \ub418\ub3cc\ub9b4 \uc218 \uc5c6\uc5b4\uc694.\n\uacc4\uc18d\ud560\uae4c\uc694?')) return;
+      const idx = (rows || []).findIndex(function (x) { return x && x.id === r.id; });
+      if (idx >= 0) rows.splice(idx, 1);
+      _slvQ.shift();
+      _slvUndo = null; slvUndoBar(false);      // 지운 카드는 되돌리기 대상이 아니다
+      try { await saveRows(); } catch (e) {}
+      try { insInvalidate(); } catch (e) {}
+      try { renderTable(); } catch (e) {}
+      try { renderThumbBoard(); } catch (e) {}
+      slvSpawn(true); slvHud();
+      try { slvAutoBar(); } catch (e) {}
+      try { csToast('\U0001F5D1 \u300c' + nm + '\u300d \uc9c0\uc6e0\uc5b4\uc694'); } catch (e) {}
+    };
     const fb = document.getElementById('fb-sortline'); if (fb) fb.onclick = slvOpen;
     const sb = document.getElementById('sh-slbadge'); if (sb) sb.onclick = slvOpen;
     // 유형 관리창
@@ -47184,7 +47218,19 @@
     };
     const pick = document.getElementById('cs-pick-photos');
     const pin = document.getElementById('cs-photo-input');
-    if (pick && pin) { pick.onclick = () => pin.click(); pin.onchange = (e) => { csHandlePhotos(e.target.files); e.target.value = ''; }; }
+    // v616 · 사진을 넣으면 «바로» 아래 스트립·카드에 반영 — 전에는 담기만 하고 화면을 안 그렸다
+    if (pick && pin) {
+      pick.onclick = () => pin.click();
+      pin.onchange = async (e) => {
+        await csHandlePhotos(e.target.files);
+        try { csoRenderStrip(); } catch (er) {}
+        try { if (_csBlocks.length) csoRenderCards(); } catch (er) {}
+        try { csoUpdateStatusbar(); } catch (er) {}
+        const ct = document.getElementById('cso-slotct');
+        if (ct) ct.textContent = _csPhotos.length ? _csPhotos.length + '장 ✓' : '';
+        e.target.value = '';
+      };
+    }
     // v534: 인자 없이 넘기면 click 이벤트가 scopeEl 자리에 들어간다 — 옛 검수목록을 명시
     const sv = document.getElementById('cs-save');
     if (sv) sv.onclick = function () { csSaveToWarehouse(document.getElementById('cs-review-list')); };
@@ -51821,7 +51867,8 @@
   // 지금 보고 있는 화면에 맞춰 탭 줄의 활성 표시를 맞춘다 (화면이 바뀌어도 탭은 제자리)
   function st2SyncBar(ws) {
     // v598 · 원고·썸네일 화면으로 나가도 도크는 그 방(시간·클릭)에 켜둔다
-    const map = { pattern: 'stay', scripts: 'stay', thumb: 'clk' };
+    // v615 · 원고·패턴 화면에서는 도크의 ✎ 원고 칸이 켜진다 (전에는 ⏱ 지속 칸이 켜졌다)
+    const map = { pattern: 'scripts', scripts: 'scripts', thumb: 'clk' };
     const cur = map[ws] || _st2Tab;
     document.querySelectorAll('#st2-ws button').forEach(b => b.classList.toggle('on', b.dataset.st2tab === cur));
   }
@@ -52040,7 +52087,7 @@
     const rate = has ? Math.max(0, Math.min(1, now / goal)) : 0;
     const stay4 = has ? Math.max(1, Math.round(rate * 4)) : 0;
     let h = '<div class="rm" style="--rc:#b07bf0">' +
-      '<div class="rm-sgn"><div class="txt"><s>ROOM 02</s><b>시청지속 시간의 방</b><i>같이 가다가 조용히 뒤처진다</i></div></div>' +
+      '<div class="rm-sgn"><div class="txt"><s>ROOM 02</s><b>오래 보게 하는 방</b><i>시청지속 시간 · 같이 가다가 조용히 뒤처진다</i></div></div>' +
       '<div class="rm-z"><span class="rm-tag">① 직감</span>' +
         '<div class="rm-stage gtour">' +
           '<div class="road"></div>' +
