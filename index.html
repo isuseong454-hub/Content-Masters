@@ -45639,7 +45639,18 @@
   function prpRenderCard() {
     const r = _prpQ[_prpCur]; if (!r) return;
     const fmt = n => (n == null || n === '') ? null : (Number(n) >= 10000 ? (Number(n) / 10000).toFixed(1).replace(/\.0$/, '') + '만' : Number(n).toLocaleString());
-    const bg = r.thumb ? 'center/cover url(' + JSON.stringify(r.thumb) + ')' : 'linear-gradient(158deg,#4d353b,#251b1f 60%,#140e11)';
+    // v619 · r.thumb는 행에 없는 필드였다 — 실제 사진은 hasThumb + loadImage 경로에 있다
+    const bg = 'linear-gradient(158deg,#4d353b,#251b1f 60%,#140e11)';
+    if (r.hasThumb) {
+      const rid = r.id;
+      loadImage(rid, 'thumb').then(function (u) {
+        if (!u) return;
+        const cur = _prpQ[_prpCur];
+        if (!cur || cur.id !== rid) return;                       // 그사이 다음 카드로 넘어갔으면 버린다
+        const th = document.querySelector('#prp-card .th');
+        if (th) th.style.background = 'center/cover url(' + JSON.stringify(u) + ')';
+      }).catch(function () {});
+    }
     const row = (k, v, col) => '<div class="r"><span class="k">' + k + '</span><span class="v' + (v ? '' : ' none') + '"' +
       (col && v ? ' style="color:' + col + '"' : '') + '>' + (v || '—') + '</span></div>';
     const types = (r.thumbTypes || []).slice(0, 2).join(' · ');
@@ -45664,11 +45675,20 @@
     let h = '', n = Math.min(left, 3);
     for (let i = 0; i < n; i++) {
       const r = _prpQ[_prpCur + 1 + i];
-      const bg = r && r.thumb ? 'center/cover url(' + JSON.stringify(r.thumb) + ')' : 'linear-gradient(158deg,#3a2c30,#1d1518)';
-      h += '<span class="hp" style="left:' + (i * 42) + 'px;background:' + bg + ';--sr:' + ((i % 2 ? -1 : 1) * (2 + i)) + 'deg;animation-delay:' + (i * .7) + 's"></span>';
+      const bg = 'linear-gradient(158deg,#3a2c30,#1d1518)';
+      h += '<span class="hp" data-prpth="' + (r ? r.id : '') + '" style="left:' + (i * 42) + 'px;background:' + bg + ';--sr:' + ((i % 2 ? -1 : 1) * (2 + i)) + 'deg;animation-delay:' + (i * .7) + 's"></span>';
     }
     q.className = 'prp-rope' + (left ? '' : ' empty');
     q.innerHTML = h + '<span class="pn">' + (left ? left + '장 남음' : '다 했어요') + '</span>';
+    // v619 · 빨랫줄 사진도 진짜로 — 로드되면 그 자리만 갈아끼운다
+    q.querySelectorAll('[data-prpth]').forEach(function (el) {
+      const rid = el.dataset.prpth; if (!rid) return;
+      const rr = _prpQ.find(function (x) { return x && x.id === rid; });
+      if (!rr || !rr.hasThumb) return;
+      loadImage(rid, 'thumb').then(function (u) {
+        if (u && el.isConnected) el.style.background = 'center/cover url(' + JSON.stringify(u) + ')';
+      }).catch(function () {});
+    });
   }
 
   function prpLadder() {
