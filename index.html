@@ -466,6 +466,10 @@
   .sp-k,.sp-r{display:inline;font-size:inherit;line-height:inherit;text-decoration:none;font-style:normal;border-radius:3px;padding:0 2px}
   .sp-k{font-weight:700;color:#FF8A7A;background:rgba(255,68,56,.13);box-shadow:inset 0 -2px 0 rgba(255,68,56,.6)}
   .sp-r{color:#FFC585;background:rgba(255,160,44,.11);box-shadow:inset 0 -2px 0 rgba(255,160,44,.5)}
+  /* v635 · 패턴 파악에선 형광이 퍼져 보인다(사장님) — 배경 없이 진한 컬러 글자만 */
+  #pt2 .sp-k,#pt2 .sp-r{ background:none; box-shadow:none; padding:0; }
+  #pt2 .sp-k{ color:#FF6B5E; font-weight:800; }
+  #pt2 .sp-r{ color:#FFB25C; font-weight:700; }
   /* 🧭 방 레일 — 현재 방을 항상 알려준다 */
   #room-rail{ position:sticky; top:0; z-index:70; display:flex; align-items:center; gap:6px;
     padding:calc(8px + env(safe-area-inset-top)) 12px 8px;
@@ -19271,6 +19275,8 @@
     padding:8px 14px; cursor:pointer; border:1px solid rgba(230,251,98,.45); color:var(--pxacid);
     background:rgba(230,251,98,.09); box-shadow:0 0 18px -9px var(--pxacid); }
   .px-pen:active{ transform:scale(.965); }
+  .px-pen.pk{ margin-left:0; border-color:rgba(255,68,56,.5); color:#FF6B5E;
+    background:rgba(255,68,56,.09); box-shadow:0 0 18px -9px #FF4438; }
   /* 무대 */
   .px-stage{ margin-top:12px; border:1px solid rgba(255,255,255,.045); border-radius:20px; padding:16px 13px;
     background:rgba(255,255,255,.008); overflow-x:auto; }
@@ -19326,6 +19332,17 @@
   .px-shots .ph.none{ border-style:dashed; display:flex; align-items:center; justify-content:center; font-size:17px; opacity:.5; }
   .px-shots .ph em{ position:absolute; left:5px; bottom:5px; font-style:normal; font-family:'JetBrains Mono',monospace;
     font-size:8.5px; font-weight:800; color:#fff; background:rgba(0,0,0,.62); border-radius:6px; padding:2px 5px; }
+  .px-shots .ph.ex{ border-color:rgba(215,243,75,.35); }
+  .px-shots .ph .x{ position:absolute; right:3px; top:3px; width:18px; height:18px; line-height:18px; text-align:center;
+    font-size:9px; font-weight:900; color:#ffb3a8; background:rgba(0,0,0,.66); border-radius:6px; text-decoration:none; }
+  .px-shots .ph.add{ display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px;
+    border-style:dashed; border-color:rgba(215,243,75,.3); color:#aab586; font-size:17px; font-weight:800;
+    background:rgba(215,243,75,.03); }
+  .px-shots .ph.add span{ font-size:9px; font-weight:800; letter-spacing:.06em; }
+  .px-exrec{ display:flex; gap:7px; flex-wrap:wrap; }
+  .px-exr{ width:64px; height:85px; border-radius:9px; display:inline-block; cursor:pointer;
+    background-color:rgba(255,255,255,.04); background-size:cover; background-position:center;
+    border:1px solid rgba(255,255,255,.12); }
   #px-shot-ov{ display:none; position:fixed; inset:0; z-index:6600; background:rgba(0,0,0,.87);
     align-items:center; justify-content:center; padding:22px;
     -webkit-backdrop-filter:blur(4px); backdrop-filter:blur(4px); }
@@ -53861,9 +53878,10 @@
   let pxAnalyses = [], _pxALoaded = false;
   let _pxPicked = [], _pxStep = 1, _pxNotes = {}, _pxHls = [], _pxRep = 0, _pxFolder = 'x';
   let _pxThumbs = {}, _pxPq = '', _pxPsort = 'v', _pxCur = null;
+  let _pxExtra = [];   // v634 · 카드와 무관한 참고 캡처 [{d:dataURL}] — 분석 저장 때 이미지 창고로
   const PX_STEPN = ['', '담기', '다듬기', '패턴 파악'];
   const PX_HINT = ['', '잘된 원고를 무대에 담아요',
-    '라벨을 탭해 역할을 고치고, 중요한 문장은 🖍 형광펜으로',
+    '라벨을 탭해 역할을 고치고, 중요한 문장은 🖍 형광펜 · 핵심은 빨강 펜으로',
     '색이 줄을 섰어요 — 공통점을 적으면 아래 리포트에 바로 담겨요'];
 
   async function pxLoad() {
@@ -53925,14 +53943,73 @@
   }
   // v631 · 표본 사진 나란히 — 크게 보고 눈으로 공통 포인트를 잡는다 (참고 위계)
   function pxPhotoStripHtml() {
-    if (!_pxPicked.length) return '';
-    const n = _pxPicked.filter(o => _pxThumbs[o.id]).length;
+    if (!_pxPicked.length && !_pxExtra.length) return '';
     return '<div class="px-shots"><div class="hd">🖼 표본 사진 나란히' +
-      '<i>' + (n ? '탭하면 크게 — 나란히 보면 공통 포인트가 보여요' : '사진 있는 표본이 없어요') + '</i></div>' +
+      '<i>탭하면 크게 · ＋로 참고 캡처도 나란히</i></div>' +
       '<div class="row">' + _pxPicked.map((o, i) =>
         '<button type="button" class="ph' + (_pxThumbs[o.id] ? '' : ' none') + '" data-pxshot="' + i + '" data-pxthid="' + o.id + '" style="' + pxThumbCss(o.id) + '">' +
         (_pxThumbs[o.id] ? '' : '<span>📷</span>') +
-        (o.views ? '<em>' + fmtViews(o.views) + '</em>' : '') + '</button>').join('') + '</div></div>';
+        (o.views ? '<em>' + fmtViews(o.views) + '</em>' : '') + '</button>').join('') +
+      _pxExtra.map((e2, i) =>
+        '<button type="button" class="ph ex" data-pxexi="' + i + '" style="background-image:url(' + e2.d + ')">' +
+        '<s class="x" data-pxexdel="' + i + '">✕</s></button>').join('') +
+      '<button type="button" class="ph add" id="px-exadd">＋<span>사진 추가</span></button>' +
+      '</div></div>';
+  }
+  // v634 · 참고 캡처 — 갤러리에서 골라 바로 나란히 (520px로 줄여 가볍게)
+  function pxExAdd() {
+    let inp = document.getElementById('px-exin');
+    if (!inp) {
+      inp = document.createElement('input'); inp.type = 'file'; inp.accept = 'image/*'; inp.multiple = true;
+      inp.id = 'px-exin'; inp.style.display = 'none'; document.body.appendChild(inp);
+      inp.onchange = async function () {
+        const fs = [...(inp.files || [])].filter(f => f.type && f.type.indexOf('image/') === 0).slice(0, 12);
+        for (const f of fs) { const d = await pxExRead(f); if (d) _pxExtra.push({ d: d }); }
+        inp.value = '';
+        if (fs.length) { pxRender(); try { toast('🖼 참고 사진 +' + fs.length + ' — 분석 저장 때 같이 묶여요'); } catch (e) {} }
+      };
+    }
+    inp.click();
+  }
+  function pxExRead(f) {
+    return new Promise(res => {
+      const fr = new FileReader();
+      fr.onload = function () {
+        const im = new Image();
+        im.onload = function () {
+          const k2 = Math.min(1, 520 / Math.max(im.width, im.height));
+          const cv = document.createElement('canvas');
+          cv.width = Math.round(im.width * k2); cv.height = Math.round(im.height * k2);
+          cv.getContext('2d').drawImage(im, 0, 0, cv.width, cv.height);
+          res(cv.toDataURL('image/jpeg', .82));
+        };
+        im.onerror = function () { res(null); };
+        im.src = fr.result;
+      };
+      fr.onerror = function () { res(null); };
+      fr.readAsDataURL(f);
+    });
+  }
+  function pxExOpen(i) {
+    const e2 = _pxExtra[i]; if (!e2) return;
+    pxExShowUrl(e2.d, '참고 사진 ' + (i + 1) + '/' + _pxExtra.length,
+      _pxExtra.length > 1 ? function (dir) { pxExOpen((i + dir + _pxExtra.length) % _pxExtra.length); } : null);
+  }
+  function pxExShowUrl(d, cap, nav) {
+    let ov = document.getElementById('px-shot-ov');
+    if (!ov) {
+      ov = document.createElement('div'); ov.id = 'px-shot-ov';
+      document.body.appendChild(ov);
+      ov.addEventListener('click', function (e) { if (!e.target.closest('.nav')) ov.classList.remove('on'); });
+    }
+    ov.innerHTML = '<div class="box"><img src="' + d + '" alt=""/>' +
+      '<div class="cap">' + (cap || '') + '</div>' +
+      (nav ? '<button type="button" class="nav pv">‹</button><button type="button" class="nav nx">›</button>' : '') + '</div>';
+    if (nav) {
+      ov.querySelector('.pv').onclick = function (e) { e.stopPropagation(); nav(-1); };
+      ov.querySelector('.nx').onclick = function (e) { e.stopPropagation(); nav(1); };
+    }
+    ov.classList.add('on');
   }
   function pxShotOpen(i) {
     const o = _pxPicked[i]; if (!o) return;
@@ -54030,7 +54107,8 @@
         '<button class="px-cvb nxt" id="px-next">' + (_pxStep >= 3 ? '끝' : '다음 · ' + PX_STEPN[_pxStep + 1] + ' →') + '</button></div>';
       h += '<div class="px-xbar"><span class="px-xtt">표본 <b>' + _pxPicked.length + '</b> / 4</span></div>';
       if (_pxStep >= 2) h += '<div class="px-etools"><span class="px-eh">라벨 탭 = 역할 고치기 · 문장을 드래그해서 고른 뒤 →</span>' +
-        '<button class="px-pen" id="px-pen">🖍 형광펜</button></div>';
+        '<button class="px-pen" id="px-pen">🖍 형광펜</button>' +
+        '<button class="px-pen pk" id="px-penk">핵심</button></div>';
     }
     h += '<div class="px-stage' + (_pxStep === 2 ? ' m2' : _pxStep >= 3 ? ' m3' : '') + '" id="px-stage">' + pxStageInner() + '</div>';
     if (_pxStep >= 3 && _pxPicked.length >= 2) h += pxReportHtml();
@@ -54189,6 +54267,7 @@
       e.stopPropagation(); pxRolePop(b.parentElement, +b.parentElement.dataset.ci, +b.parentElement.dataset.bi);
     });
     const pen = document.getElementById('px-pen'); if (pen) { pen.onmousedown = e => e.preventDefault(); pen.onclick = pxMark; }
+    const penk = document.getElementById('px-penk'); if (penk) { penk.onmousedown = e => e.preventDefault(); penk.onclick = pxMarkKey; }   // v635
     host.querySelectorAll('.px-rnote').forEach(inp => inp.oninput = () => {
       _pxNotes[inp.dataset.pxn] = inp.value;
       inp.classList.toggle('has', !!inp.value.trim());
@@ -54198,10 +54277,45 @@
     });
     host.querySelectorAll('[data-pxrep]').forEach(t => t.onclick = () => { _pxRep = +t.dataset.pxrep; pxRender(); });
     host.querySelectorAll('[data-pxshot]').forEach(b => b.onclick = () => pxShotOpen(+b.dataset.pxshot));   // v631
+    host.querySelectorAll('[data-pxexi]').forEach(b => b.onclick = (e) => {      // v634 · 참고 캡처
+      if (e.target.closest('[data-pxexdel]')) return; pxExOpen(+b.dataset.pxexi); });
+    host.querySelectorAll('[data-pxexdel]').forEach(b => b.onclick = (e) => {
+      e.stopPropagation(); _pxExtra.splice(+b.dataset.pxexdel, 1); pxRender(); });
+    { const exa = host.querySelector('#px-exadd'); if (exa) exa.onclick = pxExAdd; }
     host.querySelectorAll('[data-pxf2]').forEach(f => f.onclick = () => f.classList.toggle('off'));
     const sv = document.getElementById('px-save'); if (sv) sv.onclick = pxSaveAnalysis;
     const sv2 = document.getElementById('px-save2'); if (sv2) sv2.onclick = () => { pxSaveToStructures(); };
     pxLoadThumbs(_pxPicked);
+  }
+  // v635 · 핵심 펜 — 드래그로 고른 글이 «손질 칠(빨강)»로 저장 (시트·판독지·손질과 같은 저장소)
+  function pxMarkKey() {
+    const sel = window.getSelection();
+    if (!sel || sel.isCollapsed || !sel.rangeCount) { try { toast('문장을 드래그해서 고른 뒤 눌러주세요'); } catch (e) {} return; }
+    const node = sel.anchorNode;
+    const el0 = node ? (node.nodeType === 1 ? node : node.parentElement) : null;
+    const cell = el0 ? el0.closest('.px-blk') : null;
+    if (!cell) { try { toast('표본 문장 안에서 골라주세요'); } catch (e) {} return; }
+    const ci = +cell.dataset.ci, bi = +cell.dataset.bi;
+    const o = _pxPicked[ci]; if (!o || !o.blocks || !o.blocks[bi]) return;
+    const clean = String(o.blocks[bi].t || '').replace(/<[^>]*>/g, '').replace(/&nbsp;/gi, ' ');
+    const ws = clean.split(/\s+/).filter(Boolean);
+    const S = String(sel.toString() || '').replace(/\s+/g, ' ').trim();
+    sel.removeAllRanges();
+    if (!S || !ws.length) return;
+    const parts = S.split(' ');
+    const f = parts[0];
+    let a = ws.findIndex(w => w.indexOf(f) > -1 || f.indexOf(w) > -1);
+    if (a < 0) a = 0;
+    const b = Math.min(ws.length - 1, a + parts.length - 1);
+    const r0 = o.r; r0.prep = r0.prep || {}; r0.prep.marks = r0.prep.marks || {};
+    const seg = r0.prep.marks[bi] || {};
+    let all = true;
+    for (let j = a; j <= b; j++) if (seg[j] !== 'k') { all = false; break; }
+    for (let j = a; j <= b; j++) { if (all) delete seg[j]; else seg[j] = 'k'; }
+    if (Object.keys(seg).length) r0.prep.marks[bi] = seg; else delete r0.prep.marks[bi];
+    try { saveRows(); } catch (e) {}
+    pxRender();
+    try { toast(all ? '핵심 해제' : '🔴 핵심 — 시트·판독지·손질에도 그대로 보여요'); } catch (e) {}
   }
   // 형광펜 (선택 → 버튼)
   function pxMark() {
@@ -54340,12 +54454,26 @@
       fm: fm.length ? fm : [['도입부', '#E25C5C']],
       ct: _pxHls.slice(), snap: snap
     };
+    // v634 · 참고 캡처도 분석에 묶는다 — 이미지는 이미지 창고(saveImage)에, 목록만 여기
+    if (_pxExtra.length) {
+      entry.extra = [];
+      for (let k2 = 0; k2 < _pxExtra.length; k2++) {
+        const exid = entry.id + '_ex' + k2;
+        try { await saveImage(exid, 'thumb', _pxExtra[k2].d); entry.extra.push(exid); } catch (e) {}
+      }
+    }
     pxAnalyses.unshift(entry);
     await pxSave();
     toast('🗂 내 분석 모음에 저장했어요');
     _pxFolder = 'ana'; pxRender();
   }
 
+  // v634 · 분석 기록 상세의 참고 사진 줄
+  function pxExRecHtml(a) {
+    if (!(a.extra || []).length) return '';
+    return '<h4 style="font-size:9px;font-weight:800;letter-spacing:.18em;color:#5d6350;margin:12px 0 7px">참고 사진 ' + a.extra.length + '장</h4>' +
+      '<div class="px-exrec">' + a.extra.map(id2 => '<span class="px-exr" data-pxaex="' + id2 + '"></span>').join('') + '</div>';
+  }
   // ── 폴더: 내 분석 모음 ──
   function pxAnaHtml() {
     if (!pxAnalyses.length) return '<div class="px-empty2">아직 저장한 분석이 없어요.<br>패턴 파악에서 표본을 담고 <b>저장하기</b>를 누르면 여기 쌓입니다.</div>';
@@ -54395,13 +54523,19 @@
       }).join('') + '</div></div></div>';
     h += '<div class="px-bpane" data-pane="s"><h4 style="font-size:9px;font-weight:800;letter-spacing:.18em;color:#5d6350;margin:0 0 10px">표본 ' + (a.refs || []).length + '편</h4>' +
       (a.refs || []).map(r => '<div class="px-sprow"><span class="px-cth' + (_pxThumbs[r.id] ? '' : ' none') + '" style="width:30px;height:40px;' + pxThumbCss(r.id) + '"></span>' +
-        '<span><div class="px-spn">' + esc(r.t) + '</div><div class="px-spv">' + (r.v ? '▶ ' + fmtNum(r.v) : '조회수 미입력') + '</div></span></div>').join('') + '</div>';
+        '<span><div class="px-spn">' + esc(r.t) + '</div><div class="px-spv">' + (r.v ? '▶ ' + fmtNum(r.v) : '조회수 미입력') + '</div></span></div>').join('') + pxExRecHtml(a) + '</div>';
     h += '</div></div><div class="px-dfoot"><button class="del" data-pxadel>삭제</button>' +
       '<button class="use" data-pxpromote>📐 공식화하기</button></div>';
     const box = document.getElementById('px-recb');
     box.innerHTML = h;
     document.getElementById('px-rec').classList.add('on');
     document.getElementById('px-scrim').classList.add('on');
+    // v634 · 참고 캡처 채우기 + 탭 확대
+    box.querySelectorAll('[data-pxaex]').forEach(el => {
+      loadImage(el.dataset.pxaex, 'thumb').then(d => {
+        if (d && el.isConnected) { el.style.backgroundImage = 'url(' + d + ')'; el.onclick = () => pxExShowUrl(d, '참고 사진'); }
+      }).catch(() => {});
+    });
     box.querySelectorAll('.px-si').forEach(b => b.onclick = () => {
       box.querySelectorAll('.px-si').forEach(x => x.classList.toggle('on', x === b));
       box.querySelectorAll('.px-bpane').forEach(p => p.classList.toggle('on', p.dataset.pane === b.dataset.pxb));
@@ -54419,6 +54553,7 @@
     });
     box.querySelector('[data-pxadel]').onclick = async () => {
       if (!confirm('이 분석 기록을 삭제할까요?')) return;
+      try { (a.extra || []).forEach(id2 => deleteImage(id2, 'thumb')); } catch (e) {}   // v634 · 참고 사진 고아 방지
       pxAnalyses.splice(i, 1); await pxSave();
       document.getElementById('px-rec').classList.remove('on');
       document.getElementById('px-scrim').classList.remove('on');
