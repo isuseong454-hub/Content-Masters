@@ -21355,6 +21355,7 @@
               <p class="settings-section-desc">동의하신 약관 전문을 언제든 다시 볼 수 있어요.</p>
               <div class="settings-actions">
                 <button class="settings-btn" id="settings-scriptclean-btn"><span>🧹</span> 원고 칸 청소 — 흘러든 분해 줄 정리</button>
+                <div id="settings-scriptclean-res" style="width:100%;font-size:12px;line-height:1.5;color:#d7f34b;"></div>
                 <button class="settings-btn" id="settings-terms-btn"><span>📜</span> 이용약관 전문 보기</button>
                 <!-- v596 · 서랍 소멸로 로그아웃·휴지통·운영자 문이 설정 안으로 이사 -->
                 <button class="settings-btn" id="settings-trash-btn"><span>🗑</span> 유형 휴지통</button>
@@ -48576,14 +48577,20 @@
     (rows || []).forEach(function (r0) {
       const raw = String(r0.script || '');
       if (!raw.trim()) return;
-      const lines = raw.split(/<br\s*\/?\s*>|\n/);
+      // v627 · 줄 나눔 관용 — 편집기가 <div>·<p>로 줄을 나눠도 읽는다 («반응 없음»의 원인 ①)
+      const lines = raw.split(/<br\s*\/?\s*>|<\/?div[^>]*>|<\/?p[^>]*>|\n/i);
       const keep = [], secs = [];
       let changed = false, inStruct = false, meta = 0;
       lines.forEach(function (ln) {
-        const t = ln.replace(/<[^>]*>/g, '').replace(/&nbsp;/gi, ' ').trim();
-        const km = t.match(/^([가-힣A-Za-z]{1,8})\s*[:：]\s*(.*)$/);
-        if (km && km[1] === '원고구조') { changed = true; inStruct = true; return; }
-        if (km && CS_META_KEYS.indexOf(km[1].trim()) > -1) { changed = true; meta++; return; }
+        // v627 · 원고는 esc()로 저장돼 «이득손해>»가 «&gt;»로 적혀 있다 — 해독 후 판별
+        const t = ln.replace(/<[^>]*>/g, '').replace(/&nbsp;/gi, ' ')
+          .replace(/&gt;/gi, '>').replace(/&lt;/gi, '<').replace(/&amp;/gi, '&').trim();
+        if (!t) return;                              // 태그 조각·빈 줄 — 재조립 때 <br> 하나로
+        // v627 · 라벨 관용 — «왜 터졌나 :»처럼 띄어 써도 잡는다
+        const km = t.match(/^([가-힣A-Za-z][가-힣A-Za-z\s]{0,9})\s*[:：]\s*(.*)$/);
+        const kkey = km ? km[1].replace(/\s+/g, '') : '';
+        if (km && kkey === '원고구조') { changed = true; inStruct = true; return; }
+        if (km && (CS_META_KEYS.indexOf(kkey) > -1 || kkey === '왜터짐')) { changed = true; meta++; return; }
         const sm = t.match(/^([가-힣A-Za-z0-9&·\s]{1,14}?)\s*(?:[（(][^)）]{0,40}[)）])?\s*>\s*(.+)$/);
         if (sm && (CS_STRUCT_MAP[sm[1].trim()] || inStruct)) {
           secs.push({ k: sm[1].trim(), c: CS_STRUCT_MAP[sm[1].trim()] || '', t: sm[2].trim() });
@@ -48609,14 +48616,17 @@
   try {
     const scb = document.getElementById('settings-scriptclean-btn');
     if (scb) scb.onclick = function () {
+      // v627 · 결과는 버튼 아래 글자로 — 토스트가 설정 창 뒤에 숨어 «반응 없음»으로 보였다(원인 ②)
+      const _res = document.getElementById('settings-scriptclean-res');
+      const say = function (t2) { if (_res) _res.textContent = t2; try { toast(t2); } catch (e) {} };
       const st = cmScriptCleanScan(false);
-      if (!st.touched) { try { toast('🧹 흘러든 줄이 없어요 — 원고 칸이 깨끗합니다'); } catch (e) {} return; }
-      if (!confirm(st.touched + '장에서 분해 줄을 발견했어요.\n· 구조로 승격: ' + st.structUp + '장\n· 흘러든 메타 줄 정리: ' + st.metaMoved + '줄\n\n정리할까요? 원고 문장은 건드리지 않아요.')) return;
+      if (!st.touched) { say('🧹 흘러든 줄이 없어요 — ' + (rows || []).length + '장 전부 깨끗합니다 (데이터는 그대로 안전해요)'); return; }
+      if (!confirm(st.touched + '장에서 분해 줄을 발견했어요.\n· 구조로 승격: ' + st.structUp + '장\n· 흘러든 메타 줄 정리: ' + st.metaMoved + '줄\n\n정리할까요? 원고 문장은 건드리지 않아요.')) { say('취소했어요 — 아무것도 안 바꿨습니다'); return; }
       cmScriptCleanScan(true);
       try { saveRows(); } catch (e) {}
       try { renderTable(); } catch (e) {}
       try { renderThumbBoard(); } catch (e) {}
-      try { toast('🧹 정리 완료 — 시트 «구조» 칸을 확인해보세요'); } catch (e) {}
+      say('🧹 정리 완료 — ' + st.touched + '장 손봄 · 구조 승격 ' + st.structUp + '장. 시트 «구조» 칸을 확인해보세요');
     };
   } catch (e) {}
 
