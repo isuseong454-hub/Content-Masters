@@ -439,6 +439,29 @@
   }
 
   /* ===== MAIN ===== */
+  /* ═══ v624 · 위화감 전체 마감 — 손끝 반응·자간·뼈대 + PC(호버·포커스·스크롤바) ═══ */
+  button:not(:disabled){ transition:scale .16s cubic-bezier(.2,1.4,.4,1); }
+  button:not(:disabled):active{ scale:.96; }
+  h1,h2,h3{ letter-spacing:-.02em; }
+  #tgym-cnt u{ letter-spacing:-.03em; }
+  .skl{ position:relative; overflow:hidden; }
+  .skl::after{ content:''; position:absolute; inset:0; pointer-events:none;
+    background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.07) 50%,transparent 70%);
+    animation:sklSweep 1.2s linear 8; }
+  @keyframes sklSweep{ from{ transform:translateX(-100%);} to{ transform:translateX(100%);} }
+  @media (hover:hover) and (pointer:fine){
+    button:not(:disabled):hover{ filter:brightness(1.07); }
+  }
+  :focus-visible{ outline:2px solid rgba(215,243,75,.5); outline-offset:2px; }
+  ::selection{ background:rgba(215,243,75,.3); }
+  html{ scrollbar-width:thin; scrollbar-color:rgba(255,255,255,.16) transparent; }
+  ::-webkit-scrollbar{ width:9px; height:9px; }
+  ::-webkit-scrollbar-track{ background:transparent; }
+  ::-webkit-scrollbar-thumb{ background:rgba(255,255,255,.14); border-radius:8px;
+    border:2px solid transparent; background-clip:content-box; }
+  ::-webkit-scrollbar-thumb:hover{ background:rgba(255,255,255,.26);
+    border:2px solid transparent; background-clip:content-box; }
+  @media (prefers-reduced-motion:reduce){ .skl::after{ animation:none; } }
   /* 🧭 방 레일 — 현재 방을 항상 알려준다 */
   #room-rail{ position:sticky; top:0; z-index:70; display:flex; align-items:center; gap:6px;
     padding:calc(8px + env(safe-area-inset-top)) 12px 8px;
@@ -22678,6 +22701,29 @@
       font-family:inherit;transition:transform .16s ease,opacity .16s;-webkit-tap-highlight-color:transparent}
     .prp-un:active{transform:scale(.88)}
     .prp-un[disabled]{opacity:.3;pointer-events:none}
+    #prp-del{margin-top:11px;width:100%;border:1px solid rgba(224,120,140,.28);background:rgba(224,120,140,.06);
+      color:#E0788C;font-family:inherit;font-size:11px;font-weight:800;border-radius:10px;padding:9px 0;
+      cursor:pointer;min-height:36px;-webkit-tap-highlight-color:transparent}
+    #prp-del:active{transform:scale(.96)}
+    #prp-lp{position:absolute;right:14px;bottom:96px;z-index:40;width:min(320px,86vw);max-height:54vh;
+      display:flex;flex-direction:column;background:rgba(26,20,12,.97);border:1px solid rgba(255,238,190,.16);
+      border-radius:16px;box-shadow:0 24px 60px rgba(0,0,0,.6);overflow:hidden;
+      animation:prpLpIn .3s cubic-bezier(.2,1.3,.4,1) both}
+    @keyframes prpLpIn{from{opacity:0;transform:translateY(14px) scale(.96)}to{opacity:1;transform:none}}
+    #prp-lp .hd{display:flex;align-items:center;justify-content:space-between;padding:11px 13px;
+      border-bottom:1px solid rgba(255,238,190,.1);font-size:12px}
+    #prp-lp .hd b{color:#eae8de}
+    #prp-lp .hd .x{border:none;background:none;color:#9a8f7c;font-size:13px;cursor:pointer;padding:4px 6px}
+    #prp-lp .ls{overflow-y:auto;padding:7px}
+    #prp-lp .it{display:flex;gap:9px;align-items:center;width:100%;text-align:left;border:none;cursor:pointer;
+      background:none;border-radius:10px;padding:7px;font-family:inherit}
+    #prp-lp .it:hover{background:rgba(255,255,255,.05)}
+    #prp-lp .it .th{width:34px;height:44px;flex:none;border-radius:7px;display:block;
+      background:linear-gradient(158deg,#3a2c30,#1d1518)}
+    #prp-lp .it .tx{min-width:0;display:flex;flex-direction:column;gap:2px}
+    #prp-lp .it .tx b{font-size:11.5px;color:#e8e2d4;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    #prp-lp .it .tx i{font-style:normal;font-size:9.5px;color:#9a8f7c;font-family:'JetBrains Mono',monospace}
+    #prp-rope .pn{cursor:pointer;text-decoration:underline dotted rgba(255,238,190,.4);text-underline-offset:3px}
     #prp[data-tool="k"] .prp-sgt,#prp[data-tool="r"] .prp-sgt,#prp[data-tool="e"] .prp-sgt{cursor:crosshair;touch-action:none}
     #prp[data-tool="t"] .prp-sgt{user-select:text;-webkit-user-select:text;cursor:text}
     #prp[data-tool="t"] .prp-sgt[contenteditable="true"]{outline:1px dashed rgba(215,243,75,.4);outline-offset:6px;border-radius:4px}
@@ -44745,9 +44791,9 @@
     document.getElementById('slv-out').textContent = slvPad(_slvDone);
     const q = document.getElementById('slv-q'); q.innerHTML = '';
     _slvQ.slice(1, 7).forEach((r, i) => {
-      const d = document.createElement('div'); d.className = 'qd t' + (i + 1); // 차례 온도: 앞쪽=라임, 뒤쪽=쿨
+      const d = document.createElement('div'); d.className = 'qd t' + (i + 1) + (r.hasThumb ? ' skl' : ''); // 차례 온도: 앞쪽=라임, 뒤쪽=쿨
       q.appendChild(d);
-      if (r.hasThumb) loadImage(r.id, 'thumb').then(u => { if (u) d.innerHTML = '<img src="' + u + '" alt=""/>'; }).catch(() => {});
+      if (r.hasThumb) loadImage(r.id, 'thumb').then(u => { d.classList.remove('skl'); if (u) d.innerHTML = '<img src="' + u + '" alt=""/>'; }).catch(() => {});
     });
     const more = _slvQ.length - 1 - 6;
     if (more > 0) q.insertAdjacentHTML('beforeend', '<span class="slv-qmore">+' + more + '</span>');
@@ -44989,7 +45035,7 @@
     const _l = arm.querySelector('.lamp'); if (_l) { _l.style.removeProperty('background'); _l.style.removeProperty('box-shadow'); } // 램프 소등(공정 톤 리셋)
     if (!r) { slvHud(); return; }
     const f = document.getElementById('slv-floor');
-    const c = document.createElement('div'); c.className = 'slv-cc';
+    const c = document.createElement('div'); c.className = 'slv-cc' + (r.hasThumb ? ' skl' : '');
     c.style.background = SLV_GRADS[(r.no || 0) % 6];
     c.innerHTML = '<span class="hk">' + esc(slvTitleOf(r)) + '</span>' + (r.views ? '<span class="vw">▶ ' + fmtViews(r.views) + '</span>' : '');
     c.style.top = SLV_CARD_TOP + 'px';
@@ -44999,7 +45045,7 @@
       requestAnimationFrame(() => { c.style.transition = ''; c.style.left = slvPickX() + 'px'; c.style.transform = ''; c.style.borderRadius = ''; });
     }
     else { c.style.left = slvPickX() + 'px'; f.appendChild(c); }
-    if (r.hasThumb) loadImage(r.id, 'thumb').then(u => { if (u && c.parentNode) { c.insertAdjacentHTML('afterbegin', '<img src="' + u + '" alt=""/>'); c.classList.add('has-img'); } }).catch(() => {});
+    if (r.hasThumb) loadImage(r.id, 'thumb').then(u => { c.classList.remove('skl'); if (u && c.parentNode) { c.insertAdjacentHTML('afterbegin', '<img src="' + u + '" alt=""/>'); c.classList.add('has-img'); } }).catch(() => {});
     const sig = document.getElementById('slv-sig');
     if (sig) { // 3요소 신호등: 현재 카드 채움 상태
       const hasScript = !!(String(r.script || '').replace(/<[^>]*>/g, '').trim() || (r.scriptSecFlex && r.scriptSecFlex.length) || (r.scriptSections && Object.keys(r.scriptSections).some(k => r.scriptSections[k] && String(r.scriptSections[k]).replace(/<[^>]*>/g, '').trim())));
@@ -45489,6 +45535,7 @@
   ];
   let _prpQ = [], _prpCur = null, _prpTool = null, _prpPainting = false, _prpInited = false, _prpCut = false;
   let _prpHist = [], _prpRedo = [], _prpHistFor = null, _prpLastXY = null;   // v622 · 되돌리기 10단계 + 보간
+  let _prpDtapAt = 0, _prpDtapEl = null;   // v625 · 두 번 톡 = 문장
 
   // 행 → 조각 배열 [{k라벨, c섹션키, t본문}] (flex 우선, 없으면 5칸에서 만든다)
   function prpSegsOf(r) {
@@ -45600,8 +45647,8 @@
     document.getElementById('prp-go').onclick = prpNext;
     document.getElementById('prp-rope').onclick = function () { if (_prpCur < _prpQ.length - 1) prpNext(); };
 
-    const HINTS = { k: '<b>핵심 펜</b> — 글 위를 쓸면 빨갛게', r: '<b>참고 펜</b> — 글 위를 쓸면 주황으로',
-      e: '<b>지우개</b> — 문지르면 지워져요', t: '<b>글 고치기</b> — 바로 타이핑하세요' };
+    const HINTS = { k: '<b>핵심 펜</b> — 쓸면 빨갛게 · 두 번 톡 = 문장', r: '<b>참고 펜</b> — 쓸면 주황 · 두 번 톡 = 문장',
+      e: '<b>지우개</b> — 문지르면 지워져요 · 두 번 톡 = 문장', t: '<b>글 고치기</b> — 바로 타이핑하세요' };
     document.getElementById('prp-tray').addEventListener('click', function (e) {
       const b = e.target.closest('.prp-pen'); if (!b) return;
       if (_prpTool === 't' && b.dataset.t !== 't') prpCommitText();   // 글 고치기에서 빠져나올 때 저장
@@ -45623,6 +45670,12 @@
       if (!_prpTool || _prpTool === 't') return;
       if (!e.target.closest('#prp-host')) return;
       prpHistPush();                             // v622 · 스트로크 시작 = 되돌리기 지점
+      const _w = e.target.closest ? e.target.closest('#prp-segs .w') : null;
+      const _now = Date.now();
+      if (_w && _prpDtapEl === _w && _now - _prpDtapAt < 380) {   // v625 · 두 번 톡 = 문장 전체
+        prpPaintSentence(_w);
+        _prpDtapAt = 0; _prpDtapEl = null;
+      } else { _prpDtapAt = _now; _prpDtapEl = _w; }
       _prpLastXY = null;
       _prpPainting = true; prpStroke(e.clientX, e.clientY, e.pointerType); e.preventDefault();
     });
@@ -45682,6 +45735,20 @@
       setTimeout(function () { w.classList.remove('snap'); }, 340);
     });
   }
+  // v625 · 문장 전체 칠하기 — 문장 끝 = . ! ? 로 끝나는 단어
+  function prpPaintSentence(w) {
+    const seg = w.closest('.prp-sgt'); if (!seg || !_prpTool || _prpTool === 't') return;
+    const ws = [...seg.querySelectorAll('.w')];
+    const j = ws.indexOf(w); if (j < 0) return;
+    const END = /[.!?。…]['"”’)]*$/;
+    let a = j; while (a > 0 && !END.test(ws[a - 1].textContent)) a--;
+    let b = j; while (b < ws.length - 1 && !END.test(ws[b].textContent)) b++;
+    for (let k = a; k <= b; k++) {
+      const el = ws[k];
+      if (_prpTool === 'e') el.classList.remove('k', 'r', 'pv', 'pvx');
+      else { el.classList.remove('k', 'r', 'pvx'); el.classList.add(_prpTool, 'pv'); }
+    }
+  }
   // v622 · 손가락 위 «지금 단어» 칩
   function prpChipShow(x, y, el) {
     let c = document.getElementById('prp-fchip');
@@ -45739,13 +45806,19 @@
     if (d) d.disabled = !_prpRedo.length;
   }
 
+  // v625 · 엔티티 청소 — &nbsp;가 글자로 보이고 띄어쓰기를 막던 것
+  function prpClean(t) {
+    return String(t || '').replace(/<[^>]*>/g, '')
+      .replace(/&nbsp;/gi, ' ').replace(/&amp;/gi, '&').replace(/&lt;/gi, '<')
+      .replace(/&gt;/gi, '>').replace(/&quot;/gi, '"').replace(/&#0?39;/g, "'");
+  }
   function prpRenderFilm(anim) {
     const r = _prpQ[_prpCur]; if (!r) return;
     if (_prpHistFor !== r.id) { _prpHist = []; _prpRedo = []; _prpHistFor = r.id; try { prpHistSync(); } catch (e) {} }
     const segs = prpSegsOf(r);
     const marks = (r.prep && r.prep.marks) || {};
     const html = segs.map(function (s, i) {
-      const t = (s.t || '').replace(/<[^>]*>/g, '');
+      const t = prpClean(s.t);
       const mk = marks[i] || {};
       const wArr = t.split(/\s+/).filter(Boolean);
       const words = wArr.map(function (w, j) {
@@ -45789,11 +45862,12 @@
     if (r.hasThumb) {
       const rid = r.id;
       loadImage(rid, 'thumb').then(function (u) {
-        if (!u) return;
         const cur = _prpQ[_prpCur];
         if (!cur || cur.id !== rid) return;                       // 그사이 다음 카드로 넘어갔으면 버린다
         const th = document.querySelector('#prp-card .th');
-        if (th) th.style.background = 'center/cover url(' + JSON.stringify(u) + ')';
+        if (!th) return;
+        th.classList.remove('skl');                               // v624 · 뮺대 걷기
+        if (u) th.style.background = 'center/cover url(' + JSON.stringify(u) + ')';
       }).catch(function () {});
     }
     const row = (k, v, col) => '<div class="r"><span class="k">' + k + '</span><span class="v' + (v ? '' : ' none') + '"' +
@@ -45801,7 +45875,7 @@
     const types = (r.thumbTypes || []).slice(0, 2).join(' · ');
 
     document.getElementById('prp-card').innerHTML =
-      '<span class="th" style="background:' + bg + '"></span>' +
+      '<span class="th' + (r.hasThumb ? ' skl' : '') + '" style="background:' + bg + '"></span>' +
       '<span class="info">' +
         '<span class="eyebrow">지금 손질 중</span>' +
         '<span class="ct">' + esc(r.hook || r.topicMain || r.idea || '(제목 없음)') + '</span>' +
@@ -45812,9 +45886,64 @@
           (r.trendScore ? row('트렌드', String(r.trendScore), '#FF7A45') : '') +
           (types ? row('썸네일', esc(types)) : '') +
         '</div>' +
+        '<button type="button" id="prp-del">🗑 이 카드 삭제</button>' +
       '</span>';
+    const _db = document.getElementById('prp-del'); if (_db) _db.onclick = prpDeleteCur;
+  }
+  // v625 · 🗑 손질 줄에서 바로 삭제 — 중복·잘못 담긴 카드 (되돌릴 수 없음→confirm)
+  function prpDeleteCur() {
+    const r = _prpQ[_prpCur]; if (!r) return;
+    if (!confirm('«' + String(r.hook || r.topicMain || '이 카드').slice(0, 16) + '» 카드를 삭제할까요? 되돌릴 수 없어요.')) return;
+    const i = rows.indexOf(r);
+    if (i > -1) { rows.splice(i, 1); try { saveRows(); } catch (e) {} }
+    try { renderTable(); } catch (e) {}
+    try { renderThumbBoard(); } catch (e) {}
+    _prpQ.splice(_prpCur, 1);
+    if (!_prpQ.length) { prpFinish(); }
+    else {
+      if (_prpCur >= _prpQ.length) _prpCur = _prpQ.length - 1;
+      prpRenderFilm(true); prpRenderRope();
+    }
+    try { prpRefreshBadge(); } catch (e) {}
+    try { toast('🗑 삭제했어요'); } catch (e) {}
   }
 
+  // v625 · 남은 카드 전체 보기 — 누르면 그 카드로 바로 점프
+  function prpOpenList() {
+    let lp = document.getElementById('prp-lp');
+    if (lp) { lp.remove(); return; }
+    lp = document.createElement('div'); lp.id = 'prp-lp';
+    const rest = _prpQ.slice(_prpCur);
+    let h = '<div class="hd"><b>손질 대기 ' + rest.length + '장</b><button type="button" class="x">✕</button></div><div class="ls">';
+    rest.forEach(function (r, k) {
+      h += '<button type="button" class="it" data-prplj="' + (_prpCur + k) + '">' +
+        '<span class="th" data-prplth="' + r.id + '"></span>' +
+        '<span class="tx"><b>' + esc(String((typeof slvTitleOf === 'function' ? slvTitleOf(r) : (r.hook || '(제목 없음)'))).slice(0, 34)) + '</b>' +
+        '<i>' + (r.views ? '▶ ' + fmtViews(r.views) : '') + (k === 0 ? ' · 지금 손질 중' : '') + '</i></span></button>';
+    });
+    h += '</div>';
+    lp.innerHTML = h;
+    document.getElementById('prp').appendChild(lp);
+    lp.querySelector('.x').onclick = function () { lp.remove(); };
+    lp.querySelectorAll('[data-prplj]').forEach(function (b) {
+      b.onclick = function () {
+        const to = parseInt(b.dataset.prplj, 10);
+        lp.remove();
+        if (isNaN(to) || to === _prpCur) return;
+        _prpCur = to;
+        prpRenderFilm(true); prpRenderRope();
+      };
+    });
+    lp.querySelectorAll('[data-prplth]').forEach(function (el) {
+      const rr = _prpQ.find(function (x) { return x && x.id === el.dataset.prplth; });
+      if (!rr || !rr.hasThumb) return;
+      el.classList.add('skl');
+      loadImage(rr.id, 'thumb').then(function (u) {
+        el.classList.remove('skl');
+        if (u && el.isConnected) el.style.background = 'center/cover url(' + JSON.stringify(u) + ')';
+      }).catch(function () { el.classList.remove('skl'); });
+    });
+  }
   function prpRenderRope() {
     const left = _prpQ.length - _prpCur - 1, q = document.getElementById('prp-rope');
     let h = '', n = Math.min(left, 3);
@@ -45826,6 +45955,8 @@
     q.className = 'prp-rope' + (left ? '' : ' empty');
     q.innerHTML = h + '<span class="pn">' + (left ? left + '장 남음' : '다 했어요') + '</span>';
     // v619 · 빨랫줄 사진도 진짜로 — 로드되면 그 자리만 갈아끼운다
+    const _pn = q.querySelector('.pn');
+    if (_pn) _pn.onclick = function (e) { e.stopPropagation(); prpOpenList(); };   // v625 · 남은 것 전체 보기
     q.querySelectorAll('[data-prpth]').forEach(function (el) {
       const rid = el.dataset.prpth; if (!rid) return;
       const rr = _prpQ.find(function (x) { return x && x.id === rid; });
@@ -45882,7 +46013,7 @@
       const i = +el.dataset.i;
       const t = el.textContent.replace(/\s+/g, ' ').trim();
       const segs = prpSegsOf(r); const s = segs[i]; if (!s) return;
-      const old = (s.t || '').replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
+      const old = prpClean(s.t).replace(/\s+/g, ' ').trim();
       if (t && t !== old) {
         changed = true;
         if (Array.isArray(r.scriptSecFlex) && r.scriptSecFlex.length) {
@@ -51977,7 +52108,11 @@
     const el = document.getElementById('tgym-cnt');
     if (el) {
       el.className = 'cnt' + (c.total ? '' : ' zero');
+      const _prev = parseInt(el.dataset.cuPrev || '0', 10);
       el.innerHTML = '<u>' + c.total + '</u><em>번 훈련</em>';
+      // v624 · 숫자 굴러오름 — 커질 때만, 본 값에서 이어서
+      if (c.total > _prev) { try { countUp(el.querySelector('u'), c.total, { from: _prev, duration: 700 }); } catch (e) {} }
+      el.dataset.cuPrev = String(c.total);
     }
     const b = document.getElementById('tgym-brk');
     if (b) {
