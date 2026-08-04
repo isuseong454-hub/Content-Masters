@@ -20086,6 +20086,10 @@
       .cso-tray-h{display:flex;align-items:baseline;gap:7px;margin:16px 2px 8px}
       .cso-tray-h .t{font-size:12.5px;font-weight:800}.cso-tray-h .c{font-size:9.5px;color:var(--cso-lime);font-family:'JetBrains Mono',monospace}
       .cso-tray-h .sp{flex:1}.cso-tray-h .dn{font-size:9.5px;color:var(--cso-emer);font-weight:700}
+      .cso-tray-h #cso-clear{border:1px solid var(--cso-line2);background:none;color:#9aa08a;font-size:9.5px;
+        font-weight:800;font-family:inherit;border-radius:7px;padding:4px 8px;cursor:pointer;min-height:24px;
+        -webkit-tap-highlight-color:transparent}
+      .cso-tray-h #cso-clear:active{transform:scale(.93)}
       .cso-row{display:flex;gap:7px;overflow-x:auto;padding-bottom:5px;scrollbar-width:none;min-height:20px}
       .cso-row::-webkit-scrollbar{display:none}
       .cso-empty{font-size:10px;color:var(--cso-sub2);padding:8px 4px}
@@ -20183,7 +20187,7 @@
           <div class="cso-belt"></div>
           <div class="cso-statusbar" id="cso-statusbar"><span class="sl">담긴 재료</span><div class="sb-items"><span class="sb t1" id="sb-thumb"><i></i>썸네일</span><span class="sb t2" id="sb-content"><i></i>내용</span><span class="sb t3" id="sb-script"><i></i>원고</span></div></div>
         </div>
-        <div class="cso-tray-h"><span class="t">컨텐츠 분해 카드</span><span class="c" id="cso-cnt"></span><span class="sp"></span><span class="dn" id="cso-dn"></span></div>
+        <div class="cso-tray-h"><span class="t">컨텐츠 분해 카드</span><span class="c" id="cso-cnt"></span><span class="sp"></span><button type="button" id="cso-clear" style="display:none">비우기</button><span class="dn" id="cso-dn"></span></div>
         <div class="cso-row" id="cso-row"><span class="cso-empty">무대에 던지면 여기 좌르륵 — 카드가 채워져요</span></div>
         <!-- v543 · 다음 방 예고 — 저장 «전»에 보여준다 (팝업으로 묻는 대신) -->
         <button type="button" class="cso-peek" id="cso-peek">
@@ -22653,6 +22657,27 @@
     .prp-sgt .w.sd{color:#8f8983;border-bottom:1px dashed rgba(160,150,136,.55)}
     .prp-sgt .w.k{color:#FF8A7A;font-weight:700;background:rgba(255,68,56,.13);box-shadow:inset 0 -2px 0 rgba(255,68,56,.6);border-bottom:none}
     .prp-sgt .w.r{color:#FFC585;background:rgba(255,160,44,.11);box-shadow:inset 0 -2px 0 rgba(255,160,44,.5);border-bottom:none}
+    /* v622 · 쫀쫀 5종 — 가안(pv)→확정(snap) · 지우개 가안(pvx) · 손가락 칩 · 되돌리기 */
+    .prp-sgt .w{display:inline-block}
+    .prp-sgt .w.pv{opacity:.55}
+    .prp-sgt .w.pvx{opacity:.35;text-decoration:line-through}
+    .prp-sgt .w.snap{animation:prpSnap .3s cubic-bezier(.2,1.6,.4,1)}
+    @keyframes prpSnap{0%{transform:scale(1)}45%{transform:scale(1.14)}100%{transform:scale(1)}}
+    #prp[data-tool="k"] .prp-sgt,#prp[data-tool="r"] .prp-sgt,#prp[data-tool="e"] .prp-sgt{
+      user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent}
+    .prp-pen{-webkit-tap-highlight-color:transparent}
+    .prp-pen:active{transform:scale(.93)}
+    .prp-pen.on:active{transform:translateY(-7px) scale(.93)}
+    #prp-fchip{position:fixed;z-index:2600;pointer-events:none;display:none;transform:translate(-50%,-100%);
+      font-size:12.5px;font-weight:800;color:#0d0f0a;background:#eae8de;border-radius:8px;padding:5px 10px;
+      white-space:nowrap}
+    #prp-fchip::after{content:'';position:absolute;left:50%;bottom:-4px;transform:translateX(-50%);
+      border:5px solid transparent;border-top-color:#eae8de;border-bottom:none}
+    .prp-un{width:36px;height:36px;border-radius:11px;border:1px solid rgba(255,255,255,.09);
+      background:rgba(0,0,0,.3);color:#c9c4b8;font-size:15px;font-weight:900;cursor:pointer;
+      font-family:inherit;transition:transform .16s ease,opacity .16s;-webkit-tap-highlight-color:transparent}
+    .prp-un:active{transform:scale(.88)}
+    .prp-un[disabled]{opacity:.3;pointer-events:none}
     #prp[data-tool="k"] .prp-sgt,#prp[data-tool="r"] .prp-sgt,#prp[data-tool="e"] .prp-sgt{cursor:crosshair;touch-action:none}
     #prp[data-tool="t"] .prp-sgt{user-select:text;-webkit-user-select:text;cursor:text}
     #prp[data-tool="t"] .prp-sgt[contenteditable="true"]{outline:1px dashed rgba(215,243,75,.4);outline-offset:6px;border-radius:4px}
@@ -22746,6 +22771,8 @@
               <button type="button" class="prp-pen" data-t="r"><span class="nib"></span>참고</button>
               <button type="button" class="prp-pen" data-t="e"><span class="nib"></span>지우개</button>
               <button type="button" class="prp-pen" data-t="t"><span class="nib"></span>글 고치기</button>
+              <button type="button" class="prp-un" id="prp-undo" disabled title="되돌리기">↺</button>
+              <button type="button" class="prp-un" id="prp-redo" disabled title="다시하기">↻</button>
               <span class="prp-hint" id="prp-hint">펜을 집으세요</span>
             </div>
             <div class="prp-foot">
@@ -45461,6 +45488,7 @@
     ['증거', ''], ['비교', ''], ['반박', ''], ['소구포인트', 'appeal'], ['CTA', 'cta']
   ];
   let _prpQ = [], _prpCur = null, _prpTool = null, _prpPainting = false, _prpInited = false, _prpCut = false;
+  let _prpHist = [], _prpRedo = [], _prpHistFor = null, _prpLastXY = null;   // v622 · 되돌리기 10단계 + 보간
 
   // 행 → 조각 배열 [{k라벨, c섹션키, t본문}] (flex 우선, 없으면 5칸에서 만든다)
   function prpSegsOf(r) {
@@ -45594,10 +45622,22 @@
       if (_prpCut) return;                       // 자르기 모드는 click으로 처리
       if (!_prpTool || _prpTool === 't') return;
       if (!e.target.closest('#prp-host')) return;
-      _prpPainting = true; prpPaintAt(e.clientX, e.clientY); e.preventDefault();
+      prpHistPush();                             // v622 · 스트로크 시작 = 되돌리기 지점
+      _prpLastXY = null;
+      _prpPainting = true; prpStroke(e.clientX, e.clientY, e.pointerType); e.preventDefault();
     });
-    document.addEventListener('pointermove', function (e) { if (_prpPainting) prpPaintAt(e.clientX, e.clientY); });
-    document.addEventListener('pointerup', function () { if (_prpPainting) { _prpPainting = false; prpCollect(); prpSync(); } });
+    document.addEventListener('pointermove', function (e) { if (_prpPainting) prpStroke(e.clientX, e.clientY, e.pointerType); });
+    const prpUp = function () {
+      if (!_prpPainting) return;
+      _prpPainting = false;
+      prpChipHide();
+      prpStrokeCommit();                         // v622 · 가안 → 확정(착 스냅)
+      prpCollect(); prpSync(); prpHistSync();
+    };
+    document.addEventListener('pointerup', prpUp);
+    document.addEventListener('pointercancel', prpUp);
+    document.getElementById('prp-undo').onclick = function () { prpHistStep(-1); };
+    document.getElementById('prp-redo').onclick = function () { prpHistStep(1); };
 
     // 라벨 → 캐스케이드 / 자르기 클릭
     rt.addEventListener('click', function (e) {
@@ -45612,14 +45652,96 @@
 
   function prpPaintAt(x, y) {
     const el = document.elementFromPoint(x, y);
-    if (!el || !el.classList || !el.classList.contains('w')) return;
-    if (!el.closest('#prp-host')) return;
-    el.classList.remove('k', 'r');
-    if (_prpTool !== 'e') el.classList.add(_prpTool);
+    if (!el || !el.classList || !el.classList.contains('w')) return null;
+    if (!el.closest('#prp-host')) return null;
+    if (_prpTool === 'e') {                      // 지우개도 가안 — 손 떼는 순간 진짜 지워진다
+      if (el.classList.contains('k') || el.classList.contains('r')) el.classList.add('pvx');
+    } else {
+      el.classList.remove('k', 'r', 'pvx');
+      el.classList.add(_prpTool, 'pv');
+    }
+    return el;
+  }
+  // v622 · 빠른 스윕 보간 — 지나친 사이 단어도 전부 칠한다 («따로 노는 느낌» 차단)
+  function prpStroke(x, y, ptype) {
+    if (_prpLastXY) {
+      const dx = x - _prpLastXY.x, dy = y - _prpLastXY.y, d = Math.hypot(dx, dy);
+      if (d > 14) {
+        const n = Math.min(24, Math.floor(d / 9));
+        for (let s2 = 1; s2 <= n; s2++) prpPaintAt(_prpLastXY.x + dx * s2 / (n + 1), _prpLastXY.y + dy * s2 / (n + 1));
+      }
+    }
+    const el = prpPaintAt(x, y);
+    _prpLastXY = { x: x, y: y };
+    if (ptype === 'touch') prpChipShow(x, y, el);   // 손가락이 단어를 가리니 위에 미리 보여준다
+  }
+  function prpStrokeCommit() {
+    document.querySelectorAll('#prp-segs .w.pvx').forEach(function (w) { w.classList.remove('k', 'r', 'pvx'); });
+    document.querySelectorAll('#prp-segs .w.pv').forEach(function (w) {
+      w.classList.remove('pv'); w.classList.add('snap');
+      setTimeout(function () { w.classList.remove('snap'); }, 340);
+    });
+  }
+  // v622 · 손가락 위 «지금 단어» 칩
+  function prpChipShow(x, y, el) {
+    let c = document.getElementById('prp-fchip');
+    if (!c) { c = document.createElement('div'); c.id = 'prp-fchip'; document.body.appendChild(c); }
+    if (!el) { c.style.display = 'none'; return; }
+    const COL = { k: '#FF4438', r: '#FFA02C', e: '#8b9184' };
+    c.textContent = el.textContent;
+    c.style.display = 'block';
+    c.style.left = x + 'px';
+    c.style.top = (y - 34) + 'px';
+    c.style.boxShadow = '0 8px 22px rgba(0,0,0,.45), inset 0 -3px 0 ' + (COL[_prpTool] || '#8b9184');
+  }
+  function prpChipHide() { const c = document.getElementById('prp-fchip'); if (c) c.style.display = 'none'; }
+  // v622 · 되돌리기·다시하기 — 칠 상태 10단계 (틀렸을 때 빠르게 뒤로)
+  function prpMarksSnap() {
+    const snap = {};
+    document.querySelectorAll('#prp-segs .prp-sg').forEach(function (sg) {
+      const i = sg.dataset.i, m = {};
+      sg.querySelectorAll('.w.k,.w.r').forEach(function (w) { m[w.dataset.j] = w.classList.contains('k') ? 'k' : 'r'; });
+      snap[i] = m;
+    });
+    return snap;
+  }
+  function prpMarksRestore(snap) {
+    document.querySelectorAll('#prp-segs .prp-sg').forEach(function (sg) {
+      const m = (snap || {})[sg.dataset.i] || {};
+      sg.querySelectorAll('.w').forEach(function (w) {
+        w.classList.remove('k', 'r', 'pv', 'pvx', 'snap');
+        if (m[w.dataset.j]) w.classList.add(m[w.dataset.j]);
+      });
+    });
+    prpCollect(); prpSync();
+  }
+  function prpHistPush() {
+    _prpHist.push(prpMarksSnap());
+    if (_prpHist.length > 10) _prpHist.shift();
+    _prpRedo = [];
+    prpHistSync();
+  }
+  function prpHistStep(dir) {
+    if (dir < 0) {
+      if (!_prpHist.length) return;
+      _prpRedo.push(prpMarksSnap()); if (_prpRedo.length > 10) _prpRedo.shift();
+      prpMarksRestore(_prpHist.pop());
+    } else {
+      if (!_prpRedo.length) return;
+      _prpHist.push(prpMarksSnap()); if (_prpHist.length > 10) _prpHist.shift();
+      prpMarksRestore(_prpRedo.pop());
+    }
+    prpHistSync();
+  }
+  function prpHistSync() {
+    const u = document.getElementById('prp-undo'), d = document.getElementById('prp-redo');
+    if (u) u.disabled = !_prpHist.length;
+    if (d) d.disabled = !_prpRedo.length;
   }
 
   function prpRenderFilm(anim) {
     const r = _prpQ[_prpCur]; if (!r) return;
+    if (_prpHistFor !== r.id) { _prpHist = []; _prpRedo = []; _prpHistFor = r.id; try { prpHistSync(); } catch (e) {} }
     const segs = prpSegsOf(r);
     const marks = (r.prep && r.prep.marks) || {};
     const html = segs.map(function (s, i) {
@@ -46273,6 +46395,7 @@
     var cards = row.querySelectorAll('.cso-card:not(.phw)');
     try { var _cso = csoQ('cso'); if (_cso) _cso.classList.toggle('cso-empty0', cards.length === 0); } catch (e) {}
     var cnt = csoQ('cso-cnt'); if (cnt) cnt.textContent = cards.length ? cards.length + '장' : '';
+    var _clr = csoQ('cso-clear'); if (_clr) _clr.style.display = (_csBlocks.length || _csPhotos.length) ? '' : 'none';
     var selN = row.querySelectorAll('.cso-card:not(.off):not(.phw)').length;
     var dn = csoQ('cso-dn'); if (dn) dn.textContent = selN ? '✓ ' + selN + ' 선택' : '';
     // v543 · 버튼이 «다음에 무슨 일이 일어나는지» 스스로 말한다 (저장은 종착점이 아니다)
@@ -46308,7 +46431,9 @@
     if (txt.trim().length < 15) return false;
     var blocks = csParse(txt);
     if (!blocks.length){ if (!silent) csToast('아직 [분해] 블록이 안 보여요 — 봇 답 전체를 붙여넣었는지 확인'); return false; }
-    _csBlocks = blocks;
+    // v623 · 누적 — 나눠 던져도 앞 카드가 안 사라진다
+    _csBlocks = _csBlocks.concat(blocks);
+    if (_csBlocks.length > blocks.length) csToast('🧩 +' + blocks.length + '장 — 총 ' + _csBlocks.length + '장');
     if (el) el.value = '';
     csoCloseFeed();
     csoThrowFx();                                   // 골인 모션
@@ -46506,6 +46631,14 @@
       }
       csoTryParse(false); // [분해] 있으면 골인 모션, 없으면 안내 토스트
     };
+    // v623 · 비우기 — 무대만 리셋 (창고 저장분 무관)
+    var clr = csoQ('cso-clear');
+    if (clr) clr.onclick = function(){
+      if (!confirm('무대를 비울까요? 창고에 저장된 건 그대로예요.')) return;
+      _csBlocks = []; _csPhotos = []; _csMap = [];
+      var pa = csoQ('cso-paste'); if (pa) pa.value = '';
+      csoRenderStrip(); csoRenderCards(); csoUpdateStatusbar();
+    };
     // 카드 탭 = 선택 토글
     var row = csoQ('cso-row');
     if (row) row.addEventListener('click', function(e){
@@ -46549,14 +46682,14 @@
     const list = Array.from(files || []).filter(f => f.type && f.type.startsWith('image/'));
     if (!list.length) return;
     csToast('🖼 사진 ' + list.length + '장 읽는 중…');
-    _csPhotos = [];
+    const _was = _csPhotos.length;                    // v623 · 누적 — 나눠 넣어도 안 사라진다
     for (const f of list) { const u = await csReadPhoto(f); if (u) _csPhotos.push(u); }
     const strip = document.getElementById('cs-photo-strip');
     if (strip) {
       strip.style.display = _csPhotos.length ? 'flex' : 'none';
       strip.innerHTML = _csPhotos.map((u, i) => '<div class="cs-ph"><span class="pn">' + (i + 1) + '</span><img src="' + u + '" alt=""/></div>').join('');
     }
-    csToast('🖼 ' + _csPhotos.length + '장 준비 — 번호 순서대로 매칭돼요');
+    csToast('🖼 +' + (_csPhotos.length - _was) + '장 — 총 ' + _csPhotos.length + '장 (번호 순서대로 매칭)');
     if (_csBlocks.length) csRenderReview();
   }
 
@@ -46695,12 +46828,10 @@
     const emp = document.getElementById('cs-review-empty'); if (emp) emp.style.display = '';
     // v543 · 저장은 종착점이 아니다 — 묻지 말고 «다음 방»으로 이어준다.
     //   버튼에 「창고에 넣고 분류하기 ›」라고 이미 적혀 있으니, 팝업으로 또 묻는 건 말이 안 맞는다.
-    setTimeout(async () => {
+    // v623 · «시트 보러 갈까요?» 팝업 삭제 (2026-08-04 사장님) — 분류할 게 있으면 정거장, 없으면 그대로 머문다
+    setTimeout(() => {
       const _un = (typeof slvUnsorted === 'function') ? slvUnsorted().length : 0;
-      if (_un > 0) { csoGoSort(); return; }                    // 분류할 게 있으면 바로 정거장으로
-      if (await appConfirm('창고(시트)에서 방금 담은 걸 볼까요?', { okText: '보러가기', cancelText: '계속 정리' })) {
-        csCloseRoom(); switchWorkspace('sheet');
-      }
+      if (_un > 0) csoGoSort();                               // 분류할 게 있으면 바로 정거장으로
     }, 500);
   }
 
