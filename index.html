@@ -462,6 +462,9 @@
   ::-webkit-scrollbar-thumb:hover{ background:rgba(255,255,255,.26);
     border:2px solid transparent; background-clip:content-box; }
   @media (prefers-reduced-motion:reduce){ .skl::after{ animation:none; } }
+  /* v630 · 손질 칠 표시 — 시트·판독지 공용 (손질 방 톤 그대로) */
+  .sp-k{font-weight:700;color:#FF8A7A;background:rgba(255,68,56,.13);box-shadow:inset 0 -2px 0 rgba(255,68,56,.6);border-radius:3px;padding:0 2px;font-style:normal}
+  .sp-r{color:#FFC585;background:rgba(255,160,44,.11);box-shadow:inset 0 -2px 0 rgba(255,160,44,.5);border-radius:3px;padding:0 2px;font-style:normal}
   /* 🧭 방 레일 — 현재 방을 항상 알려준다 */
   #room-rail{ position:sticky; top:0; z-index:70; display:flex; align-items:center; gap:6px;
     padding:calc(8px + env(safe-area-inset-top)) 12px 8px;
@@ -29260,7 +29263,7 @@
                      data-placeholder="원고 — 직접 쓰거나 벤치마킹한 글을 다듬어보세요. 드래그해서 색 적용."
                      style="${em === 'sections' ? 'display:none;' : ''}">${r.script || ''}</div>
                 <div class="sh-script-secs" data-row="${r.id}" style="${em === 'sections' ? '' : 'display:none;'}">
-                  <div class="sh-struct-preview">${structPreviewHtml(r.scriptSections, r.scriptSecFlex)}</div>
+                  <div class="sh-struct-preview">${structPreviewHtml(r.scriptSections, r.scriptSecFlex, r.prep && r.prep.marks)}</div>
                   <button type="button" class="sh-struct-edit" data-act="struct-edit" data-id="${r.id}">✏ 구조 편집 · 붙여넣어 나누기</button>
                 </div>
                 <div class="sh-cell-bar">
@@ -29862,22 +29865,30 @@
     const host = document.getElementById('rd-script'); if (!host) return;
     let rowsHtml = '';
     try { mergeIntroFlex(r.scriptSecFlex); } catch (e) {}
+    const _mk = r.prep && r.prep.marks;               // v630 · 손질 칠 표시
     if (Array.isArray(r.scriptSecFlex) && r.scriptSecFlex.length) {
+      let fi = -1;
       rowsHtml = r.scriptSecFlex.map((x, i) => {
-        const t = (x.t || '').trim(); if (!t) return '';
+        const t = (x.t || '').trim();
+        const t0 = t.replace(/<[^>]*>/g, '').trim(); if (!t0) return '';
+        fi++;
         const meta = x.c ? SCRIPT_SECTIONS.find(s => s.key === x.c) : null;
         const color = meta ? meta.color : flexLabelColor(x.k);
+        const painted = _mk ? prpMarksPaint(t, _mk[fi]) : null;
         return '<div class="rd-fr" style="color:' + color + '"><div class="rd-fh"><span class="l">' +
           esc(meta ? meta.label : x.k) + '</span></div>' +
-          '<div class="rd-fx" data-fi="' + i + '">' + esc(t) + '</div></div>';
+          '<div class="rd-fx" data-fi="' + i + '">' + (painted || esc(t)) + '</div></div>';
       }).filter(Boolean).join('');
     } else {
+      let si = -1;
       rowsHtml = SCRIPT_SECTIONS.map(s => {
         const v = (r.scriptSections || {})[s.key];
         const t = v ? String(v).replace(/<[^>]*>/g, '').trim() : '';
         if (!t) return '';
+        si++;
+        const painted = _mk ? prpMarksPaint(t, _mk[si]) : null;
         return '<div class="rd-fr" style="color:' + s.color + '"><div class="rd-fh"><span class="l">' + esc(s.label) + '</span></div>' +
-          '<div class="rd-fx" data-sk="' + s.key + '">' + esc(t) + '</div></div>';
+          '<div class="rd-fx" data-sk="' + s.key + '">' + (painted || esc(t)) + '</div></div>';
       }).filter(Boolean).join('');
     }
     host.innerHTML = rowsHtml
@@ -31973,24 +31984,47 @@
     for (let i = 0; i < FLEX_LBL_COLORS.length; i++) { if (FLEX_LBL_COLORS[i].re.test(k)) return FLEX_LBL_COLORS[i].color; }
     return '#8b9184';   // 미분류 = 중립 회색 (해시 팔레트 폐기 — 색의 헌법)
   }
-  function structPreviewHtml(sections, flexList) {
+  // v630 · 손질 방에서 칠한 핵심(k)·참고(r)를 원고가 보이는 곳마다 — 칠이 자산이 되게
+  //   단어 번호는 손질 방(prpClean → 공백 split)과 같은 체계. 칠이 없으면 null(기존 렌더 유지).
+  function prpMarksPaint(txt, mk) {
+    if (!mk) return null;
+    if (!Object.keys(mk).length) return null;
+    const clean = String(txt || '').replace(/<[^>]*>/g, '')
+      .replace(/&nbsp;/gi, ' ').replace(/&gt;/gi, '>').replace(/&lt;/gi, '<').replace(/&amp;/gi, '&');
+    const ws = clean.split(/\s+/).filter(Boolean);
+    let hit = false;
+    const out = ws.map(function (w, j) {
+      const c = mk[j];
+      if (c === 'k' || c === 'r') { hit = true; return '<b class="sp-' + c + '">' + esc(w) + '</b>'; }
+      return esc(w);
+    }).join(' ');
+    return hit ? out : null;
+  }
+  function structPreviewHtml(sections, flexList, marks) {
     // v409: flexList([{k,c,t}] 원문 순서) 있으면 유연 구조로 렌더 — 표준 라벨은 제색, 그 외는 단어색
     try { mergeIntroFlex(flexList); } catch (e) {}   // v536: 옛 «후킹»을 이득&손해로 흡수
     if (Array.isArray(flexList) && flexList.length) {
+      let fi = -1;                                   // v630 · 손질 방과 같은 «빈 조각 제외» 번호
       return flexList.map(function (x) {
-        const t = (x.t || '').trim(); if (!t) return '';
+        const t = (x.t || '').trim();
+        const t0 = t.replace(/<[^>]*>/g, '').trim(); if (!t0) return '';
+        fi++;
         const meta = x.c ? SCRIPT_SECTIONS.find(function (s) { return s.key === x.c; }) : null;
         const color = meta ? meta.color : flexLabelColor(x.k);
         const label = meta ? meta.label : x.k;
-        return '<div class="struct-prev-row"><span class="struct-prev-lbl" style="color:' + color + ';border-color:' + color + '">' + esc(label) + '</span><span class="struct-prev-txt">' + esc(t) + '</span></div>';
+        const painted = marks ? prpMarksPaint(t, marks[fi]) : null;
+        return '<div class="struct-prev-row"><span class="struct-prev-lbl" style="color:' + color + ';border-color:' + color + '">' + esc(label) + '</span><span class="struct-prev-txt">' + (painted || esc(t)) + '</span></div>';
       }).filter(Boolean).join('');
     }
     const filled = SCRIPT_SECTIONS.filter(function (s) { const v = (sections || {})[s.key]; return v && String(v).replace(/<[^>]*>/g, '').trim(); });
     if (!filled.length) return '<div class="struct-prev-empty">아직 비어있어요 — ✏ 눌러 붙여넣고 나눠보세요</div>';
+    let si = -1;
     return SCRIPT_SECTIONS.map(function (s) {
       const v = (sections || {})[s.key];
       const has = v && String(v).replace(/<[^>]*>/g, '').trim();
-      return '<div class="struct-prev-row' + (has ? '' : ' empty') + '"><span class="struct-prev-lbl" style="color:' + s.color + ';border-color:' + s.color + '">' + esc(s.label) + '</span><span class="struct-prev-txt">' + (has ? v : '—') + '</span></div>';
+      let body = has ? v : '—';
+      if (has) { si++; const p2 = marks ? prpMarksPaint(v, marks[si]) : null; if (p2) body = p2; }
+      return '<div class="struct-prev-row' + (has ? '' : ' empty') + '"><span class="struct-prev-lbl" style="color:' + s.color + ';border-color:' + s.color + '">' + esc(s.label) + '</span><span class="struct-prev-txt">' + body + '</span></div>';
     }).join('');
   }
   function scriptFromFlex(list) {
