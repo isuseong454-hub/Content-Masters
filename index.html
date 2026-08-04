@@ -18075,6 +18075,13 @@
   .gtour .cnt{ position:absolute; left:0; right:0; bottom:12px; text-align:center; font-size:11px; color:#8a8f88; z-index:6; }
   .gtour .cnt b{ color:var(--rc); }
 
+  /* ═══ v620 · ⏱ 오래 보게 하는 방 ① 직감 = 릴스 속 등산 ═══ */
+  .rm-stage.sth{ background:linear-gradient(#100a1c,#050309); }
+  .sth-cv{ position:absolute; inset:0; width:100%; height:100%; display:block; }
+  .rm-stage.sth .cnt{ position:absolute; left:0; right:0; bottom:10px; text-align:center;
+    font-size:11px; color:#8a8f88; z-index:6; text-shadow:0 1px 4px rgba(0,0,0,.7); }
+  .rm-stage.sth .cnt b{ color:var(--rc); }
+
   /* ═══ v598 · ▣ 클릭의 방 ① 직감 = 네온 간판 거리 ═══ */
   .nsign{ background:linear-gradient(#12080d,#050304); }
   .nsign .st{ position:absolute; left:0; right:0; bottom:38px; height:36px;
@@ -51497,6 +51504,236 @@
     if (!TGH.raf) TGH.raf = requestAnimationFrame(tgHeroDraw);
   }
   function tgHeroStop() { if (TGH.raf) { cancelAnimationFrame(TGH.raf); TGH.raf = 0; } }
+  /* ═══ v620 · ⏱ 오래 보게 하는 방 히어로 — 릴스 속 등산 (확정안) ═══
+     확정(2026-08-04): 튕김+숫자 · 이탈은 초반에 몰림 · 30명 한 덩어리 · 가이드 같이 출발+«출발할게요!»
+     · 골인=노랑 반짝 · 하트 빨강 · 땅은 %와 무관, 목표 넘으면 공기만 밝게 · 발열 헌법 그대로 */
+  const STH = { raf: 0, t0: 0, last: 0, w: 0, h: 0, disp: undefined, prevT: undefined, pops: [] };
+  const STH_N = 30, STH_CY = 11, STH_BASE = 1240;
+  function sthFrac(v) { return v - Math.floor(v); }
+  function sthKeep() {
+    let p = null; try { p = rmPctNow('stay'); } catch (e) {}
+    if (p === null || p === undefined) p = (tGoals.stayp || 70);   // 기록 없으면 목표만큼 — 0으로 겁주지 않기
+    return Math.max(0, Math.min(100, p));
+  }
+  function sthSlope(w, h, t) { return { x: w * (.07 + .70 * t), y: h * .88 - h * .50 * Math.pow(t, .92) }; }
+  function sthStage(x, w, h, gate, hit) {
+    const g = x.createLinearGradient(0, 0, 0, h);
+    g.addColorStop(0, '#100a1c'); g.addColorStop(.55, '#0a0614'); g.addColorStop(1, '#050309');
+    x.fillStyle = g; x.fillRect(0, 0, w, h);
+    if (hit) {                                        // 목표 넘김 — 공기만 밝아진다 (땅은 그대로)
+      const lg = x.createRadialGradient(w * .66, h * .22, 0, w * .66, h * .22, h * .95);
+      lg.addColorStop(0, 'rgba(215,243,75,.11)'); lg.addColorStop(1, 'rgba(215,243,75,0)');
+      x.fillStyle = lg; x.fillRect(0, 0, w, h);
+    }
+    x.fillStyle = '#0b0716';                          // 뒤 산
+    x.beginPath(); x.moveTo(-10, h);
+    [[.10, .52], [.26, .7], [.42, .36], [.58, .6], [.72, .3], [.9, .55], [1.05, .4]].forEach(function (p) {
+      x.lineTo(w * p[0], h * p[1]); });
+    x.lineTo(w + 10, h); x.closePath(); x.fill();
+    x.fillStyle = '#140d24';                          // 오르는 능선 — 오른쪽 22%는 아이콘 줄 몫 (겹침 방지)
+    x.beginPath(); x.moveTo(-10, h);
+    x.lineTo(w * .07, h * .88);
+    for (let t = 0; t <= 1.001; t += .05) { const p = sthSlope(w, h, t); x.lineTo(p.x, p.y); }
+    x.lineTo(sthSlope(w, h, 1).x, h); x.closePath(); x.fill();
+    const gp = sthSlope(w, h, gate);                  // 목표 % 점선 — 통과하면 실선
+    x.save(); x.strokeStyle = hit ? 'rgba(215,243,75,.92)' : 'rgba(215,243,75,.5)';
+    x.lineWidth = hit ? 2.4 : 1.4; if (!hit) x.setLineDash([4, 4]);
+    x.beginPath(); x.moveTo(gp.x, gp.y - 36); x.lineTo(gp.x, gp.y + 12); x.stroke(); x.restore();
+    x.font = "800 8px 'JetBrains Mono',monospace"; x.textAlign = 'center';
+    x.fillStyle = hit ? 'rgba(215,243,75,.95)' : 'rgba(215,243,75,.6)';
+    x.fillText(Math.round(gate * 100) + (hit ? '% 통과' : '%'), gp.x, gp.y - 42);
+    const tp = sthSlope(w, h, 1);                     // 정상 깃발
+    x.strokeStyle = 'rgba(255,255,255,.4)'; x.lineWidth = 1.2;
+    x.beginPath(); x.moveTo(tp.x, tp.y); x.lineTo(tp.x, tp.y - 16); x.stroke();
+    x.fillStyle = hit ? '#D7F34B' : 'rgba(255,255,255,.45)';
+    x.beginPath(); x.moveTo(tp.x, tp.y - 16); x.lineTo(tp.x + 11, tp.y - 12.5); x.lineTo(tp.x, tp.y - 9); x.closePath(); x.fill();
+    return gp;
+  }
+  function sthHeartIcon(x, cx, cy, sc) {              // ♡는 빨갛게 — 이모지 말고 직접 그림 (색 보장)
+    x.save(); x.translate(cx, cy); x.scale(sc, sc);
+    x.beginPath();
+    x.moveTo(0, 2.6);
+    x.bezierCurveTo(-4.6, -1.4, -2.8, -5.2, 0, -2.7);
+    x.bezierCurveTo(2.8, -5.2, 4.6, -1.4, 0, 2.6);
+    x.fillStyle = '#ff4d67'; x.fill();
+    x.restore();
+  }
+  function sthReels(x, w, h, T, hit, gate) {          // 릴스 옷 — ♥·말풍선·저장·공유 + 재생바(목표 눈금)
+    x.save();
+    x.fillStyle = 'rgba(224,120,140,.85)'; x.beginPath(); x.arc(14, 13, 2.4, 0, 6.2832); x.fill();
+    x.font = "800 7px 'JetBrains Mono',monospace"; x.textAlign = 'left';
+    x.fillStyle = 'rgba(255,255,255,.4)'; x.fillText('REELS', 22, 15.5);
+    const ix = w - 15, iy = h * .30, gap = 24;
+    sthHeartIcon(x, ix, iy - 4, 1.6);
+    x.strokeStyle = 'rgba(255,255,255,.7)'; x.lineWidth = 1.2;   // 말풍선(댓글)
+    x.beginPath(); x.arc(ix, iy + gap - 4, 5, 0, 6.2832); x.stroke();
+    x.fillStyle = 'rgba(255,255,255,.7)';
+    x.beginPath(); x.moveTo(ix - 3, iy + gap); x.lineTo(ix - 5, iy + gap + 4); x.lineTo(ix, iy + gap + .5); x.closePath(); x.fill();
+    x.beginPath(); x.moveTo(ix - 4, iy + gap * 2 - 8); x.lineTo(ix + 4, iy + gap * 2 - 8);   // 저장(북마크)
+    x.lineTo(ix + 4, iy + gap * 2 + 3); x.lineTo(ix, iy + gap * 2 - 1); x.lineTo(ix - 4, iy + gap * 2 + 3);
+    x.closePath(); x.strokeStyle = 'rgba(255,255,255,.7)'; x.stroke();
+    x.font = '11px sans-serif'; x.fillStyle = 'rgba(255,255,255,.75)'; x.textAlign = 'center';
+    x.fillText('\u2197', ix, iy + gap * 3);
+    x.fillStyle = 'rgba(255,255,255,.15)'; x.fillRect(8, h - 9, w - 16, 2);
+    x.fillStyle = 'rgba(255,255,255,.6)';
+    x.fillRect(8, h - 9, (w - 16) * sthFrac(T / STH_CY), 2);
+    x.fillStyle = hit ? 'rgba(215,243,75,.95)' : 'rgba(215,243,75,.7)';
+    x.fillRect(8 + (w - 16) * gate - 1, h - 12, 2, 8);
+    x.restore();
+  }
+  function sthBubble(x, px, py, a) {                  // «출발할게요!» — 시작 신호 1초
+    if (a <= 0) return;
+    x.save(); x.globalAlpha = a;
+    const bw = 62, bh = 17, bx = px - 8, by = py - 46;
+    x.fillStyle = 'rgba(255,255,255,.92)';
+    if (x.roundRect) { x.beginPath(); x.roundRect(bx, by, bw, bh, 8.5); x.fill(); }
+    else x.fillRect(bx, by, bw, bh);
+    x.beginPath(); x.moveTo(bx + 10, by + bh); x.lineTo(bx + 16, by + bh); x.lineTo(bx + 9, by + bh + 5); x.closePath(); x.fill();
+    x.fillStyle = '#12061f'; x.font = '800 8.5px sans-serif'; x.textAlign = 'left';
+    x.fillText('출발할게요!', bx + 8, by + 11.5);
+    x.restore();
+  }
+  function sthFrame(x, w, h, T) {
+    const k = Math.max(1, Math.min(1.5, w / 360));    // 폰 기준으로 그려 무대째 키움
+    if (k > 1.01) {
+      x.save(); x.translate(w / 2, h); x.scale(k, k); x.translate(-w / (2 * k), -h / k);
+      sthFrame(x, w / k, h / k, T); x.restore(); return;
+    }
+    const keep = sthKeep(), gp100 = (tGoals.stayp || 70);
+    const gate = Math.max(.3, Math.min(.92, gp100 / 100));
+    const hit = keep >= gp100;
+    sthStage(x, w, h, gate, hit);
+    const cross = Math.round(STH_N * keep / 100);
+    const tb = sthFrac(T / STH_CY) * 1.34 - .08;
+    // 가이드(내 콘텐츠) — 무리와 같이 출발, 목표 선에 닿으면 서서 손 내밈
+    const tg = Math.min(gate, tb * 1.02 + .03);
+    const gpt = sthSlope(w, h, Math.max(0, tg));
+    const atGate = tg >= gate - .001;
+    const bob = atGate ? Math.sin(T * 2.2) * 1.5 : 0;
+    if (tb > -.06) {
+      const fx = gpt.x + (atGate ? 9 : 0), fy = gpt.y + bob * .3;
+      tghMan(x, fx, fy, 30, atGate ? .22 : tb * 9,
+        hit ? 'rgba(215,243,75,.95)' : 'rgba(215,243,75,.8)', 1, atGate ? -0.06 : -0.1);
+      x.strokeStyle = 'rgba(215,243,75,.85)'; x.lineWidth = 1.4;   // 라임 깃발
+      x.beginPath(); x.moveTo(fx + 8.4, fy - 23.4); x.lineTo(fx + 8.4, fy - 39); x.stroke();
+      x.fillStyle = '#D7F34B';
+      x.beginPath(); x.moveTo(fx + 8.4, fy - 39); x.lineTo(fx + 18.6, fy - 36);
+      x.lineTo(fx + 8.4, fy - 33); x.closePath(); x.fill();
+      sthBubble(x, fx, fy, tb < .14 ? Math.min(1, (tb + .06) / .05) * (1 - Math.max(0, (tb - .09) / .05)) : 0);
+    }
+    // 무리 30명 — 한 덩어리, 이탈은 초반에 몰림(보통 릴스), 골인은 노랑
+    let alive = 0;
+    for (let i = 0; i < STH_N; i++) {
+      const off = -.15 * sthFrac(i * .618);
+      const spd = .96 + .08 * sthFrac(i * .377);
+      const t = tb * spd + off;
+      const made = ((i * 7 + 5) % STH_N) < cross;
+      const stop = .10 + (gate - .12) * Math.pow(sthFrac(i * .53), 2.1);   // 제곱 — 초반 가중
+      if (t < 0) { alive++; continue; }
+      const hh = 18 + 3 * sthFrac(i * .71);
+      let px, py, a = 1, tilt = -0.1, pose = t * 9 + i, rim;
+      if (made || t <= stop) {                        // 오르는 중
+        alive++;
+        if (t > 1.16) continue;
+        const p = sthSlope(w, h, Math.min(1, t));
+        px = p.x; py = p.y + (i % 3 - 1) * 2;
+        const past = t > gate;
+        rim = past ? (hit ? 'rgba(215,243,75,.9)' : 'rgba(215,243,75,.75)') : 'rgba(150,140,180,.34)';
+        if (past && t < gate + .05) py -= (1 - (t - gate) / .05) * 3;      // 잡히는 순간 살짝 당겨짐
+        if (t > 1) {                                  // ── 골인! 노랑으로 변하며 폴짝+별빛 ──
+          const gd = (t - 1) / .16;
+          a = Math.max(0, 1 - gd * 1.05);
+          rim = 'rgba(255,224,102,.95)';
+          py -= Math.sin(Math.min(1, gd * 2) * Math.PI) * 4;
+          x.save(); x.globalAlpha = a * .85;
+          x.strokeStyle = 'rgba(255,224,102,.9)'; x.lineWidth = 1.1;
+          const r1 = 4 + gd * 7, r2 = r1 + 4;
+          for (let rj = 0; rj < 4; rj++) {
+            const ang = rj * 1.5708 + .7854;
+            x.beginPath();
+            x.moveTo(px + Math.cos(ang) * r1, py - hh * .95 + Math.sin(ang) * r1);
+            x.lineTo(px + Math.cos(ang) * r2, py - hh * .95 + Math.sin(ang) * r2);
+            x.stroke();
+          }
+          x.restore();
+        }
+      } else {                                        // ── 이탈 — 튕겨져 나간다 ──
+        const d = (t - stop) / .17; if (d > 1) continue;
+        const s2 = sthSlope(w, h, stop);
+        px = s2.x - d * d * 30 - d * 8;               // 뒤로 밀려나며
+        py = s2.y - (d * 34 - d * d * 62);            // 붕 떴다가 떨어짐
+        tilt = -.2 - d * 2.7; pose = .25;             // 빙글 돌며 허우적
+        a = Math.max(0, 1 - d * 1.15);
+        rim = 'rgba(224,120,140,.4)';
+      }
+      tghMan(x, px, py, hh, pose, rim, a, tilt);
+    }
+    sthReels(x, w, h, T, hit, gate);
+    // 숫자 — «남은 시청자»가 뚝뚝 (확정)
+    const target = Math.round(STH_BASE * alive / STH_N);
+    if (STH.disp === undefined) STH.disp = target;
+    if (target > STH.disp) { STH.disp = target; STH.pops.length = 0; }   // 새 사이클 — 바로 채움
+    else if (target < STH.disp) {
+      if (STH.prevT !== undefined && target < STH.prevT) STH.pops.push({ amt: STH.prevT - target, at: T });
+      STH.disp += (target - STH.disp) * .3;
+      if (STH.disp - target < .6) STH.disp = target;
+    }
+    STH.prevT = target;
+    x.save(); x.textAlign = 'left';
+    x.font = "900 16px 'JetBrains Mono',monospace";
+    x.fillStyle = 'rgba(255,255,255,.88)';
+    x.fillText(Math.round(STH.disp).toLocaleString(), 12, 36);
+    x.font = "700 7.5px 'JetBrains Mono',monospace";
+    x.fillStyle = 'rgba(255,255,255,.35)';
+    x.fillText('남은 시청자', 12, 47);
+    STH.pops = STH.pops.filter(function (pp) { return T - pp.at < 1; });
+    STH.pops.forEach(function (pp) {
+      const u = T - pp.at;
+      x.globalAlpha = Math.max(0, 1 - u);
+      x.font = "800 10px 'JetBrains Mono',monospace";
+      x.fillStyle = '#E0788C';
+      x.fillText('-' + pp.amt, 64, 36 - u * 12);
+    });
+    x.restore();
+  }
+  function sthFit(cv) {
+    const r = cv.getBoundingClientRect(); if (!r.width) return false;
+    const d = Math.min(1.5, window.devicePixelRatio || 1);   // 발열 — 1.5배면 충분
+    STH.w = r.width; STH.h = r.height;
+    cv.width = Math.round(r.width * d); cv.height = Math.round(r.height * d);
+    cv.getContext('2d').setTransform(d, 0, 0, d, 0, 0);
+    return true;
+  }
+  function sthDraw(ts) {
+    const cv = document.getElementById('sth-cv');
+    if (!cv) { STH.raf = 0; return; }
+    // 화면에 없거나 앱이 잠들면 스스로 쉰다 — 700ms마다만 깨어나 확인
+    const _r = cv.getBoundingClientRect();
+    const _off = document.hidden || cv.offsetParent === null ||
+                 _r.bottom < -40 || _r.top > (window.innerHeight || 800) + 40;
+    if (_off) {
+      STH.raf = 0;
+      setTimeout(function () { if (!STH.raf && document.getElementById('sth-cv')) STH.raf = requestAnimationFrame(sthDraw); }, 700);
+      return;
+    }
+    if (!STH.t0) STH.t0 = ts;
+    if (STH.last && ts - STH.last < 33) { STH.raf = requestAnimationFrame(sthDraw); return; }   // 30fps 캡
+    STH.last = ts;
+    if (Math.abs(_r.width - STH.w) > 1) sthFit(cv);
+    try { const _x = cv.getContext('2d'); _x.clearRect(0, 0, STH.w, STH.h);
+      sthFrame(_x, STH.w, STH.h, (ts - STH.t0) / 1000); } catch (e) {}
+    STH.raf = requestAnimationFrame(sthDraw);
+  }
+  function sthStart() {
+    const cv = document.getElementById('sth-cv'); if (!cv) return;
+    if (!sthFit(cv)) { setTimeout(sthStart, 120); return; }
+    let reduce = false;
+    try { reduce = matchMedia('(prefers-reduced-motion:reduce)').matches; } catch (e) {}
+    try { const _x = cv.getContext('2d'); _x.clearRect(0, 0, STH.w, STH.h);   // 첫 프레임은 바로
+      sthFrame(_x, STH.w, STH.h, 1.2); } catch (e) {}
+    if (reduce) return;
+    if (!STH.raf) STH.raf = requestAnimationFrame(sthDraw);
+  }
   /* ═══ v609 · 훈련 횟수 — «너 몇 번 했어?»에 답하는 숫자 ═══
      세 가지를 더한다: 3초로 뜼어본 카드 · 썸네일 대진 회차 · 손으로 적은 기록 */
   function tgymCounts() {
@@ -52254,20 +52491,15 @@
       ' ' + gx.toFixed(0) + ',' + keepAtGoal.toFixed(0) +
       ' C' + (gx + 40).toFixed(0) + ',' + (keepAtGoal + (118 - keepAtGoal) * 0.4).toFixed(0) +
       ' ' + (gx + 90).toFixed(0) + ',' + (keepAtGoal + (118 - keepAtGoal) * 0.7).toFixed(0) + ' 260,' + (keepAtGoal + (118 - keepAtGoal) * 0.82).toFixed(0);
-    // 가이드 투어 — 목표 대비 달성률만큼 사람이 따라온다 (4명 기준)
-    const rate = has ? Math.max(0, Math.min(1, now / goal)) : 0;
-    const stay4 = has ? Math.max(1, Math.round(rate * 4)) : 0;
+    // v620 · 등산 히어로가 직접 그린다 — 캡션에 쓸 %만 계산
+    const spct = rmPctNow('stay');
     let h = '<div class="rm" style="--rc:#b07bf0">' +
       '<div class="rm-sgn"><div class="txt"><s>ROOM 02</s><b>오래 보게 하는 방</b><i>시청지속 시간 · 같이 가다가 조용히 뒤처진다</i></div></div>' +
       '<div class="rm-z"><span class="rm-tag">① 직감</span>' +
-        '<div class="rm-stage gtour">' +
-          '<div class="road"></div>' +
-          '<span class="t4">🙋</span><span class="t3">🙋‍♀️</span><span class="t2">🙋‍♂️</span><span class="t1">🙋</span>' +
-          '<span class="gd">🙋‍♂️</span><span class="flag">🏁</span>' +
-          '<div class="rul"><span>0s</span><span>' + Math.round(goal / 3) + 's</span><span>' + Math.round(goal * 2 / 3) + 's</span><span><b>' + goal + 's</b></span></div>' +
-          '<div class="cnt">' + (has
-            ? '4명 중 <b>' + stay4 + '명</b>이 끝까지 따라왔어요 — 평균 <b>' + now + '초</b>'
-            : '내가 앞장서고 사람들이 따라옵니다 — <b>평균 시청 시간</b>을 넣으면 몇 명이 남는지 보여요') + '</div>' +
+        '<div class="rm-stage sth"><canvas id="sth-cv" class="sth-cv"></canvas>' +
+          '<div class="cnt">' + (spct !== null
+            ? '내 시청지속 <b>' + spct + '%</b> — 30명이 출발하면 <b>' + Math.round(30 * Math.min(100, Math.max(0, spct)) / 100) + '명</b>이 선을 넘어요'
+            : '<b>평균 시청 시간</b>과 <b>영상 길이</b>를 넣으면 — 내 %만큼 사람들이 남아요') + '</div>' +
         '</div></div>' +
       '<div class="rm-z"><div class="rm-ins"><span class="rm-tag">② 내 인사이트</span>' +
         '<div class="rm-gph">' +
@@ -52307,6 +52539,7 @@
       '<div class="rm-foot">기록 <b>' + RM_LOG.stay.length + '</b>편<span style="margin-left:auto">✎ 시간</span></div>' +
       '</div>';
     el.innerHTML = h;
+    try { sthStart(); } catch (e) {}
     stWireLen();
     rmWireLog('stay', st2RenderStay, '초', 120);
     el.querySelectorAll('[data-st]').forEach(function (b) { b.onclick = function () { _stTrain = b.dataset.st; st2RenderStay(); }; });
