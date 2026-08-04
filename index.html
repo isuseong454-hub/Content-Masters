@@ -19306,6 +19306,33 @@
   .px-cth{ width:27px; height:36px; border-radius:7px; flex:0 0 auto; border:1px solid rgba(255,255,255,.12);
     background-size:cover; background-position:center; box-shadow:0 3px 10px -4px rgba(0,0,0,.8); }
   .px-cth.none{ border-style:dashed; border-color:rgba(255,255,255,.09); background:rgba(255,255,255,.02); }
+  /* v631 · 표본 사진 나란히 (참고 위계 — 크게 보고 포인트 잡기) */
+  .px-shots{ margin:0 0 14px; }
+  .px-shots .hd{ font-size:10px; font-weight:800; letter-spacing:.14em; color:var(--pxfaint,#5d6350); margin:0 0 7px; }
+  .px-shots .hd i{ font-style:normal; letter-spacing:0; font-weight:600; opacity:.8; margin-left:7px; }
+  .px-shots .row{ display:flex; gap:8px; overflow-x:auto; padding-bottom:6px; scrollbar-width:none; }
+  .px-shots .row::-webkit-scrollbar{ display:none; }
+  .px-shots .ph{ position:relative; flex:0 0 auto; width:96px; height:128px; border-radius:12px;
+    border:1px solid rgba(255,255,255,.13); background-color:rgba(255,255,255,.03);
+    background-size:cover; background-position:center; cursor:pointer; padding:0;
+    -webkit-tap-highlight-color:transparent; }
+  .px-shots .ph.none{ border-style:dashed; display:flex; align-items:center; justify-content:center; font-size:17px; opacity:.5; }
+  .px-shots .ph em{ position:absolute; left:5px; bottom:5px; font-style:normal; font-family:'JetBrains Mono',monospace;
+    font-size:8.5px; font-weight:800; color:#fff; background:rgba(0,0,0,.62); border-radius:6px; padding:2px 5px; }
+  #px-shot-ov{ display:none; position:fixed; inset:0; z-index:6600; background:rgba(0,0,0,.87);
+    align-items:center; justify-content:center; padding:22px;
+    -webkit-backdrop-filter:blur(4px); backdrop-filter:blur(4px); }
+  #px-shot-ov.on{ display:flex; }
+  #px-shot-ov .box{ position:relative; max-width:min(430px,92vw); }
+  #px-shot-ov img{ width:100%; max-height:72vh; object-fit:contain; border-radius:16px; display:block; }
+  #px-shot-ov .nope{ width:min(320px,80vw); height:200px; display:flex; align-items:center; justify-content:center;
+    color:#8a8f88; border:1px dashed rgba(255,255,255,.2); border-radius:16px; }
+  #px-shot-ov .cap{ margin-top:10px; text-align:center; font-size:12.5px; color:#d9ddd2; }
+  #px-shot-ov .nav{ position:absolute; top:50%; transform:translateY(-50%); width:40px; height:40px; border-radius:50%;
+    border:1px solid rgba(255,255,255,.25); background:rgba(0,0,0,.55); color:#fff; font-size:17px; cursor:pointer;
+    -webkit-tap-highlight-color:transparent; }
+  #px-shot-ov .nav.pv{ left:-8px; }
+  #px-shot-ov .nav.nx{ right:-8px; }
   .px-rmv{ margin-left:auto; flex:0 0 auto; color:var(--pxfaint); cursor:pointer; font-size:11px;
     width:18px; height:18px; display:flex; align-items:center; justify-content:center; border-radius:50%; }
   .px-rmv:hover{ color:var(--pxtx); background:rgba(255,255,255,.07); }
@@ -53753,7 +53780,8 @@
     if (Array.isArray(r.scriptSecFlex) && r.scriptSecFlex.length) {
       const out = [];
       r.scriptSecFlex.forEach((x, i) => {
-        const t = (x.t || '').trim(); if (!t) return;
+        const t = (x.t || '').trim();
+        if (!t.replace(/<[^>]*>/g, '').trim()) return;   // v632 · 손질 방과 같은 빈 조각 판정
         const meta = x.c ? SCRIPT_SECTIONS.find(sc => sc.key === x.c) : null;
         out.push({ lb: meta ? meta.label : x.k, c: meta ? meta.color : flexLabelColor(x.k), t: t, fi: i });
       });
@@ -53783,6 +53811,35 @@
     need.forEach(o => { _pxThumbs[o.id] = null; });
     Promise.all(need.map(o => loadImage(o.id, 'thumb').then(d => { if (d) _pxThumbs[o.id] = d; }).catch(() => {})))
       .then(() => { const el = document.getElementById('pt2'); if (el && el.querySelector('.px')) pxRender(); });
+  }
+  // v631 · 표본 사진 나란히 — 크게 보고 눈으로 공통 포인트를 잡는다 (참고 위계)
+  function pxPhotoStripHtml() {
+    if (!_pxPicked.length) return '';
+    const n = _pxPicked.filter(o => _pxThumbs[o.id]).length;
+    return '<div class="px-shots"><div class="hd">🖼 표본 사진 나란히' +
+      '<i>' + (n ? '탭하면 크게 — 나란히 보면 공통 포인트가 보여요' : '사진 있는 표본이 없어요') + '</i></div>' +
+      '<div class="row">' + _pxPicked.map((o, i) =>
+        '<button type="button" class="ph' + (_pxThumbs[o.id] ? '' : ' none') + '" data-pxshot="' + i + '" style="' + pxThumbCss(o.id) + '">' +
+        (_pxThumbs[o.id] ? '' : '<span>📷</span>') +
+        (o.views ? '<em>' + fmtViews(o.views) + '</em>' : '') + '</button>').join('') + '</div></div>';
+  }
+  function pxShotOpen(i) {
+    const o = _pxPicked[i]; if (!o) return;
+    let ov = document.getElementById('px-shot-ov');
+    if (!ov) {
+      ov = document.createElement('div'); ov.id = 'px-shot-ov';
+      document.body.appendChild(ov);
+      ov.addEventListener('click', function (e) { if (!e.target.closest('.nav')) ov.classList.remove('on'); });
+    }
+    const d = _pxThumbs[o.id];
+    ov.innerHTML = '<div class="box">' + (d ? '<img src="' + d + '" alt=""/>' : '<div class="nope">📷 사진 없음</div>') +
+      '<div class="cap"><b>' + esc(o.title) + '</b>' + (o.views ? ' · ▶ ' + fmtViews(o.views) : '') +
+      (_pxPicked.length > 1 ? ' <s style="opacity:.55;text-decoration:none">' + (i + 1) + '/' + _pxPicked.length + '</s>' : '') + '</div>' +
+      (_pxPicked.length > 1 ? '<button type="button" class="nav pv">‹</button><button type="button" class="nav nx">›</button>' : '') + '</div>';
+    const pv = ov.querySelector('.pv'), nx = ov.querySelector('.nx');
+    if (pv) pv.onclick = function (e) { e.stopPropagation(); pxShotOpen((i - 1 + _pxPicked.length) % _pxPicked.length); };
+    if (nx) nx.onclick = function (e) { e.stopPropagation(); pxShotOpen((i + 1) % _pxPicked.length); };
+    ov.classList.add('on');
   }
   function pxRoleAxis(sel) {
     const cnt = {}, pos = {}, col = {};
@@ -53878,21 +53935,22 @@
     }
     if (_pxStep <= 2) {
       const edit = _pxStep === 2;
-      let h = '<div class="px-cols">';
+      let h = pxPhotoStripHtml() + '<div class="px-cols">';
       _pxPicked.forEach((o, di) => {
+        const _m = o.r && o.r.prep && o.r.prep.marks;   // v632 · 손질 칠 표시
         h += '<div class="px-col' + (edit ? '' : ' drop') + '" style="animation-delay:' + (di * .09) + 's">' +
           '<div class="px-ct"><span class="px-cth' + (_pxThumbs[o.id] ? '' : ' none') + '" style="' + pxThumbCss(o.id) + '"></span>' +
           '<span class="tx1"><span class="tt">' + esc(o.title) + '</span><i>' + (o.views ? '▶ ' + fmtNum(o.views) : '조회수 미입력') + '</i></span>' +
           '<span class="px-rmv" data-pxrm="' + di + '">×</span></div>' +
           o.blocks.map((b, bi) => '<div class="px-blk' + (edit ? ' edit' : '') + '" data-ci="' + di + '" data-bi="' + bi + '" style="--pk:' + b.c + ';animation-delay:' + (bi * .05) + 's">' +
-            '<b>' + esc(b.lb) + '</b><span>' + esc(b.t) + '</span></div>').join('') + '</div>';
+            '<b>' + esc(b.lb) + '</b><span>' + ((_m ? prpMarksPaint(b.t, _m[bi]) : null) || esc(b.t)) + '</span></div>').join('') + '</div>';
       });
       if (_pxPicked.length < 4 && !edit) h += '<div class="px-col px-ghostcol" id="px-more">＋ 원고 담기</div>';
       return h + '</div>';
     }
     // 3단계 — 역할 정렬
     const axis = pxRoleAxis(_pxPicked);
-    let h = '<div style="min-width:max-content"><div class="px-rhead"><span class="sp"></span>' +
+    let h = pxPhotoStripHtml() + '<div style="min-width:max-content"><div class="px-rhead"><span class="sp"></span>' +
       _pxPicked.map(o => '<span class="px-rhc"><span class="px-cth' + (_pxThumbs[o.id] ? '' : ' none') + '" style="width:22px;height:29px;' + pxThumbCss(o.id) + '"></span>' +
         '<span><span class="tt">' + esc(o.title) + '</span><i>' + (o.views ? '▶ ' + fmtNum(o.views) : '—') + '</i></span></span>').join('') + '</div>';
     axis.forEach((R, ri) => {
@@ -53901,8 +53959,14 @@
       h += '<div class="px-rgrp" style="--pk:' + R.c + '">' +
         '<div class="px-rrow' + (full ? ' common' : '') + '" style="--pk:' + R.c + ';animation-delay:' + (ri * .06) + 's">' +
         '<div class="rl"><b>' + esc(R.g) + '</b><s class="' + (full ? 'full' : '') + '">' + n + '/' + _pxPicked.length + (full ? ' ✓' : '') + '</s></div>' +
-        hits.map(b => b ? '<div class="px-cell" style="--pk:' + R.c + '"><span>' + esc(b.t) + '</span></div>'
-          : '<div class="px-cell ghosted"><span>—</span></div>').join('') + '</div>' +
+        hits.map((b, ci) => {
+          if (!b) return '<div class="px-cell ghosted"><span>—</span></div>';
+          const o2 = _pxPicked[ci];
+          const _m2 = o2 && o2.r && o2.r.prep && o2.r.prep.marks;
+          const bi2 = _m2 ? o2.blocks.indexOf(b) : -1;
+          const p2 = (_m2 && bi2 > -1) ? prpMarksPaint(b.t, _m2[bi2]) : null;
+          return '<div class="px-cell" style="--pk:' + R.c + '"><span>' + (p2 || esc(b.t)) + '</span></div>';
+        }).join('') + '</div>' +
         '<input class="px-rnote' + ((_pxNotes[R.g] || '').trim() ? ' has' : '') + '" data-pxn="' + esc(R.g) + '" value="' + esc(_pxNotes[R.g] || '') + '" placeholder="' + esc(R.g) + '의 공통점이 보이면 한 줄로… (리포트에 자동 기입)"></div>';
     });
     return h + '</div>';
@@ -54022,6 +54086,7 @@
         .map(k => '<b style="--pc:' + pxRoleColor(k) + '">' + esc(k) + '</b><span>' + esc(_pxNotes[k]) + '</span>').join('');
     });
     host.querySelectorAll('[data-pxrep]').forEach(t => t.onclick = () => { _pxRep = +t.dataset.pxrep; pxRender(); });
+    host.querySelectorAll('[data-pxshot]').forEach(b => b.onclick = () => pxShotOpen(+b.dataset.pxshot));   // v631
     host.querySelectorAll('[data-pxf2]').forEach(f => f.onclick = () => f.classList.toggle('off'));
     const sv = document.getElementById('px-save'); if (sv) sv.onclick = pxSaveAnalysis;
     const sv2 = document.getElementById('px-save2'); if (sv2) sv2.onclick = () => { pxSaveToStructures(); };
