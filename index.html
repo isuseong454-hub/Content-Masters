@@ -20066,6 +20066,22 @@
       #cso-strip .ph{position:relative;width:34px;height:44px;border-radius:6px;overflow:hidden;border:1px solid var(--cso-line2)}
       #cso-strip .ph img{width:100%;height:100%;object-fit:cover}
       #cso-strip .ph .pn{position:absolute;left:2px;top:1px;font-size:8px;font-weight:800;color:#0b0c09;background:var(--cso-neon);border-radius:4px;padding:0 3px}
+      /* v621 · 사진 빼기 ✕ + 대기 카드 + 카드 수정 */
+      #cso-strip .ph .px{position:absolute;right:1px;top:1px;width:16px;height:16px;border:none;border-radius:5px;
+        background:rgba(0,0,0,.74);color:#ff8896;font-size:9px;font-weight:900;line-height:16px;padding:0;cursor:pointer}
+      .cso-card.phw{border-style:dashed;cursor:default}
+      .cso-card.phw .cc-hook{color:#9aa08a;font-weight:700}
+      .cc-acts{display:flex;gap:6px;padding:0 9px 8px;flex-wrap:wrap}
+      .cc-acts button{flex:none;border:1px solid var(--cso-line2);background:rgba(255,255,255,.03);color:#cfd6c2;
+        font-size:10px;font-weight:800;font-family:inherit;border-radius:8px;padding:5px 9px;cursor:pointer;min-height:28px}
+      .cc-acts button.dgr{color:#ff8896}
+      .cc-edit{display:flex;flex-direction:column;gap:6px;padding:0 9px 9px}
+      .cc-edit input{width:100%;box-sizing:border-box;border:1px solid var(--cso-line2);background:#0b0d08;color:#e8e9e6;
+        border-radius:8px;padding:8px 9px;font-size:16px;font-family:inherit}
+      .cc-edit .r{display:flex;gap:6px}
+      .cc-edit .r button{flex:1;border:none;border-radius:8px;padding:8px 0;font-weight:800;font-family:inherit;cursor:pointer;min-height:32px}
+      .cc-edit .r .sv{background:var(--cso-neon,#D7F34B);color:#101206}
+      .cc-edit .r .cx{background:rgba(255,255,255,.06);color:#9aa08a}
       /* 카드 트레이 */
       .cso-tray-h{display:flex;align-items:baseline;gap:7px;margin:16px 2px 8px}
       .cso-tray-h .t{font-size:12.5px;font-weight:800}.cso-tray-h .c{font-size:9.5px;color:var(--cso-lime);font-family:'JetBrains Mono',monospace}
@@ -46028,7 +46044,33 @@
   }
   function csoRenderStrip(){
     var strip = csoQ('cso-strip'); if (!strip) return;
-    strip.innerHTML = _csPhotos.map(function(u, i){ return '<div class="ph"><span class="pn">' + (i+1) + '</span><img src="' + u + '" alt=""/></div>'; }).join('');
+    strip.innerHTML = _csPhotos.map(function(u, i){ return '<div class="ph"><span class="pn">' + (i+1) + '</span><img src="' + u + '" alt=""/><button type="button" class="px" data-csphdel="' + i + '" title="이 사진 빼기">✕</button></div>'; }).join('');
+    strip.querySelectorAll('[data-csphdel]').forEach(function(b){ b.onclick = function(){ csoPhotoDel(parseInt(b.dataset.csphdel, 10)); }; });
+  }
+  // v621 · 사진 하나 빼기 — 카드 짝은 유지, 짝 잃은 카드는 «사진 없음»으로
+  function csoPhotoDel(p){
+    if (p < 0 || p >= _csPhotos.length) return;
+    if (!confirm('이 사진을 빼까요?')) return;
+    csEnsureMap();
+    _csBlocks.forEach(function(b, k){
+      var cur = (typeof _csMap[k] === 'number') ? _csMap[k] : k;
+      _csMap[k] = (cur === p) ? -1 : (cur > p ? cur - 1 : cur);
+    });
+    _csPhotos.splice(p, 1);
+    csoRenderStrip(); csoRenderCards(); csoUpdateStatusbar();
+  }
+  // v621 · 분해 카드 하나 빼기 — 사진 짝 번호는 따라서 당김
+  function csoCardDel(i){
+    if (i < 0 || i >= _csBlocks.length) return;
+    if (!confirm('이 카드를 빼까요?')) return;
+    csEnsureMap();
+    var m = [];
+    _csBlocks.forEach(function(b, k){
+      var cur = (typeof _csMap[k] === 'number') ? _csMap[k] : k;
+      if (k < i) m[k] = cur; else if (k > i) m[k - 1] = cur;
+    });
+    _csBlocks.splice(i, 1); _csMap = m;
+    csoRenderCards(); csoUpdateStatusbar();
   }
   function csoRenderCards(){
     var row = csoQ('cso-row'); if (!row) return;
@@ -46043,7 +46085,24 @@
         fix.querySelectorAll('[data-cshift]').forEach(function(b){ b.onclick = function(){ csShiftAll(parseInt(b.dataset.cshift, 10)); }; });
       }
     }
-    if (!_csBlocks.length){ row.innerHTML = '<span class="cso-empty">무대에 던지면 여기 좌르륵 — 카드가 채워져요</span>'; csoRefresh(); return; }
+    if (!_csBlocks.length && !_csPhotos.length){ row.innerHTML = '<span class="cso-empty">무대에 던지면 여기 좌르륵 — 카드가 채워져요</span>'; csoRefresh(); return; }
+    // v621 · 사진만 던져도 바로 보인다 — 짝 없는 사진은 «대기 카드»
+    csEnsureMap();
+    var usedPh = {};
+    _csBlocks.forEach(function(b, k){ var cur = (typeof _csMap[k] === 'number') ? _csMap[k] : k; if (cur >= 0) usedPh[cur] = 1; });
+    var waitHtml = _csPhotos.map(function(u, p){
+      if (usedPh[p]) return '';
+      return '<div class="cso-card phw">' +
+        '<div class="cc-head">' +
+          '<div class="cc-th"><img src="' + u + '" alt=""/></div>' +
+          '<div class="cc-body">' +
+            '<div class="cc-hook">📷 사진 ' + (p + 1) + ' — 원고를 기다리는 중</div>' +
+            '<div class="cc-meta"><span class="mc miss">원고 없음</span><span class="mc miss">내용 없음</span></div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="cc-acts"><button type="button" data-csphdel2="' + p + '" class="dgr">🗑 이 사진 빼기</button></div>' +
+        '</div>';
+    }).join('');
     // v539 · 「뭐가 담겼는지」가 보이는 카드 — 퍼센트 대신 사실만, 탭하면 담긴 원고
     row.innerHTML = _csBlocks.map(function(b, i){
       b._dup = csoDupCheck(b);
@@ -46101,9 +46160,19 @@
         '</div>' +
         (peek ? '<button type="button" class="cc-more" data-ccmore="' + i + '"><span class="cv">›</span>' + esc(moreLabel) + '</button>' +
                 '<div class="cc-peek"><div class="cc-peek-in">' + peek + '</div></div>' : '') +
+        '<div class="cc-acts">' +
+          '<button type="button" data-csedit="' + i + '">✎ 수정</button>' +
+          (hasThumb ? '<button type="button" data-csphoff="' + i + '">📷 사진 떼기</button>' : '') +
+          '<button type="button" data-csdel="' + i + '" class="dgr">🗑 빼기</button>' +
+        '</div>' +
+        '<div class="cc-edit" data-cewrap="' + i + '" style="display:none">' +
+          '<input data-ce-hook="' + i + '" placeholder="후킹 문구" value="' + esc(String(b.hook || '')).replace(/"/g, '&quot;') + '">' +
+          '<input data-ce-views="' + i + '" inputmode="numeric" placeholder="조회수 (예: 360000 또는 36만)" value="' + (b.views || '') + '">' +
+          '<div class="r"><button type="button" class="sv" data-ce-save="' + i + '">저장</button><button type="button" class="cx" data-ce-cancel="' + i + '">취소</button></div>' +
+        '</div>' +
         '<input type="checkbox" data-cs-chk="' + i + '" ' + (sel ? 'checked' : '') + ' style="display:none">' +
         '</div>';
-    }).join('');
+    }).join('') + waitHtml;
     // 「담긴 원고 보기」 — 카드 선택(탭)과 분리
     row.querySelectorAll('[data-ccmore]').forEach(function(btn){
       btn.onclick = function(e){
@@ -46111,6 +46180,31 @@
         var card = btn.closest('.cso-card'); if (card) card.classList.toggle('open');
       };
     });
+    // v621 · 수정·빼기 — 카드 선택 클릭과 분리
+    row.querySelectorAll('[data-csdel]').forEach(function(b){ b.onclick = function(e){ e.stopPropagation(); csoCardDel(parseInt(b.dataset.csdel, 10)); }; });
+    row.querySelectorAll('[data-csphdel2]').forEach(function(b){ b.onclick = function(e){ e.stopPropagation(); csoPhotoDel(parseInt(b.dataset.csphdel2, 10)); }; });
+    row.querySelectorAll('[data-csphoff]').forEach(function(b){ b.onclick = function(e){ e.stopPropagation();
+      csEnsureMap(); _csMap[parseInt(b.dataset.csphoff, 10)] = -1; csoRenderCards(); csoUpdateStatusbar(); }; });
+    row.querySelectorAll('[data-csedit]').forEach(function(b){ b.onclick = function(e){ e.stopPropagation();
+      var w = row.querySelector('[data-cewrap="' + b.dataset.csedit + '"]');
+      if (w) w.style.display = (w.style.display === 'none') ? 'flex' : 'none'; }; });
+    row.querySelectorAll('.cc-edit').forEach(function(w){ w.onclick = function(e){ e.stopPropagation(); }; });
+    row.querySelectorAll('[data-ce-cancel]').forEach(function(b){ b.onclick = function(e){ e.stopPropagation();
+      var w = row.querySelector('[data-cewrap="' + b.dataset.ceCancel + '"]'); if (w) w.style.display = 'none'; }; });
+    row.querySelectorAll('[data-ce-save]').forEach(function(b){ b.onclick = function(e){ e.stopPropagation();
+      var i = parseInt(b.dataset.ceSave, 10); if (isNaN(i) || !_csBlocks[i]) return;
+      var hEl = row.querySelector('[data-ce-hook="' + i + '"]'), vEl = row.querySelector('[data-ce-views="' + i + '"]');
+      if (hEl) _csBlocks[i].hook = hEl.value.trim();
+      if (vEl){
+        var raw = String(vEl.value || '').trim().replace(/,/g, '');
+        if (raw){
+          var mm = raw.match(/^([\d.]+)\s*만$/);
+          var num = mm ? Math.round(parseFloat(mm[1]) * 10000) : parseInt(raw, 10);
+          if (!isNaN(num)) _csBlocks[i].views = num;
+        }
+      }
+      csoRenderCards();
+    }; });
     // v499 · 사진 바꾸기 ‹› — 카드 선택 클릭과 분리
     row.querySelectorAll('.cc-swap button').forEach(function(b){
       b.onclick = function(e){
@@ -46141,7 +46235,7 @@
   }
   function csoSyncNext(){
     var nCards = 0;
-    try { nCards = (csoQ('cso-row') || {}).querySelectorAll ? csoQ('cso-row').querySelectorAll('.cso-card').length : 0; } catch (e) {}
+    try { nCards = (csoQ('cso-row') || {}).querySelectorAll ? csoQ('cso-row').querySelectorAll('.cso-card:not(.phw)').length : 0; } catch (e) {}
     var un = csoUnsortedN();
     // ① 여정 스텝 — 카드가 있으면 «확인» 단계
     var step = nCards ? 2 : 1;
@@ -46176,10 +46270,10 @@
   }
   function csoRefresh(){
     var row = csoQ('cso-row'); if (!row) return;
-    var cards = row.querySelectorAll('.cso-card');
+    var cards = row.querySelectorAll('.cso-card:not(.phw)');
     try { var _cso = csoQ('cso'); if (_cso) _cso.classList.toggle('cso-empty0', cards.length === 0); } catch (e) {}
     var cnt = csoQ('cso-cnt'); if (cnt) cnt.textContent = cards.length ? cards.length + '장' : '';
-    var selN = row.querySelectorAll('.cso-card:not(.off)').length;
+    var selN = row.querySelectorAll('.cso-card:not(.off):not(.phw)').length;
     var dn = csoQ('cso-dn'); if (dn) dn.textContent = selN ? '✓ ' + selN + ' 선택' : '';
     // v543 · 버튼이 «다음에 무슨 일이 일어나는지» 스스로 말한다 (저장은 종착점이 아니다)
     var sb = csoQ('cso-save'); if (sb){ sb.disabled = selN === 0; sb.textContent = (selN ? selN + '개 ' : '') + '창고에 넣고 분류하기 ›'; }
@@ -46302,7 +46396,7 @@
         e.preventDefault(); st.classList.remove('hot'); csoReady(false);
         var dt = e.dataTransfer; if (!dt) return;
         var imgs = Array.prototype.slice.call(dt.files || []).filter(function(f){ return f.type && f.type.indexOf('image/') === 0; });
-        if (imgs.length){ csHandlePhotos(imgs).then(function(){ csoRenderStrip(); if (_csBlocks.length) csoRenderCards(); csoUpdateStatusbar(); csoThrowFx(); }); return; }
+        if (imgs.length){ csHandlePhotos(imgs).then(function(){ csoRenderStrip(); csoRenderCards(); csoUpdateStatusbar(); csoThrowFx(); }); return; }
         var tf = Array.prototype.slice.call(dt.files || []).filter(function(f){ return f.type === 'text/plain'; })[0];
         if (tf){ var rd = new FileReader(); rd.onload = function(){ csoQ('cso-paste').value = rd.result; csoTryParse(); }; rd.readAsText(tf); return; }
         var txt = dt.getData && dt.getData('text/plain');
@@ -46327,7 +46421,7 @@
         e.preventDefault();
         var dt = e.dataTransfer; if (!dt) return;
         var imgs = Array.prototype.slice.call(dt.files || []).filter(function(f){ return f.type && f.type.indexOf('image/') === 0; });
-        if (imgs.length){ csHandlePhotos(imgs).then(function(){ csoRenderStrip(); if (_csBlocks.length) csoRenderCards(); csoUpdateStatusbar(); csoThrowFx(); }); return; }
+        if (imgs.length){ csHandlePhotos(imgs).then(function(){ csoRenderStrip(); csoRenderCards(); csoUpdateStatusbar(); csoThrowFx(); }); return; }
         var tf = Array.prototype.slice.call(dt.files || []).filter(function(f){ return f.type === 'text/plain'; })[0];
         if (tf){ var rd = new FileReader(); rd.onload = function(){ csoQ('cso-paste').value = rd.result; csoTryParse(); }; rd.readAsText(tf); }
       });
@@ -46341,7 +46435,7 @@
       var cd = e.clipboardData; if (!cd) return;
       var imgFiles = [];
       if (cd.items){ for (var i = 0; i < cd.items.length; i++){ if (cd.items[i].type && cd.items[i].type.indexOf('image/') === 0){ var f = cd.items[i].getAsFile(); if (f) imgFiles.push(f); } } }
-      if (imgFiles.length){ e.preventDefault(); csHandlePhotos(imgFiles).then(function(){ csoRenderStrip(); if (_csBlocks.length) csoRenderCards(); csoUpdateStatusbar(); csoThrowFx(); }); return; }
+      if (imgFiles.length){ e.preventDefault(); csHandlePhotos(imgFiles).then(function(){ csoRenderStrip(); csoRenderCards(); csoUpdateStatusbar(); csoThrowFx(); }); return; }
       var txt = cd.getData && cd.getData('text/plain');
       if (txt && txt.trim().length > 15){ csoQ('cso-paste').value = txt; if (csoTryParse(true)) e.preventDefault(); }
     });
@@ -46397,7 +46491,7 @@
       document.body.appendChild(fin);
       pick.onclick = function(){ fin.click(); };
       fin.onchange = async function(e){
-        await csHandlePhotos(e.target.files); csoRenderStrip(); if (_csBlocks.length) csoRenderCards(); csoUpdateStatusbar(); e.target.value = '';
+        await csHandlePhotos(e.target.files); csoRenderStrip(); csoRenderCards(); csoUpdateStatusbar(); e.target.value = '';
         var ct = csoQ('cso-slotct'); if (ct) ct.textContent = _csPhotos.length ? _csPhotos.length + '장 ✓' : '';
       };
     }
@@ -46415,7 +46509,7 @@
     // 카드 탭 = 선택 토글
     var row = csoQ('cso-row');
     if (row) row.addEventListener('click', function(e){
-      var c = e.target.closest('.cso-card'); if (!c) return;
+      var c = e.target.closest('.cso-card'); if (!c || c.classList.contains('phw')) return;
       c.classList.toggle('off'); csoRefresh();
     });
     // 저장
@@ -47398,7 +47492,7 @@
       pin.onchange = async (e) => {
         await csHandlePhotos(e.target.files);
         try { csoRenderStrip(); } catch (er) {}
-        try { if (_csBlocks.length) csoRenderCards(); } catch (er) {}
+        try { csoRenderCards(); } catch (er) {}
         try { csoUpdateStatusbar(); } catch (er) {}
         const ct = document.getElementById('cso-slotct');
         if (ct) ct.textContent = _csPhotos.length ? _csPhotos.length + '장 ✓' : '';
