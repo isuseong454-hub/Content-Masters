@@ -13139,11 +13139,13 @@
   #ws-home, #ws-sheet, #ws-customer, #ws-sorter, #ws-compass,
   #ws-northstar, #ws-diagnose, #ws-engine{ display:none !important; }
   #sh-sidebar .sh-sb-section:first-of-type > .sh-sb-section-title{ display:none; }
-  /* 갈림길 우상단 ⚙ — 작게, 조용히 (설정=내보내기·백업 문) */
+  /* v626 · 갈림길 우상단 ⚙설정 — 너무 조용해서 못 찾으셨다(사장님) → 글자 붙은 알약으로 */
   .cs-set{ position:absolute; top:calc(12px + env(safe-area-inset-top)); right:14px; z-index:8;
-    width:38px; height:38px; border-radius:50%; font-size:17px; line-height:1; cursor:pointer;
-    background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.13); color:#8a968e;
+    display:inline-flex; align-items:center; gap:6px; height:38px; padding:0 14px 0 12px;
+    border-radius:999px; font-size:15px; line-height:1; cursor:pointer; font-family:inherit;
+    background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.22); color:#cfd8cf;
     -webkit-tap-highlight-color:transparent; transition:color .18s, border-color .18s, transform .16s; }
+  .cs-set .t{ font-size:12px; font-weight:800; letter-spacing:-.01em; }
   .cs-set:hover{ color:#e6fb62; border-color:rgba(215,243,75,.4); }
   .cs-set:active{ transform:scale(.92); }
   /* 바늘 카드 — «나는 ___에게 ___라고 말하는 사람이다» */
@@ -19583,7 +19585,7 @@
 <div class="cs-ov" id="cs-fork">
   <div class="cs-air">
     <!-- v596 · 설정 문 = 갈림길 우상단 ⚙ 하나 (더보기·서랍 소멸 — 내보내기·백업·약관·로그아웃은 이 안) -->
-    <button class="cs-set" id="cs-set" title="설정" aria-label="설정">⚙</button>
+    <button class="cs-set" id="cs-set" title="설정" aria-label="설정">⚙<span class="t">설정</span></button>
     <div class="cs-wrap">
       <!-- v570 · 갈림길 = 현황판 (Vaulta 구조 문법 × 우리 색 헌법). 인사말 절반 → 내 숫자 -->
       <div class="cs-greet fork-dash">
