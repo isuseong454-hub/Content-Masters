@@ -19926,17 +19926,17 @@
           <div class="fork-bd" id="fork-bd-ware" style="color:#d7f34b;background:rgba(215,243,75,.1)"></div>
         </div>
         <div class="qcf-sep s1">›</div>
-        <!-- v646 · ◈ 기획 = 갈림길 정중앙 (나침반 분해 — 내 기준(바늘)은 기획 홈 맨 위로) -->
-        <div class="qcf-t" style="--qc:179,157,251" data-cs-go="plan" title="기획 — 이번 주 다섯 편">
-          <div class="ob"><img src="fork-plan.png" alt="" onerror="this.style.display='none';var s=this.nextElementSibling;if(s)s.style.display='';"><svg style="display:none" viewBox="0 0 24 24"><path class="g" d="M12 3.6l7.4 8.4-7.4 8.4L4.6 12z"/><path class="g" d="M12 8.2l3.4 3.8-3.4 3.8-3.4-3.8z"/></svg></div>
-          <div class="nm">기획</div><div class="vb">정하다</div>
-          <div class="fork-bd" id="fork-bd-plan" style="color:#B39DFB;background:rgba(179,157,251,.12)"></div>
-        </div>
-        <div class="qcf-sep s2">›</div>
+        <!-- v669 · 순서 = 저장소 → 트레이닝 → 기획 (사장님 확정) -->
         <div class="qcf-t" style="--qc:255,61,166" data-cs-go="prod">
           <div class="ob"><img src="fork-gym.png" alt="" onerror="this.style.display='none';var s=this.nextElementSibling;if(s)s.style.display='';"><svg style="display:none" viewBox="0 0 24 24"><path class="g" d="M8 12h8"/><path class="g" d="M6.2 9v6M3.8 10.4v3.2M17.8 9v6M20.2 10.4v3.2"/></svg></div>
           <div class="nm">트레이닝</div><div class="vb">만들다</div>
           <div class="fork-bd" id="fork-bd-prod" style="color:#FF3DA6;background:rgba(255,61,166,.1)"></div>
+        </div>
+        <div class="qcf-sep s2">›</div>
+        <div class="qcf-t" style="--qc:179,157,251" data-cs-go="plan" title="기획 — 이번 주 다섯 편">
+          <div class="ob"><img src="fork-plan.png" alt="" onerror="this.style.display='none';var s=this.nextElementSibling;if(s)s.style.display='';"><svg style="display:none" viewBox="0 0 24 24"><path class="g" d="M12 3.6l7.4 8.4-7.4 8.4L4.6 12z"/><path class="g" d="M12 8.2l3.4 3.8-3.4 3.8-3.4-3.8z"/></svg></div>
+          <div class="nm">기획</div><div class="vb">정하다</div>
+          <div class="fork-bd" id="fork-bd-plan" style="color:#B39DFB;background:rgba(179,157,251,.12)"></div>
         </div>
         <!-- v646 · 나침반 타일 제거(분해) — 바늘=기획 홈 · 알고리즘·지표=트레이닝 로비 문 · 고객·트렌드=저장소 칩 -->
       </div>
@@ -35247,7 +35247,10 @@
     if (back) back.onclick = () => { window.__rrFrom = null; window.__rrDir = 'back'; switchWorkspace('studio'); };
   }
 
+  // v667 · 어느 방으로 옮기든, 고객 방에 안 저장된 글이 있으면 먼저 담는다
+  function _flushBeforeLeave() { try { if (window._cus2FlushAll) window._cus2FlushAll(); } catch (e) {} }
   function switchWorkspace(ws) {
+    _flushBeforeLeave();   // v667 · 고객 방에 안 저장된 글이 있으면 먼저 담고 옮긴다
     // v557 · 패턴 파악은 원고 탭 안으로 이사 — 옛 호출은 전부 여기로 도착해도 원고 탭에 내려준다
     if (ws === 'pattern') {
       switchWorkspace('scripts');
@@ -42185,6 +42188,11 @@
   // ============================================================
   let _currentPmmId = null;
   let _cuInited = false;
+  // 🚨 v668 · 마지막으로 보던 타겟을 기억한다.
+  //   기억하지 않으면 재진입 때마다 첫 타겟이 열려서, 2번째 타겟에 써둔 글이 «사라진 것»처럼 보인다.
+  const CUR_PMM_KEY = 'cm-cur-pmm';
+  function cuRememberPmm(id) { try { localStorage.setItem(CUR_PMM_KEY, id || ''); } catch (e) {} }
+  function cuRecallPmm() { try { return localStorage.getItem(CUR_PMM_KEY) || ''; } catch (e) { return ''; } }
 
   function renderCustomer() {
     // 첫 PMM 자동 생성
@@ -42195,8 +42203,10 @@
       savePmms();
     }
     if (!_currentPmmId || !pmms.find(p => p.id === _currentPmmId)) {
-      _currentPmmId = pmms[0].id;
+      const _last = cuRecallPmm();                                   // v668 · 마지막에 보던 타겟부터
+      _currentPmmId = (_last && pmms.find(p => p.id === _last)) ? _last : pmms[0].id;
     }
+    cuRememberPmm(_currentPmmId);
 
     renderCuTabs();
     renderCuFields();
@@ -42405,6 +42415,7 @@
         const id = t.dataset.pmmId;
         if (id === _currentPmmId) return;
         _currentPmmId = id;
+        cuRememberPmm(id);                                           // v668
         renderCuTabs();
         renderCuFields();
         renderCollect();
@@ -46284,6 +46295,7 @@
       const ins = e.target.closest('.prp-ins');        // v656 · 구간 사이 ＋
       if (ins) {
         e.stopPropagation();
+        prpTextGuard();                               // v670
         const at = +ins.dataset.ins;
         const n = document.querySelectorAll('#prp-segs .prp-sg').length;
         if (at >= n) prpAddSeg(Math.max(0, n - 1), 1);   // 맨 끝
@@ -46314,6 +46326,7 @@
     });
   }
   function prpAddSeg(i, where) {                             // where: -1 위 · +1 아래
+    prpTextGuard();                                          // v670 · 고쳐 쓰던 글 먼저 담기
     const r = _prpQ[_prpCur]; if (!r) return;
     prpEnsureFlex(r);
     const a = prpRealIdx(r, i); if (a < 0) return;
@@ -46326,6 +46339,7 @@
   }
   // v641 · 문단 이동 — 캐스케이드 ↑↓와 구조 모드 핸들이 같이 쓴다 (칠·터진포인트 인덱스도 같이 이사)
   function prpMoveSeg(i, dir) {
+    prpTextGuard();                                          // v670
     const r = _prpQ[_prpCur]; if (!r) return;
     prpEnsureFlex(r);
     const a = prpRealIdx(r, i), b = prpRealIdx(r, i + dir);
@@ -46409,7 +46423,8 @@
   function prpChipHide() { const c = document.getElementById('prp-fchip'); if (c) c.style.display = 'none'; }
   // v622 · 되돌리기·다시하기 — 칠 상태 10단계 (틀렸을 때 빠르게 뒤로)
   function prpMarksSnap() {
-    const snap = {};
+    const snap = { _t: {} };                   // v670 · _t = 구간별 글 (예전엔 칠만 담겨 글은 안 돌아왔다)
+    document.querySelectorAll('#prp-segs .prp-sgt').forEach(function (el) { snap._t[el.dataset.i] = el.textContent; });
     document.querySelectorAll('#prp-segs .prp-sg').forEach(function (sg) {
       const i = sg.dataset.i, m = {};
       sg.querySelectorAll('.w.k,.w.r').forEach(function (w) { m[w.dataset.j] = w.classList.contains('k') ? 'k' : 'r'; });
@@ -46418,6 +46433,15 @@
     return snap;
   }
   function prpMarksRestore(snap) {
+    // v670 · 글부터 되돌리고(칠은 건드리지 않는다) 그다음 칠을 얹는다
+    if (snap && snap._t) {
+      let moved = false;
+      document.querySelectorAll('#prp-segs .prp-sgt').forEach(function (el) {
+        const t = snap._t[el.dataset.i];
+        if (t != null && el.textContent !== t) { el.textContent = t; moved = true; }
+      });
+      if (moved) { try { prpCommitText(false, true, true); } catch (e) {} }
+    }
     document.querySelectorAll('#prp-segs .prp-sg').forEach(function (sg) {
       const m = (snap || {})[sg.dataset.i] || {};
       sg.querySelectorAll('.w').forEach(function (w) {
@@ -46661,7 +46685,9 @@
   }
   // 글 고치기 → 본문 저장 (단어 수가 달라지므로 그 조각 마크는 비운다)
   //   defer=true면 저장을 호출자에게 맡긴다 — saveRows 중복 호출로 스냅샷이 뒤집히는 것 방지
-  function prpCommitText(defer) {
+  //   quiet  = 화면을 다시 그리지 않는다 (타이핑 중 자동 저장용 — 다시 그리면 한글이 깨지고 커서가 튄다)
+  //   keepMk = 칠을 지우지 않는다 (되돌리기 복원용 — 평소엔 글이 바뀌면 그 줄의 칠은 무효라 지운다)
+  function prpCommitText(defer, quiet, keepMk) {
     const r = _prpQ[_prpCur]; if (!r) return;
     let changed = false;
     document.querySelectorAll('#prp-segs .prp-sgt').forEach(function (el) {
@@ -46675,12 +46701,46 @@
           const tgt = r.scriptSecFlex.filter(x => (x.t || '').replace(/<[^>]*>/g, '').trim())[i];
           if (tgt) tgt.t = t;
         } else if (r.scriptSections && s.c) { r.scriptSections[s.c] = t; }
-        if (r.prep && r.prep.marks) delete r.prep.marks[i];
+        if (!keepMk && r.prep && r.prep.marks) delete r.prep.marks[i];
       }
     });
-    if (changed) { if (!defer) saveRows(); prpRenderFilm(false); toast('원고 고침 저장'); }
+    if (changed) {
+      if (!defer) saveRows();
+      if (!quiet) { prpRenderFilm(false); toast('원고 고침 저장'); }
+    }
     return changed;
   }
+  // 🚨 v670 · 고쳐 쓴 글을 «놓치지 않게» — 문서 위임이라 화면을 몇 번 다시 그려도 그대로 붙어 있다
+  let _prpTxtT = null;
+  function prpTextGuard() {                    // 구조를 건드리기 «전»에 반드시 먼저
+    try { clearTimeout(_prpTxtT); if (_prpTool === 'x') prpCommitText(true, true); } catch (e) {}
+  }
+  // ⚠️ 되돌리기 지점은 «글자가 바뀌기 전»에 담아야 한다 — input은 이미 바뀐 뒤라 같은 값이 담긴다
+  document.addEventListener('beforeinput', function (e) {
+    const el = e.target; if (!el.classList || !el.classList.contains('prp-sgt')) return;
+    if (!el._prpDirty) { el._prpDirty = 1; try { prpHistPush(); } catch (er) {} }
+  });
+  document.addEventListener('focusin', function (e) {
+    const el = e.target; if (el.classList && el.classList.contains('prp-sgt')) el._prpDirty = 0;
+  });
+  document.addEventListener('input', function (e) {
+    const el = e.target; if (!el.classList || !el.classList.contains('prp-sgt')) return;
+    clearTimeout(_prpTxtT);
+    _prpTxtT = setTimeout(function () { try { prpCommitText(false, true); } catch (er) {} }, 800);
+  });
+  document.addEventListener('focusout', function (e) {
+    const el = e.target; if (!el.classList || !el.classList.contains('prp-sgt')) return;
+    clearTimeout(_prpTxtT); el._prpDirty = 0;
+    try { prpCommitText(false, true); } catch (er) {}
+  });
+  document.addEventListener('keydown', function (e) {
+    if (!(e.ctrlKey || e.metaKey) || (e.key !== 'z' && e.key !== 'Z')) return;
+    const rt = document.getElementById('prp');
+    if (!rt || getComputedStyle(rt).display === 'none') return;
+    e.preventDefault();                        // 브라우저 기본 되돌리기 대신 우리 것 (칠+글 함께)
+    clearTimeout(_prpTxtT);
+    try { prpHistStep(e.shiftKey ? 1 : -1); } catch (er) {}
+  });
   function prpSaveCur() {
     const r = _prpQ[_prpCur]; if (!r) return;
     if (_prpTool === 'x') prpCommitText(true);   // v650 · 고친 글 저장
@@ -46755,6 +46815,7 @@
   document.addEventListener('click', function (e) {
     const ci = e.target.closest('.prp-ci');
     if (ci && _prpCascSg) {
+      prpTextGuard();                                        // v670 · 라벨 바꾸기 전에도
       const r = _prpQ[_prpCur]; prpEnsureFlex(r);
       const a = prpRealIdx(r, +_prpCascSg.dataset.i);
       if (a >= 0) { r.scriptSecFlex[a].k = ci.dataset.lb; r.scriptSecFlex[a].c = ci.dataset.sk || ''; saveRows(); }
@@ -46764,6 +46825,7 @@
     }
     const act = e.target.closest('.prp-cact button');
     if (act && _prpCascSg) {
+      prpTextGuard();                                        // 🚨 v670 · 빼기·자르기 전에 내 글부터 담는다
       const r = _prpQ[_prpCur], i = +_prpCascSg.dataset.i, a2 = act.dataset.a;
       prpEnsureFlex(r);
       const a = prpRealIdx(r, i);
@@ -52147,10 +52209,40 @@
       const b = box.querySelector('[data-cus2save]'); if (!b) return;
       const k = b.dataset.cus2save.split('|');
       const cur = k[0] === 'sell' ? ((p.me || {})[k[1]] || '') : ((p.pmm5 || {})[k[1]] || '');
-      b.disabled = (ta.value.trim() === String(cur).trim());
+      const same = (ta.value.trim() === String(cur).trim());
+      b.disabled = same;
+      b.textContent = same ? '저장됨' : '저장';
+    };
+    // 🚨 v667 · 손으로 안 눌러도 알아서 담아둔다 — 저장 버튼을 못 누르고 나가면 글이 통째로 사라졌다
+    let _cus2AutoT = null;
+    const cus2Commit = async (ta, silent) => {
+      const box = ta.closest('.cus2-sq'); if (!box) return false;
+      const b = box.querySelector('[data-cus2save]'); if (!b) return false;
+      const kk = b.dataset.cus2save.split('|'), grp = kk[0], key = kk[1];
+      const now = ta.value.trim();
+      const was = grp === 'sell' ? ((p.me || {})[key] || '').trim() : ((p.pmm5 || {})[key] || '').trim();
+      if (now === was) return false;
+      if (grp === 'sell') { if (!p.me) p.me = {}; p.me[key] = now; }
+      else { if (!p.pmm5) p.pmm5 = {}; p.pmm5[key] = now; }
+      p.updatedAt = Date.now();
+      await savePmms();
+      sqDirty(ta);
+      cus2PaintStage(silent ? null : grp);   // ⚠️ 화면을 다시 그리지 않는다 — 숫자·문구만 갱신(한글 조합 보호)
+      return true;
+    };
+    window._cus2FlushAll = function () {   // 방을 떠날 때 남은 것 전부
+      document.querySelectorAll('.cus2-sqa[data-cus2sell], .cus2-sqa[data-cus2p5]').forEach(function (ta) {
+        try { cus2Commit(ta, true); } catch (e) {}
+      });
     };
     document.querySelectorAll('.cus2-sqa[data-cus2sell], .cus2-sqa[data-cus2p5]').forEach(ta => {
-      ta.oninput = () => sqDirty(ta); sqDirty(ta);
+      ta.oninput = () => {
+        sqDirty(ta);
+        clearTimeout(_cus2AutoT);
+        _cus2AutoT = setTimeout(function () { cus2Commit(ta, true); }, 900);   // 타이핑이 멈추면
+      };
+      ta.onblur = () => { clearTimeout(_cus2AutoT); cus2Commit(ta, true); };   // 칸을 벗어나면 즉시
+      sqDirty(ta);
     });
     const cus2PaintStage = (kind) => {
       const me3 = p.me || {}, q5b = p.pmm5 || {};
@@ -52173,17 +52265,15 @@
       return { sn: sn, pn: pn };
     };
     document.querySelectorAll('[data-cus2save]').forEach(b => b.onclick = async () => {
-      const kk = b.dataset.cus2save.split('|'), grp = kk[0], key = kk[1];
+      const kk = b.dataset.cus2save.split('|'), grp = kk[0];
       const ta = b.closest('.cus2-sq').querySelector('textarea');
+      const key = kk[1];
       const was = grp === 'sell' ? ((p.me || {})[key] || '').trim() : ((p.pmm5 || {})[key] || '').trim();
-      if (grp === 'sell') { if (!p.me) p.me = {}; p.me[key] = ta.value.trim(); }
-      else { if (!p.pmm5) p.pmm5 = {}; p.pmm5[key] = ta.value.trim(); }
-      b.disabled = true;
+      await cus2Commit(ta, false);            // v667 · 자동 저장과 같은 길
       const st = cus2PaintStage(grp);
       if (!was && ta.value.trim()) toast(grp === 'sell'
         ? (st.sn >= 7 ? '⚡ 힘이 가득 찼어요 — 차 보세요' : '⚡ 차는 힘이 세졌어요 · ' + st.sn + '/7')
         : (st.pn >= 5 ? '⭕ 골대가 최대가 됐어요' : '⭕ 골대가 커졌어요 · ' + st.pn + '/5'));
-      p.updatedAt = Date.now(); await savePmms();
     });
     const pg = document.getElementById('cus2-proofgo');
     if (pg) pg.onclick = () => { _cus2Proof = true; st2RenderCus(); };
