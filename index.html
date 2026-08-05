@@ -463,6 +463,184 @@
     border:2px solid transparent; background-clip:content-box; }
   @media (prefers-reduced-motion:reduce){ .skl::after{ animation:none; } }
   /* v630 · 손질 칠 표시 — 시트·판독지 공용 (손질 방 톤 그대로) */
+
+  /* ═══ v645 · ◈ 기획실 — MENISCUS 톤(파라메트릭 소켓·구슬·물드는 광원) ═══
+     원칙 3: ①창 0개(모달 금지) ②아래는 워크스페이스(그 자리에서 갈아 끼움) ③스페이스 톤 */
+  #plan-view{ position:relative; overflow:hidden; isolation:isolate; height:100%; min-height:0;
+    background:radial-gradient(ellipse 120% 70% at 50% -6%, #141c33 0%, #0a0f1c 46%, #05070e 78%, #04060b 100%); }
+  #plan-view .pln-stars{ position:absolute; inset:0; z-index:0; pointer-events:none; opacity:.5; }
+  #plan-view .pln-stars i{ position:absolute; width:1px; height:1px; border-radius:50%; background:#cdd8f0; display:block; }
+  #plan-view .pln-aura{ position:absolute; left:50%; bottom:-150px; width:560px; height:400px; transform:translateX(-50%);
+    background:radial-gradient(closest-side, var(--plc,#D7F34B) 0%, transparent 70%);
+    opacity:.16; transition:opacity .55s ease, background .6s ease; pointer-events:none; z-index:1; filter:blur(4px); }
+  #plan-view .pln-grain{ position:absolute; inset:0; z-index:2; pointer-events:none;
+    background:linear-gradient(180deg, rgba(10,14,26,.5) 0%, transparent 20%, transparent 70%, rgba(3,5,10,.68) 100%); }
+  .pln-in{ position:absolute; inset:0; z-index:3; display:flex; flex-direction:column; }
+  .pln-hd{ flex:none; height:46px; display:flex; align-items:center; padding:0 20px; gap:8px; }
+  .pln-back{ width:30px; height:30px; margin-left:-8px; border:none; border-radius:10px; background:transparent;
+    color:rgba(206,216,240,.55); font-size:19px; line-height:1; cursor:pointer; font-family:inherit;
+    -webkit-tap-highlight-color:transparent; }
+  .pln-back:active{ transform:scale(.9); }
+  .pln-hd .bd{ width:7px; height:7px; border-radius:50%; background:var(--plc,#D7F34B);
+    box-shadow:0 0 10px var(--plc,#D7F34B); transition:background .5s ease, box-shadow .5s ease; }
+  .pln-hd .nm{ font:700 9.5px/1 'JetBrains Mono',monospace; letter-spacing:.2em; color:rgba(206,216,240,.55); }
+  .pln-hd .wk{ margin-left:auto; font:700 9.5px/1 'JetBrains Mono',monospace; color:rgba(176,188,214,.34); }
+  .pln-ws{ flex:1; min-height:0; overflow-y:auto; overflow-x:hidden; padding:4px 20px 14px;
+    scrollbar-width:none; -webkit-overflow-scrolling:touch; }
+  .pln-ws::-webkit-scrollbar{ display:none; }
+  .pln-wsin{ transition:opacity .24s ease, transform .3s cubic-bezier(.2,.9,.3,1); max-width:520px; margin:0 auto; }
+  .pln-wsin.out{ opacity:0; transform:translateY(8px); }
+  /* 홈 */
+  .pln-home{ display:flex; flex-direction:column; min-height:430px; height:100%; }
+  .pln-home .top{ flex:1; display:flex; flex-direction:column; justify-content:center; text-align:center; padding-bottom:8px; }
+  .pln-nd{ display:flex; align-items:center; gap:7px; font-size:10px; color:rgba(176,188,214,.55);
+    padding:8px 10px; border:1px solid rgba(255,255,255,.07); border-radius:11px; margin:4px 0 2px;
+    background:rgba(255,255,255,.02); white-space:nowrap; overflow:hidden; cursor:pointer;
+    -webkit-tap-highlight-color:transparent; }
+  .pln-nd .t{ min-width:0; overflow:hidden; text-overflow:ellipsis; }
+  .pln-nd b{ color:rgba(238,242,252,.85); font-weight:700; }
+  .pln-nd s{ margin-left:auto; text-decoration:none; color:rgba(176,188,214,.32); flex:none;
+    font:700 8.5px/1 'JetBrains Mono',monospace; }
+  .pln-kick{ font:700 8.5px/1 'JetBrains Mono',monospace; letter-spacing:.17em; color:rgba(176,188,214,.4); margin-bottom:14px; }
+  .pln-one{ font-size:40px; font-weight:900; letter-spacing:-.038em; line-height:1.1; color:#fff; margin:0; }
+  .pln-one em{ font-style:normal; color:var(--plc); }
+  .pln-sub{ font-size:12.5px; color:rgba(196,206,232,.55); margin:13px 0 0; line-height:1.6; }
+  .pln-go{ margin:26px auto 0; padding:14px 26px; border:none; border-radius:15px;
+    background:linear-gradient(160deg, color-mix(in srgb, var(--plc) 92%, #fff), var(--plc));
+    color:#08101c; font-weight:900; font-size:13px; font-family:inherit; cursor:pointer;
+    box-shadow:0 14px 30px -14px var(--plc); transition:transform .16s ease; }
+  .pln-go:active{ transform:scale(.97); }
+  .pln-whole{ flex:none; padding:16px 0 8px; border-top:1px solid rgba(255,255,255,.06); }
+  .pln-wl{ display:flex; align-items:baseline; gap:6px; margin-bottom:11px; }
+  .pln-wl b{ font-size:10.5px; font-weight:800; color:rgba(226,232,248,.75); }
+  .pln-wl s{ margin-left:auto; text-decoration:none; font:700 9px/1 'JetBrains Mono',monospace; color:rgba(176,188,214,.4); }
+  .pln-bars{ display:flex; gap:5px; }
+  .pln-bars .bcol{ flex:1; display:flex; flex-direction:column; align-items:center; gap:5px; cursor:pointer;
+    -webkit-tap-highlight-color:transparent; }
+  .pln-bars .tr{ width:100%; height:32px; border-radius:7px; background:rgba(255,255,255,.05);
+    position:relative; overflow:hidden; border:1px solid rgba(255,255,255,.05); }
+  .pln-bars .tr i{ position:absolute; left:0; right:0; bottom:0; background:var(--bc); border-radius:6px;
+    transition:height .5s cubic-bezier(.2,.9,.3,1); }
+  .pln-bars .lb{ font:700 8px/1 'JetBrains Mono',monospace; color:rgba(176,188,214,.34); }
+  .pln-bars .bcol.on .lb{ color:var(--bc); }
+  /* 아이디어 = 기획의 연료 */
+  .pln-idea{ margin-top:18px; padding-top:14px; border-top:1px solid rgba(255,255,255,.06); }
+  .pln-idea .ih{ display:flex; align-items:baseline; gap:6px; margin-bottom:9px; }
+  .pln-idea .ih b{ font-size:10.5px; font-weight:800; color:rgba(226,232,248,.7); }
+  .pln-idea .ih s{ margin-left:auto; text-decoration:none; font:700 9px/1 'JetBrains Mono',monospace; color:rgba(176,188,214,.36); }
+  .pln-ic{ display:flex; align-items:center; gap:9px; padding:10px 11px; border-radius:12px; margin-bottom:6px;
+    background:rgba(255,255,255,.035); border:1px solid rgba(255,255,255,.055); cursor:pointer;
+    -webkit-tap-highlight-color:transparent; }
+  .pln-ic .dt{ width:7px; height:7px; border-radius:50%; background:#F5C08E; flex:none; box-shadow:0 0 8px rgba(245,192,142,.7); }
+  .pln-ic .tx{ flex:1; min-width:0; font-size:11.5px; color:rgba(238,242,252,.86); font-weight:600;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .pln-ic .go{ flex:none; font:700 8.5px/1 'JetBrains Mono',monospace; color:rgba(176,188,214,.4); }
+  .pln-empty{ font-size:11.5px; color:rgba(176,188,214,.38); padding:10px 2px; line-height:1.6; }
+  /* 편 */
+  .pln-k{ font:700 8.5px/1 'JetBrains Mono',monospace; letter-spacing:.16em; color:var(--plc); opacity:.85; margin:12px 0 10px; }
+  .pln-big{ font-size:34px; font-weight:900; letter-spacing:-.035em; line-height:1.12; color:#fff; margin:0 0 8px; }
+  .pln-big.sm{ font-size:24px; letter-spacing:-.024em; line-height:1.28; }
+  .pln-why{ font-size:12px; color:rgba(196,206,232,.55); margin:0 0 16px; line-height:1.6; }
+  .pln-why em{ font-style:normal; color:var(--plc); font-weight:700; }
+  .pln-cand{ display:flex; align-items:flex-start; gap:11px; padding:13px; border-radius:15px; margin-bottom:8px;
+    background:linear-gradient(160deg, rgba(255,255,255,.055), rgba(255,255,255,.022));
+    border:1px solid rgba(255,255,255,.075); cursor:pointer; -webkit-tap-highlight-color:transparent;
+    transition:transform .18s cubic-bezier(.2,1.4,.4,1), border-color .25s ease; }
+  .pln-cand:active{ transform:scale(.976); }
+  .pln-cand .dot{ width:8px; height:8px; border-radius:50%; background:var(--plc); flex:none; margin-top:5px;
+    box-shadow:0 0 10px var(--plc); }
+  .pln-cand .tx{ min-width:0; flex:1; }
+  .pln-cand .tx b{ display:block; font-size:12.5px; font-weight:700; color:rgba(246,248,255,.95); line-height:1.42; }
+  .pln-cand .tx s{ display:block; text-decoration:none; font-size:10px; color:rgba(176,188,214,.5); margin-top:3px; }
+  .pln-cand .tx s em{ font-style:normal; color:var(--plc); }
+  .pln-cand .src{ flex:none; font:700 7.5px/1 'JetBrains Mono',monospace; color:rgba(176,188,214,.35);
+    background:rgba(255,255,255,.05); padding:5px 6px; border-radius:6px; margin-top:2px; }
+  /* v649 · 기획 홈 알고리즘 한 줄 — 탭하면 상세(옛 나침반 홈) */
+  .pln-alg{ display:flex; align-items:center; gap:8px; padding:8px 10px; margin:0 0 11px;
+    border:1px solid rgba(255,255,255,.07); border-radius:11px; background:rgba(255,255,255,.02);
+    cursor:pointer; -webkit-tap-highlight-color:transparent; white-space:nowrap; overflow:hidden; }
+  .pln-alg .ic{ font-size:11px; color:rgba(206,216,240,.5); flex:none; }
+  .pln-alg i{ font-style:normal; font-size:9.5px; font-weight:700; color:rgba(176,188,214,.55); }
+  .pln-alg i b{ color:var(--gc); font-family:ui-monospace,Consolas,monospace; font-size:10px; }
+  .pln-alg s{ margin-left:auto; text-decoration:none; color:rgba(176,188,214,.3); flex:none; font-size:12px; }
+  .pln-alg:active{ transform:scale(.985); }
+  .pln-prog{ display:flex; gap:4px; margin:2px 0 14px; }
+  .pln-prog i{ flex:1; height:3px; border-radius:2px; background:rgba(255,255,255,.08); }
+  .pln-prog i.on{ background:var(--plc); }
+  .pln-sec{ margin:0 0 6px; }
+  .pln-sech{ display:flex; align-items:center; gap:7px; padding:13px 2px 8px; }
+  .pln-sech b{ font-size:10px; font-weight:800; color:rgba(226,232,248,.62); letter-spacing:.04em; }
+  .pln-sech s{ margin-left:auto; text-decoration:none; font:700 8.5px/1 'JetBrains Mono',monospace; color:rgba(176,188,214,.34); }
+  .pln-fld{ padding:12px 13px; border-radius:14px; background:rgba(255,255,255,.04);
+    border:1px solid rgba(255,255,255,.065); cursor:pointer; -webkit-tap-highlight-color:transparent; }
+  .pln-fld.empty{ border-style:dashed; border-color:rgba(255,255,255,.12); background:transparent; }
+  .pln-fld .v{ font-size:12.5px; color:rgba(242,246,255,.92); line-height:1.55; font-weight:600; }
+  .pln-fld.empty .v{ color:rgba(176,188,214,.4); font-weight:500; }
+  .pln-fld .m{ font-size:9.5px; color:rgba(176,188,214,.4); margin-top:5px; }
+  .pln-flow{ display:flex; flex-wrap:wrap; gap:4px; }
+  .pln-flow span{ font-size:9.5px; font-weight:700; padding:6px 8px; border-radius:7px;
+    background:rgba(255,255,255,.06); color:rgba(226,232,248,.8); }
+  .pln-flow i{ font-style:normal; color:rgba(176,188,214,.28); align-self:center; font-size:9px; }
+  .pln-cuts{ display:flex; flex-direction:column; gap:6px; }
+  .pln-cut{ display:flex; align-items:flex-start; gap:9px; padding:10px 11px; border-radius:13px;
+    background:rgba(255,255,255,.035); border:1px solid rgba(255,255,255,.06); cursor:pointer;
+    -webkit-tap-highlight-color:transparent; transition:border-color .2s ease; }
+  .pln-cut .no{ width:19px; height:19px; border-radius:50%; flex:none; display:grid; place-items:center;
+    font:800 9px/1 'JetBrains Mono',monospace; background:color-mix(in srgb, var(--plc) 26%, transparent);
+    color:var(--plc); border:1px solid color-mix(in srgb, var(--plc) 40%, transparent); margin-top:1px; }
+  .pln-cut .tx{ min-width:0; flex:1; }
+  .pln-cut .tx b{ display:block; font-size:11.8px; font-weight:700; color:rgba(240,245,255,.92); line-height:1.45; }
+  .pln-cut .tx s{ display:block; text-decoration:none; font-size:9.5px; color:rgba(176,188,214,.45); margin-top:3px; }
+  .pln-cut .vis{ flex:none; font:700 7.5px/1 'JetBrains Mono',monospace; padding:4px 5px; border-radius:5px; margin-top:2px;
+    background:rgba(255,255,255,.05); color:rgba(176,188,214,.42); }
+  .pln-cut .del{ flex:none; color:rgba(176,188,214,.3); font-size:13px; padding:0 2px; }
+  .pln-cut.add{ border-style:dashed; border-color:rgba(255,255,255,.12); background:transparent; justify-content:center; }
+  .pln-cut.add .tx b{ color:rgba(176,188,214,.4); font-weight:600; text-align:center; font-size:11px; }
+  .pln-magic{ display:flex; align-items:center; gap:9px; margin-top:7px; padding:11px 12px; border-radius:13px;
+    background:linear-gradient(150deg, color-mix(in srgb, var(--plc) 15%, transparent), rgba(255,255,255,.02));
+    border:1px solid color-mix(in srgb, var(--plc) 32%, transparent); cursor:pointer; -webkit-tap-highlight-color:transparent; }
+  .pln-magic .ic{ font-size:14px; }
+  .pln-magic .tx{ flex:1; min-width:0; }
+  .pln-magic .tx b{ display:block; font-size:11px; font-weight:800; color:var(--plc); }
+  .pln-magic .tx s{ display:block; text-decoration:none; font-size:9.5px; color:rgba(200,212,236,.55); margin-top:2px; }
+  .pln-magic .go{ color:var(--plc); font-size:13px; }
+  .pln-rowl{ display:flex; align-items:center; gap:10px; padding:12px 3px; border-bottom:1px solid rgba(255,255,255,.05);
+    cursor:pointer; -webkit-tap-highlight-color:transparent; }
+  .pln-rowl .k{ font-size:11px; color:rgba(176,188,214,.45); width:40px; flex:none; font-weight:700; }
+  .pln-rowl .v{ font-size:12px; color:rgba(240,244,255,.88); font-weight:700; flex:1; }
+  .pln-rowl .v em{ font-style:normal; color:var(--plc); }
+  .pln-rowl .go{ color:rgba(176,188,214,.3); font-size:12px; }
+  .pln-act{ display:block; width:100%; margin-top:15px; padding:14px; border:none; border-radius:15px;
+    background:linear-gradient(160deg, color-mix(in srgb, var(--plc) 92%, #fff), var(--plc));
+    color:#08101c; font-weight:900; font-size:12.5px; font-family:inherit; cursor:pointer;
+    box-shadow:0 12px 28px -14px var(--plc); transition:transform .16s ease; }
+  .pln-act:active{ transform:scale(.975); }
+  .pln-act2{ display:block; width:100%; margin-top:7px; padding:11px; border:1px solid rgba(255,255,255,.09);
+    border-radius:13px; background:transparent; color:rgba(176,188,214,.5); font-weight:700; font-size:10.5px;
+    font-family:inherit; cursor:pointer; }
+  /* 바 + 소켓 */
+  .pln-bar{ flex:none; height:112px; position:relative; margin:0 8px; max-width:520px; width:calc(100% - 16px); align-self:center; }
+  .pln-svg{ position:absolute; left:0; bottom:12px; width:100%; height:60px; overflow:visible; display:block; }
+  .pln-slots{ position:absolute; left:0; bottom:12px; width:100%; height:60px; display:flex; align-items:center; z-index:3; }
+  .pln-slot{ flex:1; height:100%; display:flex; align-items:center; justify-content:center; cursor:pointer;
+    -webkit-tap-highlight-color:transparent; position:relative; }
+  .pln-slot .gl{ font-size:13px; line-height:1; opacity:.34; color:rgba(226,232,248,.9);
+    transition:opacity .3s ease; font-weight:700; }
+  .pln-slot.on .gl{ opacity:0; }
+  .pln-slot .tag{ position:absolute; bottom:5px; font:800 7.5px/1 'JetBrains Mono',monospace;
+    color:var(--sc); opacity:0; transition:opacity .3s ease; }
+  .pln-slot.on .tag{ opacity:.9; }
+  .pln-bead{ position:absolute; z-index:4; border-radius:50%; pointer-events:none;
+    background:radial-gradient(circle at 36% 27%, rgba(255,255,255,.95), var(--plc) 44%, color-mix(in srgb, var(--plc) 62%, #000) 100%);
+    box-shadow:0 0 18px -1px var(--plc), 0 0 42px -8px var(--plc), inset 0 -3px 7px rgba(0,0,0,.3);
+    transition:background .5s ease, box-shadow .5s ease; }
+  .pln-bead.empty{ background:radial-gradient(circle at 36% 27%, rgba(255,255,255,.22), rgba(130,142,175,.22) 46%, rgba(38,45,64,.6) 100%);
+    box-shadow:0 0 12px -5px rgba(150,165,205,.4), inset 0 -3px 7px rgba(0,0,0,.34); }
+  .pln-bead .ic{ position:absolute; inset:0; display:grid; place-items:center; font-size:14px;
+    color:rgba(8,14,26,.82); font-weight:900; }
+  .pln-bead.empty .ic{ color:rgba(226,234,255,.45); font-size:15px; font-weight:300; }
+  .pln-foot{ position:absolute; left:0; right:0; bottom:-3px; text-align:center; font-size:9.5px; color:rgba(176,188,214,.28); }
+  @media (prefers-reduced-motion:reduce){ .pln-wsin,.pln-bars .tr i,.pln-bead,.pln-aura{ transition:none!important; } }
   /* v638 · 형광펜 폐지 — 칠은 전부 굵은 컬러 글자만 */
   .sp-k,.sp-r{display:inline;font-size:inherit;line-height:inherit;text-decoration:none;font-style:normal;padding:0}
   .sp-k{font-weight:800;color:#FF6B5E}
@@ -13150,6 +13328,9 @@
      방 이동은 갈림길·방 레일·하단 탭이 다 하고, 라이벌·알고리즘·진단은 나침반 안에 문이 있다.
      서랍은 시트 필터·정렬 전용으로만 남는다(시트 상단 버거로 열림). 설정은 갈림길 우상단 ⚙. */
   #bn-more{ display:none !important; }
+  /* v647 · 나침반 분해 — 사이드바 큰 문 숨김. 바늘=기획 · 고객·트렌드=저장소 칩 · 알고리즘=트레이닝 로비 */
+  #ws-compass{ display:none !important; }
+  #ws-customer{ display:none !important; }
   #ws-home, #ws-sheet, #ws-customer, #ws-sorter, #ws-compass,
   #ws-northstar, #ws-diagnose, #ws-engine{ display:none !important; }
   #sh-sidebar .sh-sb-section:first-of-type > .sh-sb-section-title{ display:none; }
@@ -13195,29 +13376,7 @@
     -webkit-tap-highlight-color:transparent; }
   .cp-engine:active{ transform:scale(.98); }
 
-  /* ═══ v595 · 🏋️ 트레이닝 로비 — 전술 보드(tgym) 아래 4문 (사장님 확정) ═══ */
-  .st2-lobby{ display:grid; grid-template-columns:1fr 1fr; gap:9px; margin-top:14px; }
-  .st2-lobby .door{ display:flex; flex-direction:column; align-items:flex-start; gap:3px; padding:14px 13px 12px;
-    border-radius:15px; text-align:left; cursor:pointer; font-family:inherit;
-    background:rgba(8,11,10,.72); border:1px solid color-mix(in srgb,var(--c) 46%,transparent);
-    box-shadow:0 0 18px -7px color-mix(in srgb,var(--c) 55%,transparent), inset 0 1px 0 rgba(255,255,255,.1);
-    transition:transform .18s cubic-bezier(.2,1.3,.4,1), box-shadow .2s; -webkit-tap-highlight-color:transparent; }
-  .st2-lobby .door:hover{ transform:translateY(-2px); }
-  .st2-lobby .door:active{ transform:scale(.96); }
-  .st2-lobby .door .g{ font-size:19px; color:var(--c); filter:drop-shadow(0 0 7px color-mix(in srgb,var(--c) 65%,transparent)); }
-  .st2-lobby .door .nm{ font-size:13px; font-weight:900; color:#F0F3EC; letter-spacing:-.02em; margin-top:2px; }
-  .st2-lobby .door .dd{ font-size:9.5px; color:#8f9a86; }
-  .st2-lobby .door .tg{ font-family:'JetBrains Mono',monospace; font-size:9px; font-weight:700; color:var(--c); margin-top:5px; }
-  .st2-cpnote{ display:block; width:100%; margin-top:10px; padding:11px 13px; border-radius:13px; text-align:left;
-    font-family:inherit; font-size:11px; font-weight:700; cursor:pointer;
-    background:rgba(167,139,250,.06); border:1px solid rgba(167,139,250,.2); color:#b3a8d6;
-    -webkit-tap-highlight-color:transparent; }
-  .st2-cpnote b{ color:#C9B8FF; }
-  .st2-cpnote:active{ transform:scale(.98); }
-  .st2-oldfold{ margin-top:18px; }
-  .st2-oldfold .ofb{ width:100%; padding:9px 4px; background:none; border:none;
-    border-top:1px dashed rgba(255,255,255,.12); color:#6b715c; font-family:inherit; font-size:10.5px;
-    font-weight:700; cursor:pointer; text-align:center; }
+  /* v648 · v595 로비 CSS 제거 — st2RenderLobby가 호출자 0인 고아였음 (실제 홈 = scene1) */
 
 
   /* 🪟 v435 — 상단이 스크롤에 반응한다 (모션 위계 2층: 전환).
@@ -14229,6 +14388,7 @@
   .bn-tab:active { opacity: 0.6; }
   /* v430: 「원고」는 홈(오늘 카드·내 원고 행)에서 들어가므로 하단 탭에서만 숨김 — 화면·데이터는 그대로 */
   .bn-tab[data-ws="scripts"]{ display:none !important; }
+  .bn-tab[data-ws="thumb"]{ display:none !important; }   /* v647 · 썸네일은 저장소(분류) 칩으로 — 화면·배선은 보존 */
   /* 원고 화면 상단 «← 홈» — 탭을 뺐으니 나가는 길을 명시 */
   .sc-backhome{ display:inline-flex; align-items:center; gap:6px; font-family:inherit; font-size:11px;
     font-weight:800; color:var(--law-sub); background:rgba(255,255,255,.035);
@@ -19753,15 +19913,18 @@
            트레이닝=핑크 · 나침반=보라 (사장님 지시). png가 없으면 옛 선화 SVG로 폴백 -->
       <div class="qcf-flow" id="qcf-flow">
         <!-- v595d · 사장님 누끼 교체 + 색 재배치: AI=파랑 · 창고=라임(라임=자산 — 자산이 쌓이는 곳) -->
-        <div class="qcf-t" style="--qc:70,150,250" data-cs-go="sorter">
-          <div class="ob"><img src="fork-sorter.png" alt="" onerror="this.style.display='none';var s=this.nextElementSibling;if(s)s.style.display='';"><svg style="display:none" viewBox="0 0 24 24"><path class="g" d="M4.5 7.5h15v11h-15z"/><path class="g" d="M4.5 12.2h15M12 7.5v11"/><path class="g" d="M8 4.6l1 1.4M16 4.6l-1 1.4"/></svg></div>
-          <div class="nm">AI 정리</div><div class="vb">담다</div>
-        </div>
-        <div class="qcf-sep s1">›</div>
+        <!-- v646 · AI 정리 타일 제거 — 담는 문은 우상단 🤖·사이드바·⚡빠르게 담기로 충분 (사장님 확정) -->
         <div class="qcf-t" style="--qc:215,243,75" data-cs-go="ware">
           <div class="ob"><img src="fork-ware.png" alt="" onerror="this.style.display='none';var s=this.nextElementSibling;if(s)s.style.display='';"><svg style="display:none" viewBox="0 0 24 24"><path class="g" d="M3.4 9.2L12 4.6l8.6 4.6v9.8H3.4z"/><path class="g" d="M8.2 19V12h7.6v7"/></svg></div>
           <div class="nm">내 창고</div><div class="vb">이해하다</div>
           <div class="fork-bd" id="fork-bd-ware" style="color:#d7f34b;background:rgba(215,243,75,.1)"></div>
+        </div>
+        <div class="qcf-sep s1">›</div>
+        <!-- v646 · ◈ 기획 = 갈림길 정중앙 (나침반 분해 — 내 기준(바늘)은 기획 홈 맨 위로) -->
+        <div class="qcf-t" style="--qc:179,157,251" data-cs-go="plan" title="기획 — 이번 주 다섯 편">
+          <div class="ob"><img src="fork-plan.png" alt="" onerror="this.style.display='none';var s=this.nextElementSibling;if(s)s.style.display='';"><svg style="display:none" viewBox="0 0 24 24"><path class="g" d="M12 3.6l7.4 8.4-7.4 8.4L4.6 12z"/><path class="g" d="M12 8.2l3.4 3.8-3.4 3.8-3.4-3.8z"/></svg></div>
+          <div class="nm">기획</div><div class="vb">정하다</div>
+          <div class="fork-bd" id="fork-bd-plan" style="color:#B39DFB;background:rgba(179,157,251,.12)"></div>
         </div>
         <div class="qcf-sep s2">›</div>
         <div class="qcf-t" style="--qc:255,61,166" data-cs-go="prod">
@@ -19769,13 +19932,7 @@
           <div class="nm">트레이닝</div><div class="vb">만들다</div>
           <div class="fork-bd" id="fork-bd-prod" style="color:#FF3DA6;background:rgba(255,61,166,.1)"></div>
         </div>
-        <!-- v595 · C-2 (사장님 픽) — 🧭 나침반 = 네 번째 문. 레일에서 끊긴 보라 타일.
-             동사 자리엔 명사 «내 기준» — 순서에서 완전히 빠진다 -->
-        <div class="qcf-sep cut"></div>
-        <div class="qcf-t" style="--qc:155,108,255" data-cs-go="compass" title="나침반 — 내 기준">
-          <div class="ob"><img src="fork-compass.png" alt="" onerror="this.style.display='none';var s=this.nextElementSibling;if(s)s.style.display='';"><svg style="display:none" viewBox="0 0 24 24"><path class="g" d="M12 3.4a8.6 8.6 0 1 1 0 17.2 8.6 8.6 0 1 1 0-17.2"/><path class="g" d="M15.4 8.6l-2 4.8-4.8 2 2-4.8z"/></svg></div>
-          <div class="nm">나침반</div><div class="vb">내 기준</div>
-        </div>
+        <!-- v646 · 나침반 타일 제거(분해) — 바늘=기획 홈 · 알고리즘·지표=트레이닝 로비 문 · 고객·트렌드=저장소 칩 -->
       </div>
       <!-- v526 · 큰 네온 카트 = 빠르게 담기 -->
       <div class="qcf-cart" id="qcf-cart" data-cs-go="qc">
@@ -20721,7 +20878,7 @@
     <button class="bn-tab" data-ws="scripts"><span class="bn-ico">✎</span><span class="bn-lab">원고</span></button>
     <button class="bn-tab" data-ws="thumb"><span class="bn-ico">▣</span><span class="bn-lab">썸네일</span></button>
     <button class="bn-tab" data-ws="formatboard"><span class="bn-ico">▦</span><span class="bn-lab">분류</span></button>
-    <button class="bn-tab" data-ws="idea"><span class="bn-ico">💡</span><span class="bn-lab">아이디어</span></button>
+    <button class="bn-tab" data-ws="plan"><span class="bn-ico">◈</span><span class="bn-lab">기획</span></button>
     <button class="bn-tab" id="bn-more"><span class="bn-ico">☰</span><span class="bn-lab">더보기</span></button>
   </nav>
 
@@ -23083,7 +23240,11 @@
           <button class="fb-toggle-btn on" data-fbmode="format">유형별</button>
           <button class="fb-toggle-btn" data-fbmode="purpose">퍼널별</button>
           <button class="fb-toggle-btn" data-fbmode="views">조회수별</button>
+          <button class="fb-toggle-btn" data-fbmode="thumb">🖼 썸네일</button>
+          <button class="fb-toggle-btn" data-fbmode="copy">💬 수식어</button>
           <button class="fb-toggle-btn" data-fbmode="kw">🏷 키워드</button>
+          <button class="fb-toggle-btn" data-fbdoor="customer">◉ 고객</button>
+          <button class="fb-toggle-btn" data-fbdoor="trend">↗ 트렌드</button>
           <button class="fb-toggle-btn" data-fbmode="comment" style="display:none;">💬 공감댓글</button>
           <button class="fb-toggle-btn" data-fbmode="audio" style="display:none;">🎵 오디오</button>
         </div>
@@ -23116,7 +23277,38 @@
       <div class="tb-body" id="tb-body"></div>
     </div>
 
-    <!-- ===== 💡 아이디어 (v643 · ⓐ 확정 — 분류 보드에서 독립한 다섯 번째 탭) ===== -->
+
+    <!-- ═══ v645 · ◈ 기획 — 홈 + 이번 주 5편 (MENISCUS 톤 · 창 0개) ═══ -->
+    <div id="plan-view" style="display:none;">
+      <div class="pln-stars" id="pln-stars"></div>
+      <div class="pln-aura" id="pln-aura"></div>
+      <div class="pln-grain"></div>
+      <div class="pln-in">
+        <div class="pln-hd"><button class="pln-back" id="pln-back" title="갈림길로">‹</button><span class="bd" id="pln-bdot"></span><span class="nm" id="pln-nm">P L A N</span><span class="wk" id="pln-wk"></span></div>
+        <div class="pln-ws" id="pln-ws"><div class="pln-wsin" id="pln-wsin"></div></div>
+        <div class="pln-bar">
+          <svg class="pln-svg" id="pln-svg" viewBox="0 0 326 60" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="plnPF" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#1a2338"/><stop offset="1" stop-color="#0d1220"/>
+              </linearGradient>
+              <linearGradient id="plnRT" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="rgba(255,255,255,.26)"/>
+                <stop offset=".5" stop-color="rgba(255,255,255,.05)"/>
+                <stop offset="1" stop-color="rgba(255,255,255,0)"/>
+              </linearGradient>
+            </defs>
+            <path id="pln-plate" fill="url(#plnPF)"></path>
+            <path id="pln-rim" fill="none" stroke="url(#plnRT)" stroke-width="1.1"></path>
+            <path id="pln-lit" fill="none" stroke-width="1.3" stroke-linecap="round"></path>
+          </svg>
+          <div class="pln-slots" id="pln-slots"></div>
+          <div class="pln-bead" id="pln-bead"><span class="ic" id="pln-beadic">⌂</span></div>
+          <div class="pln-foot" id="pln-foot">구슬을 탭하거나 끌어서 옮겨요</div>
+        </div>
+      </div>
+    </div>
+    <!-- ===== 💡 아이디어 (v643 · 화면은 보존 — 탭은 ◈기획으로 교체, 아이디어는 기획 홈 안에서) ===== -->
     <div id="idea-view" class="fb-wrap" style="display:none;">
       <section class="fb-header">
         <div class="fb-eyebrow">소재 · 아이디어</div>
@@ -23635,7 +23827,7 @@
          여기에 그 id를 놓는 것만으로 이사가 끝난다. -->
     <div id="cp-view" style="display:none;">
       <div class="cp-wrap">
-        <div class="cp-sign"><s>COMPASS</s><b>나침반</b><i>누구에게 · 무슨 말을 하는가</i></div>
+        <div class="cp-sign"><s id="cp-sign-s">MY ALGORITHM</s><b id="cp-sign-b">내 알고리즘</b><i id="cp-sign-i">이 판은 뭘 밀어주는가</i></div>
         <div id="cp-me" style="display:none;"></div>
         <!-- v596 · 나침반 홈(사장님 확정) = 알고리즘 코어 + 지표 + 3차원 맵 + 인사이트 합침
              («알고리즘을 통해 어떻게 진행되고 있는지» — 트레이닝 옛 홈에서 통째로 이사) -->
@@ -26272,13 +26464,23 @@
 
     // 분류 뷰 토글 (유형/퍼널/조회수 + 키워드/댓글/아이디어/오디오) 바인딩
     document.querySelectorAll('.fb-toggle-btn').forEach(b => {
+      if (b.dataset.fbdoor) {   // v647 · 문 칩(◉고객·↗트렌드) — 모드가 아니라 그 방으로 간다
+        b.classList.remove('on');
+        b.onclick = () => {
+          if (b.dataset.fbdoor === 'customer') { try { switchWorkspace('customer'); } catch (e) {} }
+          else { try { switchWorkspace('compass'); cpSetTab('trend'); } catch (e) {} }
+        };
+        return;
+      }
       b.classList.toggle('on', b.dataset.fbmode === fbGroupMode);
       b.onclick = () => { fbGroupMode = b.dataset.fbmode; _fbOpenKey = null; renderFormatBoard(); };
     });
     // 분류 뷰 헤더 문구를 선택 탭에 맞게
-    const _FB_CLASSIFY = { eb: '분류 · 유형 · 퍼널', t: '유형·퍼널로 <span class="em">분류된</span> 시트', s: '한 계정은 3~4가지 유형을 반복해 돌립니다.<br/>분류해두면 다음 콘텐츠를 어떤 유형·퍼널 단계로 찍을지가 보입니다.' };
+    const _FB_CLASSIFY = { eb: '저장소 · 분류', t: '유형·퍼널로 <span class="em">분류된</span> 시트', s: '한 계정은 3~4가지 유형을 반복해 돌립니다.<br/>분류해두면 다음 콘텐츠를 어떤 유형·퍼널 단계로 찍을지가 보입니다.' };
     const _FB_HEAD = {
-      format: _FB_CLASSIFY, purpose: _FB_CLASSIFY, views: _FB_CLASSIFY, thumb: _FB_CLASSIFY, copy: _FB_CLASSIFY,
+      format: _FB_CLASSIFY, purpose: _FB_CLASSIFY, views: _FB_CLASSIFY,
+      thumb:   { eb: '저장소 · 소재 모아보기', t: '잘 된 <span class="em">썸네일</span> 몰아보기', s: '같은 패턴을 나란히 보고<br/>왜 눈길이 갔는지 바로 꺼내 쓰세요.' },
+      copy:    { eb: '저장소 · 소재 모아보기', t: '저장한 <span class="em">수식어</span>', s: '끌린 문구를 유형별로 모아<br/>다음 제목에 바로 꺼내 쓰세요.' },
       kw:      { eb: '분류 · 소재 모아보기', t: '모아둔 <span class="em">키워드</span> 한눈에', s: '자주 쓰는 키워드를 황금(★)으로 올려두고<br/>다음 콘텐츠에 바로 꺼내 쓰세요.' },
       comment: { eb: '분류 · 소재 모아보기', t: '저장한 <span class="em">공감댓글</span>', s: '사람들이 반응한 댓글을 유형별로 모아<br/>어떤 말에 반응하는지 찾으세요.' },
       idea:    { eb: '분류 · 소재 모아보기', t: '모아둔 <span class="em">아이디어</span>', s: '떠오른 아이디어를 쌓아두고<br/>하나씩 콘텐츠로 실행하세요.' },
@@ -26289,7 +26491,8 @@
     const _tEl = document.querySelector('#fb-view .fb-title'); if (_tEl) _tEl.innerHTML = _fbh.t;
     const _sEl = document.querySelector('#fb-view .fb-sub'); if (_sEl) _sEl.innerHTML = _fbh.s;
     // 키워드·공감댓글·아이디어·오디오는 몰아보기 보드를 분류 뷰(fb-columns)에 그려준다
-    if (fbGroupMode === 'kw' || fbGroupMode === 'comment' || fbGroupMode === 'idea' || fbGroupMode === 'audio') {
+    if (fbGroupMode === 'kw' || fbGroupMode === 'comment' || fbGroupMode === 'idea' || fbGroupMode === 'audio'
+        || fbGroupMode === 'thumb' || fbGroupMode === 'copy') {   // v647 · 썸네일·수식어도 저장소 허브에서
       renderThumbBoard(fbGroupMode, 'fb-columns');
       return;
     }
@@ -26411,6 +26614,14 @@
     });
     // 토글 버튼 (형식별/목적별)
     document.querySelectorAll('.fb-toggle-btn').forEach(b => {
+      if (b.dataset.fbdoor) {   // v647 · 문 칩(◉고객·↗트렌드) — 모드가 아니라 그 방으로 간다
+        b.classList.remove('on');
+        b.onclick = () => {
+          if (b.dataset.fbdoor === 'customer') { try { switchWorkspace('customer'); } catch (e) {} }
+          else { try { switchWorkspace('compass'); cpSetTab('trend'); } catch (e) {} }
+        };
+        return;
+      }
       b.classList.toggle('on', b.dataset.fbmode === fbGroupMode);
       b.onclick = () => { fbGroupMode = b.dataset.fbmode; _fbOpenKey = null; renderFormatBoard(); };
     });
@@ -35033,9 +35244,21 @@
       if (st2View) st2View.style.display = 'none';
       if (cpView) cpView.style.display = 'none';   // v595
       const ivEl = document.getElementById('idea-view'); if (ivEl) ivEl.style.display = 'none';   // v643
+      const pvEl = document.getElementById('plan-view'); if (pvEl) pvEl.style.display = 'none';   // v645
     };
 
-    if (ws === 'idea') {   // v643 · 💡 아이디어 탭 (ⓐ 확정) — 분류 보드에서 독립
+    if (ws === 'plan') {   // v645 · ◈ 기획 — 홈 + 이번 주 5편
+      hideAll();
+      const pv = document.getElementById('plan-view');
+      if (pv) { pv.style.display = 'block'; }
+      sheetSb.style.display = 'none';
+      mbSb.style.display = 'none';
+      if (cuSb) cuSb.style.display = 'none';
+      topbar.style.display = 'none';
+      try { plnOpen(); } catch (e) { console.error('[plan]', e); }
+      return;
+    }
+    if (ws === 'idea') {   // v643 · 💡 아이디어 (탭에선 빠졌지만 화면·배선 보존)
       hideAll();
       const iv = document.getElementById('idea-view');
       if (iv) { iv.style.display = 'flex'; iv.style.flexDirection = 'column'; }
@@ -48014,7 +48237,8 @@
         const go = el.dataset.csGo;
         if (go === 'sorter') csOpenRoom();
         else if (go === 'prod') { csCloseFork(); cmSweepRooms(); try { switchWorkspace('studio'); } catch (e) {} } // v413 제작소 홈으로
-        else if (go === 'compass') { csCloseFork(); cmSweepRooms(); try { switchWorkspace('compass'); } catch (e) {} } // v595 · 🧭 나침반
+        else if (go === 'compass') { csCloseFork(); cmSweepRooms(); try { switchWorkspace('compass'); } catch (e) {} } // v595 · 🧭 나침반(분해 후에도 문은 살아있다)
+        else if (go === 'plan') { csCloseFork(); cmSweepRooms(); try { switchWorkspace('plan'); } catch (e) {} } // v646 · ◈ 기획
         else if (go === 'qc') qcOpen(); // ⚡ 빠른 담기
         else { csCloseFork(); cmSweepRooms(); } // ware/skip — v593 · 깔린 분류·손질 방까지 쓸어 닫는다
       });
@@ -49824,8 +50048,8 @@
     });
   }
   function st2RenderHome() {
-    // v595 · 홈 자리는 로비가 차지 — 옛 홈은 로비의 «이전 홈» 접이(#st2-oldhome) 안에 그대로 산다 (기능 삭제 0)
-    const el = document.getElementById('st2-oldhome') || document.getElementById('st2-home'); if (!el) return;
+    // v648 · 로비 제거 — 홈(scene1)은 st2-home에 바로 그린다
+    const el = document.getElementById('st2-home'); if (!el) return;
     const mode = st2Mode();
     const v = document.getElementById('st2-view');
     v.classList.toggle('lens-att', mode === 'att');
@@ -53254,6 +53478,17 @@
     //   진짜 고객 분석 방은 #st2-cus(4바구니·벽 부수기)이고 이미 나침반 안에 있다. 그걸 그대로 연다.
     _cpTab = tab;
     document.querySelectorAll('#cp-ws button').forEach(b => b.classList.toggle('on', b.dataset.cptab === tab));
+    // v649 · 나침반 간판 소멸 — 방은 재활용, 이름은 탭이 정한다
+    const SIGNS = {
+      insight: ['MY ALGORITHM', '내 알고리즘', '이 판은 뭘 밀어주는가'],
+      me: ['NEEDLE', '바늘', '누구에게 · 무슨 말을 하는가'],
+      cus: ['CUSTOMER', '고객 분석', '고객의 속을 캐는 방'],
+      trend: ['TREND', '트렌드', '지금 물이 들어오는 곳']
+    };
+    const sg = SIGNS[tab] || SIGNS.insight;
+    const _ss = document.getElementById('cp-sign-s'); if (_ss) _ss.textContent = sg[0];
+    const _sb = document.getElementById('cp-sign-b'); if (_sb) _sb.textContent = sg[1];
+    const _si = document.getElementById('cp-sign-i'); if (_si) _si.textContent = sg[2];
     const me = document.getElementById('cp-me'); if (me) me.style.display = (tab === 'me') ? 'block' : 'none';
     const ih = document.getElementById('cp-insight'); if (ih) ih.style.display = (tab === 'insight') ? 'block' : 'none';
     const tr = document.getElementById('st2-trend'); if (tr) tr.style.display = (tab === 'trend') ? 'block' : 'none';
@@ -53313,6 +53548,508 @@
     });
     try { renderInsightPanel(); } catch (e) { console.error('[cp] insight panel', e); }
   }
+
+  /* ═══════════ v645 · ◈ 기획실 — 홈 + 이번 주 5편 ═══════════
+     레퍼런스 = MENISCUS(사장님 대표 레퍼런스). 규칙 3개를 지킨다:
+       ① 창 0개 — 후보도 작업도 전부 같은 면에서
+       ② 아래는 워크스페이스 — 구슬은 «지금 어디»만 말하고 위 내용이 갈아 끼워진다
+       ③ 소켓은 하나의 파라메트릭 path — 어깨가 윗변과 구슬에 동시 접선(|C1C2| = s + rb) */
+  var PLN_KEY = 'plnv1';
+  var PLN_HOME_C = '#D7F34B';
+  var PLN_COLS = ['#7EC8F5', '#9BE8B4', '#B39DFB', '#F5C08E', '#F59BB0'];
+  var PLN_STEPS = ['정하기', '후킹', '컷', '원고', '배포'];   // v649 · 기획=조종석, 배포까지 한 줄
+  var PLN_DAYS = ['월요일', '화요일', '수요일', '목요일', '금요일'];
+  /* 구조 라벨 → 컷 제안 (원고의 «말»을 화면의 «그림»으로 옮긴다) */
+  //   ⚠️ v645b · 컷 제목엔 «원래 라벨»을 살린다 — 방법1·2·3이 같은 문장으로 뭉치면 구분이 안 된다
+  var PLN_CUTMAP = [
+    [/이득|손해|후킹|도입/, '눈으로 먼저 보여준다', '전 / 후 나란히', '화면'],
+    [/공감|상황|POV/, '그 상황을 재현한다', '실제 장면 클로즈업', '촬영'],
+    [/원인|이유|왜/, '왜 그런지 짚는다', '손으로 가리키며', '촬영'],
+    [/전문|용어|근거|증거/, '근거를 띄운다', '도표 · 색상환 · 자막', '화면'],
+    [/방법|해결|과정/, '실제로 해 보인다', '과정 클로즈업', '촬영'],
+    [/소구|가치|결과/, '결과를 보여준다', '빛에 비친 마무리', '촬영'],
+    [/CTA|홍보|예고/, '한 줄로 마무리', '자막 + 얼굴', '촬영']
+  ];
+  function plnCutFor(label) {
+    var t = String(label || '').trim(), lb = t.length > 11 ? t.slice(0, 11) : t;
+    for (var i = 0; i < PLN_CUTMAP.length; i++) {
+      if (PLN_CUTMAP[i][0].test(t)) return { b: lb + ' — ' + PLN_CUTMAP[i][1], s: PLN_CUTMAP[i][2], v: PLN_CUTMAP[i][3] };
+    }
+    return { b: lb + ' — 무엇을 보여줄까요', s: '탭해서 어떻게 찍을지 적기', v: '—' };
+  }
+  var _pln = null, _plnCur = 0, _plnInited = false, _plnLoaded = false;
+  var PLN_W = 326, PLN_H = 60, PLN_R = 24, PLN_RB = 21, PLN_S = 12;
+  var _plnRaf = 0, _plnX = 0, _plnTgt = 0, _plnVel = 0, _plnRun = false;
+  var $pln = function (id) { return document.getElementById(id); };
+
+  function plnWeekId() {
+    var d = new Date(), y = d.getFullYear();
+    var st = new Date(y, 0, 1);
+    var w = Math.ceil((((d - st) / 86400000) + st.getDay() + 1) / 7);
+    return y + '-W' + w;
+  }
+  function plnBlank() { return { wk: plnWeekId(), eps: [null, null, null, null, null] }; }
+  async function plnLoad() {
+    if (_plnLoaded) return _pln;
+    try {
+      var r = await window.storage.get(PLN_KEY);          // ⚠️ {key,value} — value를 언랩해야 한다
+      _pln = r && r.value ? JSON.parse(r.value) : plnBlank();
+    } catch (e) { _pln = plnBlank(); }
+    if (!_pln || !Array.isArray(_pln.eps)) _pln = plnBlank();
+    while (_pln.eps.length < 5) _pln.eps.push(null);
+    _plnLoaded = true;
+    return _pln;
+  }
+  async function plnSave() { try { await window.storage.set(PLN_KEY, JSON.stringify(_pln)); } catch (e) {} }
+
+  /* 후보 — 담아둔 카드 + 아이디어에서 «왜 이걸» 이유와 함께 꺼내온다 */
+  function plnUsedIds() {
+    return (_pln.eps || []).filter(Boolean).map(function (e) { return e.rid; }).filter(Boolean);
+  }
+  function plnCandidates(n) {
+    var used = plnUsedIds(), out = [];
+    var pool = (rows || []).filter(function (r) {
+      return r && used.indexOf(r.id) < 0 && (typeof prpHasScript === 'function' ? prpHasScript(r) : true);
+    }).sort(function (a, b) { return (b.views || 0) - (a.views || 0); });
+    var now = Date.now();
+    pool.slice(0, 12).forEach(function (r) {
+      var days = r.updatedAt ? Math.floor((now - r.updatedAt) / 86400000) : 0;
+      var why = days > 5 ? '담아만 두고 <em>' + days + '일째</em>예요'
+              : (r.views >= 100000 ? '이 구조가 <em>' + fmtViews(r.views) + '</em> 갔어요' : '담아둔 카드에서');
+      out.push({ rid: r.id, t: (r.hook || r.topicMain || '(제목 없음)'), why: why, src: '저장소',
+                 ref: r.views ? fmtViews(r.views) : '—', row: r });
+    });
+    try {
+      (collects || []).filter(function (c) { return c.kind === 'idea' && !c.executed && (c.memo || '').trim() && used.indexOf(c.id) < 0; })
+        .slice(0, 6).forEach(function (c) {
+          out.push({ rid: c.id, t: c.memo.trim().slice(0, 40), why: '적어둔 <em>아이디어</em>', src: '아이디어', ref: '—', row: null });
+        });
+    } catch (e) {}
+    // 저장소 2 + 아이디어 1로 섞는다 (한쪽만 나오지 않게)
+    var a = out.filter(function (x) { return x.src === '저장소'; });
+    var b = out.filter(function (x) { return x.src === '아이디어'; });
+    var mix = a.slice(0, 2).concat(b.slice(0, 1));
+    while (mix.length < (n || 3) && a.length > mix.filter(function(x){return x.src==='저장소';}).length) {
+      mix.push(a[mix.filter(function(x){return x.src==='저장소';}).length]);
+    }
+    return mix.slice(0, n || 3);
+  }
+  function plnBoneOf(row) {
+    try {
+      var segs = prpSegsOf(row) || [];
+      if (segs.length) return segs.map(function (x) { return x.k || '구간'; }).slice(0, 6);
+    } catch (e) {}
+    return ['이득&손해', '공감', '이유', '해결', 'CTA'];
+  }
+
+  /* ── 소켓 path ── */
+  function plnPlateD(cx, cy, rb, s) {
+    var W = PLN_W, H = PLN_H, R = PLN_R, top = 0;
+    var dy = cy - (top + s), q = (s + rb) * (s + rb) - dy * dy;
+    var tail = ' L ' + (W - R) + ' ' + top + ' A ' + R + ' ' + R + ' 0 0 1 ' + W + ' ' + (top + R) +
+      ' L ' + W + ' ' + (H - R) + ' A ' + R + ' ' + R + ' 0 0 1 ' + (W - R) + ' ' + H +
+      ' L ' + R + ' ' + H + ' A ' + R + ' ' + R + ' 0 0 1 0 ' + (H - R) +
+      ' L 0 ' + (top + R) + ' A ' + R + ' ' + R + ' 0 0 1 ' + R + ' ' + top + ' Z';
+    if (q <= 0.5) return 'M ' + R + ' ' + top + tail;
+    var dx = Math.sqrt(q), L = cx - dx, Rt = cx + dx, k = s / (s + rb);
+    var tLx = L + (cx - L) * k, tLy = (top + s) + (cy - (top + s)) * k;
+    var tRx = Rt + (cx - Rt) * k;
+    return 'M ' + R + ' ' + top + ' L ' + L.toFixed(2) + ' ' + top +
+      ' A ' + s + ' ' + s + ' 0 0 1 ' + tLx.toFixed(2) + ' ' + tLy.toFixed(2) +
+      ' A ' + rb + ' ' + rb + ' 0 0 0 ' + tRx.toFixed(2) + ' ' + tLy.toFixed(2) +
+      ' A ' + s + ' ' + s + ' 0 0 1 ' + Rt.toFixed(2) + ' ' + top + tail;
+  }
+  function plnLitD(cx, cy, rb, s) {
+    var dy = cy - s, q = (s + rb) * (s + rb) - dy * dy;
+    if (q <= 0.5) return '';
+    var dx = Math.sqrt(q), L = cx - dx, Rt = cx + dx, k = s / (s + rb);
+    var tLx = L + (cx - L) * k, tLy = s + (cy - s) * k, tRx = Rt + (cx - Rt) * k;
+    return 'M ' + tLx.toFixed(2) + ' ' + tLy.toFixed(2) +
+           ' A ' + rb + ' ' + rb + ' 0 0 0 ' + tRx.toFixed(2) + ' ' + tLy.toFixed(2);
+  }
+  function plnSlotX(i) { return (PLN_W / 6) * (i + 0.5); }
+  function plnColOf(i) { return i === 0 ? PLN_HOME_C : (_pln.eps[i - 1] ? PLN_COLS[i - 1] : '#8792AD'); }
+  function plnFit() {
+    var svg = $pln('pln-svg'); if (!svg) return false;
+    var w = svg.getBoundingClientRect().width; if (!w) return false;
+    PLN_W = Math.round(w);
+    svg.setAttribute('viewBox', '0 0 ' + PLN_W + ' ' + PLN_H);
+    return true;
+  }
+  function plnPaint(px) {
+    var cy = -PLN_RB * 0.44;
+    var d = plnPlateD(px, cy, PLN_RB, PLN_S);
+    var pl = $pln('pln-plate'), rm = $pln('pln-rim'), lt = $pln('pln-lit'), bd = $pln('pln-bead');
+    if (!pl || !bd) return;
+    pl.setAttribute('d', d); rm.setAttribute('d', d);
+    lt.setAttribute('d', plnLitD(px, cy, PLN_RB, PLN_S));
+    lt.setAttribute('stroke', (_plnCur === 0 || _pln.eps[_plnCur - 1]) ? 'rgba(255,255,255,.3)' : 'rgba(255,255,255,.13)');
+    bd.style.width = (PLN_RB * 2) + 'px'; bd.style.height = (PLN_RB * 2) + 'px';
+    bd.style.left = (px - PLN_RB) + 'px';
+    bd.style.bottom = (12 + PLN_H - cy - PLN_RB) + 'px';   // SVG 세로는 1:1 — 배율 곱하면 안 된다
+  }
+  function plnLoop() {
+    _plnVel = (_plnVel + (_plnTgt - _plnX) * 0.17) * 0.72;
+    _plnX += _plnVel;
+    if (Math.abs(_plnTgt - _plnX) < 0.15 && Math.abs(_plnVel) < 0.15) {
+      _plnX = _plnTgt; _plnVel = 0; _plnRun = false; plnPaint(_plnX); return;
+    }
+    plnPaint(_plnX); _plnRaf = requestAnimationFrame(plnLoop);
+  }
+  function plnMoveTo(x) { _plnTgt = x; if (!_plnRun) { _plnRun = true; _plnRaf = requestAnimationFrame(plnLoop); } }
+
+  function plnRenderSlots() {
+    var el = $pln('pln-slots'); if (!el) return;
+    el.innerHTML = [0, 1, 2, 3, 4, 5].map(function (i) {
+      var filled = i === 0 ? true : !!_pln.eps[i - 1];
+      return '<div class="pln-slot' + (i === _plnCur ? ' on' : '') + '" data-plni="' + i + '" style="--sc:' + plnColOf(i) + '">' +
+        '<span class="gl">' + (i === 0 ? '⌂' : (filled ? '◆' : '○')) + '</span>' +
+        '<span class="tag">' + (i === 0 ? '홈' : i + '편') + '</span></div>';
+    }).join('');
+    el.querySelectorAll('[data-plni]').forEach(function (b) {
+      b.onclick = function () { plnGo(+b.dataset.plni); };
+    });
+  }
+  function plnReadyN() { return _pln.eps.filter(function (e) { return e && e.step >= 3; }).length; }
+  function plnSetN() { return _pln.eps.filter(Boolean).length; }
+
+  /* v649 · 알고리즘 네 수치 — 트레이닝 보드(nowOf)와 같은 셈법. 기록 없으면 — */
+  function plnAlgRates() {
+    try { if (!_rmLoaded) rmLoad().then(function () { if (_plnCur === 0) plnRenderWs(false); }); } catch (e) {}
+    var defs = [['eye', '3초', '#43e0e6', 'eye'], ['stay', '지속', '#b07bf0', 'stayp'],
+                ['clk', '클릭', '#E0788C', 'clk'], ['emp', '공감', '#2FD07B', 'emp']];
+    return defs.map(function (d) {
+      var now = null;
+      try {
+        if (d[0] === 'emp') { var s2 = epStats(); now = (s2.n && (s2.sh + s2.sa)) ? Math.round(s2.tot * 10) / 10 : null; }
+        else if (d[0] === 'stay') now = rmPctNow('stay');
+        else now = rmNow(d[0]);
+      } catch (e) {}
+      return { k: d[1], c: d[2], now: now };
+    });
+  }
+  function plnHomeHtml() {
+    var nextI = -1, msg = '', sub = '', i;
+    for (i = 0; i < 5; i++) { if (!_pln.eps[i]) { nextI = i; break; } }
+    if (nextI > -1) {
+      msg = '<em>' + (nextI + 1) + '편</em> 정하기';
+      sub = '다섯 편 중 <b style="color:rgba(240,244,255,.9)">' + plnSetN() + '편</b>을 정했어요.<br>후보는 골라만 두면 됩니다.';
+    } else {
+      for (i = 0; i < 5; i++) { if (_pln.eps[i].step < 3) { nextI = i; break; } }
+      if (nextI > -1) { msg = '<em>' + (nextI + 1) + '편</em> ' + PLN_STEPS[_pln.eps[nextI].step];
+        sub = '이것만 채우면 원고로 넘어갑니다.'; }
+      else {
+        for (i = 0; i < 5; i++) { if (_pln.eps[i].step < 5) { nextI = i; break; } }
+        if (nextI > -1) { msg = '<em>' + (nextI + 1) + '편</em> ' + PLN_STEPS[Math.min(_pln.eps[nextI].step, 4)];
+          sub = '기획은 끝났어요 — 이제 만들 차례입니다.'; }
+        else { msg = '이번 주 <em>끝</em>'; sub = '다섯 편 모두 배포까지 갔어요.<br>다음 주 판을 짜도 됩니다.'; }
+      }
+    }
+    var bars = [0, 1, 2, 3, 4].map(function (k) {
+      var e = _pln.eps[k], p = e ? (e.step / 5) : 0;
+      return '<div class="bcol' + (_plnCur === k + 1 ? ' on' : '') + '" data-plngo="' + (k + 1) + '" style="--bc:' + (e ? PLN_COLS[k] : '#8792AD') + '">' +
+        '<span class="tr"><i style="height:' + Math.round(p * 100) + '%"></i></span>' +
+        '<span class="lb">' + (k + 1) + '</span></div>';
+    }).join('');
+    var ideas = [];
+    try { ideas = (collects || []).filter(function (c) { return c.kind === 'idea' && !c.executed && (c.memo || '').trim(); }); } catch (e) {}
+    var used = plnUsedIds();
+    var ideaHtml = ideas.length
+      ? ideas.slice(0, 4).map(function (c) {
+          var on = used.indexOf(c.id) > -1;
+          return '<div class="pln-ic" data-plnidea="' + esc(c.id) + '"><span class="dt"></span>' +
+            '<span class="tx">' + esc(c.memo.trim().slice(0, 40)) + '</span>' +
+            '<span class="go">' + (on ? '담김 ✓' : '＋ 편으로') + '</span></div>';
+        }).join('')
+      : '<div class="pln-empty">아직 모은 아이디어가 없어요.<br>⚡ 빠르게 담기의 💡 칸에 한 줄만 적어두면 여기 쌓입니다.</div>';
+    var nd = (needle && (needle.to || needle.msg))
+      ? '<b>' + esc(needle.to || '누구에게') + '</b> · ' + esc((needle.msg || '').slice(0, 26) || '무슨 말')
+      : '내 기준을 정해두면 후보가 정확해져요';
+    var alg = plnAlgRates();
+    var algHtml = '<div class="pln-alg" data-plnalg="1"><span class="ic">◎</span>' +
+      alg.map(function (r) { return '<i style="--gc:' + r.c + '">' + r.k + ' <b>' + (r.now !== null ? Math.round(r.now) : '—') + '</b></i>'; }).join('') +
+      '<s>›</s></div>';
+    return '<div class="pln-home">' +
+      '<div class="pln-nd" data-plnneedle="1">🧭 <span class="t">' + nd + '</span><s>바늘 ›</s></div>' +
+      algHtml +
+      '<div class="top">' +
+        '<div class="pln-kick">이번 주 다섯 편</div>' +
+        '<h2 class="pln-one">' + msg + '</h2>' +
+        '<p class="pln-sub">' + sub + '</p>' +
+        (nextI > -1 ? '<button class="pln-go" data-plngo="' + (nextI + 1) + '">작업 시작하기</button>' : '') +
+      '</div>' +
+      '<div class="pln-whole">' +
+        '<div class="pln-wl"><b>이번 주 전체</b><s>' + plnReadyN() + ' 준비됨 · ' + plnSetN() + ' 정함</s></div>' +
+        '<div class="pln-bars">' + bars + '</div>' +
+        '<div class="pln-idea"><div class="ih"><b>💡 모아둔 아이디어</b><s>' + ideas.length + '개</s></div>' + ideaHtml + '</div>' +
+      '</div></div>';
+  }
+
+  function plnEpHtml(n) {
+    var e = _pln.eps[n - 1];
+    if (!e) {
+      var cands = plnCandidates(3);
+      if (!cands.length) {
+        return '<div class="pln-k">' + n + '편 · 아직 안 정했어요</div>' +
+          '<h2 class="pln-big">무엇을<br>만들까요</h2>' +
+          '<div class="pln-empty">고를 후보가 없어요.<br>골대에 분해 결과를 던지거나 💡 아이디어를 적어두면 여기에 올라옵니다.</div>';
+      }
+      return '<div class="pln-k">' + n + '편 · 아직 안 정했어요</div>' +
+        '<h2 class="pln-big">무엇을<br>만들까요</h2>' +
+        '<p class="pln-why">담아둔 것 · 아이디어에서 <em>세 개만</em> 골라 왔어요.</p>' +
+        cands.map(function (x, k) {
+          return '<div class="pln-cand" data-plnpick="' + k + '">' +
+            '<span class="dot"></span><span class="tx"><b>' + esc(x.t) + '</b><s>' + x.why + '</s></span>' +
+            '<span class="src">' + x.src + '</span></div>';
+        }).join('');
+    }
+    var steps = '<div class="pln-prog">' + [0, 1, 2, 3, 4].map(function (k) {
+      return '<i class="' + (k < e.step ? 'on' : '') + '"></i>';
+    }).join('') + '</div>';
+    var hookBlock = e.hook
+      ? '<div class="pln-fld" data-plnhook="1"><div class="v">' + esc(e.hook) + '</div><div class="m">첫 3초에 이 말이 나옵니다 · 탭해서 고치기</div></div>'
+      : '<div class="pln-fld empty" data-plnhook="1"><div class="v">＋ 첫 3초에 무슨 말로 잡을까요</div><div class="m">탭해서 적기</div></div>';
+    var cutsBlock = (e.cuts && e.cuts.length)
+      ? '<div class="pln-cuts">' + e.cuts.map(function (ct, k) {
+          return '<div class="pln-cut" data-plncut="' + k + '"><span class="no">' + (k + 1) + '</span>' +
+            '<span class="tx"><b>' + esc(ct.b) + '</b><s>' + esc(ct.s) + '</s></span>' +
+            '<span class="vis">' + esc(ct.v) + '</span>' +
+            '<span class="del" data-plncutdel="' + k + '">×</span></div>';
+        }).join('') + '<div class="pln-cut add" data-plncutadd="1"><span class="tx"><b>＋ 컷 추가</b></span></div></div>'
+      : '<div class="pln-cuts"><div class="pln-cut add" data-plncutadd="1"><span class="tx"><b>＋ 첫 컷 만들기</b></span></div></div>' +
+        '<div class="pln-magic" data-plnsteal="1"><span class="ic">✨</span><span class="tx">' +
+        '<b>' + esc(e.ref) + ' 편은 이렇게 ' + (e.bone || []).length + '컷이었어요</b><s>그 컷 구성 그대로 가져오기</s></span><span class="go">›</span></div>';
+    var cutN = (e.cuts || []).length;
+    var shots = (e.cuts || []).filter(function (c) { return c.v === '촬영'; }).length;
+    return '<div class="pln-k">' + n + '편 · ' + esc(e.src) + '에서</div>' +
+      '<h2 class="pln-big sm">' + esc(e.t) + '</h2>' + steps +
+      '<div class="pln-sec"><div class="pln-sech"><b>후킹 — 첫 3초</b></div>' + hookBlock + '</div>' +
+      '<div class="pln-sec"><div class="pln-sech"><b>내용 구조</b><s>' + esc(e.ref) + ' 원고의 뼈대</s></div>' +
+        '<div class="pln-fld"><div class="pln-flow">' + (e.bone || []).map(function (s2, k) {
+          return (k ? '<i>›</i>' : '') + '<span>' + esc(s2) + '</span>'; }).join('') + '</div></div></div>' +
+      '<div class="pln-sec"><div class="pln-sech"><b>컷 — 화면에 뭐가 보이나</b>' +
+        (cutN ? '<s>' + cutN + '컷 · 찍을 것 ' + shots + '</s>' : '') + '</div>' + cutsBlock + '</div>' +
+      '<div class="pln-sec"><div class="pln-sech"><b>언제 · 재료</b></div>' +
+        '<div class="pln-rowl" data-plnday="1"><span class="k">언제</span><span class="v"><em>' + esc(e.day) + '</em></span><span class="go">›</span></div>' +
+        '<div class="pln-rowl" data-plnmat="1"><span class="k">재료</span><span class="v">' + esc(e.mat || '담아둔 카드에서') + '</span><span class="go">›</span></div></div>' +
+      (e.step >= 4
+        ? '<button class="pln-act" data-plndist="1">⬡ 배포로 보내기' + (e.step >= 5 ? ' — 다녀옴 ✓' : '') + '</button>' +
+          '<button class="pln-act2" data-plnwrite="1">✎ 원고 다시 보기</button>'
+        : e.step >= 3
+        ? '<button class="pln-act" data-plnwrite="1">✎ 이 편 원고 쓰러 가기</button>'
+        : '<button class="pln-act" data-plnnext="1">' + (e.hook ? '컷 짜기' : '후킹부터 채우기') + '</button>') +
+      '<button class="pln-act2" data-plnagain="1">다른 걸로 바꾸기</button>';
+  }
+
+  function plnRenderWs(anim) {
+    var wsin = $pln('pln-wsin'); if (!wsin) return;
+    var html = _plnCur === 0 ? plnHomeHtml() : plnEpHtml(_plnCur);
+    if (anim) {
+      wsin.classList.add('out');
+      setTimeout(function () {
+        wsin.innerHTML = html; plnBind(); wsin.classList.remove('out');
+        var ws = $pln('pln-ws'); if (ws) ws.scrollTop = 0;
+      }, 180);
+    } else {
+      wsin.innerHTML = html; plnBind();
+      var ws = $pln('pln-ws'); if (ws) ws.scrollTop = 0;
+    }
+  }
+  function plnBind() {
+    var wsin = $pln('pln-wsin'); if (!wsin) return;
+    wsin.querySelectorAll('[data-plngo]').forEach(function (el) {
+      el.onclick = function () { plnGo(+el.dataset.plngo); };
+    });
+    wsin.querySelectorAll('[data-plnpick]').forEach(function (el) {
+      el.onclick = function () { plnPick(_plnCur, +el.dataset.plnpick); };
+    });
+    wsin.querySelectorAll('[data-plnidea]').forEach(function (el) {
+      el.onclick = function () { plnFromIdea(el.dataset.plnidea); };
+    });
+    var ndl = wsin.querySelector('[data-plnneedle]');
+    if (ndl) ndl.onclick = function () { try { switchWorkspace('compass'); cpSetTab('me'); } catch (e) {} };
+    var alg2 = wsin.querySelector('[data-plnalg]');   // v649 · 알고리즘 상세로
+    if (alg2) alg2.onclick = function () { try { switchWorkspace('compass'); cpSetTab('insight'); } catch (e) {} };
+    var ag = wsin.querySelector('[data-plnagain]');
+    if (ag) ag.onclick = async function () {
+      if (!confirm('이 편을 비우고 다시 고를까요?')) return;
+      _pln.eps[_plnCur - 1] = null; await plnSave(); plnRefresh(true);
+    };
+    var st = wsin.querySelector('[data-plnsteal]');
+    if (st) st.onclick = async function () {
+      var e = _pln.eps[_plnCur - 1]; if (!e) return;
+      e.cuts = (e.bone || []).map(function (lb) { return plnCutFor(lb); });
+      e.step = Math.max(e.step, 3);
+      await plnSave(); plnRefresh(true);
+      try { toast('✨ ' + e.cuts.length + '컷을 가져왔어요 — 하나씩 고쳐 쓰세요'); } catch (er) {}
+    };
+    var hk = wsin.querySelector('[data-plnhook]');
+    if (hk) hk.onclick = async function () {
+      var e = _pln.eps[_plnCur - 1]; if (!e) return;
+      var v = prompt('첫 3초에 무슨 말로 잡을까요?', e.hook || '');
+      if (v === null) return;
+      e.hook = v.trim(); if (e.hook) e.step = Math.max(e.step, 2);
+      await plnSave(); plnRefresh(true);
+    };
+    var nx = wsin.querySelector('[data-plnnext]');
+    if (nx) nx.onclick = function () {
+      var e = _pln.eps[_plnCur - 1]; if (!e) return;
+      if (!e.hook) { var h = wsin.querySelector('[data-plnhook]'); if (h) h.click(); return; }
+      var st2 = wsin.querySelector('[data-plnsteal]'); if (st2) { st2.click(); return; }
+      var ad = wsin.querySelector('[data-plncutadd]'); if (ad) ad.click();
+    };
+    wsin.querySelectorAll('[data-plncutadd]').forEach(function (el) {
+      el.onclick = async function () {
+        var e = _pln.eps[_plnCur - 1]; if (!e) return;
+        var v = prompt('이 컷에서 무엇을 보여줄까요?', '');
+        if (v === null || !v.trim()) return;
+        var how = prompt('어떻게 찍을까요? (비워도 됩니다)', '') || '탭해서 적기';
+        e.cuts = e.cuts || [];
+        e.cuts.push({ b: v.trim(), s: how.trim(), v: /화면|자막|도표|캡처/.test(how) ? '화면' : '촬영' });
+        e.step = Math.max(e.step, 3);
+        await plnSave(); plnRefresh(true);
+      };
+    });
+    wsin.querySelectorAll('[data-plncutdel]').forEach(function (el) {
+      el.onclick = async function (ev) {
+        ev.stopPropagation();
+        var e = _pln.eps[_plnCur - 1]; if (!e) return;
+        e.cuts.splice(+el.dataset.plncutdel, 1);
+        await plnSave(); plnRefresh(true);
+      };
+    });
+    wsin.querySelectorAll('[data-plncut]').forEach(function (el) {
+      el.onclick = async function () {
+        var e = _pln.eps[_plnCur - 1]; if (!e) return;
+        var k = +el.dataset.plncut, ct = e.cuts[k]; if (!ct) return;
+        var v = prompt('이 컷에서 무엇을 보여줄까요?', ct.b);
+        if (v === null) return;
+        var how = prompt('어떻게 찍을까요?', ct.s);
+        ct.b = v.trim() || ct.b; if (how !== null) ct.s = how.trim();
+        ct.v = /화면|자막|도표|캡처/.test(ct.s) ? '화면' : '촬영';
+        await plnSave(); plnRefresh(true);
+      };
+    });
+    var dy = wsin.querySelector('[data-plnday]');
+    if (dy) dy.onclick = async function () {
+      var e = _pln.eps[_plnCur - 1]; if (!e) return;
+      var i = PLN_DAYS.indexOf(e.day);
+      e.day = PLN_DAYS[(i + 1) % PLN_DAYS.length];
+      await plnSave(); plnRefresh(false);
+    };
+    var wr = wsin.querySelector('[data-plnwrite]');
+    if (wr) wr.onclick = async function () {
+      var e = _pln.eps[_plnCur - 1];
+      if (e && e.step < 4) { e.step = 4; try { await plnSave(); } catch (er) {} }   // v649 · 원고로 넘어감 = 4단계
+      try { window.__rrFrom = 'plan'; switchWorkspace('scripts'); } catch (er) {}
+    };
+    var ds = wsin.querySelector('[data-plndist]');   // v649 · 배포 문
+    if (ds) ds.onclick = async function () {
+      var e = _pln.eps[_plnCur - 1];
+      if (e && e.step < 5) { e.step = 5; try { await plnSave(); } catch (er) {} }
+      try { switchWorkspace('studio'); st2SetTab('osmu'); } catch (er) {}
+    };
+  }
+
+  function plnReflect() {
+    var c = plnColOf(_plnCur), pv = $pln('plan-view');
+    if (pv) pv.style.setProperty('--plc', c);
+    var bd = $pln('pln-bead'); if (bd) bd.style.setProperty('--plc', c);
+    var dot = $pln('pln-bdot'); if (dot) dot.style.background = c;
+    var au = $pln('pln-aura');
+    var filled = _plnCur === 0 || !!_pln.eps[_plnCur - 1];
+    if (au) { au.style.setProperty('--plc', c); au.style.opacity = filled ? '.28' : '.13'; }
+    if (bd) bd.classList.toggle('empty', !filled);
+    var ic = $pln('pln-beadic');
+    if (ic) ic.textContent = _plnCur === 0 ? '⌂' : (_pln.eps[_plnCur - 1] ? '✓' : '＋');
+    var nm = $pln('pln-nm'); if (nm) nm.textContent = _plnCur === 0 ? 'P L A N' : (_plnCur + ' 편');
+    var ft = $pln('pln-foot');
+    if (ft) ft.textContent = _plnCur === 0 ? '아래 구슬로 편을 옮겨요' : '구슬을 탭하거나 끌어서 옮겨요';
+  }
+  function plnRefresh(anim) { plnRenderSlots(); plnReflect(); plnRenderWs(anim); }
+  function plnGo(i) {
+    if (i === _plnCur) return;
+    _plnCur = i; plnRefresh(true); plnMoveTo(plnSlotX(i));
+  }
+  async function plnPick(n, k) {
+    var x = plnCandidates(3)[k]; if (!x) return;
+    _pln.eps[n - 1] = {
+      rid: x.rid, t: x.t, src: x.src, ref: x.ref, hook: '',
+      bone: plnBoneOf(x.row), cuts: [], day: PLN_DAYS[n - 1],
+      mat: x.row ? '이 카드에서' : '아이디어 메모', step: 1
+    };
+    await plnSave(); plnRefresh(true);
+  }
+  async function plnFromIdea(id) {
+    var c = null;
+    try { c = (collects || []).filter(function (x) { return x.id === id; })[0]; } catch (e) {}
+    if (!c) return;
+    var slot = _pln.eps.indexOf(null);
+    if (slot < 0) { try { toast('다섯 편이 다 찼어요 — 한 편을 비우고 담아주세요'); } catch (e) {} return; }
+    _pln.eps[slot] = {
+      rid: c.id, t: (c.memo || '').trim().slice(0, 40), src: '아이디어', ref: '—', hook: '',
+      bone: ['이득&손해', '공감', '이유', '해결', 'CTA'], cuts: [], day: PLN_DAYS[slot],
+      mat: '아이디어 메모', step: 1
+    };
+    await plnSave();
+    plnGo(slot + 1);
+    try { toast('💡 ' + (slot + 1) + '편으로 담았어요'); } catch (e) {}
+  }
+
+  function plnInit() {
+    if (_plnInited) return; _plnInited = true;
+    var bk = $pln('pln-back');   // v648 · 기획 → 갈림길
+    if (bk) bk.onclick = function () { try { csOpenFork(); } catch (e) {} };
+    var st = $pln('pln-stars');
+    if (st) {
+      var h = '', SEQ = [[14,58],[47,22],[88,71],[132,31],[176,88],[219,18],[258,64],[292,41],
+                         [33,120],[104,146],[196,131],[271,157],[62,188],[155,203],[236,214],[309,182]];
+      SEQ.forEach(function (p, i) {
+        h += '<i style="left:' + p[0] + 'px;top:' + p[1] + 'px;opacity:' + ((i % 3) * .16 + .22).toFixed(2) + '"></i>';
+      });
+      st.innerHTML = h;
+    }
+    var pv = $pln('plan-view');
+    var dragging = false;
+    pv.addEventListener('pointerdown', function (e) {
+      var bd = $pln('pln-bead'); if (!bd) return;
+      var r = bd.getBoundingClientRect();
+      if (e.clientX < r.left - 16 || e.clientX > r.right + 16 || e.clientY < r.top - 16 || e.clientY > r.bottom + 16) return;
+      dragging = true; e.preventDefault();
+    });
+    document.addEventListener('pointermove', function (e) {
+      if (!dragging) return;
+      var svg = $pln('pln-svg'); if (!svg) return;
+      var br = svg.getBoundingClientRect();
+      _plnX = Math.max(PLN_RB + 4, Math.min(PLN_W - PLN_RB - 4, e.clientX - br.left));
+      _plnTgt = _plnX; _plnVel = 0; plnPaint(_plnX);
+    });
+    document.addEventListener('pointerup', function () {
+      if (!dragging) return;
+      dragging = false;
+      var i = Math.max(0, Math.min(5, Math.round(_plnX / (PLN_W / 6) - 0.5)));
+      if (i === _plnCur) plnMoveTo(plnSlotX(i)); else plnGo(i);
+    });
+    window.addEventListener('resize', function () {
+      if (!$pln('plan-view') || $pln('plan-view').style.display === 'none') return;
+      if (!plnFit()) return;
+      _plnX = plnSlotX(_plnCur); _plnTgt = _plnX; plnPaint(_plnX);
+    });
+  }
+  async function plnOpen() {
+    plnInit();
+    await plnLoad();
+    try { if (!_needleLoaded) await needleLoad(); } catch (e) {}   // v647 · 바늘(내 기준)을 기획 머리에
+    if (_pln.wk !== plnWeekId()) { _pln = plnBlank(); await plnSave(); }   // 새 주가 오면 판을 비운다
+    var wk = $pln('pln-wk');
+    if (wk) { var d = new Date(); wk.textContent = (d.getMonth() + 1) + '월 ' + Math.ceil(d.getDate() / 7) + '주'; }
+    plnRefresh(false);
+    requestAnimationFrame(function () {
+      plnFit(); _plnX = plnSlotX(_plnCur); _plnTgt = _plnX; plnPaint(_plnX);
+    });
+  }
+  window.__openPlan = function () { try { switchWorkspace('plan'); } catch (e) {} };
+
   function renderCompass() {
     if (!_cpInited) {
       _cpInited = true;
@@ -53327,40 +54064,8 @@
     cpSetTab(_cpTab || 'insight');
   }
 
-  // v595 · 🏋️ 트레이닝 로비 — 사장님 확정: 전술 보드(위 tgym) + 4문 안내. 분석·기록은 🧭 나침반으로.
-  //   옛 홈(골대·맵·목표·쇼핑)은 삭제가 아니라 «접힘» — 기능 삭제 금지 원칙. 다음 판들에서 차근차근 이사.
-  function st2RenderLobby() {
-    const el = document.getElementById('st2-home'); if (!el) return;
-    const DOORS = [
-      ['3sec', '◔', '초반 3초', '시선을 붙잡는 훈련', '목표 ' + tGoals.eye + '%', '#43e0e6'],
-      ['scripts', '✎', '내용 구성', '끝까지 보게 만드는 훈련', '목표 ' + tGoals.stay + '초', '#b07bf0'],
-      ['thumbgo', '▣', '썸네일', '클릭하게 만드는 훈련', '목표 ' + tGoals.clk + '%', '#E0788C'],
-      ['osmu', '⬡', '배포', '만든 걸 다섯 곳에서 일하게', '저장·보내기 ' + tGoals.emp + '%', '#d7f34b']
-    ];
-    el.innerHTML =
-      '<div class="st2-lobby">' +
-        DOORS.map(function (d) {
-          return '<button class="door" data-st2go="' + d[0] + '" style="--c:' + d[5] + '">' +
-            '<span class="g">' + d[1] + '</span><span class="nm">' + d[2] + '</span>' +
-            '<span class="dd">' + d[3] + '</span><span class="tg">' + d[4] + '</span></button>';
-        }).join('') +
-      '</div>' +
-      '<button class="st2-cpnote" id="st2-cpnote">🧭 고객·트렌드·인사이트는 <b>나침반</b>으로 이사했어요 →</button>' +
-      '<div class="st2-oldfold"><button class="ofb" id="st2-oldopen">▾ 이전 홈 잠깐 보기 — 골대·맵·목표·쇼핑 (이사 준비 중)</button>' +
-      '<div id="st2-oldhome" style="display:none;"></div></div>';
-    el.querySelectorAll('[data-st2go]').forEach(function (b) { b.onclick = function () { st2SetTab(b.dataset.st2go); }; });
-    const cn = document.getElementById('st2-cpnote');
-    if (cn) cn.onclick = function () { try { switchWorkspace('compass'); } catch (e) {} };
-    const oo = document.getElementById('st2-oldopen');
-    if (oo) oo.onclick = function () {
-      const oh = document.getElementById('st2-oldhome'); if (!oh) return;
-      const open = oh.style.display !== 'none';
-      oh.style.display = open ? 'none' : 'block';
-      oo.textContent = open ? '▾ 이전 홈 잠깐 보기 — 골대·맵·목표·쇼핑 (이사 준비 중)' : '▴ 이전 홈 접기';
-      if (!open) { try { st2RenderHome(); } catch (e) { console.error('[st2] oldhome', e); } }
-    };
-  }
-
+  // v648 · (정리) v595 로비 st2RenderLobby 제거 — 호출자 0인 고아. 실제 홈 = scene1(st2RenderHome).
+  //   문 역할은 도크·◈기획·갈림길이 대신한다. 사장님 지시(2026-08-05).
 
   // ═══════════ v598 · ✎ 시간의 방 — ①가이드 투어 ②이탈 곡선 ③훈련 ═══════════
   let _stTrain = 'game';   // v644 · 뜯어보기 게임 = 이 방의 본 훈련
