@@ -17142,6 +17142,10 @@
   .cus2-back:hover{ color:var(--rose); border-color:var(--rose-s); }
   .cus2-back.wide{ width:auto; padding:0 12px; font-size:10.5px; font-weight:700; }
   .cus2-back.edit{ font-size:12px; }   /* v565 · ✎ 이름 고치기 — 뒤로가기(‹)와 헷갈리지 않게 */
+  .cus2-nameme{font-family:inherit;font-size:11.5px;font-weight:800;padding:6px 12px;border-radius:99px;
+    border:1px dashed rgba(224,120,140,.55);background:rgba(224,120,140,.1);color:#E0788C;cursor:pointer;
+    -webkit-tap-highlight-color:transparent}
+  .cus2-nameme:active{transform:scale(.95)}
   .cus2-who{ font-size:11.5px; font-weight:700; }
   .cus2-idx{ margin-left:auto; margin-right:2px; font-family:Georgia,serif; font-size:10px; color:var(--st2-faint); letter-spacing:.1em; }
   .cus2-tabs{ display:flex; padding:3px; border-radius:11px; background:rgba(255,255,255,.04);
@@ -51490,6 +51494,12 @@
   }
   function st2RenderCus() {
     const el = document.getElementById('st2-cus'); if (!el) return;
+    // 🚨 v678 · 이 방으로 «바로» 들어오면 _currentPmmId가 비어 있어 늘 첫 타겟이 열렸다.
+    //   그래서 다른 타겟에 담아둔 게 «없어진 것»처럼 보였다 — 기억해둔 타겟부터 되살린다.
+    if (pmms && pmms.length && !pmms.find(x => x.id === _currentPmmId)) {
+      const _last = (typeof cuRecallPmm === 'function') ? cuRecallPmm() : '';
+      _currentPmmId = (_last && pmms.find(x => x.id === _last)) ? _last : pmms[0].id;
+    }
     const p = (pmms && pmms.length) ? (pmms.find(x => x.id === _currentPmmId) || pmms[0]) : null;
     // v595f · 빈 상태에 문이 없었다 — 말만 하고 길을 안 주면 막다른 방
     if (!p) {
@@ -51501,14 +51511,16 @@
     }
     cus2Ensure(p);
     const named = !!(p.targetName || '').trim();
+    // v678 · 담은 게 있으면 이름이 없어도 본 화면을 열어준다 — 이름은 관문이 아니다
+    const _mats0 = CUS2_MATS.reduce(function (n, m) { return n + cus2Bask(p, m.k).length; }, 0);
     let h = '<div class="cus2">';
     // (v593 후반 · 타겟 세그먼트 줄은 사장님 기각 — «우리 채널의 단 한 명» 원칙. 멀티 타겟은 ◉ 고객 분석 방에만)
 
     // ── 0의 상태: 타겟 정하기 ── (v565 · 이름 고치기도 이 화면을 재사용 — 기존 이름을 채워둔다)
-    if (!named || _cus2Rename) {
+    if ((!named && !_mats0) || _cus2Rename) {
       const g = cus2Guess();
       const cur = (p.targetName || '').trim();
-      const mats = CUS2_MATS.reduce((n, m) => n + cus2Bask(p, m.k).length, 0);   // 모아둔 재료 수
+      const mats = _mats0;   // 모아둔 재료 수
       h += '<div class="cus2-first">' +
         (cur ? '<button class="cus2-rnback" id="cus2-rncancel" title="그만두기">‹</button>' : '') +
         '<div class="cus2-eye">My Target</div>' +
@@ -51541,7 +51553,8 @@
     const RN = ['0', 'I', 'II', 'III', 'IV'];
     // 상단 바 — 제목은 왼쪽, ⬆️➡️ 뒤로/돌아가기는 «항상 오른쪽» (앱 공통 규칙)
     h += '<div class="cus2-nav">' +
-      '<span class="cus2-who">' + esc((p.targetName || '').slice(0, 22)) + '</span>' +
+      '<span class="cus2-who">' + (named ? esc((p.targetName || '').slice(0, 22))
+        : '<button class="cus2-nameme" id="cus2-nameme">이 사람 이름 정하기 ›</button>') + '</span>' +
       '<span class="cus2-idx srf">' + RN[filled] + ' / IV</span>' +
       (_cus2All
         ? '<button class="cus2-back wide" id="cus2-allback" title="통으로 돌아가기">‹ 통으로</button>'
@@ -52072,6 +52085,9 @@
     const bk = document.getElementById('cus2-back');
     // v565 · 확인창도 «지우기»도 없다 — 기존 이름을 담은 편집 화면으로만 간다(그만두면 원래대로)
     if (bk) bk.onclick = () => { _cus2Rename = true; st2RenderCus(); };
+    // v678 · 이름이 아직 없을 때 상단에 뜨는 「이 사람 이름 정하기」
+    const _nm = document.getElementById('cus2-nameme');
+    if (_nm) _nm.onclick = () => { _cus2Rename = true; st2RenderCus(); };
     const nx = document.getElementById('cus2-next');
     if (nx) nx.onclick = () => { const m = CUS2_MATS.find(x => !cus2Bask(p, x.k).length); _cus2Tab = 'mat'; _cus2Sheet = m ? m.k : null; st2RenderCus(); };
     // ⚠️ .cus2-vial로 좁힘 — 시트·전체보기 섹션도 색상용 data-cus2v를 갖고 있어 전역 셀렉터면 오작동
