@@ -12682,6 +12682,12 @@
   .ide-empty2 { text-align:center; padding:34px 14px; font-size:12px; line-height:1.85; color:var(--text-mute); }
   .ide-empty2 b { color:var(--neon) }
   /* 담기 위저드 — 여러 장 슬롯 */
+  /* v651 · 단일 사진 슬롯 × 빼기 — 잘못 올렸을 때 지운다 */
+  .qcw-slot .x { position:absolute; right:7px; top:7px; width:26px; height:26px; border-radius:50%;
+    border:none; background:rgba(0,0,0,.62); color:#fff; font-size:15px; line-height:1; cursor:pointer;
+    display:grid; place-items:center; z-index:3; -webkit-tap-highlight-color:transparent; }
+  .qcw-slot .x:hover { background:rgba(224,120,140,.9); }
+  .qcw-slot .x:active { transform:scale(.9); }
   .qcw-multi { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
   /* v591 · 카드 슬롯이 «버젓이» — 점 하나가 아니라 세로 카드 모양 (썸네일 슬롯과 한 혈통) */
   .qcw-multi .mslot { position:relative; aspect-ratio:9/13; border-radius:14px; overflow:hidden;
@@ -16041,7 +16047,7 @@
   .qcw-chip.num { min-width:40px; text-align:center; border:none; background:transparent; border-radius:999px; padding:8px 0; }
   .qcw-chip.num.on { background:rgb(var(--qc,90,170,255)); color:#0b0c06; }
   .qcw-body { margin-top:16px; display:flex; justify-content:center; }
-  .qcw-slot { width:170px; aspect-ratio:9/14; border-radius:18px; border:1.5px dashed rgba(90,170,255,.5); cursor:pointer;
+  .qcw-slot { position:relative; width:170px; aspect-ratio:9/14; border-radius:18px; border:1.5px dashed rgba(90,170,255,.5); cursor:pointer;
     background:rgba(90,170,255,.05); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:9px; overflow:hidden;
     transition:border-color .2s, box-shadow .2s; }
   .qcw-slot:hover { border-color:rgba(90,170,255,.85); box-shadow:0 0 22px rgba(90,170,255,.2); }
@@ -23001,8 +23007,18 @@
     .prp-sgt .w.pvx{opacity:.35;text-decoration:line-through}
     .prp-sgt .w.snap{animation:prpSnap .3s cubic-bezier(.2,1.6,.4,1)}
     /* v641 · 펜 재편 — 글 배치 핸들 + 구조 변경 안내 */
-    .prp-mv{display:none;gap:4px;margin-left:6px;vertical-align:middle}
-    #prp.structing .prp-mv{display:inline-flex}
+    /* v656 · 구간 사이 ＋ — 구조 모드에서만 보인다 */
+    .prp-ins{display:none;width:100%;margin:0 0 11px;padding:0;border:none;background:none;cursor:pointer;
+      height:26px;position:relative;align-items:center;justify-content:center;
+      -webkit-tap-highlight-color:transparent}
+    #prp.structing .prp-ins{display:flex}
+    .prp-ins::before{content:'';position:absolute;left:0;right:0;top:50%;height:1px;
+      background:linear-gradient(90deg,transparent,rgba(95,176,232,.3) 18%,rgba(95,176,232,.3) 82%,transparent)}
+    .prp-ins span{position:relative;display:grid;place-items:center;width:25px;height:25px;border-radius:50%;
+      background:#171310;border:1px solid rgba(95,176,232,.5);color:#8FC9F0;font-size:14px;line-height:1;
+      transition:background .16s,transform .16s}
+    .prp-ins:hover span{background:rgba(95,176,232,.18)}
+    .prp-ins:active span{transform:scale(.88)}
     .prp-mv button{width:30px;height:30px;border-radius:9px;border:1px solid rgba(255,255,255,.16);
       background:rgba(255,255,255,.06);color:#e8e9e6;font-weight:800;font-size:14px;cursor:pointer}
     .prp-mv button:active{transform:scale(.92)}
@@ -23256,6 +23272,7 @@
           <button class="fb-toggle-btn" data-fbmode="thumb">🖼 썸네일</button>
           <button class="fb-toggle-btn" data-fbmode="copy">💬 수식어</button>
           <button class="fb-toggle-btn" data-fbmode="kw">🏷 키워드</button>
+          <button class="fb-toggle-btn" data-fbmode="idea">💡 아이디어</button>
           <button class="fb-toggle-btn" data-fbdoor="customer">◉ 고객</button>
           <button class="fb-toggle-btn" data-fbdoor="trend">↗ 트렌드</button>
           <button class="fb-toggle-btn" data-fbmode="comment" style="display:none;">💬 공감댓글</button>
@@ -35271,7 +35288,7 @@
       try { plnOpen(); } catch (e) { console.error('[plan]', e); }
       return;
     }
-    if (ws === 'idea') {   // v643 · 💡 아이디어 (탭에선 빠졌지만 화면·배선 보존)
+    if (ws === 'idea') {   // v643 · 💡 아이디어 — v655에서 하단 탭 원상복귀
       hideAll();
       const iv = document.getElementById('idea-view');
       if (iv) { iv.style.display = 'flex'; iv.style.flexDirection = 'column'; }
@@ -46062,7 +46079,7 @@
   // v650 · 구조 서랍 — «구조라고 할 수 있는 것들»을 쫙 펼친다 (2열)
   const PRP_LBLS = [
     ['이득&손해', 'gain'], ['공감 상황', 'empathy'], ['문제 제시', ''], ['원인·이유', ''],
-    ['전문 용어', ''], ['방법', 'method'], ['과정', ''], ['증거', ''],
+    ['전문 용어', ''], ['방법', 'method'], ['해결책', ''], ['과정', ''], ['증거', ''],
     ['비교', ''], ['반박', ''], ['소구포인트', 'appeal'], ['가치', ''],
     ['후속 예고', ''], ['CTA', 'cta']
   ];
@@ -46182,7 +46199,7 @@
 
     const HINTS = { k: '<b>핵심 펜</b> — 쓸면 빨갛게 · 두 번 톡 = 문장', r: '<b>참고 펜</b> — 쓸면 주황 · 두 번 톡 = 문장',
       e: '<b>지우개</b> — 문지르면 지워져요 · 두 번 톡 = 문장',
-      s: '<b>구조</b> — 구간 이름을 누르면 서랍이 열려요 · ↑↓로 순서도 바꿔요',
+      s: '<b>구조</b> — 이름을 누르면 서랍 · 사이의 <b>＋</b> 로 구간 추가',
       x: '<b>✎ 수정</b> — 글칸을 눌러 직접 고쳐 쓰세요' };
     document.getElementById('prp-tray').addEventListener('click', function (e) {
       const b = e.target.closest('.prp-pen'); if (!b) return;
@@ -46231,8 +46248,15 @@
 
     // 라벨 → 캐스케이드 / 자르기 클릭
     rt.addEventListener('click', function (e) {
-      const mv = e.target.closest('.prp-mv button');   // v641 · 배치 핸들
-      if (mv) { prpMoveSeg(+mv.dataset.i, mv.dataset.mv === 'up' ? -1 : 1); e.stopPropagation(); return; }
+      const ins = e.target.closest('.prp-ins');        // v656 · 구간 사이 ＋
+      if (ins) {
+        e.stopPropagation();
+        const at = +ins.dataset.ins;
+        const n = document.querySelectorAll('#prp-segs .prp-sg').length;
+        if (at >= n) prpAddSeg(Math.max(0, n - 1), 1);   // 맨 끝
+        else prpAddSeg(at, -1);                          // 그 구간 «앞»
+        return;
+      }
       if (_prpCut) {
         const w = e.target.closest('.prp-sgt .w');
         if (w) { prpDoCut(w); return; }
@@ -46405,7 +46429,7 @@
     if (_prpHistFor !== r.id) { _prpHist = []; _prpRedo = []; _prpHistFor = r.id; try { prpHistSync(); } catch (e) {} }
     const segs = prpSegsOf(r);
     const marks = (r.prep && r.prep.marks) || {};
-    const html = segs.map(function (s, i) {
+    const rowsHtml = segs.map(function (s, i) {
       const t = prpClean(s.t);
       const mk = marks[i] || {};
       const wArr = t.split(/\s+/).filter(Boolean);
@@ -46417,16 +46441,21 @@
       const col = prpColor(s);
       return '<div class="prp-sg" data-i="' + i + '" style="color:' + col + '">' +
         '<button type="button" class="prp-sgl">' + esc(s.k || (SCRIPT_SECTIONS.find(x => x.key === s.c) || {}).label || '구간') + ' <span class="cv">▾</span></button>' +
-        '<span class="prp-mv">' +
-          (i > 0 ? '<button type="button" data-mv="up" data-i="' + i + '">↑</button>' : '') +
-          (i < segs.length - 1 ? '<button type="button" data-mv="dn" data-i="' + i + '">↓</button>' : '') + '</span>' +
+        // v656 · ↑↓ 폐지 — 순서 바꾸기는 서랍(라벨 클릭) 안에 그대로 있다
+
         '<div class="prp-sgt" data-i="' + i + '">' + words + '</div></div>';
-    }).join('');
+    });
 
     // v567 · 판에는 기찻길＋원고만. 썸네일·제목·명세는 왼쪽 기둥이 맡는다(조명 아래를 비운다)
+    // v656 · 구간과 구간 «사이»마다 ＋ (구조 모드에서만 보인다)
+    const insRow = function (at) {
+      return '<button type="button" class="prp-ins" data-ins="' + at + '" title="여기에 구성 추가">' +
+        '<span>＋</span></button>';
+    };
+    const withIns = segs.map(function (_s, i) { return insRow(i) + rowsHtml[i]; }).join('') + insRow(segs.length);
     document.getElementById('prp-host').innerHTML =
       '<div class="prp-panel' + (anim ? ' in' : '') + '">' +
-        '<div class="prp-fbody"><div class="prp-vlad" id="prp-lad"></div><div id="prp-segs">' + html + '</div></div>' +
+        '<div class="prp-fbody"><div class="prp-vlad" id="prp-lad"></div><div id="prp-segs">' + withIns + '</div></div>' +
       '</div>';
 
     prpRenderCard();
@@ -47752,14 +47781,15 @@
   const QCW_FORMS = {
     shot: [
       { t: 'photo', lb: '눈에 꽂힌 썸네일', s: '붙여넣기(Ctrl+V) · 눌러서 선택' },
-      { t: 'text',  lb: '거기 뭐라고 적혀 있었어요?', s: '썸네일 위 후킹 문구 — 기억나는 만큼만', ph: '예) 이 머리 하지 마세요' },
+      { t: 'text',  lb: '거기 뭐라고 적혀 있었어요?', s: '치면 예시가 떠요 — 기억나는 만큼만', ph: '예) 이 머리 하지 마세요' },
       // v561 · 썸네일은 «컨텐츠 유형»이 아니라 «썸네일 유형»으로 나눈다 (사장님 지적)
       { t: 'thumbtype', lb: '어떤 썸네일이었어요?', s: '분해봇이 나누는 그 기준 — 하나만' }
     ],
     copy: [
-      { t: 'text',     lb: '그 «말맛» 문구', s: '수식어·후킹 문구를 그대로', ph: '예) 셋뽀는 모르는 이유 3가지' },
-      { t: 'copytype', lb: '어떤 수식어였어요?', s: '분해봇이 나누는 그 기준 — 하나만' },   // v561 · 수식어에도 분류기
-      { t: 'photo',    lb: '캡처 (선택)', s: '있으면 같이 담아요' }
+      // v651 · 사진이 맨 위 — 썸네일·댓글·아이디어와 같은 자리(붙여넣고 바로 담게)
+      { t: 'photo',    lb: '그 문구 캡처 (선택)', s: '붙여넣기(Ctrl+V) · 눌러서 선택' },
+      { t: 'text',     lb: '그 «말맛» 문구', s: '치면 예시가 떠요 — 내 문구·후킹 100선에서', ph: '예) 셋뽀는 모르는 이유 3가지' },
+      { t: 'copytype', lb: '어떤 수식어였어요?', s: '분해봇이 나누는 그 기준 — 하나만' }   // v561 · 수식어에도 분류기
     ],
     idea: [
       { t: 'photo', lb: '캡처 — 최대 6장', s: '계속 붙여넣기(Ctrl+V) 하면 쌓여요' },
@@ -47929,6 +47959,32 @@
       secEls.forEach(ta => { _qcw.sections[ta.dataset.qsec] = ta.value.trim(); });
     }
   }
+  // v652c · 유형 칩만 따로 그린다 — 검색 중 부분 갱신용(입력칸을 새로 만들지 않기 위해)
+  function qcwTypeList(ax) {
+    const isThumb = ax === 'thumb';
+    let list = []; try { list = rdTypeList(isThumb ? 'thumb' : 'copy'); }
+    catch (e) { list = isThumb ? BASE_THUMB_TYPES : BASE_COPY_TYPES; }
+    const picked = isThumb ? (_qcw.stype || '') : (_qcw.ctypeCopy || '');
+    const q = (_qcwTQ[ax] || '').trim().toLowerCase();
+    const shown = q ? list.filter(x => x.toLowerCase().indexOf(q) >= 0 || x === picked) : list;
+    return { list: list, shown: shown, picked: picked, q: q, at: isThumb ? 'qst' : 'qct' };
+  }
+  function qcwTypeChipsHtml(ax) {
+    const t = qcwTypeList(ax);
+    return t.shown.length
+      ? '<div class="qcw-chips">' + t.shown.map(x =>
+          '<button type="button" class="qcw-chip' + (t.picked === x ? ' on' : '') + '" data-' + t.at + '="' + esc(x) + '">' + esc(x) + '</button>').join('') + '</div>'
+      : '<div class="qcw-none">「' + esc(t.q) + '」에 맞는 유형이 없어요</div>';
+  }
+  function qcwBindTypeChips(box) {
+    if (!box) return;
+    box.querySelectorAll('[data-qst]').forEach(b => b.onclick = () => {
+      qcwSaveField(); _qcw.stype = (_qcw.stype === b.dataset.qst ? '' : b.dataset.qst); qcwRender();
+    });
+    box.querySelectorAll('[data-qct]').forEach(b => b.onclick = () => {
+      qcwSaveField(); _qcw.ctypeCopy = (_qcw.ctypeCopy === b.dataset.qct ? '' : b.dataset.qct); qcwRender();
+    });
+  }
   // v560 · 한 판 렌더 — 문마다 필요한 칸을 세로로 쌓는다. 다음/건너뛰기 없음, 담기 하나.
   function qcwFieldHtml(f) {
     const k = _qcw.kind;
@@ -47945,8 +48001,11 @@
       return '<div class="qcw-multi">' + slots.join('') + '</div>';
     }
     if (f.t === 'photo') {
+      // v651 · 잘못 올렸을 때 지울 수 있게 — 사진이 있을 때만 × (아이디어 슬롯과 같은 문법)
       return '<div class="qcw-slot sm' + (_qcw.img ? ' has' : '') + '" id="qcw-slot">' +
-        (_qcw.img ? '<img src="' + _qcw.img + '" alt=""/>' : '<span class="pl">＋</span><span class="s">사진 담기</span>') + '</div>';
+        (_qcw.img
+          ? '<img src="' + _qcw.img + '" alt=""/><button type="button" class="x" data-qimgx="1" title="사진 빼기">×</button>'
+          : '<span class="pl">＋</span><span class="s">사진 담기</span>') + '</div>';
     }
     if (f.t === 'basket') {
       // v591 · 얼굴이 «메인 무대»로 — 고르면 무대가 즉시 바뀐다. 선택은 아래 작은 4칩
@@ -48026,15 +48085,14 @@
       const ax = isThumb ? 'thumb' : 'copy';
       const q = (_qcwTQ[ax] || '').trim().toLowerCase();
       const shown = q ? list.filter(x => x.toLowerCase().indexOf(q) >= 0 || x === picked) : list;
+      // v652c · 칩은 «상자»에 담는다 — 검색할 때 이 상자만 갈아끼우고 입력칸은 건드리지 않는다
       return '<div class="tsr' + (q ? ' has' : '') + '"><span class="ic">&#128269;</span>' +
         '<input type="text" class="tsr-in" data-qtsr="' + ax + '" value="' + esc(q ? _qcwTQ[ax] : '') +
         '" placeholder="유형 찾기 — 치는 대로 좁혀져요" autocomplete="off" />' +
-        (q ? '<span class="tsr-n">' + shown.length + ' / ' + list.length + '</span>' : '') +
+        '<span class="tsr-n" data-qtsrn="' + ax + '"' + (q ? '' : ' style="display:none"') + '>' +
+          (q ? shown.length + ' / ' + list.length : '') + '</span>' +
         '<button type="button" class="tsr-x" data-qtsrx="' + ax + '" title="지우기">&#10005;</button></div>' +
-        (shown.length
-          ? '<div class="qcw-chips">' + shown.map(x =>
-              '<button type="button" class="qcw-chip' + (picked === x ? ' on' : '') + '" data-' + at + '="' + esc(x) + '">' + esc(x) + '</button>').join('') + '</div>'
-          : '<div class="qcw-none">「' + esc(q) + '」에 맞는 유형이 없어요</div>');
+        '<div data-qtsrbox="' + ax + '">' + qcwTypeChipsHtml(ax) + '</div>';
     }
     if (f.t === 'ctype') {
       let cts = []; try { cts = activeComment(); } catch (e) {}
@@ -48103,7 +48161,17 @@
     });
     document.getElementById('qcw-go').onclick = () => { qcwSaveField(); qcwSave(); };
     const slot = document.getElementById('qcw-slot');
-    if (slot) slot.onclick = () => { const f = document.getElementById('qcw-file'); if (f) f.click(); };
+    if (slot) slot.onclick = (e) => {
+      if (e.target.closest('[data-qimgx]')) return;   // v651 · × 는 아래 핸들러가 처리
+      const f = document.getElementById('qcw-file'); if (f) f.click();
+    };
+    w.querySelectorAll('[data-qimgx]').forEach(x => x.onclick = (e) => {   // v651 · 사진 빼기
+      e.stopPropagation();
+      qcwSaveField();                                 // 적어둔 글은 지키고
+      _qcw.img = null; _qcw.imgs = [];
+      qcwRender();
+      try { toast('사진을 뺐어요'); } catch (er) {}
+    });
     // v528 · 아이디어 여러 장 슬롯
     w.querySelectorAll('[data-qmadd]').forEach(s => s.onclick = () => { const f = document.getElementById('qcw-file'); if (f) f.click(); });
     w.querySelectorAll('[data-qmx]').forEach(x => x.onclick = (e) => {
@@ -48123,28 +48191,50 @@
     chip('[data-qc2]', b => _qcw.ctype  = (_qcw.ctype === b.dataset.qc2 ? '' : b.dataset.qc2));
     chip('[data-qb]',  b => { _qcw.basket = b.dataset.qb; _qcw.basketTouched = true; });   // 손으로 고르면 자동추측 정지
     // 🔎 v581 · 유형 찾기 — 화면을 다시 그리므로 «그 칸으로 돌아가» 계속 칠 수 있게 한다
+    // 🚨 v652 · 한글이 «ㅎㅗㅏㄱㄱ»으로 깨지던 버그 —
+    //    IME 조합 중에 qcwRender()가 입력칸을 새로 만들면 조합이 파괴된다.
+    //    조합 중(composing)에는 값만 담아두고, 조합이 끝나는 순간 한 번만 그린다.
+    //   ⇒ v652c · 입력칸은 그대로 두고 «칩 상자와 카운터»만 갈아끼운다.
+    //      화면을 다시 그리면 입력칸이 새로 만들어져 한글 조합이 깨지고 포커스가 빠진다.
     w.querySelectorAll('[data-qtsr]').forEach(function (inp) {
-      inp.addEventListener('input', function () {
+      const refresh = function () {
         const ax = inp.dataset.qtsr;
         _qcwTQ[ax] = inp.value || '';
-        qcwSaveField(); qcwRender();
-        const again = document.querySelector('[data-qtsr="' + ax + '"]');
-        if (again) { again.focus(); const v = again.value; again.value = ''; again.value = v; }
+        const t = qcwTypeList(ax);
+        const box = document.querySelector('[data-qtsrbox="' + ax + '"]');
+        if (box) { box.innerHTML = qcwTypeChipsHtml(ax); qcwBindTypeChips(box); }
+        const nEl = document.querySelector('[data-qtsrn="' + ax + '"]');
+        if (nEl) {
+          nEl.textContent = t.q ? (t.shown.length + ' / ' + t.list.length) : '';
+          nEl.style.display = t.q ? '' : 'none';
+        }
+        const wrap = inp.closest('.tsr'); if (wrap) wrap.classList.toggle('has', !!t.q);
+      };
+      inp.addEventListener('input', refresh);          // 조합 중이어도 안전 — 입력칸을 건드리지 않는다
+      inp.addEventListener('compositionend', refresh);
+      inp.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') { e.stopPropagation(); inp.value = ''; refresh(); }
       });
-      inp.addEventListener('keydown', function (e) { if (e.key === 'Escape') { e.stopPropagation(); inp.value = ''; inp.dispatchEvent(new Event('input')); } });
     });
     w.querySelectorAll('[data-qtsrx]').forEach(function (b) {
       b.onclick = function () {
-        _qcwTQ[b.dataset.qtsrx] = '';
-        qcwSaveField(); qcwRender();
-        const again = document.querySelector('[data-qtsr="' + b.dataset.qtsrx + '"]');
-        if (again) again.focus();
+        const ax = b.dataset.qtsrx;
+        _qcwTQ[ax] = '';
+        const inp = document.querySelector('[data-qtsr="' + ax + '"]');
+        if (inp) { inp.value = ''; inp.dispatchEvent(new Event('input', { bubbles: true })); inp.focus(); }
       };
     });
     // v561 · 정식 분해 3단계(분해) — 퍼널·핏·트렌드
     chip('[data-qfn]', b => _qcw.funnel = (_qcw.funnel === b.dataset.qfn ? '' : b.dataset.qfn));
     chip('[data-qrt]', b => _qcw.rating = (_qcw.rating === +b.dataset.qrt ? 0 : +b.dataset.qrt));
     chip('[data-qtr]', b => _qcw.trend  = (_qcw.trend  === +b.dataset.qtr ? 0 : +b.dataset.qtr));
+    // 🎣 v653 · «쉬운 방법» — 문구 칸에 3열 자동완성(내 썸네일 문구 │ 수식어 │ 후킹문구 100선).
+    //   원고 기찻길(rw-hook)에만 있던 것을 빠르게 담기에도. 옆 알약으로 끄고 켠다.
+    try {
+      w.querySelectorAll('[data-qta="text"],[data-qta="hook"]').forEach(function (ta) {
+        if (typeof attachHookAutocomplete === 'function') attachHookAutocomplete(ta, {});
+      });
+    } catch (e) {}
     // ── v562 · 붙여넣어 자르기 (커서 분할) ──
     //   버튼을 누르면 포커스가 옮겨가 selectionStart가 날아간다 → 미리 기억해둔다
     const sTa = w.querySelector('[data-qcursor]');
@@ -48288,8 +48378,12 @@
     const f = document.getElementById('qcw-file');
     if (f) f.onchange = (e) => { if (e.target.files && e.target.files[0]) qcwSetPhoto(e.target.files[0]); e.target.value = ''; };
     document.addEventListener('paste', (e) => {
+      // 🚨 v654 · 입력 화면(#qcw)이 열리면 qc-room은 show가 아니다 —
+      //    옛 가드는 그걸 몰라서 붙여넣기가 늘 막혀 있었다.
       const r = document.getElementById('qc-room');
-      if (!r || !r.classList.contains('show') || !_qcw) return;
+      const w = document.getElementById('qcw');
+      const open = (r && r.classList.contains('show')) || (w && w.style.display !== 'none');
+      if (!open || !_qcw) return;
       const cd = e.clipboardData; if (!cd || !cd.items) return;
       for (let i = 0; i < cd.items.length; i++) {
         if (cd.items[i].type && cd.items[i].type.indexOf('image/') === 0) {
