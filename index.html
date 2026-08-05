@@ -20120,18 +20120,19 @@
       .cs-ln{flex:1;height:1.5px;background:var(--cso-line2);margin:0 7px;border-radius:9px;transition:background .35s}
       .cs-ln.done{background:linear-gradient(90deg,var(--cso-emer),var(--cso-lime))}
       /* v543 · 다음 방 예고 카드 — 저장 «전»에 다음을 보여준다 */
+      /* v658 · 가는 곳(미분류 정리 라인)의 색을 그대로 입는다 — --sneon #e6fb62 */
       .cso-peek{display:none;align-items:center;gap:10px;margin-top:11px;padding:11px 12px;border-radius:12px;
-        cursor:pointer;border:1px solid rgba(67,224,230,.32);
-        background:linear-gradient(100deg,rgba(67,224,230,.09),rgba(67,224,230,.02));
+        cursor:pointer;border:1px solid rgba(230,251,98,.32);
+        background:linear-gradient(100deg,rgba(230,251,98,.09),rgba(230,251,98,.02));
         transition:background .16s,transform .12s;font-family:inherit;width:100%;text-align:left}
       .cso-peek.on{display:flex}
-      .cso-peek:hover{background:rgba(67,224,230,.15)}
+      .cso-peek:hover{background:rgba(230,251,98,.14)}
       .cso-peek:active{transform:scale(.99)}
       .cso-peek .ic{font-size:17px;flex:none}
       .cso-peek .tx{flex:1;min-width:0}
-      .cso-peek .t1{font-size:11.5px;font-weight:800;color:var(--cso-cyan);display:block}
+      .cso-peek .t1{font-size:11.5px;font-weight:800;color:#e6fb62;display:block}
       .cso-peek .t2{font-size:10px;color:var(--cso-sub);margin-top:2px;display:block}
-      .cso-peek .go{font-size:15px;color:var(--cso-cyan);flex:none}
+      .cso-peek .go{font-size:15px;color:#e6fb62;flex:none}
       @media (prefers-reduced-motion:reduce){.cs-st,.cs-st .dot,.cs-ln,.cso-peek{transition:none!important}}
       /* 무대 */
       .cso-stage{position:relative;height:min(460px,56vh);min-height:380px;display:flex;align-items:center;justify-content:center;cursor:pointer;overflow:hidden;border-radius:18px;border:1px solid var(--cso-line);
@@ -20278,6 +20279,7 @@
         justify-content:center; font-size:11px; font-weight:900; background:var(--cso-lime); color:#0B0C0A;
         transition:.18s; }
       .cso-card.off .cc-chk{ background:transparent; border:1.5px solid var(--cso-line2); color:transparent; }
+      .cc-dupw{ flex:none; display:flex; flex-direction:column; align-items:flex-end; gap:5px }
       .cc-flag{ font-size:9.5px; font-weight:800; padding:2.5px 7px; border-radius:99px; flex:none;
         background:rgba(224,120,140,.14); color:#E0788C; border:1px solid rgba(224,120,140,.42); }
       .cc-more{ display:flex; align-items:center; gap:5px; width:100%; background:none; border:none;
@@ -20537,11 +20539,11 @@
         <!-- v543 · 다음 방 예고 — 저장 «전»에 보여준다 (팝업으로 묻는 대신) -->
         <button type="button" class="cso-peek" id="cso-peek">
           <span class="ic">🦾</span>
-          <span class="tx"><span class="t1">다음 — 유형 분류</span><span class="t2" id="cso-peek-s">저장하면 미분류가 기다려요</span></span>
+          <span class="tx"><span class="t1">분류로 이동</span><span class="t2" id="cso-peek-s">저장하면 미분류가 기다려요</span></span>
           <span class="go">›</span>
         </button>
         <div class="cso-savebar"><span class="tx" id="cso-savetx">완성 카드만 창고로</span><button id="cso-save" disabled>창고에 넣고 분류하기 ›</button></div>
-        <div class="cso-note">카드 탭 = 저장 선택/해제 · 카드 색이 밝을수록 재료가 다 찬 것 (썸네일·내용·원고)</div>
+        <div class="cso-note">카드를 누르면 담기/빼기 · 카드 색이 밝을수록 재료가 다 찬 것 (썸네일·내용·원고)</div>
       </div>
       <div class="cso-feedov" id="cso-feedov"></div>
       <div class="cso-feed" id="cso-feed">
@@ -47007,7 +47009,7 @@
       var structN = flex ? flex.length : Object.keys(b.sections).filter(function(k){ return b.sections[k]; }).length;
       var hasScript = !!(structN || b.scriptFree);
       var ok = hasThumb && hasContent && hasScript;
-      var sel = !b._dup;
+      var sel = true;   // v658 A안 · 내가 붙여넣은 건 담는 게 기본값. «이미 있음»은 배지로만 알린다
       var methodN = flex ? flex.filter(function(x){ return /^방법/.test(String(x.k || '')); }).length : 0;
       var tooMany = methodN > 3;                                  // 잘못 잘린 신호
       var thumbInner = hasThumb ? '<img src="' + photo + '" alt=""/>' : '<span class="ph2">📷</span>';
@@ -47039,7 +47041,7 @@
         peek = '<div class="cc-prow"><span class="cc-plab" style="color:#9AA08A">통글</span><span class="cc-ptxt">' + esc(b.scriptFree) + '</span></div>';
       }
       if (b.author) peek += '<div class="cc-prow"><span class="cc-plab" style="color:#6B715C">계정</span><span class="cc-ptxt">' + esc(b.author) + '</span></div>';
-      var moreLabel = b._dup ? '이미 창고에 있는 것 같아요 — 그래도 담으려면 카드를 누르세요'
+      var moreLabel = b._dup ? '이미 창고에 있는 것 같아요 — 겹치는 게 싫으면 카드를 눌러 빼세요'
                     : tooMany ? '담긴 원고 보기 · 방법이 ' + methodN + '칸으로 잘렸어요'
                     : '담긴 원고 보기';
       return '<div class="cso-card' + (ok ? ' done' : '') + (sel ? '' : ' off') +
@@ -47050,7 +47052,8 @@
             '<div class="cc-hook">' + esc(b.hook || b.topicMain || '(제목 없음)') + '</div>' +
             '<div class="cc-meta">' + chips.join('') + '</div>' +
           '</div>' +
-          (b._dup ? '<span class="cc-flag">이미 있음</span>' : '<span class="cc-chk">✓</span>') +
+          (b._dup ? '<span class="cc-dupw"><span class="cc-flag">이미 있음</span><span class="cc-chk">✓</span></span>'
+                  : '<span class="cc-chk">✓</span>') +
         '</div>' +
         (peek ? '<button type="button" class="cc-more" data-ccmore="' + i + '"><span class="cv">›</span>' + esc(moreLabel) + '</button>' +
                 '<div class="cc-peek"><div class="cc-peek-in">' + peek + '</div></div>' : '') +
@@ -47158,7 +47161,7 @@
         var _selN = 0;
         try { _selN = (csoQ('cso-row') || document).querySelectorAll('.cso-card:not(.off):not(.phw)').length; } catch (e) {}
         ps.textContent = (_selN === 0 && _offN > 0)
-          ? _offN + '장이 꺼져 있어요 — 켜야 담깁니다'
+          ? _offN + '장을 빼두셨어요 — 카드를 누르면 다시 담겨요'
           : (un > 0 ? '저장하면 미분류 ' + un + '개가 기다려요 · 한 장씩 3초'
                     : '누르면 저장까지 같이 — 분류 필요한 것만 여기로 와요');
       }
@@ -47187,7 +47190,7 @@
         // v657 · 왜 담을 게 없는지 말해준다 — «이미 있음»으로 꺼져 있을 뿐인 경우가 많다
         var offN = row.querySelectorAll('.cso-card.off:not(.phw)').length;
         tx.innerHTML = offN
-          ? '<b style="color:#F0CF7E">' + offN + '장이 꺼져 있어요</b> — <button type="button" class="cso-allon" id="cso-allon">모두 켜기</button>'
+          ? '<b style="color:#F0CF7E">' + offN + '장을 빼두셨어요</b> — <button type="button" class="cso-allon" id="cso-allon">모두 담기</button>'
           : '완성 카드만 창고로';
       }
       else {
@@ -47214,7 +47217,7 @@
       e.stopPropagation();
       row.querySelectorAll('.cso-card.off:not(.phw)').forEach(function (c) { c.classList.remove('off'); });
       csoRefresh();
-      try { csToast('전부 켰어요 — 이제 담을 수 있습니다'); } catch (er) {}
+      try { csToast('전부 다시 담았어요'); } catch (er) {}
     };
   }
   function csoOpenFeed(){ csoQ('cso-feed').classList.add('on'); csoQ('cso-feedov').classList.add('on'); setTimeout(function(){ var p = csoQ('cso-paste'); if (p) p.focus(); }, 80); }
@@ -47367,7 +47370,7 @@
       if (_sel > 0) { csoSave(); return; }
       // 🚨 v657 · 카드는 있는데 전부 꺼져 있으면 «빈 분류 화면»으로 보내지 않는다
       if (_all > 0) {
-        csToast('카드가 다 꺼져 있어요 — 아래 «모두 켜기»를 누르거나 카드를 눌러 켜주세요');
+        csToast('담을 카드를 다 빼두셨어요 — 카드를 누르거나 아래 «모두 담기»를 눌러주세요');
         _row.querySelectorAll('.cso-card.off').forEach(function (c) {
           c.classList.remove('cso-shake'); void c.offsetWidth; c.classList.add('cso-shake');
         });
