@@ -20362,6 +20362,12 @@
       .cso-feed .ft{font-size:13px;font-weight:800;margin-bottom:9px}
       #cso-paste{width:100%;background:#0c0d0a;border:1px solid var(--cso-line2);border-radius:12px;color:var(--ink,#eee);padding:11px 12px;font-size:12.5px;font-family:inherit;resize:none;line-height:1.55;outline:none}
       #cso-paste.cso-shake{animation:csoShake .42s ease;border-color:var(--cso-lime)}
+      /* v657 · 꺼진 카드 알림 + 모두 켜기 */
+      .cso-card.cso-shake{animation:csoShake .42s ease}
+      .cso-allon{margin-left:2px;padding:5px 10px;border-radius:9px;border:1px solid rgba(240,207,126,.5);
+        background:rgba(240,207,126,.12);color:#F0CF7E;font-family:inherit;font-size:11px;font-weight:800;
+        cursor:pointer;-webkit-tap-highlight-color:transparent}
+      .cso-allon:active{transform:scale(.94)}
       @keyframes csoShake{0%,100%{transform:translateX(0)}18%,58%{transform:translateX(-5px)}38%,78%{transform:translateX(5px)}}
       #cso-paste:focus{border-color:var(--cso-limeln)}
       /* v488 · D(빛 흐르는 테두리) — AI가 «일하는» 곳: 붙이면 자동 분해되는 무대 */
@@ -47146,9 +47152,16 @@
     if (pk){
       pk.classList.toggle('on', nCards > 0);
       var ps = csoQ('cso-peek-s');
-      if (ps) ps.textContent = un > 0
-        ? '저장하면 미분류 ' + un + '개가 기다려요 · 한 장씩 3초'
-        : '누르면 저장까지 같이 — 분류 필요한 것만 여기로 와요';
+      if (ps) {
+        var _offN = 0;
+        try { _offN = (csoQ('cso-row') || document).querySelectorAll('.cso-card.off:not(.phw)').length; } catch (e) {}
+        var _selN = 0;
+        try { _selN = (csoQ('cso-row') || document).querySelectorAll('.cso-card:not(.off):not(.phw)').length; } catch (e) {}
+        ps.textContent = (_selN === 0 && _offN > 0)
+          ? _offN + '장이 꺼져 있어요 — 켜야 담깁니다'
+          : (un > 0 ? '저장하면 미분류 ' + un + '개가 기다려요 · 한 장씩 3초'
+                    : '누르면 저장까지 같이 — 분류 필요한 것만 여기로 와요');
+      }
     }
   }
   // 저장 → 분류로 «부드럽게» 넘어간다 (팝업 대신 화면 전환)
@@ -47170,7 +47183,13 @@
     // v539 · 누르기 «전»에 무엇이 들어가는지 한 줄로 — 되돌리기보다 미리 보여주는 게 안심에 세다
     var tx = csoQ('cso-savetx');
     if (tx) {
-      if (!selN) { tx.innerHTML = '완성 카드만 창고로'; }
+      if (!selN) {
+        // v657 · 왜 담을 게 없는지 말해준다 — «이미 있음»으로 꺼져 있을 뿐인 경우가 많다
+        var offN = row.querySelectorAll('.cso-card.off:not(.phw)').length;
+        tx.innerHTML = offN
+          ? '<b style="color:#F0CF7E">' + offN + '장이 꺼져 있어요</b> — <button type="button" class="cso-allon" id="cso-allon">모두 켜기</button>'
+          : '완성 카드만 창고로';
+      }
       else {
         var sel = [], off = 0;
         row.querySelectorAll('.cso-card').forEach(function(c){
@@ -47189,6 +47208,14 @@
         tx.innerHTML = parts.join(' · ');
       }
     }
+    // v657 · 「모두 켜기」 — 꺼진 카드를 한 번에 되살린다
+    var _allon = csoQ('cso-allon');
+    if (_allon) _allon.onclick = function (e) {
+      e.stopPropagation();
+      row.querySelectorAll('.cso-card.off:not(.phw)').forEach(function (c) { c.classList.remove('off'); });
+      csoRefresh();
+      try { csToast('전부 켰어요 — 이제 담을 수 있습니다'); } catch (er) {}
+    };
   }
   function csoOpenFeed(){ csoQ('cso-feed').classList.add('on'); csoQ('cso-feedov').classList.add('on'); setTimeout(function(){ var p = csoQ('cso-paste'); if (p) p.focus(); }, 80); }
   function csoCloseFeed(){ csoQ('cso-feed').classList.remove('on'); csoQ('cso-feedov').classList.remove('on'); }
@@ -47336,7 +47363,18 @@
     function csoNextDoor(){
       var _row = csoQ('cso-row');
       var _sel = _row ? _row.querySelectorAll('.cso-card:not(.off):not(.phw)').length : 0;
-      if (_sel > 0) csoSave(); else csoGoSort();
+      var _all = _row ? _row.querySelectorAll('.cso-card:not(.phw)').length : 0;
+      if (_sel > 0) { csoSave(); return; }
+      // 🚨 v657 · 카드는 있는데 전부 꺼져 있으면 «빈 분류 화면»으로 보내지 않는다
+      if (_all > 0) {
+        csToast('카드가 다 꺼져 있어요 — 아래 «모두 켜기»를 누르거나 카드를 눌러 켜주세요');
+        _row.querySelectorAll('.cso-card.off').forEach(function (c) {
+          c.classList.remove('cso-shake'); void c.offsetWidth; c.classList.add('cso-shake');
+        });
+        try { var _sb = csoQ('cso-savetx'); if (_sb) _sb.scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch (e) {}
+        return;
+      }
+      csoGoSort();
     }
     var tn = csoQ('cso-tonext'); if (tn) tn.onclick = csoNextDoor;
     var pk = csoQ('cso-peek');   if (pk) pk.onclick = csoNextDoor;
