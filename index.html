@@ -20121,16 +20121,19 @@
       .cs-ln.done{background:linear-gradient(90deg,var(--cso-emer),var(--cso-lime))}
       /* v543 · 다음 방 예고 카드 — 저장 «전»에 다음을 보여준다 */
       /* v658 · 가는 곳(미분류 정리 라인)의 색을 그대로 입는다 — --sneon #e6fb62 */
-      .cso-peek{display:none;align-items:center;gap:10px;margin-top:11px;padding:11px 12px;border-radius:12px;
-        cursor:pointer;border:1px solid rgba(230,251,98,.32);
-        background:linear-gradient(100deg,rgba(230,251,98,.09),rgba(230,251,98,.02));
-        transition:background .16s,transform .12s;font-family:inherit;width:100%;text-align:left}
+      .cso-peek{display:none;align-items:center;gap:10px;margin-top:7px;padding:13px 14px;border-radius:13px;
+        cursor:pointer;border:1px solid rgba(230,251,98,.42);
+        background:linear-gradient(100deg,rgba(230,251,98,.13),rgba(230,251,98,.04));
+        transition:background .16s,transform .12s;font-family:inherit;width:100%;text-align:left;
+        position:sticky;bottom:10px;z-index:12;
+        -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+        box-shadow:0 10px 26px -12px rgba(0,0,0,.85)}
       .cso-peek.on{display:flex}
       .cso-peek:hover{background:rgba(230,251,98,.14)}
       .cso-peek:active{transform:scale(.99)}
       .cso-peek .ic{font-size:17px;flex:none}
       .cso-peek .tx{flex:1;min-width:0}
-      .cso-peek .t1{font-size:11.5px;font-weight:800;color:#e6fb62;display:block}
+      .cso-peek .t1{font-size:13px;font-weight:800;color:#e6fb62;display:block}
       .cso-peek .t2{font-size:10px;color:var(--cso-sub);margin-top:2px;display:block}
       .cso-peek .go{font-size:15px;color:#e6fb62;flex:none}
       @media (prefers-reduced-motion:reduce){.cs-st,.cs-st .dot,.cs-ln,.cso-peek{transition:none!important}}
@@ -20462,15 +20465,11 @@
       .cso-card.off .chkmark{background:rgba(255,255,255,.15);color:transparent}
       /* v542 · 저장바 = 방 바닥에 «항상 붙어 있는» 다음 걸음.
          전에는 분해가 끝나도 화면 밖(909px)에 있어서 «버튼이 어디 갔지?»가 됐다 (사장님 제보). */
-      .cso-savebar{display:flex;align-items:center;gap:8px;margin-top:10px;
-        position:sticky;bottom:0;z-index:12;
-        padding:10px 12px;margin-left:-12px;margin-right:-12px;
-        background:linear-gradient(to top,#0B0C08 62%,rgba(11,12,8,.92) 88%,rgba(11,12,8,0));
-        -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+      /* v664 · 버튼은 하나뿐 — 요약줄은 그 «위»에 얹히는 설명이다 */
+      .cso-savebar{display:flex;align-items:center;gap:8px;margin-top:10px;padding:0 2px}
       .cso-savebar .tx{flex:1;min-width:0}
       /* 카드가 없을 땐 굳이 바닥에 붙어 있을 이유가 없다 */
-      #cso.cso-empty0 .cso-savebar{position:static;background:none;backdrop-filter:none;
-        margin-left:0;margin-right:0;padding:0}
+      #cso.cso-empty0 .cso-savebar{padding:0}
       .cso-savebar .tx{flex:1;font-size:10px;color:var(--cso-sub2)}.cso-savebar .tx b{color:var(--cso-emer)}
       .cso-savebar button{border:none;border-radius:11px;padding:11px 16px;font-family:inherit;font-size:12.5px;font-weight:800;cursor:pointer;background:linear-gradient(135deg,var(--cso-emer),#22a860);color:#04120a}
       .cso-savebar button:disabled{opacity:.4;background:#1a1b16;color:var(--cso-sub2)}
@@ -20537,12 +20536,12 @@
         <div class="cso-tray-h"><span class="t">컨텐츠 분해 카드</span><span class="c" id="cso-cnt"></span><span class="sp"></span><button type="button" id="cso-clear" style="display:none">비우기</button><span class="dn" id="cso-dn"></span></div>
         <div class="cso-row" id="cso-row"><span class="cso-empty">무대에 던지면 여기 좌르륵 — 카드가 채워져요</span></div>
         <!-- v543 · 다음 방 예고 — 저장 «전»에 보여준다 (팝업으로 묻는 대신) -->
+        <div class="cso-savebar"><span class="tx" id="cso-savetx">완성 카드만 창고로</span></div>
         <button type="button" class="cso-peek" id="cso-peek">
           <span class="ic">🦾</span>
           <span class="tx"><span class="t1">분류로 이동</span><span class="t2" id="cso-peek-s">저장하면 미분류가 기다려요</span></span>
           <span class="go">›</span>
         </button>
-        <div class="cso-savebar"><span class="tx" id="cso-savetx">완성 카드만 창고로</span><button id="cso-save" disabled>창고에 넣고 분류하기 ›</button></div>
         <div class="cso-note">카드를 누르면 담기/빼기 · 재료는 두 개예요 — <b>썸네일 사진</b>과 <b>프롬프트</b></div>
       </div>
       <div class="cso-feedov" id="cso-feedov"></div>
@@ -22888,6 +22887,16 @@
       padding:calc(22px + env(safe-area-inset-top)) 20px 204px}
     /* v574 · 정거장과 같은 문법 — 제목 16px · 숫자는 부제 · 닫기 40px 오른쪽 끝 */
     .prp-top{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+    /* v666 · 오른쪽 상단 편집 동작 — 펜처럼 «떠오르지» 않고 테두리만 켜진다 */
+    .prp-acts{display:flex;gap:7px;flex:none}
+    .prp-acts .prp-pen{padding:9px 12px;font-size:11px;border-radius:11px}
+    .prp-acts .prp-pen.on{transform:none}
+    .prp-acts .prp-pen.on:active{transform:scale(.93)}
+    .prp-acts .prp-pen .nib{width:16px}
+    @media (max-width:560px){
+      .prp-acts .prp-pen{padding:9px 10px;font-size:10.5px}
+      .prp-acts .prp-pen .nib{display:none}
+    }
     .prp-ttw{min-width:0;flex:1;display:flex;flex-direction:column;gap:2px}
     .prp-top .t{font-size:16px;font-weight:800;color:#eae8de;letter-spacing:-.02em;line-height:1.25}
     .prp-top .c{font-family:'JetBrains Mono',monospace;font-size:10px;color:#63695f;font-variant-numeric:tabular-nums;letter-spacing:.04em}
@@ -23167,6 +23176,11 @@
         <div id="prp-rail"></div><!-- v569 · 공정 레일 -->
         <div class="prp-top">
           <div class="prp-ttw"><span class="t">원고 손질</span><span class="c" id="prp-idx">— / —</span></div>
+          <!-- v666 · 편집 동작은 오른쪽 상단 (펜 줄과 성격이 다르다) -->
+          <div class="prp-acts">
+            <button type="button" class="prp-pen op" data-t="s"><span class="nib"></span>구조</button>
+            <button type="button" class="prp-pen op" data-t="x"><span class="nib"></span>✎ 수정</button>
+          </div>
           <button type="button" class="prp-x" id="prp-x" title="닫기">✕</button></div>
         <div class="prp-floor">
           <div class="prp-qz">
@@ -23179,8 +23193,6 @@
               <button type="button" class="prp-pen" data-t="k"><span class="nib"></span>핵심</button>
               <button type="button" class="prp-pen" data-t="r"><span class="nib"></span>참고</button>
               <button type="button" class="prp-pen" data-t="e"><span class="nib"></span>지우개</button>
-              <button type="button" class="prp-pen op" data-t="s"><span class="nib"></span>구조</button>
-              <button type="button" class="prp-pen op" data-t="x"><span class="nib"></span>✎ 수정</button>
               <button type="button" class="prp-un" id="prp-undo" disabled title="되돌리기">↺</button>
               <button type="button" class="prp-un" id="prp-redo" disabled title="다시하기">↻</button>
               <span class="prp-hint" id="prp-hint">펜을 집으세요</span>
@@ -45296,7 +45308,9 @@
   //   트렌드는 화면에 «(선택)»이라 적혀 있으므로 여기 기준에서 뺀다.
   function slvUnsorted() {
     return (rows || []).filter(function (r) {
-      return !(r.thumbTypes || []).length || !r.funnelStage || !(r.rating > 0);
+      if (!(r.thumbTypes || []).length) return true;              // 봇도 못 읽은 것 = 진짜 미분류
+      // v665 · 나머지는 «이번에 담은 것»만. 예전 것까지 다 부르면 빚 독촉이 된다.
+      return !!r.sortQueued && (!r.funnelStage || !(r.rating > 0));
     });
   }
   function slvRefreshEntries() {
@@ -45715,6 +45729,7 @@
     if (_vw) { r.views = parseInt(_vw.dataset.vw, 10) || 0; picked++; }
     if (!picked) return;
     _slvBusy = true; _slvBusyAt = Date.now(); if (!_slvT0) _slvT0 = Date.now();
+    delete r.sortQueued;                                     // v665 · 손을 봤으니 대기 줄에서 내린다
     r.updatedAt = Date.now();
     _slvUndo = _snap;                                        // v544 · 방금 것 되돌리기 준비
     slvUndoBar(true, '방금 «' + String(r.hook || r.topicMain || '카드').slice(0, 14) + '» 배정함');
@@ -45994,8 +46009,9 @@
     let sort = 0, prep = 0, ready = 0, month = 0;
     const now = new Date(), y = now.getFullYear(), m = now.getMonth();
     rs.forEach(function (r) {
-      // v662 · 레일의 «분류» 숫자도 slvUnsorted와 같은 셈법을 쓴다 (레일 2 · 배너 20 처럼 어긋나면 못 믿는다)
-      const needSort = !(r.thumbTypes || []).length || !r.funnelStage || !(r.rating > 0);
+      // v665 · 레일의 «분류» 숫자도 slvUnsorted와 같은 셈법 (어긋나면 못 믿는다)
+      const needSort = !(r.thumbTypes || []).length
+        || (!!r.sortQueued && (!r.funnelStage || !(r.rating > 0)));
       const needPrep = prpHasScript(r) && !(r.prep && r.prep.done);
       if (needSort) sort++;
       if (needPrep) prep++;
@@ -46217,7 +46233,8 @@
       e: '<b>지우개</b> — 문지르면 지워져요 · 두 번 톡 = 문장',
       s: '<b>구조</b> — 이름을 누르면 서랍 · 사이의 <b>＋</b> 로 구간 추가',
       x: '<b>✎ 수정</b> — 글칸을 눌러 직접 고쳐 쓰세요' };
-    document.getElementById('prp-tray').addEventListener('click', function (e) {
+    // v666 · 구조·수정이 헤더로 갔으므로 위임을 .prp-in 으로 올린다 (트레이만 보면 헤더 클릭을 놓친다)
+    document.querySelector('#prp .prp-in').addEventListener('click', function (e) {
       const b = e.target.closest('.prp-pen'); if (!b) return;
       if (_prpTool === 'x' && b.dataset.t !== 'x') prpCommitText();   // v650 · 수정에서 빠져나올 때 저장
       _prpTool = (_prpTool === b.dataset.t) ? null : b.dataset.t;
@@ -47176,12 +47193,10 @@
   }
   // 저장 → 분류로 «부드럽게» 넘어간다 (팝업 대신 화면 전환)
   function csoGoSort(){
-    // 🚨 v661 · «분류 칸» = 하단 탭 ▦ 분류(formatboard). 담은 게 유형별로 쌓이는 그곳.
-    //   예전엔 slvOpen()(미분류 정리 라인)으로 보냈는데, 봇이 유형까지 채워주면 0개라 텅 비어 보였다.
+    // v664 · 여기서 «분류»는 이 방의 ③번째 걸음(미분류 정리 라인)이다. 저장소의 ▦분류 탭이 아니다.
+    //   (텅 비어 보이던 원인은 v662에서 잡았다 — 미분류를 «봇이 채우는 칸»으로만 세던 것)
     try { csCloseRoom(); } catch (e) {}
-    setTimeout(function(){
-      try { switchWorkspace('formatboard'); } catch (e) { try { slvOpen(); } catch (e2) {} }
-    }, 180);
+    setTimeout(function(){ try { slvOpen(); } catch (e) {} }, 180);
   }
   function csoRefresh(){
     var row = csoQ('cso-row'); if (!row) return;
@@ -47596,6 +47611,8 @@
     for (const i of checked) {
       const b = _csBlocks[i];
       const r = newRow(++maxNo);
+      r.sortQueued = 1;   // v665 · 방금 담은 것 — 분류 대기 줄에 이어서 세운다
+
       // 후킹문구가 비면(릴스앱서 후킹칸 미입력 등) 주제로 제목 폴백 — 시트에 유령 행 방지
       r.hook = b.hook || [b.topicMain, b.topicSub].filter(Boolean).join(' · ');
       r.author = b.author; r.views = b.views; r.url = b.url;
