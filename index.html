@@ -7025,6 +7025,17 @@
     color: var(--emerald);
   }
 
+      /* v676 · 설정 안 «다른 방» 줄 */
+      .st-rooms{display:flex;flex-direction:column;gap:6px}
+      .st-room{display:flex;align-items:center;gap:10px;width:100%;padding:12px 13px;border-radius:12px;
+        background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);color:inherit;
+        font-family:inherit;font-size:12.5px;font-weight:700;cursor:pointer;text-align:left;
+        transition:background .16s,transform .12s;-webkit-tap-highlight-color:transparent}
+      .st-room:hover{background:rgba(255,255,255,.08)}
+      .st-room:active{transform:scale(.985)}
+      .st-room .i{font-size:15px;flex:none}
+      .st-room .t{flex:1;min-width:0}
+      .st-room .g{color:#6E6790;font-size:14px;flex:none}
   .settings-modal {
     display: none;
     position: fixed;
@@ -13172,6 +13183,8 @@
   body.in-studio #sc-view,
   body.in-studio .sc-tabpane{ padding-bottom:calc(var(--st2-dock) + 28px); }
   body.in-studio .bottom-nav{ display:none !important; }   /* 도크가 곧 이동 수단 */
+  /* v671 · 기획실도 마찬가지 — 자기 구슬 바가 이동 수단이다. 저장소 탭이 같이 뜨면 두 방이 섞여 보인다 */
+  body.in-plan .bottom-nav{ display:none !important; }
   .sc-backhome{ display:none !important; }                  /* 「← 홈」 폐기 (마크업 보존) */
   #rr-back{ display:none !important; }                      /* 「‹ 제작소로」 폐기 (마크업 보존) */
 
@@ -14377,6 +14390,9 @@
     padding-bottom: env(safe-area-inset-bottom);
     box-shadow: 0 -4px 20px rgba(0,0,0,0.4);
   }
+  /* v676 · 칸이 7개가 되었다 — 글자를 한 단계 줄여 한 줄에 담는다 */
+  .bottom-nav .bn-lab { font-size: 9.5px; letter-spacing: -.04em; }
+  @media (max-width:400px){ .bottom-nav .bn-lab { font-size: 8.8px; } }
   .bn-tab {
     flex: 1;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -20891,14 +20907,21 @@
     <button class="bn-tab" data-ws="scripts"><span class="bn-ico">✎</span><span class="bn-lab">원고</span></button>
     <button class="bn-tab" data-ws="thumb"><span class="bn-ico">▣</span><span class="bn-lab">썸네일</span></button>
     <button class="bn-tab" data-ws="formatboard"><span class="bn-ico">▦</span><span class="bn-lab">분류</span></button>
-    <button class="bn-tab" data-ws="plan"><span class="bn-ico">◈</span><span class="bn-lab">기획</span></button>
+    <!-- v673 · 고객·트렌드 = 저장소 소속 (분류 칸 안에 숨어 있어서 «없다»고 보였다) -->
+    <button class="bn-tab" data-ws="cus"><span class="bn-ico">◉</span><span class="bn-lab">고객</span></button>
+    <button class="bn-tab" data-ws="trend"><span class="bn-ico">↗</span><span class="bn-lab">트렌드</span></button>
+    <button class="bn-tab" data-ws="me"><span class="bn-ico">⌖</span><span class="bn-lab">나</span></button>
+    <button class="bn-tab" data-ws="algo"><span class="bn-ico">◎</span><span class="bn-lab">알고리즘</span></button>
+    <!-- v673 · 기획은 별개의 방 — 갈림길과 좌상단 레일로 간다 -->
     <button class="bn-tab" id="bn-more"><span class="bn-ico">☰</span><span class="bn-lab">더보기</span></button>
   </nav>
 
   <div class="sh-sb-backdrop" id="sh-sb-backdrop"></div>
 
-  <!-- ===== SIDEBAR ===== -->
-  <aside class="sh-sidebar" id="sh-sidebar">
+  <!-- ===== SIDEBAR (v676 · 폐지) =====
+       방 이동은 아래 탭줄과 좌상단 레일이 다 한다. 여기서만 갈 수 있던 셋은 ⚙설정 안으로 옮겼다.
+       마크업은 지우지 않고 숨긴다 — 내부 배선(ws-settings · ws-logout 등)이 여기를 본다. -->
+  <aside class="sh-sidebar" id="sh-sidebar" style="display:none" aria-hidden="true">
     <div class="sh-sb-eyebrow">고객관점</div>
     <h1 class="sh-sb-brand-title"><span class="em">수익화 컨텐츠</span><br/>집중 트레이닝</h1>
     <div class="sh-sb-line"></div>
@@ -20912,16 +20935,19 @@
       <button class="sh-sb-item sh-sb-main" data-ws="sheet" id="ws-sheet">
         <span class="sh-sb-icon">▤</span><span class="sh-sb-label">벤치마킹 시트</span>
       </button>
-      <button class="sh-sb-item sh-sb-main" data-ws="customer" id="ws-customer">
+      <button class="sh-sb-item sh-sb-main" data-ws="cus" id="ws-customer"><!-- v675 · 진짜 고객 방(4바구니·벽) -->
         <span class="sh-sb-icon">◉</span><span class="sh-sb-label">고객 분석</span>
+      </button>
+      <button class="sh-sb-item sh-sb-main" data-ws="trend" id="ws-trend">
+        <span class="sh-sb-icon">↗</span><span class="sh-sb-label">트렌드</span>
+      </button>
+      <button class="sh-sb-item sh-sb-main" data-ws="algo" id="ws-algo">
+        <span class="sh-sb-icon">◎</span><span class="sh-sb-label">알고리즘 코어</span><!-- v675 · 아래 「내 컨텐츠 알고리즘」과 이름이 겹쳐 구분 -->
       </button>
       <button class="sh-sb-item sh-sb-main" id="ws-sorter" title="AI 컨텐츠 정리">
         <span class="sh-sb-icon">🤖</span><span class="sh-sb-label">AI 컨텐츠 정리</span>
       </button>
-      <!-- v595 · 🧭 나침반 — 내 기준(바늘·고객·트렌드·인사이트)이 모이는 방 -->
-      <button class="sh-sb-item sh-sb-main" data-ws="compass" id="ws-compass" title="나침반 — 내 기준">
-        <span class="sh-sb-icon">⌖</span><span class="sh-sb-label">나침반</span>
-      </button>
+      <!-- v675 · 나침반 문 제거 — 바늘=기획 홈 · 고객·트렌드·알고리즘=위 세 칸으로 다 나갔다 -->
       <!-- (v557 · 패턴 파악은 원고 탭 안으로 이사 — 사이드바 버튼 제거) -->
       <button class="sh-sb-item" data-ws="northstar" id="ws-northstar">
         <span class="sh-sb-icon">🥊</span><span class="sh-sb-label">라이벌 멘토</span>
@@ -21097,9 +21123,9 @@
     <div id="room-rail" role="navigation" aria-label="방 이동">
       <button class="rr-btn rr-fork" data-room="fork" title="갈림길로"><span class="g">‹</span><span class="t">갈림길</span></button>
       <button class="rr-btn rr-ai" data-room="sorter" title="AI 컨텐츠 정리"><span class="g">⊞</span><span class="t">AI 정리</span></button>
-      <button class="rr-btn rr-home" data-room="home" title="홈"><span class="g">⌂</span><span class="t">홈</span></button>
+      <button class="rr-btn rr-home" data-room="home" title="내 창고"><span class="g">⌂</span><span class="t">내 창고</span></button><!-- v671 · 갈림길 이름과 통일 -->
       <button class="rr-btn rr-mk" data-room="studio" title="트레이닝 룸"><span class="g">✎</span><span class="t">트레이닝</span></button>
-      <button class="rr-btn rr-cp" data-room="compass" title="나침반"><span class="g">⌖</span><span class="t">나침반</span></button><!-- v595 -->
+      <button class="rr-btn rr-pl" data-room="plan" title="기획"><span class="g">◈</span><span class="t">기획</span></button><!-- v671 · 나침반 분해 후 그 자리 -->
       <button class="rr-back" id="rr-back" style="display:none">‹ 제작소로</button>
       <span class="rr-where" id="rr-where"></span>
     </div>
@@ -21619,6 +21645,18 @@
             <button class="settings-modal-close" id="settings-modal-close">×</button>
           </div>
           <div class="settings-modal-body">
+
+            <!-- v676 · 왼쪽 목록을 없애면서, 거기서만 갈 수 있던 방들을 여기로 -->
+            <div class="settings-section">
+              <div class="settings-section-title">다른 방</div>
+              <div class="st-rooms">
+                <button type="button" class="st-room" data-ws="northstar"><span class="i">🥊</span><span class="t">라이벌 멘토</span><span class="g">›</span></button>
+                <button type="button" class="st-room" data-ws="diagnose"><span class="i">🩺</span><span class="t">릴스 진단</span><span class="g">›</span></button>
+                <button type="button" class="st-room" id="st-room-engine"><span class="i">◎</span><span class="t">내 컨텐츠 알고리즘</span><span class="g">›</span></button>
+                <button type="button" class="st-room" id="st-room-trash"><span class="i">🗑</span><span class="t">휴지통</span><span class="g">›</span></button>
+                <button type="button" class="st-room" id="st-room-logout"><span class="i">⏻</span><span class="t">로그아웃</span><span class="g">›</span></button>
+              </div>
+            </div>
 
             <!-- 📷 v587 · 쓴 만큼 -->
             <div class="settings-section">
@@ -22887,6 +22925,10 @@
       padding:calc(22px + env(safe-area-inset-top)) 20px 204px}
     /* v574 · 정거장과 같은 문법 — 제목 16px · 숫자는 부제 · 닫기 40px 오른쪽 끝 */
     .prp-top{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+    /* v672 · 왼쪽 상단 되돌리기 */
+    .prp-hist{display:flex;gap:6px;flex:none}
+    .prp-hist .prp-un{width:34px;height:34px;font-size:14px}
+    @media (max-width:560px){ .prp-hist .prp-un{width:31px;height:31px;border-radius:10px} }
     /* v666 · 오른쪽 상단 편집 동작 — 펜처럼 «떠오르지» 않고 테두리만 켜진다 */
     .prp-acts{display:flex;gap:7px;flex:none}
     .prp-acts .prp-pen{padding:9px 12px;font-size:11px;border-radius:11px}
@@ -23175,6 +23217,11 @@
       <div class="prp-in">
         <div id="prp-rail"></div><!-- v569 · 공정 레일 -->
         <div class="prp-top">
+          <!-- v672 · 되돌리기는 왼쪽 상단 — 사람이 손에 익은 자리 (Ctrl+Z도 그대로) -->
+          <div class="prp-hist">
+            <button type="button" class="prp-un" id="prp-undo" disabled title="되돌리기 (Ctrl+Z)">↺</button>
+            <button type="button" class="prp-un" id="prp-redo" disabled title="다시하기 (Ctrl+Shift+Z)">↻</button>
+          </div>
           <div class="prp-ttw"><span class="t">원고 손질</span><span class="c" id="prp-idx">— / —</span></div>
           <!-- v666 · 편집 동작은 오른쪽 상단 (펜 줄과 성격이 다르다) -->
           <div class="prp-acts">
@@ -23193,8 +23240,6 @@
               <button type="button" class="prp-pen" data-t="k"><span class="nib"></span>핵심</button>
               <button type="button" class="prp-pen" data-t="r"><span class="nib"></span>참고</button>
               <button type="button" class="prp-pen" data-t="e"><span class="nib"></span>지우개</button>
-              <button type="button" class="prp-un" id="prp-undo" disabled title="되돌리기">↺</button>
-              <button type="button" class="prp-un" id="prp-redo" disabled title="다시하기">↻</button>
               <span class="prp-hint" id="prp-hint">펜을 집으세요</span>
             </div>
             <div class="prp-foot">
@@ -23293,8 +23338,6 @@
           <button class="fb-toggle-btn" data-fbmode="copy">💬 수식어</button>
           <button class="fb-toggle-btn" data-fbmode="kw">🏷 키워드</button>
           <button class="fb-toggle-btn" data-fbmode="idea">💡 아이디어</button>
-          <button class="fb-toggle-btn" data-fbdoor="customer">◉ 고객</button>
-          <button class="fb-toggle-btn" data-fbdoor="trend">↗ 트렌드</button>
           <button class="fb-toggle-btn" data-fbmode="comment" style="display:none;">💬 공감댓글</button>
           <button class="fb-toggle-btn" data-fbmode="audio" style="display:none;">🎵 오디오</button>
         </div>
@@ -26517,7 +26560,7 @@
       if (b.dataset.fbdoor) {   // v647 · 문 칩(◉고객·↗트렌드) — 모드가 아니라 그 방으로 간다
         b.classList.remove('on');
         b.onclick = () => {
-          if (b.dataset.fbdoor === 'customer') { try { switchWorkspace('customer'); } catch (e) {} }
+          if (b.dataset.fbdoor === 'customer') { try { switchWorkspace('cus'); } catch (e) {} }   // v674 · 진짜 고객 방
           else { try { switchWorkspace('compass'); cpSetTab('trend'); } catch (e) {} }
         };
         return;
@@ -26667,7 +26710,7 @@
       if (b.dataset.fbdoor) {   // v647 · 문 칩(◉고객·↗트렌드) — 모드가 아니라 그 방으로 간다
         b.classList.remove('on');
         b.onclick = () => {
-          if (b.dataset.fbdoor === 'customer') { try { switchWorkspace('customer'); } catch (e) {} }
+          if (b.dataset.fbdoor === 'customer') { try { switchWorkspace('cus'); } catch (e) {} }   // v674 · 진짜 고객 방
           else { try { switchWorkspace('compass'); cpSetTab('trend'); } catch (e) {} }
         };
         return;
@@ -35198,14 +35241,17 @@
     const from = window.__rrFrom;
     // v595 · 나침반 = 세 번째 방 — 나침반에서 나간 화면(라이벌 멘토 등)도 나침반 소속으로 표시
     const room = (ws === 'studio' || from === 'studio') ? 'studio'
+      : (ws === 'plan') ? 'plan'                                        // v671 · 기획 = 독립된 방
       : (ws === 'compass' || from === 'compass') ? 'compass' : 'home';
     rail.querySelectorAll('.rr-btn').forEach(b => b.classList.toggle('here', b.dataset.room === room));
     const w = document.getElementById('rr-where');
-    if (w) w.textContent = (room === 'studio' ? '트레이닝 룸' : room === 'compass' ? '나침반' : '내 창고') +
-      (RR_LABELS[ws] && ws !== 'studio' && ws !== 'compass' ? ' · ' + RR_LABELS[ws] : '');
+    // v673 · 나침반 간판은 v649에 없앴다 — 트렌드는 저장소 소속이므로 «내 창고»로 부른다
+    if (w) w.textContent = (room === 'studio' ? '트레이닝 룸' : room === 'plan' ? '기획' : '내 창고') +
+      (RR_LABELS[ws] && ws !== 'studio' && ws !== 'compass' && ws !== 'plan' ? ' · ' + RR_LABELS[ws] : '');
     // 제작소 소속이면 탭 줄이 따라온다 (A안 v434) — 되돌아가기 버튼은 필요 없어짐
     document.body.classList.toggle('in-studio', room === 'studio');
     document.body.classList.toggle('in-compass', room === 'compass');   // v595 · 밤하늘 공기 + 은빛 도크
+    document.body.classList.toggle('in-plan', room === 'plan');         // v671 · 기획실 = 저장소 탭을 떼어낸다
     try { st2SyncBar(ws); } catch (e) {}
     rrSlide();
   }
@@ -35241,7 +35287,8 @@
       // v571 · 갈림길로 되돌아가는 길 — 지금까진 나가면 다시 못 들어왔다
       if (r === 'fork') { try { window.__csForkShown = false; maybeShowFork(); } catch (e) {} return; }
       if (r === 'sorter') { if (window.__openSorter) window.__openSorter(); return; }
-      switchWorkspace(r === 'studio' ? 'studio' : r === 'compass' ? 'compass' : 'home');   // v595
+      if (r === 'plan') { switchWorkspace('plan'); return; }                              // v671
+      switchWorkspace(r === 'studio' ? 'studio' : r === 'compass' ? 'compass' : 'home');
     });
     const back = document.getElementById('rr-back');
     if (back) back.onclick = () => { window.__rrFrom = null; window.__rrDir = 'back'; switchWorkspace('studio'); };
@@ -35251,6 +35298,15 @@
   function _flushBeforeLeave() { try { if (window._cus2FlushAll) window._cus2FlushAll(); } catch (e) {} }
   function switchWorkspace(ws) {
     _flushBeforeLeave();   // v667 · 고객 방에 안 저장된 글이 있으면 먼저 담고 옮긴다
+    // v674 · 고객·트렌드·알고리즘은 방이 따로 없고 «탭»이다 — 어디서 부르든 한 길로 모은다.
+    //   ⚠️ 'customer'(셀링포인트 껍데기)와 헷갈리지 말 것. 축구공·저항 벽·4바구니는 'cus' 쪽에 있다.
+    const CP_TABS = { cus: 'cus', trend: 'trend', algo: 'insight', me: 'me' };   // v676 · 「나」 추가
+    if (CP_TABS[ws]) {
+      const _t = CP_TABS[ws];
+      switchWorkspace('compass');
+      try { cpSetTab(_t); } catch (e) {}
+      return;
+    }
     // v557 · 패턴 파악은 원고 탭 안으로 이사 — 옛 호출은 전부 여기로 도착해도 원고 탭에 내려준다
     if (ws === 'pattern') {
       switchWorkspace('scripts');
@@ -42128,6 +42184,16 @@
   function initSettingsModal() {
     const wsSettings = document.getElementById('ws-settings');
     if (wsSettings) wsSettings.onclick = openSettingsModal;
+    // v676 · 설정 안 «다른 방» 줄 — 왼쪽 목록을 없앤 대신 여기서 간다
+    document.querySelectorAll('.st-room[data-ws]').forEach(function (b) {
+      b.onclick = function () { try { closeSettingsModal(); } catch (e) {} switchWorkspace(b.dataset.ws); };
+    });
+    var _sre = document.getElementById('st-room-engine');
+    if (_sre) _sre.onclick = function () { var t = document.getElementById('ws-engine'); if (t) t.click(); };
+    var _srt = document.getElementById('st-room-trash');
+    if (_srt) _srt.onclick = function () { var t = document.getElementById('ws-trash'); if (t) t.click(); };
+    var _srl = document.getElementById('st-room-logout');
+    if (_srl) _srl.onclick = function () { var t = document.getElementById('ws-logout'); if (t) t.click(); };
     const wsTrash = document.getElementById('ws-trash');
     if (wsTrash) wsTrash.onclick = openTrashModal;
     // v596 · 서랍 소멸 — 설정 안의 새 문 3개 (휴지통·운영자·로그아웃)
@@ -53782,11 +53848,11 @@
     const rivalN = (typeof northStars !== 'undefined' && Array.isArray(northStars)) ? northStars.length : 0;
     el.innerHTML =
       '<div class="cp-needle">' +
-        '<div class="k">THE NEEDLE · 바늘</div>' +
+        '<div class="k">내가 누구에게 무슨 말을 하는가</div>' +
         '<div class="line">나는 <input class="to" id="cp-to" placeholder="누구" value="' + esc(needle.to).replace(/"/g, '&quot;') + '">에게<br>' +
         '“<input class="msg" id="cp-msg" placeholder="무슨 말" value="' + esc(needle.msg).replace(/"/g, '&quot;') + '">”라고<br>말하는 사람이다.</div>' +
         '<div class="hint">이 한 문장이 바뀌면, 아래 재료가 전부 다시 읽힙니다.</div>' +
-        '<button class="cp-save" id="cp-save">바늘 고정</button>' +
+        '<button class="cp-save" id="cp-save">이걸로 정하기</button>' +
       '</div>' +
       '<div class="cp-k">내 기준의 재료</div>' +
       '<button class="cp-card" id="cp-rival"><span class="ic">🥊</span><span><span class="tt">라이벌 멘토</span><br><span class="dd">' +
@@ -53796,7 +53862,7 @@
       const to = document.getElementById('cp-to'), ms = document.getElementById('cp-msg');
       needle.to = to ? to.value.trim() : ''; needle.msg = ms ? ms.value.trim() : '';
       await needleSave();
-      try { toast('🧭 바늘 고정 — 흔들리면 여기로 돌아오세요'); } catch (e) {}
+      try { toast('✓ 정했어요 — 흔들리면 여기로 돌아오세요'); } catch (e) {}
     };
     const rv = document.getElementById('cp-rival');
     if (rv) rv.onclick = function () { window.__rrFrom = 'compass'; try { switchWorkspace('northstar'); } catch (e) {} };
@@ -53806,10 +53872,16 @@
     //   진짜 고객 분석 방은 #st2-cus(4바구니·벽 부수기)이고 이미 나침반 안에 있다. 그걸 그대로 연다.
     _cpTab = tab;
     document.querySelectorAll('#cp-ws button').forEach(b => b.classList.toggle('on', b.dataset.cptab === tab));
+    // v674 · 하단 탭 표시 (ws는 compass라 자동으로는 안 켜진다)
+    try {
+      const _MAP = { cus: 'cus', trend: 'trend', insight: 'algo', me: 'me' };
+      document.querySelectorAll('.bn-tab[data-ws="cus"],.bn-tab[data-ws="trend"],.bn-tab[data-ws="algo"],.bn-tab[data-ws="me"]')
+        .forEach(function (b) { b.classList.toggle('active', b.dataset.ws === _MAP[tab]); });
+    } catch (e) {}
     // v649 · 나침반 간판 소멸 — 방은 재활용, 이름은 탭이 정한다
     const SIGNS = {
       insight: ['MY ALGORITHM', '내 알고리즘', '이 판은 뭘 밀어주는가'],
-      me: ['NEEDLE', '바늘', '누구에게 · 무슨 말을 하는가'],
+      me: ['ME', '나', '누구에게 · 무슨 말을 하는가'],
       cus: ['CUSTOMER', '고객 분석', '고객의 속을 캐는 방'],
       trend: ['TREND', '트렌드', '지금 물이 들어오는 곳']
     };
@@ -54098,7 +54170,7 @@
       alg.map(function (r) { return '<i style="--gc:' + r.c + '">' + r.k + ' <b>' + (r.now !== null ? Math.round(r.now) : '—') + '</b></i>'; }).join('') +
       '<s>›</s></div>';
     return '<div class="pln-home">' +
-      '<div class="pln-nd" data-plnneedle="1">🧭 <span class="t">' + nd + '</span><s>바늘 ›</s></div>' +
+      '<div class="pln-nd" data-plnneedle="1">⌖ <span class="t">' + nd + '</span><s>누구에게 · 무슨 말 ›</s></div>' +
       algHtml +
       '<div class="top">' +
         '<div class="pln-kick">이번 주 다섯 편</div>' +
