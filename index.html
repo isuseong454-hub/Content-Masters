@@ -23002,13 +23002,18 @@
     .prp-sgt .w.snap{animation:prpSnap .3s cubic-bezier(.2,1.6,.4,1)}
     /* v641 · 펜 재편 — 글 배치 핸들 + 구조 변경 안내 */
     .prp-mv{display:none;gap:4px;margin-left:6px;vertical-align:middle}
-    #prp.moving .prp-mv{display:inline-flex}
+    #prp.structing .prp-mv{display:inline-flex}
     .prp-mv button{width:30px;height:30px;border-radius:9px;border:1px solid rgba(255,255,255,.16);
       background:rgba(255,255,255,.06);color:#e8e9e6;font-weight:800;font-size:14px;cursor:pointer}
     .prp-mv button:active{transform:scale(.92)}
     #prp.structing .prp-sgl{animation:prpSglPulse 1.6s ease-in-out infinite}
     @keyframes prpSglPulse{0%,100%{box-shadow:0 0 0 0 rgba(95,176,232,0)}50%{box-shadow:0 0 0 4px rgba(95,176,232,.28)}}
-    #prp.moving .prp-sgt,#prp.structing .prp-sgt{opacity:.55}
+    #prp.structing .prp-sgt{opacity:.62}
+    /* v650 · ✎ 수정 모드 — 글칸이 종이처럼 열린다 */
+    #prp.editing .prp-sgt{background:rgba(255,255,255,.045);border-radius:10px;padding:9px 11px;
+      outline:1px dashed rgba(215,243,75,.34);cursor:text}
+    #prp.editing .prp-sgt:focus{outline:1.5px solid rgba(215,243,75,.6);background:rgba(255,255,255,.07)}
+    #prp.editing .prp-sgt .w{background:none!important}
     @keyframes prpSnap{0%{transform:scale(1)}45%{transform:scale(1.14)}100%{transform:scale(1)}}
     #prp[data-tool="k"] .prp-sgt,#prp[data-tool="r"] .prp-sgt,#prp[data-tool="e"] .prp-sgt{
       user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent}
@@ -23068,13 +23073,13 @@
     .prp-pen[data-t="k"] .nib{background:#FF4438} .prp-pen[data-t="r"] .nib{background:#FFA02C}
     .prp-pen[data-t="e"] .nib{background:#8b9184;clip-path:none;border-radius:3px;height:9px}
     .prp-pen[data-t="s"] .nib{background:#5FB0E8;clip-path:none;border-radius:3px;height:9px}
-    .prp-pen[data-t="m"] .nib{background:#C9A97E;clip-path:none;border-radius:3px;height:9px}
+    .prp-pen[data-t="x"] .nib{background:#D7F34B;clip-path:polygon(0 20%,70% 20%,70% 0,100% 50%,70% 100%,70% 80%,0 80%)}
     .prp-pen.on{transform:translateY(-7px);color:#eae8de}
     .prp-pen[data-t="k"].on{border-color:#FF4438;box-shadow:0 12px 22px -10px rgba(255,68,56,.5)}
     .prp-pen[data-t="r"].on{border-color:#FFA02C;box-shadow:0 12px 22px -10px rgba(255,160,44,.45)}
     .prp-pen[data-t="e"].on{border-color:#8b9184}
     .prp-pen[data-t="s"].on{border-color:#5FB0E8;box-shadow:0 12px 22px -10px rgba(95,176,232,.4)}
-    .prp-pen[data-t="m"].on{border-color:#C9A97E;box-shadow:0 12px 22px -10px rgba(201,169,126,.4)}
+    .prp-pen[data-t="x"].on{border-color:#D7F34B;box-shadow:0 12px 22px -10px rgba(215,243,75,.4)}
     .prp-hint{font-size:10.5px;color:#63695f;margin-left:auto;line-height:1.5}
     .prp-hint b{color:#9aa094}
 
@@ -23101,19 +23106,27 @@
     .prp-fin b{display:block;font-family:'Noto Serif KR',Georgia,serif;font-weight:900;font-size:17px;margin:14px 0 8px;letter-spacing:-.01em;color:#eae8de}
     .prp-fin p{margin:0 auto;font-size:12.5px;color:#9aa094;line-height:1.8;max-width:38ch}
 
-    .prp-casc{position:fixed;z-index:1660;min-width:198px;display:none;
-      background:#171310;border:1px solid rgba(255,255,255,.18);border-radius:15px;padding:7px;
-      box-shadow:0 28px 60px rgba(0,0,0,.8);transform-origin:top left}
+    .prp-casc{position:fixed;z-index:1660;width:262px;max-height:74vh;overflow-y:auto;display:none;
+      background:#171310;border:1px solid rgba(255,255,255,.18);border-radius:15px;padding:8px;
+      box-shadow:0 28px 60px rgba(0,0,0,.8);transform-origin:top left;
+      scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.2) transparent}
+    .prp-casc::-webkit-scrollbar{width:5px}
+    .prp-casc::-webkit-scrollbar-thumb{background:rgba(255,255,255,.18);border-radius:3px}
+    .prp-cgrid{display:grid;grid-template-columns:1fr 1fr;gap:3px}
+    .prp-ctit{font-size:9px;font-weight:800;letter-spacing:.1em;color:#6b715c;padding:3px 4px 6px}
     .prp-casc.on{display:block;animation:prpCascIn .3s cubic-bezier(.2,1.25,.35,1)}
     @keyframes prpCascIn{from{opacity:0;transform:translateY(-10px) scale(.94)}}
-    .prp-ci{display:flex;align-items:center;gap:9px;width:100%;text-align:left;font-family:inherit;
-      font-size:11.5px;font-weight:700;padding:8px 11px;border-radius:9px;border:none;background:none;
-      color:#eae8de;cursor:pointer;opacity:0;transform:translateY(-7px);transition:opacity .3s,transform .3s,background .14s}
+    .prp-ci{display:flex;align-items:center;gap:7px;width:100%;text-align:left;font-family:inherit;
+      font-size:11px;font-weight:700;padding:8px 8px;border-radius:9px;border:none;background:rgba(255,255,255,.03);
+      color:#eae8de;cursor:pointer;opacity:0;transform:translateY(-7px);transition:opacity .26s,transform .26s,background .14s;
+      white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .prp-ci.on{background:rgba(215,243,75,.13);box-shadow:inset 0 0 0 1px rgba(215,243,75,.4)}
     .prp-casc.on .prp-ci{opacity:1;transform:none}
     .prp-ci:hover{background:rgba(255,255,255,.07)}
     .prp-ci .sw{width:9px;height:9px;border-radius:2px;flex:none;background:var(--c)}
     .prp-cd{height:1px;background:rgba(255,255,255,.09);margin:6px 9px}
-    .prp-cact{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;padding:2px 4px 3px}
+    .prp-cact{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;padding:2px 2px 3px}
+    .prp-cact button.wide{grid-column:1/-1}
     .prp-cact button{font-family:inherit;font-size:10px;font-weight:800;padding:7px 0;border-radius:8px;
       border:1px solid rgba(255,255,255,.09);background:rgba(0,0,0,.25);color:#9aa094;cursor:pointer;
       opacity:0;transform:translateY(-7px);transition:opacity .3s,transform .3s,color .14s,border-color .14s}
@@ -23142,8 +23155,8 @@
               <button type="button" class="prp-pen" data-t="k"><span class="nib"></span>핵심</button>
               <button type="button" class="prp-pen" data-t="r"><span class="nib"></span>참고</button>
               <button type="button" class="prp-pen" data-t="e"><span class="nib"></span>지우개</button>
-              <button type="button" class="prp-pen op" data-t="s"><span class="nib"></span>구조 변경</button>
-              <button type="button" class="prp-pen op" data-t="m"><span class="nib"></span>글 배치</button>
+              <button type="button" class="prp-pen op" data-t="s"><span class="nib"></span>구조</button>
+              <button type="button" class="prp-pen op" data-t="x"><span class="nib"></span>✎ 수정</button>
               <button type="button" class="prp-un" id="prp-undo" disabled title="되돌리기">↺</button>
               <button type="button" class="prp-un" id="prp-redo" disabled title="다시하기">↻</button>
               <span class="prp-hint" id="prp-hint">펜을 집으세요</span>
@@ -46046,9 +46059,12 @@
     } catch (e) {}
   }
 
+  // v650 · 구조 서랍 — «구조라고 할 수 있는 것들»을 쫙 펼친다 (2열)
   const PRP_LBLS = [
-    ['이득&손해', 'gain'], ['공감 상황', 'empathy'], ['원인·이유', ''], ['방법', 'method'],
-    ['증거', ''], ['비교', ''], ['반박', ''], ['소구포인트', 'appeal'], ['CTA', 'cta']
+    ['이득&손해', 'gain'], ['공감 상황', 'empathy'], ['문제 제시', ''], ['원인·이유', ''],
+    ['전문 용어', ''], ['방법', 'method'], ['과정', ''], ['증거', ''],
+    ['비교', ''], ['반박', ''], ['소구포인트', 'appeal'], ['가치', ''],
+    ['후속 예고', ''], ['CTA', 'cta']
   ];
   let _prpQ = [], _prpCur = null, _prpTool = null, _prpPainting = false, _prpInited = false, _prpCut = false;
   let _prpHist = [], _prpRedo = [], _prpHistFor = null, _prpLastXY = null;   // v622 · 되돌리기 10단계 + 보간
@@ -46166,10 +46182,11 @@
 
     const HINTS = { k: '<b>핵심 펜</b> — 쓸면 빨갛게 · 두 번 톡 = 문장', r: '<b>참고 펜</b> — 쓸면 주황 · 두 번 톡 = 문장',
       e: '<b>지우개</b> — 문지르면 지워져요 · 두 번 톡 = 문장',
-      s: '<b>구조 변경</b> — 구간 이름(색 라벨)을 누르면 구조 목록이 열려요',
-      m: '<b>글 배치</b> — ↑↓를 눌러 문단 순서를 바꿔요' };
+      s: '<b>구조</b> — 구간 이름을 누르면 서랍이 열려요 · ↑↓로 순서도 바꿔요',
+      x: '<b>✎ 수정</b> — 글칸을 눌러 직접 고쳐 쓰세요' };
     document.getElementById('prp-tray').addEventListener('click', function (e) {
       const b = e.target.closest('.prp-pen'); if (!b) return;
+      if (_prpTool === 'x' && b.dataset.t !== 'x') prpCommitText();   // v650 · 수정에서 빠져나올 때 저장
       _prpTool = (_prpTool === b.dataset.t) ? null : b.dataset.t;
       document.querySelectorAll('.prp-pen').forEach(p => p.classList.toggle('on', p.dataset.t === _prpTool));
       const rt = document.getElementById('prp'); rt.dataset.tool = _prpTool || '';
@@ -46179,14 +46196,15 @@
       document.getElementById('prp-hint').innerHTML = _prpTool ? HINTS[_prpTool]
         : sdN0 ? '점선 ' + sdN0 + '곳 = <b>어디서나 하는 말</b> — 숫자·장면으로 바꾸면 세져요'
         : '펜을 집으세요';
-      rt.classList.toggle('structing', _prpTool === 's');   // v641 · 구조 변경 = 라벨 안내 모드
-      rt.classList.toggle('moving', _prpTool === 'm');      // v641 · 글 배치 = ↑↓ 핸들 모드
+      rt.classList.toggle('structing', _prpTool === 's');   // v650 · 구조 = 라벨 서랍 + ↑↓ 핸들
+      rt.classList.toggle('editing', _prpTool === 'x');     // v650 · ✎ 수정 = 직접 타이핑
+      document.querySelectorAll('.prp-sgt').forEach(function (el) { el.contentEditable = (_prpTool === 'x') ? 'true' : 'false'; });
     });
 
     const rt = document.getElementById('prp');
     rt.addEventListener('pointerdown', function (e) {
       if (_prpCut) return;                       // 자르기 모드는 click으로 처리
-      if (!_prpTool || _prpTool === 's' || _prpTool === 'm') return;
+      if (!_prpTool || _prpTool === 's' || _prpTool === 'x') return;
       if (!e.target.closest('#prp-host')) return;
       prpHistPush();                             // v622 · 스트로크 시작 = 되돌리기 지점
       const _w = e.target.closest ? e.target.closest('#prp-segs .w') : null;
@@ -46224,7 +46242,32 @@
     });
   }
 
-  // v641 · 문단 이동 — 캐스케이드 ↑↓와 배치 모드 핸들이 같이 쓴다 (칠·터진포인트 인덱스도 같이 이사)
+  // v650 · 구간을 사이에 «넣고 빼기» — 칠(marks)·터진포인트(hot) 번호를 같이 민다
+  function prpShiftMarks(r, from, delta) {
+    if (!r.prep) return;
+    ['marks', 'hot'].forEach(function (key) {
+      const m = r.prep[key]; if (!m) return;
+      const out = {};
+      Object.keys(m).forEach(function (k) {
+        const n = +k;
+        if (delta < 0 && n === from) return;                 // 지운 칸의 칠은 버린다
+        out[n >= from ? n + delta : n] = m[k];
+      });
+      r.prep[key] = out;
+    });
+  }
+  function prpAddSeg(i, where) {                             // where: -1 위 · +1 아래
+    const r = _prpQ[_prpCur]; if (!r) return;
+    prpEnsureFlex(r);
+    const a = prpRealIdx(r, i); if (a < 0) return;
+    const at = where < 0 ? a : a + 1;
+    const vi = where < 0 ? i : i + 1;                        // 화면(빈 조각 제외) 번호
+    r.scriptSecFlex.splice(at, 0, { k: '새 구간', c: '', t: '여기에 문장을 적어주세요' });
+    prpShiftMarks(r, vi, 1);
+    saveRows(); prpRenderFilm(false);
+    try { toast('구간을 ' + (where < 0 ? '위' : '아래') + '에 넣었어요 — 이름과 글을 채워주세요'); } catch (e) {}
+  }
+  // v641 · 문단 이동 — 캐스케이드 ↑↓와 구조 모드 핸들이 같이 쓴다 (칠·터진포인트 인덱스도 같이 이사)
   function prpMoveSeg(i, dir) {
     const r = _prpQ[_prpCur]; if (!r) return;
     prpEnsureFlex(r);
@@ -46282,7 +46325,7 @@
   }
   // v625 · 문장 전체 칠하기 — 문장 끝 = . ! ? 로 끝나는 단어
   function prpPaintSentence(w) {
-    const seg = w.closest('.prp-sgt'); if (!seg || !_prpTool || _prpTool === 's' || _prpTool === 'm') return;
+    const seg = w.closest('.prp-sgt'); if (!seg || !_prpTool || _prpTool === 's' || _prpTool === 'x') return;
     const ws = [...seg.querySelectorAll('.w')];
     const j = ws.indexOf(w); if (j < 0) return;
     const END = /[.!?。…]['"”’)]*$/;
@@ -46397,8 +46440,9 @@
     }
     document.getElementById('prp-idx').textContent =
       String(_prpCur + 1).padStart(2, '0') + ' / ' + String(_prpQ.length).padStart(2, '0');
-    const _rt2 = document.getElementById('prp');   // v641 · 재렌더 후 모드 클래스 유지
-    if (_rt2) { _rt2.classList.toggle('structing', _prpTool === 's'); _rt2.classList.toggle('moving', _prpTool === 'm'); }
+    const _rt2 = document.getElementById('prp');   // v650 · 재렌더 후 모드 유지
+    if (_rt2) { _rt2.classList.toggle('structing', _prpTool === 's'); _rt2.classList.toggle('editing', _prpTool === 'x'); }
+    if (_prpTool === 'x') document.querySelectorAll('.prp-sgt').forEach(function (el) { el.contentEditable = 'true'; });
     prpSync();
   }
 
@@ -46577,6 +46621,7 @@
   }
   function prpSaveCur() {
     const r = _prpQ[_prpCur]; if (!r) return;
+    if (_prpTool === 'x') prpCommitText(true);   // v650 · 고친 글 저장
     prpCollect(); saveRows();
   }
 
@@ -46586,19 +46631,32 @@
   function prpCascOpen(lb) {
     const casc = document.getElementById('prp-casc');
     _prpCascSg = lb.closest('.prp-sg');
-    casc.innerHTML = PRP_LBLS.map(function (L, i) {
-      const col = L[1] ? (SCRIPT_SECTIONS.find(s => s.key === L[1]) || {}).color : flexLabelColor(L[0]);
-      return '<button type="button" class="prp-ci" style="transition-delay:' + (i * 22) + 'ms" data-lb="' + esc(L[0]) + '" data-sk="' + L[1] + '" data-col="' + col + '">' +
-        '<span class="sw" style="--c:' + col + '"></span>' + esc(L[0]) + '</button>';
-    }).join('') +
-      '<div class="prp-cd"></div><div class="prp-cact">' +
-      '<button type="button" data-a="up" style="transition-delay:220ms" title="위로">↑</button>' +
-      '<button type="button" data-a="dn" style="transition-delay:244ms" title="아래로">↓</button>' +
-      '<button type="button" data-a="cut" style="transition-delay:268ms" title="여기서 자르기">✂</button>' +
-      '<button type="button" data-a="del" style="transition-delay:292ms" title="빼기">⌫</button></div>';
+    const nowLb = (_prpCascSg.querySelector('.prp-sgl') || {}).textContent || '';
+    casc.innerHTML = '<div class="prp-ctit">이 구간을 무엇이라 부를까요</div><div class="prp-cgrid">' +
+      PRP_LBLS.map(function (L, i) {
+        const col = L[1] ? (SCRIPT_SECTIONS.find(s => s.key === L[1]) || {}).color : flexLabelColor(L[0]);
+        const on = nowLb.indexOf(L[0]) === 0 ? ' on' : '';
+        return '<button type="button" class="prp-ci' + on + '" style="transition-delay:' + Math.min(i * 14, 200) + 'ms" data-lb="' + esc(L[0]) + '" data-sk="' + L[1] + '" data-col="' + col + '">' +
+          '<span class="sw" style="--c:' + col + '"></span>' + esc(L[0]) + '</button>';
+      }).join('') + '</div>' +
+      '<div class="prp-cd"></div><div class="prp-ctit">이 구간 손보기</div><div class="prp-cact">' +
+      '<button type="button" data-a="up" style="transition-delay:210ms" title="위로">↑ 위로</button>' +
+      '<button type="button" data-a="dn" style="transition-delay:224ms" title="아래로">↓ 아래로</button>' +
+      '<button type="button" data-a="edit" style="transition-delay:238ms" title="글 고치기">✎ 고치기</button>' +
+      '<button type="button" data-a="addup" style="transition-delay:252ms" title="위에 새 구간">＋ 위에</button>' +
+      '<button type="button" data-a="adddn" style="transition-delay:266ms" title="아래에 새 구간">＋ 아래에</button>' +
+      '<button type="button" data-a="cut" style="transition-delay:280ms" title="여기서 자르기">✂ 자르기</button>' +
+      '<button type="button" class="wide" data-a="del" style="transition-delay:294ms" title="빼기">🗑 이 구간 빼기</button></div>';
     const rc = lb.getBoundingClientRect();
-    casc.style.left = Math.min(rc.left, innerWidth - 222) + 'px';
-    casc.style.top = (rc.bottom + 6) + 'px';
+    casc.style.left = Math.max(8, Math.min(rc.left, innerWidth - 274)) + 'px';
+    // 아래로 열면 잘리는 자리면 위로 뒤집는다
+    casc.style.top = '0px'; casc.classList.add('on');
+    const ch = casc.offsetHeight || 320;
+    casc.classList.remove('on');
+    const below = innerHeight - rc.bottom - 12;
+    let ty = (below >= ch || below >= rc.top) ? (rc.bottom + 6) : (rc.top - ch - 6);
+    ty = Math.max(8, Math.min(ty, innerHeight - ch - 8));   // v650b · 화면 밖으로 나가지 않게 물린다
+    casc.style.top = ty + 'px';
     casc.classList.remove('on'); void casc.offsetWidth; casc.classList.add('on');
   }
   // flex 배열에서 «보이는 i번째» 조각의 실제 인덱스
@@ -46649,9 +46707,24 @@
       const a = prpRealIdx(r, i);
       if (a2 === 'up' || a2 === 'dn') prpMoveSeg(i, a2 === 'up' ? -1 : 1);   // v641 · 공용 이동
       if (a2 === 'del' && a >= 0) {
+        if (prpSegsOf(r).length <= 1) { toast('마지막 구간은 뺄 수 없어요'); prpCascClose(); return; }
         r.scriptSecFlex.splice(a, 1);
-        if (r.prep) r.prep.marks = {};
-        saveRows(); prpRenderFilm(false); toast('조각을 뺐어요');
+        prpShiftMarks(r, i, -1);                             // v650 · 나머지 칠은 살린다
+        saveRows(); prpRenderFilm(false); toast('구간을 뺐어요');
+      }
+      if (a2 === 'addup') { prpAddSeg(i, -1); prpCascClose(); return; }
+      if (a2 === 'adddn') { prpAddSeg(i, 1); prpCascClose(); return; }
+      if (a2 === 'edit') {                                    // v650 · 이 칸부터 바로 고치기
+        _prpTool = 'x';
+        document.querySelectorAll('.prp-pen').forEach(function (p) { p.classList.toggle('on', p.dataset.t === 'x'); });
+        const rt2 = document.getElementById('prp');
+        rt2.dataset.tool = 'x'; rt2.classList.remove('structing'); rt2.classList.add('editing');
+        document.getElementById('prp-hint').innerHTML = '<b>✎ 수정</b> — 글칸을 눌러 직접 고쳐 쓰세요';
+        document.querySelectorAll('.prp-sgt').forEach(function (el) { el.contentEditable = 'true'; });
+        prpCascClose();
+        const tgt = document.querySelector('#prp-segs .prp-sg[data-i="' + i + '"] .prp-sgt');
+        if (tgt) { tgt.focus(); try { tgt.scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch (e) {} }
+        return;
       }
       if (a2 === 'cut') {
         _prpCut = true; document.getElementById('prp').classList.add('cutting');
@@ -46669,6 +46742,7 @@
     // ⚠️ v566 · saveRows를 연달아 두 번 부르면 «먼저 만든 스냅샷»이 나중에 도착해 done을 지운다.
     //   모아서 한 번만 저장한다 (prpSaveCur 대신 수집만).
     if (r) {
+      if (_prpTool === 'x') prpCommitText(true);   // v650
       prpCollect();
       r.prep = r.prep || {}; r.prep.done = true; r.prep.at = Date.now();
       saveRows();
