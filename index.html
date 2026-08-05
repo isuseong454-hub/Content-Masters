@@ -20094,7 +20094,7 @@
       #cs-room .cs-stepper, #cs-room .cs-stage{display:none!important}
       #cso{--cso-lime:#c2f24a;--cso-neon:#e6fb62;--cso-limeln:rgba(194,242,74,.4);--cso-limeft:rgba(194,242,74,.08);
         --cso-gold:#f0cf7e;--cso-rose:#ff9ec2;--cso-cyan:#43e0e6;--cso-emer:#37d67a;
-        --cso-thumb:#a7e3c4;--cso-content:#9fd0e8;--cso-script:#f0b8a0;
+        --cso-thumb:#a7e3c4;--cso-content:#ff9ec2;--cso-script:#f0b8a0;   /* v660 · 프롬프트 = 핑크 */
         --cso-sub:#9aa08a;--cso-sub2:#6b715c;--cso-line:rgba(255,255,255,.08);--cso-line2:rgba(255,255,255,.14);max-width:520px;margin:0 auto}
       .cso-top{display:flex;align-items:center;gap:8px;margin-bottom:6px}
       .cso-tb{border:1px solid var(--cso-line2);background:rgba(26,27,22,.6);color:var(--cso-sub);border-radius:11px;padding:8px 12px;font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;transition:.15s}
@@ -20529,10 +20529,10 @@
           <div class="cso-obj o-dunk"><div class="board"><div class="bb"><div class="sq"></div></div><div class="rim"></div><div class="net"></div><div class="cutie">🏀</div></div></div>
           <div class="cso-obj o-jewel"><div class="box"><div class="lid"></div><div class="base"><div class="gems"><span class="gem"></span><span class="gem"></span><span class="gem"></span></div></div></div></div>
           <div class="cso-obj o-flower"><div class="blooms"><span class="bloom b1">🌸</span><span class="bloom b2">🌷</span><span class="bloom b3">🌼</span></div><div class="vase"></div></div>
-          <div class="cso-lbl"><div class="t1">여기에 <b>던지기</b></div><div class="t2">봇이 정리해준 걸 붙여넣고 캡처 던지기</div></div>
+          <div class="cso-lbl"><div class="t1">여기에 <b>던지기</b></div><div class="t2">프롬프트 결과 붙여넣기 + 썸네일 캡처 — 둘이면 끝</div></div>
           <div class="cso-rdylbl" id="cso-rdylbl"><div class="r1">여기에 놓으세요</div><div class="r2" id="cso-rdysub">⌘V로 바로 담깁니다</div></div>
           <div class="cso-belt"></div>
-          <div class="cso-statusbar" id="cso-statusbar"><span class="sl">담긴 재료</span><div class="sb-items"><span class="sb t1" id="sb-thumb"><i></i>썸네일</span><span class="sb t2" id="sb-content"><i></i>내용</span><span class="sb t3" id="sb-script"><i></i>원고</span></div></div>
+          <div class="cso-statusbar" id="cso-statusbar"><span class="sl">담긴 재료</span><div class="sb-items"><span class="sb t1" id="sb-thumb"><i></i>썸네일</span><span class="sb t2" id="sb-content"><i></i>프롬프트</span></div></div>
         </div>
         <div class="cso-tray-h"><span class="t">컨텐츠 분해 카드</span><span class="c" id="cso-cnt"></span><span class="sp"></span><button type="button" id="cso-clear" style="display:none">비우기</button><span class="dn" id="cso-dn"></span></div>
         <div class="cso-row" id="cso-row"><span class="cso-empty">무대에 던지면 여기 좌르륵 — 카드가 채워져요</span></div>
@@ -20543,7 +20543,7 @@
           <span class="go">›</span>
         </button>
         <div class="cso-savebar"><span class="tx" id="cso-savetx">완성 카드만 창고로</span><button id="cso-save" disabled>창고에 넣고 분류하기 ›</button></div>
-        <div class="cso-note">카드를 누르면 담기/빼기 · 카드 색이 밝을수록 재료가 다 찬 것 (썸네일·내용·원고)</div>
+        <div class="cso-note">카드를 누르면 담기/빼기 · 재료는 두 개예요 — <b>썸네일 사진</b>과 <b>프롬프트</b></div>
       </div>
       <div class="cso-feedov" id="cso-feedov"></div>
       <div class="cso-feed" id="cso-feed">
@@ -47008,7 +47008,7 @@
       var flex = (b.secList && b.secList.length) ? b.secList : null;
       var structN = flex ? flex.length : Object.keys(b.sections).filter(function(k){ return b.sections[k]; }).length;
       var hasScript = !!(structN || b.scriptFree);
-      var ok = hasThumb && hasContent && hasScript;
+      var ok = hasThumb && hasContent;   // v659 · 사진 + 프롬프트 두 개면 완성. 원고는 있으면 덤
       var sel = true;   // v658 A안 · 내가 붙여넣은 건 담는 게 기본값. «이미 있음»은 배지로만 알린다
       var methodN = flex ? flex.filter(function(x){ return /^방법/.test(String(x.k || '')); }).length : 0;
       var tooMany = methodN > 3;                                  // 잘못 잘린 신호
@@ -47020,10 +47020,10 @@
       var chips = [];
       if (b.views) chips.push('<span class="mc v">' + esc(fmtNum(b.views)) + '</span>');
       if (b.format) chips.push('<span class="mc ok">' + esc(b.format) + '</span>');
+      // v659 · 있는 것만 적는다. 원고가 안 보이는 릴스가 더 많으므로 «없음»으로 벌주지 않는다
       if (structN) chips.push('<span class="mc ' + (tooMany ? 'miss' : 'ok') + '">원고 ' + structN + '칸' + (tooMany ? ' · 잘게 쪼개짐' : '') + '</span>');
       else if (b.scriptFree) chips.push('<span class="mc ok">원고 통글</span>');
-      else chips.push('<span class="mc miss">원고 없음</span>');
-      if (!hasThumb) chips.push('<span class="mc miss">사진 없음</span>');
+      if (!hasThumb) chips.push('<span class="mc miss">사진 넣으면 완성</span>');
       // 펼치면 나오는 담긴 원고
       var peek = '';
       if (flex) {
@@ -47113,14 +47113,13 @@
     csoRefresh();
   }
   function csoUpdateStatusbar(){
-    // 던진 세트에 3요소가 있었나 → 하단 상태바 점등
+    // v659 · 재료는 «두 개»다 — 썸네일(사진)과 프롬프트(봇이 분해해준 것).
+    //   원고는 캡션에 안 적힌 릴스가 더 많다. 그걸 세 번째 재료로 세우면 영영 미완성으로 보인다.
     var anyThumb = _csPhotos.length > 0;
-    var anyContent = _csBlocks.some(function(b){ return b.topicMain || b.copyText || b.thumbHook || b.views || b.format || (b.custMind && b.custMind.length); });
-    var anyScript = _csBlocks.some(function(b){ return Object.keys(b.sections).some(function(k){ return b.sections[k]; }) || b.scriptFree || (b.secList && b.secList.length); });
-    var st = csoQ('sb-thumb'), sc = csoQ('sb-content'), sr = csoQ('sb-script');
+    var anyPrompt = _csBlocks.length > 0;
+    var st = csoQ('sb-thumb'), sc = csoQ('sb-content');
     if (st) st.classList.toggle('on', anyThumb);
-    if (sc) sc.classList.toggle('on', anyContent);
-    if (sr) sr.classList.toggle('on', anyScript);
+    if (sc) sc.classList.toggle('on', anyPrompt);
     var bar = csoQ('cso-statusbar');
     if (bar){ bar.classList.add('flash'); setTimeout(function(){ bar.classList.remove('flash'); }, 700); }
   }
@@ -47201,11 +47200,9 @@
           if (!isNaN(i) && _csBlocks[i]) sel.push({ b: _csBlocks[i], i: i });
         });
         var nPh = sel.filter(function(x){ return !!csPhotoFor(x.i); }).length;
-        var nSc = sel.filter(function(x){ var b = x.b;
-          return (b.secList && b.secList.length) || Object.keys(b.sections).some(function(k){ return b.sections[k]; }) || b.scriptFree; }).length;
         var parts = ['<b>' + selN + '개</b>를 창고에 넣습니다'];
+        // v659 · 재료 두 개만 말한다 — 프롬프트는 이미 다 들어와 있고, 사진만 챙기면 된다
         parts.push('사진 ' + nPh + (nPh < selN ? '<span style="color:#F0CF7E">/' + selN + '</span>' : ''));
-        parts.push('원고 ' + nSc + (nSc < selN ? '<span style="color:#F0CF7E">/' + selN + '</span>' : ''));
         if (off) parts.push('<span style="color:#6B715C">' + off + '개는 빼고</span>');
         parts.push('<span style="color:#43e0e6">분류 필요하면 자동 이동</span>');
         tx.innerHTML = parts.join(' · ');
