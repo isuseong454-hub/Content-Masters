@@ -13294,8 +13294,8 @@
     box-shadow:
       inset 0 0 0 1px rgba(167,139,250,.2),
       inset 0 0 44px -14px rgba(140,100,240,.55); }
-  body.in-compass .bottom-nav{ display:none !important; }
-  body.in-compass{ --cp-dock:calc(62px + env(safe-area-inset-bottom)); }
+  /* v679 · 고객·트렌드·나·알고리즘도 «내 창고» 소속 — 저장소 하단 탭을 그대로 쓴다 (옛 나침반 규칙 폐기) */
+  body.in-compass{ --cp-dock:0px; }   /* v679 · 전용 바가 없어졌으므로 */
   body.in-compass .cp-wrap{ padding-bottom:calc(var(--cp-dock) + 28px); }
   /* v595f · (고객|트렌드) 세그는 살린다 — 사장님: «메뉴가 없어졌다». 도크와 겹쳐도 화면 안의 문이 맞다 */
   /* v595f · 사장님: 고객·트렌드의 하위 메뉴도 중요한 위계 — 작던 것들을 알약·큰 글자로 승격 */
@@ -13314,6 +13314,7 @@
   /* 도크 — 트레이닝 유리 도크(v558)와 같은 문법, 불빛만 은빛 */
   #cp-ws{ display:none; }
   body.in-compass #cp-ws{
+    display:none !important;   /* v679 · 전용 바 폐기 — 하단 탭이 하나면 된다 */
     display:flex; gap:0; position:fixed; left:0; right:0; bottom:0; z-index:60;
     justify-content:center; box-sizing:border-box;
     padding:11px 6px calc(11px + env(safe-area-inset-bottom));
@@ -21125,9 +21126,10 @@
   <main class="sh-main">
     <!-- 🧭 방 레일 — 어느 방에 있든 항상 보임 (정리 · 홈 · 제작소) -->
     <div id="room-rail" role="navigation" aria-label="방 이동">
+      <!-- v679 · 배선 통일 — 갈림길 · 내 창고 · 트레이닝 · 기획 (갈림길 타일과 같은 순서).
+           AI 정리는 방이 아니라 «넣기» 공정이라 뺐다 — 홈 레일 ▶넣기가 그 문이다. -->
       <button class="rr-btn rr-fork" data-room="fork" title="갈림길로"><span class="g">‹</span><span class="t">갈림길</span></button>
-      <button class="rr-btn rr-ai" data-room="sorter" title="AI 컨텐츠 정리"><span class="g">⊞</span><span class="t">AI 정리</span></button>
-      <button class="rr-btn rr-home" data-room="home" title="내 창고"><span class="g">⌂</span><span class="t">내 창고</span></button><!-- v671 · 갈림길 이름과 통일 -->
+      <button class="rr-btn rr-home" data-room="home" title="내 창고"><span class="g">⌂</span><span class="t">내 창고</span></button>
       <button class="rr-btn rr-mk" data-room="studio" title="트레이닝 룸"><span class="g">✎</span><span class="t">트레이닝</span></button>
       <button class="rr-btn rr-pl" data-room="plan" title="기획"><span class="g">◈</span><span class="t">기획</span></button><!-- v671 · 나침반 분해 후 그 자리 -->
       <button class="rr-back" id="rr-back" style="display:none">‹ 제작소로</button>
@@ -51546,8 +51548,7 @@
     }
 
     // v593→v614 · 💚 고객 분석 = 고객 + 트렌드 (사장님 확정) — 위 세그로 오간다. 트렌드 방 몸은 그대로
-    h += '<div class="cus2-ctx"><button type="button" class="on">👤 고객</button>' +
-      '<button type="button" data-cus2ctxtr>🔥 트렌드</button></div>';
+    // v679 · 🔥트렌드 토글 제거 — 트렌드는 하단 탭에 이미 있다. 한 기능이 두 군데면 또 헷갈린다.
     // ── 상단: 뒤로 + 3탭 ──
     const filled = CUS2_MATS.filter(m => cus2Bask(p, m.k).length).length;
     const RN = ['0', 'I', 'II', 'III', 'IV'];
