@@ -23290,7 +23290,7 @@
           <input type="text" class="tb-search" id="fb-search" placeholder="🔍 검색 — 후킹·유형·키워드로 빨리 찾기" />
           <button class="tb-search-clear" id="fb-search-clear" type="button" title="지우기">×</button>
         </div>
-        <button class="fb-sortline" id="fb-sortline"><span class="t">🦾 미분류 <b id="fb-sl-n">0</b>개 대기 — 썸네일·수식어 유형 비어있어요</span><span class="go">정리 시작 →</span></button>
+        <button class="fb-sortline" id="fb-sortline"><span class="t">🦾 <b id="fb-sl-n">0</b>개가 내 손을 기다려요 — 퍼널·나에게 핏은 나만 알아요</span><span class="go">한 장씩 채우기 →</span></button>
       </section>
       <div class="fb-board">
         <div class="fb-columns" id="fb-columns"></div>
@@ -45170,7 +45170,10 @@
       b.thumbHook = b.thumbTypes[0] || '';       // 하위호환 — 8축 필드는 첫 개만
       b.techniques = csSplitList(f['오래보기']).slice(0, 3);
       b.custMind = csSplitList(f['고객']);
-      b.funnelStage = CS_FUNNEL_MAP[(f['퍼널'] || '').trim()] || '';
+      // 🚨 v663 · 퍼널은 «내가 직접 고른다» (사장님 확정 2026-08-05).
+      //   봇은 「처음 본 사람이 끝까지 볼까?」라는 내 기준을 모른 채 감으로 찍는다 —
+      //   그 값을 채워두면 내가 안 보고 넘어가게 되므로, 아예 받지 않고 분류 방에서 직접 고른다.
+      b.funnelStage = '';
       b.viralTypes = csSplitList(f['왜터졌나']).slice(0, 2);
       b.keywords = csSplitList(f['키워드']);
       b.copyText = csSplitList(f['수식어']).join(', ');
@@ -45287,9 +45290,13 @@
   // 미분류 = ①썸네일 유형이 비었거나 ②수식어 «문구»가 있는데 그 유형이 빈 행.
   //   (v449) 수식어를 안 적은 행에까지 «수식어 유형»을 물으면 영원히 안 끝난다
   // v546 · 미분류 = «썸네일 유형이 빈 것»만. 수식어 유형은 프롬프트가 채우므로 여기 기준에서 뺀다
+  // 🚨 v662 · «내가 채워야 할 칸»이 빈 행 = 분류 대기.
+  //   봇이 채우는 칸(썸네일 유형)만 보던 옛 기준은 «봇이 다 했으니 분류할 게 없다»는 거짓말을 만들었다.
+  //   퍼널은 봇이 감으로 찍고, 나에게 핏은 봇이 아예 모른다 — 그게 이 방이 존재하는 이유다.
+  //   트렌드는 화면에 «(선택)»이라 적혀 있으므로 여기 기준에서 뺀다.
   function slvUnsorted() {
     return (rows || []).filter(function (r) {
-      return !(r.thumbTypes || []).length;
+      return !(r.thumbTypes || []).length || !r.funnelStage || !(r.rating > 0);
     });
   }
   function slvRefreshEntries() {
@@ -45987,7 +45994,8 @@
     let sort = 0, prep = 0, ready = 0, month = 0;
     const now = new Date(), y = now.getFullYear(), m = now.getMonth();
     rs.forEach(function (r) {
-      const needSort = !(r.thumbTypes || []).length;
+      // v662 · 레일의 «분류» 숫자도 slvUnsorted와 같은 셈법을 쓴다 (레일 2 · 배너 20 처럼 어긋나면 못 믿는다)
+      const needSort = !(r.thumbTypes || []).length || !r.funnelStage || !(r.rating > 0);
       const needPrep = prpHasScript(r) && !(r.prep && r.prep.done);
       if (needSort) sort++;
       if (needPrep) prep++;
@@ -47168,8 +47176,12 @@
   }
   // 저장 → 분류로 «부드럽게» 넘어간다 (팝업 대신 화면 전환)
   function csoGoSort(){
+    // 🚨 v661 · «분류 칸» = 하단 탭 ▦ 분류(formatboard). 담은 게 유형별로 쌓이는 그곳.
+    //   예전엔 slvOpen()(미분류 정리 라인)으로 보냈는데, 봇이 유형까지 채워주면 0개라 텅 비어 보였다.
     try { csCloseRoom(); } catch (e) {}
-    setTimeout(function(){ try { slvOpen(); } catch (e) {} }, 180);
+    setTimeout(function(){
+      try { switchWorkspace('formatboard'); } catch (e) { try { slvOpen(); } catch (e2) {} }
+    }, 180);
   }
   function csoRefresh(){
     var row = csoQ('cso-row'); if (!row) return;
@@ -47641,9 +47653,12 @@
     //   버튼에 「창고에 넣고 분류하기 ›」라고 이미 적혀 있으니, 팝업으로 또 묻는 건 말이 안 맞는다.
     // v623 · «시트 보러 갈까요?» 팝업 삭제 (2026-08-04 사장님) — 분류할 게 있으면 정거장, 없으면 그대로 머문다
     setTimeout(() => {
+      // v661 · 담은 게 «어디에» 쌓였는지 눈으로 보게 한다 — 미분류 유무와 상관없이 분류 칸으로
       const _un = (typeof slvUnsorted === 'function') ? slvUnsorted().length : 0;
-      if (_un > 0) { csToast('✓ 저장 완료 — 분류 칸으로 넘어갑니다 ›'); csoGoSort(); }
-      else csToast('✓ 봇이 유형까지 채워줘서 분류 없이 창고(시트)에 정리됐어요');
+      csToast(_un > 0
+        ? '✓ 저장 완료 — 분류 칸으로 갑니다 · ' + _un + '개는 퍼널·핏을 직접 정해야 해요 ›'
+        : '✓ 저장 완료 — 분류 칸으로 갑니다 ›');
+      csoGoSort();
     }, 500);
   }
 
