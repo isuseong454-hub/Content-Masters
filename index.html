@@ -24448,9 +24448,9 @@
               <div class="rd-sub" id="rd-sub" style="margin-top:9px"></div>
             </div>
             <!-- v583 · «왜 터졌나»는 제목·키워드 바로 아래로 (읽는 순서: 무엇 → 왜 → 어떻게) -->
-            ${r.sec3 && r.sec3.d ? `<div class="rd-blk"><span class="k">🎬 초반 3초 — 내가 뜯어본 것</span>
-              <div class="v"><span class="rd-pills" style="color:#43e0e6">${(r.sec3.t || []).map(t => `<span class="rd-fchip">${esc(t)}</span>`).join('')}</span>
-              ${r.sec3.w ? `<div style="margin-top:7px;line-height:1.6">${esc(r.sec3.w)}</div>` : ''}</div></div>` : ''}
+            <!-- v688 · 초반 3초 — 다른 칸들처럼 빈 칸으로 두고 JS가 채운다.
+                 예전엔 여기에 템플릿 문법이 박혀 있어 코드가 글자로 보였다 -->
+            <div id="rd-sec3"></div>
             <div class="rd-blk rd-why"><span class="k">★ 왜 터졌나 · 메모</span>
               <div class="rd-ro" id="rd-memo-ro"></div>
               <div class="rd-pick" style="display:none" id="rd-memo-wrap"><textarea class="rd-memo" id="rd-memo" placeholder="이건 왜 통했을까 — 한 줄로"></textarea></div></div>
@@ -30467,6 +30467,17 @@
     // ⑤ 제목 · 키워드 · 원본
     document.getElementById('rd-hook').textContent = r.hook || r.copyText || '(제목 없음)';
     rdPaintFmt(r);
+    // v688 · 초반 3초 — 뜯어본 게 있을 때만 그린다 (없으면 빈 칸)
+    (function () {
+      const box = document.getElementById('rd-sec3'); if (!box) return;
+      const s3 = r.sec3;
+      if (!(s3 && s3.d)) { box.innerHTML = ''; return; }
+      const chips = (s3.t || []).map(function (t) { return '<span class="rd-fchip">' + esc(t) + '</span>'; }).join('');
+      box.innerHTML = '<div class="rd-blk"><span class="k">🎬 초반 3초 — 내가 뜯어본 것</span>' +
+        '<div class="v"><span class="rd-pills" style="color:#43e0e6">' + chips + '</span>' +
+        (s3.w ? '<div style="margin-top:7px;line-height:1.6">' + esc(s3.w) + '</div>' : '') +
+        '</div></div>';
+    })();
     const kws = (r.keywords || []).concat(r.format ? ['#' + r.format] : []);
     document.getElementById('rd-sub').innerHTML =
       (kws.length ? kws.map(k => '<span class="rd-pill" style="color:#43E0E6">' + esc(k) + '</span>').join('') : '') +
