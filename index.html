@@ -16328,8 +16328,8 @@
       radial-gradient(100% 88% at 50% 0%, rgba(var(--qc),.11), rgba(255,255,255,.012) 74%);
     -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);
     box-shadow:
-      inset 0 1px 0 rgba(255,255,255,.26),
-      0 0 46px -20px rgba(var(--qc),.85); }
+      inset 0 1px 0 rgba(255,255,255,.22),
+      0 0 40px -24px rgba(var(--qc),.7); }
   .qcf-t.jly::after{ content:''; position:absolute; inset:0; border-radius:inherit; padding:1.5px;
     background:linear-gradient(150deg, var(--jl), var(--jm) 46%, var(--jd));
     -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
@@ -16337,13 +16337,14 @@
     pointer-events:none; opacity:1; transition:opacity .2s; }
   /* 안쪽에 색이 고인다 — 평소엔 옅게, 손이 가면 짙게 (이게 «글로우») */
   .qcf-t.jly::before{ content:''; position:absolute; inset:0; border-radius:inherit; pointer-events:none;
-    box-shadow:inset 0 0 22px -6px rgba(var(--qc),.55);
-    opacity:.45; transition:opacity .22s, box-shadow .22s; }
+    box-shadow:inset 0 0 20px -8px rgba(var(--qc),.4);
+    opacity:.4; transition:opacity .22s, box-shadow .22s; }
+  /* v686 · 손이 가면 «테두리»만 — 안은 건드리지 않는다 */
   .qcf-t.jly:hover{ border-color:transparent;
     box-shadow:
-      inset 0 1px 0 rgba(255,255,255,.4),
-      0 0 40px -12px rgba(var(--qc),.85),
-      0 14px 30px rgba(0,0,0,.45); }
+      inset 0 1px 0 rgba(255,255,255,.3),
+      0 0 22px -6px rgba(var(--qc),.5),
+      0 12px 26px rgba(0,0,0,.42); }
   /* v684 · 반짝임 — 테두리가 한 번 밝아졌다 잔잔해진다 (호버·터치 1회) */
   @keyframes qcfSheen{ 0%{opacity:.5} 40%{opacity:1} 100%{opacity:1} }
   @keyframes qcfPulse{ 0%{opacity:.45} 40%{opacity:1} 100%{opacity:1} }
@@ -16357,9 +16358,9 @@
     .qcf-t.jly:hover::after, .qcf-t.jly:hover::before,
     .qcf-t.jly:active::after, .qcf-t.jly:active::before{ animation:none; }
   }
-  .qcf-t.jly:hover::before{ opacity:1; box-shadow:inset 0 0 30px -4px rgba(var(--qc),.75); }
+  .qcf-t.jly:hover::before{ opacity:.7; box-shadow:inset 0 0 24px -8px rgba(var(--qc),.45); }
   /* 누르는 순간 한 번 «확» — 빛이 안에서 퍼졌다 잦아든다 */
-  .qcf-t.jly:active::before{ opacity:1; box-shadow:inset 0 0 44px 0 rgba(var(--qc),.9); }
+  .qcf-t.jly:active::before{ opacity:.9; box-shadow:inset 0 0 30px -4px rgba(var(--qc),.6); }
   .qcf-t.jly .nm{ color:var(--jl); }
   .qcf-t.jly .ob svg .g{ stroke:var(--jl); }
   @media (prefers-reduced-motion:reduce){
@@ -16368,11 +16369,10 @@
   .qcf-t .ob { height:46px; display:flex; align-items:center; justify-content:center; }
   .qcf-t .ob svg { width:34px; height:34px; }
   /* v685 · 얇은 선화 — 그림과 같은 두 겹 글로우 (안=자기 색 진하게 · 밖=옆 색 옅게) */
-  .qcf-t.jly .ob svg { width:36px; height:36px; transition:filter .28s ease;
-    filter:drop-shadow(0 0 4px rgba(var(--qc),.95)) drop-shadow(0 0 13px rgba(var(--qc),.45)); }
-  .qcf-t.jly:hover .ob svg {
-    filter:drop-shadow(0 0 6px rgba(var(--qc),1)) drop-shadow(0 0 20px rgba(var(--qc),.75)); }
-  .qcf-t.jly .ob svg .g { stroke-width:1.9; }
+  /* v686 · 선화는 «색»만 — 글로우를 뺀다(사장님: 너무 쨍해).
+     반짝임은 아이콘이 아니라 «타일 테두리»가 맡는다. */
+  .qcf-t.jly .ob svg { width:36px; height:36px; filter:none; }
+  .qcf-t.jly .ob svg .g { stroke-width:1.8; }
   /* v595c · 사장님 네온 그림. mix-blend-mode:screen = 검정 배경 투명화(네온만 남음).
      v595e · 누끼 완료라 살짝 키움 + 그림마다 비율이 달라(덤벨=납작·나침반=길쭉) 시각 무게를 개별 보정 */
   .qcf-t .ob img { display:block; max-height:36px; max-width:60px; object-fit:contain;
@@ -16389,26 +16389,13 @@
     filter:grayscale(1) brightness(1.16) sepia(1) hue-rotate(100deg) saturate(2.4)
            drop-shadow(0 0 4px rgba(155,232,180,.95))
            drop-shadow(0 0 14px rgba(126,224,200,.55)); }
-  .qcf-t[data-cs-go="ware"]:hover .ob img {
-    filter:grayscale(1) brightness(1.3) sepia(1) hue-rotate(100deg) saturate(2.6)
-           drop-shadow(0 0 6px rgba(155,232,180,1))
-           drop-shadow(0 0 20px rgba(126,224,200,.8)); }
   .qcf-t[data-cs-go="prod"] .ob img { max-width:58px;
     filter:grayscale(1) brightness(1.18) sepia(1) hue-rotate(205deg) saturate(3.2)
            drop-shadow(0 0 4px rgba(179,157,251,.95))
            drop-shadow(0 0 14px rgba(143,182,245,.55)); }
-  .qcf-t[data-cs-go="prod"]:hover .ob img {
-    filter:grayscale(1) brightness(1.32) sepia(1) hue-rotate(205deg) saturate(3.4)
-           drop-shadow(0 0 6px rgba(179,157,251,1))
-           drop-shadow(0 0 20px rgba(143,182,245,.8)); }
+  /* v686 · 트로피도 «색»만 — 글로우 없이 (쨍한 것 걷어냄) */
   .qcf-t[data-cs-go="plan"] .ob img { max-height:42px; max-width:52px;
-    filter:grayscale(1) brightness(1.2) sepia(1) hue-rotate(150deg) saturate(2.8)
-           drop-shadow(0 0 4px rgba(126,200,245,.95))
-           drop-shadow(0 0 14px rgba(111,224,192,.5)); }
-  .qcf-t[data-cs-go="plan"]:hover .ob img {
-    filter:grayscale(1) brightness(1.34) sepia(1) hue-rotate(150deg) saturate(3)
-           drop-shadow(0 0 6px rgba(126,200,245,1))
-           drop-shadow(0 0 20px rgba(111,224,192,.8)); }
+    filter:grayscale(1) brightness(1.12) sepia(1) hue-rotate(150deg) saturate(2.4); }
   .qcf-t[data-cs-go="sorter"] .ob img { max-height:37px; }    /* 로봇 — 아주아주 살짝 (v595h 사장님) */
   /* 짧은 모션 — 등장 때 한 번, 뜻 있는 것만 (매일 보는 화면 · 1초 안) */
   .qcf-t.in .ob img { animation:qcfPopI .5s cubic-bezier(.2,1.4,.4,1) both; }
@@ -16429,9 +16416,10 @@
   .qcf-t .vb { font-size:9.5px; font-weight:800; color:rgb(var(--qc)); margin-top:3px; letter-spacing:.02em; }
   /* 타일은 불투명 바탕 — 뒤 레일이 «타일을 관통»하지 않고 사이에서만 보인다 */
   .qcf-t { background:linear-gradient(160deg,#0e1310,#0a0d0b); }
+  /* v687 · 이어지는 선은 철회(사장님: 안 어울린다) — «›» 하나로 돌아간다 */
   .qcf-sep { flex:none; width:20px; display:flex; align-items:center; justify-content:center;
     font-size:15px; color:var(--cs-faint); }
-  .qcf-sep.s1 { color:#8ec4a2; } .qcf-sep.s2 { color:#d2a06a; }   /* 이음새 = 양옆 색의 중간 (파랑→라임 / 라임→핑크) */
+  .qcf-sep.s1 { color:#8ec4a2; } .qcf-sep.s2 { color:#9aa0d6; }   /* 이음새 = 양옆 색의 중간 */
   @media (max-width:380px){ .qcf-t { padding:12px 4px 10px; } .qcf-t .nm { font-size:10.5px; } .qcf-sep { width:12px; font-size:12px; } }
 
   /* ── 갈림길: 큰 카트 CTA ── */
@@ -29850,7 +29838,7 @@
                 <span class="sh-head-right">
                   <span class="sh-link-wrap" data-link-cell data-row="${r.id}">
                     ${r.url ?
-                      `<button class="sh-link active" data-act="editlink" data-id="${r.id}" title="클릭해서 링크 수정">🔗 링크</button><a href="${esc(r.url)}" target="_blank" rel="noopener" class="sh-link-open" title="새 탭으로 열기">↗</a>` :
+                      `<a class="sh-link active" href="${esc(r.url)}" target="_blank" rel="noopener" data-act="openlink" data-id="${r.id}" title="원본 열기 — 길게 누르면 수정">🔗 링크</a>` :
                       `<button class="sh-link empty" data-act="addlink" data-id="${r.id}">🔗 링크</button>`
                     }
                   </span>
@@ -29997,6 +29985,25 @@
   }
 
   // === INLINE LINK EDITOR ===
+  // v687 · 링크 알약 하나로 — 짧게 누르면 원본이 열리고, «길게» 누르면 수정 칸이 열린다.
+  //   («↗ 새 탭» 버튼을 없앤 대신 수정 경로가 사라지지 않게)
+  if (!window._shLinkLongWired) {
+    window._shLinkLongWired = 1;
+    let _lnkT = null, _lnkLong = false;
+    const _lnkPick = (e) => e.target.closest && e.target.closest('a.sh-link.active[data-act="openlink"]');
+    document.addEventListener('pointerdown', (e) => {
+      const a = _lnkPick(e); if (!a) return;
+      _lnkLong = false;
+      clearTimeout(_lnkT);
+      _lnkT = setTimeout(() => { _lnkLong = true; try { openInlineLinkEditor(a.dataset.id); } catch (er) {} }, 520);
+    });
+    ['pointerup', 'pointercancel', 'pointerleave'].forEach(ev =>
+      document.addEventListener(ev, () => clearTimeout(_lnkT)));
+    document.addEventListener('click', (e) => {
+      const a = _lnkPick(e); if (!a) return;
+      if (_lnkLong) { e.preventDefault(); e.stopPropagation(); _lnkLong = false; }
+    }, true);
+  }
   function openInlineLinkEditor(rowId) {
     const cell = document.querySelector(`[data-link-cell][data-row="${rowId}"]`);
     if (!cell) return;
