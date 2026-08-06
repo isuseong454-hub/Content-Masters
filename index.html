@@ -678,18 +678,25 @@
   #room-rail .rr-fork{ color:#9aa094; border-color:rgba(255,255,255,.14); }
   #room-rail .rr-fork:hover{ background:rgba(255,255,255,.07); color:#eae8de; }
   #room-rail .rr-fork .g{ font-size:15px; }
-  #room-rail .rr-ai{ color:#2ec76b; border-color:rgba(46,199,107,.28); }
-  #room-rail .rr-ai:hover{ background:rgba(46,199,107,.1); border-color:rgba(46,199,107,.5); }
-  #room-rail .rr-home{ color:#4d9ff0; border-color:rgba(77,159,240,.28); }
-  #room-rail .rr-home:hover{ background:rgba(77,159,240,.1); border-color:rgba(77,159,240,.5); }
-  #room-rail .rr-mk{ color:#b07bf0; border-color:rgba(176,123,240,.28); }
-  #room-rail .rr-mk:hover{ background:rgba(176,123,240,.1); border-color:rgba(176,123,240,.5); }
+  /* v680 · 갈림길 젤리 3색과 같은 혈통 — 내 창고=라임그린 · 트레이닝=라벤더 · 기획=스카이 */
+  #room-rail .rr-home{ color:#9BE8B4; border-color:rgba(155,232,180,.3); }
+  #room-rail .rr-home:hover{ background:rgba(155,232,180,.12); border-color:rgba(155,232,180,.6);
+    box-shadow:0 0 16px -4px rgba(155,232,180,.5); }
+  #room-rail .rr-mk{ color:#B39DFB; border-color:rgba(179,157,251,.3); }
+  #room-rail .rr-mk:hover{ background:rgba(179,157,251,.12); border-color:rgba(179,157,251,.6);
+    box-shadow:0 0 16px -4px rgba(179,157,251,.5); }
+  #room-rail .rr-pl{ color:#7EC8F5; border-color:rgba(126,200,245,.3); }
+  #room-rail .rr-pl:hover{ background:rgba(126,200,245,.12); border-color:rgba(126,200,245,.6);
+    box-shadow:0 0 16px -4px rgba(126,200,245,.5); }
   /* 지금 있는 방 = 채워진 칩 */
-  #room-rail .rr-home.here{ background:rgba(77,159,240,.14); border-color:rgba(77,159,240,.6); color:#4d9ff0; }
+  #room-rail .rr-home.here{ background:rgba(155,232,180,.16); border-color:rgba(155,232,180,.62); color:#9BE8B4;
+    box-shadow:0 0 18px -6px rgba(155,232,180,.6); }
+  #room-rail .rr-pl.here{ background:rgba(126,200,245,.16); border-color:rgba(126,200,245,.62); color:#7EC8F5;
+    box-shadow:0 0 18px -6px rgba(126,200,245,.6); }
   #room-rail .rr-btn.here{ background:rgba(255,255,255,.09); border-color:rgba(255,255,255,.34);
     color:var(--law-focus); box-shadow:0 0 0 3px rgba(255,255,255,.04); }
-  #room-rail .rr-mk.here{ background:rgba(176,123,240,.16); border-color:rgba(176,123,240,.62); color:#b07bf0; }
-  #room-rail .rr-ai.here{ background:rgba(46,199,107,.16); border-color:rgba(46,199,107,.62); color:#2ec76b; }
+  #room-rail .rr-mk.here{ background:rgba(179,157,251,.16); border-color:rgba(179,157,251,.62); color:#B39DFB;
+    box-shadow:0 0 18px -6px rgba(179,157,251,.6); }
   #room-rail .rr-back{ display:none; align-items:center; margin-left:8px; border:1px solid rgba(215,243,75,.3);
     background:rgba(215,243,75,.08); color:var(--law-asset); border-radius:999px; padding:6px 12px;
     font-family:inherit; font-size:11px; font-weight:800; cursor:pointer; transition:.18s;
@@ -13271,15 +13278,17 @@
      트레이닝(v594 라임 튜브)과 같은 공법·반대 체온: 저긴 뜨겁고 빠르게, 여긴 차갑고 느리게(모션 0).
      별을 보고 방향을 잡던 원래 방법 — 별은 위쪽 하늘에만, 아래는 어둠. */
   /* v595b · 사장님 지시: 나침반 = 보라 (그림의 보라 나침반과 한 혈통) */
+  /* v680 · 고객·트렌드·나·알고리즘은 «내 창고» 소속 — 딥퍼플은 없앤 나침반의 색이었다.
+     창고 톤(초록 기미의 검정)으로 통일. 트렌드의 밤하늘은 무대(카드) 안쪽에만 남는다. */
   #cp-view{ min-height:100vh;
-    background:radial-gradient(120% 70% at 50% -8%, #191330, #0e0a1e 55%, #070610 100%); }
+    background:radial-gradient(120% 70% at 50% -8%, #161A15, #0E100D 55%, #080906 100%); }
   .cp-wrap{ max-width:560px; margin:0 auto; padding:14px 16px 90px; color:#E8EDE9; }
   .cp-sign{ text-align:center; padding:12px 0 4px; }
   .cp-sign s{ display:block; text-decoration:none; font-family:'JetBrains Mono',monospace; font-size:8.5px;
-    letter-spacing:.5em; color:rgba(190,170,240,.55); }
-  .cp-sign b{ font-size:20px; font-weight:900; letter-spacing:.05em; color:#EDE6FF;
-    text-shadow:0 0 18px rgba(167,139,250,.5),0 0 44px rgba(140,100,240,.2); }
-  .cp-sign i{ display:block; font-style:normal; font-size:9.5px; color:#8d82b8; font-weight:700; margin-top:2px; }
+    letter-spacing:.5em; color:rgba(180,215,190,.55); }
+  .cp-sign b{ font-size:20px; font-weight:900; letter-spacing:.05em; color:#EAF3EC;
+    text-shadow:0 0 18px rgba(155,232,180,.4),0 0 44px rgba(94,203,139,.16); }
+  .cp-sign i{ display:block; font-style:normal; font-size:9.5px; color:#84947f; font-weight:700; margin-top:2px; }
   /* 별 + 은빛 테두리 — 트레이닝 튜브와 같은 fixed 오버레이 한 장 (z:55 · 방 오버레이엔 안 걸림) */
   body.in-compass::after{
     content:''; position:fixed; inset:0; z-index:55; pointer-events:none;
@@ -13292,8 +13301,8 @@
       radial-gradient(1.1px 1.1px at 8% 26%, rgba(255,255,255,.45), transparent),
       radial-gradient(1px 1px at 78% 30%, rgba(255,255,255,.35), transparent);
     box-shadow:
-      inset 0 0 0 1px rgba(167,139,250,.2),
-      inset 0 0 44px -14px rgba(140,100,240,.55); }
+      inset 0 0 0 1px rgba(155,232,180,.16),
+      inset 0 0 44px -14px rgba(94,203,139,.4); }
   /* v679 · 고객·트렌드·나·알고리즘도 «내 창고» 소속 — 저장소 하단 탭을 그대로 쓴다 (옛 나침반 규칙 폐기) */
   body.in-compass{ --cp-dock:0px; }   /* v679 · 전용 바가 없어졌으므로 */
   body.in-compass .cp-wrap{ padding-bottom:calc(var(--cp-dock) + 28px); }
@@ -16307,15 +16316,93 @@
   .qcf-t:hover { transform:translateY(-4px); border-color:rgba(var(--qc),.85);
     box-shadow:0 0 30px rgba(var(--qc),.5), 0 14px 30px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.24); }
   .qcf-t:active { transform:translateY(-1px) scale(.97); }
+
+  /* ═══ v680 · 젤리 3색 C안 — 칠하지 않고 «테두리»에만 젤리 그라데이션 ═══
+     거북이 젤리의 «한 몸에 두 색»을 윤곽으로만 빌려온다. 앱의 어두운 톤은 그대로. */
+  /* v680b · 사장님이 D안에서 본 «은은한 무언가» = 색 번짐이 아니라 «유리 한 장».
+     ①옅은 흰 막(유리 몸) ②윗 가장자리에 걸리는 빛 한 줄 ③뒤로 아주 옅게 번지는 색.
+     ②가 빠지면 그냥 어두운 박스로 보인다 — 이게 재질을 만드는 핵심. */
+  .qcf-t.jly{ border-color:transparent;
+    background:
+      linear-gradient(160deg, rgba(255,255,255,.085), rgba(255,255,255,.018)),
+      radial-gradient(100% 88% at 50% 0%, rgba(var(--qc),.11), rgba(255,255,255,.012) 74%);
+    -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.26),
+      0 0 46px -20px rgba(var(--qc),.85); }
+  .qcf-t.jly::after{ content:''; position:absolute; inset:0; border-radius:inherit; padding:1.5px;
+    background:linear-gradient(150deg, var(--jl), var(--jm) 46%, var(--jd));
+    -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite:xor; mask-composite:exclude;
+    pointer-events:none; opacity:1; transition:opacity .2s; }
+  /* 안쪽에 색이 고인다 — 평소엔 옅게, 손이 가면 짙게 (이게 «글로우») */
+  .qcf-t.jly::before{ content:''; position:absolute; inset:0; border-radius:inherit; pointer-events:none;
+    box-shadow:inset 0 0 22px -6px rgba(var(--qc),.55);
+    opacity:.45; transition:opacity .22s, box-shadow .22s; }
+  .qcf-t.jly:hover{ border-color:transparent;
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.4),
+      0 0 40px -12px rgba(var(--qc),.85),
+      0 14px 30px rgba(0,0,0,.45); }
+  /* v684 · 반짝임 — 테두리가 한 번 밝아졌다 잔잔해진다 (호버·터치 1회) */
+  @keyframes qcfSheen{ 0%{opacity:.5} 40%{opacity:1} 100%{opacity:1} }
+  @keyframes qcfPulse{ 0%{opacity:.45} 40%{opacity:1} 100%{opacity:1} }
+  .qcf-t.jly:hover::after{ opacity:1; animation:qcfSheen .5s cubic-bezier(.2,.9,.3,1) both; }
+  .qcf-t.jly:hover::before{ animation:qcfPulse .5s cubic-bezier(.2,.9,.3,1) both; }
+  .qcf-t.jly:hover .ob img{ filter:inherit; }
+  /* 폰 — 손가락이 닿는 순간에도 같은 반짝임 */
+  .qcf-t.jly:active::after{ opacity:1; animation:qcfSheen .34s ease both; }
+  .qcf-t.jly:active::before{ animation:qcfPulse .34s ease both; }
+  @media (prefers-reduced-motion:reduce){
+    .qcf-t.jly:hover::after, .qcf-t.jly:hover::before,
+    .qcf-t.jly:active::after, .qcf-t.jly:active::before{ animation:none; }
+  }
+  .qcf-t.jly:hover::before{ opacity:1; box-shadow:inset 0 0 30px -4px rgba(var(--qc),.75); }
+  /* 누르는 순간 한 번 «확» — 빛이 안에서 퍼졌다 잦아든다 */
+  .qcf-t.jly:active::before{ opacity:1; box-shadow:inset 0 0 44px 0 rgba(var(--qc),.9); }
+  .qcf-t.jly .nm{ color:var(--jl); }
+  .qcf-t.jly .ob svg .g{ stroke:var(--jl); }
+  @media (prefers-reduced-motion:reduce){
+    .qcf-t.jly::before, .qcf-t.jly::after{ transition:none; }
+  }
   .qcf-t .ob { height:46px; display:flex; align-items:center; justify-content:center; }
   .qcf-t .ob svg { width:34px; height:34px; }
   /* v595c · 사장님 네온 그림. mix-blend-mode:screen = 검정 배경 투명화(네온만 남음).
      v595e · 누끼 완료라 살짝 키움 + 그림마다 비율이 달라(덤벨=납작·나침반=길쭉) 시각 무게를 개별 보정 */
   .qcf-t .ob img { display:block; max-height:36px; max-width:60px; object-fit:contain;
-    filter:drop-shadow(0 0 8px rgba(var(--qc),.38)); }
+    filter:drop-shadow(0 0 8px rgba(var(--qc),.38)); transition:filter .28s ease; }
   .qcf-t[data-cs-go="prod"] .ob img { max-width:68px; }       /* 덤벨 — 가로로 넓게 */
   .qcf-t[data-cs-go="compass"] .ob img { max-height:40px; }   /* 나침반 — 세로가 본체 */
   .qcf-t[data-cs-go="ware"] .ob img { max-height:38px; }      /* 집 — 살짝 키움 (v595h 사장님) */
+  /* v682 · 그림도 젤리 3색으로 — «흑백으로 만든 뒤 물들임»(사장님 픽).
+     테두리만 바꾸었더니 그림이 따로 놀았다 — 덤벨은 핑크, 집은 라임, 테두리는 라벤더·민트.
+     sepia 뒤 기본색이 주황(~35°)이라 거기서 목표 색상까지 돌린다. */
+  /* v683 · 글로우를 «두 겹»으로 — 안쪽은 자기 색(진하고 좁게), 바깥은 옆 색(옆고 넓게).
+     거북이 젤리의 오묘함 = 한 색 안에 다른 색이 겹치는 것. 한 겹이면 그냥 네온이다. */
+  .qcf-t[data-cs-go="ware"] .ob img {
+    filter:grayscale(1) brightness(1.16) sepia(1) hue-rotate(100deg) saturate(2.4)
+           drop-shadow(0 0 4px rgba(155,232,180,.95))
+           drop-shadow(0 0 14px rgba(126,224,200,.55)); }
+  .qcf-t[data-cs-go="ware"]:hover .ob img {
+    filter:grayscale(1) brightness(1.3) sepia(1) hue-rotate(100deg) saturate(2.6)
+           drop-shadow(0 0 6px rgba(155,232,180,1))
+           drop-shadow(0 0 20px rgba(126,224,200,.8)); }
+  .qcf-t[data-cs-go="prod"] .ob img { max-width:58px;
+    filter:grayscale(1) brightness(1.18) sepia(1) hue-rotate(205deg) saturate(3.2)
+           drop-shadow(0 0 4px rgba(179,157,251,.95))
+           drop-shadow(0 0 14px rgba(143,182,245,.55)); }
+  .qcf-t[data-cs-go="prod"]:hover .ob img {
+    filter:grayscale(1) brightness(1.32) sepia(1) hue-rotate(205deg) saturate(3.4)
+           drop-shadow(0 0 6px rgba(179,157,251,1))
+           drop-shadow(0 0 20px rgba(143,182,245,.8)); }
+  .qcf-t[data-cs-go="plan"] .ob img { max-height:42px; max-width:52px;
+    filter:grayscale(1) brightness(1.2) sepia(1) hue-rotate(150deg) saturate(2.8)
+           drop-shadow(0 0 4px rgba(126,200,245,.95))
+           drop-shadow(0 0 14px rgba(111,224,192,.5)); }
+  .qcf-t[data-cs-go="plan"]:hover .ob img {
+    filter:grayscale(1) brightness(1.34) sepia(1) hue-rotate(150deg) saturate(3)
+           drop-shadow(0 0 6px rgba(126,200,245,1))
+           drop-shadow(0 0 20px rgba(111,224,192,.8)); }
   .qcf-t[data-cs-go="sorter"] .ob img { max-height:37px; }    /* 로봇 — 아주아주 살짝 (v595h 사장님) */
   /* 짧은 모션 — 등장 때 한 번, 뜻 있는 것만 (매일 보는 화면 · 1초 안) */
   .qcf-t.in .ob img { animation:qcfPopI .5s cubic-bezier(.2,1.4,.4,1) both; }
@@ -19941,21 +20028,21 @@
       <div class="qcf-flow" id="qcf-flow">
         <!-- v595d · 사장님 누끼 교체 + 색 재배치: AI=파랑 · 창고=라임(라임=자산 — 자산이 쌓이는 곳) -->
         <!-- v646 · AI 정리 타일 제거 — 담는 문은 우상단 🤖·사이드바·⚡빠르게 담기로 충분 (사장님 확정) -->
-        <div class="qcf-t" style="--qc:215,243,75" data-cs-go="ware">
+        <div class="qcf-t jly" style="--qc:155,232,180;--jl:#9BE8B4;--jm:#7EE0C8;--jd:#2E8F5C" data-cs-go="ware">
           <div class="ob"><img src="fork-ware.png" alt="" onerror="this.style.display='none';var s=this.nextElementSibling;if(s)s.style.display='';"><svg style="display:none" viewBox="0 0 24 24"><path class="g" d="M3.4 9.2L12 4.6l8.6 4.6v9.8H3.4z"/><path class="g" d="M8.2 19V12h7.6v7"/></svg></div>
           <div class="nm">내 창고</div><div class="vb">이해하다</div>
           <div class="fork-bd" id="fork-bd-ware" style="color:#d7f34b;background:rgba(215,243,75,.1)"></div>
         </div>
         <div class="qcf-sep s1">›</div>
         <!-- v669 · 순서 = 저장소 → 트레이닝 → 기획 (사장님 확정) -->
-        <div class="qcf-t" style="--qc:255,61,166" data-cs-go="prod">
+        <div class="qcf-t jly" style="--qc:179,157,251;--jl:#B39DFB;--jm:#8FB6F5;--jd:#5B47A8" data-cs-go="prod">
           <div class="ob"><img src="fork-gym.png" alt="" onerror="this.style.display='none';var s=this.nextElementSibling;if(s)s.style.display='';"><svg style="display:none" viewBox="0 0 24 24"><path class="g" d="M8 12h8"/><path class="g" d="M6.2 9v6M3.8 10.4v3.2M17.8 9v6M20.2 10.4v3.2"/></svg></div>
           <div class="nm">트레이닝</div><div class="vb">만들다</div>
           <div class="fork-bd" id="fork-bd-prod" style="color:#FF3DA6;background:rgba(255,61,166,.1)"></div>
         </div>
         <div class="qcf-sep s2">›</div>
-        <div class="qcf-t" style="--qc:179,157,251" data-cs-go="plan" title="기획 — 이번 주 다섯 편">
-          <div class="ob"><img src="fork-plan.png" alt="" onerror="this.style.display='none';var s=this.nextElementSibling;if(s)s.style.display='';"><svg style="display:none" viewBox="0 0 24 24"><path class="g" d="M12 3.6l7.4 8.4-7.4 8.4L4.6 12z"/><path class="g" d="M12 8.2l3.4 3.8-3.4 3.8-3.4-3.8z"/></svg></div>
+        <div class="qcf-t jly" style="--qc:126,200,245;--jl:#7EC8F5;--jm:#6FE0C0;--jd:#2C6E9E" data-cs-go="plan" title="기획 — 이번 주 다섯 편">
+          <div class="ob"><img src="hero-trophy.png" alt="" onerror="this.style.display='none';var s=this.nextElementSibling;if(s)s.style.display='';"><svg style="display:none" viewBox="0 0 24 24"><path class="g" d="M7.5 4h9v5.2a4.5 4.5 0 0 1-9 0z"/><path class="g" d="M7.5 5.6H5a3 3 0 0 0 3 3"/><path class="g" d="M16.5 5.6H19a3 3 0 0 1-3 3"/><path class="g" d="M12 13.7V17"/><path class="g" d="M9 20h6"/><path class="g" d="M9.6 17h4.8v3H9.6z"/></svg></div>
           <div class="nm">기획</div><div class="vb">정하다</div>
           <div class="fork-bd" id="fork-bd-plan" style="color:#B39DFB;background:rgba(179,157,251,.12)"></div>
         </div>
