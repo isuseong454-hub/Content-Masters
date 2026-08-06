@@ -49676,8 +49676,14 @@
     });
   }
 
+  let _loggingOut = false;
   async function logout() {
-    if (!(await appConfirm('로그아웃 하시겠어요?'))) return;
+    if (_loggingOut) return;          // v690 · 어느 문으로 들어오든 확인 창은 하나만
+    _loggingOut = true;
+    let _ok = false;
+    try { _ok = await appConfirm('로그아웃 하시겠어요?'); }
+    finally { _loggingOut = false; }
+    if (!_ok) return;
     await setCurrentUser(null);
     await setAutologin(false);
     // 운영자 메뉴 숨김
@@ -49937,11 +49943,10 @@
     // 로그아웃 버튼 — window 노출 + onclick 직접 바인딩
     window.__logout = logout;
     window.__goWs = switchWorkspace; // 방 스위처 인라인 onclick용 브리지 (v413)
+    // 🚨 v690 · 예전엔 onclick + addEventListener «둘 다» 붙어 있어서 한 번 눌러도 logout()이 두 번 돌았다.
+    //   → 확인 창이 두 개 겹쳐 뜨고, 하나를 확인해도 남은 창이 화면을 덮어 «로그아웃이 안 된다»가 됐다.
     const logoutBtn = document.getElementById('ws-logout');
-    if (logoutBtn) {
-      logoutBtn.onclick = logout;
-      logoutBtn.addEventListener('click', logout); // 이중 안전망
-    }
+    if (logoutBtn) logoutBtn.onclick = logout;
 
     // 자동완성 체크박스 상태 적용
     const autoLogin = await getAutologin();
@@ -56744,10 +56749,28 @@
 // ============================================================
 // === Service Worker 등록 (PWA 설치 가능) =====================
 // ============================================================
+// v690 · 「배포했는데 안 바뀐다」의 정체 = 브라우저가 sw.js «파일 자체»를 캐시한다.
+//   홈화면 앱(PWA)은 Ctrl+Shift+R이 없어서 손으로 풀 방법도 마땅치 않았다.
+//   ⇒ ①sw.js는 항상 새로 받고(updateViaCache:'none') ②열 때·앱으로 돌아올 때 새 버전을 확인하고
+//     ③새 것이 준비되면 조용히 갈아탄 뒤 한 번만 새로고침한다.
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('sw.js').catch(err => {
+    navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }).then(reg => {
+      const check = () => { try { reg.update(); } catch (e) {} };
+      check();
+      // 앱으로 돌아올 때마다 새 버전이 있는지 본다 (앱을 껐다 켜지 않아도)
+      document.addEventListener('visibilitychange', () => { if (!document.hidden) check(); });
+      setInterval(check, 15 * 60 * 1000);
+    }).catch(err => {
       console.log('SW 등록 실패:', err);
+    });
+
+    // 새 서비스워커가 자리를 잡으면 한 번만 새로고침 — 무한 새로고침 방지 플래그
+    let _swReloaded = false;
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if (_swReloaded) return;
+      _swReloaded = true;
+      location.reload();
     });
   });
 }
