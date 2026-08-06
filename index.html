@@ -16300,10 +16300,8 @@
   .qcf-flow { display:flex; align-items:stretch; gap:0; margin-top:22px; position:relative; }
   /* v595 · C-2: 4타일이 됐지만 레일은 «트레이닝»에서 끝난다 — 나침반은 순서(담다›이해하다›만들다)에 없다.
      left 12% = 1번 타일 중심, right 34% = 3번 타일 중심 (4등분 기준) */
-  .qcf-flow::before { content:''; position:absolute; left:12%; right:34%; top:50%; height:2px; margin-top:-1px;
-    border-radius:2px; z-index:0; pointer-events:none;
-    background:linear-gradient(90deg, rgba(70,150,250,.55), rgba(215,243,75,.55) 50%, rgba(255,61,166,.55));
-    filter:blur(.2px); }
+  /* v689 · 가로로 이어지던 선 제거 (사장님: 짜친다) — 색도 옛 팔레트(파랑·라임·핑크)라 어긋나 있었다 */
+  .qcf-flow::before { content:none; }
   /* v595 · 나침반 앞 이음새 = «›»가 아니라 얇은 세로 실선 — 「여기부터는 다른 것」 */
   .qcf-sep.cut { width:16px; }
   .qcf-sep.cut::before { content:''; width:1px; height:26px;
@@ -16328,17 +16326,17 @@
       radial-gradient(100% 88% at 50% 0%, rgba(var(--qc),.11), rgba(255,255,255,.012) 74%);
     -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);
     box-shadow:
-      inset 0 1px 0 rgba(255,255,255,.22),
-      0 0 40px -24px rgba(var(--qc),.7); }
+      inset 0 1px 0 rgba(255,255,255,.16),
+      0 0 36px -26px rgba(var(--qc),.55); }
   .qcf-t.jly::after{ content:''; position:absolute; inset:0; border-radius:inherit; padding:1.5px;
     background:linear-gradient(150deg, var(--jl), var(--jm) 46%, var(--jd));
     -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
     -webkit-mask-composite:xor; mask-composite:exclude;
-    pointer-events:none; opacity:1; transition:opacity .2s; }
+    pointer-events:none; opacity:.72; transition:opacity .2s; }   /* v689 · 테두리 차분하게 */
   /* 안쪽에 색이 고인다 — 평소엔 옅게, 손이 가면 짙게 (이게 «글로우») */
   .qcf-t.jly::before{ content:''; position:absolute; inset:0; border-radius:inherit; pointer-events:none;
-    box-shadow:inset 0 0 20px -8px rgba(var(--qc),.4);
-    opacity:.4; transition:opacity .22s, box-shadow .22s; }
+    box-shadow:inset 0 0 20px -10px rgba(var(--qc),.3);
+    opacity:.32; transition:opacity .22s, box-shadow .22s; }
   /* v686 · 손이 가면 «테두리»만 — 안은 건드리지 않는다 */
   .qcf-t.jly:hover{ border-color:transparent;
     box-shadow:
@@ -16361,7 +16359,7 @@
   .qcf-t.jly:hover::before{ opacity:.7; box-shadow:inset 0 0 24px -8px rgba(var(--qc),.45); }
   /* 누르는 순간 한 번 «확» — 빛이 안에서 퍼졌다 잦아든다 */
   .qcf-t.jly:active::before{ opacity:.9; box-shadow:inset 0 0 30px -4px rgba(var(--qc),.6); }
-  .qcf-t.jly .nm{ color:var(--jl); }
+  .qcf-t.jly .nm{ color:var(--jl); opacity:.88; }
   .qcf-t.jly .ob svg .g{ stroke:var(--jl); }
   @media (prefers-reduced-motion:reduce){
     .qcf-t.jly::before, .qcf-t.jly::after{ transition:none; }
@@ -16394,8 +16392,8 @@
            drop-shadow(0 0 4px rgba(179,157,251,.95))
            drop-shadow(0 0 14px rgba(143,182,245,.55)); }
   /* v686 · 트로피도 «색»만 — 글로우 없이 (쨍한 것 걷어냄) */
-  .qcf-t[data-cs-go="plan"] .ob img { max-height:42px; max-width:52px;
-    filter:grayscale(1) brightness(1.12) sepia(1) hue-rotate(150deg) saturate(2.4); }
+  .qcf-t[data-cs-go="plan"] .ob img { max-height:40px; max-width:50px;
+    filter:grayscale(1) brightness(.94) sepia(1) hue-rotate(150deg) saturate(1.9) opacity(.92); }
   .qcf-t[data-cs-go="sorter"] .ob img { max-height:37px; }    /* 로봇 — 아주아주 살짝 (v595h 사장님) */
   /* 짧은 모션 — 등장 때 한 번, 뜻 있는 것만 (매일 보는 화면 · 1초 안) */
   .qcf-t.in .ob img { animation:qcfPopI .5s cubic-bezier(.2,1.4,.4,1) both; }
