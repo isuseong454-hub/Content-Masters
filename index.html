@@ -16367,6 +16367,12 @@
   }
   .qcf-t .ob { height:46px; display:flex; align-items:center; justify-content:center; }
   .qcf-t .ob svg { width:34px; height:34px; }
+  /* v685 · 얇은 선화 — 그림과 같은 두 겹 글로우 (안=자기 색 진하게 · 밖=옆 색 옅게) */
+  .qcf-t.jly .ob svg { width:36px; height:36px; transition:filter .28s ease;
+    filter:drop-shadow(0 0 4px rgba(var(--qc),.95)) drop-shadow(0 0 13px rgba(var(--qc),.45)); }
+  .qcf-t.jly:hover .ob svg {
+    filter:drop-shadow(0 0 6px rgba(var(--qc),1)) drop-shadow(0 0 20px rgba(var(--qc),.75)); }
+  .qcf-t.jly .ob svg .g { stroke-width:1.9; }
   /* v595c · 사장님 네온 그림. mix-blend-mode:screen = 검정 배경 투명화(네온만 남음).
      v595e · 누끼 완료라 살짝 키움 + 그림마다 비율이 달라(덤벨=납작·나침반=길쭉) 시각 무게를 개별 보정 */
   .qcf-t .ob img { display:block; max-height:36px; max-width:60px; object-fit:contain;
@@ -20029,14 +20035,14 @@
         <!-- v595d · 사장님 누끼 교체 + 색 재배치: AI=파랑 · 창고=라임(라임=자산 — 자산이 쌓이는 곳) -->
         <!-- v646 · AI 정리 타일 제거 — 담는 문은 우상단 🤖·사이드바·⚡빠르게 담기로 충분 (사장님 확정) -->
         <div class="qcf-t jly" style="--qc:155,232,180;--jl:#9BE8B4;--jm:#7EE0C8;--jd:#2E8F5C" data-cs-go="ware">
-          <div class="ob"><img src="fork-ware.png" alt="" onerror="this.style.display='none';var s=this.nextElementSibling;if(s)s.style.display='';"><svg style="display:none" viewBox="0 0 24 24"><path class="g" d="M3.4 9.2L12 4.6l8.6 4.6v9.8H3.4z"/><path class="g" d="M8.2 19V12h7.6v7"/></svg></div>
+          <div class="ob"><img src="fork-ware.png" alt="" style="display:none"><svg viewBox="0 0 24 24"><path class="g" d="M3.4 9.2L12 4.6l8.6 4.6v9.8H3.4z"/><path class="g" d="M8.2 19V12h7.6v7"/></svg></div>
           <div class="nm">내 창고</div><div class="vb">이해하다</div>
           <div class="fork-bd" id="fork-bd-ware" style="color:#d7f34b;background:rgba(215,243,75,.1)"></div>
         </div>
         <div class="qcf-sep s1">›</div>
         <!-- v669 · 순서 = 저장소 → 트레이닝 → 기획 (사장님 확정) -->
         <div class="qcf-t jly" style="--qc:179,157,251;--jl:#B39DFB;--jm:#8FB6F5;--jd:#5B47A8" data-cs-go="prod">
-          <div class="ob"><img src="fork-gym.png" alt="" onerror="this.style.display='none';var s=this.nextElementSibling;if(s)s.style.display='';"><svg style="display:none" viewBox="0 0 24 24"><path class="g" d="M8 12h8"/><path class="g" d="M6.2 9v6M3.8 10.4v3.2M17.8 9v6M20.2 10.4v3.2"/></svg></div>
+          <div class="ob"><img src="fork-gym.png" alt="" style="display:none"><svg viewBox="0 0 24 24"><path class="g" d="M8 12h8"/><path class="g" d="M6.2 9v6M3.8 10.4v3.2M17.8 9v6M20.2 10.4v3.2"/></svg></div>
           <div class="nm">트레이닝</div><div class="vb">만들다</div>
           <div class="fork-bd" id="fork-bd-prod" style="color:#FF3DA6;background:rgba(255,61,166,.1)"></div>
         </div>
