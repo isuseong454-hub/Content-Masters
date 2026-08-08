@@ -493,6 +493,16 @@
   /* 홈 */
   .pln-home{ display:flex; flex-direction:column; min-height:430px; height:100%; }
   .pln-home .top{ flex:1; display:flex; flex-direction:column; justify-content:center; text-align:center; padding-bottom:8px; }
+  /* v692 · 기획 홈 원고·배포 문 */
+  .pln-doors{ display:flex; gap:8px; margin:10px 0 2px; }
+  .pln-door{ flex:1; display:flex; flex-direction:column; align-items:flex-start; gap:3px;
+    font-family:inherit; font-size:12.5px; font-weight:800; color:#CFE3F2;
+    padding:11px 13px; border-radius:13px; cursor:pointer; text-align:left;
+    background:rgba(126,200,245,.07); border:1px solid rgba(126,200,245,.22);
+    -webkit-tap-highlight-color:transparent; transition:background .16s, border-color .16s; }
+  .pln-door s{ text-decoration:none; font-size:9.5px; font-weight:700; color:#7C8CA0; }
+  .pln-door:hover{ background:rgba(126,200,245,.13); border-color:rgba(126,200,245,.45); }
+  .pln-door:active{ transform:scale(.98); }
   .pln-nd{ display:flex; align-items:center; gap:7px; font-size:10px; color:rgba(176,188,214,.55);
     padding:8px 10px; border:1px solid rgba(255,255,255,.07); border-radius:11px; margin:4px 0 2px;
     background:rgba(255,255,255,.02); white-space:nowrap; overflow:hidden; cursor:pointer;
@@ -23010,6 +23020,13 @@
       padding:calc(22px + env(safe-area-inset-top)) 20px 204px}
     /* v574 · 정거장과 같은 문법 — 제목 16px · 숫자는 부제 · 닫기 40px 오른쪽 끝 */
     .prp-top{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+    /* v691 · 방마다 «갈림길로» 문을 둔다 — ✕만 있으면 어디로 나가는지 모른다 */
+    .prp-fork, .slv-fork{ flex:none; font-family:inherit; font-size:11px; font-weight:800;
+      padding:8px 12px; border-radius:99px; cursor:pointer;
+      background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.12); color:#9aa094;
+      -webkit-tap-highlight-color:transparent; transition:background .16s, color .16s; }
+    .prp-fork:hover, .slv-fork:hover{ background:rgba(255,255,255,.09); color:#eae8de; }
+    .prp-fork:active, .slv-fork:active{ transform:scale(.95); }
     /* v672 · 왼쪽 상단 되돌리기 */
     .prp-hist{display:flex;gap:6px;flex:none}
     .prp-hist .prp-un{width:34px;height:34px;font-size:14px}
@@ -23308,6 +23325,7 @@
             <button type="button" class="prp-un" id="prp-redo" disabled title="다시하기 (Ctrl+Shift+Z)">↻</button>
           </div>
           <div class="prp-ttw"><span class="t">원고 손질</span><span class="c" id="prp-idx">— / —</span></div>
+          <button type="button" class="prp-fork" id="prp-fork" title="갈림길로">‹ 갈림길</button>
           <!-- v666 · 편집 동작은 오른쪽 상단 (펜 줄과 성격이 다르다) -->
           <div class="prp-acts">
             <button type="button" class="prp-pen op" data-t="s"><span class="nib"></span>구조</button>
@@ -23377,6 +23395,8 @@
           <button type="button" class="slv-undo" id="slv-undo"><span class="ic">↩</span><span class="t" id="slv-undo-t">되돌리기</span></button>
           <!-- v548 · 자동배정 = 큰 바에서 «작은 버튼»으로 (기능은 유지, 화면은 안 먹게) -->
           <button type="button" class="slv-automini" id="slv-automini" title="문구만 봐도 확실한 것을 한 번에 배정">✨ <b id="slv-auton">0</b></button>
+          <!-- v691 · 갈림길로 나가는 문 (✕만 있으면 어디로 나가는지 모른다) -->
+          <button type="button" class="slv-fork" id="slv-fork" title="갈림길로">‹ 갈림길</button>
           <!-- ⬆️➡️ 닫기는 항상 오른쪽 끝 (앱 공통 규칙) · 44px -->
           <button class="slv-back" id="slv-back" title="닫기">✕</button>
         </div>
@@ -24211,14 +24231,16 @@
              [홈|3초|지속|클릭률|맥락] │ [원고|배포]. 왼쪽은 연습, 오른쪽은 진짜 일.
              이름과 속이 같아야 한다 — 「원고」를 눌렀는데 훈련방이 열리던 것을 바로잡음 -->
         <div class="st2-ws" id="st2-ws">
-          <button class="on" data-st2tab="home"><span class="g">⌂</span><span class="t">홈</span></button>
+          <button class="on" data-st2tab="home"><span class="g">⌂</span><span class="t">트레이닝룸</span></button>
           <button data-st2tab="3sec"><span class="g">◔</span><span class="t">3초</span></button>
           <button data-st2tab="stay"><span class="g">⏱</span><span class="t">지속</span></button>
           <button data-st2tab="clk"><span class="g">▣</span><span class="t">클릭률</span></button>
           <button data-st2tab="emp"><span class="g">♡</span><span class="t">맥락</span></button>
-          <span class="st2-sep" aria-hidden="true"></span>
-          <button data-st2tab="scripts"><span class="g">✎</span><span class="t">원고</span></button>
-          <button data-st2tab="osmu"><span class="g">⬡</span><span class="t">배포</span></button>
+          <!-- v692 · 원고·배포 = ◈기획 소속으로 이사 (기획 구슬: 정하기→후킹→컷→원고→배포).
+               도크에선 숨기고 마크업·배선은 보존 — 기획 홈의 두 문이 쓴다 -->
+          <span class="st2-sep" aria-hidden="true" style="display:none"></span>
+          <button data-st2tab="scripts" style="display:none"><span class="g">✎</span><span class="t">원고</span></button>
+          <button data-st2tab="osmu" style="display:none"><span class="g">⬡</span><span class="t">배포</span></button>
           <button data-st2tab="cus" style="display:none"><span class="g">◉</span><span class="t">고객 분석</span></button>
         </div>
         <div id="st2-home"></div>
@@ -35352,11 +35374,13 @@
     scripts: '내 원고', thumb: '썸네일', studio: '트레이닝 룸', compass: '나침반' };
   function rrUpdate(ws) {
     const rail = document.getElementById('room-rail'); if (!rail) return;
-    if (ws === 'studio' || ws === 'home' || ws === 'compass') window.__rrFrom = null;      // 방에 도착하면 출신 초기화
+    // v692 · 기획에서 연 배포(studio 몸통)는 «기획 소속»을 유지해야 하므로 plan 출신은 여기서 안 지운다.
+    //   (지우는 건 레일·갈림길 클릭이 한다 — 사람이 방을 «직접» 골랐을 때)
+    if ((ws === 'studio' || ws === 'home' || ws === 'compass') && window.__rrFrom !== 'plan') window.__rrFrom = null;
     const from = window.__rrFrom;
     // v595 · 나침반 = 세 번째 방 — 나침반에서 나간 화면(라이벌 멘토 등)도 나침반 소속으로 표시
-    const room = (ws === 'studio' || from === 'studio') ? 'studio'
-      : (ws === 'plan') ? 'plan'                                        // v671 · 기획 = 독립된 방
+    const room = (ws === 'plan' || from === 'plan') ? 'plan'            // v692 · 기획서 연 원고·배포도 기획 소속
+      : (ws === 'studio' || from === 'studio') ? 'studio'
       : (ws === 'compass' || from === 'compass') ? 'compass' : 'home';
     rail.querySelectorAll('.rr-btn').forEach(b => b.classList.toggle('here', b.dataset.room === room));
     const w = document.getElementById('rr-where');
@@ -35399,6 +35423,7 @@
     } catch (e) {}
     rail.querySelectorAll('.rr-btn').forEach(b => b.onclick = () => {
       const r = b.dataset.room;
+      window.__rrFrom = null;   // v692 · 사람이 방을 직접 골랐다 — plan 출신 표식을 지운다
       // v571 · 갈림길로 되돌아가는 길 — 지금까진 나가면 다시 못 들어왔다
       if (r === 'fork') { try { window.__csForkShown = false; maybeShowFork(); } catch (e) {} return; }
       if (r === 'sorter') { if (window.__openSorter) window.__openSorter(); return; }
@@ -45357,7 +45382,18 @@
         // v626 · GPT가 순서를 바꿔 메타 줄을 원고구조 뒤에 뱉어도 원고로 흘리지 않는다
         if (km && CS_META_KEYS.indexOf(km[1].trim()) > -1) { b.fields[km[1].trim()] = km[2].trim(); return; }
         if (inStruct && !b.secList && !b.scriptFree && /^\(?[가-힣A-Za-z0-9·&\s]{1,18}\)?$/.test(t) && /형/.test(t)) { b.structType = t.replace(/[()]/g, ''); return; } // 판정이 다음 줄에 온 경우
-        if (inStruct && !/^없음[\s\-—–~.!…]*$/.test(t)) b.scriptFree += (b.scriptFree ? '\n' : '') + t;
+        // 🚨 v691 · 라벨 없는 줄 = «직전 구간이 이어지는 줄»이다.
+        //   프롬프트가 «한 라벨 안의 여러 문장은 줄바꿈으로 이어 붙여»라고 시키므로 이런 줄이 정상적으로 온다.
+        //   예전엔 이걸 전부 scriptFree(통글)로 흘려서, 화면엔 구간 첫 줄만 보이고 나머지가 사라진 것처럼 됐다.
+        if (inStruct && !/^없음[\s\-—–~.!…]*$/.test(t)) {
+          if (b.secList && b.secList.length) {
+            const _last = b.secList[b.secList.length - 1];
+            _last.t += '\n' + t;
+            if (_last.c) b.sections[_last.c] = _last.t;   // 표준 라벨이면 canonical 칸도 같이
+            return;
+          }
+          b.scriptFree += (b.scriptFree ? '\n' : '') + t;
+        }
       });
       const f = b.fields;
       b.hook = f['후킹문구'] || f['후킹'] || '';
@@ -46137,6 +46173,9 @@
       slvClose();
       if (_cmrFromFork) { _cmrFromFork = false; try { csOpenFork(); } catch (e) {} }
     };
+    // v691 · 「‹ 갈림길」 — 어디서 들어왔든 갈림길로 바로
+    { const fk = document.getElementById('slv-fork');
+      if (fk) fk.onclick = function () { slvClose(); _cmrFromFork = false; try { csOpenFork(); } catch (e) {} }; }
     var _ub = document.getElementById('slv-undo'); if (_ub) _ub.onclick = slvDoUndo;   // v544
     document.getElementById('slv-assign').onclick = function () { slvAssign(); setTimeout(function () { try { slvAutoBar(); } catch (e) {} }, 700); };
     document.getElementById('slv-skip').onclick = () => { if (slvBusyNow() || _slvQ.length < 2) return; _slvQ.push(_slvQ.shift()); slvSpawn(true); slvAutoBar(); };
@@ -46414,6 +46453,9 @@
     for (let i = 0; i < 10; i++) h += '<span class="prp-mote" style="left:' + (24 + ((i * 37) % 54)) + '%;top:' + (12 + ((i * 23) % 50)) + '%;--md:' + (7 + (i % 5) * 1.7) + 's;--mdel:' + (i * .9) + 's;--mo:' + (.3 + (i % 3) * .18) + '"></span>';
     document.getElementById('prp-motes').innerHTML = h;
 
+    // v691 · 「‹ 갈림길」 — 어디서 들어왔든 갈림길로 바로
+    { const fk = document.getElementById('prp-fork');
+      if (fk) fk.onclick = function () { prpClose(); _cmrFromFork = false; try { csOpenFork(); } catch (e) {} }; }
     document.getElementById('prp-x').onclick = function () {   // v593 · 갈림길에서 왔으면 갈림길로
       prpClose();
       if (_cmrFromFork) { _cmrFromFork = false; try { csOpenFork(); } catch (e) {} }
@@ -48716,6 +48758,7 @@
     document.querySelectorAll('[data-cs-go]').forEach(el => {
       el.addEventListener('click', () => {
         const go = el.dataset.csGo;
+        window.__rrFrom = null;   // v692 · 갈림길에서 직접 골랐다 — 출신 표식 초기화
         if (go === 'sorter') csOpenRoom();
         else if (go === 'prod') { csCloseFork(); cmSweepRooms(); try { switchWorkspace('studio'); } catch (e) {} } // v413 제작소 홈으로
         else if (go === 'compass') { csCloseFork(); cmSweepRooms(); try { switchWorkspace('compass'); } catch (e) {} } // v595 · 🧭 나침반(분해 후에도 문은 살아있다)
@@ -50317,7 +50360,9 @@
       });
       pl.forEach(function (p, ci) {
         const cc = p.m === 'att' ? '#7B9BE8' : '#37d67a';
-        h += '<div class="st2-wc' + (p.pop ? ' pop' : '') + '" data-st2pl="' + wi + '-' + ci + '" style="--cc:' + cc + '"><span class="cdt"></span>' +
+        // v691 · data-st2th=rowId — 그리기 끝난 뒤 썸네일을 불러 붙인다 (쇼핑 카드와 같은 공법)
+        h += '<div class="st2-wc' + (p.pop ? ' pop' : '') + '" data-st2pl="' + wi + '-' + ci + '"' +
+          (p.rowId ? ' data-st2th="' + p.rowId + '"' : '') + ' style="--cc:' + cc + '"><span class="cdt"></span>' +
           (ed ? '<span class="rm" data-st2rm="' + wi + '-' + ci + '">×</span>' : '') +
           '<span class="nm">' + esc(String(p.nm || '재료').slice(0, 14)) + '</span></div>';
         delete p.pop;
@@ -50329,6 +50374,15 @@
       h += '</div></div>';
     });
     el.innerHTML = h;
+    // v691 · 배정 카드에 썸네일 — 사진이 있는 카드만 (없으면 이름 그대로)
+    el.querySelectorAll('[data-st2th]').forEach(function (c) {
+      const rid = c.dataset.st2th;
+      const r0 = (rows || []).find(function (x) { return String(x.id) === String(rid); });
+      if (!(r0 && r0.hasThumb)) return;
+      loadImage(rid, 'thumb').then(function (img) {
+        if (img && !c.querySelector('img')) { const im = document.createElement('img'); im.src = img; c.prepend(im); }
+      }).catch(function () {});
+    });
     const sum = document.getElementById('st2-calsum');
     if (sum) {
       if (off === 0) { const goal = monthlyUploadGoal || 0;
@@ -50415,6 +50469,14 @@
     document.getElementById('st2-cartitems').innerHTML = st2Cart.map(id =>
       '<span class="st2-cartth" data-st2cx="' + id + '"><span class="x2">×</span></span>').join('');
     document.getElementById('st2-cartgo').textContent = '배정하러 → ' + st2Cart.length;
+    // v691 · 카트 칸에도 썸네일 — 빈 네모만 있으면 뭘 담았는지 모른다
+    bar.querySelectorAll('.st2-cartth').forEach(function (c) {
+      const r0 = (rows || []).find(function (x) { return String(x.id) === String(c.dataset.st2cx); });
+      if (!(r0 && r0.hasThumb)) return;
+      loadImage(r0.id, 'thumb').then(function (img) {
+        if (img && !c.querySelector('img')) { const im = document.createElement('img'); im.src = img; c.prepend(im); }
+      }).catch(function () {});
+    });
     bar.querySelectorAll('[data-st2cx] .x2').forEach(x => x.onclick = ev => {
       ev.stopPropagation();
       const id = x.parentElement.dataset.st2cx;
@@ -50457,6 +50519,14 @@
       const it = items.find(x => String(x.r.id) === String(id));
       return '<div class="st2-dcard" data-st2dg="' + id + '"><span class="nm4">' + esc(String(it ? it.nm : '재료').slice(0, 12)) + '</span></div>';
     }).join('');
+    // v691 · 장바구니 카드에도 썸네일 — 이름만 있으면 뭐가 뭔지 못 알아본다
+    document.querySelectorAll('#st2-dockcs .st2-dcard').forEach(function (c) {
+      const it = items.find(x => String(x.r.id) === String(c.dataset.st2dg));
+      if (!(it && it.r.hasThumb)) return;
+      loadImage(it.r.id, 'thumb').then(function (img) {
+        if (img && !c.querySelector('img')) { const im = document.createElement('img'); im.src = img; c.prepend(im); }
+      }).catch(function () {});
+    });
     document.getElementById('st2-dockn').textContent = st2Cart.length + '장';
     st2WireDrag();
   }
@@ -50520,7 +50590,12 @@
     return picks.slice(0, 3);
   }
   function st2RenderWeek() {
+    // v691 · «이번 주, 이 3개» 폐지 (사장님: 부산스럽다).
+    //   골라주는 일은 기획실이 한다 — 두 군데서 따로 권하면 오히려 헷갈린다.
+    //   계산하는 st2WeekPlanData()는 남겨둔다 — 나중에 기획실에서 쓸 수 있다.
     const el = document.getElementById('st2-week'); if (!el) return;
+    el.innerHTML = ''; return;
+    /* eslint-disable no-unreachable */
     const picks = st2WeekPlanData();
     if (!picks.length) { el.innerHTML = ''; return; }
     el.innerHTML = '<div class="st2wk"><div class="h">✦ 이번 주, 이 ' + picks.length + '개 <span class="s">「오늘 뭐 올리지」 대신 — 내 데이터가 고른 것</span></div>' +
@@ -54302,6 +54377,11 @@
       '<s>›</s></div>';
     return '<div class="pln-home">' +
       '<div class="pln-nd" data-plnneedle="1">⌖ <span class="t">' + nd + '</span><s>누구에게 · 무슨 말 ›</s></div>' +
+      // v692 · 원고·배포 문 — 트레이닝 도크에서 이사해 온 둘
+      '<div class="pln-doors">' +
+        '<button type="button" class="pln-door" data-plndoor="scripts">✎ 원고<s>쓰던 것 · 완성본</s></button>' +
+        '<button type="button" class="pln-door" data-plndoor="osmu">⬡ 배포<s>한 편을 여러 판에</s></button>' +
+      '</div>' +
       algHtml +
       '<div class="top">' +
         '<div class="pln-kick">이번 주 다섯 편</div>' +
@@ -54399,6 +54479,16 @@
     });
     var ndl = wsin.querySelector('[data-plnneedle]');
     if (ndl) ndl.onclick = function () { try { switchWorkspace('compass'); cpSetTab('me'); } catch (e) {} };
+    // v692 · 원고·배포 문 — 기획 소속으로 연다 (__rrFrom='plan')
+    wsin.querySelectorAll('[data-plndoor]').forEach(function (d) {
+      d.onclick = function () {
+        window.__rrFrom = 'plan';
+        try {
+          if (d.dataset.plndoor === 'scripts') switchWorkspace('scripts');
+          else { switchWorkspace('studio'); st2SetTab('osmu'); }
+        } catch (e) {}
+      };
+    });
     var alg2 = wsin.querySelector('[data-plnalg]');   // v649 · 알고리즘 상세로
     if (alg2) alg2.onclick = function () { try { switchWorkspace('compass'); cpSetTab('insight'); } catch (e) {} };
     var ag = wsin.querySelector('[data-plnagain]');
