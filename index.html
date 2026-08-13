@@ -524,6 +524,57 @@
   .pln-wl{ display:flex; align-items:baseline; gap:6px; margin-bottom:11px; }
   .pln-wl b{ font-size:10.5px; font-weight:800; color:rgba(226,232,248,.75); }
   .pln-wl s{ margin-left:auto; text-decoration:none; font:700 9px/1 'JetBrains Mono',monospace; color:rgba(176,188,214,.4); }
+  /* ══ v693 · 진행판 — 편 카드 + 세로 구슬 5단계 ══ */
+  .plb-hd{ display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin:2px 0 12px; }
+  .plb-hd .pct{ font-size:34px; font-weight:900; letter-spacing:-.05em; line-height:.9;
+    background:linear-gradient(160deg,#EDEAF7,#7EC8F5); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .plb-hd .pct i{ font-style:normal; font-size:14px; }
+  .plb-hd .mt{ font-size:10px; color:#7C749A; font-weight:700; }
+  .plb-gbar{ flex:1 1 100%; height:5px; border-radius:99px; background:rgba(255,255,255,.06); position:relative; }
+  .plb-gbar i{ position:absolute; left:0; top:0; bottom:0; border-radius:99px;
+    background:linear-gradient(90deg,#6FE0C0,#7EC8F5); }
+  .plb-gbar i::after{ content:''; position:absolute; right:-4px; top:50%; transform:translateY(-50%);
+    width:10px; height:10px; border-radius:50%; background:#CDEBFF; box-shadow:0 0 9px rgba(126,200,245,.9); }
+  .plb-cols{ display:flex; gap:9px; overflow-x:auto; padding-bottom:5px; -webkit-overflow-scrolling:touch; }
+  .plb-card{ flex:0 0 148px; border-radius:15px; padding:11px 12px 10px; cursor:pointer; position:relative;
+    background:linear-gradient(160deg,rgba(255,255,255,.05),rgba(255,255,255,.014));
+    border:1px solid rgba(255,255,255,.07); transition:transform .18s, border-color .18s;
+    -webkit-tap-highlight-color:transparent; }
+  .plb-card::before{ content:''; position:absolute; left:11px; right:11px; top:0; height:2px;
+    border-radius:2px; background:var(--bc); opacity:.75; }
+  .plb-card:hover{ transform:translateY(-2px); border-color:rgba(255,255,255,.16); }
+  .plb-card.on{ border-color:var(--bc); }
+  .plb-card.emp{ opacity:.55; }
+  .plb-card.emp::before{ opacity:.3; }
+  .plb-no{ font:800 8.5px/1 'JetBrains Mono',monospace; color:#6B648A; }
+  .plb-tt{ font-size:11px; font-weight:900; letter-spacing:-.02em; margin:4px 0 9px; line-height:1.35;
+    min-height:29px; overflow:hidden; }
+  .plb-card.emp .plb-tt{ color:#6E6790; font-weight:700; }
+  .plb-st{ display:flex; align-items:center; gap:7px; position:relative; padding:3.5px 0; }
+  .plb-st::before{ content:''; position:absolute; left:8px; top:-8px; width:2px; height:12px;
+    background:rgba(255,255,255,.09); }
+  .plb-st:first-child::before{ display:none; }
+  .plb-st.done::before{ background:var(--bc); opacity:.6; }
+  .plb-st .bd{ width:17px; height:17px; border-radius:50%; flex:none; position:relative; z-index:2;
+    background:radial-gradient(circle at 34% 26%, rgba(255,255,255,.8), var(--bc) 45%, rgba(0,0,0,.35));
+    box-shadow:0 2px 6px -2px rgba(0,0,0,.6); }
+  .plb-st .bd i{ position:absolute; inset:0; display:grid; place-items:center; font-style:normal;
+    font-size:8px; font-weight:900; color:rgba(14,16,26,.75); }
+  .plb-st.now .bd{ background:radial-gradient(circle at 34% 26%, rgba(255,255,255,.16), rgba(130,142,175,.16) 46%, rgba(30,26,48,.6));
+    outline:1.5px solid var(--bc); outline-offset:2px; }
+  .plb-st.now .bd i{ color:var(--bc); font-size:9px; }
+  .plb-st.rest .bd{ background:radial-gradient(circle at 34% 26%, rgba(255,255,255,.09), rgba(130,142,175,.11) 46%, rgba(30,26,48,.5));
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.06); }
+  .plb-st.rest .bd i{ color:transparent; }
+  .plb-st .nm{ font-size:9.5px; font-weight:800; color:#D5CFEA; }
+  .plb-st.now .nm{ color:var(--bc); }
+  .plb-st.rest .nm{ color:#6E6790; font-weight:700; }
+  .plb-st .tag{ margin-left:auto; font-size:7.5px; font-weight:800; color:var(--bc);
+    padding:2px 6px; border-radius:99px; background:rgba(255,255,255,.05); }
+  .plb-ft{ margin-top:8px; font:800 9.5px/1 'JetBrains Mono',monospace; color:var(--bc); text-align:right; }
+  .plb-card.emp .plb-ft{ color:#8792AD; font-family:inherit; }
+  .plb-bar{ height:2.5px; border-radius:99px; background:rgba(255,255,255,.07); margin-top:5px; overflow:hidden; }
+  .plb-bar i{ display:block; height:100%; background:var(--bc); border-radius:99px; }
   .pln-bars{ display:flex; gap:5px; }
   .pln-bars .bcol{ flex:1; display:flex; flex-direction:column; align-items:center; gap:5px; cursor:pointer;
     -webkit-tap-highlight-color:transparent; }
@@ -13299,6 +13350,40 @@
   .cp-sign b{ font-size:20px; font-weight:900; letter-spacing:.05em; color:#EAF3EC;
     text-shadow:0 0 18px rgba(155,232,180,.4),0 0 44px rgba(94,203,139,.16); }
   .cp-sign i{ display:block; font-style:normal; font-size:9.5px; color:#84947f; font-weight:700; margin-top:2px; }
+  /* ══ v693 · 벤 다이어그램 — 나∩고객 ══ */
+  .cpv{ margin:6px 0 16px; }
+  .cpv-h{ text-align:center; font-size:12.5px; font-weight:900; letter-spacing:-.02em; margin-bottom:4px; }
+  .cpv-h em{ font-style:normal; color:#D7F34B; }
+  .cpv-venn{ position:relative; height:218px; max-width:360px; margin:0 auto; }
+  .cpv-cir{ position:absolute; top:14px; width:206px; height:206px; border-radius:50%; padding:26px 20px; }
+  .cpv-cir.me{ left:0;
+    background:radial-gradient(circle at 36% 28%, rgba(126,200,245,.15), rgba(126,200,245,.045) 62%, rgba(126,200,245,.02));
+    border:1.5px solid rgba(126,200,245,.45); }
+  .cpv-cir.cus{ right:0;
+    background:radial-gradient(circle at 64% 28%, rgba(47,208,123,.14), rgba(47,208,123,.045) 62%, rgba(47,208,123,.02));
+    border:1.5px solid rgba(47,208,123,.45); }
+  .cpv-cir .ch{ font-size:11px; font-weight:900; margin-bottom:7px; }
+  .cpv-cir.me .ch{ color:#A9DCFF; }
+  .cpv-cir.cus .ch{ color:#7EE8AE; text-align:right; }
+  .cpv-cir ul{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:5px; max-width:96px; }
+  .cpv-cir.cus ul{ margin-left:auto; align-items:flex-end; text-align:right; }
+  .cpv-cir li{ font-size:8.5px; font-weight:700; color:#C9CFDE; line-height:1.45; }
+  .cpv-cir li i{ font-style:normal; font-size:7.5px; font-weight:800; padding:1px 5px; border-radius:99px; margin:0 3px; }
+  .cpv-cir.me li i{ background:rgba(126,200,245,.14); color:#A9DCFF; }
+  .cpv-cir.cus li i{ background:rgba(47,208,123,.14); color:#7EE8AE; }
+  .cpv-cir .cpv-emp{ color:#6E6790; font-weight:700; }
+  .cpv-mid{ position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); z-index:3;
+    text-align:center; width:118px; display:flex; flex-direction:column; gap:4px; align-items:center; }
+  .cpv-mid .mh{ font-size:8.5px; font-weight:800; color:#D7F34B; }
+  .cpv-gk{ font-size:10px; font-weight:900; letter-spacing:-.02em; color:#14160a;
+    background:linear-gradient(120deg,#EAF788,#D7F34B); border-radius:99px; padding:4px 10px;
+    box-shadow:0 4px 12px -4px rgba(215,243,75,.55); max-width:118px; overflow:hidden;
+    text-overflow:ellipsis; white-space:nowrap; }
+  .cpv-gk.dim{ background:rgba(215,243,75,.1); color:#B9C77A; box-shadow:none; font-weight:700; }
+  .cpv-decl{ max-width:340px; margin:4px auto 0; border-radius:12px; padding:10px 13px; text-align:center;
+    background:linear-gradient(150deg,rgba(215,243,75,.08),rgba(215,243,75,.02));
+    border:1px solid rgba(215,243,75,.25); font-size:11px; font-weight:700; line-height:1.65; color:#B8BFAE; }
+  .cpv-decl b{ color:#A9DCFF; } .cpv-decl em{ font-style:normal; color:#7EE8AE; }
   /* 별 + 은빛 테두리 — 트레이닝 튜브와 같은 fixed 오버레이 한 장 (z:55 · 방 오버레이엔 안 걸림) */
   body.in-compass::after{
     content:''; position:fixed; inset:0; z-index:55; pointer-events:none;
@@ -54049,10 +54134,59 @@
     _needleLoaded = true;
   }
   async function needleSave() { try { await window.storage.set(NEEDLE_KEY, JSON.stringify(needle)); } catch (e) {} }
+  // v693 · 벤 다이어그램 — 나∩고객. 적는 칸 0: 셀링포인트·통·★황금 키워드·선언문이 스스로 모인다
+  function cpVennHtml() {
+    var p = null;
+    try { p = (pmms && pmms.length) ? (pmms.find(function (x) { return x.id === _currentPmmId; }) || pmms[0]) : null; } catch (e) {}
+    var ME_LB = { selling: '한 문장', features: '전문성', merit: '장점', benefit: '혜택', rival: '경쟁', diff: '차별화', proof: '증거' };
+    var mine = [];
+    if (p && p.me) Object.keys(ME_LB).forEach(function (k) {
+      var v = String(p.me[k] || '').trim();
+      if (v && mine.length < 3) mine.push({ lb: ME_LB[k], t: v.slice(0, 16) });
+    });
+    var BK = { pain: '문제', desire: '욕구', fear: '회피', resist: '저항' };
+    var cus = [];
+    if (p) Object.keys(BK).forEach(function (k) {
+      var arr = [];
+      try { arr = cus2Bask(p, k) || []; } catch (e) {}
+      if (arr.length) cus.push({ lb: BK[k], n: arr.length, t: String((arr[0] || {}).quote || '').slice(0, 15) });
+    });
+    cus.sort(function (a, b) { return b.n - a.n; }); cus = cus.slice(0, 3);
+    var gold = [];
+    try { gold = (st2Kw && Array.isArray(st2Kw.gold)) ? st2Kw.gold.filter(Boolean).slice(0, 2) : []; } catch (e) {}
+    var meHtml = mine.length
+      ? mine.map(function (m) { return '<li><i>' + m.lb + '</i>' + esc(m.t) + '</li>'; }).join('')
+      : '<li class="cpv-emp">셀링포인트에 적으면 여기가 차요</li>';
+    var cusHtml = cus.length
+      ? cus.map(function (c) { return '<li>' + esc(c.t) + '<i>' + c.lb + ' ×' + c.n + '</i></li>'; }).join('')
+      : '<li class="cpv-emp">통에 3개만 담으면 차요</li>';
+    var goldHtml = gold.length
+      ? gold.map(function (g) { return '<span class="cpv-gk">' + esc(g) + '</span>'; }).join('')
+      : '<span class="cpv-gk dim">★ 키워드에 별을 찍으면 떠요</span>';
+    var decl = (needle.to || needle.msg)
+      ? '나는 <b>' + esc(needle.to || '누구') + '</b>에게 «<em>' + esc(needle.msg || '무슨 말') + '</em>»을 말하는 사람이다'
+      : '아래 빈칸을 채우면 여기 얹혀요 — 나는 누구에게 무슨 말을 하는가';
+    return '<div class="cpv">' +
+      '<div class="cpv-h">결이 맞는 지점 — 여기서 <em>선택의 이유</em>가 생깁니다</div>' +
+      '<div class="cpv-venn">' +
+        '<div class="cpv-cir me"><div class="ch">나의 무기</div><ul>' + meHtml + '</ul></div>' +
+        '<div class="cpv-cir cus"><div class="ch">고객의 속</div><ul>' + cusHtml + '</ul></div>' +
+        '<div class="cpv-mid"><div class="mh">★ 결이 맞는 말</div>' + goldHtml + '</div>' +
+      '</div>' +
+      '<div class="cpv-decl">' + decl + '</div>' +
+      '</div>';
+  }
   function cpRenderMe() {
     const el = document.getElementById('cp-me'); if (!el) return;
+    // v693 · 벤의 ★황금 키워드 — 고객 방을 아직 안 열었으면 로드가 안 돼 있다. 오면 채워서 다시 그린다
+    try {
+      if (typeof _st2KwLoaded !== 'undefined' && !_st2KwLoaded && typeof st2KwLoad === 'function') {
+        st2KwLoad().then(function () { if (_cpTab === 'me') cpRenderMe(); }).catch(function () {});
+      }
+    } catch (e) {}
     const rivalN = (typeof northStars !== 'undefined' && Array.isArray(northStars)) ? northStars.length : 0;
     el.innerHTML =
+      cpVennHtml() +
       '<div class="cp-needle">' +
         '<div class="k">내가 누구에게 무슨 말을 하는가</div>' +
         '<div class="line">나는 <input class="to" id="cp-to" placeholder="누구" value="' + esc(needle.to).replace(/"/g, '&quot;') + '">에게<br>' +
@@ -54351,12 +54485,41 @@
         else { msg = '이번 주 <em>끝</em>'; sub = '다섯 편 모두 배포까지 갔어요.<br>다음 주 판을 짜도 됩니다.'; }
       }
     }
+    // v693 · 진행판(사장님 픽: A 챕터 보드 × 세로 구슬) — 옛 5칸 막대를 교체.
+    //   구슬 문법 = 기획 하단 구슬 바와 동일 (●끝냄 · ◎다음 · ○아직 — 벌 아님)
+    var _doneSteps = 0, _setN = 0;
+    _pln.eps.forEach(function (e) { if (e) { _setN++; _doneSteps += Math.min(e.step || 0, 5); } });
+    var _wkPct = _setN ? Math.round(_doneSteps / (_setN * 5) * 100) : 0;
     var bars = [0, 1, 2, 3, 4].map(function (k) {
-      var e = _pln.eps[k], p = e ? (e.step / 5) : 0;
-      return '<div class="bcol' + (_plnCur === k + 1 ? ' on' : '') + '" data-plngo="' + (k + 1) + '" style="--bc:' + (e ? PLN_COLS[k] : '#8792AD') + '">' +
-        '<span class="tr"><i style="height:' + Math.round(p * 100) + '%"></i></span>' +
-        '<span class="lb">' + (k + 1) + '</span></div>';
+      var e = _pln.eps[k], col = e ? PLN_COLS[k] : '#8792AD';
+      var head = '<div class="plb-no">' + (k + 1) + ' EP</div>' +
+        '<div class="plb-tt">' + (e ? esc(String(e.t || '').slice(0, 22)) : '아직 안 정함') + '</div>';
+      var steps;
+      if (e) {
+        steps = PLN_STEPS.map(function (nm, si) {
+          var st = si < e.step ? 'done' : (si === e.step ? 'now' : 'rest');
+          return '<div class="plb-st ' + st + '"><span class="bd"><i>' +
+            (st === 'done' ? '✓' : st === 'now' ? '›' : '') + '</i></span>' +
+            '<span class="nm">' + nm + '</span>' +
+            (st === 'now' ? '<span class="tag">다음</span>' : (si === 4 && e.step >= 5 ? '<span class="tag">✦ 완성</span>' : '')) + '</div>';
+        }).join('');
+      } else {
+        steps = PLN_STEPS.map(function (nm) {
+          return '<div class="plb-st rest"><span class="bd"><i></i></span><span class="nm">' + nm + '</span></div>';
+        }).join('');
+      }
+      var ft = e ? Math.min(e.step, 5) + '/5' : '＋ 정하기';
+      return '<div class="plb-card' + (e ? '' : ' emp') + (_plnCur === k + 1 ? ' on' : '') + '" data-plngo="' + (k + 1) + '" style="--bc:' + col + '">' +
+        head + '<div class="plb-rail">' + steps + '</div>' +
+        '<div class="plb-ft">' + ft + '</div>' +
+        (e ? '<div class="plb-bar"><i style="width:' + Math.round(Math.min(e.step, 5) / 5 * 100) + '%"></i></div>' : '') +
+        '</div>';
     }).join('');
+    var _wkHead = _setN
+      ? '<div class="plb-hd"><span class="pct">' + _wkPct + '<i>%</i></span>' +
+        '<span class="mt">' + _setN + '편 중 ' + String((_doneSteps / 5).toFixed(1)).replace('.0', '') + '편 끝냄 · 남은 걸음 ' + (_setN * 5 - _doneSteps) + '</span>' +
+        '<span class="plb-gbar"><i style="width:' + _wkPct + '%"></i></span></div>'
+      : '';
     var ideas = [];
     try { ideas = (collects || []).filter(function (c) { return c.kind === 'idea' && !c.executed && (c.memo || '').trim(); }); } catch (e) {}
     var used = plnUsedIds();
@@ -54391,7 +54554,8 @@
       '</div>' +
       '<div class="pln-whole">' +
         '<div class="pln-wl"><b>이번 주 전체</b><s>' + plnReadyN() + ' 준비됨 · ' + plnSetN() + ' 정함</s></div>' +
-        '<div class="pln-bars">' + bars + '</div>' +
+        _wkHead +
+        '<div class="plb-cols">' + bars + '</div>' +
         '<div class="pln-idea"><div class="ih"><b>💡 모아둔 아이디어</b><s>' + ideas.length + '개</s></div>' + ideaHtml + '</div>' +
       '</div></div>';
   }
