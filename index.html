@@ -575,6 +575,112 @@
   .plb-card.emp .plb-ft{ color:#8792AD; font-family:inherit; }
   .plb-bar{ height:2.5px; border-radius:99px; background:rgba(255,255,255,.07); margin-top:5px; overflow:hidden; }
   .plb-bar i{ display:block; height:100%; background:var(--bc); border-radius:99px; }
+  /* ══ v694 · ④원고 — 좌우 나란히 쓰기 (plw-) ══ */
+  .plw-hd{ display:flex; align-items:center; gap:9px; margin-bottom:11px; }
+  .plw-back{ background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.11); border-radius:9px;
+    color:#C9D2E4; font-size:11px; font-weight:800; font-family:inherit; padding:6px 10px; cursor:pointer;
+    -webkit-tap-highlight-color:transparent; }
+  .plw-back:active{ transform:scale(.95); }
+  .plw-tt{ font-size:13px; font-weight:900; letter-spacing:-.02em; overflow:hidden; white-space:nowrap;
+    text-overflow:ellipsis; flex:1; min-width:0; }
+  .plw-step{ font-size:10px; font-weight:800; color:#F5C08E; background:rgba(245,192,142,.1);
+    border:1px solid rgba(245,192,142,.3); padding:3px 8px; border-radius:99px; flex:none; }
+  .plw-kwbar{ border-radius:13px; padding:10px 11px; margin-bottom:11px;
+    background:rgba(230,251,98,.04); border:1px solid rgba(230,251,98,.13); }
+  .plw-kwcap{ font-size:10px; font-weight:800; color:#C9E45B; margin-bottom:7px; }
+  .plw-kwcap s{ text-decoration:none; color:#7C8496; font-weight:600; margin-left:5px; }
+  .plw-kwrow{ display:flex; flex-wrap:wrap; gap:6px; align-items:center; }
+  .plw-kw{ display:inline-flex; align-items:center; gap:4px; padding:5px 10px 5px 7px; border-radius:99px;
+    font-size:12px; font-weight:700; cursor:pointer; color:#E9F7A8;
+    background:rgba(230,251,98,.09); border:1px solid rgba(230,251,98,.28);
+    transition:transform .16s ease, box-shadow .16s ease; -webkit-tap-highlight-color:transparent; }
+  .plw-kw:active{ transform:scale(.95); }
+  .plw-kw.sel{ background:rgba(230,251,98,.18); box-shadow:0 0 12px rgba(230,251,98,.2); color:#F4FCC8; }
+  .plw-kw b{ font-weight:900; font-size:12px; color:rgba(255,255,255,.22); padding:0 1px; }
+  .plw-kw.star b{ color:#F4C842; text-shadow:0 0 8px rgba(244,200,66,.6); }
+  .plw-kw.star{ border-color:rgba(244,200,66,.55); }
+  .plw-kwadd input{ width:96px; background:transparent; border:1px dashed rgba(255,255,255,.2);
+    border-radius:99px; color:#DCE3EE; font-size:16px; font-family:inherit; padding:4px 10px; outline:none; }
+  .plw-kwadd input::placeholder{ color:#7C8496; font-size:12px; }
+  .plw-sug{ font-size:11px; font-weight:700; color:#C9E45B; padding:5px 9px; border-radius:99px;
+    border:1px dashed rgba(230,251,98,.3); cursor:pointer; -webkit-tap-highlight-color:transparent; }
+  .plw-links{ display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin-top:9px; padding-top:9px;
+    border-top:1px dashed rgba(230,251,98,.15); }
+  .plw-links .who{ font-size:11px; font-weight:800; color:#C9E45B; margin-right:2px; }
+  .plw-lnk{ display:inline-flex; align-items:center; gap:5px; padding:6px 10px; border-radius:9px;
+    font-size:11.5px; font-weight:700; cursor:pointer; color:#DCE3EE; font-family:inherit;
+    background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.12);
+    transition:transform .16s ease; -webkit-tap-highlight-color:transparent; }
+  .plw-lnk:active{ transform:scale(.95); }
+  .plw-lnk svg{ flex:none; display:block; }
+  .plw-lnk.del{ color:#8A94A6; margin-left:auto; }
+  .plw-duo{ display:grid; grid-template-columns:1fr; gap:11px; }
+  .plw-pane{ border-radius:14px; padding:12px 13px; background:rgba(8,10,15,.5);
+    border:1px solid rgba(255,255,255,.08); min-width:0; }
+  .plw-fold{ width:100%; text-align:left; background:none; border:none; color:#7EC8F5; font-size:11.5px;
+    font-weight:800; font-family:inherit; cursor:pointer; padding:0 0 8px; -webkit-tap-highlight-color:transparent; }
+  .plw-bmpane.folded .plw-bmbody, .plw-bmpane.folded .plw-why, .plw-bmpane.folded .plw-hint,
+  .plw-bmpane.folded .plw-bmempty{ display:none; }
+  .plw-bmcap{ display:flex; align-items:center; gap:7px; margin-bottom:8px; }
+  .plw-bmcap b{ font-size:12px; font-weight:900; }
+  .plw-src{ font-size:10px; color:#8A94A6; background:rgba(255,255,255,.05); padding:3px 7px; border-radius:7px;
+    overflow:hidden; white-space:nowrap; text-overflow:ellipsis; max-width:46%; }
+  .plw-swap{ margin-left:auto; background:none; border:none; color:#7EC8F5; font-size:11px; font-weight:800;
+    font-family:inherit; cursor:pointer; flex:none; -webkit-tap-highlight-color:transparent; }
+  .plw-why{ font-size:11.5px; margin-bottom:9px; padding:7px 9px; border-radius:9px; cursor:pointer;
+    background:rgba(244,200,66,.06); border:1px dashed rgba(244,200,66,.25); line-height:1.45; }
+  .plw-why b{ color:#F4E3A8; font-weight:700; }
+  .plw-why s{ text-decoration:none; color:#8A94A6; }
+  .plw-bmempty{ font-size:12px; color:#8A94A6; line-height:1.6; padding:14px 2px 6px; }
+  .plw-bmbody{ max-height:52vh; overflow-y:auto; -webkit-overflow-scrolling:touch; }
+  .plw-sg{ margin-bottom:11px; padding-left:8px; border-left:2px solid var(--c, rgba(255,255,255,.14)); }
+  .plw-sl{ display:inline-block; font-size:9.5px; font-weight:800; color:var(--c,#8A94A6); margin-bottom:3px; }
+  .plw-st2{ font-size:13px; line-height:1.66; color:#C3CBD8; }
+  .plw-w{ font-style:normal; }
+  .plw-w.mk{ border-radius:3px; padding:0 2px; cursor:pointer; color:#F0F4FA; background:rgba(255,255,255,.1); }
+  .plw-w.sit{ background:rgba(201,169,126,.3); } .plw-w.prb{ background:rgba(224,123,123,.32); }
+  .plw-w.des{ background:rgba(126,155,114,.34); } .plw-w.sol{ background:rgba(95,176,232,.3); }
+  .plw-w.hot{ background:rgba(244,200,66,.3); }
+  .plw-hint{ font-size:10px; color:#7C8496; margin-top:6px; }
+  .plw-mycap{ display:flex; align-items:center; gap:8px; margin-bottom:8px; flex-wrap:wrap; }
+  .plw-mycap b{ font-size:12px; font-weight:900; color:#F5C08E; }
+  .plw-stars{ font-size:10.5px; color:#8A94A6; }
+  .plw-stars b{ color:#F4E3A8; font-weight:800; margin-right:3px; }
+  .plw-ta{ width:100%; min-height:240px; background:transparent; border:none; outline:none; resize:vertical;
+    color:#EDF1F7; font-size:16px; line-height:1.7; font-family:inherit; }
+  .plw-ta::placeholder{ color:#5A6374; }
+  .plw-foot{ display:flex; align-items:center; gap:9px; margin-top:9px; padding-top:9px;
+    border-top:1px solid rgba(255,255,255,.07); font-size:10.5px; color:#8A94A6; }
+  .plw-foot .sv{ color:#9BE8B4; }
+  .plw-done{ margin-left:auto; padding:8px 15px; border-radius:11px; border:none; cursor:pointer;
+    font-size:12px; font-weight:900; font-family:inherit; color:#0A0D12;
+    background:linear-gradient(135deg,#F5C08E,#F0AC6C); box-shadow:0 10px 22px -10px rgba(245,192,142,.7);
+    transition:transform .16s ease; -webkit-tap-highlight-color:transparent; }
+  .plw-done:active{ transform:scale(.95); }
+  .plw-pick{ position:fixed; inset:0; z-index:3000; background:rgba(4,6,10,.72); backdrop-filter:blur(4px);
+    display:flex; align-items:flex-end; justify-content:center; }
+  .plw-pkin{ width:min(480px,100%); max-height:72vh; overflow-y:auto; border-radius:18px 18px 0 0;
+    background:#10141C; border:1px solid rgba(255,255,255,.1);
+    padding:14px 14px calc(16px + env(safe-area-inset-bottom)); }
+  .plw-pkhd{ display:flex; align-items:center; margin-bottom:10px; }
+  .plw-pkhd b{ font-size:13px; font-weight:900; }
+  .plw-pkx{ margin-left:auto; background:none; border:none; color:#8A94A6; font-size:12px; font-weight:700;
+    font-family:inherit; cursor:pointer; }
+  .plw-pkrow{ display:flex; align-items:center; gap:9px; padding:11px 9px; border-radius:11px; cursor:pointer; }
+  .plw-pkrow:hover{ background:rgba(255,255,255,.04); }
+  .plw-pkrow.on{ background:rgba(126,200,245,.08); outline:1px solid rgba(126,200,245,.3); }
+  .plw-pkrow b{ font-size:12.5px; font-weight:700; flex:1; min-width:0; overflow:hidden; white-space:nowrap;
+    text-overflow:ellipsis; }
+  .plw-pkrow s{ text-decoration:none; font-size:11px; color:#8A94A6; flex:none; }
+  .plw-pkempty{ font-size:12px; color:#8A94A6; line-height:1.6; padding:12px 6px 18px; }
+  @media (min-width:720px){
+    .plw-duo{ grid-template-columns:1fr 1fr; }
+    .plw-fold{ display:none; }
+    .plw-bmpane.folded .plw-bmbody{ display:block; }
+    .plw-bmpane.folded .plw-why{ display:block; }
+    .plw-bmpane.folded .plw-hint{ display:block; }
+    .plw-bmpane.folded .plw-bmempty{ display:block; }
+  }
   .pln-bars{ display:flex; gap:5px; }
   .pln-bars .bcol{ flex:1; display:flex; flex-direction:column; align-items:center; gap:5px; cursor:pointer;
     -webkit-tap-highlight-color:transparent; }
@@ -54317,7 +54423,7 @@
     }
     return { b: lb + ' — 무엇을 보여줄까요', s: '탭해서 어떻게 찍을지 적기', v: '—' };
   }
-  var _pln = null, _plnCur = 0, _plnInited = false, _plnLoaded = false;
+  var _pln = null, _plnCur = 0, _plnInited = false, _plnLoaded = false, _plnWrite = 0, _plnKwSel = -1;
   var PLN_W = 326, PLN_H = 60, PLN_R = 24, PLN_RB = 21, PLN_S = 12;
   var _plnRaf = 0, _plnX = 0, _plnTgt = 0, _plnVel = 0, _plnRun = false;
   var $pln = function (id) { return document.getElementById(id); };
@@ -54606,7 +54712,8 @@
         (cutN ? '<s>' + cutN + '컷 · 찍을 것 ' + shots + '</s>' : '') + '</div>' + cutsBlock + '</div>' +
       '<div class="pln-sec"><div class="pln-sech"><b>언제 · 재료</b></div>' +
         '<div class="pln-rowl" data-plnday="1"><span class="k">언제</span><span class="v"><em>' + esc(e.day) + '</em></span><span class="go">›</span></div>' +
-        '<div class="pln-rowl" data-plnmat="1"><span class="k">재료</span><span class="v">' + esc(e.mat || '담아둔 카드에서') + '</span><span class="go">›</span></div></div>' +
+        '<div class="pln-rowl" data-plnmat="1"><span class="k">재료</span><span class="v">' + esc(e.mat || '담아둔 카드에서') + '</span><span class="go">›</span></div>' +
+        '<div class="pln-rowl" data-plnwhy="1"><span class="k">왜 터짐</span><span class="v">' + (e.why ? '<em>' + esc(e.why) + '</em>' : '이게 터진 이유를 한 줄로') + '</span><span class="go">›</span></div></div>' +
       (e.step >= 4
         ? '<button class="pln-act" data-plndist="1">⬡ 배포로 보내기' + (e.step >= 5 ? ' — 다녀옴 ✓' : '') + '</button>' +
           '<button class="pln-act2" data-plnwrite="1">✎ 원고 다시 보기</button>'
@@ -54616,9 +54723,261 @@
       '<button class="pln-act2" data-plnagain="1">다른 걸로 바꾸기</button>';
   }
 
+  /* ══ v694 · ④원고 — 편 소속 «좌우 나란히» 쓰기 화면 (㉮안)
+     왼쪽=벤치마킹(칠 그대로) · 위=키워드(후보 여러 개 → ★확정 2~3) · 오른쪽=내 원고.
+     검색 바로가기: 트렌드·유튜브·네이버=키워드 박아서 열림 / 데이터랩=복사 후 열림(주소로 못 실음).
+     ⚠️ 원고 textarea는 절대 재렌더하지 않는다(IME 헌법) — 키워드 줄(#plw-kwbar)만 부분 갱신. */
+  var PLW_LOGOS = {
+    tr: '<svg viewBox="0 0 24 24" width="14" height="14"><path d="M2 18.5l6.5-7.5 4.5 3.7 5-5.7" stroke="#4285F4" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path fill="#4285F4" d="M15.5 4.5H23V12z"/></svg>',
+    dl: '<svg viewBox="0 0 24 24" width="13" height="13"><rect width="24" height="24" rx="5" fill="#03C75A"/><rect x="5" y="12.5" width="3.2" height="6.5" rx="1" fill="#fff"/><rect x="10.4" y="8.5" width="3.2" height="10.5" rx="1" fill="#fff"/><rect x="15.8" y="5" width="3.2" height="14" rx="1" fill="#fff"/></svg>',
+    yt: '<svg viewBox="0 0 24 24" width="15" height="15"><rect x="1" y="4.8" width="22" height="14.4" rx="4" fill="#FF0033"/><path d="M10 9.2l5.6 2.8-5.6 2.8z" fill="#fff"/></svg>',
+    nv: '<svg viewBox="0 0 24 24" width="13" height="13"><rect width="24" height="24" rx="5" fill="#03C75A"/><path d="M6.7 6.5h3.6l3 4.9V6.5h4v11h-3.6l-3-4.9v4.9h-4z" fill="#fff"/></svg>'
+  };
+  function plwRowOf(e) {
+    if (!e || !e.rid) return null;
+    var r = null;
+    try { r = (rows || []).filter(function (x) { return x && x.id === e.rid; })[0] || null; } catch (er) {}
+    return (r && prpHasScript(r)) ? r : null;
+  }
+  function plwBmHtml(e) {
+    var r = plwRowOf(e);
+    if (!r) {
+      return '<div class="plw-bmcap"><b>벤치마킹</b><button type="button" class="plw-swap" data-plwswap="1">창고에서 고르기</button></div>' +
+        '<div class="plw-bmempty">옆에 놓고 볼 원고가 아직 없어요.<br>창고에서 하나 골라오면 칠까지 그대로 옵니다.</div>';
+    }
+    var marks = (r.prep && r.prep.marks) || {}, hot = (r.prep && r.prep.hot) || {};
+    var body = prpSegsOf(r).map(function (sg, i) {
+      var mk = marks[i] || {}, ht = hot[i] || {};
+      var words = prpClean(sg.t).split(/\s+/).filter(Boolean).map(function (w, j) {
+        var cls = (mk[j] ? ' mk ' + mk[j] : '') + (ht[j] ? ' mk hot' : '');
+        return '<i class="plw-w' + cls + '">' + esc(w) + '</i>';
+      }).join(' ');
+      return '<div class="plw-sg" style="--c:' + prpColor(sg) + '"><span class="plw-sl">' + esc(sg.k || '구간') + '</span>' +
+        '<div class="plw-st2">' + words + '</div></div>';
+    }).join('');
+    return '<div class="plw-bmcap"><b>벤치마킹</b><span class="plw-src">' + esc(String(r.hook || r.topicMain || '').slice(0, 16)) +
+      (r.views ? ' · ' + fmtViews(r.views) : '') + '</span>' +
+      '<button type="button" class="plw-swap" data-plwswap="1">바꾸기 ⇄</button></div>' +
+      '<div class="plw-why" data-plwwhy="1">💡 ' + (e.why ? '<b>' + esc(e.why) + '</b>' : '<s>왜 터졌을까? 한 줄 적기</s>') + '</div>' +
+      '<div class="plw-bmbody" id="plw-bm">' + body + '</div>' +
+      '<div class="plw-hint">칠한 단어를 톡 치면 키워드로 올라갑니다</div>';
+  }
+  function plwKwHtml(e) {
+    var kws = e.kw || [];
+    var chips = kws.map(function (k, i) {
+      return '<span class="plw-kw' + (k.star ? ' star' : '') + (i === _plnKwSel ? ' sel' : '') + '" data-plwkw="' + i + '">' +
+        '<b data-plwstar="' + i + '">★</b>' + esc(k.t) + '</span>';
+    }).join('');
+    var sug = '';
+    try {
+      if (typeof st2Kw !== 'undefined' && st2Kw && (st2Kw.gold || []).length) {
+        var have = kws.map(function (k) { return k.t; });
+        sug = (st2Kw.gold || []).filter(function (g) { return have.indexOf(g) < 0; }).slice(0, 2)
+          .map(function (g) { return '<span class="plw-sug" data-plwsug="' + esc(g) + '">★황금 ' + esc(g) + ' ＋</span>'; }).join('');
+      }
+    } catch (er) {}
+    var sel = kws[_plnKwSel];
+    var links = sel
+      ? '<div class="plw-links"><span class="who">「' + esc(sel.t) + '」</span>' +
+        '<button type="button" class="plw-lnk" data-plwlink="tr">' + PLW_LOGOS.tr + ' 트렌드</button>' +
+        '<button type="button" class="plw-lnk" data-plwlink="dl">' + PLW_LOGOS.dl + ' 데이터랩</button>' +
+        '<button type="button" class="plw-lnk" data-plwlink="yt">' + PLW_LOGOS.yt + ' 유튜브</button>' +
+        '<button type="button" class="plw-lnk" data-plwlink="nv">' + PLW_LOGOS.nv + ' 네이버</button>' +
+        '<button type="button" class="plw-lnk del" data-plwkwdel="1">지우기</button></div>'
+      : '';
+    return '<div class="plw-kwcap">핵심 키워드 <s>여러 개 모았다가, ★로 2~3개만 확정</s></div>' +
+      '<div class="plw-kwrow">' + chips +
+      '<span class="plw-kwadd"><input id="plw-kwin" type="text" maxlength="24" placeholder="＋ 키워드" autocomplete="off"></span>' +
+      sug + '</div>' + links;
+  }
+  function plwStarHtml(e) {
+    var st = (e.kw || []).filter(function (k) { return k.star; });
+    if (!st.length) return '';
+    return '꼭 박기 — ' + st.map(function (k) { return '<b>★' + esc(k.t) + '</b>'; }).join(' ');
+  }
+  function plnWriteHtml(n) {
+    var e = _pln.eps[n - 1]; if (!e) return '';
+    var folded = (window.innerWidth || 0) < 720 ? ' folded' : '';
+    return '<div class="plw">' +
+      '<div class="plw-hd"><button type="button" class="plw-back" data-plwback="1">‹ ' + n + '편</button>' +
+        '<span class="plw-tt">' + esc(String(e.t || '').slice(0, 24)) + '</span>' +
+        '<span class="plw-step">④ 원고</span></div>' +
+      '<div class="plw-kwbar" id="plw-kwbar">' + plwKwHtml(e) + '</div>' +
+      '<div class="plw-duo">' +
+        '<div class="plw-pane plw-bmpane' + folded + '" id="plw-bmpane">' +
+          '<button type="button" class="plw-fold" data-plwfold="1">' + (folded ? '벤치마킹 펴기 ⌄' : '벤치마킹 접기 ⌃') + '</button>' +
+          plwBmHtml(e) + '</div>' +
+        '<div class="plw-pane plw-mine">' +
+          '<div class="plw-mycap"><b>내 원고</b><span class="plw-stars" id="plw-stars">' + plwStarHtml(e) + '</span></div>' +
+          '<textarea id="plw-ta" class="plw-ta" placeholder="위 키워드를 박아서, 벤치마킹의 구조로 내 얘기를 써 보세요.">' + esc(e.draft || '') + '</textarea>' +
+          '<div class="plw-foot"><span class="sv" id="plw-sv">' + (e.draft ? '● 저장돼 있어요' : '쓰는 대로 자동저장') + '</span>' +
+            '<span class="ct" id="plw-ct">' + String(e.draft || '').length + '자</span>' +
+            '<button type="button" class="plw-done" data-plwdone="1">원고 완성 →</button></div>' +
+        '</div></div></div>';
+  }
+  function plwCommit() {
+    var e = _pln.eps[_plnCur - 1], ta = document.getElementById('plw-ta');
+    if (e && ta) { e.draft = ta.value; plnSave(); }
+  }
+  function plwKwAdd(e, t) {
+    t = String(t || '').trim(); if (!t) return;
+    e.kw = e.kw || [];
+    if (e.kw.some(function (k) { return k.t === t; })) { try { toast('이미 있는 키워드예요'); } catch (er) {} return; }
+    e.kw.push({ t: t, star: 0 });
+    _plnKwSel = e.kw.length - 1;
+    plnSave(); plwKwRender(e);
+  }
+  function plwKwRender(e) {
+    var bar = document.getElementById('plw-kwbar'); if (!bar) return;
+    bar.innerHTML = plwKwHtml(e);
+    var st = document.getElementById('plw-stars'); if (st) st.innerHTML = plwStarHtml(e);
+    plwKwBind(e);
+  }
+  function plwKwBind(e) {
+    var bar = document.getElementById('plw-kwbar'); if (!bar) return;
+    bar.querySelectorAll('[data-plwkw]').forEach(function (c) {
+      c.onclick = function (ev) {
+        if (ev.target && ev.target.hasAttribute && ev.target.hasAttribute('data-plwstar')) return;
+        var i = +c.dataset.plwkw;
+        _plnKwSel = (_plnKwSel === i) ? -1 : i;
+        plwKwRender(e);
+      };
+    });
+    bar.querySelectorAll('[data-plwstar]').forEach(function (s) {
+      s.onclick = function (ev) {
+        ev.stopPropagation();
+        var k = (e.kw || [])[+s.dataset.plwstar]; if (!k) return;
+        if (!k.star && (e.kw || []).filter(function (x) { return x.star; }).length >= 3) {
+          try { toast('★은 3개까지 — 다 박으면 아무것도 안 박혀요'); } catch (er) {}
+          return;
+        }
+        k.star = k.star ? 0 : 1;
+        plnSave(); plwKwRender(e);
+      };
+    });
+    bar.querySelectorAll('[data-plwsug]').forEach(function (g) {
+      g.onclick = function () { plwKwAdd(e, g.dataset.plwsug); };
+    });
+    var inp = document.getElementById('plw-kwin');
+    if (inp) inp.addEventListener('keydown', function (ev) {
+      if (ev.key !== 'Enter' || ev.isComposing || ev.keyCode === 229) return;   // 한글 조합 중 Enter는 무시
+      ev.preventDefault();
+      plwKwAdd(e, inp.value);
+    });
+    var del = bar.querySelector('[data-plwkwdel]');
+    if (del) del.onclick = function () {
+      if (_plnKwSel < 0 || !e.kw || !e.kw[_plnKwSel]) return;
+      e.kw.splice(_plnKwSel, 1); _plnKwSel = -1;
+      plnSave(); plwKwRender(e);
+    };
+    bar.querySelectorAll('[data-plwlink]').forEach(function (b) {
+      b.onclick = function () {
+        var k = (e.kw || [])[_plnKwSel]; if (!k) return;
+        var q = encodeURIComponent(k.t), kind = b.dataset.plwlink;
+        if (kind === 'tr') window.open('https://trends.google.co.kr/trends/explore?hl=ko&geo=KR&q=' + q, '_blank');
+        else if (kind === 'yt') window.open('https://www.youtube.com/results?search_query=' + q, '_blank');
+        else if (kind === 'nv') window.open('https://search.naver.com/search.naver?query=' + q, '_blank');
+        else if (kind === 'dl') {
+          var open2 = function () { window.open('https://datalab.naver.com/keyword/trendSearch.naver', '_blank'); };
+          try {
+            navigator.clipboard.writeText(k.t).then(function () {
+              try { toast('「' + k.t + '」 복사됨 — 검색창에 붙여넣기만 하세요'); } catch (er) {}
+              open2();
+            }, open2);
+          } catch (er) { open2(); }
+        }
+      };
+    });
+  }
+  function plwBind(wsin) {
+    var e = _pln.eps[_plnCur - 1]; if (!e) return;
+    var bk = wsin.querySelector('[data-plwback]');
+    if (bk) bk.onclick = function () { plwCommit(); _plnWrite = 0; plnRefresh(true); };
+    var fd = wsin.querySelector('[data-plwfold]');
+    if (fd) fd.onclick = function () {
+      var p = document.getElementById('plw-bmpane'); if (!p) return;
+      p.classList.toggle('folded');
+      fd.textContent = p.classList.contains('folded') ? '벤치마킹 펴기 ⌄' : '벤치마킹 접기 ⌃';
+    };
+    var why = wsin.querySelector('[data-plwwhy]');
+    if (why) why.onclick = async function () {
+      var v = prompt('이 벤치마킹이 터진 이유가 뭘까요? (한 줄)', e.why || '');
+      if (v === null) return;
+      e.why = v.trim(); await plnSave();
+      why.innerHTML = '💡 ' + (e.why ? '<b>' + esc(e.why) + '</b>' : '<s>왜 터졌을까? 한 줄 적기</s>');
+    };
+    wsin.querySelectorAll('[data-plwswap]').forEach(function (b) { b.onclick = plwPickOpen; });
+    plwKwBind(e);
+    try {   // ★황금 키워드 제안 — 고객 방을 안 열었어도 로드해서 채운다
+      if (typeof _st2KwLoaded !== 'undefined' && !_st2KwLoaded && typeof st2KwLoad === 'function') {
+        st2KwLoad().then(function () { if (_plnWrite) plwKwRender(e); }).catch(function () {});
+      }
+    } catch (er) {}
+    var bm = document.getElementById('plw-bm');
+    if (bm) bm.addEventListener('click', function (ev) {
+      var w = ev.target && ev.target.closest ? ev.target.closest('.plw-w.mk') : null;
+      if (!w) return;
+      plwKwAdd(e, w.textContent.replace(/[.,!?…~"'「」()]/g, '').trim());
+    });
+    var ta = document.getElementById('plw-ta');
+    if (ta) {
+      var t0 = 0;
+      var save = function () {
+        e.draft = ta.value;
+        plnSave();
+        var sv = document.getElementById('plw-sv'); if (sv) sv.textContent = '● 방금 저장됨';
+      };
+      ta.addEventListener('input', function () {
+        var ct = document.getElementById('plw-ct'); if (ct) ct.textContent = ta.value.length + '자';
+        clearTimeout(t0); t0 = setTimeout(save, 600);
+      });
+      ta.addEventListener('focusout', function () { clearTimeout(t0); save(); });
+    }
+    var dn = wsin.querySelector('[data-plwdone]');
+    if (dn) dn.onclick = async function () {
+      plwCommit();
+      if (e.step < 4) e.step = 4;
+      await plnSave();
+      _plnWrite = 0; plnRefresh(true);
+      try { toast('✦ ④원고 끝 — 다음은 ⑤배포'); } catch (er) {}
+    };
+  }
+  function plwPickOpen() {
+    var e = _pln.eps[_plnCur - 1]; if (!e) return;
+    var old = document.getElementById('plw-pick'); if (old) old.remove();
+    var pool = [];
+    try {
+      pool = (rows || []).filter(function (r) { return r && prpHasScript(r); })
+        .sort(function (a, b) { return (b.views || 0) - (a.views || 0); }).slice(0, 20);
+    } catch (er) {}
+    var list = pool.length
+      ? pool.map(function (r) {
+          return '<div class="plw-pkrow' + (r.id === e.rid ? ' on' : '') + '" data-plwpk="' + esc(String(r.id)) + '">' +
+            '<b>' + esc(String(r.hook || r.topicMain || '(제목 없음)').slice(0, 30)) + '</b>' +
+            '<s>' + (r.views ? fmtViews(r.views) : '—') + '</s></div>';
+        }).join('')
+      : '<div class="plw-pkempty">원고가 있는 카드가 아직 없어요.<br>분해 결과를 창고에 담으면 여기 올라옵니다.</div>';
+    var ov = document.createElement('div');
+    ov.id = 'plw-pick'; ov.className = 'plw-pick';
+    ov.innerHTML = '<div class="plw-pkin"><div class="plw-pkhd"><b>옆에 놓을 벤치마킹</b>' +
+      '<button type="button" class="plw-pkx" data-plwpkx="1">닫기</button></div>' + list + '</div>';
+    document.body.appendChild(ov);
+    ov.addEventListener('click', function (ev) {
+      if (ev.target === ov || (ev.target.closest && ev.target.closest('[data-plwpkx]'))) { ov.remove(); return; }
+      var rowEl = ev.target.closest ? ev.target.closest('[data-plwpk]') : null;
+      if (!rowEl) return;
+      var r = (rows || []).filter(function (x) { return x && String(x.id) === rowEl.dataset.plwpk; })[0];
+      if (!r) return;
+      e.rid = r.id; e.src = '저장소';
+      e.ref = r.views ? fmtViews(r.views) : '—';
+      e.bone = plnBoneOf(r);
+      plnSave(); ov.remove(); plnRenderWs(false);
+    });
+  }
   function plnRenderWs(anim) {
     var wsin = $pln('pln-wsin'); if (!wsin) return;
-    var html = _plnCur === 0 ? plnHomeHtml() : plnEpHtml(_plnCur);
+    if (_plnWrite && !(_plnCur > 0 && _pln.eps[_plnCur - 1])) _plnWrite = 0;
+    var html = _plnCur === 0 ? plnHomeHtml() : (_plnWrite ? plnWriteHtml(_plnCur) : plnEpHtml(_plnCur));
     if (anim) {
       wsin.classList.add('out');
       setTimeout(function () {
@@ -54632,6 +54991,7 @@
   }
   function plnBind() {
     var wsin = $pln('pln-wsin'); if (!wsin) return;
+    if (wsin.querySelector('[data-plwback]')) { plwBind(wsin); return; }   // v694 · ④원고 화면
     wsin.querySelectorAll('[data-plngo]').forEach(function (el) {
       el.onclick = function () { plnGo(+el.dataset.plngo); };
     });
@@ -54722,11 +55082,18 @@
       e.day = PLN_DAYS[(i + 1) % PLN_DAYS.length];
       await plnSave(); plnRefresh(false);
     };
+    var why = wsin.querySelector('[data-plnwhy]');   // v694 · 베끼기와 원리 뽑기를 가르는 한 줄
+    if (why) why.onclick = async function () {
+      var e = _pln.eps[_plnCur - 1]; if (!e) return;
+      var v = prompt('이 벤치마킹이 터진 이유가 뭘까요? (한 줄)', e.why || '');
+      if (v === null) return;
+      e.why = v.trim();
+      await plnSave(); plnRefresh(false);
+    };
     var wr = wsin.querySelector('[data-plnwrite]');
-    if (wr) wr.onclick = async function () {
-      var e = _pln.eps[_plnCur - 1];
-      if (e && e.step < 4) { e.step = 4; try { await plnSave(); } catch (er) {} }   // v649 · 원고로 넘어감 = 4단계
-      try { window.__rrFrom = 'plan'; switchWorkspace('scripts'); } catch (er) {}
+    if (wr) wr.onclick = function () {   // v694 · 편 소속 ④원고 화면 — «완성»을 눌러야 4단계가 찬다
+      if (!_pln.eps[_plnCur - 1]) return;
+      _plnWrite = 1; _plnKwSel = -1; plnRenderWs(true);
     };
     var ds = wsin.querySelector('[data-plndist]');   // v649 · 배포 문
     if (ds) ds.onclick = async function () {
@@ -54754,7 +55121,7 @@
   function plnRefresh(anim) { plnRenderSlots(); plnReflect(); plnRenderWs(anim); }
   function plnGo(i) {
     if (i === _plnCur) return;
-    _plnCur = i; plnRefresh(true); plnMoveTo(plnSlotX(i));
+    _plnCur = i; _plnWrite = 0; _plnKwSel = -1; plnRefresh(true); plnMoveTo(plnSlotX(i));
   }
   async function plnPick(n, k) {
     var x = plnCandidates(3)[k]; if (!x) return;
