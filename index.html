@@ -681,6 +681,90 @@
     .plw-bmpane.folded .plw-hint{ display:block; }
     .plw-bmpane.folded .plw-bmempty{ display:block; }
   }
+  /* ══ v695 · 단계별 모형(진화) tf- — 구슬→별→메달→트로피→후광 (재사용 부품) ══ */
+  .tf{ display:inline-grid; place-items:center; --tfh:150deg; --tfg:126,200,245; }
+  .tf-c-plan{ --tfh:150deg; --tfg:126,200,245; }
+  .tf-c-gym{ --tfh:205deg; --tfg:179,157,251; }
+  .tf-c-ware{ --tfh:100deg; --tfg:155,232,180; }
+  .tf-bead{ width:15px; height:15px; border-radius:50%;
+    background:radial-gradient(circle at 34% 26%, rgba(255,255,255,.85), rgb(var(--tfg)) 48%, rgba(0,0,0,.4));
+    box-shadow:0 0 7px rgba(var(--tfg),.5), 0 2px 5px rgba(0,0,0,.5); }
+  .tf-star svg{ width:23px; height:23px; display:block; filter:drop-shadow(0 0 6px rgba(var(--tfg),.55)); }
+  .tf-star path{ fill:rgb(var(--tfg)); }
+  .tf-medal{ position:relative; width:32px; height:40px; }
+  .tf-medal .rb{ position:absolute; left:50%; top:0; transform:translateX(-50%); display:flex; gap:1px; }
+  .tf-medal .rb b{ display:block; width:7px; height:13px; background:rgba(var(--tfg),.4);
+    clip-path:polygon(0 0,100% 0,100% 100%,50% 72%,0 100%); }
+  .tf-medal .disc{ position:absolute; left:50%; top:9px; transform:translateX(-50%);
+    width:29px; height:29px; border-radius:50%;
+    background:radial-gradient(circle at 36% 28%, rgba(255,255,255,.5), rgb(var(--tfg)) 52%, rgba(0,0,0,.35));
+    box-shadow:0 0 8px rgba(var(--tfg),.45), inset 0 1px 0 rgba(255,255,255,.5);
+    display:grid; place-items:center; }
+  .tf-medal .disc svg{ width:14px; height:14px; display:block; }
+  .tf-medal .disc path{ fill:rgba(255,255,255,.92); }
+  .tf-tro img{ width:44px; height:44px; object-fit:contain; display:block;
+    filter:grayscale(1) brightness(1.04) sepia(1) hue-rotate(var(--tfh)) saturate(1.6)
+      drop-shadow(0 0 8px rgba(var(--tfg),.4)); }
+  .tf-fin{ position:relative; width:70px; height:66px; display:grid; place-items:center; }
+  .tf-fin::before{ content:''; position:absolute; inset:-4px;
+    background:radial-gradient(circle at 50% 46%, rgba(var(--tfg),.36), rgba(var(--tfg),.12) 42%, transparent 68%); }
+  .tf-fin::after{ content:''; position:absolute; left:50%; top:46%; width:60px; height:60px;
+    transform:translate(-50%,-50%); border-radius:50%; border:1px solid rgba(var(--tfg),.35);
+    box-shadow:0 0 14px rgba(var(--tfg),.25), inset 0 0 14px rgba(var(--tfg),.12); }
+  .tf-fin img{ position:relative; z-index:2; width:48px; height:48px; object-fit:contain; display:block;
+    filter:grayscale(1) brightness(1.14) sepia(1) hue-rotate(var(--tfh)) saturate(1.9)
+      drop-shadow(0 0 11px rgba(var(--tfg),.7)) drop-shadow(0 0 22px rgba(var(--tfg),.35)); }
+  .tf-fin .sp{ position:absolute; z-index:3; font-style:normal; color:rgb(var(--tfg)); text-shadow:0 0 7px rgba(var(--tfg),.9); }
+  .tf-fin .p1{ left:7px; top:5px; font-size:9px; } .tf-fin .p2{ right:6px; top:17px; font-size:7px; }
+  .tf-fin .p3{ left:14px; bottom:7px; font-size:6px; }
+  /* 후광 모션 — 보일 때만(.live) · 발열 헌법 */
+  @keyframes tfFloat{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-2.5px); } }
+  @keyframes tfPulse{ 0%,100%{ opacity:.8; } 50%{ opacity:1; } }
+  @keyframes tfTw{ 0%,100%{ opacity:.3; } 50%{ opacity:1; } }
+  .tf-fin.live img{ animation:tfFloat 3.4s ease-in-out infinite; }
+  .tf-fin.live::before{ animation:tfPulse 3.4s ease-in-out infinite; }
+  .tf-fin.live .sp{ animation:tfTw 2.6s ease-in-out infinite; }
+  .tf-fin.live .p2{ animation-delay:.9s; } .tf-fin.live .p3{ animation-delay:1.7s; }
+  @media (prefers-reduced-motion: reduce){ .tf-fin.live img, .tf-fin.live::before, .tf-fin.live .sp{ animation:none; } }
+  /* 작게 — 진행판 카드용 */
+  .tf.sm.tf-bead{ width:11px; height:11px; }
+  .tf.sm.tf-star svg{ width:16px; height:16px; }
+  .tf.sm.tf-medal{ width:22px; height:28px; }
+  .tf.sm.tf-medal .rb b{ width:5px; height:9px; }
+  .tf.sm.tf-medal .disc{ width:20px; height:20px; top:7px; }
+  .tf.sm.tf-medal .disc svg{ width:10px; height:10px; }
+  .tf.sm.tf-tro img{ width:26px; height:26px; }
+  .tf.sm.tf-fin{ width:34px; height:34px; }
+  .tf.sm.tf-fin::after{ width:30px; height:30px; }
+  .tf.sm.tf-fin img{ width:26px; height:26px; }
+  .tf.sm.tf-fin .sp{ display:none; }
+  /* 진행판 카드 우상단 */
+  .plb-tf{ position:absolute; right:8px; top:7px; z-index:2; display:flex; flex-direction:column;
+    align-items:center; gap:2px; min-height:40px; justify-content:center; }
+  .plb-tf s{ text-decoration:none; font-size:7px; font-weight:800; color:#8FB9DB; white-space:nowrap; }
+  .plb-card .plb-tt{ padding-right:30px; }
+  /* 트레이닝 룸 진열장 */
+  .tf-shelf{ border-radius:16px; padding:13px 12px 10px; margin:10px 0 4px;
+    background:linear-gradient(160deg, rgba(255,255,255,.045), rgba(255,255,255,.015));
+    border:1px solid rgba(255,255,255,.08); }
+  .tf-shhd{ display:flex; align-items:baseline; gap:7px; margin-bottom:10px; }
+  .tf-shhd b{ font-size:12px; font-weight:900; color:#F0F4FF; }
+  .tf-shhd s{ text-decoration:none; margin-left:auto; font-size:10px; color:#8A94A6; font-weight:700; }
+  .tf-shrow{ display:flex; gap:4px; align-items:flex-end; justify-content:flex-start; flex-wrap:wrap; }
+  .tf-slot{ display:flex; flex-direction:column; align-items:center; gap:5px; width:76px; padding:4px 0; border-radius:11px; }
+  .tf-slot .bx{ height:66px; display:grid; place-items:center; }
+  .tf-slot .nm{ font-size:9px; font-weight:700; color:#C9D4E2; text-align:center; line-height:1.3;
+    max-width:74px; overflow:hidden; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; }
+  .tf-slot .dt{ font-size:8px; color:#7C8496; font-weight:700; }
+  .tf-slot.go{ cursor:pointer; transition:transform .16s ease; -webkit-tap-highlight-color:transparent; }
+  .tf-slot.go:active{ transform:scale(.96); }
+  .tf-shbar{ height:6px; border-radius:4px; margin-top:6px;
+    background:linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.025));
+    box-shadow:0 5px 12px rgba(0,0,0,.4); }
+  .tf-shempty{ display:flex; align-items:center; gap:12px; padding:4px 2px 8px; }
+  .tf-shempty .tx{ font-size:11px; color:#9AA4B6; line-height:1.55; }
+  .tf-shempty .tx b{ color:#DCE3EE; }
+  .tf-shempty .sil img{ width:44px; height:44px; object-fit:contain; opacity:.25; filter:grayscale(1) brightness(.9); }
   .pln-bars{ display:flex; gap:5px; }
   .pln-bars .bcol{ flex:1; display:flex; flex-direction:column; align-items:center; gap:5px; cursor:pointer;
     -webkit-tap-highlight-color:transparent; }
@@ -20230,13 +20314,13 @@
         <!-- v669 · 순서 = 저장소 → 트레이닝 → 기획 (사장님 확정) -->
         <div class="qcf-t jly" style="--qc:179,157,251;--jl:#B39DFB;--jm:#8FB6F5;--jd:#5B47A8" data-cs-go="prod">
           <div class="ob"><img src="fork-gym.png" alt="" style="display:none"><svg viewBox="0 0 24 24"><path class="g" d="M8 12h8"/><path class="g" d="M6.2 9v6M3.8 10.4v3.2M17.8 9v6M20.2 10.4v3.2"/></svg></div>
-          <div class="nm">트레이닝</div><div class="vb">만들다</div>
+          <div class="nm">트레이닝 룸</div><div class="vb">만들다</div>
           <div class="fork-bd" id="fork-bd-prod" style="color:#FF3DA6;background:rgba(255,61,166,.1)"></div>
         </div>
         <div class="qcf-sep s2">›</div>
         <div class="qcf-t jly" style="--qc:126,200,245;--jl:#7EC8F5;--jm:#6FE0C0;--jd:#2C6E9E" data-cs-go="plan" title="기획 — 이번 주 다섯 편">
           <div class="ob"><img src="hero-trophy.png" alt="" onerror="this.style.display='none';var s=this.nextElementSibling;if(s)s.style.display='';"><svg style="display:none" viewBox="0 0 24 24"><path class="g" d="M7.5 4h9v5.2a4.5 4.5 0 0 1-9 0z"/><path class="g" d="M7.5 5.6H5a3 3 0 0 0 3 3"/><path class="g" d="M16.5 5.6H19a3 3 0 0 1-3 3"/><path class="g" d="M12 13.7V17"/><path class="g" d="M9 20h6"/><path class="g" d="M9.6 17h4.8v3H9.6z"/></svg></div>
-          <div class="nm">기획</div><div class="vb">정하다</div>
+          <div class="nm">기획의 방</div><div class="vb">정하다</div>
           <div class="fork-bd" id="fork-bd-plan" style="color:#B39DFB;background:rgba(179,157,251,.12)"></div>
         </div>
         <!-- v646 · 나침반 타일 제거(분해) — 바늘=기획 홈 · 알고리즘·지표=트레이닝 로비 문 · 고객·트렌드=저장소 칩 -->
@@ -50851,6 +50935,8 @@
           '<circle cx="292" cy="17" r="3.4" fill="none" stroke="#d8b23a" stroke-width="1.4" opacity=".8"/></svg>' +
         (done > 0 ? '<div class="cap">조회수는 세지 않습니다. <b>올린 횟수만.</b><br>위 목표를 눌러 바꿔요.</div>' : '<div class="cap">아직 이번 달 첫 편 전이에요.<br><b>한 편만 올리면</b> 곡선이 오르기 시작해요.</div>') +
       '</div><div class="st2-hint">아래로<span class="ar">↓</span></div></div>';
+    // 🏆 v695 · 트로피 진열장 — 완주=후광 · 자라는 중=지금 형태 (1막 바로 아래)
+    h += '<div class="st2-rv" id="st2-shelf"></div>';
     // ── 2막 · 인사이트 — 왜 그런가 (4지표 + 맵) ──
     h += '<div class="st2-act st2-rv"><span class="n">01</span><span class="t">인사이트</span>' +
       '<span class="d">지난 4주의 나와 지금의 나를 비교해요. 남과의 비교가 아니라 <b>내 과거와의 비교</b>.</span></div>' +
@@ -50900,6 +50986,7 @@
     else { st2GoalLoad().then(function () { try { st2RenderGoal(); } catch (e) {} }); }
     try { st2RenderWeek(); } catch (e) {}
     st2WireHome(goal, done);
+    try { tfShelfRender(); } catch (e) {}   // v695 · 트로피 진열장
   }
   function st2RenderMap3() {
     const el = document.getElementById('st2-map-m3'); if (!el) return;
@@ -54574,6 +54661,83 @@
       return { k: d[1], c: d[2], now: now };
     });
   }
+  /* ══ v695 · 단계별 모형(진화) tf- — 구슬→별→메달→트로피→후광. 잔에 박힌 별이 자란다.
+     재사용 부품(사장님: 나중에 다른 데도 씀) — tfFormHtml(단계1~5, 색클래스, 작게) ══ */
+  var TF_NM = ['구슬', '별', '메달', '트로피', '후광'];
+  var TF_STARP = 'M12 2l2.9 6.2 6.6.8-4.9 4.6 1.3 6.6L12 17l-5.9 3.2 1.3-6.6L2.5 9l6.6-.8z';
+  function tfFormHtml(st, cls, sm) {
+    var c = 'tf ' + (cls || 'tf-c-plan') + (sm ? ' sm' : '');
+    st = Math.max(1, Math.min(5, st | 0));
+    if (st === 1) return '<span class="' + c + ' tf-bead"></span>';
+    if (st === 2) return '<span class="' + c + ' tf-star"><svg viewBox="0 0 24 24"><path d="' + TF_STARP + '"/></svg></span>';
+    if (st === 3) return '<span class="' + c + ' tf-medal"><i class="rb"><b></b><b></b></i><i class="disc"><svg viewBox="0 0 24 24"><path d="' + TF_STARP + '"/></svg></i></span>';
+    if (st === 4) return '<span class="' + c + ' tf-tro"><img src="hero-trophy.png" alt=""></span>';
+    return '<span class="' + c + ' tf-fin"><i class="sp p1">✦</i><i class="sp p2">✧</i><i class="sp p3">✦</i><img src="hero-trophy.png" alt=""></span>';
+  }
+  /* 트로피 로그 — 완주(⑤배포)만 영구 보관. plnv1은 주가 바뀌면 비워지므로 별도 저장 */
+  var _tro = null, _troLoaded = false, _tfIo = null;
+  async function troLoad() {
+    if (_troLoaded) return _tro;
+    try {
+      var r = await window.storage.get('trov1');          // ⚠️ {key,value} — value 언랩
+      _tro = r && r.value ? JSON.parse(r.value) : [];
+    } catch (e) { _tro = []; }
+    if (!Array.isArray(_tro)) _tro = [];
+    _troLoaded = true;
+    return _tro;
+  }
+  async function troAdd(t, wk) {
+    t = String(t || '').trim(); if (!t) return;
+    await troLoad();
+    if (_tro.some(function (x) { return x && x.t === t && x.wk === wk; })) return;
+    _tro.push({ t: t, wk: wk, at: Date.now() });
+    try { await window.storage.set('trov1', JSON.stringify(_tro)); } catch (e) {}
+  }
+  async function tfShelfRender() {
+    var el = document.getElementById('st2-shelf'); if (!el) return;
+    try { await troLoad(); } catch (e) {}
+    try { await plnLoad(); } catch (e) {}
+    if (!document.getElementById('st2-shelf')) return;   // 그 사이 화면이 바뀌었으면 중단
+    var tros = (_tro || []).slice().reverse();
+    var eps = ((_pln && _pln.eps) || []).map(function (e, i) { return e ? { e: e, i: i } : null; })
+      .filter(Boolean).filter(function (x) { return (x.e.step || 0) < 5; });
+    var h = '<div class="tf-shelf"><div class="tf-shhd"><b>🏆 내가 낸 것 ' + tros.length + '</b>' +
+      (eps.length ? '<s>자라는 중 ' + eps.length + '</s>' : '') + '</div>';
+    if (!tros.length && !eps.length) {
+      h += '<div class="tf-shempty"><span class="sil"><img src="hero-trophy.png" alt=""></span>' +
+        '<span class="tx"><b>첫 트로피 자리는 비워뒀어요.</b><br>기획의 방에서 편을 정하면 여기 구슬부터 놓입니다.</span></div>';
+    } else {
+      var wkNow = plnWeekId();
+      h += '<div class="tf-shrow">';
+      tros.slice(0, 6).forEach(function (x) {
+        h += '<div class="tf-slot"><div class="bx">' + tfFormHtml(5, 'tf-c-plan') + '</div>' +
+          '<div class="nm">' + esc(String(x.t || '').slice(0, 20)) + '</div>' +
+          '<div class="dt">' + (x.wk === wkNow ? '이번 주' : esc(String(x.wk || '').replace(/^\d+-/, ''))) + ' ✦ 완주</div></div>';
+      });
+      if (tros.length > 6) {
+        h += '<div class="tf-slot"><div class="bx" style="font-size:12px;font-weight:900;color:#8A94A6">+' + (tros.length - 6) + '</div><div class="nm">더 있음</div></div>';
+      }
+      eps.forEach(function (x) {
+        var st = Math.max(1, Math.min(4, x.e.step || 1));
+        h += '<div class="tf-slot go" data-tfgo="1"><div class="bx">' + tfFormHtml(st, 'tf-c-plan') + '</div>' +
+          '<div class="nm">' + esc(String(x.e.t || '').slice(0, 20)) + '</div>' +
+          '<div class="dt">지금: ' + TF_NM[st - 1] + ' · ' + Math.min(x.e.step || 0, 5) + '/5</div></div>';
+      });
+      h += '</div><div class="tf-shbar"></div>';
+    }
+    h += '</div>';
+    el.innerHTML = h;
+    el.querySelectorAll('[data-tfgo]').forEach(function (b) {
+      b.onclick = function () { try { switchWorkspace('plan'); } catch (e) {} };
+    });
+    try {   // 후광 모션 — 보일 때만 (발열 헌법)
+      if (_tfIo) _tfIo.disconnect();
+      _tfIo = new IntersectionObserver(function (es) {
+        es.forEach(function (en) { en.target.classList.toggle('live', en.isIntersecting); });
+      }, { threshold: .3 });
+      el.querySelectorAll('.tf-fin').forEach(function (f) { _tfIo.observe(f); });
+    } catch (e) {}
+  }
   function plnHomeHtml() {
     var nextI = -1, msg = '', sub = '', i;
     for (i = 0; i < 5; i++) { if (!_pln.eps[i]) { nextI = i; break; } }
@@ -54615,8 +54779,12 @@
         }).join('');
       }
       var ft = e ? Math.min(e.step, 5) + '/5' : '＋ 정하기';
+      // v695 · 우상단 모형 — 편의 «지금 형태» (구슬→별→메달→트로피→후광)
+      var tfN = e ? Math.max(1, Math.min(5, e.step || 1)) : 0;
+      var tf = e ? '<div class="plb-tf">' + tfFormHtml(tfN, 'tf-c-plan', true) +
+        '<s>' + (tfN >= 5 ? '✦ 완주' : TF_NM[tfN - 1]) + '</s></div>' : '';
       return '<div class="plb-card' + (e ? '' : ' emp') + (_plnCur === k + 1 ? ' on' : '') + '" data-plngo="' + (k + 1) + '" style="--bc:' + col + '">' +
-        head + '<div class="plb-rail">' + steps + '</div>' +
+        tf + head + '<div class="plb-rail">' + steps + '</div>' +
         '<div class="plb-ft">' + ft + '</div>' +
         (e ? '<div class="plb-bar"><i style="width:' + Math.round(Math.min(e.step, 5) / 5 * 100) + '%"></i></div>' : '') +
         '</div>';
@@ -55099,6 +55267,7 @@
     if (ds) ds.onclick = async function () {
       var e = _pln.eps[_plnCur - 1];
       if (e && e.step < 5) { e.step = 5; try { await plnSave(); } catch (er) {} }
+      if (e) { try { troAdd(e.t, _pln.wk); } catch (er) {} }   // v695 · 완주 수확 → 트로피 로그(영구)
       try { switchWorkspace('studio'); st2SetTab('osmu'); } catch (er) {}
     };
   }
@@ -55192,6 +55361,7 @@
     plnInit();
     await plnLoad();
     try { if (!_needleLoaded) await needleLoad(); } catch (e) {}   // v647 · 바늘(내 기준)을 기획 머리에
+    try { var _wkOld = _pln.wk; (_pln.eps || []).forEach(function (e) { if (e && e.step >= 5) troAdd(e.t, _wkOld); }); } catch (e2) {}   // v695 · 완주 수확(주 넘김 대비)
     if (_pln.wk !== plnWeekId()) { _pln = plnBlank(); await plnSave(); }   // 새 주가 오면 판을 비운다
     var wk = $pln('pln-wk');
     if (wk) { var d = new Date(); wk.textContent = (d.getMonth() + 1) + '월 ' + Math.ceil(d.getDate() / 7) + '주'; }
