@@ -575,6 +575,83 @@
   .plb-card.emp .plb-ft{ color:#8792AD; font-family:inherit; }
   .plb-bar{ height:2.5px; border-radius:99px; background:rgba(255,255,255,.07); margin-top:5px; overflow:hidden; }
   .plb-bar i{ display:block; height:100%; background:var(--bc); border-radius:99px; }
+  /* ══ v701 · 스케줄(plsc-) = 유리 타임라인 + 편집 패널 — 요일 루틴, 주 넘겨도 유지 ══ */
+  .plsc{ display:flex; border-radius:16px; overflow:hidden; border:1px solid rgba(255,255,255,.13);
+    background:rgba(255,255,255,.035); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.16), 0 10px 26px -14px rgba(0,0,0,.8); }
+  .plsc .seg{ position:relative; padding:12px 4px 11px; text-align:center; border-right:1px solid rgba(255,255,255,.07);
+    background:linear-gradient(180deg, rgba(var(--scr),.17), rgba(var(--scr),.05)); cursor:pointer; transition:.15s; }
+  .plsc .seg:last-child{ border-right:none; }
+  .plsc .seg .d{ font-size:10.5px; font-weight:800; color:#8FA0BC; letter-spacing:.04em; }
+  .plsc .seg .r{ font-size:10.5px; font-weight:800; color:var(--sc); margin-top:1px; line-height:1.35; }
+  .plsc .seg.today{ background:linear-gradient(180deg, rgba(var(--scr),.36), rgba(var(--scr),.13));
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.24); }
+  .plsc .seg.today .d{ color:#EDF2FA; }
+  .plsc .seg.today::after{ content:'오늘'; position:absolute; top:-8px; left:50%; transform:translateX(-50%);
+    font-size:8px; font-weight:800; color:#0B0E14; background:#fff; border-radius:99px; padding:1px 6px;
+    box-shadow:0 2px 8px rgba(0,0,0,.4); }
+  .plsc .seg.open{ box-shadow:inset 0 0 0 1.5px var(--sc), inset 0 1px 0 rgba(255,255,255,.2); }
+  .plsc-p{ margin-top:10px; border:1px solid rgba(255,255,255,.09); border-radius:13px; padding:13px 15px; background:rgba(0,0,0,.22); }
+  .plsc-ph{ display:flex; align-items:center; gap:9px; margin-bottom:10px; flex-wrap:wrap; }
+  .plsc-ph b{ font-size:13px; font-weight:800; color:#EDF2FA; }
+  .plsc-ph .ctl{ margin-left:auto; display:flex; gap:5px; flex-wrap:wrap; }
+  .plsc-ph .ctl button{ font-family:inherit; font-size:10.5px; font-weight:800; border-radius:99px; padding:5px 11px;
+    background:transparent; border:1px solid rgba(255,255,255,.16); color:#8FA0BC; cursor:pointer; }
+  .plsc-lab{ font-size:10px; font-weight:800; letter-spacing:.12em; color:#5C6B87; margin:11px 0 6px; }
+  .plsc-chips{ display:flex; gap:5px; flex-wrap:wrap; }
+  .plsc-ch{ font-family:inherit; font-size:11.5px; font-weight:800; border-radius:999px; padding:6px 13px; cursor:pointer;
+    background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.16); color:#8FA0BC; }
+  .plsc-ch.on{ color:#0B0E14; border-color:transparent; }
+  .plsc-swr{ display:flex; gap:7px; align-items:center; }
+  .plsc-sw{ width:24px; height:24px; border-radius:50%; cursor:pointer; border:2px solid transparent;
+    background:radial-gradient(circle at 35% 30%, rgba(255,255,255,.6), var(--swc) 60%); }
+  .plsc-sw.on{ border-color:#fff; transform:scale(1.1); }
+  .plsc-sw.auto{ background:conic-gradient(#9BE8B4,#7EC8F5,#C7B6FF,#F5B08E,#C6FF4A,#9BE8B4); }
+  .plsc-today{ display:flex; align-items:center; gap:10px; margin-bottom:12px; padding:12px 15px;
+    border-radius:14px; border:1px solid rgba(255,255,255,.13);
+    background:rgba(255,255,255,.05); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.14); flex-wrap:wrap; }
+  .plsc-today .tx{ flex:1; font-size:13.5px; color:#C6CFE2; min-width:150px; }
+  .plsc-today .tx b{ color:#EDF2FA; }
+  .plsc-today .tx em{ font-style:normal; color:var(--tc,#7EC8F5); font-weight:800; }
+  .plsc-today .tx s{ text-decoration:none; display:block; font-size:11px; color:#5C6B87; margin-top:1px; }
+  .plsc-today button{ font-family:inherit; font-size:12.5px; font-weight:800; border-radius:11px; padding:9px 16px;
+    background:var(--tc,#7EC8F5); color:#0B0E14; border:none; cursor:pointer; flex:none; }
+  .plsc-goal{ display:flex; align-items:center; gap:9px; margin:0 0 10px; }
+  .plsc-goal .k{ font-size:12px; font-weight:800; color:#8FA0BC; }
+  .plsc-goal button{ width:26px; height:26px; border-radius:9px; background:rgba(255,255,255,.06);
+    border:1px solid rgba(255,255,255,.14); color:#EDF2FA; font-size:14px; cursor:pointer; font-family:inherit; }
+  .plsc-goal b{ font:800 15px/1 'JetBrains Mono',monospace; color:#C6FF4A; min-width:16px; text-align:center; }
+  /* v701 · 진행판 = 3열 그리드 + 미니 썸네일 */
+  .plb-cols{ display:grid; grid-template-columns:repeat(3,1fr); gap:9px; overflow:visible; padding-bottom:0; }
+  .plb-card{ flex:none; width:auto; }
+  .plb-mini{ position:absolute; right:9px; bottom:24px; width:26px; aspect-ratio:9/12; object-fit:cover;
+    border-radius:5px; box-shadow:0 0 0 1.5px rgba(155,232,180,.55); }
+  /* v701 · 공정 방 상단 편 스트립 — 가로 한 줄, 우측 페이드 */
+  .pv2-eps{ display:flex; gap:7px; overflow-x:auto; scrollbar-width:none; margin:0 0 14px; padding-bottom:2px;
+    -webkit-mask-image:linear-gradient(90deg,#000 82%,transparent 99%); mask-image:linear-gradient(90deg,#000 82%,transparent 99%); }
+  .pv2-eps::-webkit-scrollbar{ display:none; }
+  .pv2-ep{ flex:none; display:flex; align-items:center; gap:7px; border:1px solid rgba(255,255,255,.11); border-radius:999px;
+    padding:7px 14px; background:rgba(255,255,255,.035); cursor:pointer; max-width:230px; font-family:inherit; transition:.15s; }
+  .pv2-ep .n{ font:800 10.5px/1 'JetBrains Mono',monospace; color:#7EC8F5; flex:none; }
+  .pv2-ep .t{ font-size:12px; font-weight:700; color:#DDE2F0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .pv2-ep .t.dim{ color:#5C6B87; font-weight:600; }
+  .pv2-ep.on{ border-color:#7EC8F5; box-shadow:0 0 0 1px #7EC8F5; }
+  /* v701 · 서재(권) — 배포 방 하단 */
+  .pv2-shelf{ margin-top:22px; }
+  .pv2-shelf .sh2{ font-size:11px; font-weight:800; letter-spacing:.16em; color:#5C6B87; margin-bottom:9px; }
+  .pv2-books{ display:grid; grid-template-columns:repeat(3,1fr); gap:9px; }
+  .pv2-bk{ border:1px solid rgba(255,255,255,.1); border-radius:12px; overflow:hidden; background:rgba(0,0,0,.22); }
+  .pv2-bk .cv{ aspect-ratio:16/10; display:flex; align-items:flex-end; padding:7px; font-size:9.5px; font-weight:800;
+    color:#5C6B87; background:rgba(255,255,255,.04); }
+  .pv2-bk .cv img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .pv2-bk .cv.hasimg{ padding:0; }
+  .pv2-bk .meta{ padding:8px 10px 9px; }
+  .pv2-bk .t{ font-size:11px; font-weight:700; color:#DDE2F0; line-height:1.4; }
+  .pv2-bk .s{ font-size:9.5px; color:#5C6B87; margin-top:3px; display:flex; gap:6px; align-items:center; flex-wrap:wrap; }
+  .pv2-bk .s b{ color:#C6FF4A; }
+  .pv2-bk .rev{ margin-top:7px; width:100%; font-family:inherit; font-size:10px; font-weight:800; border-radius:8px; padding:5px 0;
+    background:transparent; border:1px dashed rgba(255,255,255,.18); color:#8FA0BC; cursor:pointer; }
   /* ══ v698 · 편 화면 = 공정 5구간 (pv2-) — 리서치·분석·디벨롭·원고·배포 ══ */
   .pv2-h{ display:flex; align-items:center; gap:8px; margin:20px 0 9px; }
   .pv2-h .no{ font:800 15px/1 'JetBrains Mono',monospace; color:var(--sc); opacity:.65; letter-spacing:.02em; }
@@ -986,6 +1063,24 @@
   .pln-slot .tag{ position:absolute; bottom:5px; font:800 7.5px/1 'JetBrains Mono',monospace;
     color:var(--sc); opacity:0; transition:opacity .3s ease; }
   .pln-slot.on .tag{ opacity:.9; }
+  /* v701 · 구슬 바 = 리퀴드 글라스 (인스타 새 바 참고 — 사장님 확정) */
+  .pln-svg, .pln-bead{ display:none !important; }
+  .pln-bar{ height:auto; padding:6px 0 10px; }
+  .pln-slots{ position:static; height:auto; gap:4px; align-items:center;
+    padding:7px; border-radius:999px;
+    background:rgba(22,28,40,.55); backdrop-filter:blur(24px) saturate(1.6); -webkit-backdrop-filter:blur(24px) saturate(1.6);
+    border:1px solid rgba(255,255,255,.14);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.22), inset 0 -1px 0 rgba(255,255,255,.04), 0 18px 40px -18px rgba(0,0,0,.9); }
+  .pln-slot{ flex:1; min-width:0; height:auto; flex-direction:column; gap:1px; padding:8px 2px 7px; border-radius:999px; transition:.18s; }
+  .pln-slot .gl{ font-size:12px; opacity:.5; color:var(--sc); font-weight:800; transition:.18s; }
+  .pln-slot .tag{ position:static; font:800 8.5px/1.2 inherit; color:#8FA0BC; opacity:1; letter-spacing:.02em; }
+  .pln-slot.on{ background:rgba(255,255,255,.16);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.35), 0 4px 14px -4px rgba(0,0,0,.6); }
+  .pln-slot.on .gl{ opacity:1; text-shadow:0 0 12px var(--sc); }
+  .pln-slot.on .tag{ color:#fff; }
+  .pv2-ghost{ pointer-events:none; }   /* v700 · 사장님: 흐리게 말고 그냥 오픈 — 색 그대로, 저장만 리서치 경유 */
+  .pv2-ghostnote{ margin:2px 0 12px; padding:11px 14px; border-radius:12px; cursor:pointer;
+    border:1px dashed rgba(255,255,255,.22); color:#AEB9CF; font-size:12.5px; font-weight:700; line-height:1.5; }
   .pln-bead{ position:absolute; z-index:4; border-radius:50%; pointer-events:none;
     background:radial-gradient(circle at 36% 27%, rgba(255,255,255,.95), var(--plc) 44%, color-mix(in srgb, var(--plc) 62%, #000) 100%);
     box-shadow:0 0 18px -1px var(--plc), 0 0 42px -8px var(--plc), inset 0 -3px 7px rgba(0,0,0,.3);
@@ -54672,7 +54767,7 @@
     } catch (er) { cb(null); }
   }
   async function pv2ThumbAdd(file) {
-    var e = _pln.eps[_plnCur - 1]; if (!e || !file) return;
+    var e = _pln.eps[_plnEp]; if (!e || !file) return;
     e.thumbs = e.thumbs || [];
     if (e.thumbs.length >= 5) { try { toast('썸네일은 5장까지 — 하나를 빼고 담아주세요'); } catch (er) {} return; }
     pv2Shrink(file, async function (dataUrl) {
@@ -54702,6 +54797,7 @@
     return { b: lb + ' — 무엇을 보여줄까요', s: '탭해서 어떻게 찍을지 적기', v: '—' };
   }
   var _pln = null, _plnCur = 0, _plnInited = false, _plnLoaded = false, _plnWrite = 0, _plnKwSel = -1, _pv2St = -1;
+  var _plnEp = 0;   // v699 · 작업대에 올라온 편(0~4) — 하단 구슬 바는 이제 «공정 워크스페이스»(홈+리서치~배포)
   var PLN_W = 326, PLN_H = 60, PLN_R = 24, PLN_RB = 21, PLN_S = 12;
   var _plnRaf = 0, _plnX = 0, _plnTgt = 0, _plnVel = 0, _plnRun = false;
   var $pln = function (id) { return document.getElementById(id); };
@@ -54712,7 +54808,7 @@
     var w = Math.ceil((((d - st) / 86400000) + st.getDay() + 1) / 7);
     return y + '-W' + w;
   }
-  function plnBlank() { return { wk: plnWeekId(), eps: [null, null, null, null, null] }; }
+  function plnBlank() { return { wk: plnWeekId(), eps: [null, null, null, null, null], goal: 3 }; }
   async function plnLoad() {
     if (_plnLoaded) return _pln;
     try {
@@ -54725,6 +54821,103 @@
     return _pln;
   }
   async function plnSave() { try { await window.storage.set(PLN_KEY, JSON.stringify(_pln)); } catch (e) {} }
+
+  /* ══ v701 · 스케줄(plsc) — 요일 루틴. plnv1과 달리 주가 바뀌어도 유지(습관이니까) ══ */
+  var PLSC_KEY = 'plsched1';
+  var PLSC_PAL = ['리서치', '분석', '디벨롭', '원고', '촬영', '편집', '배포', '회고'];
+  var PLSC_COL = { '리서치': '#9BE8B4', '분석': '#7EC8F5', '디벨롭': '#C7B6FF', '원고': '#F5B08E', '촬영': '#F5B08E', '편집': '#F5B08E', '배포': '#C6FF4A', '회고': '#C6FF4A' };
+  var PLSC_RGB = { '#9BE8B4': '155,232,180', '#7EC8F5': '126,200,245', '#C7B6FF': '199,182,255', '#F5B08E': '245,176,142', '#C6FF4A': '198,255,74' };
+  var PLSC_SW = ['#9BE8B4', '#7EC8F5', '#C7B6FF', '#F5B08E', '#C6FF4A'];
+  var PLSC_DAYN = ['월', '화', '수', '목', '금', '토', '일'];
+  var PLSC_GO = { '리서치': 1, '분석': 2, '디벨롭': 3, '원고': 4, '촬영': 4, '편집': 4, '배포': 5, '회고': 5 };   // 촬영·편집=안내 라벨, 방은 원고
+  var _plsc = null, _plscLoaded = false, _plscOpen = -1;
+  function plscBlank() {
+    return { segs: [
+      { d: [0], s: ['리서치', '분석'], c: null }, { d: [1, 2], s: ['디벨롭', '원고'], c: null },
+      { d: [3], s: ['촬영'], c: null }, { d: [4, 5], s: ['편집'], c: null }, { d: [6], s: ['배포', '회고'], c: null }
+    ] };
+  }
+  async function plscLoad() {
+    if (_plscLoaded) return _plsc;
+    try {
+      var r = await window.storage.get(PLSC_KEY);
+      _plsc = r && r.value ? JSON.parse(r.value) : plscBlank();
+    } catch (e) { _plsc = plscBlank(); }
+    if (!_plsc || !Array.isArray(_plsc.segs) || !_plsc.segs.length) _plsc = plscBlank();
+    _plscLoaded = true;
+    return _plsc;
+  }
+  async function plscSave() { try { await window.storage.set(PLSC_KEY, JSON.stringify(_plsc)); } catch (e) {} }
+  function plscToday() { return (new Date().getDay() + 6) % 7; }
+  function plscSegCol(sg) { return sg.c || PLSC_COL[(sg.s || [])[0]] || '#8FA0AD'; }
+  function plscHtml() {
+    var sc = _plsc || plscBlank();
+    if (!_plscLoaded) plscLoad().then(function () { if (_plnCur === 0) plnRenderWs(false); });
+    var td = plscToday();
+    var bar = '<div class="plsc">' + sc.segs.map(function (sg, i) {
+      var c = plscSegCol(sg), rgb = PLSC_RGB[c] || '143,160,188';
+      return '<div class="seg' + (sg.d.indexOf(td) > -1 ? ' today' : '') + (i === _plscOpen ? ' open' : '') +
+        '" data-plscsg="' + i + '" style="flex:' + sg.d.length + ';--sc:' + c + ';--scr:' + rgb + '">' +
+        '<div class="d">' + sg.d.map(function (d) { return PLSC_DAYN[d]; }).join('·') + '</div>' +
+        '<div class="r">' + ((sg.s || []).join('·') || '쉼') + '</div></div>';
+    }).join('') + '</div>';
+    var panel = '';
+    if (_plscOpen >= 0 && sc.segs[_plscOpen]) {
+      var sg = sc.segs[_plscOpen];
+      var chips = PLSC_PAL.map(function (nm) {
+        var on = sg.s.indexOf(nm) > -1;
+        return '<button type="button" class="plsc-ch' + (on ? ' on' : '') + '" data-plscch="' + nm + '"' +
+          (on ? ' style="background:' + PLSC_COL[nm] + '"' : '') + '>' + nm + '</button>';
+      }).join('');
+      var sws = '<div class="plsc-swr"><span class="plsc-sw auto' + (sg.c ? '' : ' on') + '" data-plscsw="auto"></span>' +
+        PLSC_SW.map(function (c2) {
+          return '<span class="plsc-sw' + (sg.c === c2 ? ' on' : '') + '" data-plscsw="' + c2 + '" style="--swc:' + c2 + '"></span>';
+        }).join('') + '</div>';
+      panel = '<div class="plsc-p"><div class="plsc-ph"><b>' + sg.d.map(function (d) { return PLSC_DAYN[d]; }).join('·') + '요일에 하는 일</b>' +
+        '<div class="ctl">' +
+        (_plscOpen > 0 ? '<button type="button" data-plscmgl="1">◀ 왼쪽과 합치기</button>' : '') +
+        (_plscOpen < sc.segs.length - 1 ? '<button type="button" data-plscmgr="1">오른쪽과 합치기 ▶</button>' : '') +
+        (sg.d.length > 1 ? '<button type="button" data-plscspl="1">요일 나누기</button>' : '') +
+        '</div></div>' +
+        '<div class="plsc-lab">단계 구성</div><div class="plsc-chips">' + chips + '</div>' +
+        '<div class="plsc-lab">구간 컬러</div>' + sws + '</div>';
+    }
+    return bar + panel;
+  }
+  /* 오늘 한 줄 + 조용한 이월 — 스케줄의 심장 */
+  function plscTodayInfo() {
+    var sc = _plsc || plscBlank(), td = plscToday();
+    var seg = null;
+    sc.segs.forEach(function (sg) { if (sg.d.indexOf(td) > -1) seg = sg; });
+    var stages = (seg && seg.s.length) ? seg.s.slice() : [];
+    var late = [];
+    try {
+      var eps = (_pln.eps || []).slice(0, plnGoal()).filter(Boolean);
+      sc.segs.forEach(function (sg) {
+        if (!sg.d.every(function (d) { return d < td; })) return;   // 이번 주에서 이미 지나간 구간만
+        (sg.s || []).forEach(function (nm) {
+          var need = PLSC_GO[nm] || 1;
+          if (!eps.length) return;
+          var behind = eps.some(function (e) { return (e.step || 0) < need; });
+          if (behind && stages.indexOf(nm) < 0 && late.indexOf(nm) < 0) late.push(nm);
+        });
+      });
+    } catch (e) {}
+    return { stages: stages, late: late.slice(0, 2) };
+  }
+  function plscTodayHtml() {
+    var inf = plscTodayInfo();
+    var wait = (_pln.eps || []).slice(0, plnGoal()).filter(Boolean).length;
+    if (!inf.stages.length && !inf.late.length) {
+      return '<div class="plsc-today" style="--tc:#D7F34B"><span class="tx"><b>오늘은 쉬는 날</b><s>아래 스케줄을 탭하면 요일 루틴을 바꿀 수 있어요</s></span></div>';
+    }
+    var main = inf.stages.length ? inf.stages : inf.late;
+    var tc = PLSC_COL[main[0]] || '#7EC8F5';
+    return '<div class="plsc-today" style="--tc:' + tc + '"><span class="tx">오늘은 <em>' + main.join('·') + '</em> 하는 날' +
+      (wait ? ' — <b>' + wait + '편</b>이 기다립니다' : '') +
+      (inf.late.length && inf.stages.length ? '<s>＋ 밀린 ' + inf.late.join('·') + '도 오늘 칸에 올라와 있어요</s>' : '') +
+      '</span><button type="button" data-plsctoday="' + (PLSC_GO[main[0]] || 1) + '">시작하기 →</button></div>';
+  }
 
   /* 후보 — 담아둔 카드 + 아이디어에서 «왜 이걸» 이유와 함께 꺼내온다 */
   function plnUsedIds() {
@@ -54792,7 +54985,7 @@
            ' A ' + rb + ' ' + rb + ' 0 0 0 ' + tRx.toFixed(2) + ' ' + tLy.toFixed(2);
   }
   function plnSlotX(i) { return (PLN_W / 6) * (i + 0.5); }
-  function plnColOf(i) { return i === 0 ? PLN_HOME_C : (_pln.eps[i - 1] ? PLN_COLS[i - 1] : '#8792AD'); }
+  function plnColOf(i) { return i === 0 ? PLN_HOME_C : PLN_STEP_COLS[i - 1]; }   // v699 · 구슬=공정색
   function plnFit() {
     var svg = $pln('pln-svg'); if (!svg) return false;
     var w = svg.getBoundingClientRect().width; if (!w) return false;
@@ -54807,7 +55000,7 @@
     if (!pl || !bd) return;
     pl.setAttribute('d', d); rm.setAttribute('d', d);
     lt.setAttribute('d', plnLitD(px, cy, PLN_RB, PLN_S));
-    lt.setAttribute('stroke', (_plnCur === 0 || _pln.eps[_plnCur - 1]) ? 'rgba(255,255,255,.3)' : 'rgba(255,255,255,.13)');
+    lt.setAttribute('stroke', (_plnCur === 0 || _pln.eps[_plnEp]) ? 'rgba(255,255,255,.3)' : 'rgba(255,255,255,.13)');
     bd.style.width = (PLN_RB * 2) + 'px'; bd.style.height = (PLN_RB * 2) + 'px';
     bd.style.left = (px - PLN_RB) + 'px';
     bd.style.bottom = (12 + PLN_H - cy - PLN_RB) + 'px';   // SVG 세로는 1:1 — 배율 곱하면 안 된다
@@ -54822,20 +55015,23 @@
   }
   function plnMoveTo(x) { _plnTgt = x; if (!_plnRun) { _plnRun = true; _plnRaf = requestAnimationFrame(plnLoop); } }
 
-  function plnRenderSlots() {
+  function plnRenderSlots() {   // v699 · 구슬 바 = 공정 워크스페이스 (홈 + 리서치~배포)
     var el = $pln('pln-slots'); if (!el) return;
+    var e = _pln.eps[_plnEp];
+    var NMS = ['홈', '리서치', '분석', '디벨롭', '원고', '배포'];
     el.innerHTML = [0, 1, 2, 3, 4, 5].map(function (i) {
-      var filled = i === 0 ? true : !!_pln.eps[i - 1];
+      var done = i === 0 ? true : (e ? (i === 1 ? true : e.step >= i) : false);
       return '<div class="pln-slot' + (i === _plnCur ? ' on' : '') + '" data-plni="' + i + '" style="--sc:' + plnColOf(i) + '">' +
-        '<span class="gl">' + (i === 0 ? '⌂' : (filled ? '◆' : '○')) + '</span>' +
-        '<span class="tag">' + (i === 0 ? '홈' : i + '편') + '</span></div>';
+        '<span class="gl">' + (i === 0 ? '⌂' : (done ? '◆' : '○')) + '</span>' +
+        '<span class="tag">' + NMS[i] + '</span></div>';
     }).join('');
     el.querySelectorAll('[data-plni]').forEach(function (b) {
       b.onclick = function () { plnGo(+b.dataset.plni); };
     });
   }
-  function plnReadyN() { return _pln.eps.filter(function (e) { return e && e.step >= 3; }).length; }
-  function plnSetN() { return _pln.eps.filter(Boolean).length; }
+  function plnGoal() { return Math.max(1, Math.min(5, (_pln && _pln.goal) || 3)); }   // v701 · 이번 주 목표 개수 — 목표가 판을 만든다
+  function plnReadyN() { return _pln.eps.slice(0, plnGoal()).filter(function (e) { return e && e.step >= 3; }).length; }
+  function plnSetN() { return _pln.eps.slice(0, plnGoal()).filter(Boolean).length; }
 
   /* v649 · 알고리즘 네 수치 — 트레이닝 보드(nowOf)와 같은 셈법. 기록 없으면 — */
   function plnAlgRates() {
@@ -54886,6 +55082,7 @@
       rec.rid = e.rid || null; rec.ref = e.ref || '—'; rec.hook = e.hook || '';
       rec.bone = (e.bone || []).slice();
       rec.cuts = (e.cuts || []).map(function (c) { return { b: c.b, s: c.s, v: c.v }; });
+      rec.thumb = (e.thumbs && e.thumbs.length) ? e.thumbs[e.rep || 0] : '';   // v701 · 서재 표지 = 대표 썸네일
     }
     _tro.push(rec);
     try { await window.storage.set('trov1', JSON.stringify(_tro)); } catch (er) {}
@@ -54894,8 +55091,8 @@
     await troLoad();
     var x = (_tro || [])[i]; if (!x) return;
     await plnLoad();
-    var slot = _pln.eps.indexOf(null);
-    if (slot < 0) { try { toast('다섯 편이 다 찼어요 — 한 편을 비우고 담아주세요'); } catch (e) {} return; }
+    var slot = _pln.eps.slice(0, plnGoal()).indexOf(null);
+    if (slot < 0) { try { toast('목표 ' + plnGoal() + '편이 다 찼어요 — 목표를 늘리거나 한 편을 비워주세요'); } catch (e) {} return; }
     var t = prompt('이 구조로 새 편 — 제목은?', x.t || '');
     if (t === null) return;
     t = t.trim() || x.t;
@@ -54962,28 +55159,28 @@
     } catch (e) {}
   }
   function plnHomeHtml() {
+    var _goal = plnGoal();
     var nextI = -1, msg = '', sub = '', i;
-    for (i = 0; i < 5; i++) { if (!_pln.eps[i]) { nextI = i; break; } }
+    for (i = 0; i < _goal; i++) { if (!_pln.eps[i]) { nextI = i; break; } }
     if (nextI > -1) {
       msg = '<em>' + (nextI + 1) + '편</em> 정하기';
-      sub = '다섯 편 중 <b style="color:rgba(240,244,255,.9)">' + plnSetN() + '편</b>을 정했어요.<br>후보는 골라만 두면 됩니다.';
+      sub = '목표 ' + _goal + '편 중 <b style="color:rgba(240,244,255,.9)">' + plnSetN() + '편</b>을 정했어요.<br>후보는 골라만 두면 됩니다.';
     } else {
-      for (i = 0; i < 5; i++) { if (_pln.eps[i].step < 3) { nextI = i; break; } }
+      for (i = 0; i < _goal; i++) { if (_pln.eps[i].step < 3) { nextI = i; break; } }
       if (nextI > -1) { msg = '<em>' + (nextI + 1) + '편</em> ' + PLN_STEPS[_pln.eps[nextI].step];
         sub = '이것만 채우면 원고로 넘어갑니다.'; }
       else {
-        for (i = 0; i < 5; i++) { if (_pln.eps[i].step < 5) { nextI = i; break; } }
+        for (i = 0; i < _goal; i++) { if (_pln.eps[i].step < 5) { nextI = i; break; } }
         if (nextI > -1) { msg = '<em>' + (nextI + 1) + '편</em> ' + PLN_STEPS[Math.min(_pln.eps[nextI].step, 4)];
           sub = '기획은 끝났어요 — 이제 만들 차례입니다.'; }
-        else { msg = '이번 주 <em>끝</em>'; sub = '다섯 편 모두 배포까지 갔어요.<br>다음 주 판을 짜도 됩니다.'; }
+        else { msg = '이번 주 <em>끝</em>'; sub = '목표한 편 모두 배포까지 갔어요.<br>다음 주 판을 짜도 됩니다.'; }
       }
     }
-    // v693 · 진행판(사장님 픽: A 챕터 보드 × 세로 구슬) — 옛 5칸 막대를 교체.
-    //   구슬 문법 = 기획 하단 구슬 바와 동일 (●끝냄 · ◎다음 · ○아직 — 벌 아님)
+    // v693 · 진행판(사장님 픽: A 챕터 보드 × 세로 구슬) — v701: 목표 개수만큼, 3열 그리드
     var _doneSteps = 0, _setN = 0;
-    _pln.eps.forEach(function (e) { if (e) { _setN++; _doneSteps += Math.min(e.step || 0, 5); } });
+    _pln.eps.slice(0, _goal).forEach(function (e) { if (e) { _setN++; _doneSteps += Math.min(e.step || 0, 5); } });
     var _wkPct = _setN ? Math.round(_doneSteps / (_setN * 5) * 100) : 0;
-    var bars = [0, 1, 2, 3, 4].map(function (k) {
+    var bars = [0, 1, 2, 3, 4].slice(0, _goal).map(function (k) {
       var e = _pln.eps[k], col = e ? PLN_COLS[k] : '#8792AD';
       var head = '<div class="plb-no">' + (k + 1) + ' EP</div>' +
         '<div class="plb-tt">' + (e ? esc(String(e.t || '').slice(0, 22)) : '아직 안 정함') + '</div>';
@@ -55001,38 +55198,25 @@
           return '<div class="plb-st rest" style="--bc:' + PLN_STEP_COLS[si] + '"><span class="bd"><i></i></span><span class="nm">' + nm + '</span></div>';
         }).join('');
       }
-      var ft = e ? Math.min(e.step, 5) + '/5' : '＋ 정하기';
+      var ft = e ? (e.step >= 5 ? '✦ 완주' : Math.min(e.step, 5) + '/5 · 다음 ' + PLN_STEPS[Math.min(e.step, 4)] + ' ›') : '＋ 정하기';
       // v695 · 우상단 모형 — 편의 «지금 형태» (구슬→별→메달→트로피→후광)
       var tfN = e ? Math.max(1, Math.min(5, e.step || 1)) : 0;
       var tf = e ? '<div class="plb-tf">' + tfFormHtml(tfN, 'tf-c-plan', true) +
         '<s>' + (tfN >= 5 ? '✦ 완주' : TF_NM[tfN - 1]) + '</s></div>' : '';
-      return '<div class="plb-card' + (e ? '' : ' emp') + (_plnCur === k + 1 ? ' on' : '') + '" data-plngo="' + (k + 1) + '" style="--bc:' + col + '">' +
+      var mini = (e && e.thumbs && e.thumbs.length) ? '<img class="plb-mini" src="' + e.thumbs[e.rep || 0] + '" alt="">' : '';
+      return '<div class="plb-card' + (e ? '' : ' emp') + (_plnEp === k && plnSetN() ? ' on' : '') + '" data-plngo="' + (k + 1) + '" style="--bc:' + col + '">' +
         tf + head + '<div class="plb-rail">' + steps + '</div>' +
         '<div class="plb-ft">' + ft + '</div>' +
         (e ? '<div class="plb-bar"><i style="width:' + Math.round(Math.min(e.step, 5) / 5 * 100) + '%"></i></div>' : '') +
-        '</div>';
+        mini + '</div>';
     }).join('');
     var _wkHead = _setN
       ? '<div class="plb-hd"><span class="pct">' + _wkPct + '<i>%</i></span>' +
         '<span class="mt">' + _setN + '편 중 ' + String((_doneSteps / 5).toFixed(1)).replace('.0', '') + '편 끝냄 · 남은 걸음 ' + (_setN * 5 - _doneSteps) + '</span>' +
         '<span class="plb-gbar"><i style="width:' + _wkPct + '%"></i></span></div>'
       : '';
-    // v696 · 요일 판 — 편이 어느 요일에 놓였나 (탭 = 그 편으로 · data-plngo 재사용)
-    var _wkBoard = '';
-    if (_setN) {
-      var _dS = ['월', '화', '수', '목', '금'];
-      var _tI = (new Date()).getDay() - 1;   // 0=월 … 4=금 (주말엔 «오늘» 없음)
-      _wkBoard = '<div class="plwk">' + _dS.map(function (dn, di) {
-        var chips = '';
-        _pln.eps.forEach(function (e, k) {
-          if (!e || e.day !== PLN_DAYS[di]) return;
-          chips += '<span class="plwk-chip' + ((e.step || 0) >= 5 ? ' dn' : '') + '" data-plngo="' + (k + 1) + '" style="--pc:' + PLN_COLS[k] + '">' +
-            (k + 1) + '편' + ((e.step || 0) >= 5 ? ' ✦' : '') + '</span>';
-        });
-        return '<div class="plwk-col' + (di === _tI ? ' today' : '') + '">' +
-          '<span class="d">' + dn + (di === _tI ? '<i>오늘</i>' : '') + '</span>' + chips + '</div>';
-      }).join('') + '</div>';
-    }
+    // v701 · 스케줄(요일 루틴) — 옛 요일 판(plwk) 은퇴, 유리 타임라인이 대신한다
+    var _wkBoard = plscHtml();
     var ideas = [];
     try { ideas = (collects || []).filter(function (c) { return c.kind === 'idea' && !c.executed && (c.memo || '').trim(); }); } catch (e) {}
     var used = plnUsedIds();
@@ -55052,6 +55236,7 @@
       alg.map(function (r) { return '<i style="--gc:' + r.c + '">' + r.k + ' <b>' + (r.now !== null ? Math.round(r.now) : '—') + '</b></i>'; }).join('') +
       '<s>›</s></div>';
     return '<div class="pln-home">' +
+      plscTodayHtml() +
       '<div class="pln-nd" data-plnneedle="1">⌖ <span class="t">' + nd + '</span><s>누구에게 · 무슨 말 ›</s></div>' +
       // v692 · 원고·배포 문 — 트레이닝 도크에서 이사해 온 둘
       '<div class="pln-doors">' +
@@ -55060,29 +55245,50 @@
       '</div>' +
       algHtml +
       '<div class="top">' +
-        '<div class="pln-kick">이번 주 다섯 편</div>' +
+        '<div class="pln-kick">이번 주 ' + _goal + '편</div>' +
         '<h2 class="pln-one">' + msg + '</h2>' +
         '<p class="pln-sub">' + sub + '</p>' +
         (nextI > -1 ? '<button class="pln-go" data-plngo="' + (nextI + 1) + '">작업 시작하기</button>' : '') +
       '</div>' +
       '<div class="pln-whole">' +
-        '<div class="pln-wl"><b>이번 주 전체</b><s>' + plnReadyN() + ' 준비됨 · ' + plnSetN() + ' 정함</s></div>' +
-        _wkHead + _wkBoard +
+        '<div class="pln-wl"><b>스케줄</b><s>' + plnReadyN() + ' 준비됨 · ' + plnSetN() + ' 정함</s></div>' +
+        _wkBoard +
+        '<div class="plsc-goal" style="margin-top:14px"><span class="k">이번 주 목표</span>' +
+          '<button type="button" data-plgoal="-1">−</button><b>' + _goal + '</b><button type="button" data-plgoal="1">＋</button>' +
+          '<span class="k" style="opacity:.7">개</span></div>' +
+        _wkHead +
         '<div class="plb-cols">' + bars + '</div>' +
         '<div class="pln-idea"><div class="ih"><b>💡 모아둔 아이디어</b><s>' + ideas.length + '개</s></div>' + ideaHtml + '</div>' +
       '</div></div>';
   }
 
-  function plnEpHtml(n) {
-    var e = _pln.eps[n - 1];
+  function pv2EpsStrip() {   // v701 · 공정 방 상단 — 이번 주 편들 가로 한 줄 (탭=작업대 교체)
+    var goal = plnGoal(), out = '<div class="pv2-eps">';
+    for (var i = 0; i < goal; i++) {
+      var e = _pln.eps[i];
+      out += '<button type="button" class="pv2-ep' + (i === _plnEp ? ' on' : '') + '" data-pv2ep="' + i + '">' +
+        '<span class="n">' + (i + 1) + '</span>' +
+        (e ? '<span class="t">' + esc(String(e.t || '').slice(0, 24)) + '</span>' : '<span class="t dim">미정</span>') + '</button>';
+    }
+    return out + '</div>';
+  }
+  function plnEpHtml(n) {   // v699 · n = 공정 번호(1~5). 작업 대상 편은 _plnEp — 구슬 바가 곧 공정 워크스페이스
+    var e = _pln.eps[_plnEp];
+    var ghost = false;
+    if (!e && n !== 1) {   // v700 · 빈 공정 = 벽 대신 구조가 비쳐 보이는 고스트 (첫날부터 차 있게)
+      ghost = true;
+      e = { t: '편을 정하면 제목이 여기에', src: '저장소', ref: '—', hook: '', hooks: [], kw: [], voc: {},
+            bone: ['이득&손해', '공감', '이유', '해결', 'CTA'], cuts: [], thumbs: [], step: 1,
+            day: '—', mat: '—', why: '', who: '', point: '', dev: null };
+    }
     if (!e) {
       var cands = plnCandidates(3);
       if (!cands.length) {
-        return '<div class="pln-k">' + n + '편 · 아직 안 정했어요</div>' +
+        return '<div class="pln-k">' + (_plnEp + 1) + '편 · 아직 안 정했어요</div>' +
           '<h2 class="pln-big">무엇을<br>만들까요</h2>' +
           '<div class="pln-empty">고를 후보가 없어요.<br>골대에 분해 결과를 던지거나 💡 아이디어를 적어두면 여기에 올라옵니다.</div>';
       }
-      return '<div class="pln-k">' + n + '편 · 아직 안 정했어요</div>' +
+      return '<div class="pln-k">' + (_plnEp + 1) + '편 · 아직 안 정했어요</div>' +
         '<h2 class="pln-big">무엇을<br>만들까요</h2>' +
         '<p class="pln-why">담아둔 것 · 아이디어에서 <em>세 개만</em> 골라 왔어요.</p>' +
         cands.map(function (x, k) {
@@ -55132,14 +55338,8 @@
         '<b>' + esc(e.ref) + ' 편은 이렇게 ' + (e.bone || []).length + '컷이었어요</b><s>그 컷 구성 그대로 가져오기</s></span><span class="go">›</span></div>';
     var cutN = (e.cuts || []).length;
     var shots = (e.cuts || []).filter(function (c) { return c.v === '촬영'; }).length;
-    // v698b · 시안 그대로 — 단계 = 워크스페이스. 상단 레일 5탭, 한 번에 한 구간만 보인다.
-    var curSt = (_pv2St >= 0 && _pv2St <= 4) ? _pv2St : Math.min(e.step, 4);
-    var rail = '<div class="pv2-rail">' + PLN_STEPS.map(function (nm2, si) {
-      var full = si === 0 ? true : e.step >= si + 1;
-      return '<button type="button" class="pv2-tab' + (si === curSt ? ' on' : '') + '" data-pv2go="' + si + '" style="--sc:' + PLN_STEP_COLS[si] + '">' +
-        '<i class="bd2' + (full ? ' full' : '') + '"></i>' +
-        '<span class="no">0' + (si + 1) + '</span><span class="nm">' + nm2 + '</span></button>';
-    }).join('') + '</div>';
+    // v699 · 구슬 바가 레일 — 이 함수는 지금 구슬(공정)의 작업실만 그린다
+    var curSt = n - 1;
     var body = '';
     if (curSt === 0) {
       body = pv2h('1', '리서치', true) +
@@ -55184,15 +55384,39 @@
           ? '<button class="pln-act" data-plnwrite="1">✎ ' + (e.step >= 4 ? '원고 다시 보기' : '이 편 원고 쓰러 가기') + '</button>'
           : '<button class="pln-act" data-plnnext="1">' + (e.hook ? '✨ 구조로 컷 깔기 — 디벨롭' : '후킹부터 채우기 — 분석') + '</button>');
     } else {
+      // v701 · 배포 방 = 위(내보내기) + 아래(서재 — 여태 내보낸 권들)
+      if (!_troLoaded) { try { troLoad().then(function () { if (_plnCur === 5) plnRenderWs(false); }); } catch (er) {} }
+      var books = _troLoaded ? (_tro || []) : [];
+      var shelf = '<div class="pv2-shelf"><div class="sh2">📚 서재 — 내보낸 편들</div>' +
+        (books.length
+          ? '<div class="pv2-books">' + books.slice().reverse().slice(0, 12).map(function (x, ri) {
+              var idx = books.length - 1 - ri;
+              var cv = x.thumb ? '<div class="cv hasimg"><img src="' + x.thumb + '" alt=""></div>'
+                               : '<div class="cv">' + esc(String(x.t || '').slice(0, 12)) + '</div>';
+              var perf = (typeof x.rate === 'number') ? ' <b>' + x.rate + '%</b>' + (x.rate >= 5 ? ' ✦' : '') : '';
+              return '<div class="pv2-bk">' + cv + '<div class="meta"><div class="t">' + esc(String(x.t || '').slice(0, 24)) + '</div>' +
+                '<div class="s">' + esc(x.wk || '') + perf + '</div>' +
+                (x.learn ? '<div class="s">💡 ' + esc(String(x.learn).slice(0, 26)) + '</div>' : '') +
+                '<button type="button" class="rev" data-pv2rev="' + idx + '">' + (typeof x.rate === 'number' ? '회고 고치기' : '📊 회고 적기') + '</button>' +
+                '</div></div>';
+            }).join('') + '</div>'
+          : '<div class="pln-fld empty"><div class="v">배포하면 여기 권으로 꽂힙니다</div><div class="m">썸네일 · 성과 · 배운 것이 함께 영구 보관돼요</div></div>') +
+        '</div>';
       body = pv2h('5', '배포', e.step >= 5) +
         (e.step >= 4
           ? '<button class="pln-act" data-plndist="1">⬡ 배포로 보내기' + (e.step >= 5 ? ' — 다녀옴 ✓' : '') + '</button>'
-          : '<div class="pln-fld empty"><div class="v">원고를 완성하면 배포가 열립니다</div><div class="m">배포하면 트로피로 수확됩니다</div></div>');
+          : '<div class="pln-fld empty"><div class="v">원고를 완성하면 배포가 열립니다</div><div class="m">배포하면 아래 서재에 권으로 꽂힙니다</div></div>') +
+        shelf;
     }
-    return '<div class="pln-k">' + n + '편 · ' + esc(e.src) + '에서</div>' +
+    if (ghost) {
+      return '<div class="pln-k">공정 0' + n + ' · ' + PLN_STEPS[n - 1] + '</div>' +
+        '<div class="pv2-ghostnote" data-plnslot="1">리서치에서 편을 정하면 이 방이 이렇게 채워집니다 — 눌러서 정하러 가기 ›</div>' +
+        '<div class="pv2-ghost"><h2 class="pln-big sm">' + esc(e.t) + '</h2>' + body + '</div>';
+    }
+    return '<div class="pln-k">' + (_plnEp + 1) + '편 · ' + esc(e.src) + '에서</div>' +
       '<h2 class="pln-big sm">' + esc(e.t) + '</h2>' +
-      rail + body +
-      '<button class="pln-act2" data-plnagain="1">다른 걸로 바꾸기</button>';
+      body +
+      (curSt === 0 ? '<button class="pln-act2" data-plnagain="1">다른 걸로 바꾸기</button>' : '');
   }
 
   /* ══ v694 · ④원고 — 편 소속 «좌우 나란히» 쓰기 화면 (㉮안)
@@ -55294,7 +55518,7 @@
         '</div></div></div>';
   }
   function plwCommit() {
-    var e = _pln.eps[_plnCur - 1], ta = document.getElementById('plw-ta');
+    var e = _pln.eps[_plnEp], ta = document.getElementById('plw-ta');
     if (e && ta) { e.draft = ta.value; plnSave(); }
   }
   function plwKwAdd(e, t) {
@@ -55414,7 +55638,7 @@
     document.head.appendChild(s);
   }
   function plwBind(wsin) {
-    var e = _pln.eps[_plnCur - 1]; if (!e) return;
+    var e = _pln.eps[_plnEp]; if (!e) return;
     var bk = wsin.querySelector('[data-plwback]');
     if (bk) bk.onclick = function () { plwCommit(); _plnWrite = 0; plnRefresh(true); };
     var fd = wsin.querySelector('[data-plwfold]');
@@ -55473,7 +55697,7 @@
     };
   }
   function plwPickOpen() {
-    var e = _pln.eps[_plnCur - 1]; if (!e) return;
+    var e = _pln.eps[_plnEp]; if (!e) return;
     var old = document.getElementById('plw-pick'); if (old) old.remove();
     var pool = [];
     try {
@@ -55506,8 +55730,8 @@
   }
   function plnRenderWs(anim) {
     var wsin = $pln('pln-wsin'); if (!wsin) return;
-    if (_plnWrite && !(_plnCur > 0 && _pln.eps[_plnCur - 1])) _plnWrite = 0;
-    var html = _plnCur === 0 ? plnHomeHtml() : (_plnWrite ? plnWriteHtml(_plnCur) : plnEpHtml(_plnCur));
+    if (_plnWrite && !(_plnCur > 0 && _pln.eps[_plnEp])) _plnWrite = 0;
+    var html = _plnCur === 0 ? plnHomeHtml() : (_plnWrite ? plnWriteHtml(_plnEp + 1) : (pv2EpsStrip() + plnEpHtml(_plnCur)));
     if (anim) {
       wsin.classList.add('out');
       setTimeout(function () {
@@ -55523,15 +55747,13 @@
     var wsin = $pln('pln-wsin'); if (!wsin) return;
     if (wsin.querySelector('[data-plwback]')) { plwBind(wsin); return; }   // v694 · ④원고 화면
     wsin.querySelectorAll('[data-plngo]').forEach(function (el) {
-      el.onclick = function () { plnGo(+el.dataset.plngo); };
-    });
-    // v698b · 공정 탭 — 단계 워크스페이스 이동
-    wsin.querySelectorAll('[data-pv2go]').forEach(function (b) {
-      b.onclick = function () { _pv2St = +b.dataset.pv2go; plnRenderWs(false); };
+      el.onclick = function () { plnGoEp(+el.dataset.plngo - 1); };   // v699 · 편 번호 → 작업대에 올리기
     });
     wsin.querySelectorAll('[data-plnpick]').forEach(function (el) {
-      el.onclick = function () { plnPick(_plnCur, +el.dataset.plnpick); };
+      el.onclick = function () { plnPick(_plnEp + 1, +el.dataset.plnpick); };
     });
+    var sl = wsin.querySelector('[data-plnslot]');   // v699 · 빈 공정에서 리서치로
+    if (sl) sl.onclick = function () { plnGo(1); };
     wsin.querySelectorAll('[data-plnidea]').forEach(function (el) {
       el.onclick = function () { plnFromIdea(el.dataset.plnidea); };
     });
@@ -55552,11 +55774,11 @@
     var ag = wsin.querySelector('[data-plnagain]');
     if (ag) ag.onclick = async function () {
       if (!confirm('이 편을 비우고 다시 고를까요?')) return;
-      _pln.eps[_plnCur - 1] = null; await plnSave(); plnRefresh(true);
+      _pln.eps[_plnEp] = null; await plnSave(); plnRefresh(true);
     };
     var st = wsin.querySelector('[data-plnsteal]');
     if (st) st.onclick = async function () {
-      var e = _pln.eps[_plnCur - 1]; if (!e) return;
+      var e = _pln.eps[_plnEp]; if (!e) return;
       e.cuts = (e.bone || []).map(function (lb) { return plnCutFor(lb); });
       e.step = Math.max(e.step, 3);
       await plnSave(); plnRefresh(true);
@@ -55564,7 +55786,7 @@
     };
     var hk = wsin.querySelector('[data-plnhook]');
     if (hk) hk.onclick = async function () {
-      var e = _pln.eps[_plnCur - 1]; if (!e) return;
+      var e = _pln.eps[_plnEp]; if (!e) return;
       var v = prompt('첫 3초에 무슨 말로 잡을까요?', e.hook || '');
       if (v === null) return;
       e.hook = v.trim(); if (e.hook) e.step = Math.max(e.step, 2);
@@ -55572,9 +55794,9 @@
     };
     var nx = wsin.querySelector('[data-plnnext]');
     if (nx) nx.onclick = function () {
-      var e = _pln.eps[_plnCur - 1]; if (!e) return;
-      if (!e.hook) {   // v698b · 최종 후킹부터 — 분석 탭으로 데려가 입력칸 포커스
-        _pv2St = 1; plnRenderWs(false);
+      var e = _pln.eps[_plnEp]; if (!e) return;
+      if (!e.hook) {   // v699 · 최종 후킹부터 — 분석 구슬로 데려가 입력칸 포커스
+        _plnCur = 2; plnRefresh(false); plnMoveTo(plnSlotX(2));
         var hi = document.getElementById('pv2-hkin'); if (hi) hi.focus();
         try { toast('후킹 문구를 모아서 ★최종을 골라주세요'); } catch (er) {}
         return;
@@ -55585,7 +55807,7 @@
     // v698 · 후킹 보드 — 최종/예비/삭제/직접 쓰기
     wsin.querySelectorAll('[data-pv2fin]').forEach(function (b) {
       b.onclick = async function () {
-        var e = _pln.eps[_plnCur - 1]; if (!e || !e.hooks) return;
+        var e = _pln.eps[_plnEp]; if (!e || !e.hooks) return;
         var h = e.hooks[+b.dataset.pv2fin]; if (!h) return;
         if (h.role === 'fin') { h.role = ''; e.hook = ''; }
         else {
@@ -55597,7 +55819,7 @@
     });
     wsin.querySelectorAll('[data-pv2bak]').forEach(function (b) {
       b.onclick = async function () {
-        var e = _pln.eps[_plnCur - 1]; if (!e || !e.hooks) return;
+        var e = _pln.eps[_plnEp]; if (!e || !e.hooks) return;
         var h = e.hooks[+b.dataset.pv2bak]; if (!h) return;
         if (h.role === 'bak') h.role = '';
         else {
@@ -55610,7 +55832,7 @@
     });
     wsin.querySelectorAll('[data-pv2hkdel]').forEach(function (b) {
       b.onclick = async function () {
-        var e = _pln.eps[_plnCur - 1]; if (!e || !e.hooks) return;
+        var e = _pln.eps[_plnEp]; if (!e || !e.hooks) return;
         var i = +b.dataset.pv2hkdel;
         if (e.hooks[i] && e.hooks[i].role === 'fin') e.hook = '';
         e.hooks.splice(i, 1);
@@ -55621,7 +55843,7 @@
     if (hin) hin.addEventListener('keydown', function (ev) {
       if (ev.key !== 'Enter' || ev.isComposing || ev.keyCode === 229) return;   // 한글 조합 가드
       ev.preventDefault();
-      var e = _pln.eps[_plnCur - 1]; if (!e) return;
+      var e = _pln.eps[_plnEp]; if (!e) return;
       var t = hin.value.trim(); if (!t) return;
       e.hooks = e.hooks || [];
       if (e.hooks.length >= 10) { try { toast('후킹은 10개까지 — 이제 좁힐 차례예요'); } catch (er) {} return; }
@@ -55631,7 +55853,7 @@
     // v698 · 시청자 공감 — 댓글 담기/빼기
     wsin.querySelectorAll('[data-pv2voc]').forEach(function (b) {
       b.onclick = async function () {
-        var e = _pln.eps[_plnCur - 1]; if (!e) return;
+        var e = _pln.eps[_plnEp]; if (!e) return;
         var v = prompt('시청자의 목소리 한 줄 (댓글 복붙)', '');
         if (v === null || !v.trim()) return;
         e.voc = e.voc || {};
@@ -55644,7 +55866,7 @@
     wsin.querySelectorAll('[data-pv2rep]').forEach(function (t) {
       t.onclick = async function (ev) {
         if (ev.target && ev.target.hasAttribute && ev.target.hasAttribute('data-pv2thdel')) return;
-        var e = _pln.eps[_plnCur - 1]; if (!e) return;
+        var e = _pln.eps[_plnEp]; if (!e) return;
         e.rep = +t.dataset.pv2rep;
         await plnSave(); plnRefresh(false);
       };
@@ -55653,7 +55875,7 @@
       s.onclick = async function (ev) {
         ev.stopPropagation();
         if (!confirm('이 썸네일을 뺄까요?')) return;
-        var e = _pln.eps[_plnCur - 1]; if (!e || !e.thumbs) return;
+        var e = _pln.eps[_plnEp]; if (!e || !e.thumbs) return;
         var i = +s.dataset.pv2thdel;
         e.thumbs.splice(i, 1);
         if ((e.rep || 0) >= e.thumbs.length) e.rep = 0;
@@ -55672,7 +55894,7 @@
     if (window.__pv2PasteH) document.removeEventListener('paste', window.__pv2PasteH);
     window.__pv2PasteH = function (ev) {
       try {
-        if (_plnCur < 1 || _plnWrite || !_pln.eps[_plnCur - 1]) return;
+        if (_plnCur < 1 || _plnWrite || !_pln.eps[_plnEp]) return;
         var wsel = $pln('pln-wsin'); if (!wsel || !wsel.offsetParent) return;   // 기획 화면이 보일 때만
         var items = (ev.clipboardData || {}).items || [];
         for (var i = 0; i < items.length; i++) {
@@ -55688,7 +55910,7 @@
     // v698 · 디벨롭 4공식 픽 — 고르면 편이 「내 것」이 된다 (해제해도 구슬은 안 뺏음 — A안)
     wsin.querySelectorAll('[data-pv2dev]').forEach(function (b) {
       b.onclick = async function () {
-        var e = _pln.eps[_plnCur - 1]; if (!e) return;
+        var e = _pln.eps[_plnEp]; if (!e) return;
         var i = +b.dataset.pv2dev;
         e.dev = (e.dev === i) ? null : i;
         if (typeof e.dev === 'number') e.step = Math.max(e.step, 3);
@@ -55698,7 +55920,7 @@
     wsin.querySelectorAll('[data-pv2vocdel]').forEach(function (s) {
       s.onclick = async function () {
         if (!confirm('이 한 줄을 뺄까요?')) return;
-        var e = _pln.eps[_plnCur - 1]; if (!e || !e.voc) return;
+        var e = _pln.eps[_plnEp]; if (!e || !e.voc) return;
         var kv = s.dataset.pv2vocdel.split(':');
         (e.voc[kv[0]] || []).splice(+kv[1], 1);
         await plnSave(); plnRefresh(false);
@@ -55706,7 +55928,7 @@
     });
     wsin.querySelectorAll('[data-plncutadd]').forEach(function (el) {
       el.onclick = async function () {
-        var e = _pln.eps[_plnCur - 1]; if (!e) return;
+        var e = _pln.eps[_plnEp]; if (!e) return;
         var v = prompt('이 컷에서 무엇을 보여줄까요?', '');
         if (v === null || !v.trim()) return;
         var how = prompt('어떻게 찍을까요? (비워도 됩니다)', '') || '탭해서 적기';
@@ -55719,14 +55941,14 @@
     wsin.querySelectorAll('[data-plncutdel]').forEach(function (el) {
       el.onclick = async function (ev) {
         ev.stopPropagation();
-        var e = _pln.eps[_plnCur - 1]; if (!e) return;
+        var e = _pln.eps[_plnEp]; if (!e) return;
         e.cuts.splice(+el.dataset.plncutdel, 1);
         await plnSave(); plnRefresh(true);
       };
     });
     wsin.querySelectorAll('[data-plncut]').forEach(function (el) {
       el.onclick = async function () {
-        var e = _pln.eps[_plnCur - 1]; if (!e) return;
+        var e = _pln.eps[_plnEp]; if (!e) return;
         var k = +el.dataset.plncut, ct = e.cuts[k]; if (!ct) return;
         var v = prompt('이 컷에서 무엇을 보여줄까요?', ct.b);
         if (v === null) return;
@@ -55738,14 +55960,14 @@
     });
     var dy = wsin.querySelector('[data-plnday]');
     if (dy) dy.onclick = async function () {
-      var e = _pln.eps[_plnCur - 1]; if (!e) return;
+      var e = _pln.eps[_plnEp]; if (!e) return;
       var i = PLN_DAYS.indexOf(e.day);
       e.day = PLN_DAYS[(i + 1) % PLN_DAYS.length];
       await plnSave(); plnRefresh(false);
     };
     var why = wsin.querySelector('[data-plnwhy]');   // v694 · 베끼기와 원리 뽑기를 가르는 한 줄
     if (why) why.onclick = async function () {
-      var e = _pln.eps[_plnCur - 1]; if (!e) return;
+      var e = _pln.eps[_plnEp]; if (!e) return;
       var v = prompt('이 벤치마킹이 터진 이유가 뭘까요? (한 줄)', e.why || '');
       if (v === null) return;
       e.why = v.trim();
@@ -55754,7 +55976,7 @@
     // v698 · 리서치 브리프 재료 — 누구에게 · 핵심 포인트 · 칠하기 연결
     var who = wsin.querySelector('[data-pv2who]');
     if (who) who.onclick = async function () {
-      var e = _pln.eps[_plnCur - 1]; if (!e) return;
+      var e = _pln.eps[_plnEp]; if (!e) return;
       var v = prompt('이 편이 잡을 한 사람은 누구인가요?', e.who || '');
       if (v === null) return;
       e.who = v.trim();
@@ -55762,7 +55984,7 @@
     };
     var pt = wsin.querySelector('[data-pv2point]');
     if (pt) pt.onclick = async function () {
-      var e = _pln.eps[_plnCur - 1]; if (!e) return;
+      var e = _pln.eps[_plnEp]; if (!e) return;
       var v = prompt('이 편을 보고 나면 뭘 믿게 되나요? (핵심 포인트 한 문장)', e.point || '');
       if (v === null) return;
       e.point = v.trim();
@@ -55770,24 +55992,103 @@
     };
     var pnt = wsin.querySelector('[data-pv2paint]');
     if (pnt) pnt.onclick = function () {
-      var e = _pln.eps[_plnCur - 1]; if (!e || !e.rid) return;
+      var e = _pln.eps[_plnEp]; if (!e || !e.rid) return;
       try { prpOpenFor(e.rid); } catch (er) { try { toast('이 카드엔 원고가 없어요'); } catch (er2) {} }
     };
     var wr = wsin.querySelector('[data-plnwrite]');
     if (wr) wr.onclick = function () {   // v694 · 편 소속 ④원고 화면 — «완성»을 눌러야 4단계가 찬다
-      if (!_pln.eps[_plnCur - 1]) return;
+      if (!_pln.eps[_plnEp]) return;
       _plnWrite = 1; _plnKwSel = -1; plnRenderWs(true);
     };
     var ds = wsin.querySelector('[data-plndist]');   // v649 · 배포 문
     if (ds) ds.onclick = async function () {
-      var e = _pln.eps[_plnCur - 1];
+      var e = _pln.eps[_plnEp];
       if (e && e.step < 5) { e.step = 5; try { await plnSave(); } catch (er) {} }
       if (e) { try { troAdd(e.t, _pln.wk, e); } catch (er) {} }   // v695 · 완주 수확 → 트로피 로그(영구)
       try { switchWorkspace('studio'); st2SetTab('osmu'); } catch (er) {}
     };
+    // v701 · 스케줄 · 목표 · 오늘 한 줄 · 편 스트립 · 회고
+    wsin.querySelectorAll('[data-plgoal]').forEach(function (b) {
+      b.onclick = async function () {
+        var g = Math.max(1, Math.min(5, plnGoal() + (+b.dataset.plgoal)));
+        if (g === plnGoal()) return;
+        _pln.goal = g;
+        if (_plnEp >= g) _plnEp = 0;
+        await plnSave(); plnRefresh(false);
+      };
+    });
+    var tdb = wsin.querySelector('[data-plsctoday]');
+    if (tdb) tdb.onclick = function () { plnGo(+tdb.dataset.plsctoday); };
+    wsin.querySelectorAll('[data-plscsg]').forEach(function (el) {
+      el.onclick = function () { _plscOpen = (_plscOpen === +el.dataset.plscsg) ? -1 : +el.dataset.plscsg; plnRenderWs(false); };
+    });
+    wsin.querySelectorAll('[data-plscch]').forEach(function (el) {
+      el.onclick = async function () {
+        var sg = _plsc && _plsc.segs[_plscOpen]; if (!sg) return;
+        var i2 = sg.s.indexOf(el.dataset.plscch);
+        if (i2 > -1) sg.s.splice(i2, 1); else sg.s.push(el.dataset.plscch);
+        await plscSave(); plnRenderWs(false);
+      };
+    });
+    wsin.querySelectorAll('[data-plscsw]').forEach(function (el) {
+      el.onclick = async function () {
+        var sg = _plsc && _plsc.segs[_plscOpen]; if (!sg) return;
+        sg.c = el.dataset.plscsw === 'auto' ? null : el.dataset.plscsw;
+        await plscSave(); plnRenderWs(false);
+      };
+    });
+    var mgl = wsin.querySelector('[data-plscmgl]');
+    if (mgl) mgl.onclick = async function () {
+      var sg = _plsc.segs[_plscOpen], left = _plsc.segs[_plscOpen - 1]; if (!sg || !left) return;
+      left.d = left.d.concat(sg.d);
+      sg.s.forEach(function (x) { if (left.s.indexOf(x) < 0) left.s.push(x); });
+      if (sg.c && !left.c) left.c = sg.c;
+      _plsc.segs.splice(_plscOpen, 1); _plscOpen = _plscOpen - 1;
+      await plscSave(); plnRenderWs(false);
+    };
+    var mgr = wsin.querySelector('[data-plscmgr]');
+    if (mgr) mgr.onclick = async function () {
+      var sg = _plsc.segs[_plscOpen], right = _plsc.segs[_plscOpen + 1]; if (!sg || !right) return;
+      sg.d = sg.d.concat(right.d);
+      right.s.forEach(function (x) { if (sg.s.indexOf(x) < 0) sg.s.push(x); });
+      if (right.c && !sg.c) sg.c = right.c;
+      _plsc.segs.splice(_plscOpen + 1, 1);
+      await plscSave(); plnRenderWs(false);
+    };
+    var spl = wsin.querySelector('[data-plscspl]');
+    if (spl) spl.onclick = async function () {
+      var sg = _plsc.segs[_plscOpen]; if (!sg) return;
+      var parts = sg.d.map(function (d) { return { d: [d], s: sg.s.slice(), c: sg.c }; });
+      _plsc.segs.splice.apply(_plsc.segs, [_plscOpen, 1].concat(parts));
+      await plscSave(); plnRenderWs(false);
+    };
+    wsin.querySelectorAll('[data-pv2ep]').forEach(function (b) {
+      b.onclick = function () {
+        if (_plnEp === +b.dataset.pv2ep) return;
+        _plnEp = +b.dataset.pv2ep; _plnKwSel = -1; plnRenderWs(false);
+      };
+    });
+    wsin.querySelectorAll('[data-pv2rev]').forEach(function (b) {
+      b.onclick = async function () {   // v701 · 회고 — 숫자 두 개면 5% 판정이 나온다
+        await troLoad();
+        var x = _tro[+b.dataset.pv2rev]; if (!x) return;
+        var v = prompt('조회수는 얼마였나요? (숫자만)', x.views || '');
+        if (v === null) return;
+        var s = prompt('저장+공유는 몇 개였나요? (숫자만)', x.eng || '');
+        if (s === null) return;
+        var l = prompt('이번 편에서 배운 것 한 줄', x.learn || '');
+        x.views = parseInt(String(v).replace(/[^0-9]/g, ''), 10) || 0;
+        x.eng = parseInt(String(s).replace(/[^0-9]/g, ''), 10) || 0;
+        x.rate = x.views ? Math.round(x.eng / x.views * 1000) / 10 : 0;
+        if (l !== null) x.learn = String(l).trim();
+        try { await window.storage.set('trov1', JSON.stringify(_tro)); } catch (er) {}
+        plnRenderWs(false);
+        try { toast(x.rate >= 5 ? '✦ ' + x.rate + '% — 5% 통과!' : '기록됨 — 저장·공유율 ' + x.rate + '%'); } catch (er) {}
+      };
+    });
     // v698 · ②분석 키워드 서랍 — ④원고에서 이사해 온 층 (plw 함수 재사용, 마운트만 편 화면)
     if (wsin.querySelector('#plw-kwbar')) {
-      var ke = _pln.eps[_plnCur - 1];
+      var ke = _pln.eps[_plnEp];
       if (ke) {
         plwKwBind(ke);
         try {
@@ -55805,19 +56106,27 @@
     var bd = $pln('pln-bead'); if (bd) bd.style.setProperty('--plc', c);
     var dot = $pln('pln-bdot'); if (dot) dot.style.background = c;
     var au = $pln('pln-aura');
-    var filled = _plnCur === 0 || !!_pln.eps[_plnCur - 1];
+    var filled = _plnCur === 0 || !!_pln.eps[_plnEp];
     if (au) { au.style.setProperty('--plc', c); au.style.opacity = filled ? '.28' : '.13'; }
     if (bd) bd.classList.toggle('empty', !filled);
     var ic = $pln('pln-beadic');
-    if (ic) ic.textContent = _plnCur === 0 ? '⌂' : (_pln.eps[_plnCur - 1] ? '✓' : '＋');
-    var nm = $pln('pln-nm'); if (nm) nm.textContent = _plnCur === 0 ? 'P L A N' : (_plnCur + ' 편');
+    var _se = _pln.eps[_plnEp];
+    var _sd = _plnCur > 0 && _se && (_plnCur === 1 ? true : _se.step >= _plnCur);
+    if (ic) ic.textContent = _plnCur === 0 ? '⌂' : (_sd ? '✓' : (_se ? '›' : '＋'));
+    var nm = $pln('pln-nm'); if (nm) nm.textContent = _plnCur === 0 ? 'P L A N' : PLN_STEPS[_plnCur - 1];
     var ft = $pln('pln-foot');
-    if (ft) ft.textContent = _plnCur === 0 ? '아래 구슬로 편을 옮겨요' : '구슬을 탭하거나 끌어서 옮겨요';
+    if (ft) ft.textContent = _plnCur === 0 ? '아래 구슬 = 다섯 공정이에요' : (_se ? (_plnEp + 1) + '편 작업 중 · 구슬로 공정 이동' : '홈에서 편을 골라 올려요');
   }
   function plnRefresh(anim) { plnRenderSlots(); plnReflect(); plnRenderWs(anim); }
   function plnGo(i) {
     if (i === _plnCur) return;
-    _plnCur = i; _plnWrite = 0; _plnKwSel = -1; _pv2St = -1; plnRefresh(true); plnMoveTo(plnSlotX(i));
+    _plnCur = i; _plnWrite = 0; _plnKwSel = -1; plnRefresh(true); plnMoveTo(plnSlotX(i));
+  }
+  function plnGoEp(k) {   // v699 · 진행판·스케줄에서 편을 작업대에 올린다 → 다음 할 공정으로
+    _plnEp = Math.max(0, Math.min(plnGoal() - 1, k));
+    var e = _pln.eps[_plnEp];
+    var tgt = !e ? 1 : (e.step <= 1 ? 1 : Math.min((e.step || 1) + 1, 5));
+    if (_plnCur === tgt) plnRefresh(true); else plnGo(tgt);
   }
   async function plnPick(n, k) {
     var x = plnCandidates(3)[k]; if (!x) return;
@@ -55826,22 +56135,22 @@
       bone: plnBoneOf(x.row), cuts: [], day: PLN_DAYS[n - 1],
       mat: x.row ? '이 카드에서' : '아이디어 메모', step: 1
     };
-    _pv2St = 0;   // v698b · 편을 정하면 리서치부터
-    await plnSave(); plnRefresh(true);
+    await plnSave(); plnRefresh(true);   // v699 · 정한 자리(리서치)에서 이어감
   }
   async function plnFromIdea(id) {
     var c = null;
     try { c = (collects || []).filter(function (x) { return x.id === id; })[0]; } catch (e) {}
     if (!c) return;
-    var slot = _pln.eps.indexOf(null);
-    if (slot < 0) { try { toast('다섯 편이 다 찼어요 — 한 편을 비우고 담아주세요'); } catch (e) {} return; }
+    var slot = _pln.eps.slice(0, plnGoal()).indexOf(null);
+    if (slot < 0) { try { toast('목표 ' + plnGoal() + '편이 다 찼어요 — 목표를 늘리거나 한 편을 비워주세요'); } catch (e) {} return; }
     _pln.eps[slot] = {
       rid: c.id, t: (c.memo || '').trim().slice(0, 40), src: '아이디어', ref: '—', hook: '',
       bone: ['이득&손해', '공감', '이유', '해결', 'CTA'], cuts: [], day: PLN_DAYS[slot],
       mat: '아이디어 메모', step: 1
     };
     await plnSave();
-    plnGo(slot + 1);
+    _plnEp = slot;
+    if (_plnCur === 1) plnRefresh(true); else plnGo(1);   // v699 · 담자마자 리서치 작업대로
     try { toast('💡 ' + (slot + 1) + '편으로 담았어요'); } catch (e) {}
   }
 
@@ -55894,7 +56203,7 @@
     var wk = $pln('pln-wk');
     if (wk) { var d = new Date(); wk.textContent = (d.getMonth() + 1) + '월 ' + Math.ceil(d.getDate() / 7) + '주'; }
     plnRefresh(false);
-    if (window.__plnGoto) { var _g = window.__plnGoto; window.__plnGoto = null; plnGo(_g); }   // v696 · 트로피에서 깐 편으로 바로
+    if (window.__plnGoto) { var _g = window.__plnGoto; window.__plnGoto = null; plnGoEp(_g - 1); }   // v696 · 트로피에서 깐 편으로 바로
     requestAnimationFrame(function () {
       plnFit(); _plnX = plnSlotX(_plnCur); _plnTgt = _plnX; plnPaint(_plnX);
     });
