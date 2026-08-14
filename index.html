@@ -584,6 +584,19 @@
     background:radial-gradient(circle at 35% 30%, rgba(255,255,255,.85), var(--sc) 62%);
     box-shadow:0 0 7px var(--sc); }
   .pv2-h .ln{ flex:1; height:1px; background:rgba(255,255,255,.08); }
+  .pv2-rail{ display:flex; gap:6px; margin:2px 0 16px; overflow-x:auto; padding-bottom:4px; }
+  .pv2-tab{ position:relative; flex:1; min-width:62px; display:flex; flex-direction:column; align-items:flex-start; gap:1px;
+    background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.09); border-radius:12px;
+    padding:8px 10px 7px; cursor:pointer; font:inherit; transition:.15s; }
+  .pv2-tab .no{ font:800 9px/1 'JetBrains Mono',monospace; color:var(--sc); opacity:.7; letter-spacing:.06em; }
+  .pv2-tab .nm{ font-size:11.5px; font-weight:800; color:#8FA0BC; }
+  .pv2-tab .bd2{ position:absolute; top:7px; right:8px; width:9px; height:9px; border-radius:50%;
+    border:1.5px solid rgba(255,255,255,.2); font-style:normal; }
+  .pv2-tab .bd2.full{ border-color:transparent;
+    background:radial-gradient(circle at 35% 30%, rgba(255,255,255,.85), var(--sc) 62%);
+    box-shadow:0 0 6px var(--sc); }
+  .pv2-tab.on{ border-color:var(--sc); box-shadow:0 0 0 1px var(--sc); background:rgba(255,255,255,.05); }
+  .pv2-tab.on .nm{ color:#EDF2FA; }
   .pv2-hks{ display:flex; flex-direction:column; gap:6px; }
   .pv2-hk{ display:flex; align-items:center; gap:6px; padding:8px 10px; border-radius:10px;
     background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.09); }
@@ -54688,7 +54701,7 @@
     }
     return { b: lb + ' — 무엇을 보여줄까요', s: '탭해서 어떻게 찍을지 적기', v: '—' };
   }
-  var _pln = null, _plnCur = 0, _plnInited = false, _plnLoaded = false, _plnWrite = 0, _plnKwSel = -1;
+  var _pln = null, _plnCur = 0, _plnInited = false, _plnLoaded = false, _plnWrite = 0, _plnKwSel = -1, _pv2St = -1;
   var PLN_W = 326, PLN_H = 60, PLN_R = 24, PLN_RB = 21, PLN_S = 12;
   var _plnRaf = 0, _plnX = 0, _plnTgt = 0, _plnVel = 0, _plnRun = false;
   var $pln = function (id) { return document.getElementById(id); };
@@ -55119,55 +55132,66 @@
         '<b>' + esc(e.ref) + ' 편은 이렇게 ' + (e.bone || []).length + '컷이었어요</b><s>그 컷 구성 그대로 가져오기</s></span><span class="go">›</span></div>';
     var cutN = (e.cuts || []).length;
     var shots = (e.cuts || []).filter(function (c) { return c.v === '촬영'; }).length;
+    // v698b · 시안 그대로 — 단계 = 워크스페이스. 상단 레일 5탭, 한 번에 한 구간만 보인다.
+    var curSt = (_pv2St >= 0 && _pv2St <= 4) ? _pv2St : Math.min(e.step, 4);
+    var rail = '<div class="pv2-rail">' + PLN_STEPS.map(function (nm2, si) {
+      var full = si === 0 ? true : e.step >= si + 1;
+      return '<button type="button" class="pv2-tab' + (si === curSt ? ' on' : '') + '" data-pv2go="' + si + '" style="--sc:' + PLN_STEP_COLS[si] + '">' +
+        '<i class="bd2' + (full ? ' full' : '') + '"></i>' +
+        '<span class="no">0' + (si + 1) + '</span><span class="nm">' + nm2 + '</span></button>';
+    }).join('') + '</div>';
+    var body = '';
+    if (curSt === 0) {
+      body = pv2h('1', '리서치', true) +
+        '<div class="pln-sec">' +
+          '<div class="pln-rowl" data-plnwhy="1"><span class="k">왜 터짐</span><span class="v">' + (e.why ? '<em>' + esc(e.why) + '</em>' : '이게 터진 이유를 한 줄로') + '</span><span class="go">›</span></div>' +
+          '<div class="pln-rowl" data-pv2who="1"><span class="k">누구에게</span><span class="v">' + (e.who ? '<em>' + esc(e.who) + '</em>' : '이 편이 잡을 한 사람') + '</span><span class="go">›</span></div>' +
+          '<div class="pln-rowl" data-pv2point="1"><span class="k">핵심 포인트</span><span class="v">' + (e.point ? '<em>' + esc(e.point) + '</em>' : '보고 나면 믿게 될 한 문장') + '</span><span class="go">›</span></div>' +
+          (e.rid ? '<div class="pln-rowl" data-pv2paint="1"><span class="k">🖍 칠하기</span><span class="v">원본 원고에서 패턴 캐내기</span><span class="go">›</span></div>' : '') +
+          '<div class="pln-rowl" data-plnmat="1"><span class="k">재료</span><span class="v">' + esc(e.mat || '담아둔 카드에서') + '</span><span class="go">›</span></div>' +
+          '<div class="pln-rowl" data-plnday="1"><span class="k">언제</span><span class="v"><em>' + esc(e.day) + '</em></span><span class="go">›</span></div></div>' +
+        '<div class="pln-sec"><div class="pln-sech"><b>참고 썸네일</b><s>' + ((e.thumbs || []).length) + '/5 · 탭=대표</s></div>' +
+          '<div class="pv2-ths">' + (e.thumbs || []).map(function (src, i) {
+            var rep = (e.rep || 0) === i;
+            return '<div class="pv2-t' + (rep ? ' rep' : '') + '" data-pv2rep="' + i + '"><img src="' + src + '" alt="">' +
+              (rep ? '<b>대표</b>' : '') + '<s data-pv2thdel="' + i + '">×</s></div>';
+          }).join('') +
+          ((e.thumbs || []).length < 5
+            ? '<div class="pv2-t add" data-pv2thadd="1">＋<i>붙여넣기<br>· 파일</i></div>' +
+              '<input id="pv2-thfile" type="file" accept="image/*" hidden>'
+            : '') +
+          '</div></div>';
+    } else if (curSt === 1) {
+      body = pv2h('2', '분석', e.step >= 2) +
+        '<div class="plw-kwbar" id="plw-kwbar">' + plwKwHtml(e) + '</div>' +
+        '<div class="pln-sec"><div class="pln-sech"><b>후킹 문구</b><s>' + e.hooks.length + '/10 · 최종 1 + 예비 1</s></div>' + hookBoard + '</div>' +
+        '<div class="pln-sec"><div class="pln-sech"><b>시청자 공감</b><s>댓글을 4바구니로</s></div>' + vocHtml + '</div>';
+    } else if (curSt === 2) {
+      body = pv2h('3', '디벨롭', e.step >= 3) +
+        pv2BriefHtml(e) +
+        '<div class="pln-sec"><div class="pln-sech"><b>디벨롭 4공식</b><s>소스를 나로 통과시키기 · 택 1</s></div>' +
+          '<div class="pv2-dvs">' + PLN_DEVS.map(function (d, i) {
+            return '<div class="pv2-dv' + (e.dev === i ? ' sel' : '') + '" data-pv2dev="' + i + '"><b>' + (e.dev === i ? '✓ ' : '') + d[0] + '</b><s>' + d[1] + '</s></div>';
+          }).join('') + '</div></div>' +
+        '<div class="pln-sec"><div class="pln-sech"><b>내용 구조</b><s>' + esc(e.ref) + ' 원고의 뼈대</s></div>' +
+          '<div class="pln-fld"><div class="pln-flow">' + (e.bone || []).map(function (s2, k) {
+            return (k ? '<i>›</i>' : '') + '<span>' + esc(s2) + '</span>'; }).join('') + '</div></div></div>';
+    } else if (curSt === 3) {
+      body = pv2h('4', '원고', e.step >= 4) +
+        '<div class="pln-sec"><div class="pln-sech"><b>컷 — 화면에 뭐가 보이나</b>' +
+          (cutN ? '<s>' + cutN + '컷 · 찍을 것 ' + shots + '</s>' : '') + '</div>' + cutsBlock + '</div>' +
+        (e.step >= 3
+          ? '<button class="pln-act" data-plnwrite="1">✎ ' + (e.step >= 4 ? '원고 다시 보기' : '이 편 원고 쓰러 가기') + '</button>'
+          : '<button class="pln-act" data-plnnext="1">' + (e.hook ? '✨ 구조로 컷 깔기 — 디벨롭' : '후킹부터 채우기 — 분석') + '</button>');
+    } else {
+      body = pv2h('5', '배포', e.step >= 5) +
+        (e.step >= 4
+          ? '<button class="pln-act" data-plndist="1">⬡ 배포로 보내기' + (e.step >= 5 ? ' — 다녀옴 ✓' : '') + '</button>'
+          : '<div class="pln-fld empty"><div class="v">원고를 완성하면 배포가 열립니다</div><div class="m">배포하면 트로피로 수확됩니다</div></div>');
+    }
     return '<div class="pln-k">' + n + '편 · ' + esc(e.src) + '에서</div>' +
-      '<h2 class="pln-big sm">' + esc(e.t) + '</h2>' + steps +
-      // ── 01 리서치 — 재료의 정체 (주제는 위 제목) + 브리프 재료 + 칠하기
-      pv2h('1', '리서치', true) +
-      '<div class="pln-sec">' +
-        '<div class="pln-rowl" data-plnwhy="1"><span class="k">왜 터짐</span><span class="v">' + (e.why ? '<em>' + esc(e.why) + '</em>' : '이게 터진 이유를 한 줄로') + '</span><span class="go">›</span></div>' +
-        '<div class="pln-rowl" data-pv2who="1"><span class="k">누구에게</span><span class="v">' + (e.who ? '<em>' + esc(e.who) + '</em>' : '이 편이 잡을 한 사람') + '</span><span class="go">›</span></div>' +
-        '<div class="pln-rowl" data-pv2point="1"><span class="k">핵심 포인트</span><span class="v">' + (e.point ? '<em>' + esc(e.point) + '</em>' : '보고 나면 믿게 될 한 문장') + '</span><span class="go">›</span></div>' +
-        (e.rid ? '<div class="pln-rowl" data-pv2paint="1"><span class="k">🖍 칠하기</span><span class="v">원본 원고에서 패턴 캐내기</span><span class="go">›</span></div>' : '') +
-        '<div class="pln-rowl" data-plnmat="1"><span class="k">재료</span><span class="v">' + esc(e.mat || '담아둔 카드에서') + '</span><span class="go">›</span></div>' +
-        '<div class="pln-rowl" data-plnday="1"><span class="k">언제</span><span class="v"><em>' + esc(e.day) + '</em></span><span class="go">›</span></div></div>' +
-      '<div class="pln-sec"><div class="pln-sech"><b>참고 썸네일</b><s>' + ((e.thumbs || []).length) + '/5 · 탭=대표</s></div>' +
-        '<div class="pv2-ths">' + (e.thumbs || []).map(function (src, i) {
-          var rep = (e.rep || 0) === i;
-          return '<div class="pv2-t' + (rep ? ' rep' : '') + '" data-pv2rep="' + i + '"><img src="' + src + '" alt="">' +
-            (rep ? '<b>대표</b>' : '') + '<s data-pv2thdel="' + i + '">×</s></div>';
-        }).join('') +
-        ((e.thumbs || []).length < 5
-          ? '<div class="pv2-t add" data-pv2thadd="1">＋<i>붙여넣기<br>· 파일</i></div>' +
-            '<input id="pv2-thfile" type="file" accept="image/*" hidden>'
-          : '') +
-        '</div></div>' +
-      // ── 02 분석 — 키워드 서랍(④원고에서 이사) + 후킹
-      pv2h('2', '분석', e.step >= 2) +
-      '<div class="plw-kwbar" id="plw-kwbar">' + plwKwHtml(e) + '</div>' +
-      '<div class="pln-sec"><div class="pln-sech"><b>후킹 문구</b><s>' + e.hooks.length + '/10 · 최종 1 + 예비 1</s></div>' + hookBoard + '</div>' +
-      '<div class="pln-sec"><div class="pln-sech"><b>시청자 공감</b><s>댓글을 4바구니로</s></div>' + vocHtml + '</div>' +
-      // ── 03 디벨롭 — 한장요약(자동) + 4공식 + 구조
-      pv2h('3', '디벨롭', e.step >= 3) +
-      pv2BriefHtml(e) +
-      '<div class="pln-sec"><div class="pln-sech"><b>디벨롭 4공식</b><s>소스를 나로 통과시키기 · 택 1</s></div>' +
-        '<div class="pv2-dvs">' + PLN_DEVS.map(function (d, i) {
-          return '<div class="pv2-dv' + (e.dev === i ? ' sel' : '') + '" data-pv2dev="' + i + '"><b>' + (e.dev === i ? '✓ ' : '') + d[0] + '</b><s>' + d[1] + '</s></div>';
-        }).join('') + '</div></div>' +
-      '<div class="pln-sec"><div class="pln-sech"><b>내용 구조</b><s>' + esc(e.ref) + ' 원고의 뼈대</s></div>' +
-        '<div class="pln-fld"><div class="pln-flow">' + (e.bone || []).map(function (s2, k) {
-          return (k ? '<i>›</i>' : '') + '<span>' + esc(s2) + '</span>'; }).join('') + '</div></div></div>' +
-      // ── 04 원고 — 컷 + 쓰기
-      pv2h('4', '원고', e.step >= 4) +
-      '<div class="pln-sec"><div class="pln-sech"><b>컷 — 화면에 뭐가 보이나</b>' +
-        (cutN ? '<s>' + cutN + '컷 · 찍을 것 ' + shots + '</s>' : '') + '</div>' + cutsBlock + '</div>' +
-      (e.step >= 3
-        ? '<button class="pln-act" data-plnwrite="1">✎ ' + (e.step >= 4 ? '원고 다시 보기' : '이 편 원고 쓰러 가기') + '</button>'
-        : '<button class="pln-act" data-plnnext="1">' + (e.hook ? '✨ 구조로 컷 깔기 — 디벨롭' : '후킹부터 채우기 — 분석') + '</button>') +
-      // ── 05 배포
-      pv2h('5', '배포', e.step >= 5) +
-      (e.step >= 4
-        ? '<button class="pln-act" data-plndist="1">⬡ 배포로 보내기' + (e.step >= 5 ? ' — 다녀옴 ✓' : '') + '</button>'
-        : '<div class="pln-fld empty"><div class="v">원고를 완성하면 배포가 열립니다</div><div class="m">배포하면 트로피로 수확됩니다</div></div>') +
+      '<h2 class="pln-big sm">' + esc(e.t) + '</h2>' +
+      rail + body +
       '<button class="pln-act2" data-plnagain="1">다른 걸로 바꾸기</button>';
   }
 
@@ -55501,6 +55525,10 @@
     wsin.querySelectorAll('[data-plngo]').forEach(function (el) {
       el.onclick = function () { plnGo(+el.dataset.plngo); };
     });
+    // v698b · 공정 탭 — 단계 워크스페이스 이동
+    wsin.querySelectorAll('[data-pv2go]').forEach(function (b) {
+      b.onclick = function () { _pv2St = +b.dataset.pv2go; plnRenderWs(false); };
+    });
     wsin.querySelectorAll('[data-plnpick]').forEach(function (el) {
       el.onclick = function () { plnPick(_plnCur, +el.dataset.plnpick); };
     });
@@ -55545,7 +55573,8 @@
     var nx = wsin.querySelector('[data-plnnext]');
     if (nx) nx.onclick = function () {
       var e = _pln.eps[_plnCur - 1]; if (!e) return;
-      if (!e.hook) {   // v698 · 최종 후킹부터 — 보드 입력칸으로 안내
+      if (!e.hook) {   // v698b · 최종 후킹부터 — 분석 탭으로 데려가 입력칸 포커스
+        _pv2St = 1; plnRenderWs(false);
         var hi = document.getElementById('pv2-hkin'); if (hi) hi.focus();
         try { toast('후킹 문구를 모아서 ★최종을 골라주세요'); } catch (er) {}
         return;
@@ -55788,7 +55817,7 @@
   function plnRefresh(anim) { plnRenderSlots(); plnReflect(); plnRenderWs(anim); }
   function plnGo(i) {
     if (i === _plnCur) return;
-    _plnCur = i; _plnWrite = 0; _plnKwSel = -1; plnRefresh(true); plnMoveTo(plnSlotX(i));
+    _plnCur = i; _plnWrite = 0; _plnKwSel = -1; _pv2St = -1; plnRefresh(true); plnMoveTo(plnSlotX(i));
   }
   async function plnPick(n, k) {
     var x = plnCandidates(3)[k]; if (!x) return;
@@ -55797,6 +55826,7 @@
       bone: plnBoneOf(x.row), cuts: [], day: PLN_DAYS[n - 1],
       mat: x.row ? '이 카드에서' : '아이디어 메모', step: 1
     };
+    _pv2St = 0;   // v698b · 편을 정하면 리서치부터
     await plnSave(); plnRefresh(true);
   }
   async function plnFromIdea(id) {
