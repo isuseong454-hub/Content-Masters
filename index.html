@@ -1363,6 +1363,36 @@
   .sct-hc .x{ flex:none; color:#7C8496; font-weight:900; padding:0 5px; cursor:pointer; }
   .sct-csh .sct-pick{ cursor:pointer; }
   .sct-csh .sct-pick .vt i{ color:#7EC8F5; font-weight:900; }
+  /* v703 · 자동완성 — 사람들이 실제로 이어 쓰는 말 */
+  .sctv .sct-sug{ display:none; flex-wrap:wrap; gap:5px; align-items:center; margin:-3px 0 10px; }
+  .sctv .sct-sug.on{ display:flex; }
+  .sctv .sct-sug .cap{ font-size:9px; color:#5F6878; font-weight:700; margin-right:2px; width:100%; }
+  .sctv .sct-sug button{ font-family:inherit; font-size:11px; font-weight:700; color:#C9D4E2; cursor:pointer;
+    background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.12); border-radius:99px; padding:5px 11px;
+    transition:transform .16s ease; }
+  .sctv .sct-sug button:active{ transform:scale(.95); }
+  /* v704 · 비교판 위계 — 보조(＋키워드)/주(비교하기) 한 줄 */
+  .sctv .kb-btns{ display:flex; gap:8px; margin:2px 0 8px; }
+  .sctv .kb-btns .kb-plus{ width:auto; flex:0 0 34%; margin:0; }
+  .sctv .kb-btns .kb-go{ width:auto; flex:1; }
+  .sctv .kb-main > .kb-sub{ margin-top:2px; }
+  /* v704 · 🪙 금맥 바로가기 선반 — 수요가 이미 검증된 곳들 */
+  .sctv .kb-gold{ display:flex; align-items:center; gap:10px; padding:9px 8px; border-radius:12px;
+    text-decoration:none; margin-bottom:5px; background:rgba(255,255,255,.03);
+    border:1px solid rgba(255,255,255,.07); transition:transform .16s ease; }
+  .sctv .kb-gold:active{ transform:scale(.98); }
+  .sctv .kb-gold .ic{ flex:none; width:28px; height:28px; border-radius:50%; display:grid; place-items:center;
+    font-size:13px; font-weight:900; color:#fff; background:var(--gc); }
+  .sctv .kb-gold .tx{ flex:1; min-width:0; }
+  .sctv .kb-gold .tx b{ display:block; font-size:12px; font-weight:800; color:#EDF1F7; }
+  .sctv .kb-gold .tx s{ text-decoration:none; display:block; font-size:9.5px; color:#8A94A6; line-height:1.5; margin-top:1px; }
+  .sctv .kb-gold .go{ flex:none; font-size:12px; color:#7DE8A8; font-weight:900; }
+  /* v705 · 금맥 찾기 = 세 번째 방 — 금색 공기 */
+  .sctv .mtabs button.gd.on{ color:#F7E6AE; background:rgba(244,200,66,.13); border-color:rgba(244,200,66,.5); }
+  .sctv.gdm{ background:radial-gradient(700px 420px at 50% -8%, #1F1A0D, #141009 55%, #0C0A07); }
+  .sctv .kb-sec.gold{ background:linear-gradient(170deg, rgba(244,200,66,.07), rgba(255,255,255,.02) 60%);
+    border-color:rgba(244,200,66,.28); }
+  .sctv .kb-sec.gold .kb-gold .go{ color:#F4E3A8; }
 
   .pv2-ghostnote{ margin:2px 0 12px; padding:11px 14px; border-radius:12px; cursor:pointer;
     border:1px dashed rgba(255,255,255,.22); color:#AEB9CF; font-size:12.5px; font-weight:700; line-height:1.5; }
@@ -56582,6 +56612,42 @@
       video: false, tags: [], cmts: [] };
     return _sctCart.__nv;
   }
+  /* ── v703 · 자동완성 — JSONP(script)라 서버 0·쿠폰 0. 유튜브=ds:yt · 네이버=ac ── */
+  var _sctSugSeq = 0, _sctSugT = 0, _sctKbSugT = 0;
+  function sctJsonp(url, cbParam) {
+    return new Promise(function (res) {
+      var name = '__sctSug' + (++_sctSugSeq), done = false;
+      var s = document.createElement('script');
+      window[name] = function (d) { done = true; window[name] = undefined; s.remove(); res(d); };
+      s.src = url + '&' + cbParam + '=' + name;
+      s.onerror = function () { if (!done) { window[name] = undefined; s.remove(); res(null); } };
+      document.head.appendChild(s);
+      setTimeout(function () { if (!done) { window[name] = function () {}; s.remove(); res(null); } }, 4000);
+    });
+  }
+  function sctYtSug(q) {
+    return sctJsonp('https://suggestqueries.google.com/complete/search?client=youtube&ds=yt&hl=ko&q=' + encodeURIComponent(q), 'jsonp')
+      .then(function (d) { return ((d && d[1]) || []).map(function (x) { return x && x[0]; }).filter(Boolean); });
+  }
+  function sctNvSug(q) {
+    return sctJsonp('https://ac.search.naver.com/nx/ac?q=' + encodeURIComponent(q) + '&con=1&frm=nv&ans=2&r_format=json&r_enc=UTF-8&st=100', '_callback')
+      .then(function (d) { return (((d && d.items) || [])[0] || []).map(function (x) { return x && x[0]; }).filter(Boolean); });
+  }
+  function sctSugRender(box, list, cap, onPick) {
+    if (!box) return;
+    if (!list || !list.length) { box.innerHTML = ''; box.classList.remove('on'); return; }
+    box.classList.add('on');
+    box.innerHTML = '<span class="cap">' + cap + '</span>' + list.slice(0, 8).map(function (w, i) {
+      return '<button type="button" data-sug="' + i + '">' + sctEsc(w) + '</button>';
+    }).join('');
+    box.querySelectorAll('[data-sug]').forEach(function (b) {
+      b.onclick = function () { onPick(list[+b.dataset.sug]); };
+    });
+  }
+  function sctSugHide(id) {
+    var b = document.getElementById(id);
+    if (b) { b.innerHTML = ''; b.classList.remove('on'); }
+  }
   /* ── 화면 골격 — 상태를 그대로 그려서(토글 on·검색어·결과) 재렌더에도 이어진다 ── */
   function sctHtml() {
     var e = (_sctEp >= 0 && _pln && _pln.eps) ? _pln.eps[_sctEp] : null;
@@ -56594,6 +56660,7 @@
     var kwv =
       '<div id="sct-kwview"' + (_sctMode === 'yt' ? '' : ' style="display:none"') + '>' +
         '<div class="bar"><input id="sct-q" type="text" placeholder="키워드 — 예: 단발" autocomplete="off" value="' + sctEsc(_sctQ) + '"><button id="sct-go">정찰</button></div>' +
+        '<div class="sct-sug" id="sct-sug"></div>' +
         '<div class="tgs">' +
           '<div class="tg" id="sct-tg-per"><span class="lb">기간</span>' + tb('p', 'all', _sctPer, '전체 (3년)') + tb('p', '7', _sctPer, '최근 7일') + tb('p', '30', _sctPer, '최근 30일') + '</div>' +
           '<div class="tg" id="sct-tg-fmt"><span class="lb">형식</span>' + tb('f', 'all', _sctFmt, '전체') + tb('f', 'shorts', _sctFmt, '쇼츠') + tb('f', 'long', _sctFmt, '일반 영상') + '</div>' +
@@ -56615,22 +56682,29 @@
       '</div>';
     var kbv =
       '<div id="sct-kwlab"' + (_sctMode === 'kb' ? '' : ' style="display:none"') + '>' +
-        '<div id="sct-kb-slots"></div>' +
-        '<button type="button" class="kb-plus" id="sct-kb-plus">＋ 키워드</button>' +
-        '<button type="button" class="kb-go" id="sct-kb-go">⚖ 비교하기</button>' +
-        '<div class="scap" style="margin-left:2px">같은 판에 올려야 보입니다 — <b style="color:#7DE8A8">누가 수요가 있고, 누가 허명인가.</b> 칸의 색 = 아래 그래프 선의 색.</div>' +
+        '<div class="kb-sec kb-main"><b>⚖ 키워드 비교판 <s>같은 판에 올려야 «누가 진짜 수요인지» 보여요</s></b>' +
+          '<div id="sct-kb-slots"></div>' +
+          '<div class="sct-sug" id="sct-kbsug"></div>' +
+          '<div class="kb-btns"><button type="button" class="kb-plus" id="sct-kb-plus">＋ 키워드</button>' +
+          '<button type="button" class="kb-go" id="sct-kb-go">⚖ 비교하기</button></div>' +
+          '<div class="kb-sub">칸의 색 = 아래 그래프 선의 색 · 최대 5개</div></div>' +
         '<div id="sct-kb-out"></div>' +
       '</div>';
+    var gdv =
+      '<div id="sct-goldview"' + (_sctMode === 'gold' ? '' : ' style="display:none"') + '>' +
+        sctGoldHtml() +
+      '</div>';
     var n = sctCartN();
-    return '<div class="sctv' + (_sctMode === 'kb' ? ' kbm' : _sctMode === 'ch' ? ' chm' : '') + '" id="sctv">' +
+    return '<div class="sctv' + (_sctMode === 'kb' ? ' kbm' : _sctMode === 'ch' ? ' chm' : _sctMode === 'gold' ? ' gdm' : '') + '" id="sctv">' +
       '<div class="sct-top">' +
         '<button type="button" class="plw-back" data-sctback="1">‹ 기획</button>' +
         '<div class="mtabs">' +
-          '<button type="button" id="sct-mt-yt" class="yt' + (_sctMode !== 'kb' ? ' on' : '') + '">🎬 유튜브 정찰</button>' +
+          '<button type="button" id="sct-mt-yt" class="yt' + (_sctMode === 'yt' || _sctMode === 'ch' ? ' on' : '') + '">🎬 유튜브 정찰</button>' +
           '<button type="button" id="sct-mt-kb" class="kb' + (_sctMode === 'kb' ? ' on' : '') + '">🔑 검색 키워드</button>' +
+          '<button type="button" id="sct-mt-gd" class="gd' + (_sctMode === 'gold' ? ' on' : '') + '">🪙 금맥 찾기</button>' +
         '</div>' +
         '<button type="button" class="sct-cartbtn" id="sct-cartbtn">🛒<span class="n' + (n ? '' : ' zero') + '" id="sct-cartn">' + n + '</span></button>' +
-      '</div>' + ctx + kwv + chv + kbv + '</div>';
+      '</div>' + ctx + kwv + chv + kbv + gdv + '</div>';
   }
   function sctMode(m) {
     _sctMode = m;
@@ -56638,11 +56712,14 @@
     kv.style.display = (m === 'yt') ? '' : 'none';
     document.getElementById('sct-chview').style.display = (m === 'ch') ? '' : 'none';
     document.getElementById('sct-kwlab').style.display = (m === 'kb') ? '' : 'none';
+    document.getElementById('sct-goldview').style.display = (m === 'gold') ? '' : 'none';
     var rt = document.getElementById('sctv');
     rt.classList.toggle('kbm', m === 'kb');
     rt.classList.toggle('chm', m === 'ch');
-    document.getElementById('sct-mt-yt').classList.toggle('on', m !== 'kb');
+    rt.classList.toggle('gdm', m === 'gold');
+    document.getElementById('sct-mt-yt').classList.toggle('on', m === 'yt' || m === 'ch');
     document.getElementById('sct-mt-kb').classList.toggle('on', m === 'kb');
+    document.getElementById('sct-mt-gd').classList.toggle('on', m === 'gold');
   }
   function sctOpen(ep) {
     _sctEp = (typeof ep === 'number') ? ep : -1;
@@ -56898,13 +56975,29 @@
       _sctChShown = 10; sctRenderCh();
     });
     var q = document.getElementById('sct-q');
-    q.addEventListener('input', function () { _sctQ = q.value; });
+    q.addEventListener('input', function () {
+      _sctQ = q.value;
+      clearTimeout(_sctSugT);   // v703 · 유튜브가 이어 쓰는 말
+      var val = q.value.trim();
+      if (!val) { sctSugHide('sct-sug'); return; }
+      _sctSugT = setTimeout(function () {
+        sctYtSug(val).then(function (list) {
+          if (q.value.trim() !== val) return;
+          sctSugRender(document.getElementById('sct-sug'), list, '유튜브에서 사람들이 이어 쓰는 말 — 톡 = 바로 정찰', function (w) {
+            _sctQ = w; q.value = w;
+            sctSugHide('sct-sug');
+            sctRun();
+          });
+        });
+      }, 250);
+    });
     q.addEventListener('keydown', function (ev) {
       if (ev.key === 'Enter' && !ev.isComposing && ev.keyCode !== 229) sctRun();
     });
     document.getElementById('sct-go').onclick = sctRun;
     document.getElementById('sct-mt-yt').onclick = function () { sctMode('yt'); };
     document.getElementById('sct-mt-kb').onclick = function () { sctMode('kb'); };
+    document.getElementById('sct-mt-gd').onclick = function () { sctMode('gold'); };
     document.getElementById('sct-chback').onclick = function () { sctMode('yt'); if (_sctVids.length) sctRenderKw(); };
     document.getElementById('sct-cartbtn').onclick = sctCartOpen;
     sctKbSlots(_sctKbVals);
@@ -56937,6 +57030,27 @@
     if (_sctMode === 'ch' && _sctChVids.length) sctRenderCh();
     if (_sctMode === 'kb' && _sctKb.length) sctKbRender();
   }
+  /* ── v704 · 🪙 금맥 바로가기 — API는 없지만 수요가 이미 검증된 곳들 (전부 무로그인) ── */
+  function sctGoldHtml() {
+    var S = [
+      ['https://www.facebook.com/ads/library/?active_status=active&ad_type=all&country=KR', '#0866FF', 'f',
+       '메타 광고 라이브러리',
+       '경쟁자가 지금 «돈 태우는 광고» 전부 공개 — 오래 돌고 있는 광고 = 팔리는 문구라는 증거'],
+      ['https://www.oliveyoung.co.kr/store/main/getBestList.do', '#9BC03C', 'O',
+       '올리브영 랭킹',
+       '지갑이 열리는 수요 — «1회만에 손상모 개선» 같은 상품 문구 = 돈으로 검증된 후킹 사전'],
+      ['https://ads.tiktok.com/business/creativecenter/inspiration/popular/hashtag/pc/ko', '#161823', '♪',
+       '틱톡 크리에이티브 센터',
+       '쇼츠 소재의 상류 — 릴스·쇼츠에서 터지기 전에 여기 인기 해시태그에 먼저 뜹니다']
+    ];
+    return '<div class="kb-sec gold"><b>🪙 금맥 찾기 <s>광고비가 검증해 준 곳들 탐방 — 전부 로그인 없이 열려요</s></b>' +
+      S.map(function (x) {
+        return '<a class="kb-gold" target="_blank" rel="noopener" href="' + x[0] + '">' +
+          '<span class="ic" style="--gc:' + x[1] + '">' + x[2] + '</span>' +
+          '<span class="tx"><b>' + x[3] + '</b><s>' + x[4] + '</s></span><span class="go">↗</span></a>';
+      }).join('') +
+      '<div class="kb-sub">여기서 볼 건 상품이 아니라 <b>문구</b> — 반응은 «검색 &lt; 시청 &lt; 댓글 &lt; 저장 &lt; 결제» 순으로 진짜예요.</div></div>';
+  }
   /* ── 검색 키워드 비교 (분리 칸) ── */
   var SCT_KBC = ['#4285F4', '#EA4335', '#FBBC04', '#34A853', '#A142F4'];   // 구글 트렌드 선 색 순서
   function sctKbVals() {
@@ -56959,7 +57073,22 @@
       };
     });
     box.querySelectorAll('input').forEach(function (inp) {
-      inp.addEventListener('input', function () { _sctKbVals = sctKbVals(); });
+      inp.addEventListener('input', function () {
+        _sctKbVals = sctKbVals();
+        clearTimeout(_sctKbSugT);   // v703 · 네이버가 이어 쓰는 말 — 그 칸에 채움
+        var val = inp.value.trim();
+        if (!val) { sctSugHide('sct-kbsug'); return; }
+        _sctKbSugT = setTimeout(function () {
+          sctNvSug(val).then(function (list) {
+            if (inp.value.trim() !== val || !document.body.contains(inp)) return;
+            sctSugRender(document.getElementById('sct-kbsug'), list, '네이버에서 사람들이 이어 쓰는 말 — 톡 = 이 칸에 채움', function (w) {
+              inp.value = w; _sctKbVals = sctKbVals();
+              sctSugHide('sct-kbsug');
+              inp.focus();
+            });
+          });
+        }, 250);
+      });
       inp.addEventListener('keydown', function (e) {
         if (e.key === 'Enter' && !e.isComposing && e.keyCode !== 229) {
           e.preventDefault();
