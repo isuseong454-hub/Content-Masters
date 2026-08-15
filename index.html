@@ -1519,6 +1519,130 @@
     border:1px solid rgba(255,255,255,.09); border-radius:10px; padding:11px 13px; white-space:pre-wrap; }
   .pvbf .meta2{ font-size:10.5px; color:#9A93BC; margin-top:14px; text-align:center; }
   .pvbf .meta2 b{ color:#D9CDFF; }
+  /* ══ v711 · 📦 금고 화면(유예 상자) + 🔥 모드 선택 — 힉스필드 시네마 ══ */
+  .cmvt{ position:fixed; inset:0; z-index:9999; overflow-y:auto;
+    background:radial-gradient(120% 80% at 50% 0%, #10140f, #060806 52%, #030403); }
+  .cmvt .in{ max-width:560px; margin:0 auto; min-height:100vh; min-height:100dvh; position:relative;
+    display:flex; flex-direction:column; align-items:center; padding:52px 20px 40px; perspective:1150px; }
+  .cmvt .cap1{ font-size:17px; font-weight:900; letter-spacing:-.01em; color:#F0F4FA; text-align:center;
+    animation:cmvFd .8s ease .15s both; }
+  .cmvt .cap2{ font-size:12px; color:#8FA0BC; margin-top:5px; text-align:center; animation:cmvFd .8s ease .28s both; }
+  @keyframes cmvFd{ from{ opacity:0; transform:translateY(-8px);} to{ opacity:1; transform:none;} }
+  .cmvt .stats{ display:flex; align-items:stretch; margin:28px 0 6px; animation:cmvFd .9s ease .4s both; }
+  .cmvt .st{ padding:0 22px; text-align:center; position:relative; }
+  .cmvt .st + .st::before{ content:''; position:absolute; left:0; top:16%; bottom:16%; width:1px;
+    background:linear-gradient(180deg, transparent, rgba(255,255,255,.16), transparent); }
+  .cmvt .st b{ display:block; font:200 38px/1.05 'JetBrains Mono',monospace; letter-spacing:-.02em; color:#F4F7FC;
+    text-shadow:0 0 24px rgba(215,243,75,.25); }
+  .cmvt .st u{ display:block; text-decoration:none; width:26px; height:2px; margin:8px auto 7px; border-radius:2px;
+    background:linear-gradient(90deg, #D7F34B, #43E0E6); }
+  .cmvt .st s{ text-decoration:none; font-size:9.5px; font-weight:800; letter-spacing:.24em; color:#6E7A8E; }
+  .cmvt .vault{ width:150px; height:150px; margin:36px auto 42px; position:relative; transform-style:preserve-3d;
+    cursor:pointer; animation:cmvIn 1s cubic-bezier(.2,1.2,.3,1) .5s both; }
+  @keyframes cmvIn{ from{ opacity:0; transform:translateY(40px) scale(.6);} to{ opacity:1; transform:translateY(0) scale(1);} }
+  .cmvt .spin{ position:absolute; inset:0; transform-style:preserve-3d; animation:cmvSpin 14s linear infinite; }
+  .cmvt.opened .spin{ animation-play-state:paused; }
+  @keyframes cmvSpin{ from{ transform:rotateX(-12deg) rotateY(0);} to{ transform:rotateX(-12deg) rotateY(360deg);} }
+  .cmvt .f{ position:absolute; inset:0; border-radius:14px; border:1.5px solid rgba(215,243,75,.65);
+    background:linear-gradient(160deg, rgba(215,243,75,.10), rgba(6,8,6,.94) 58%);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.18); }
+  .cmvt .f.ft{ transform:translateZ(75px); }
+  .cmvt .f.bk{ transform:rotateY(180deg) translateZ(75px); }
+  .cmvt .f.lf{ transform:rotateY(-90deg) translateZ(75px); }
+  .cmvt .f.rt{ transform:rotateY(90deg) translateZ(75px); }
+  .cmvt .f.tp{ transform:rotateX(90deg) translateZ(75px); }
+  .cmvt .f.bt{ transform:rotateX(-90deg) translateZ(75px); }
+  .cmvt .f.ft::after{ content:'🗂'; position:absolute; inset:0; display:grid; place-items:center; font-size:34px;
+    filter:drop-shadow(0 0 12px rgba(215,243,75,.5)); }
+  .cmvt .halo{ position:absolute; inset:-26px; border-radius:50%; pointer-events:none;
+    background:radial-gradient(closest-side, rgba(215,243,75,.13), transparent 70%); filter:blur(8px); }
+  .cmvt.opened .vault .f{ border-color:#D7F34B; box-shadow:inset 0 1px 0 rgba(255,255,255,.25), 0 0 44px rgba(215,243,75,.35); }
+  .cmspot{ position:absolute; left:50%; bottom:96px; transform:translateX(-50%); width:280px; height:44px; border-radius:50%;
+    background:radial-gradient(closest-side, rgba(215,243,75,.2), transparent 72%); filter:blur(6px); pointer-events:none; }
+  .cmvt .after{ display:none; flex-direction:column; align-items:center; gap:11px; margin-top:auto; padding-top:8px; }
+  .cmvt.opened .after{ display:flex; animation:cmvFd .5s ease .2s both; }
+  .cmvt .direct{ font-size:13.5px; color:#DCE6F2; text-align:center; line-height:1.7; }
+  .cmvt .direct b{ color:#D7F34B; }
+  .cmvt .dl{ font-family:inherit; font-size:13.5px; font-weight:900; color:#0B0E14; border:none; border-radius:13px;
+    padding:13px 28px; cursor:pointer; background:linear-gradient(135deg, #D7F34B, #A9E84A);
+    box-shadow:0 14px 34px -12px rgba(215,243,75,.55); }
+  .cmvt .warn{ font-size:11px; color:#C9A25A; text-align:center; line-height:1.6; max-width:320px; }
+  .cmvt .ext{ font-size:11px; color:#5C6B87; text-decoration:underline; cursor:pointer; background:none; border:none; font-family:inherit; }
+  .cmvt .hint{ position:absolute; bottom:14px; left:0; right:0; text-align:center; font-size:10.5px; color:#4A5262; }
+  .cmvt.opened .hint{ display:none; }
+  .cmmd{ position:fixed; inset:0; z-index:9999; overflow-y:auto;
+    background:radial-gradient(120% 76% at 50% 4%, #0f1410, #050706 54%, #030403); }
+  .cmmd .in{ max-width:600px; margin:0 auto; min-height:100vh; min-height:100dvh;
+    display:flex; flex-direction:column; justify-content:center; padding:40px 18px; perspective:1100px; }
+  .cmmd .mhead{ font-size:19px; font-weight:900; }
+  .cmmd .msub{ font-size:12px; color:#8FA0BC; margin:4px 0 18px; }
+  .cmmd .modes{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .cmmd .mode{ border-radius:20px; padding:22px 20px 56px; cursor:pointer; position:relative; overflow:hidden;
+    background:linear-gradient(165deg, #101410, #080A08); border:1px solid rgba(255,255,255,.09);
+    box-shadow:0 24px 50px -22px rgba(0,0,0,.9), inset 0 1px 0 rgba(255,255,255,.08);
+    transition:transform .4s cubic-bezier(.2,.9,.3,1), box-shadow .4s, border-color .3s; }
+  .cmmd .mode:hover{ transform:translateZ(40px) translateY(-4px); }
+  .cmmd .mode .ic{ font-size:32px; margin-bottom:12px; display:block; filter:drop-shadow(0 0 14px rgba(215,243,75,.35)); }
+  .cmmd .mode.hard .ic{ filter:drop-shadow(0 0 14px rgba(224,86,75,.5)); }
+  .cmmd .mode h3{ font-size:18px; font-weight:900; letter-spacing:-.01em; }
+  .cmmd .mode .tag{ font-size:10px; color:#8FA0BC; margin:2px 0 12px; display:block; }
+  .cmmd .mode p{ font-size:12px; color:#AAB6C6; line-height:1.7; }
+  .cmmd .mode p b{ color:#EDF2FA; }
+  .cmmd .mode .pros{ margin-top:14px; border-top:1px dashed rgba(255,255,255,.12); padding-top:11px;
+    display:flex; flex-direction:column; gap:5px; }
+  .cmmd .mode .pros i{ font-style:normal; font-size:11px; display:flex; gap:7px; line-height:1.5; }
+  .cmmd .mode .pros i.g{ color:#B7E8C6; } .cmmd .mode .pros i.g::before{ content:'✓'; color:#9BE8B4; font-weight:900; }
+  .cmmd .mode .pros i.r{ color:#C6A9A6; } .cmmd .mode .pros i.r::before{ content:'−'; color:#C97B72; font-weight:900; }
+  .cmmd .mode.normal{ border-color:rgba(155,232,180,.28); }
+  .cmmd .mode.hard{ border-color:rgba(224,86,75,.4); }
+  .cmmd .mode .badge{ position:absolute; right:14px; top:14px; font-size:9px; font-weight:900; border-radius:99px; padding:3px 10px; }
+  .cmmd .mode.normal .badge{ color:#9BE8B4; border:1px solid rgba(155,232,180,.5); }
+  .cmmd .mode.hard .badge{ color:#fff; background:#E0564B; animation:cmmdP 2.2s ease-in-out infinite; }
+  @keyframes cmmdP{ 0%,100%{ transform:scale(1);} 50%{ transform:scale(1.07);} }
+  .cmmd .mode .pick{ position:absolute; left:0; right:0; bottom:0; padding:11px; text-align:center; font-size:11px; font-weight:900;
+    background:rgba(255,255,255,.04); color:#5C6B87; transition:.25s; }
+  .cmmd .mode.normal.sel{ border-color:#9BE8B4; border-width:1.5px; }
+  .cmmd .mode.hard.sel{ border-color:#E0564B; border-width:1.5px; }
+  .cmmd .mode.normal.sel .pick{ background:#9BE8B4; color:#0B0E14; }
+  .cmmd .mode.hard.sel .pick{ background:#E0564B; color:#fff; }
+  .cmmd .go{ margin-top:16px; font-family:inherit; font-size:13.5px; font-weight:900; border:none; border-radius:13px;
+    padding:14px; cursor:pointer; background:linear-gradient(135deg, #D7F34B, #A9E84A); color:#0B0E14; }
+  .cmmd .go:disabled{ background:rgba(255,255,255,.08); color:#5C6B87; cursor:default; }
+  @media (max-width:520px){ .cmmd .modes{ grid-template-columns:1fr; } }
+  /* v712 · 🎓 하드 졸업 축하 */
+  .cmgd{ position:fixed; inset:0; z-index:9999; display:flex; align-items:center; justify-content:center; padding:20px;
+    background:radial-gradient(120% 80% at 50% 8%, #101623, #070A11 55%, #04060B); animation:cmvFd .5s ease both; }
+  .cmgd .in{ text-align:center; max-width:340px; padding:36px 26px 30px; border-radius:24px;
+    background:linear-gradient(160deg, rgba(255,255,255,.07), rgba(255,255,255,.02));
+    border:1px solid rgba(215,243,75,.3);
+    box-shadow:0 40px 90px rgba(0,0,0,.6), 0 0 60px rgba(215,243,75,.1), inset 0 1px 0 rgba(255,255,255,.14);
+    animation:cmvIn .6s cubic-bezier(.2,1.4,.4,1) both .12s; }
+  .cmgd .ic{ font-size:44px; filter:drop-shadow(0 0 22px rgba(215,243,75,.5)); }
+  .cmgd h3{ font-size:20px; font-weight:900; margin:10px 0 12px; }
+  .cmgd p{ font-size:12.5px; color:#AAB6C6; line-height:1.75; }
+  .cmgd p b{ color:#EDF2FA; }
+  .cmgd p.s{ margin-top:12px; } .cmgd p.s b{ color:#D7F34B; }
+  .cmgd button{ margin-top:20px; font-family:inherit; font-size:13px; font-weight:900; border:none; border-radius:12px;
+    padding:12px 34px; background:#D7F34B; color:#0B0E14; cursor:pointer; }
+  /* 관리자 — 챌린지 */
+  .chg-chips{ display:flex; gap:6px; flex-wrap:wrap; margin:6px 0 2px; }
+  .chg-chips button{ font-family:inherit; font-size:11.5px; font-weight:800; border-radius:99px; padding:7px 14px; cursor:pointer;
+    color:#8A94A6; background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.14); }
+  .chg-chips button.on{ color:#0B0E14; background:#D7F34B; border-color:transparent; }
+  #chg-form{ display:none; border:1px solid rgba(215,243,75,.3); border-radius:14px; padding:14px; margin-top:12px;
+    background:rgba(215,243,75,.04); }
+  #chg-form.open{ display:block; }
+  .chg-tbl{ width:100%; border-collapse:collapse; font-size:11.5px; margin-top:12px; }
+  .chg-tbl th{ text-align:left; font-size:9.5px; color:#5C6B87; font-weight:800; padding:7px 8px; border-bottom:1px solid rgba(255,255,255,.1); }
+  .chg-tbl td{ padding:9px 8px; border-bottom:1px solid rgba(255,255,255,.05); color:#C4CFDE; }
+  .chg-tbl td b{ color:#EDF2FA; font-family:'JetBrains Mono',monospace; }
+  .chg-bdg{ font-size:9px; font-weight:900; border-radius:99px; padding:2px 8px; }
+  .chg-bdg.f{ color:#9BE8B4; border:1px solid rgba(155,232,180,.45); }
+  .chg-bdg.h{ color:#fff; background:#E0564B; }
+  .chg-bdg.q{ color:#8A94A6; border:1px solid rgba(255,255,255,.2); }
+  .chg-bdg.s{ color:#C9A25A; border:1px solid rgba(201,162,90,.5); }
+  .chg-tbl .wake{ font-family:inherit; font-size:10px; font-weight:800; border-radius:8px; padding:4px 10px; cursor:pointer;
+    background:rgba(255,255,255,.06); border:1px solid rgba(215,243,75,.5); color:#D7F34B; }
   /* v707 · 인라인 빈칸 — 팝업(prompt) 전멸 */
   .pln-rowl .pv2-edit{ flex:1; min-width:0; background:rgba(255,255,255,.06); border:1px solid rgba(126,200,245,.45);
     border-radius:9px; color:#EDF2FA; font-family:inherit; font-size:16px; padding:8px 11px; outline:none; }
@@ -21905,6 +22029,29 @@
         <button class="admin-filter-btn" data-filter="expired">만료</button>
       </div>
       <div class="admin-list" id="admin-list"></div>
+    </section>
+
+    <!-- v711 · 🎯 챌린지 코드 — 모드는 수강생이 첫 로그인 때 선택 -->
+    <section class="admin-section">
+      <h2 class="admin-section-title">🎯 챌린지 코드</h2>
+      <div style="font-size:11px;color:#8A94A6;margin:4px 0 10px">코드만 발급합니다 — 프리/하드는 수강생이 직접 선택 · 잠든 코드는 여기서만 깨울 수 있어요</div>
+      <button class="admin-create-btn" id="chg-new" style="width:auto;padding:10px 20px">＋ 챌린지 코드 발급</button>
+      <div id="chg-form">
+        <label class="admin-label">수강생 이름</label>
+        <input type="text" class="auth-input" id="chg-name" placeholder="예: 고객관점 3기 — 김수강" maxlength="40" />
+        <label class="admin-label">사용 기간</label>
+        <div class="chg-chips" id="chg-per">
+          <button data-v="30">1개월</button><button class="on" data-v="90">3개월</button>
+          <button data-v="180">6개월</button><button data-v="365">1년</button><button data-v="lifetime">평생</button>
+        </div>
+        <label class="admin-label">주간 목표 (하드 선택 시)</label>
+        <div class="chg-chips" id="chg-goal">
+          <button data-v="2">2편</button><button class="on" data-v="3">3편</button><button data-v="5">5편</button>
+        </div>
+        <button class="admin-create-btn" id="chg-make">발급하기 🎯</button>
+        <div style="font-size:10px;color:#5C6B87;margin-top:8px;line-height:1.6">발급되면 코드가 아래 목록에 떠요 · 수강생이 첫 로그인에서 프리/하드를 고르면 모드가 표시됩니다</div>
+      </div>
+      <div id="chg-list"></div>
     </section>
   </main>
 </div>
@@ -44828,6 +44975,233 @@
   function hideAuth() {
     document.getElementById('auth-overlay').classList.remove('show');
     document.body.style.overflow = '';
+    try { setTimeout(cmGate, 400); } catch (e) {}   // v711 · 유예 상자·챌린지 게이트
+  }
+  /* ══ v711 · 📦 유예 상자(금고 큐브) + 🔥 챌린지 게이트 ══
+     grace(만료 후 14일)·sleep(하드 동면) → 금고 화면(백업만) · 챌린지 첫 로그인 → 모드 선택 1회 ·
+     하드 → 로그인 시 지난주 업로드(trov1 wk) 단순 카운트, 미달=동면(부활은 관리자 «깨우기»만) */
+  function cmEsc2(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function cmWkId(d) { var y = d.getFullYear(), st = new Date(y, 0, 1); var w = Math.ceil((((d - st) / 86400000) + st.getDay() + 1) / 7); return y + '-W' + w; }
+  async function cmGate() {
+    var u = _currentUser; if (!u) return;
+    if (u.status === 'sleep') { cmVaultShow('sleep'); return; }
+    if (u.grace) { cmVaultShow('grace'); return; }
+    if (u.challenge && !u.mode) { cmModeShow(); return; }
+    if (u.challenge && u.mode === 'hard') { try { await cmHardCheck(); } catch (e) {} }
+  }
+  async function cmHardCheck() {
+    var u = _currentUser; if (!u || u.status === 'sleep' || u.hardDone) return;
+    var goal = u.wkGoal || 3, target = goal * 14;   // 하드 = 100일(14주) 챌린지 — 총 goal×14편
+    var tro = [];
+    try { var r2 = await window.storage.get('trov1'); tro = r2 && r2.value ? JSON.parse(r2.value) : []; } catch (e) {}
+    if (!Array.isArray(tro)) tro = [];
+    // 🎓 졸업 — 총량을 채웠거나 100일을 완주하면 남은 기간은 프리 모드로 자동 전환
+    var over100 = u.signedUpAt && (Date.now() - u.signedUpAt >= 100 * 86400000);
+    if (tro.length >= target || over100) { try { await cmHardGrad(tro.length); } catch (e) {} return; }
+    if (u.signedUpAt && Date.now() - u.signedUpAt < 10 * 86400000) return;   // 시작 열흘 면제
+    var prevWk = cmWkId(new Date(Date.now() - 7 * 86400000));
+    if (prevWk === cmWkId(new Date())) return;   // 같은 주면 판정 없음
+    var done = null;
+    try { var r = await window.storage.get('hardchk1'); done = r ? r.value : null; } catch (e) {}
+    if (done === prevWk) return;   // 이미 판정한 주
+    var n = tro.filter(function (x) { return x && x.wk === prevWk; }).length;
+    var a = window.__cmAuth || {};
+    try { await window.storage.set('hardchk1', prevWk); } catch (e) {}
+    if (n >= goal) {
+      try { await cmRpc('cm_hard_report', { p_code: a.code, p_pin_hash: a.pinHash, p_pass: true }); } catch (e) {}
+      u.streak = (u.streak || 0) + 1;
+      try { setCurrentUser(u); } catch (e) {}
+    } else {
+      try { await cmRpc('cm_hard_report', { p_code: a.code, p_pin_hash: a.pinHash, p_pass: false }); } catch (e) {}
+      u.status = 'sleep';
+      try { setCurrentUser(u); } catch (e) {}
+      cmVaultShow('sleep');
+    }
+  }
+  /* ── 🎓 v712 · 하드 졸업 — 남은 기간은 프리 모드로 ── */
+  async function cmHardGrad(nDone) {
+    var a = window.__cmAuth || {}; var res = null;
+    try { res = await cmRpc('cm_hard_graduate', { p_code: a.code, p_pin_hash: a.pinHash }); } catch (e) {}
+    if (!(res && res.ok)) return;
+    var u = _currentUser; u.mode = 'free'; u.hardDone = true;
+    try { setCurrentUser(u); } catch (e) {}
+    cmGradShow(nDone, res.streak || 0);
+  }
+  function cmGradShow(nDone, streak) {
+    var u = _currentUser || {};
+    var old = document.getElementById('cmgd'); if (old) old.remove();
+    var ov = document.createElement('div');
+    ov.id = 'cmgd'; ov.className = 'cmgd';
+    ov.innerHTML = '<div class="in">' +
+      '<div class="ic">\uD83C\uDF93</div>' +
+      '<h3>하드 모드 완주</h3>' +
+      '<p><b>' + cmEsc2(u.name || '수강생') + '</b>님, 100일의 약속을 지켜냈어요.<br>완주한 편 <b>' + (nDone || 0) + '</b>' + (streak ? ' · 생존 스트릭 <b>\uD83D\uDD25 ' + streak + '주</b>' : '') + '</p>' +
+      '<p class="s">남은 기간은 <b>프리 모드</b>로 자동 전환됐습니다 — 이제 판이 아니라, 몸이 움직일 차례.</p>' +
+      '<button type="button" id="cmgd-ok">계속하기</button></div>';
+    document.body.appendChild(ov);
+    document.getElementById('cmgd-ok').onclick = function () { ov.remove(); };
+  }
+  /* ── 금고 화면 — 잠긴 문 없는 유일한 출구 ── */
+  function cmVaultShow(kind) {
+    var u = _currentUser || {};
+    var old = document.getElementById('cmvt'); if (old) old.remove();
+    var nm = cmEsc2(u.name || '수강생');
+    var title = kind === 'sleep' ? nm + '님, 이번 주 약속이 지켜지지 않았어요' : nm + '님, 여정이 잠시 멈췄어요';
+    var sub2 = kind === 'sleep' ? '하드 모드 — 앱이 잠겼습니다. 만든 것들은 금고에 안전해요'
+                                : '기간이 끝났어요 — 만든 것들은 금고에 안전하게 봉인해뒀습니다';
+    var until = '';
+    if (kind === 'grace' && u.graceUntil) {
+      var d = new Date(u.graceUntil);
+      until = (d.getMonth() + 1) + '월 ' + d.getDate() + '일';
+    }
+    var warn = kind === 'sleep'
+      ? '자료는 계속 안전하게 보관됩니다 — 다시 시작하려면 관리자(강사)에게 연락해 주세요'
+      : '⏳ ' + (until || '2주 뒤') + '까지 — 이후 자료가 완전히 삭제됩니다';
+    var ov = document.createElement('div');
+    ov.id = 'cmvt'; ov.className = 'cmvt';
+    ov.innerHTML = '<div class="in">' +
+      '<div class="cap1">' + title + '</div>' +
+      '<div class="cap2">' + sub2 + '</div>' +
+      '<div class="stats" id="cmvt-stats">' +
+        '<div class="st"><b id="cmvt-n1">0</b><u></u><s>모은 자산</s></div>' +
+        '<div class="st"><b id="cmvt-n2">0</b><u></u><s>완주한 편</s></div>' +
+        '<div class="st"><b id="cmvt-n3">0</b><u></u><s>원고</s></div>' +
+      '</div>' +
+      '<div class="vault" id="cmvt-box"><div class="halo"></div><div class="spin">' +
+        '<div class="f ft"></div><div class="f bk"></div><div class="f lf"></div>' +
+        '<div class="f rt"></div><div class="f tp"></div><div class="f bt"></div>' +
+      '</div></div>' +
+      '<div class="cmspot"></div>' +
+      '<div class="after">' +
+        '<div class="direct"><b>' + nm + '님의 자료</b>를 백업 다운로드 받으실 수 있습니다</div>' +
+        '<button type="button" class="dl" id="cmvt-dl">전체 백업 내려받기</button>' +
+        '<div class="warn">' + warn + '</div>' +
+        (kind === 'grace' ? '<button type="button" class="ext" id="cmvt-ext">이어서 하기 — 기간 연장 문의 ›</button>' : '') +
+      '</div>' +
+      '<div class="hint">금고를 톡 하면 열립니다</div>' +
+      '</div>';
+    document.body.appendChild(ov);
+    document.body.style.overflow = 'hidden';
+    ov.addEventListener('click', function (ev) {
+      if (ev.target.closest && (ev.target.closest('#cmvt-dl') || ev.target.closest('#cmvt-ext'))) return;
+      ov.classList.add('opened');
+    });
+    var dl = document.getElementById('cmvt-dl');
+    if (dl) dl.onclick = function () { cmVaultBackup(dl); };
+    var ex = document.getElementById('cmvt-ext');
+    if (ex) ex.onclick = function () { ex.textContent = '관리자(강사)에게 직접 연락해 주세요 🙏'; };
+    cmVaultCounts();
+  }
+  async function cmVaultCounts() {
+    var a = window.__cmAuth || {};
+    function cnt(id, n) {
+      var el = document.getElementById(id); if (!el) return;
+      var t0 = null;
+      function step(ts) {
+        if (!t0) t0 = ts;
+        var p = Math.min((ts - t0) / 1100, 1);
+        el.textContent = Math.round(n * (1 - Math.pow(1 - p, 3)));
+        if (p < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    }
+    try { var r1 = await cmRpc('cm_data_get', { p_code: a.code, p_pin_hash: a.pinHash, p_kind: 'rows' });
+      cnt('cmvt-n1', (r1 && r1.data && r1.data.length) || 0); } catch (e) { cnt('cmvt-n1', 0); }
+    try { var r2 = await window.storage.get('trov1');
+      cnt('cmvt-n2', r2 && r2.value ? (JSON.parse(r2.value) || []).length : 0); } catch (e) { cnt('cmvt-n2', 0); }
+    try { var r3 = await cmRpc('cm_data_get', { p_code: a.code, p_pin_hash: a.pinHash, p_kind: 'scripts' });
+      cnt('cmvt-n3', (r3 && r3.data && r3.data.length) || 0); } catch (e) { cnt('cmvt-n3', 0); }
+  }
+  async function cmVaultBackup(btn) {
+    var a = window.__cmAuth || {};
+    if (btn) btn.textContent = '포장 중…';
+    var out = { app: '컨텐츠 마스터즈', code: a.code, at: new Date().toISOString(), kinds: {}, kv: {} };
+    var KINDS = ['rows', 'scripts', 'pmms', 'keywords', 'funnel_slots', 'week_slots', 'profiles'];
+    for (var i = 0; i < KINDS.length; i++) {
+      try {
+        var r = await cmRpc('cm_data_get', { p_code: a.code, p_pin_hash: a.pinHash, p_kind: KINDS[i] });
+        if (r && r.ok !== false) out.kinds[KINDS[i]] = (r.data !== undefined ? r.data : r);
+      } catch (e) {}
+    }
+    var KV = ['plnv1', 'trov1', 'plsched1', 'hmv1-growthlog', 'cm-needle'];
+    for (var j = 0; j < KV.length; j++) {
+      try {
+        var rv = await window.storage.get(KV[j]);
+        if (rv && rv.value !== undefined && rv.value !== null) {
+          try { out.kv[KV[j]] = JSON.parse(rv.value); } catch (e2) { out.kv[KV[j]] = rv.value; }
+        }
+      } catch (e) {}
+    }
+    try {
+      var blob = new Blob([JSON.stringify(out, null, 2)], { type: 'application/json' });
+      var el = document.createElement('a');
+      el.href = URL.createObjectURL(blob);
+      el.download = '마스터즈-백업-' + (a.code || 'me') + '-' + new Date().toISOString().slice(0, 10) + '.json';
+      document.body.appendChild(el); el.click(); el.remove();
+      setTimeout(function () { URL.revokeObjectURL(el.href); }, 4000);
+      if (btn) btn.textContent = '✓ 내려받았어요 — 다시 받기';
+    } catch (e) { if (btn) btn.textContent = '실패 — 다시 시도'; }
+  }
+  /* ── 모드 선택 — 챌린지 첫 로그인 1회 ── */
+  function cmModeShow() {
+    var u = _currentUser || {};
+    var old = document.getElementById('cmmd'); if (old) old.remove();
+    var goal = u.wkGoal || 3;
+    var ov = document.createElement('div');
+    ov.id = 'cmmd'; ov.className = 'cmmd';
+    ov.innerHTML = '<div class="in">' +
+      '<div class="mhead">어떤 마음으로 시작할까요?</div>' +
+      '<div class="msub">딱 한 번, 지금 고릅니다 — 나중에 바꿀 수 없어요.</div>' +
+      '<div class="modes">' +
+        '<div class="mode normal" data-cmmd="free">' +
+          '<span class="badge">기본</span><span class="ic">🌿</span>' +
+          '<h3>프리 모드</h3><span class="tag">FREE — 내 속도대로</span>' +
+          '<p>압박 없이, 모든 기능을 자유롭게. 꾸준함은 스스로 만드는 몫.</p>' +
+          '<div class="pros">' +
+            '<i class="g">일정 압박이 없어요</i>' +
+            '<i class="g">쉬어가도 아무 일도 없어요</i>' +
+            '<i class="r">활동이 들쑥날쑥해지기 쉬워요</i>' +
+            '<i class="r">반년 뒤의 내가, 지금과 같을 수 있어요</i>' +
+          '</div><div class="pick">🌿 프리로 시작</div></div>' +
+        '<div class="mode hard" data-cmmd="hard">' +
+          '<span class="badge">추천</span><span class="ic">🔥</span>' +
+          '<h3>하드 모드</h3><span class="tag">HARD — 100일 챌린지 · 뒤를 만들지 않는다</span>' +
+          '<p>삶의 변화를 원하면, 뒤를 만들지 마세요.<br><b>반년 뒤가 기대되는 나</b>를 만나고 싶다면 — 추천.</p>' +
+          '<div class="pros">' +
+            '<i class="g">매주 ' + goal + '편 × 14주 = 총 <b>' + (goal * 14) + '편</b>이면 완주</i>' +
+            '<i class="g">완주하면 남은 기간은 <b>프리 모드로 자동 전환</b>돼요</i>' +
+            '<i class="g">생존 스트릭이 진열장에 금테로 남아요</i>' +
+            '<i class="r">한 주에 ' + goal + '개의 업로드 진행 못 하시면 <b style="color:#E0564B">앱이 잠깁니다</b></i>' +
+            '<i class="r">부활은 없어요 — 자료만 찾아갈 수 있어요</i>' +
+          '</div><div class="pick">🔥 하드로 시작</div></div>' +
+      '</div>' +
+      '<button type="button" class="go" id="cmmd-go" disabled>모드를 골라주세요</button>' +
+      '</div>';
+    document.body.appendChild(ov);
+    document.body.style.overflow = 'hidden';
+    var picked = null;
+    ov.querySelectorAll('.mode').forEach(function (m) {
+      m.onclick = function () {
+        ov.querySelectorAll('.mode').forEach(function (x) { x.classList.remove('sel'); });
+        m.classList.add('sel');
+        picked = m.dataset.cmmd;
+        var g = document.getElementById('cmmd-go');
+        g.disabled = false;
+        g.textContent = picked === 'hard' ? '🔥 하드 모드로 시작하기 — 뒤는 없습니다' : '🌿 프리 모드로 시작하기';
+      };
+    });
+    document.getElementById('cmmd-go').onclick = async function () {
+      if (!picked) return;
+      var a = window.__cmAuth || {};
+      this.disabled = true; this.textContent = '정하는 중…';
+      var res = null;
+      try { res = await cmRpc('cm_set_mode', { p_code: a.code, p_pin_hash: a.pinHash, p_mode: picked }); } catch (e) {}
+      if (res && res.ok) {
+        var u2 = _currentUser; u2.mode = picked;
+        try { setCurrentUser(u2); } catch (e) {}
+        ov.remove(); document.body.style.overflow = '';
+      } else { this.disabled = false; this.textContent = '잠시 후 다시 시도해 주세요'; }
+    };
   }
 
   // === PIN 헬퍼 ===
@@ -45055,7 +45429,7 @@
       const autoLogin = document.getElementById('auth-autologin').checked;
       await setAutologin(autoLogin);
       addRecentCode(res.user.code); // 내가 쓴 코드 기기에 저장 → 다음에 자동 표시
-      await setCurrentUser({ code: res.user.code, name: res.user.name, is_master: !!res.user.is_master, pinHash: hash, expiresAt: (res.user.expiresAt != null ? res.user.expiresAt : (res.user.expires_at != null ? res.user.expires_at : null)) });
+      await setCurrentUser({ code: res.user.code, name: res.user.name, is_master: !!res.user.is_master, pinHash: hash, expiresAt: (res.user.expiresAt != null ? res.user.expiresAt : (res.user.expires_at != null ? res.user.expires_at : null)), mode: res.user.mode || null, status: res.user.status || 'active', challenge: !!res.user.challenge, wkGoal: res.user.wkGoal || 3, streak: res.user.streak || 0, grace: !!res.user.grace, graceUntil: (res.user.graceUntil != null ? res.user.graceUntil : null), signedUpAt: (res.user.signedUpAt != null ? res.user.signedUpAt : null), hardDone: !!res.user.hardDone });
       hideAuth();
       onLoggedIn();
     });
@@ -45126,7 +45500,7 @@
         return;
       }
       await setAutologin(true);
-      await setCurrentUser({ code: res.user.code, name: res.user.name, is_master: !!res.user.is_master, pinHash: hash, expiresAt: (res.user.expiresAt != null ? res.user.expiresAt : (res.user.expires_at != null ? res.user.expires_at : null)) });
+      await setCurrentUser({ code: res.user.code, name: res.user.name, is_master: !!res.user.is_master, pinHash: hash, expiresAt: (res.user.expiresAt != null ? res.user.expiresAt : (res.user.expires_at != null ? res.user.expires_at : null)), mode: res.user.mode || null, status: res.user.status || 'active', challenge: !!res.user.challenge, wkGoal: res.user.wkGoal || 3, streak: res.user.streak || 0, grace: !!res.user.grace, graceUntil: (res.user.graceUntil != null ? res.user.graceUntil : null), signedUpAt: (res.user.signedUpAt != null ? res.user.signedUpAt : null), hardDone: !!res.user.hardDone });
       hideAuth();
       onLoggedIn();
     };
@@ -50751,7 +51125,67 @@
     renderAdminList();
   }
 
+  var _chgWired = false;
+  function cmChgWire() {
+    if (_chgWired) { cmChgList(); return; }
+    _chgWired = true;
+    var nb = document.getElementById('chg-new');
+    if (nb) nb.onclick = function () { document.getElementById('chg-form').classList.toggle('open'); };
+    document.querySelectorAll('#chg-form .chg-chips').forEach(function (g) {
+      g.querySelectorAll('button').forEach(function (b) {
+        b.onclick = function () {
+          g.querySelectorAll('button').forEach(function (x) { x.classList.remove('on'); });
+          b.classList.add('on');
+        };
+      });
+    });
+    var mk = document.getElementById('chg-make');
+    if (mk) mk.onclick = async function () {
+      var name = (document.getElementById('chg-name').value || '').trim();
+      if (!name) { mk.textContent = '이름을 적어주세요'; setTimeout(function () { mk.textContent = '발급하기 🎯'; }, 1400); return; }
+      var per = (document.querySelector('#chg-per button.on') || {}).dataset.v || '90';
+      var goal = +((document.querySelector('#chg-goal button.on') || {}).dataset.v || 3);
+      mk.disabled = true; mk.textContent = '발급 중…';
+      var res = null;
+      try { res = await cmRpc('cm_admin_challenge_create', { p_admin_pw: _adminPw, p_name: name, p_period: per, p_goal: goal }); } catch (e) {}
+      mk.disabled = false;
+      if (res && res.ok) {
+        mk.textContent = '✓ 발급됨 — 코드 ' + res.code;
+        document.getElementById('chg-name').value = '';
+        cmChgList();
+      } else { mk.textContent = '실패 — 다시 시도'; }
+    };
+    cmChgList();
+  }
+  async function cmChgList() {
+    var box = document.getElementById('chg-list'); if (!box) return;
+    var res = null;
+    try { res = await cmRpc('cm_admin_challenge_list', { p_admin_pw: _adminPw }); } catch (e) {}
+    var us = (res && res.ok && res.users) || [];
+    if (!us.length) { box.innerHTML = '<div style="font-size:11px;color:#5C6B87;padding:10px 2px">아직 발급한 챌린지 코드가 없어요.</div>'; return; }
+    box.innerHTML = '<table class="chg-tbl"><tr><th>코드</th><th>이름</th><th>모드</th><th>목표</th><th>스트릭</th><th>상태</th><th></th></tr>' +
+      us.map(function (x) {
+        var md = x.mode === 'hard' ? '<span class="chg-bdg h">하드</span>'
+               : x.mode === 'free' ? '<span class="chg-bdg f">프리</span>'
+               : '<span class="chg-bdg q">미선택</span>';
+        var st = x.status === 'sleep' ? '<span class="chg-bdg s">😴 동면</span>'
+               : x.hardDone ? '<span class="chg-bdg f">🎓 완주</span>' : '진행 중';
+        return '<tr><td><b>' + x.code + '</b></td><td>' + String(x.name || '').replace(/</g, '&lt;') + '</td>' +
+          '<td>' + md + '</td><td>주 ' + (x.wkGoal || 3) + '편</td>' +
+          '<td>' + (x.streak ? '🔥 ' + x.streak + '주' : '—') + '</td><td>' + st + '</td>' +
+          '<td>' + (x.status === 'sleep' ? '<button class="wake" data-chgwake="' + x.code + '">깨우기</button>' : '') + '</td></tr>';
+      }).join('') + '</table>';
+    box.querySelectorAll('[data-chgwake]').forEach(function (b) {
+      b.onclick = async function () {
+        if (!confirm(b.dataset.chgwake + ' 코드를 깨울까요? (동면 해제)')) return;
+        var r = null;
+        try { r = await cmRpc('cm_admin_wake', { p_admin_pw: _adminPw, p_code: b.dataset.chgwake }); } catch (e) {}
+        if (r && r.ok) cmChgList();
+      };
+    });
+  }
   function renderAdminList() {
+    try { cmChgWire(); } catch (e) {}
     const el = document.getElementById('admin-list');
     const countEl = document.getElementById('admin-list-count');
     if (!el) return;
@@ -50943,7 +51377,7 @@
     if (_currentUser && _currentUser.code && _currentUser.pinHash && autoLogin) {
       const res = await cmRpc('cm_login', { p_code: _currentUser.code, p_pin_hash: _currentUser.pinHash });
       if (res && res.ok) {
-        await setCurrentUser({ code: res.user.code, name: res.user.name, is_master: !!res.user.is_master, pinHash: _currentUser.pinHash, expiresAt: (res.user.expiresAt != null ? res.user.expiresAt : (res.user.expires_at != null ? res.user.expires_at : (_currentUser.expiresAt != null ? _currentUser.expiresAt : null))) });
+        await setCurrentUser({ code: res.user.code, name: res.user.name, is_master: !!res.user.is_master, pinHash: _currentUser.pinHash, expiresAt: (res.user.expiresAt != null ? res.user.expiresAt : (res.user.expires_at != null ? res.user.expires_at : (_currentUser.expiresAt != null ? _currentUser.expiresAt : null))), mode: res.user.mode || null, status: res.user.status || 'active', challenge: !!res.user.challenge, wkGoal: res.user.wkGoal || 3, streak: res.user.streak || 0, grace: !!res.user.grace, graceUntil: (res.user.graceUntil != null ? res.user.graceUntil : null), signedUpAt: (res.user.signedUpAt != null ? res.user.signedUpAt : null), hardDone: !!res.user.hardDone });
         onLoggedIn();
         return true;
       }
