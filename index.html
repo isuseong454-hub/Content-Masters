@@ -1079,6 +1079,291 @@
   .pln-slot.on .gl{ opacity:1; text-shadow:0 0 12px var(--sc); }
   .pln-slot.on .tag{ color:#fff; }
   .pv2-ghost{ pointer-events:none; }   /* v700 · 사장님: 흐리게 말고 그냥 오픈 — 색 그대로, 저장만 리서치 경유 */
+
+  /* ══ v702 · 🔭 정찰 — _yt.html 시안 이식 (전 선택자 .sctv 스코프 · 시트=.sct-csh) ══ */
+  .sctv .bar{ display:flex; gap:7px; margin-bottom: 10px; }
+  .sctv .bar input{ flex:1; background: rgba(255,255,255,.045); border:1px solid rgba(255,255,255,.12);
+    border-radius: 12px; padding: 12px 14px; color:#EDF1F7; font-size: 16px; font-family: inherit; outline:none; }
+  .sctv .bar input:focus{ border-color: rgba(255,78,69,.45); }
+  .sctv .bar button{ flex:none; padding: 0 20px; border-radius: 12px; border:none; cursor:pointer;
+    background: linear-gradient(135deg, #FF4E45, #E02D25); color:#fff; font-size: 13.5px; font-weight: 900; font-family: inherit; }
+  .sctv .tgs{ display:flex; flex-direction:column; gap: 6px; margin-bottom: 5px; }
+  .sctv .tg{ display:flex; gap:5px; align-items:center; flex-wrap: wrap; }
+  .sctv .tg .lb{ font-size: 10px; font-weight: 700; color:#5F6878; width: 30px; }
+  .sctv .tg button{ padding: 5px 11px; border-radius: 99px; cursor:pointer; font-family:inherit;
+    font-size: 11px; font-weight: 700; color:#8A94A6; background: none; border:1px solid transparent; }
+  .sctv .tg button.on{ color:#F0F4FA; background: rgba(255,255,255,.07); border-color: rgba(255,255,255,.14); }
+  .sctv .tg button.on.gold{ color:#F4E3A8; background: rgba(244,200,66,.1); border-color: rgba(244,200,66,.4); }
+  .sctv .scap{ font-size: 10.5px; color:#5F6878; margin: 2px 0 14px 35px; line-height: 1.5; }
+  .sctv .scap b{ font-weight: 800; }
+  .sctv .scap s{ text-decoration: none; color:#4A5262; }
+  .sctv .nv{ border-radius:16px; padding:13px 14px; margin-bottom:12px;
+    background: linear-gradient(170deg, rgba(3,199,90,.07), rgba(255,255,255,.02) 60%);
+    border:1px solid rgba(3,199,90,.28); }
+  .sctv .nv-hd{ display:flex; align-items:center; gap:8px; }
+  .sctv .nv-hd .logo{ width:20px; height:20px; border-radius:5px; background:#03C75A; color:#fff;
+    display:grid; place-items:center; font-weight:900; font-size:12px; }
+  .sctv .nv-hd b{ font-size:13px; font-weight:900; }
+  .sctv .nv-hd .demo{ margin-left:auto; font-size:8.5px; color:#7C8496; }
+  .sctv .nv-big{ display:flex; align-items:baseline; gap:10px; margin-top:9px; flex-wrap:wrap; }
+  .sctv .nv-big .tot{ font-size:21px; font-weight:900; color:#7DE8A8; }
+  .sctv .nv-big .tot s{ text-decoration:none; font-size:11px; color:#8A94A6; font-weight:700; }
+  .sctv .nv-big .sp{ font-size:10.5px; color:#9AA4B6; font-weight:700; }
+  .sctv .nv-comp{ font-size:9.5px; font-weight:900; padding:2.5px 9px; border-radius:99px; align-self:center; }
+  .sctv .nv-comp.h{ color:#FF9D97; background:rgba(255,110,100,.1); border:1px solid rgba(255,110,100,.35); }
+  .sctv .nv-comp.m{ color:#F4E3A8; background:rgba(244,200,66,.1); border:1px solid rgba(244,200,66,.3); }
+  .sctv .nv-comp.l{ color:#7DE8A8; background:rgba(125,232,168,.1); border:1px solid rgba(125,232,168,.3); }
+  .sctv .nv-acts{ display:flex; gap:14px; margin-top:10px; }
+  .sctv .nv-note{ font-size:9.5px; color:#5F6878; margin-top:8px; line-height:1.5; }
+  .sctv .nv-note b{ font-weight:800; }
+  .sctv .nv-tbl{ display:none; margin-top:10px; border-top:1px solid rgba(255,255,255,.06); padding-top:8px;
+    max-height:300px; overflow-y:auto; }
+  .sctv .nv-tbl.on{ display:block; }
+  .sctv .nv-row{ display:flex; align-items:center; gap:8px; padding:6px; border-radius:9px; font-size:11px; }
+  .sctv .nv-row:hover{ background:rgba(255,255,255,.03); }
+  .sctv .nv-row .w{ flex:1; min-width:0; font-weight:700; color:#DCE8F5; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
+  .sctv .nv-row .n{ flex:none; width:64px; text-align:right; font-weight:900; color:#7DE8A8; }
+  .sctv .nv-row .d{ flex:none; width:104px; text-align:right; font-size:9px; color:#7C8496; }
+  .sctv .nv-row .c{ flex:none; width:30px; text-align:center; font-size:9px; color:#9AA4B6; }
+  .sctv .nv-row .add button{ width:26px; height:22px; border-radius:7px; cursor:pointer; font-family:inherit;
+    font-size:11px; font-weight:900; color:#D7F34B;
+    background:rgba(215,243,75,.08); border:1px solid rgba(215,243,75,.4); }
+  .sctv .nv-row .add button.in{ background:linear-gradient(135deg,#D7F34B,#A9E84A); color:#0A0D12; border:none; }
+  .sctv .kb-links{ display:flex; gap:8px; margin-top:12px; }
+  .sctv .kb-lnk{ flex:1; display:flex; align-items:center; justify-content:center; gap:7px; padding:11px 8px;
+    border-radius:12px; cursor:pointer; font-family:inherit; font-size:12px; font-weight:800;
+    color:#DCE8F5; text-decoration:none; background:rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.14); transition:transform .16s ease; }
+  .sctv .kb-lnk:active{ transform:scale(.97); }
+  .sctv .kb-lnk svg{ flex:none; display:block; }
+  .sctv .nv-emb{ display:none; margin-top:10px; border-radius:12px; overflow:hidden; background:#fff;
+    border:1px solid rgba(255,255,255,.14); }
+  .sctv .nv-emb.on{ display:block; min-height:110px; }
+  .sctv .nv-emb iframe{ display:block; width:100% !important; border:0; height:420px; }
+  .sctv .nv-embload{ padding:14px; font-size:12px; color:#555; }
+  .sctv .nv-embload a{ color:#1a73e8; }
+  .sct-csh .cv .vt .vtn{ width:52px; height:30px; border-radius:6px; flex:none; background:#03C75A; color:#fff;
+    display:grid; place-items:center; font-weight:900; }
+  .sctv .mtabs{ display:flex; gap:7px; margin-bottom:15px; }
+  .sctv .mtabs button{ padding:8px 15px; border-radius:99px; cursor:pointer; font-family:inherit;
+    font-size:12px; font-weight:800; color:#8A94A6; background:rgba(255,255,255,.04);
+    border:1px solid rgba(255,255,255,.1); }
+  .sctv .mtabs button.yt.on{ color:#FFD9D6; background:rgba(255,78,69,.13); border-color:rgba(255,78,69,.5); }
+  .sctv .mtabs button.kb.on{ color:#B9F5D2; background:rgba(3,199,90,.13); border-color:rgba(3,199,90,.5); }
+  .sctv .kbbtn{ flex:none; padding:0 18px; border-radius:12px; border:none; cursor:pointer;
+    background:linear-gradient(135deg, #03C75A, #02A94C); color:#fff; font-size:13.5px; font-weight:900; font-family:inherit; }
+  .sctv .kb-slot{ display:flex; align-items:center; gap:9px; margin-bottom:7px; border-radius:12px; padding:2px 6px 2px 13px;
+    background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.11); }
+  .sctv .kb-slot:focus-within{ border-color: var(--kc); box-shadow: 0 0 10px -4px var(--kc); }
+  .sctv .kb-slot .dt{ width:9px; height:9px; border-radius:50%; background:var(--kc); flex:none; box-shadow:0 0 7px var(--kc); }
+  .sctv .kb-slot input{ flex:1; background:none; border:none; outline:none; color:#EDF1F7;
+    font-size:16px; font-family:inherit; padding:10px 4px; min-width:0; }
+  .sctv .kb-slot input::placeholder{ color:#5F6878; }
+  .sctv .kb-slot i{ font-style:normal; cursor:pointer; color:#7C8496; font-weight:900; padding:6px 10px; }
+  .sctv .kb-plus{ display:block; width:100%; padding:10px; margin:2px 0 9px; border-radius:12px; cursor:pointer;
+    font-family:inherit; font-size:12px; font-weight:800; color:#B9F5D2;
+    background:rgba(3,199,90,.06); border:1px dashed rgba(3,199,90,.4); }
+  .sctv .kb-plus:active{ transform:scale(.98); }
+  .sctv .kb-go{ display:block; width:100%; padding:13px; border-radius:13px; border:none; cursor:pointer;
+    font-family:inherit; font-size:13.5px; font-weight:900; color:#fff;
+    background:linear-gradient(135deg, #03C75A, #029447); box-shadow:0 10px 24px -10px rgba(3,199,90,.5); }
+  .sctv .kb-go:disabled{ opacity:.6; cursor:default; }
+  .sctv .kb-sec{ border-radius:16px; padding:13px 14px; margin-top:12px;
+    background:linear-gradient(170deg, rgba(3,199,90,.06), rgba(255,255,255,.02) 60%);
+    border:1px solid rgba(3,199,90,.25); }
+  .sctv .kb-sec > b{ display:flex; align-items:center; gap:7px; font-size:12.5px; font-weight:900; margin-bottom:10px; }
+  .sctv .kb-sec > b s{ text-decoration:none; margin-left:auto; font-size:9px; color:#7C8496; font-weight:600; }
+  .sctv .kb-row{ display:flex; align-items:center; gap:9px; padding:7px 0; }
+  .sctv .kb-row .w{ flex:none; width:112px; font-size:12px; font-weight:800; color:#DCE8F5;
+    overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
+  .sctv .kb-row.win .w{ color:#B9F5D2; }
+  .sctv .kb-row.win .w::after{ content:' 👑'; }
+  .sctv .kb-row .barw{ flex:1; height:15px; border-radius:99px; background:rgba(255,255,255,.05); overflow:hidden; }
+  .sctv .kb-row .bar{ height:100%; border-radius:99px; background:linear-gradient(90deg, #03C75A, #7DE8A8);
+    box-shadow:0 0 10px rgba(3,199,90,.3); }
+  .sctv .kb-row.zero .bar{ background:rgba(255,255,255,.12); box-shadow:none; }
+  .sctv .kb-row .n{ flex:none; width:76px; text-align:right; font-size:12px; font-weight:900; color:#7DE8A8; }
+  .sctv .kb-row .cmpx{ flex:none; width:56px; text-align:right; }
+  .sctv .kb-sub{ font-size:9.5px; color:#5F6878; margin-top:7px; line-height:1.5; }
+  .sctv .card{ border-radius: 16px; padding: 13px; margin-bottom: 12px;
+    background: rgba(255,255,255,.032); border: 1px solid rgba(255,255,255,.06); }
+  .sctv .top{ display:flex; gap: 12px; }
+  .sctv .th{ flex:none; width: 132px; position: relative; cursor:pointer; }
+  .sctv .th img{ width: 132px; height: 74px; object-fit: cover; border-radius: 10px; display:block; }
+  .sctv .th .dur{ position:absolute; right: 5px; bottom: 5px; font-size: 9px; font-weight: 800;
+    background: rgba(0,0,0,.75); color:#fff; padding: 1px 5px; border-radius: 5px; }
+  .sctv .th .pl{ position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width: 28px; height: 28px;
+    border-radius:50%; background: rgba(0,0,0,.5); display:grid; place-items:center; }
+  .sctv .th .pl::after{ content:''; border-style:solid; border-width: 5px 0 5px 9px;
+    border-color: transparent transparent transparent #fff; margin-left: 2px; }
+  .sctv .bd{ flex:1; min-width: 0; display:flex; flex-direction:column; }
+  .sctv .tt{ font-size: 12.5px; font-weight: 800; line-height: 1.45; color:#EDF1F7;
+    display:-webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .sctv .big{ display:flex; align-items:center; gap: 8px; margin-top: 6px; flex-wrap:wrap; }
+  .sctv .big .vw{ font-size: 14px; font-weight: 900; color:#FF8A84; }
+  .sctv .big .spd{ font-size: 10px; font-weight: 800; color:#7DE8A8; }
+  .sctv .mult{ font-size: 10.5px; font-weight: 900; padding: 3px 10px; border-radius: 99px; letter-spacing: .2px;
+    color:#EFDB9E; background: rgba(244,200,66,.055); border: 1px solid rgba(244,200,66,.35);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.09); }
+  .sctv .mult.hi{ color:#FFEDB0; border-color: rgba(255,225,140,.65);
+    background: linear-gradient(135deg, rgba(244,200,66,.13), rgba(255,236,170,.04));
+    box-shadow: 0 0 13px rgba(244,200,66,.28), inset 0 1px 0 rgba(255,255,255,.2);
+    text-shadow: 0 0 8px rgba(244,200,66,.55); }
+  .sctv .mult.hi::before{ content:'✦ '; }
+  .sctv .mult.mid{ color:#C8B98A; border-color: rgba(244,200,66,.2); box-shadow:none; }
+  .sctv .mult.low{ color:#9AA4B6; border-color: rgba(255,255,255,.12); background: rgba(255,255,255,.04); box-shadow:none; }
+  .sctv .meta{ font-size: 10.5px; color:#7C8496; margin-top: 5px; line-height: 1.5; }
+  .sctv .chlink{ display:inline-flex; align-items:center; gap: 6px; cursor:pointer;
+    color:#DCE8F5; font-weight: 800; vertical-align: middle; }
+  .sctv .chlink .av{ width: 17px; height: 17px; border-radius: 50%; display:block;
+    border: 1px solid rgba(126,200,245,.4); }
+  .sctv .chlink .ana{ font-style: normal; font-size: 8.5px; font-weight: 800; letter-spacing: .3px;
+    color:#9FD3F7; padding: 2px 8px; border-radius: 99px;
+    background: rgba(126,200,245,.07); border: 1px solid rgba(126,200,245,.32);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.08); transition: box-shadow .18s ease, color .18s ease; }
+  .sctv .chlink:hover .ana{ color:#CFEAFF; box-shadow: 0 0 10px rgba(126,200,245,.3), inset 0 1px 0 rgba(255,255,255,.12); }
+  .sctv .acts{ display:flex; align-items:center; justify-content:flex-end; gap: 12px; margin-top: 10px; }
+  .sctv .lnkb{ background:none; border:none; cursor:pointer; font-family:inherit;
+    font-size: 11px; font-weight: 700; color:#8A94A6; padding: 2px 0; }
+  .sctv .lnkb b{ color:#C9D2E4; font-weight: 800; }
+  .sctv .lnkb.like{ cursor: default; margin-right: auto; }
+  .sctv .lnkb.open{ color:#AFD9F5; }
+  .sctv .addv{ padding: 6px 14px; border-radius: 99px; border:none; cursor:pointer;
+    font-family:inherit; font-size: 11px; font-weight: 900; color:#0A0D12;
+    background: linear-gradient(135deg, #D7F34B, #A9E84A); }
+  .sctv .addv.done{ background: rgba(215,243,75,.12); color:#D7F34B; border: 1px solid rgba(215,243,75,.45); }
+  .sctv .drawer{ display:none; margin-top: 11px; padding-top: 11px; border-top: 1px solid rgba(255,255,255,.06); }
+  .sctv .drawer.on{ display:block; }
+  .sctv .drawer .cap{ font-size: 10px; color:#5F6878; margin-bottom: 8px; }
+  .sctv .tags2{ display:flex; flex-wrap: wrap; gap: 5px; }
+  .sctv .tags2 i{ font-style: normal; font-size: 10px; font-weight: 700; color:#AFD9F5; cursor:pointer;
+    background: rgba(126,200,245,.07); border: 1px solid rgba(126,200,245,.22); padding: 3.5px 9px; border-radius: 99px; }
+  .sctv .tags2 i.in{ color:#0A0D12; background: linear-gradient(135deg, #D7F34B, #A9E84A); border-color: transparent; }
+  .sctv .tags2 i.in::after{ content:' ✓'; }
+  .sctv .tags2 .no{ color:#7C8496; background:none; border:none; cursor:default; }
+  .sctv .cmwrap{ max-height: 300px; overflow-y: auto; }
+  .sctv .cmt{ display:flex; gap: 9px; padding: 8px 7px; border-radius: 10px; cursor:pointer; align-items:flex-start; }
+  .sctv .cmt:hover{ background: rgba(255,255,255,.03); }
+  .sctv .cmt .lk{ flex:none; min-width: 48px; text-align:center; font-size: 9.5px; font-weight: 900; color:#8A94A6;
+    background: rgba(255,255,255,.05); border-radius: 8px; padding: 3px 5px; }
+  .sctv .cmt.hot .lk{ color:#7DE8A8; background: rgba(125,232,168,.08); }
+  .sctv .cmt .tx2{ flex:1; min-width:0; font-size: 11px; line-height: 1.6; color:#C9D4E2; white-space: pre-wrap; word-break: break-word; }
+  .sctv .cmt .tx2 s{ text-decoration:none; display:block; font-size: 9px; color:#5F6878; margin-top: 2px; }
+  .sctv .cmt.in{ background: rgba(215,243,75,.06); box-shadow: inset 2.5px 0 0 #D7F34B; }
+  .sctv .cmt.in .tx2::after{ content:'  ✓ 담음 — 톡하면 취소'; color:#D7F34B; font-size: 9px; font-weight: 800; }
+  .sctv .no2{ font-size: 10.5px; color:#7C8496; padding: 4px 0; }
+  .sctv .stat{ text-align:center; padding: 28px 10px; color:#8A94A6; font-size: 12.5px; line-height: 1.6; }
+  .sctv .morebtn{ display:block; width:100%; padding: 12px; margin-top: 2px; border-radius: 12px; cursor:pointer;
+    font-family:inherit; font-size: 11.5px; font-weight: 800; color:#9AA4B6;
+    background: rgba(255,255,255,.035); border: 1px solid rgba(255,255,255,.08); }
+  .sctv .inpl{ margin-bottom: 11px; }
+  .sctv .inpl .vh{ position: relative; width: 100%; padding-top: 56.25%; border-radius: 11px; overflow:hidden; background:#000; }
+  .sctv .inpl iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
+  .sctv .inpl .rw{ display:flex; gap:12px; margin-top: 7px; }
+  .sctv .inpl a{ text-decoration:none; }
+  .sctv .chback{ background:none; border:none; cursor:pointer; font-family:inherit; font-size: 12px; font-weight: 800;
+    color:#AFD9F5; padding: 0 0 12px; }
+  .sctv .chcard{ border-radius: 18px; overflow:hidden; margin-bottom: 14px;
+    background: linear-gradient(175deg, rgba(126,200,245,.07), rgba(255,255,255,.02) 55%);
+    border: 1px solid rgba(126,200,245,.22);
+    box-shadow: 0 18px 44px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.1); }
+  .sctv .chbn{ height: 96px; background-size: cover; background-position: center; position: relative; }
+  .sctv .chbn::after{ content:''; position:absolute; inset:0;
+    background: linear-gradient(180deg, transparent 20%, rgba(13,17,24,.94)); }
+  .sctv .chbn.nob{ background: linear-gradient(135deg, rgba(126,200,245,.16), rgba(13,17,24,.6)); }
+  .sctv .chpro{ display:flex; align-items:center; gap: 11px; padding: 0 14px; margin-top: -26px; position:relative; z-index:2; }
+  .sctv .chpro img{ width: 56px; height: 56px; border-radius: 50%; border: 2.5px solid rgba(126,200,245,.55);
+    box-shadow: 0 6px 16px rgba(0,0,0,.5); background:#10141C; }
+  .sctv .chpro .nm2{ padding-top: 20px; min-width:0; }
+  .sctv .chpro .nm2 b{ display:block; font-size: 15px; font-weight: 900; }
+  .sctv .chpro .nm2 s{ text-decoration:none; font-size: 10px; color:#8A94A6; }
+  .sctv .chnums{ display:flex; gap: 13px; flex-wrap:wrap; padding: 9px 14px 0; }
+  .sctv .chnums span{ font-size: 10px; color:#7C8496; font-weight: 700; }
+  .sctv .chnums span i{ font-style:normal; color:#DCE8F5; font-weight: 900; font-size: 11.5px; }
+  .sctv .chstats{ display:grid; grid-template-columns: repeat(4, 1fr); gap: 7px; padding: 11px 12px 13px; }
+  .sctv .chstat{ border-radius: 12px; padding: 9px 6px; text-align:center;
+    background: rgba(13,17,24,.55); border: 1px solid rgba(126,200,245,.14); }
+  .sctv .chstat .k{ font-size: 8.5px; font-weight: 800; color:#7FA8C4; letter-spacing:.2px; }
+  .sctv .chstat .v{ font-size: 13px; font-weight: 900; color:#EDF6FF; margin-top: 3px; }
+  .sctv .chstat .s{ font-size: 8px; color:#5F6878; margin-top: 2px; }
+  @media (max-width: 430px){
+  .sctv .chstats{ grid-template-columns: repeat(2, 1fr); }
+}
+  .sct-csh{ position: fixed; inset: 0; z-index: 95; display:none; align-items:flex-end; justify-content:center;
+    background: rgba(4,6,10,.7); backdrop-filter: blur(4px); }
+  .sct-csh.on{ display:flex; }
+  .sct-csh .in2{ width: min(540px, 100%); max-height: 76vh; overflow-y:auto; border-radius: 20px 20px 0 0;
+    background:#10141C; border: 1px solid rgba(255,255,255,.1); padding: 15px 14px calc(16px + env(safe-area-inset-bottom)); }
+  .sct-csh h2{ font-size: 14px; font-weight: 900; display:flex; align-items:center; gap:8px; margin-bottom: 11px; }
+  .sct-csh h2 s{ text-decoration:none; margin-left:auto; font-size: 11px; color:#8A94A6; font-weight: 700; cursor:pointer; }
+  .sct-csh .cv{ border-radius: 13px; padding: 10px 11px; background: rgba(255,255,255,.035);
+    border: 1px solid rgba(255,255,255,.08); margin-bottom: 8px; }
+  .sct-csh .cv .vt{ display:flex; gap: 8px; align-items:center; margin-bottom: 6px; }
+  .sct-csh .cv .vt img{ width: 52px; height: 30px; object-fit:cover; border-radius: 6px; flex:none; }
+  .sct-csh .cv .vt b{ flex:1; min-width:0; font-size: 11.5px; font-weight: 800; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
+  .sct-csh .cv .vt i{ font-style:normal; flex:none; font-size: 10px; color:#FF8A84; font-weight: 900; }
+  .sct-csh .pick{ display:flex; gap: 6px; align-items:flex-start; font-size: 10.5px; color:#C9D4E2; padding: 4px 2px; }
+  .sct-csh .pick .k2{ flex:none; font-size: 9px; font-weight: 900; color:#7C8496; width: 26px; padding-top: 1px; }
+  .sct-csh .pick .v2{ flex:1; min-width:0; line-height: 1.45; }
+  .sct-csh .pick .x{ flex:none; cursor:pointer; color:#7C8496; font-weight: 900; padding: 0 6px; }
+  .sct-csh .go{ display:block; width: 100%; margin-top: 10px; padding: 13px; border-radius: 13px; border:none; cursor:pointer;
+    font-family:inherit; font-size: 13.5px; font-weight: 900; color:#0A0D12;
+    background: linear-gradient(135deg, #7EC8F5, #5FA8DC); }
+  .sct-csh .note{ margin-top: 8px; font-size: 10px; color:#7C8496; text-align:center; }
+  .sct-csh .empty{ text-align:center; color:#8A94A6; font-size: 12px; padding: 22px 8px; line-height:1.6; }
+
+  /* ── 정찰 본체 골격 — 시안의 body 공기를 .sctv 컨테이너로 (kbm=초록 · chm=스카이) ── */
+  .sctv{ border-radius:22px; padding:14px 12px calc(24px + env(safe-area-inset-bottom));
+    background:radial-gradient(700px 380px at 50% -8%, #0F141C, #0A0D12 55%, #07090C);
+    border:1px solid rgba(255,255,255,.07); color:#E8ECF2; transition:background .4s ease; }
+  .sctv.kbm{ background:radial-gradient(700px 420px at 50% -8%, #0C1D14, #0A1410 55%, #070D0A); }
+  .sctv.chm{ background:radial-gradient(700px 420px at 50% -8%, #0E1B28, #0A111C 55%, #070B12); }
+  .sctv .sct-top{ position:sticky; top:-4px; z-index:6; display:flex; align-items:center; gap:8px;
+    margin:-4px -4px 10px; padding:7px 6px; border-radius:14px;
+    background:rgba(10,13,18,.88); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); }
+  .sctv .sct-top .plw-back{ flex:none; padding:6px 4px; }
+  .sctv .sct-top .mtabs{ margin:0; flex:1; flex-wrap:wrap; }
+  .sctv .sct-top .mtabs button{ padding:7px 11px; font-size:11px; }
+  .sct-cartbtn{ position:relative; flex:none; width:40px; height:40px; border-radius:50%;
+    border:1px solid rgba(215,243,75,.5); cursor:pointer; font-size:16px;
+    background:radial-gradient(circle at 34% 26%, rgba(255,255,255,.14), rgba(20,26,14,.92) 60%);
+    display:grid; place-items:center; }
+  .sct-cartbtn .n{ position:absolute; right:-5px; top:-5px; min-width:18px; height:18px; border-radius:99px;
+    background:linear-gradient(135deg,#D7F34B,#A9E84A); color:#0A0D12; font-size:10px; font-weight:900;
+    display:grid; place-items:center; padding:0 4px; }
+  .sct-cartbtn .n.zero{ background:rgba(255,255,255,.14); color:#9AA4B6; }
+  @keyframes sctBump{ 0%{transform:scale(1)} 40%{transform:scale(1.28)} 100%{transform:scale(1)} }
+  .sct-cartbtn.bump{ animation:sctBump .45s cubic-bezier(.2,1.6,.4,1); }
+  .sctv .sct-ctx{ font-size:10.5px; color:#9AA4B6; margin:0 2px 10px; line-height:1.5; }
+  .sctv .sct-ctx b{ color:#AFE3C0; font-weight:800; }
+  .sct-fly{ position:fixed; z-index:200; pointer-events:none; font-size:10px; font-weight:800;
+    color:#0A0D12; background:linear-gradient(135deg,#D7F34B,#A9E84A); padding:3px 9px; border-radius:99px;
+    max-width:150px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis;
+    transition:transform .6s cubic-bezier(.3,.7,.4,1), opacity .6s ease; box-shadow:0 6px 18px rgba(215,243,75,.4); }
+  /* ── 수확 — ①리서치 영상 줄 · ②분석 댓글 줄 (편 화면에 뜨는 부분이라 .sctv 밖) ── */
+  .sct-hv{ display:flex; align-items:center; gap:9px; padding:7px 6px; border-radius:11px;
+    background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.06); margin-bottom:6px; }
+  .sct-hv img{ width:52px; height:30px; object-fit:cover; border-radius:6px; flex:none; }
+  .sct-hv .t{ flex:1; min-width:0; font-size:11px; font-weight:700; color:#DCE8F5;
+    overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
+  .sct-hv .t b{ display:block; font-size:9px; color:#7C8496; font-weight:700; }
+  .sct-hv button,.sct-hv a{ flex:none; border:1px solid rgba(126,200,245,.3); background:rgba(126,200,245,.07);
+    color:#AFD9F5; font-size:9.5px; font-weight:800; border-radius:8px; padding:4px 8px; cursor:pointer;
+    text-decoration:none; font-family:inherit; }
+  .sct-hv .x{ flex:none; color:#7C8496; font-weight:900; padding:2px 6px; cursor:pointer; }
+  .sct-hc{ display:flex; align-items:flex-start; gap:8px; padding:7px 6px; border-radius:11px;
+    background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.06); margin-bottom:6px; }
+  .sct-hc .lk{ flex:none; font-size:9px; font-weight:900; color:#8A94A6; background:rgba(255,255,255,.05);
+    border-radius:7px; padding:3px 6px; }
+  .sct-hc .t{ flex:1; min-width:0; font-size:10.5px; line-height:1.55; color:#C9D4E2; word-break:break-word; }
+  .sct-hc .bks{ flex:none; display:flex; gap:4px; padding-top:1px; }
+  .sct-hc .bks i{ font-style:normal; width:20px; height:20px; border-radius:50%; display:grid; place-items:center;
+    font-size:9px; font-weight:900; cursor:pointer; color:var(--vc);
+    background:rgba(255,255,255,.04); border:1px solid var(--vc); }
+  .sct-hc .x{ flex:none; color:#7C8496; font-weight:900; padding:0 5px; cursor:pointer; }
+  .sct-csh .sct-pick{ cursor:pointer; }
+  .sct-csh .sct-pick .vt i{ color:#7EC8F5; font-weight:900; }
+
   .pv2-ghostnote{ margin:2px 0 12px; padding:11px 14px; border-radius:12px; cursor:pointer;
     border:1px dashed rgba(255,255,255,.22); color:#AEB9CF; font-size:12.5px; font-weight:700; line-height:1.5; }
   .pln-bead{ position:absolute; z-index:4; border-radius:50%; pointer-events:none;
@@ -20519,7 +20804,8 @@
         </div>
         <div class="qcf-sep s2">›</div>
         <div class="qcf-t jly" style="--qc:126,200,245;--jl:#7EC8F5;--jm:#6FE0C0;--jd:#2C6E9E" data-cs-go="plan" title="기획 — 이번 주 다섯 편">
-          <div class="ob"><img src="hero-trophy.png" alt="" onerror="this.style.display='none';var s=this.nextElementSibling;if(s)s.style.display='';"><svg style="display:none" viewBox="0 0 24 24"><path class="g" d="M7.5 4h9v5.2a4.5 4.5 0 0 1-9 0z"/><path class="g" d="M7.5 5.6H5a3 3 0 0 0 3 3"/><path class="g" d="M16.5 5.6H19a3 3 0 0 1-3 3"/><path class="g" d="M12 13.7V17"/><path class="g" d="M9 20h6"/><path class="g" d="M9.6 17h4.8v3H9.6z"/></svg></div>
+          <!-- v702 · 트로피→펜(생각대로 선화) — 트로피는 진행판·서재의 결승선으로 이사 (사장님 지시) -->
+          <div class="ob"><svg viewBox="0 0 24 24"><path class="g" d="M12 20h9"/><path class="g" d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg></div>
           <div class="nm">기획의 방</div><div class="vb">정하다</div>
           <div class="fork-bd" id="fork-bd-plan" style="color:#B39DFB;background:rgba(179,157,251,.12)"></div>
         </div>
@@ -55240,6 +55526,7 @@
       '<div class="pln-nd" data-plnneedle="1">⌖ <span class="t">' + nd + '</span><s>누구에게 · 무슨 말 ›</s></div>' +
       // v692 · 원고·배포 문 — 트레이닝 도크에서 이사해 온 둘
       '<div class="pln-doors">' +
+        '<button type="button" class="pln-door" data-plndoor="scout">🔭 정찰<s>유튜브 · 검색 키워드</s></button>' +
         '<button type="button" class="pln-door" data-plndoor="scripts">✎ 원고<s>쓰던 것 · 완성본</s></button>' +
         '<button type="button" class="pln-door" data-plndoor="osmu">⬡ 배포<s>한 편을 여러 판에</s></button>' +
       '</div>' +
@@ -55349,6 +55636,7 @@
           '<div class="pln-rowl" data-pv2point="1"><span class="k">핵심 포인트</span><span class="v">' + (e.point ? '<em>' + esc(e.point) + '</em>' : '보고 나면 믿게 될 한 문장') + '</span><span class="go">›</span></div>' +
           (e.rid ? '<div class="pln-rowl" data-pv2paint="1"><span class="k">🖍 칠하기</span><span class="v">원본 원고에서 패턴 캐내기</span><span class="go">›</span></div>' : '') +
           '<div class="pln-rowl" data-plnmat="1"><span class="k">재료</span><span class="v">' + esc(e.mat || '담아둔 카드에서') + '</span><span class="go">›</span></div>' +
+          '<div class="pln-rowl" data-pv2scout="1"><span class="k">🔭 정찰</span><span class="v">유튜브 · 검색 키워드에서 재료 캐오기</span><span class="go">›</span></div>' +
           '<div class="pln-rowl" data-plnday="1"><span class="k">언제</span><span class="v"><em>' + esc(e.day) + '</em></span><span class="go">›</span></div></div>' +
         '<div class="pln-sec"><div class="pln-sech"><b>참고 썸네일</b><s>' + ((e.thumbs || []).length) + '/5 · 탭=대표</s></div>' +
           '<div class="pv2-ths">' + (e.thumbs || []).map(function (src, i) {
@@ -55360,12 +55648,12 @@
             ? '<div class="pv2-t add" data-pv2thadd="1">＋<i>붙여넣기<br>· 파일</i></div>' +
               '<input id="pv2-thfile" type="file" accept="image/*" hidden>'
             : '') +
-          '</div></div>';
+          '</div></div>' + sctHvVidsHtml(e);
     } else if (curSt === 1) {
       body = pv2h('2', '분석', e.step >= 2) +
         '<div class="plw-kwbar" id="plw-kwbar">' + plwKwHtml(e) + '</div>' +
         '<div class="pln-sec"><div class="pln-sech"><b>후킹 문구</b><s>' + e.hooks.length + '/10 · 최종 1 + 예비 1</s></div>' + hookBoard + '</div>' +
-        '<div class="pln-sec"><div class="pln-sech"><b>시청자 공감</b><s>댓글을 4바구니로</s></div>' + vocHtml + '</div>';
+        '<div class="pln-sec"><div class="pln-sech"><b>시청자 공감</b><s>댓글을 4바구니로</s></div>' + vocHtml + '</div>' + sctHvCmtsHtml(e);
     } else if (curSt === 2) {
       body = pv2h('3', '디벨롭', e.step >= 3) +
         pv2BriefHtml(e) +
@@ -55731,7 +56019,7 @@
   function plnRenderWs(anim) {
     var wsin = $pln('pln-wsin'); if (!wsin) return;
     if (_plnWrite && !(_plnCur > 0 && _pln.eps[_plnEp])) _plnWrite = 0;
-    var html = _plnCur === 0 ? plnHomeHtml() : (_plnWrite ? plnWriteHtml(_plnEp + 1) : (pv2EpsStrip() + plnEpHtml(_plnCur)));
+    var html = _plnScout ? sctHtml() : (_plnCur === 0 ? plnHomeHtml() : (_plnWrite ? plnWriteHtml(_plnEp + 1) : (pv2EpsStrip() + plnEpHtml(_plnCur))));   // v702 · 🔭 정찰 화면
     if (anim) {
       wsin.classList.add('out');
       setTimeout(function () {
@@ -55745,6 +56033,7 @@
   }
   function plnBind() {
     var wsin = $pln('pln-wsin'); if (!wsin) return;
+    if (wsin.querySelector('#sctv')) { sctBind(wsin); return; }   // v702 · 🔭 정찰 화면
     if (wsin.querySelector('[data-plwback]')) { plwBind(wsin); return; }   // v694 · ④원고 화면
     wsin.querySelectorAll('[data-plngo]').forEach(function (el) {
       el.onclick = function () { plnGoEp(+el.dataset.plngo - 1); };   // v699 · 편 번호 → 작업대에 올리기
@@ -55762,6 +56051,7 @@
     // v692 · 원고·배포 문 — 기획 소속으로 연다 (__rrFrom='plan')
     wsin.querySelectorAll('[data-plndoor]').forEach(function (d) {
       d.onclick = function () {
+        if (d.dataset.plndoor === 'scout') { sctOpen(-1); return; }   // v702 · 🔭 정찰은 기획 안 화면
         window.__rrFrom = 'plan';
         try {
           if (d.dataset.plndoor === 'scripts') switchWorkspace('scripts');
@@ -55769,6 +56059,7 @@
         } catch (e) {}
       };
     });
+    sctEpBind(wsin);   // v702 · 🔭 정찰 줄 + 수확(영상·댓글) 배선
     var alg2 = wsin.querySelector('[data-plnalg]');   // v649 · 알고리즘 상세로
     if (alg2) alg2.onclick = function () { try { switchWorkspace('compass'); cpSetTab('insight'); } catch (e) {} };
     var ag = wsin.querySelector('[data-plnagain]');
@@ -56120,9 +56411,10 @@
   function plnRefresh(anim) { plnRenderSlots(); plnReflect(); plnRenderWs(anim); }
   function plnGo(i) {
     if (i === _plnCur) return;
-    _plnCur = i; _plnWrite = 0; _plnKwSel = -1; plnRefresh(true); plnMoveTo(plnSlotX(i));
+    _plnCur = i; _plnWrite = 0; _plnScout = 0; _plnKwSel = -1; plnRefresh(true); plnMoveTo(plnSlotX(i));
   }
   function plnGoEp(k) {   // v699 · 진행판·스케줄에서 편을 작업대에 올린다 → 다음 할 공정으로
+    _plnScout = 0;
     _plnEp = Math.max(0, Math.min(plnGoal() - 1, k));
     var e = _pln.eps[_plnEp];
     var tgt = !e ? 1 : (e.step <= 1 ? 1 : Math.min((e.step || 1) + 1, 5));
@@ -56209,6 +56501,831 @@
     });
   }
   window.__openPlan = function () { try { switchWorkspace('plan'); } catch (e) {} };
+
+  /* ══ v702 · 🔭 정찰 — 유튜브 정찰 + 채널 분석 + 검색 키워드 (시안 _yt.html 이식)
+     방 하나 · 문 두 개(기획 홈 문 = 자유 정찰 · ①리서치 줄 = 그 편 이름표 달고).
+     카트 수확: 영상→①리서치 수확 · 태그/키워드→e.kw 후보 · 댓글→②분석 공감 후보.
+     유튜브 키는 공개키(배포 후 웹사이트 제한) · 네이버 비밀키는 서버 다리(cm_kwtool)에만. */
+  var _plnScout = 0, _sctEp = -1;
+  var SCT_KEY = 'AIzaSyAx6v19d749Qs_cTikRyE_t1R12Hjw2l3c';
+  var _sctMode = 'yt', _sctQ = '';
+  var _sctPer = 'all', _sctSort = 'view', _sctFmt = 'all', _sctVids = [], _sctShown = 10;
+  var _sctChSort = 'view', _sctChFmt = 'all', _sctChVids = [], _sctChShown = 10, _sctChHd = '';
+  var _sctCart = {}, _sctKb = [], _sctKbVals = ['', ''], _sctNvCache = {}, _sctEmbLoading = 0;
+  var SCT_CAP = {   /* 정렬 설명 — 결론(색) 먼저, 계산법은 괄호 흐리게 */
+    kw: { view: '<b style="color:#F0AFAA">역대 제일 많이 본 영상부터</b> — 검증된 대박.',
+          mult: '<b style="color:#F4E3A8">채널 힘이 아니라 «소재의 힘»으로 터진 영상부터</b> <s>(조회수 ÷ 구독자)</s>',
+          speed: '<b style="color:#7DE8A8">지금 크고 있는 영상부터</b> <s>(조회수 ÷ 올린 날수 = 하루에 크는 양)</s>',
+          rel: '<b style="color:#C9D2E4">유튜브가 이 키워드에 제일 맞다고 보는 순</b> — 검색 화면과 비슷한 눈.' },
+    ch: { view: '<b style="color:#F0AFAA">이 채널에서 제일 많이 본 영상부터</b> — 옛날 대박 포함.',
+          speed: '<b style="color:#7DE8A8">이 채널에서 지금 크고 있는 영상부터</b> <s>(조회수 ÷ 올린 날수)</s>',
+          avg: '<b style="color:#F4E3A8">이 채널 기준으로도 «유독» 터진 영상부터</b> <s>(조회수 ÷ 채널 평타)</s>',
+          date: '<b style="color:#C9D2E4">최근에 올린 순</b> — 요즘 뭘 만들고 있나.' }
+  };
+  function sctEsc(s) { return String(s || '').replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function sctDurSec(iso) {
+    var m = /PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/.exec(iso || '');
+    return m ? (+m[1] || 0) * 3600 + (+m[2] || 0) * 60 + (+m[3] || 0) : 0;
+  }
+  function sctN(n) {
+    n = +n || 0;
+    if (n >= 100000000) return (n / 100000000).toFixed(1).replace(/\.0$/, '') + '억';
+    if (n >= 10000) return (n / 10000).toFixed(1).replace(/\.0$/, '') + '만';
+    return n.toLocaleString();
+  }
+  function sctFmtDur(iso) {
+    var m = /PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/.exec(iso || '');
+    if (!m) return '';
+    var h = +m[1] || 0, mm = +m[2] || 0, s = +m[3] || 0;
+    return h ? h + ':' + String(mm).padStart(2, '0') + ':' + String(s).padStart(2, '0') : mm + ':' + String(s).padStart(2, '0');
+  }
+  function sctAgo(iso) {
+    var d = (Date.now() - new Date(iso).getTime()) / 86400000;
+    if (d < 1) return '오늘';
+    if (d < 30) return Math.floor(d) + '일 전';
+    if (d < 365) return Math.floor(d / 30) + '달 전';
+    return (d / 365).toFixed(1).replace(/\.0$/, '') + '년 전';
+  }
+  function sctAnnot(v) {
+    var days = Math.max(1, (Date.now() - new Date(v.snippet.publishedAt).getTime()) / 86400000);
+    v.__days = days;
+    v.__speed = (+v.statistics.viewCount || 0) / days;
+  }
+  /* ── 네이버 월간 검색량 — Supabase 다리(cm_kwtool), 로그인 계정으로 (캐시 24h·일 잠금) ── */
+  function sctNvNum(x) {
+    var s = String(x == null ? '0' : x).replace(/,/g, '').trim();
+    if (s.indexOf('<') > -1) return 5;
+    var n = parseInt(s, 10);
+    return isNaN(n) ? 0 : n;
+  }
+  function sctNvComp(c) {
+    return c === '높음' ? '<span class="nv-comp h">경쟁 높음</span>'
+         : c === '중간' ? '<span class="nv-comp m">경쟁 중간</span>'
+         : '<span class="nv-comp l">경쟁 낮음</span>';
+  }
+  function sctNvFetch(w) {
+    var n = w.replace(/\s/g, '');
+    if (_sctNvCache[n]) return Promise.resolve(_sctNvCache[n]);
+    var a = window.__cmAuth;
+    if (!(window.sb && a && a.code && a.pinHash)) { _sctNvCache[n] = { err: 'auth' }; return Promise.resolve(_sctNvCache[n]); }
+    return window.sb.rpc('cm_kwtool', { p_code: a.code, p_pin_hash: a.pinHash, p_hint: n }).then(function (rr) {
+      var res = rr && rr.data;
+      if (!(res && res.ok)) { _sctNvCache[n] = { err: (res && res.reason) || 'network' }; return _sctNvCache[n]; }
+      var list = (res.list || []).map(function (x) { return { k: x.k, pc: sctNvNum(x.pc), mo: sctNvNum(x.mo), comp: x.comp || '—' }; });
+      list.sort(function (a2, b2) { return (b2.pc + b2.mo) - (a2.pc + a2.mo); });
+      _sctNvCache[n] = { list: list, cached: !!res.cached };
+      return _sctNvCache[n];
+    }).catch(function () { _sctNvCache[n] = { err: 'network' }; return _sctNvCache[n]; });
+  }
+  function sctNvEntry() {
+    if (!_sctCart.__nv) _sctCart.__nv = { v: { id: '__nv', t: '네이버 검색 키워드', ch: '키워드도구', views: 0, th: '' },
+      video: false, tags: [], cmts: [] };
+    return _sctCart.__nv;
+  }
+  /* ── 화면 골격 — 상태를 그대로 그려서(토글 on·검색어·결과) 재렌더에도 이어진다 ── */
+  function sctHtml() {
+    var e = (_sctEp >= 0 && _pln && _pln.eps) ? _pln.eps[_sctEp] : null;
+    var ctx = (_sctEp >= 0)
+      ? '<div class="sct-ctx">담으면 <b>' + (_sctEp + 1) + '편' + (e && e.t ? ' · ' + sctEsc(String(e.t).slice(0, 16)) : '') + '</b> 리서치로 들어갑니다 — 영상·키워드·댓글이 제자리에 꽂혀요</div>'
+      : '<div class="sct-ctx">담은 건 🛒 카트에서 원하는 편 리서치로 보냅니다</div>';
+    function tb(attr, val, cur, lb, gold) {
+      return '<button data-' + attr + '="' + val + '" class="' + (gold ? 'gold' : '') + (String(cur) === String(val) ? ' on' : '') + '">' + lb + '</button>';
+    }
+    var kwv =
+      '<div id="sct-kwview"' + (_sctMode === 'yt' ? '' : ' style="display:none"') + '>' +
+        '<div class="bar"><input id="sct-q" type="text" placeholder="키워드 — 예: 단발" autocomplete="off" value="' + sctEsc(_sctQ) + '"><button id="sct-go">정찰</button></div>' +
+        '<div class="tgs">' +
+          '<div class="tg" id="sct-tg-per"><span class="lb">기간</span>' + tb('p', 'all', _sctPer, '전체 (3년)') + tb('p', '7', _sctPer, '최근 7일') + tb('p', '30', _sctPer, '최근 30일') + '</div>' +
+          '<div class="tg" id="sct-tg-fmt"><span class="lb">형식</span>' + tb('f', 'all', _sctFmt, '전체') + tb('f', 'shorts', _sctFmt, '쇼츠') + tb('f', 'long', _sctFmt, '일반 영상') + '</div>' +
+          '<div class="tg" id="sct-tg-sort"><span class="lb">정렬</span>' + tb('s', 'view', _sctSort, '조회수') + tb('s', 'mult', _sctSort, '✦ 터짐 배율', 1) + tb('s', 'speed', _sctSort, '🚀 떡상 속도') + tb('s', 'rel', _sctSort, '관련도') + '</div>' +
+        '</div>' +
+        '<div class="scap" id="sct-scap-kw">' + SCT_CAP.kw[_sctSort] + '</div>' +
+        '<div id="sct-out"><div class="stat">키워드를 넣고 「정찰」을 눌러보세요.<br><span style="font-size:10.5px">카드의 파란 채널 이름을 톡 치면 그 채널을 통째로 훑을 수 있어요.</span></div></div>' +
+      '</div>';
+    var chv =
+      '<div id="sct-chview"' + (_sctMode === 'ch' ? '' : ' style="display:none"') + '>' +
+        '<button type="button" class="chback" id="sct-chback">‹ 키워드 정찰로</button>' +
+        '<div id="sct-chhd">' + _sctChHd + '</div>' +
+        '<div class="tgs">' +
+          '<div class="tg" id="sct-tg-chfmt"><span class="lb">형식</span>' + tb('f', 'all', _sctChFmt, '전체') + tb('f', 'shorts', _sctChFmt, '쇼츠') + tb('f', 'long', _sctChFmt, '일반 영상') + '</div>' +
+          '<div class="tg" id="sct-tg-chsort"><span class="lb">정렬</span>' + tb('s', 'view', _sctChSort, '조회수') + tb('s', 'speed', _sctChSort, '🚀 떡상 속도') + tb('s', 'avg', _sctChSort, '✦ 평타 대비', 1) + tb('s', 'date', _sctChSort, '최신') + '</div>' +
+        '</div>' +
+        '<div class="scap" id="sct-scap-ch">' + SCT_CAP.ch[_sctChSort] + '</div>' +
+        '<div id="sct-out2"></div>' +
+      '</div>';
+    var kbv =
+      '<div id="sct-kwlab"' + (_sctMode === 'kb' ? '' : ' style="display:none"') + '>' +
+        '<div id="sct-kb-slots"></div>' +
+        '<button type="button" class="kb-plus" id="sct-kb-plus">＋ 키워드</button>' +
+        '<button type="button" class="kb-go" id="sct-kb-go">⚖ 비교하기</button>' +
+        '<div class="scap" style="margin-left:2px">같은 판에 올려야 보입니다 — <b style="color:#7DE8A8">누가 수요가 있고, 누가 허명인가.</b> 칸의 색 = 아래 그래프 선의 색.</div>' +
+        '<div id="sct-kb-out"></div>' +
+      '</div>';
+    var n = sctCartN();
+    return '<div class="sctv' + (_sctMode === 'kb' ? ' kbm' : _sctMode === 'ch' ? ' chm' : '') + '" id="sctv">' +
+      '<div class="sct-top">' +
+        '<button type="button" class="plw-back" data-sctback="1">‹ 기획</button>' +
+        '<div class="mtabs">' +
+          '<button type="button" id="sct-mt-yt" class="yt' + (_sctMode !== 'kb' ? ' on' : '') + '">🎬 유튜브 정찰</button>' +
+          '<button type="button" id="sct-mt-kb" class="kb' + (_sctMode === 'kb' ? ' on' : '') + '">🔑 검색 키워드</button>' +
+        '</div>' +
+        '<button type="button" class="sct-cartbtn" id="sct-cartbtn">🛒<span class="n' + (n ? '' : ' zero') + '" id="sct-cartn">' + n + '</span></button>' +
+      '</div>' + ctx + kwv + chv + kbv + '</div>';
+  }
+  function sctMode(m) {
+    _sctMode = m;
+    var kv = document.getElementById('sct-kwview'); if (!kv) return;
+    kv.style.display = (m === 'yt') ? '' : 'none';
+    document.getElementById('sct-chview').style.display = (m === 'ch') ? '' : 'none';
+    document.getElementById('sct-kwlab').style.display = (m === 'kb') ? '' : 'none';
+    var rt = document.getElementById('sctv');
+    rt.classList.toggle('kbm', m === 'kb');
+    rt.classList.toggle('chm', m === 'ch');
+    document.getElementById('sct-mt-yt').classList.toggle('on', m !== 'kb');
+    document.getElementById('sct-mt-kb').classList.toggle('on', m === 'kb');
+  }
+  function sctOpen(ep) {
+    _sctEp = (typeof ep === 'number') ? ep : -1;
+    _plnScout = 1;
+    plnRenderWs(true);
+  }
+  function sctExit() {
+    _plnScout = 0;
+    var sh = document.getElementById('sct-csh'); if (sh) sh.remove();
+    plnRefresh(true);
+  }
+  /* ── 카트 ── */
+  function sctCartN() {
+    var n = 0;
+    Object.keys(_sctCart).forEach(function (k) {
+      var c = _sctCart[k];
+      n += (c.video ? 1 : 0) + c.tags.length + c.cmts.length;
+    });
+    return n;
+  }
+  function sctCartEntry(v) {
+    if (!_sctCart[v.id]) _sctCart[v.id] = { v: {
+      id: v.id, t: v.snippet.title, ch: v.snippet.channelTitle,
+      views: +v.statistics.viewCount || 0,
+      th: (v.snippet.thumbnails.medium || v.snippet.thumbnails.default || {}).url
+    }, video: false, tags: [], cmts: [] };
+    return _sctCart[v.id];
+  }
+  function sctCartSync(noBump) {
+    var el = document.getElementById('sct-cartn'); if (!el) return;
+    var n = sctCartN();
+    el.textContent = n; el.classList.toggle('zero', !n);
+    if (!noBump) {
+      var b = document.getElementById('sct-cartbtn');
+      if (b) { b.classList.remove('bump'); void b.offsetWidth; b.classList.add('bump'); }
+    }
+  }
+  function sctFly(fromEl, label) {
+    try {
+      var r = fromEl.getBoundingClientRect(), c = document.getElementById('sct-cartbtn').getBoundingClientRect();
+      var f = document.createElement('span');
+      f.className = 'sct-fly'; f.textContent = label;
+      f.style.left = r.left + 'px'; f.style.top = r.top + 'px';
+      document.body.appendChild(f);
+      requestAnimationFrame(function () {
+        f.style.transform = 'translate(' + (c.left + 8 - r.left) + 'px,' + (c.top + 8 - r.top) + 'px) scale(.25)';
+        f.style.opacity = '.15';
+      });
+      setTimeout(function () { f.remove(); sctCartSync(); }, 620);
+    } catch (e) { sctCartSync(); }
+  }
+  function sctCartOpen() {
+    var old = document.getElementById('sct-csh'); if (old) old.remove();
+    var d = document.createElement('div');
+    d.className = 'sct-csh on'; d.id = 'sct-csh';
+    d.innerHTML = '<div class="in2"><h2>🛒 컨텐츠 카트 <s id="sct-cart-clear">비우기</s></h2><div id="sct-cart-list"></div>' +
+      '<button type="button" class="go" id="sct-cart-go"></button><div class="note" id="sct-cart-note"></div></div>';
+    document.body.appendChild(d);
+    d.addEventListener('click', function (ev) {
+      if (ev.target !== d) return;
+      d.remove();
+      if (_sctVids.length) sctRenderKw();
+      if (_sctMode === 'ch' && _sctChVids.length) sctRenderCh();
+      if (_sctMode === 'kb' && _sctKb.length) sctKbRender();
+    });
+    document.getElementById('sct-cart-clear').onclick = function () { _sctCart = {}; sctCartSync(true); sctCartRender(); };
+    document.getElementById('sct-cart-go').onclick = sctHarvest;
+    sctCartRender();
+  }
+  function sctCartRender() {
+    var box = document.getElementById('sct-cart-list'); if (!box) return;
+    var keys = Object.keys(_sctCart).filter(function (k) {
+      var c = _sctCart[k]; return c.video || c.tags.length || c.cmts.length;
+    });
+    var go = document.getElementById('sct-cart-go'), note = document.getElementById('sct-cart-note');
+    if (go) {
+      go.style.display = keys.length ? '' : 'none';
+      go.textContent = (_sctEp >= 0) ? '✦ ' + (_sctEp + 1) + '편 리서치로 담기' : '✦ 리서치로 담기';
+    }
+    if (note) note.textContent = keys.length
+      ? ((_sctEp >= 0) ? '영상→리서치 수확 · 키워드→원고 키워드 후보 · 댓글→분석 공감 후보' : '누르면 어느 편에 담을지 고릅니다')
+      : '';
+    if (!keys.length) { box.innerHTML = '<div class="empty">카트가 비어 있어요.<br>영상·태그·댓글을 톡 치면 여기 담깁니다.</div>'; return; }
+    box.innerHTML = keys.map(function (k) {
+      var c = _sctCart[k];
+      var picks = '';
+      if (c.video) picks += '<div class="pick"><span class="k2">영상</span><span class="v2">제목·조회수·링크·썸네일 통째</span><span class="x" data-rx="v|' + k + '">×</span></div>';
+      c.tags.forEach(function (t, i) {
+        picks += '<div class="pick"><span class="k2">태그</span><span class="v2">' + sctEsc(t) + '</span><span class="x" data-rx="t|' + k + '|' + i + '">×</span></div>';
+      });
+      c.cmts.forEach(function (cm, i) {
+        picks += '<div class="pick"><span class="k2">댓글</span><span class="v2">👍' + sctN(cm.lk) + ' · ' + sctEsc(cm.t.slice(0, 70)) + (cm.t.length > 70 ? '…' : '') + '</span><span class="x" data-rx="c|' + k + '|' + i + '">×</span></div>';
+      });
+      return '<div class="cv"><div class="vt">' +
+        (c.v.th ? '<img src="' + sctEsc(c.v.th) + '" alt="">' : '<span class="vtn">N</span>') +
+        '<b>' + sctEsc(c.v.t) + '</b><i>' + (c.v.views ? '▶ ' + sctN(c.v.views) : '') + '</i></div>' + picks + '</div>';
+    }).join('');
+    box.querySelectorAll('[data-rx]').forEach(function (x) {
+      x.onclick = function () {
+        var p = x.dataset.rx.split('|'), c = _sctCart[p[1]];
+        if (!c) return;
+        if (p[0] === 'v') c.video = false;
+        if (p[0] === 't') c.tags.splice(+p[2], 1);
+        if (p[0] === 'c') c.cmts.splice(+p[2], 1);
+        sctCartSync(true); sctCartRender();
+      };
+    });
+  }
+  /* ── 수확 — 카트를 편 리서치에 분배 ── */
+  function sctHarvest() {
+    if (!sctCartN()) { try { toast('카트가 비어 있어요 — 영상·태그·댓글을 톡 치면 담깁니다'); } catch (e) {} return; }
+    if (_sctEp >= 0) { sctHarvestTo(_sctEp); return; }
+    var list = document.getElementById('sct-cart-list'); if (!list) return;
+    var goal = plnGoal();
+    var h = '<div style="font-size:11px;color:#9AA4B6;margin:2px 0 9px">어느 편 리서치로 담을까요?</div>';
+    for (var i = 0; i < goal; i++) {
+      var e = _pln.eps[i];
+      h += '<div class="cv sct-pick" data-sctpick="' + i + '"><div class="vt"><b>' + (i + 1) + '편 · ' +
+        (e ? sctEsc(String(e.t || '').slice(0, 22)) : '<span style="color:#8A94A6">아직 안 정함 — 새 편으로</span>') + '</b><i>›</i></div></div>';
+    }
+    list.innerHTML = h;
+    list.querySelectorAll('[data-sctpick]').forEach(function (el) {
+      el.onclick = function () { sctHarvestTo(+el.dataset.sctpick); };
+    });
+    var go = document.getElementById('sct-cart-go'); if (go) go.style.display = 'none';
+    var note = document.getElementById('sct-cart-note'); if (note) note.textContent = '';
+  }
+  async function sctHarvestTo(k) {
+    var e = _pln.eps[k];
+    var keys = Object.keys(_sctCart).filter(function (x) {
+      var c = _sctCart[x]; return c.video || c.tags.length || c.cmts.length;
+    });
+    if (!e) {   // 빈 자리 = 새 편 — 첫 담은 영상 제목을 후보로
+      var fv = null;
+      keys.forEach(function (x) { if (!fv && _sctCart[x].video) fv = _sctCart[x].v; });
+      var t = prompt('새 편 제목은?', fv ? String(fv.t).slice(0, 40) : _sctQ.trim().slice(0, 40));
+      if (t === null) return;
+      t = t.trim(); if (!t) return;
+      e = _pln.eps[k] = { rid: null, t: t, src: '정찰', ref: fv ? fv.ch : '—', hook: '',
+        bone: ['이득&손해', '공감', '이유', '해결', 'CTA'], cuts: [], day: PLN_DAYS[k],
+        mat: '정찰에서 담아옴', step: 1 };
+    }
+    e.scout = e.scout || { vids: [], cmts: [] };
+    e.kw = e.kw || [];
+    var nv = 0, nk = 0, nc = 0;
+    keys.forEach(function (x) {
+      var c = _sctCart[x];
+      if (c.video && !e.scout.vids.some(function (v) { return v.id === c.v.id; })) { e.scout.vids.push(c.v); nv++; }
+      c.tags.forEach(function (t2) {
+        if (!e.kw.some(function (kk) { return kk.t === t2; })) { e.kw.push({ t: t2, star: 0 }); nk++; }
+      });
+      c.cmts.forEach(function (cm) {
+        if (!e.scout.cmts.some(function (y) { return y.t === cm.t; })) { e.scout.cmts.push({ t: cm.t, lk: cm.lk }); nc++; }
+      });
+    });
+    await plnSave();
+    _sctCart = {};
+    var sh = document.getElementById('sct-csh'); if (sh) sh.remove();
+    _plnScout = 0; _plnEp = k;
+    if (_plnCur === 1) plnRefresh(true); else plnGo(1);
+    try { toast('🔭 ' + (k + 1) + '편에 담았어요 — 영상 ' + nv + ' · 키워드 ' + nk + ' · 댓글 ' + nc); } catch (er) {}
+  }
+  /* ── 수확물 표시 — ①리서치 영상 · ②분석 댓글 (편 화면 소속) ── */
+  function sctHvVidsHtml(e) {
+    var vs = (e.scout && e.scout.vids) || [];
+    if (!vs.length) return '';
+    return '<div class="pln-sec"><div class="pln-sech"><b>🔭 정찰 수확 — 영상</b><s>' + vs.length + '개</s></div>' +
+      vs.map(function (v, i) {
+        return '<div class="sct-hv">' +
+          (v.th ? '<img src="' + sctEsc(v.th) + '" alt="">' : '') +
+          '<span class="t">' + sctEsc(v.t) + '<b>▶ ' + sctN(v.views) + ' · ' + sctEsc(v.ch) + '</b></span>' +
+          '<button type="button" data-sctvth="' + i + '">🖼 썸네일로</button>' +
+          '<a href="https://www.youtube.com/watch?v=' + sctEsc(v.id) + '" target="_blank" rel="noopener">↗</a>' +
+          '<span class="x" data-sctvdel="' + i + '">×</span></div>';
+      }).join('') + '</div>';
+  }
+  function sctHvCmtsHtml(e) {
+    var cs = (e.scout && e.scout.cmts) || [];
+    if (!cs.length) return '';
+    var BK = [['prob', '문', '#E07B7B', '문제'], ['want', '욕', '#7E9B72', '욕구'], ['avoid', '회', '#F0B24E', '회피'], ['resist', '저', '#8FA0C9', '저항']];
+    return '<div class="pln-sec"><div class="pln-sech"><b>🔭 정찰에서 온 댓글</b><s>' + cs.length + ' · 글자 톡 = 그 바구니로</s></div>' +
+      cs.map(function (c, i) {
+        return '<div class="sct-hc"><span class="lk">👍' + sctN(c.lk) + '</span>' +
+          '<span class="t">' + sctEsc(c.t) + '</span><span class="bks">' +
+          BK.map(function (b) { return '<i data-sctvoc="' + i + ':' + b[0] + '" style="--vc:' + b[2] + '" title="' + b[3] + '">' + b[1] + '</i>'; }).join('') +
+          '</span><span class="x" data-sctcdel="' + i + '">×</span></div>';
+      }).join('') + '</div>';
+  }
+  function sctEpBind(wsin) {
+    var so = wsin.querySelector('[data-pv2scout]');
+    if (so) so.onclick = function () { sctOpen(_plnEp); };
+    wsin.querySelectorAll('[data-sctvth]').forEach(function (b) {
+      b.onclick = async function () {
+        var e = _pln.eps[_plnEp]; if (!e) return;
+        var v = ((e.scout || {}).vids || [])[+b.dataset.sctvth]; if (!v || !v.th) return;
+        e.thumbs = e.thumbs || [];
+        if (e.thumbs.indexOf(v.th) > -1) { try { toast('이미 담겨 있어요'); } catch (er) {} return; }
+        if (e.thumbs.length >= 5) { try { toast('참고 썸네일은 5장까지 — 한 장을 빼고 담아주세요'); } catch (er) {} return; }
+        e.thumbs.push(v.th);
+        await plnSave(); plnRefresh(false);
+      };
+    });
+    wsin.querySelectorAll('[data-sctvdel]').forEach(function (b) {
+      b.onclick = async function () {
+        var e = _pln.eps[_plnEp]; if (!e || !e.scout) return;
+        e.scout.vids.splice(+b.dataset.sctvdel, 1);
+        await plnSave(); plnRefresh(false);
+      };
+    });
+    wsin.querySelectorAll('[data-sctvoc]').forEach(function (b) {
+      b.onclick = async function () {
+        var e = _pln.eps[_plnEp]; if (!e || !e.scout) return;
+        var p = b.dataset.sctvoc.split(':');
+        var c = e.scout.cmts[+p[0]]; if (!c) return;
+        e.voc = e.voc || {};
+        (e.voc[p[1]] = e.voc[p[1]] || []).push(String(c.t).slice(0, 100));
+        e.scout.cmts.splice(+p[0], 1);
+        await plnSave(); plnRefresh(false);
+      };
+    });
+    wsin.querySelectorAll('[data-sctcdel]').forEach(function (b) {
+      b.onclick = async function () {
+        var e = _pln.eps[_plnEp]; if (!e || !e.scout) return;
+        e.scout.cmts.splice(+b.dataset.sctcdel, 1);
+        await plnSave(); plnRefresh(false);
+      };
+    });
+  }
+  /* ── 배선 — 재렌더 때마다 전부 다시 ── */
+  function sctWire(sel, attr, fn) {
+    document.querySelectorAll(sel + ' button').forEach(function (b) {
+      b.onclick = function () {
+        document.querySelectorAll(sel + ' button').forEach(function (x) { x.classList.remove('on'); });
+        b.classList.add('on'); fn(b.dataset[attr]);
+      };
+    });
+  }
+  function sctBind(wsin) {
+    var bk = wsin.querySelector('[data-sctback]');
+    if (bk) bk.onclick = sctExit;
+    sctWire('#sct-tg-per', 'p', function (v) { _sctPer = v; if (_sctQ.trim()) sctRun(); });
+    sctWire('#sct-tg-fmt', 'f', function (v) { _sctFmt = v; _sctShown = 10; sctRenderKw(); });
+    sctWire('#sct-tg-sort', 's', function (v) {
+      _sctSort = v;
+      document.getElementById('sct-scap-kw').innerHTML = SCT_CAP.kw[v];
+      if (v === 'rel') { if (_sctQ.trim()) sctRun(); }
+      else { _sctShown = 10; sctRenderKw(); }
+    });
+    sctWire('#sct-tg-chfmt', 'f', function (v) { _sctChFmt = v; _sctChShown = 10; sctRenderCh(); });
+    sctWire('#sct-tg-chsort', 's', function (v) {
+      _sctChSort = v;
+      document.getElementById('sct-scap-ch').innerHTML = SCT_CAP.ch[v];
+      _sctChShown = 10; sctRenderCh();
+    });
+    var q = document.getElementById('sct-q');
+    q.addEventListener('input', function () { _sctQ = q.value; });
+    q.addEventListener('keydown', function (ev) {
+      if (ev.key === 'Enter' && !ev.isComposing && ev.keyCode !== 229) sctRun();
+    });
+    document.getElementById('sct-go').onclick = sctRun;
+    document.getElementById('sct-mt-yt').onclick = function () { sctMode('yt'); };
+    document.getElementById('sct-mt-kb').onclick = function () { sctMode('kb'); };
+    document.getElementById('sct-chback').onclick = function () { sctMode('yt'); if (_sctVids.length) sctRenderKw(); };
+    document.getElementById('sct-cartbtn').onclick = sctCartOpen;
+    sctKbSlots(_sctKbVals);
+    document.getElementById('sct-kb-plus').onclick = function () {
+      var vs = sctKbVals();
+      if (vs.length >= 5) return;
+      sctKbSlots(vs.concat(['']));
+      var inps = document.querySelectorAll('#sct-kb-slots input');
+      if (inps.length) inps[inps.length - 1].focus();
+    };
+    document.getElementById('sct-kb-go').onclick = async function () {
+      var out = document.getElementById('sct-kb-out');
+      _sctKb = [];
+      sctKbVals().forEach(function (v) {
+        v = v.trim();
+        if (v && _sctKb.indexOf(v) < 0) _sctKb.push(v);
+      });
+      if (_sctKb.length < 2) {
+        out.innerHTML = '<div class="kb-sec"><b>⚖ 비교</b><div class="kb-sub">비교하려면 채워진 칸이 <b style="color:#B9F5D2">2개 이상</b> 필요해요 — 「＋ 키워드」로 칸을 늘려 주세요.</div></div>';
+        return;
+      }
+      var btn = this;
+      btn.disabled = true; btn.textContent = '네이버에 물어보는 중…';
+      await Promise.all(_sctKb.map(sctNvFetch));
+      btn.disabled = false; btn.textContent = '⚖ 비교하기';
+      sctKbRender();
+    };
+    // 결과 이어 그리기 — 화면을 나갔다 와도 정찰은 그대로
+    if (_sctVids.length) sctRenderKw();
+    if (_sctMode === 'ch' && _sctChVids.length) sctRenderCh();
+    if (_sctMode === 'kb' && _sctKb.length) sctKbRender();
+  }
+  /* ── 검색 키워드 비교 (분리 칸) ── */
+  var SCT_KBC = ['#4285F4', '#EA4335', '#FBBC04', '#34A853', '#A142F4'];   // 구글 트렌드 선 색 순서
+  function sctKbVals() {
+    return Array.prototype.map.call(document.querySelectorAll('#sct-kb-slots input'), function (i) { return i.value; });
+  }
+  function sctKbSlots(vals) {
+    if (!vals || !vals.length) vals = ['', ''];
+    _sctKbVals = vals.slice();
+    var box = document.getElementById('sct-kb-slots'); if (!box) return;
+    box.innerHTML = vals.map(function (v, i) {
+      return '<div class="kb-slot" style="--kc:' + SCT_KBC[i % SCT_KBC.length] + '"><span class="dt"></span>' +
+        '<input type="text" maxlength="30" placeholder="키워드 ' + (i + 1) + '" value="' + sctEsc(v) + '">' +
+        (vals.length > 1 ? '<i data-kbrm="' + i + '">×</i>' : '') + '</div>';
+    }).join('');
+    box.querySelectorAll('[data-kbrm]').forEach(function (x) {
+      x.onclick = function () {
+        var vs = sctKbVals();
+        vs.splice(+x.dataset.kbrm, 1);
+        sctKbSlots(vs);
+      };
+    });
+    box.querySelectorAll('input').forEach(function (inp) {
+      inp.addEventListener('input', function () { _sctKbVals = sctKbVals(); });
+      inp.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' && !e.isComposing && e.keyCode !== 229) {
+          e.preventDefault();
+          document.getElementById('sct-kb-go').click();
+        }
+      });
+    });
+  }
+  function sctKbRender() {
+    var out = document.getElementById('sct-kb-out'); if (!out) return;
+    var norms = _sctKb.map(function (w) { return w.replace(/\s/g, ''); });
+    var rows = _sctKb.map(function (w, i) {
+      var st = _sctNvCache[norms[i]] || {};
+      var me = null;
+      (st.list || []).forEach(function (x) { if (x.k === norms[i]) me = x; });
+      return { w: w, tot: me ? me.pc + me.mo : 0, pc: me ? me.pc : 0, mo: me ? me.mo : 0, comp: me ? me.comp : null, err: st.err };
+    });
+    var max = 0, winI = -1;
+    rows.forEach(function (r, i) { if (r.tot > max) { max = r.tot; winI = i; } });
+    var cmp = rows.map(function (r, i) {
+      var pct = max ? Math.max(3, Math.round(r.tot / max * 100)) : 3;
+      return '<div class="kb-row' + (i === winI && r.tot > 0 ? ' win' : '') + (r.tot ? '' : ' zero') + '">' +
+        '<span class="w">' + sctEsc(r.w) + '</span>' +
+        '<span class="barw"><span class="bar" style="width:' + pct + '%"></span></span>' +
+        '<span class="n">' + (r.err ? '실패' : sctN(r.tot)) + '</span>' +
+        '<span class="cmpx">' + (r.comp ? sctNvComp(r.comp) : '') + '</span></div>';
+    }).join('');
+    var seen = {}, pool = [];
+    norms.forEach(function (n) {
+      var st = _sctNvCache[n];
+      ((st && st.list) || []).forEach(function (x) {
+        if (norms.indexOf(x.k) > -1) return;
+        if (seen[x.k]) return;
+        seen[x.k] = 1; pool.push(x);
+      });
+    });
+    pool.sort(function (a, b) { return (b.pc + b.mo) - (a.pc + a.mo); });
+    var digs = pool.slice(0, 30).map(function (x, i) {
+      return '<div class="nv-row"><span class="w">' + sctEsc(x.k) + '</span><span class="n">' + sctN(x.pc + x.mo) + '</span>' +
+        '<span class="d">PC ' + sctN(x.pc) + ' · 모 ' + sctN(x.mo) + '</span><span class="c">' + sctEsc(x.comp) + '</span>' +
+        '<span class="add"><button type="button" data-kbadd="' + i + '">＋</button></span></div>';
+    }).join('');
+    out.innerHTML =
+      '<div class="kb-sec"><b>⚖ 월간 검색량 비교 <s>네이버 · PC+모바일 합</s></b>' + cmp +
+        '<div class="kb-sub">막대가 긴 쪽 = 실제 수요. 0에 가까우면 사람들이 그 말로 검색하지 않는다는 뜻 — 제목에 쓰면 아무도 못 찾아요.</div>' +
+        '<div class="kb-links">' +
+          '<button type="button" class="kb-lnk" id="sct-kb-dl"><svg viewBox="0 0 24 24" width="15" height="15"><rect width="24" height="24" rx="5" fill="#03C75A"/><rect x="5" y="12.5" width="3.2" height="6.5" rx="1" fill="#fff"/><rect x="10.4" y="8.5" width="3.2" height="10.5" rx="1" fill="#fff"/><rect x="15.8" y="5" width="3.2" height="14" rx="1" fill="#fff"/></svg> 네이버 데이터랩 바로가기</button>' +
+          '<a class="kb-lnk" target="_blank" rel="noopener" href="https://trends.google.co.kr/trends/explore?hl=ko&geo=KR&q=' + encodeURIComponent(_sctKb.join(',')) + '"><svg viewBox="0 0 24 24" width="15" height="15"><path d="M2 18.5l6.5-7.5 4.5 3.7 5-5.7" stroke="#4285F4" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path fill="#4285F4" d="M15.5 4.5H23V12z"/></svg> 구글 트렌드 바로가기</a>' +
+        '</div>' +
+        '<div class="kb-sub">데이터랩 버튼 = 첫 키워드가 복사된 채 열림 (붙여넣기 한 번 — 성별·연령대는 거기서) · 트렌드 버튼 = 키워드들이 실린 채 열림.</div></div>' +
+      '<div class="kb-sec"><b>📈 구글 트렌드 — 시간 흐름 <s>최근 12개월 · 같은 그래프에 겹침</s></b><div class="nv-emb on" id="sct-kb-emb"></div>' +
+        '<div class="kb-sub">네이버 숫자가 «지금 얼마나»라면, 이 곡선은 «커지는 중인가 식는 중인가»입니다.<br>' +
+        '그래프 자리에 «문제가 발생했습니다»가 뜨면 구글이 잠깐 막은 것 — ' +
+        '<button type="button" class="lnkb" id="sct-kb-emb-rt" style="color:#B9F5D2">🔄 다시 시도</button> · ' +
+        '<a class="lnkb" style="color:#B9F5D2;text-decoration:none" target="_blank" rel="noopener" href="https://trends.google.co.kr/trends/explore?hl=ko&geo=KR&q=' + encodeURIComponent(_sctKb.join(',')) + '">새 탭에서 보기 ↗</a></div></div>' +
+      '<div class="kb-sec"><b>⛏ 숨은 수요 발굴 <s>입력한 키워드들의 연관을 합쳐 상위 30</s></b>' +
+        (digs || '<div class="kb-sub">발굴된 연관 키워드가 없어요.</div>') + '</div>';
+    out.querySelectorAll('[data-kbadd]').forEach(function (btn) {
+      btn.onclick = function () {
+        var x = pool[+btn.dataset.kbadd]; if (!x) return;
+        var c = sctNvEntry();
+        var at = c.tags.indexOf(x.k);
+        if (at > -1) { c.tags.splice(at, 1); btn.classList.remove('in'); btn.textContent = '＋'; sctCartSync(true); return; }
+        c.tags.push(x.k);
+        btn.classList.add('in'); btn.textContent = '✓';
+        sctFly(btn, 'N ' + x.k);
+      };
+    });
+    var rt = document.getElementById('sct-kb-emb-rt');
+    if (rt) rt.onclick = function () { sctKbEmb(_sctKb.slice(0, 5)); };
+    var dlb = document.getElementById('sct-kb-dl');   // 데이터랩 바로가기 — 첫 키워드 복사 + 열기
+    if (dlb) dlb.onclick = function () {
+      var open2 = function () { window.open('https://datalab.naver.com/keyword/trendSearch.naver', '_blank'); };
+      try {
+        navigator.clipboard.writeText(_sctKb[0] || '').then(open2, open2);
+      } catch (e) { open2(); }
+    };
+    sctKbEmb(_sctKb.slice(0, 5));
+  }
+  function sctKbEmb(words) {
+    var box = document.getElementById('sct-kb-emb'); if (!box) return;
+    box.innerHTML = '<div class="nv-embload">그래프 불러오는 중…</div>';
+    var q = words.join(',');
+    var fb = '<div class="nv-embload">구글이 잠깐 그래프를 막았어요 — 🔄 다시 시도를 누르거나 ' +
+      '<a href="https://trends.google.co.kr/trends/explore?hl=ko&geo=KR&q=' + encodeURIComponent(q) + '" target="_blank" rel="noopener">새 탭으로 보기 ↗</a></div>';
+    var draw = function () {
+      if (!(window.trends && window.trends.embed && window.trends.embed.renderExploreWidgetTo)) { box.innerHTML = fb; return; }
+      box.innerHTML = '';
+      try {
+        window.trends.embed.renderExploreWidgetTo(box, 'TIMESERIES', {
+          comparisonItem: words.map(function (w) { return { keyword: w, geo: 'KR', time: 'today 12-m' }; }),
+          category: 0, property: ''
+        }, { exploreQuery: 'geo=KR&date=today 12-m&q=' + encodeURIComponent(q), guestPath: 'https://trends.google.com:443/trends/embed/' });
+      } catch (e) { box.innerHTML = fb; }
+    };
+    if (window.trends && window.trends.embed) { draw(); return; }
+    if (_sctEmbLoading) { setTimeout(draw, 900); return; }
+    _sctEmbLoading = 1;
+    var s = document.createElement('script');
+    s.src = 'https://ssl.gstatic.com/trends_nrtr/3990_RC01/embed_loader.js';
+    s.onload = draw;
+    s.onerror = function () { _sctEmbLoading = 0; box.innerHTML = fb; };
+    document.head.appendChild(s);
+  }
+  /* ── 유튜브 정찰 — 50개 1회 수신, 형식·정렬·더보기는 전부 공짜(클라이언트) ── */
+  async function sctRun() {
+    var q = _sctQ.trim();
+    var out = document.getElementById('sct-out');
+    if (!q || !out) return;
+    out.innerHTML = '<div class="stat">정찰 중…</div>';
+    try {
+      var order = (_sctSort === 'rel') ? 'relevance' : 'viewCount';
+      var su = 'https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&regionCode=KR&relevanceLanguage=ko&maxResults=50&order=' + order + '&q=' + encodeURIComponent(q) + '&key=' + SCT_KEY;
+      var days = (_sctPer === 'all') ? 365 * 3 : +_sctPer;
+      su += '&publishedAfter=' + new Date(Date.now() - days * 86400000).toISOString();
+      var sr = await fetch(su).then(function (r) { return r.json(); });
+      if (sr.error) { out.innerHTML = '<div class="stat">⚠ ' + sctEsc(sr.error.message).slice(0, 120) + '</div>'; return; }
+      var ids = (sr.items || []).map(function (x) { return x.id.videoId; }).filter(Boolean);
+      if (!ids.length) { out.innerHTML = '<div class="stat">이 조건으로는 결과가 없어요.</div>'; return; }
+      var vr = await fetch('https://www.googleapis.com/youtube/v3/videos?part=snippet,contentDetails,statistics,status&id=' + ids.join(',') + '&key=' + SCT_KEY).then(function (r) { return r.json(); });
+      _sctVids = vr.items || [];
+      var chIds = {};
+      _sctVids.forEach(function (v) { chIds[v.snippet.channelId] = 1; });
+      var cr = await fetch('https://www.googleapis.com/youtube/v3/channels?part=snippet,statistics&id=' + Object.keys(chIds).join(',') + '&key=' + SCT_KEY).then(function (r) { return r.json(); });
+      var subs = {}, thumbs = {};
+      (cr.items || []).forEach(function (c) {
+        subs[c.id] = c.statistics.hiddenSubscriberCount ? null : (+c.statistics.subscriberCount || 0);
+        thumbs[c.id] = ((c.snippet.thumbnails || {}).default || {}).url || '';
+      });
+      _sctVids.forEach(function (v) {
+        sctAnnot(v);
+        var s = subs[v.snippet.channelId];
+        v.__subs = s;
+        v.__chth = thumbs[v.snippet.channelId] || '';
+        v.__mult = (s && s > 0) ? (+v.statistics.viewCount || 0) / s : null;
+      });
+      _sctShown = 10;
+      sctRenderKw();
+    } catch (e) { out.innerHTML = '<div class="stat">⚠ 불러오기 실패: ' + sctEsc(e.message) + '</div>'; }
+  }
+  /* ── 채널 훑기 (50개 = 쿠폰 약 2장) — 배너+프로필+분석 타일 4 ── */
+  async function sctChRun(chId, chTitle) {
+    sctMode('ch');
+    var out = document.getElementById('sct-out2');
+    _sctChHd = '<div class="chhd"><b>' + sctEsc(chTitle) + '</b></div>';
+    document.getElementById('sct-chhd').innerHTML = _sctChHd;
+    out.innerHTML = '<div class="stat">채널 훑는 중…</div>';
+    try {
+      var cr = await fetch('https://www.googleapis.com/youtube/v3/channels?part=snippet,statistics,contentDetails,brandingSettings&id=' + chId + '&key=' + SCT_KEY).then(function (r) { return r.json(); });
+      var ch = (cr.items || [])[0];
+      if (!ch) { out.innerHTML = '<div class="stat">채널을 못 찾았어요.</div>'; return; }
+      var upl = ch.contentDetails.relatedPlaylists.uploads;
+      var pr = await fetch('https://www.googleapis.com/youtube/v3/playlistItems?part=contentDetails&maxResults=50&playlistId=' + upl + '&key=' + SCT_KEY).then(function (r) { return r.json(); });
+      var ids = (pr.items || []).map(function (x) { return x.contentDetails.videoId; }).filter(Boolean);
+      if (!ids.length) { out.innerHTML = '<div class="stat">영상이 없어요.</div>'; return; }
+      var vr = await fetch('https://www.googleapis.com/youtube/v3/videos?part=snippet,contentDetails,statistics,status&id=' + ids.join(',') + '&key=' + SCT_KEY).then(function (r) { return r.json(); });
+      _sctChVids = vr.items || [];
+      var subs = ch.statistics.hiddenSubscriberCount ? null : (+ch.statistics.subscriberCount || 0);
+      // 평타 = 최근 50개 조회수 «중간값» — 대박 한두 개에 안 끌려가는 정직한 평균
+      var vs = _sctChVids.map(function (v) { return +v.statistics.viewCount || 0; }).sort(function (a, b) { return a - b; });
+      var med = vs.length ? vs[Math.floor(vs.length / 2)] : 0;
+      _sctChVids.forEach(function (v) {
+        sctAnnot(v);
+        v.__subs = subs;
+        v.__mult = (med > 0) ? (+v.statistics.viewCount || 0) / med : null;   // 채널 화면의 배지 = 평타 대비
+      });
+      var banner = ch.brandingSettings && ch.brandingSettings.image && ch.brandingSettings.image.bannerExternalUrl;
+      var prof = (ch.snippet.thumbnails && (ch.snippet.thumbnails.medium || ch.snippet.thumbnails.default) || {}).url || '';
+      var shortsN = _sctChVids.filter(function (v) { return sctDurSec(v.contentDetails && v.contentDetails.duration) <= 183; }).length;
+      var shortsPct = Math.round(shortsN / _sctChVids.length * 100);
+      var spanDays = Math.max.apply(null, _sctChVids.map(function (v) { return v.__days; }));
+      var perWeek = (_sctChVids.length / Math.max(spanDays, 7) * 7);
+      var maxV = Math.max.apply(null, _sctChVids.map(function (v) { return +v.statistics.viewCount || 0; }));
+      var maxMult = med > 0 ? maxV / med : 0;
+      _sctChHd = '<div class="chcard">' +
+        (banner ? '<div class="chbn" style="background-image:url(\'' + sctEsc(banner) + '=w1060\')"></div>' : '<div class="chbn nob"></div>') +
+        '<div class="chpro"><img src="' + sctEsc(prof) + '" alt="">' +
+          '<div class="nm2"><b>' + sctEsc(ch.snippet.title) + '</b><s>' + sctEsc(ch.snippet.customUrl || '') + '</s></div></div>' +
+        '<div class="chnums">' +
+          '<span>구독 <i>' + (subs === null ? '비공개' : sctN(subs)) + '</i></span>' +
+          '<span>영상 <i>' + sctN(ch.statistics.videoCount) + '개</i></span>' +
+          '<span>채널 총조회 <i>' + sctN(ch.statistics.viewCount) + '</i></span></div>' +
+        '<div class="chstats">' +
+          '<div class="chstat"><div class="k">평타 (중간값)</div><div class="v">▶ ' + sctN(med) + '</div><div class="s">최근 ' + _sctChVids.length + '개의 보통 성적</div></div>' +
+          '<div class="chstat"><div class="k">업로드 페이스</div><div class="v">주 ' + (perWeek >= 10 ? Math.round(perWeek) : perWeek.toFixed(1)) + '개</div><div class="s">꾸준함의 온도</div></div>' +
+          '<div class="chstat"><div class="k">쇼츠 비율</div><div class="v">' + shortsPct + '%</div><div class="s">쇼츠 ' + shortsN + ' · 일반 ' + (_sctChVids.length - shortsN) + '</div></div>' +
+          '<div class="chstat"><div class="k">최고 히트</div><div class="v">×' + (maxMult >= 10 ? Math.round(maxMult).toLocaleString() : maxMult.toFixed(1)) + '배</div><div class="s">평타 대비 최고 기록</div></div>' +
+        '</div></div>';
+      document.getElementById('sct-chhd').innerHTML = _sctChHd;
+      _sctChSort = 'view'; _sctChFmt = 'all'; _sctChShown = 10;
+      document.querySelectorAll('#sct-tg-chsort button').forEach(function (x) { x.classList.toggle('on', x.dataset.s === 'view'); });
+      document.querySelectorAll('#sct-tg-chfmt button').forEach(function (x) { x.classList.toggle('on', x.dataset.f === 'all'); });
+      document.getElementById('sct-scap-ch').innerHTML = SCT_CAP.ch.view;
+      sctRenderCh();
+      var ws = $pln('pln-ws'); if (ws) ws.scrollTop = 0;
+    } catch (e) { out.innerHTML = '<div class="stat">⚠ 불러오기 실패: ' + sctEsc(e.message) + '</div>'; }
+  }
+  /* ── 카드 (공용) ── */
+  function sctCard(v, i, mode) {
+    var s = v.snippet, st = v.statistics || {};
+    var tags = (s.tags || []).slice(0, 12);
+    var m = v.__mult;
+    var mLabel = (mode === 'ch') ? '평타 ×' : '×';
+    var mHtml = (m === null || m === undefined)
+      ? '<span class="mult low">' + (mode === 'ch' ? '평타 없음' : '구독자 비공개') + '</span>'
+      : '<span class="mult' + (m >= 100 ? ' hi' : m >= 10 ? '' : m >= 1 ? ' mid' : ' low') + '">' + mLabel + (m >= 10 ? Math.round(m).toLocaleString() : m.toFixed(1)) + '배</span>';
+    var spd = '<span class="spd">하루 +' + sctN(v.__speed) + '</span>';
+    var ci = _sctCart[v.id] || { video: false, tags: [], cmts: [] };
+    var chMeta = (mode === 'kw')
+      ? '<span class="chlink" data-chgo="' + sctEsc(s.channelId) + '" data-chtt="' + sctEsc(s.channelTitle) + '">' +
+        (v.__chth ? '<img class="av" src="' + sctEsc(v.__chth) + '" alt="">' : '') + sctEsc(s.channelTitle) +
+        '<i class="ana">📊 채널 분석</i></span> · 구독 ' + (v.__subs === null ? '비공개' : sctN(v.__subs)) + ' · '
+      : '';
+    return '<div class="card" id="sct-card-' + mode + '-' + i + '">' +
+      '<div class="top">' +
+        '<div class="th" data-play="' + v.id + '" data-i="' + i + '" data-m="' + mode + '"><img src="' + sctEsc((s.thumbnails.medium || s.thumbnails.default || {}).url) + '" alt="">' +
+        '<span class="pl"></span><span class="dur">' + sctFmtDur(v.contentDetails && v.contentDetails.duration) + '</span></div>' +
+        '<div class="bd">' +
+          '<div class="tt">' + sctEsc(s.title) + '</div>' +
+          '<div class="big"><span class="vw">▶ ' + sctN(st.viewCount) + '</span>' + mHtml + spd + '</div>' +
+          '<div class="meta">' + chMeta + sctAgo(s.publishedAt) + '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="acts">' +
+        '<span class="lnkb like">👍 좋아요 <b>' + sctN(st.likeCount) + '</b></span>' +
+        '<button type="button" class="lnkb" data-stg="' + mode + '-' + i + '">🏷 태그 <b>' + tags.length + '</b></button>' +
+        '<button type="button" class="lnkb" data-scm="' + mode + '-' + i + '" data-vid="' + v.id + '">💬 댓글 <b>' + sctN(st.commentCount) + '</b></button>' +
+        '<button type="button" class="addv' + (ci.video ? ' done' : '') + '" data-addv="' + mode + '-' + i + '">' + (ci.video ? '✓ 담음 · 취소' : '🛒 담기') + '</button>' +
+      '</div>' +
+      '<div class="drawer" id="sct-tags-' + mode + '-' + i + '">' + (tags.length
+        ? '<div class="cap">태그 톡 = 담기 · 담은 건 다시 톡하면 취소</div><div class="tags2">' + tags.map(function (t, j) {
+            return '<i data-ptag="' + mode + '-' + i + '|' + j + '"' + (ci.tags.indexOf(t) > -1 ? ' class="in"' : '') + '>' + sctEsc(t) + '</i>';
+          }).join('') + '</div>'
+        : '<div class="no2">이 영상은 태그를 안 박았어요</div>') + '</div>' +
+      '<div class="drawer" id="sct-cmts-' + mode + '-' + i + '"></div>' +
+    '</div>';
+  }
+  function sctWireCards(scope, pageVids, mode) {
+    scope.querySelectorAll('[data-chgo]').forEach(function (c) {
+      c.onclick = function () { sctChRun(c.dataset.chgo, c.dataset.chtt); };
+    });
+    scope.querySelectorAll('[data-stg]').forEach(function (b) {
+      b.onclick = function () {
+        var d = document.getElementById('sct-tags-' + b.dataset.stg);
+        d.classList.toggle('on'); b.classList.toggle('open', d.classList.contains('on'));
+      };
+    });
+    scope.querySelectorAll('[data-ptag]').forEach(function (t) {
+      t.onclick = function () {
+        var p = t.dataset.ptag.split('|'), i = +p[0].split('-')[1], v = pageVids[i];
+        var tag = (v.snippet.tags || [])[+p[1]];
+        var c = sctCartEntry(v);
+        var at = c.tags.indexOf(tag);
+        if (at > -1) { c.tags.splice(at, 1); t.classList.remove('in'); sctCartSync(true); return; }
+        c.tags.push(tag);
+        t.classList.add('in');
+        sctFly(t, '🏷 ' + tag);
+      };
+    });
+    scope.querySelectorAll('[data-addv]').forEach(function (b) {
+      b.onclick = function () {
+        var i = +b.dataset.addv.split('-')[1], v = pageVids[i];
+        var c = sctCartEntry(v);
+        if (c.video) { c.video = false; b.classList.remove('done'); b.textContent = '🛒 담기'; sctCartSync(true); return; }
+        c.video = true;
+        b.classList.add('done'); b.textContent = '✓ 담음 · 취소';
+        sctFly(b, '🎬 ' + v.snippet.title.slice(0, 12));
+      };
+    });
+    scope.querySelectorAll('[data-scm]').forEach(function (b) {
+      b.onclick = async function () {
+        var box = document.getElementById('sct-cmts-' + b.dataset.scm);
+        if (box.classList.contains('on')) { box.classList.remove('on'); b.classList.remove('open'); return; }
+        box.classList.add('on'); b.classList.add('open');
+        if (box.dataset.done) return;
+        box.innerHTML = '<div class="no2">댓글 불러오는 중…</div>';
+        try {
+          var r = await fetch('https://www.googleapis.com/youtube/v3/commentThreads?part=snippet&order=relevance&maxResults=100&textFormat=plainText&videoId=' + b.dataset.vid + '&key=' + SCT_KEY).then(function (x) { return x.json(); });
+          if (r.error) { box.innerHTML = '<div class="no2">이 영상은 댓글을 볼 수 없어요 (꺼져 있거나 제한)</div>'; box.dataset.done = 1; return; }
+          var cs = (r.items || []).map(function (it) { return it.snippet.topLevelComment.snippet; })
+            .sort(function (a, b2) { return (+b2.likeCount || 0) - (+a.likeCount || 0); });
+          var i = +b.dataset.scm.split('-')[1], v = pageVids[i];
+          var have = (_sctCart[v.id] ? _sctCart[v.id].cmts : []).map(function (x) { return x.t; });
+          box.innerHTML = cs.length
+            ? '<div class="cap">좋아요 높은 순 · 전체 ' + cs.length + '개 · 톡 = 담기, 다시 톡 = 취소</div><div class="cmwrap">' + cs.map(function (c, j) {
+                return '<div class="cmt' + ((+c.likeCount || 0) >= 100 ? ' hot' : '') + (have.indexOf(c.textDisplay) > -1 ? ' in' : '') + '" data-pcmt="' + j + '">' +
+                  '<span class="lk">👍 ' + sctN(c.likeCount) + '</span>' +
+                  '<span class="tx2">' + sctEsc(c.textDisplay || '') + '<s>' + sctEsc(c.authorDisplayName || '') + '</s></span></div>';
+              }).join('') + '</div>'
+            : '<div class="no2">댓글이 없어요</div>';
+          box.dataset.done = 1;
+          box.__cs = cs;
+          box.querySelectorAll('[data-pcmt]').forEach(function (el) {
+            el.onclick = function () {
+              var cm = box.__cs[+el.dataset.pcmt];
+              var c2 = sctCartEntry(v);
+              var at = -1;
+              c2.cmts.forEach(function (x, ix) { if (x.t === cm.textDisplay) at = ix; });
+              if (at > -1) { c2.cmts.splice(at, 1); el.classList.remove('in'); sctCartSync(true); return; }
+              c2.cmts.push({ t: cm.textDisplay, lk: +cm.likeCount || 0 });
+              el.classList.add('in');
+              sctFly(el, '💬 ' + String(cm.textDisplay).slice(0, 14));
+            };
+          });
+        } catch (e) { box.innerHTML = '<div class="no2">불러오기 실패</div>'; }
+      };
+    });
+    scope.querySelectorAll('[data-play]').forEach(function (el) {
+      el.onclick = function () {
+        var i = +el.dataset.i, id = el.dataset.play;
+        var v = pageVids[i];
+        if (v && v.status && v.status.embeddable === false) {   // 퍼가기 금지 영상 = 새 탭
+          window.open('https://www.youtube.com/watch?v=' + id, '_blank');
+          return;
+        }
+        var card = document.getElementById('sct-card-' + el.dataset.m + '-' + i);
+        var old = card.querySelector('.inpl');
+        if (old) { old.remove(); return; }
+        document.querySelectorAll('.inpl').forEach(function (x) { x.remove(); });
+        var d = document.createElement('div');
+        d.className = 'inpl';
+        d.innerHTML = '<div class="vh"><iframe src="https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0&playsinline=1" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe></div>' +
+          '<div class="rw"><a class="lnkb" href="https://www.youtube.com/watch?v=' + id + '" target="_blank" rel="noopener">유튜브에서 크게 ↗</a>' +
+          '<button type="button" class="lnkb" data-stopin="1">재생 닫기</button></div>';
+        card.prepend(d);
+        d.querySelector('[data-stopin]').onclick = function () { d.remove(); };
+      };
+    });
+  }
+  function sctSortVids(vids, fmt, sort) {
+    var out = vids.slice();
+    if (fmt === 'shorts') out = out.filter(function (v) { return sctDurSec(v.contentDetails && v.contentDetails.duration) <= 183; });
+    if (fmt === 'long') out = out.filter(function (v) { return sctDurSec(v.contentDetails && v.contentDetails.duration) > 183; });
+    if (sort === 'view') out.sort(function (a, b) { return (+b.statistics.viewCount || 0) - (+a.statistics.viewCount || 0); });
+    if (sort === 'mult' || sort === 'avg') out.sort(function (a, b) { return (b.__mult || 0) - (a.__mult || 0); });
+    if (sort === 'speed') out.sort(function (a, b) { return (b.__speed || 0) - (a.__speed || 0); });
+    if (sort === 'date') out.sort(function (a, b) { return new Date(b.snippet.publishedAt) - new Date(a.snippet.publishedAt); });
+    return out;
+  }
+  function sctRenderKw() {
+    var out = document.getElementById('sct-out');
+    if (!out || !_sctVids.length) return;
+    var vids = sctSortVids(_sctVids, _sctFmt, _sctSort);
+    if (!vids.length) { out.innerHTML = '<div class="stat">이 형식으로는 결과가 없어요 — 형식이나 기간을 바꿔보세요.</div>'; return; }
+    var page = vids.slice(0, _sctShown);
+    out.innerHTML = page.map(function (v, i) { return sctCard(v, i, 'kw'); }).join('') +
+      ((vids.length > _sctShown && _sctShown < 30)
+        ? '<button type="button" class="morebtn" id="sct-more">더보기 ＋10 — 지금 ' + page.length + '개 · 최대 30개</button>' : '');
+    var mr = document.getElementById('sct-more');
+    if (mr) mr.onclick = function () { _sctShown = Math.min(_sctShown + 10, 30); sctRenderKw(); };
+    sctWireCards(out, page, 'kw');
+  }
+  function sctRenderCh() {
+    var out = document.getElementById('sct-out2');
+    if (!out || !_sctChVids.length) return;
+    var vids = sctSortVids(_sctChVids, _sctChFmt, _sctChSort);
+    if (!vids.length) { out.innerHTML = '<div class="stat">이 형식의 영상이 없어요.</div>'; return; }
+    var page = vids.slice(0, _sctChShown);
+    out.innerHTML = page.map(function (v, i) { return sctCard(v, i, 'ch'); }).join('') +
+      ((vids.length > _sctChShown && _sctChShown < 50)
+        ? '<button type="button" class="morebtn" id="sct-more2">더보기 ＋10 — 지금 ' + page.length + '개 · 최대 ' + Math.min(vids.length, 50) + '개</button>' : '');
+    var mr = document.getElementById('sct-more2');
+    if (mr) mr.onclick = function () { _sctChShown = Math.min(_sctChShown + 10, 50); sctRenderCh(); };
+    sctWireCards(out, page, 'ch');
+  }
+
 
   function renderCompass() {
     if (!_cpInited) {
