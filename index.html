@@ -59191,6 +59191,20 @@
       (src ? '<img src="' + src + '" alt="">' : '<i>📷</i>') +
       '<span class="no">' + (i + 1) + '</span></div>';
   }
+  // v757 · 연동 헌법 — 리서치 참고 포인트가 콘티 빈 컷에 순서대로 자동으로 이어진다 (이미 걸린 컷은 안 건드림)
+  function cntPhFill(e) {
+    try {
+      var bone = plwBone(e); e.cph = e.cph || {};
+      var used = {};
+      Object.keys(e.cph).forEach(function (k) { if (e.cph[k]) used[e.cph[k]] = 1; });
+      var pool = (e.thumbs || []).filter(function (t) { return t && !used[t]; });
+      var changed = false;
+      for (var i = 0; i < bone.length && pool.length; i++) {
+        if (!e.cph[i]) { e.cph[i] = pool.shift(); changed = true; }
+      }
+      if (changed) plnSave();
+    } catch (er) {}
+  }
   // v753 · 컷 사진 자리 바꾸기 — 꾹(폰)·드래그(PC)로 두 컷의 사진을 스왑
   async function cntPhSwap(a, b) {
     if (a === b || isNaN(a) || isNaN(b)) return;
@@ -59226,6 +59240,7 @@
   }
   /* Ⅸ 지도 — 촬영 직전 한 번에 훑기: 메시지 거대 · 승부처 크게 · 나머지 작게 · 사진은 컷 순서대로 */
   function cntMapHtml(e, n, bone) {
+    cntPhFill(e);   // v757 · 리서치 사진 → 빈 컷 자동 연동
     var sec = cntSec(e, bone), doneN = cntDoneN(e, bone), star = cntStarIdx(bone);
     var msg = String(e.point || '').trim();
     var hero = '';
@@ -59264,6 +59279,7 @@
   }
   /* Ⅷ 스토리보드 — 사진 작게 왼쪽 · 오른쪽 화면 지시 · 아래 원고 (흐름을 쥔 채 찍는 사람용) */
   function cntBoardHtml(e, n, bone) {
+    cntPhFill(e);   // v757 · 리서치 사진 → 빈 컷 자동 연동
     var star = cntStarIdx(bone);
     var frs = bone.map(function (bn, i) {
       var say = String((e.draftSegs || {})[i] || '').trim();
