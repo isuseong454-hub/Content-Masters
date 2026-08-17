@@ -57986,7 +57986,7 @@
     return { b: lb + ' — 무엇을 보여줄까요', s: '탭해서 어떻게 찍을지 적기', v: '—' };
   }
   var _pln = null, _plnCur = 0, _plnInited = false, _plnLoaded = false, _plnWrite = 0, _plnKwSel = -1, _pv2St = -1,
-      _pv2RefSel = -1, _pv2PaintK = 'prob',   // v717 · 레퍼런스 전시장 선택·칠 색
+      _pv2RefSel = -1, _pv2PaintK = 'prob', _pv2ScrOpen = -1,   // v717 · 레퍼런스 전시장 선택·칠 색 · v754 원고 붙이기 펼침
       _pv2PmmOn = true, _pv2PmmLoadTried = false;   // v720 · 수배지 쌓기 토글·로드 1회
   var _plwConti = 0, _prodCache = null;   // v735 · 콘티 모드 · 내 상품 자산 캐시
   var _cntView = 'map', _cntIdx = 0;   // v736 · 콘티 3면(map/board/stage) · 한 컷 무대 현재 컷
@@ -58637,13 +58637,21 @@
       var rf2 = e.refs[_pv2RefSel];
       var r = (rows || []).filter(function (x) { return x && String(x.id) === String(rf2.id); })[0];
       if (!r || !prpHasScript(r)) {
-        // v748 · 원고 없음은 원고 없음으로만 · v749 · «원고 없이 간다» 설정 가능 (사장님 픽=둘 다)
+        // v748 · 원고 없음은 원고 없음으로만 · v749 · «원고 없이 간다» 설정 · v754 · 뒤늦게 원고 붙이기
+        var scrO = (_pv2ScrOpen === _pv2RefSel)
+          ? '<textarea id="pv2-refscr" rows="7" placeholder="여기에 붙이세요 — 분해봇 결과(훅> 공감> …)든 원고 전문이든. 라벨이 있으면 구간으로, 없으면 통짜로 담겨요" style="width:100%;margin-top:10px;background:rgba(0,0,0,.3);border:1px solid rgba(126,200,245,.45);border-radius:12px;color:#E8ECF8;font-family:inherit;font-size:16px;line-height:1.7;padding:11px;outline:none"></textarea>' +
+            '<div style="display:flex;gap:8px;margin-top:8px">' +
+            '<button type="button" data-pv2scrok="1" style="flex:1;font-family:inherit;font-size:12.5px;font-weight:900;cursor:pointer;border-radius:10px;padding:10px;color:#0E1016;background:#7EC8F5;border:0">원고 담기 ✓ — 바로 칠할 수 있어요</button>' +
+            '<button type="button" data-pv2scrx="1" style="font-family:inherit;font-size:12px;font-weight:700;cursor:pointer;border-radius:10px;padding:10px 14px;color:#8FA0BC;background:none;border:1px solid rgba(255,255,255,.16)">취소</button></div>'
+          : '';
         panel = '<div class="pv2-rdpn"><div class="pv2-rdcap">' +
           (rf2.noscr ? '원고 없이 가기로 한 카드 — 썸네일·지표만 참고해요'
-            : (rf2.yid ? '원고 없음 — 정찰 카트의 ✎원고 칸에 붙이면 여기서 칠하기가 열려요' : '원고 없음 — 분해 결과를 창고에 담으면 여기 떠요')) +
-          '</div><button type="button" data-pv2noscrc="' + _pv2RefSel + '" style="margin-top:10px;font-family:inherit;font-size:11.5px;font-weight:800;cursor:pointer;border-radius:10px;padding:7px 12px;' +
+            : '원고 없음 — 아래 «✎ 원고 붙이기»로 언제든 넣을 수 있어요') +
+          '</div><div style="display:flex;gap:8px;flex-wrap:wrap">' +
+          '<button type="button" data-pv2scradd="' + _pv2RefSel + '" style="margin-top:10px;font-family:inherit;font-size:11.5px;font-weight:800;cursor:pointer;border-radius:10px;padding:7px 12px;color:#7EC8F5;background:rgba(126,200,245,.08);border:1px solid rgba(126,200,245,.45)">✎ 원고 붙이기</button>' +
+          '<button type="button" data-pv2noscrc="' + _pv2RefSel + '" style="margin-top:10px;font-family:inherit;font-size:11.5px;font-weight:800;cursor:pointer;border-radius:10px;padding:7px 12px;' +
           (rf2.noscr ? 'color:#d7f34b;background:rgba(215,243,75,.08);border:1px solid rgba(215,243,75,.45)' : 'color:#8FA0BC;background:none;border:1px solid rgba(255,255,255,.16)') + '">' +
-          (rf2.noscr ? '✓ 원고 없이 가는 카드' : '이 카드는 원고 없이 간다') + '</button></div>';
+          (rf2.noscr ? '✓ 원고 없이 가는 카드' : '이 카드는 원고 없이 간다') + '</button></div>' + scrO + '</div>';
       } else {
         e.paint = e.paint || {};
         var pm = e.paint[String(rf2.id)] || {};
@@ -61468,6 +61476,38 @@
         try { toast(e.repTh ? '★ 이 카드가 대표 썸네일이 됐어요' : '대표 해제'); } catch (er) {}
       };
     });
+    // v754 · 뒤늦게 원고 붙이기 — 담아둔 카드에 나중에 원고를 넣고 바로 칠하기
+    wsin.querySelectorAll('[data-pv2scradd]').forEach(function (b) {
+      b.onclick = function (ev) { ev.stopPropagation(); _pv2ScrOpen = +b.dataset.pv2scradd; plnRenderWs(false); };
+    });
+    var scx = wsin.querySelector('[data-pv2scrx]');
+    if (scx) scx.onclick = function (ev) { ev.stopPropagation(); _pv2ScrOpen = -1; plnRenderWs(false); };
+    var sco = wsin.querySelector('[data-pv2scrok]');
+    if (sco) sco.onclick = async function (ev) {
+      ev.stopPropagation();
+      var ta = document.getElementById('pv2-refscr'); if (!ta) return;
+      var txt = (ta.value || '').trim();
+      if (!txt) { try { toast('원고를 붙여넣어 주세요'); } catch (er) {} return; }
+      var e = plnEnsureEp();
+      var rf = (e.refs || [])[_pv2RefSel]; if (!rf) return;
+      var segs = sctParseScript(txt);
+      if (!segs.length) { try { toast('원고를 못 읽었어요'); } catch (er) {} return; }
+      sco.disabled = true;
+      var no9 = 1;
+      try { no9 = rows.length ? Math.max.apply(null, rows.map(function (r9) { return r9.no || 0; })) + 1 : 1; } catch (er9) {}
+      var row9 = newRow(no9);
+      row9.hook = String(rf.t || segs[0].t || '').slice(0, 80);
+      if (rf.yid) { row9.url = 'https://www.youtube.com/watch?v=' + rf.yid; row9.platform = 'yt'; }
+      row9.scriptSecFlex = segs;
+      rows.push(row9);
+      try { await saveRows(); } catch (er9) {}
+      rf.id = row9.id; rf.noscr = 0;
+      if (!e.rid) { e.rid = row9.id; e.ref = rf.v || '—'; try { e.bone = plnBoneOf(row9); } catch (er9) {} }
+      try { if (rf.th) sctThumbToRow(rf.th, row9.id); } catch (er9) {}
+      _pv2ScrOpen = -1;
+      await plnSave(); plnRefresh(false);
+      try { toast('✎ 원고 담김 — ' + segs.length + '구간 · 이제 문장을 칠할 수 있어요'); } catch (er) {}
+    };
     // v749 · 원고 없이 가기 — 카드 단위 토글 + 확정판 편 단위 토글
     wsin.querySelectorAll('[data-pv2noscrc]').forEach(function (b) {
       b.onclick = async function () {
