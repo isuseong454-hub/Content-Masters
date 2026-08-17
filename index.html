@@ -56492,40 +56492,76 @@
   function myaCode() { const A = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789'; let s = ''; const u = new Uint32Array(6); crypto.getRandomValues(u); for (let i = 0; i < 6; i++) s += A[u[i] % A.length]; return s; }
   function myaPerfHtml() {
     const p = myaGet('cm-mya-prof', {}), wk = myaGet('cm-mya-wk', []);
-    const lastF = wk.length ? wk[wk.length - 1].f : '';
-    return '<div class="mya-prof"><div class="mya-cover"><span class="slot">🖼 커버 사진 칸 — 연동 후 교체</span></div>' +
+    const ig = myaIg(), tk = localStorage.getItem('cm-mya-igtk');
+    const S = ig ? myaIgStats(ig) : null;
+    const lastF = ig ? ig.profile.followers_count : (wk.length ? wk[wk.length - 1].f : '');
+    return '<div class="mya-prof"><div class="mya-cover"><span class="slot">🖼 커버 사진 칸</span></div>' +
       '<div class="mya-pbody"><div class="mya-prow">' +
-        '<div class="mya-avatar" id="mya-av"><i>📷</i><b>인스타 프로필<br>사진 칸</b></div>' +
+        (ig && ig.profile.profile_picture_url
+          ? '<div class="mya-avatar" id="mya-av" style="background-image:url(' + String(ig.profile.profile_picture_url).replace(/"/g, '') + ');background-size:cover;background-position:center"></div>'
+          : '<div class="mya-avatar" id="mya-av"><i>📷</i><b>인스타 프로필<br>사진 칸</b></div>') +
         '<div class="mya-pmeta">' +
-          '<input class="nm" id="mya-nm" placeholder="이름" value="' + esc(p.nm || '').replace(/"/g, '&quot;') + '">' +
-          '<input class="id" id="mya-id" placeholder="@아이디" value="' + esc(p.id || '').replace(/"/g, '&quot;') + '">' +
+          (ig
+            ? '<div style="font-size:17px;font-weight:900;letter-spacing:-.02em">' + esc(ig.profile.name || ig.profile.username || '') + '</div>' +
+              '<div style="font-size:12px;color:#d7f34b;font-weight:700;margin-top:1px">@' + esc(ig.profile.username || '') + '</div>'
+            : '<input class="nm" id="mya-nm" placeholder="이름" value="' + esc(p.nm || '').replace(/"/g, '&quot;') + '">' +
+              '<input class="id" id="mya-id" placeholder="@아이디" value="' + esc(p.id || '').replace(/"/g, '&quot;') + '">') +
         '</div>' +
         '<div class="mya-pstats">' +
-          '<div><b id="mya-st-f">' + (lastF ? Number(lastF).toLocaleString() : '—') + '</b><small>팔로워</small></div>' +
-          '<div><b>—</b><small>영상</small></div><div><b>—</b><small>누적 조회</small></div>' +
+          '<div><b id="mya-st-f">' + (lastF ? myaN(lastF) : '—') + '</b><small>팔로워</small></div>' +
+          '<div><b>' + (ig ? myaN(ig.profile.media_count) : '—') + '</b><small>게시물</small></div>' +
+          '<div><b>' + (S ? myaN(S.totalViews) : '—') + '</b><small>최근 ' + (S ? S.n : 30) + '편 조회</small></div>' +
         '</div></div>' +
-        '<div class="mya-pcon"><i></i>연동 전 — 메타 검수 통과 후 자동 수집이 켜집니다</div>' +
+        (ig
+          ? '<div class="mya-pcon"><i></i>인스타 연결됨 · 자동 수집' +
+            '<button id="mya-igre" style="margin-left:auto;font-size:10.5px;font-weight:800;color:#d7f34b;border:1px solid rgba(215,243,75,.35);background:none;border-radius:99px;padding:5px 11px;cursor:pointer">↻ 새로고침</button>' +
+            '<button id="mya-igoff" style="margin-left:6px;font-size:10.5px;font-weight:700;color:#95a08b;border:1px solid rgba(255,255,255,.1);background:none;border-radius:99px;padding:5px 11px;cursor:pointer">해제</button></div>'
+          : '<div class="mya-pcon"><i style="background:#5d6656;box-shadow:none"></i>연결 전 — 아래에 토큰을 넣으면 실데이터로 바뀝니다</div>') +
       '</div></div>' +
-      '<div class="mya-card"><div class="t">🏆 챔피언 단상 — 평균을 이긴 것들이 늘 위에 <span style="color:#5d6656">(견본)</span></div>' +
-        '<div class="mya-mon" style="margin-top:11px"><b class="on">이번 주</b><b>이번 달</b><b>역대</b></div>' +
-        '<div class="mya-champ">' +
-          '<div class="mya-ped"><div class="cat">👁 조회 1등</div><div class="th"></div><div class="tt">앞머리 자르기 전에 꼭 보세요</div><div class="v2">3.1만 회</div><div class="avg2">내 평균의 2.4배</div><div class="base"></div></div>' +
-          '<div class="mya-ped"><div class="cat">💾 저장률 1등</div><div class="th" style="background:linear-gradient(160deg,#232c12,#141a0a)"></div><div class="tt">단골이 끊기는 진짜 이유</div><div class="v2">7.2%</div><div class="avg2">평균의 2.1배 · 목표 5% 돌파</div><div class="base"></div></div>' +
-          '<div class="mya-ped"><div class="cat">⏱ 지속 1등</div><div class="th" style="background:linear-gradient(160deg,#1a2410,#0e1408)"></div><div class="tt">파마 망하는 집 특징</div><div class="v2">76%</div><div class="avg2">목표 70% 돌파</div><div class="base"></div></div>' +
-        '</div>' +
-        '<div class="mya-aif">✦ 단상 3편의 공통점: <b>«~하기 전에 / ~하는 집» 형 대문</b> — 이 형이 당신의 승리 공식.</div></div>' +
-      '<div class="mya-gline">이번 주, <em>저장</em>이 <em class="mint">조회</em>를 이겼다</div>' +
-      '<div class="mya-card"><div class="t">📐 100만 공식 + 내 평균은 이거예요 <span style="color:#5d6656">(견본)</span></div>' +
-        '<div class="mya-mrow"><span class="k">저장+공유÷조회</span><div class="mya-mbar"><span class="me" style="width:84%"></span><span class="mk" style="left:100%"></span></div><span class="v" style="color:#6FE0C8">4.2%</span></div>' +
-        '<div class="mya-mrow"><span class="k">시청 지속</span><div class="mya-mbar"><span class="me" style="width:76%"></span><span class="mk" style="left:87%"></span></div><span class="v">61%</span></div>' +
-        '<div class="mya-mrow"><span class="k">클릭률</span><div class="mya-mbar"><span class="me" style="width:70%"></span><span class="mk" style="left:57%"></span></div><span class="v" style="color:#6FE0C8">0.21%</span></div>' +
-        '<div class="mya-mlg">청록 막대=내 이번 주 · 흰 선=목표(공식 5%·지속 70%) 또는 내 4주 평균</div>' +
-        '<div class="mya-avg4">' +
-          '<div class="mya-a4"><div class="k">평균 조회</div><div class="v">1.3만</div><small>+18% ↑</small></div>' +
-          '<div class="mya-a4"><div class="k">평균 저장률</div><div class="v">3.4%</div><small>+0.6%p ↑</small></div>' +
-          '<div class="mya-a4"><div class="k">평균 시청</div><div class="v">6.1초</div><small>+0.4초 ↑</small></div>' +
-          '<div class="mya-a4"><div class="k">평균 클릭률</div><div class="v">0.21%</div><small>4주 연속 ↑</small></div>' +
-        '</div></div>' +
+      (!ig
+        ? '<div class="mya-card"><div class="t">🔌 인스타 연결 — 개발 모드 (메타 콘솔에서 만든 토큰)</div>' +
+          '<div class="mya-week" style="grid-template-columns:1fr auto">' +
+            '<input id="mya-igtk" type="password" placeholder="액세스 토큰 붙여넣기" autocomplete="off">' +
+            '<button id="mya-iggo">연결</button></div>' +
+          '<p style="margin-top:9px;font-size:10.5px;color:#5d6656">토큰은 이 기기에만 저장됩니다 · 공용 컴퓨터에선 연결하지 마세요</p></div>'
+        : '') +
+      (S
+        ? '<div class="mya-card"><div class="t">🏆 챔피언 단상 — ' + (S.poolIsWeek ? '이번 주' : '최근 ' + S.n + '편') + ' 기준</div>' +
+          '<div class="mya-champ" style="margin-top:12px">' +
+            (S.cView ? '<div class="mya-ped"><div class="cat">👁 조회 1등</div><div class="th"' + myaTh(S.cView) + '></div><div class="tt">' + myaCap(S.cView) + '</div><div class="v2">' + myaN(S.cView.ins.views) + ' 회</div><div class="avg2">' + (S.avgViews ? '내 평균의 ' + (S.cView.ins.views / S.avgViews).toFixed(1) + '배' : '') + '</div><div class="base"></div></div>' : '') +
+            (S.cSave ? '<div class="mya-ped"><div class="cat">💾 저장률 1등</div><div class="th"' + myaTh(S.cSave) + '></div><div class="tt">' + myaCap(S.cSave) + '</div><div class="v2">' + ((S.cSave.ins.saved || 0) / Math.max(1, S.cSave.ins.views) * 100).toFixed(1) + '%</div><div class="avg2">저장 ' + myaN(S.cSave.ins.saved) + '개</div><div class="base"></div></div>' : '') +
+            (S.cWatch && S.cWatch.ins.ig_reels_avg_watch_time ? '<div class="mya-ped"><div class="cat">⏱ 평균 시청 1등</div><div class="th"' + myaTh(S.cWatch) + '></div><div class="tt">' + myaCap(S.cWatch) + '</div><div class="v2">' + (S.cWatch.ins.ig_reels_avg_watch_time / 1000).toFixed(1) + '초</div><div class="avg2">릴스 평균 시청</div><div class="base"></div></div>' : '') +
+          '</div></div>' +
+          '<div class="mya-gline">' + (S.rate >= 5
+            ? '<em>공식 5%</em>를 <em class="mint">넘었습니다</em>'
+            : '목표 5%까지 <em>' + Math.max(0, 5 - S.rate).toFixed(1) + '%p</em> <em class="mint">남았다</em>') + '</div>' +
+          '<div class="mya-card"><div class="t">📐 100만 공식 + 내 평균은 이거예요 — 실측</div>' +
+            '<div class="mya-mrow"><span class="k">저장+공유÷조회</span><div class="mya-mbar"><span class="me" style="width:' + Math.min(100, S.rate / 5 * 100).toFixed(0) + '%"></span><span class="mk" style="left:calc(100% - 2px)"></span></div><span class="v" style="color:#6FE0C8">' + S.rate.toFixed(2) + '%</span></div>' +
+            (S.avgWatch ? '<div class="mya-mrow"><span class="k">평균 시청(릴스)</span><div class="mya-mbar"><span class="me" style="width:' + Math.min(100, S.avgWatch / 15 * 100).toFixed(0) + '%"></span></div><span class="v">' + S.avgWatch.toFixed(1) + '초</span></div>' : '') +
+            '<div class="mya-mlg">청록 막대=내 실측(최근 ' + S.n + '편) · 흰 선=공식 목표 5%</div>' +
+            '<div class="mya-avg4">' +
+              '<div class="mya-a4"><div class="k">평균 조회</div><div class="v">' + myaN(S.avgViews) + '</div><small>편당</small></div>' +
+              '<div class="mya-a4"><div class="k">평균 저장률</div><div class="v">' + S.avgSavedRate.toFixed(1) + '%</div><small>' + (S.avgSavedRate >= 3 ? '좋음 ↑' : '기르는 중') + '</small></div>' +
+              '<div class="mya-a4"><div class="k">평균 시청</div><div class="v">' + (S.avgWatch ? S.avgWatch.toFixed(1) + '초' : '—') + '</div><small>릴스</small></div>' +
+              '<div class="mya-a4"><div class="k">클릭률</div><div class="v" style="color:#5d6656">검수 후</div><small>프로필·링크</small></div>' +
+            '</div></div>'
+        : '<div class="mya-card"><div class="t">🏆 챔피언 단상 — 평균을 이긴 것들이 늘 위에 <span style="color:#5d6656">(견본 — 연결하면 실측)</span></div>' +
+          '<div class="mya-champ" style="margin-top:12px">' +
+            '<div class="mya-ped"><div class="cat">👁 조회 1등</div><div class="th"></div><div class="tt">앞머리 자르기 전에 꼭 보세요</div><div class="v2">3.1만 회</div><div class="avg2">내 평균의 2.4배</div><div class="base"></div></div>' +
+            '<div class="mya-ped"><div class="cat">💾 저장률 1등</div><div class="th" style="background:linear-gradient(160deg,#232c12,#141a0a)"></div><div class="tt">단골이 끊기는 진짜 이유</div><div class="v2">7.2%</div><div class="avg2">평균의 2.1배 · 목표 5% 돌파</div><div class="base"></div></div>' +
+            '<div class="mya-ped"><div class="cat">⏱ 지속 1등</div><div class="th" style="background:linear-gradient(160deg,#1a2410,#0e1408)"></div><div class="tt">파마 망하는 집 특징</div><div class="v2">76%</div><div class="avg2">목표 70% 돌파</div><div class="base"></div></div>' +
+          '</div></div>' +
+          '<div class="mya-gline">이번 주, <em>저장</em>이 <em class="mint">조회</em>를 이겼다</div>' +
+          '<div class="mya-card"><div class="t">📐 100만 공식 + 내 평균은 이거예요 <span style="color:#5d6656">(견본)</span></div>' +
+            '<div class="mya-mrow"><span class="k">저장+공유÷조회</span><div class="mya-mbar"><span class="me" style="width:84%"></span><span class="mk" style="left:100%"></span></div><span class="v" style="color:#6FE0C8">4.2%</span></div>' +
+            '<div class="mya-mrow"><span class="k">시청 지속</span><div class="mya-mbar"><span class="me" style="width:76%"></span><span class="mk" style="left:87%"></span></div><span class="v">61%</span></div>' +
+            '<div class="mya-mlg">청록 막대=내 이번 주 · 흰 선=목표(공식 5%·지속 70%)</div>' +
+            '<div class="mya-avg4">' +
+              '<div class="mya-a4"><div class="k">평균 조회</div><div class="v">1.3만</div><small>+18% ↑</small></div>' +
+              '<div class="mya-a4"><div class="k">평균 저장률</div><div class="v">3.4%</div><small>+0.6%p ↑</small></div>' +
+              '<div class="mya-a4"><div class="k">평균 시청</div><div class="v">6.1초</div><small>+0.4초 ↑</small></div>' +
+              '<div class="mya-a4"><div class="k">평균 클릭률</div><div class="v">0.21%</div><small>4주 연속 ↑</small></div>' +
+            '</div></div>') +
       '<div class="mya-card"><div class="t">✍️ 이번 주 성적 입력 — 인스타 연동 전엔 주 1회 30초면 됩니다</div>' +
         '<div class="mya-week">' +
           '<input id="mya-wf" inputmode="numeric" placeholder="팔로워 수 (예: 2140)">' +
@@ -56534,6 +56570,34 @@
         '<div class="mya-wlist" id="mya-wlist"></div></div>';
   }
   function myaTrkHtml() {
+    const ig = myaIg();
+    if (ig) {
+      const S = myaIgStats(ig);
+      const list = (_myaSort === 'views') ? S.byViews : (_myaSort === 'saved') ? S.bySaved : S.byNew;
+      const row = function (m) {
+        const v = m.ins.views || 0, sv = m.ins.saved || 0, sr = v ? (sv / v * 100) : 0;
+        return '<div class="mya-post"><div class="th"' + myaTh(m) + '></div><div>' +
+          '<div class="tt">' + myaCap(m) + '</div>' +
+          '<div class="nums"><span>조회 <b>' + myaN(v) + '</b></span><span>도달 <b>' + myaN(m.ins.reach) + '</b></span>' +
+            '<span' + (sr >= 3 ? ' style="color:#d7f34b"' : '') + '>저장 ' + sr.toFixed(1) + '%</span>' +
+            '<span>공유 <b>' + myaN(m.ins.shares) + '</b></span><span>좋아요 <b>' + myaN(m.like_count) + '</b></span><span>댓글 <b>' + myaN(m.comments_count) + '</b></span>' +
+            (m.ins.ig_reels_avg_watch_time ? '<span>평균 시청 <b>' + (m.ins.ig_reels_avg_watch_time / 1000).toFixed(1) + '초</b></span>' : '') + '</div>' +
+          '</div></div>';
+      };
+      return '<div class="mya-gline">어떤 영상이 <em>손님</em>을 <em class="mint">데려왔나</em></div>' +
+        '<div class="mya-champ" style="margin-bottom:11px">' +
+          (S.cView ? '<div class="mya-ped"><div class="cat">👁 조회 1등</div><div class="th"' + myaTh(S.cView) + '></div><div class="tt">' + myaCap(S.cView) + '</div><div class="v2">' + myaN(S.cView.ins.views) + '</div><div class="base"></div></div>' : '') +
+          (S.cSave ? '<div class="mya-ped"><div class="cat">💾 저장 1등</div><div class="th"' + myaTh(S.cSave) + '></div><div class="tt">' + myaCap(S.cSave) + '</div><div class="v2">' + myaN(S.cSave.ins.saved) + '개</div><div class="base"></div></div>' : '') +
+          (S.cWatch && S.cWatch.ins.ig_reels_avg_watch_time ? '<div class="mya-ped"><div class="cat">⏱ 시청 1등</div><div class="th"' + myaTh(S.cWatch) + '></div><div class="tt">' + myaCap(S.cWatch) + '</div><div class="v2">' + (S.cWatch.ins.ig_reels_avg_watch_time / 1000).toFixed(1) + '초</div><div class="base"></div></div>' : '') +
+        '</div>' +
+        '<div class="mya-sortc">' +
+          '<b data-s="new"' + (_myaSort === 'new' ? ' class="on"' : '') + '>최신순</b>' +
+          '<b data-s="views"' + (_myaSort === 'views' ? ' class="on"' : '') + '>조회 높은 순</b>' +
+          '<b data-s="saved"' + (_myaSort === 'saved' ? ' class="on"' : '') + '>저장률 높은 순</b>' +
+          '<span>최근 ' + list.length + '편 · 실측</span></div>' +
+        list.map(row).join('') +
+        '<div class="mya-aif">✦ 프로필 방문·링크 클릭·팔로워 전환 깔때기는 <b>검수 승인 후</b> 이 줄에 붙습니다.</div>';
+    }
     return '<div class="mya-gline">어떤 영상이 <em>손님</em>을 <em class="mint">데려왔나</em></div>' +
       '<div class="mya-champ" style="margin-bottom:11px">' +
         '<div class="mya-ped"><div class="cat">🏠 프로필 방문 1등</div><div class="th"></div><div class="tt">앞머리 자르기 전에</div><div class="v2">512명</div><div class="base"></div></div>' +
@@ -56554,6 +56618,22 @@
         '<div class="mya-fun">👁 <b>1.8만</b> <span class="ar">→</span> 프로필 <b>402</b> <span class="ar">→</span> 링크 <b>89</b> · DM <b>8</b> <span class="ar">→</span> 팔로우 <b>+52</b><span class="ctr">클릭률 0.49%</span></div></div></div>';
   }
   function myaAudHtml() {
+    const ig = myaIg();
+    if (ig) {
+      const M = (ig.media || []).filter(function (m) { return m.ins && m.ins.ig_reels_avg_watch_time; })
+        .sort(function (a, b) { return b.ins.ig_reels_avg_watch_time - a.ins.ig_reels_avg_watch_time; }).slice(0, 5);
+      const mx = M.length ? M[0].ins.ig_reels_avg_watch_time : 1;
+      return '<div class="mya-gline">누가, <em>언제</em>, <em class="mint">어디까지</em> 보나</div>' +
+        '<div class="mya-card"><div class="t">📸 인스타 — 평균 시청 시간 (실측 · 릴스)</div>' +
+          (M.length ? M.map(function (m) {
+            return '<div class="mya-ab"><span class="k3" style="width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + myaCap(m) + '</span>' +
+              '<div class="b3"><i style="width:' + (m.ins.ig_reels_avg_watch_time / mx * 100).toFixed(0) + '%"></i></div>' +
+              '<b>' + (m.ins.ig_reels_avg_watch_time / 1000).toFixed(1) + '초</b></div>';
+          }).join('') : '<p style="margin-top:9px;font-size:11.5px;color:#5d6656">릴스 시청 시간 데이터가 아직 없어요</p>') +
+        '</div>' +
+        '<div class="mya-card"><div class="t">🎂 연령 · 🚻 성별 · 📍 도시 · 🕘 접속 시간대</div>' +
+          '<p style="margin-top:9px;font-size:11.5px;color:#95a08b;line-height:1.7">관객 통계는 <b style="color:#d7f34b">검수 승인 후</b> 자동으로 채워집니다 (팔로워 100명 이상 계정 기준 — 이미 충족).</p></div>';
+    }
     return '<div class="mya-gline">누가, <em>언제</em>, <em class="mint">어디까지</em> 보나</div>' +
       '<div class="mya-card"><div class="t">📺 유튜브 — 구간별 시청 곡선 (연동 시 자동 · 견본)</div>' +
         '<div class="mya-ret">' +
@@ -56648,6 +56728,67 @@
     if (fd) fd.innerHTML = (b.notice ? '📣 <b>' + esc(b.notice) + '</b><br>' : '') +
       '📈 이번 주 방 전체 업로드 <b>' + ups + '편</b> · 멤버 ' + (b.members || []).length + '명';
   }
+
+  // ═══ v742 · 인스타 실데이터 연동(개발 모드 — 토큰은 이 기기 localStorage에만) ═══
+  var _myaSort = 'new';
+  function myaIg() { return myaGet('cm-mya-ig', null); }
+  function myaN(n) { n = n || 0; if (n >= 10000) return (n / 10000).toFixed(n >= 100000 ? 0 : 1) + '만'; return Number(n).toLocaleString(); }
+  async function myaIgFetch(tk) {
+    const base = 'https://graph.instagram.com/v23.0';
+    const pr = await (await fetch(base + '/me?fields=user_id,username,name,profile_picture_url,followers_count,media_count&access_token=' + encodeURIComponent(tk))).json();
+    if (pr.error) throw new Error(pr.error.message || 'token');
+    const md = await (await fetch(base + '/me/media?fields=id,caption,media_type,media_product_type,timestamp,like_count,comments_count,thumbnail_url,media_url,permalink&limit=30&access_token=' + encodeURIComponent(tk))).json();
+    const items = md.data || [];
+    const out = [];
+    for (let i = 0; i < items.length; i += 10) {
+      const part = await Promise.all(items.slice(i, i + 10).map(async function (m) {
+        let ins = {};
+        try {
+          const isReel = (m.media_product_type === 'REELS');
+          const met = isReel ? 'views,reach,likes,comments,saved,shares,total_interactions,ig_reels_avg_watch_time'
+                             : 'views,reach,likes,comments,saved,shares,total_interactions';
+          const r = await (await fetch(base + '/' + m.id + '/insights?metric=' + met + '&access_token=' + encodeURIComponent(tk))).json();
+          (r.data || []).forEach(function (d) { ins[d.name] = (d.values && d.values[0] && d.values[0].value) || 0; });
+        } catch (e) {}
+        return Object.assign({}, m, { ins: ins });
+      }));
+      out.push.apply(out, part);
+    }
+    return { t: Date.now(), profile: pr, media: out };
+  }
+  async function myaIgSync(force) {
+    const tk = localStorage.getItem('cm-mya-igtk'); if (!tk) return null;
+    const c = myaIg();
+    if (!force && c && c.t && (Date.now() - c.t) < 6 * 3600 * 1000) return c;   // 6시간 캐시 — 발열·쿼터 아낌
+    try { const d = await myaIgFetch(tk); myaSet('cm-mya-ig', d); return d; }
+    catch (e) { try { toast('인스타 연결 오류 — 토큰이 만료됐을 수 있어요'); } catch (_) {} return c || null; }
+  }
+  function myaCap(m) { return esc(String(m.caption || '(제목 없음)').split('\n')[0].slice(0, 42)); }
+  function myaTh(m) { const u = m.thumbnail_url || (m.media_type === 'IMAGE' ? m.media_url : ''); return u ? ' style="background-image:url(' + u.replace(/"/g, '') + ');background-size:cover;background-position:center"' : ''; }
+  function myaIgStats(ig) {
+    const M = (ig.media || []).filter(function (m) { return m.ins && (m.ins.views || m.ins.reach); });
+    const wkAgo = Date.now() - 7 * 86400000;
+    const W = M.filter(function (m) { return new Date(m.timestamp).getTime() >= wkAgo; });
+    const pool = W.length >= 2 ? W : M;
+    const sum = function (arr, k) { return arr.reduce(function (s, m) { return s + (m.ins[k] || 0); }, 0); };
+    const v = sum(M, 'views'), sv = sum(M, 'saved'), sh = sum(M, 'shares');
+    const ws = M.filter(function (m) { return m.ins.ig_reels_avg_watch_time; });
+    const top = function (arr, f) { let b = null, bv = -1; arr.forEach(function (m) { const x = f(m); if (x > bv) { bv = x; b = m; } }); return b; };
+    return {
+      n: M.length, totalViews: v,
+      rate: v ? (sv + sh) / v * 100 : 0,
+      avgViews: M.length ? v / M.length : 0,
+      avgSavedRate: v ? sv / v * 100 : 0,
+      avgWatch: ws.length ? ws.reduce(function (s, m) { return s + m.ins.ig_reels_avg_watch_time; }, 0) / ws.length / 1000 : 0,
+      poolIsWeek: W.length >= 2,
+      cView: top(pool, function (m) { return m.ins.views || 0; }),
+      cSave: top(pool.filter(function (m) { return (m.ins.views || 0) > 0; }), function (m) { return (m.ins.saved || 0) / m.ins.views; }),
+      cWatch: top(pool, function (m) { return m.ins.ig_reels_avg_watch_time || 0; }),
+      byNew: M.slice(),
+      byViews: M.slice().sort(function (a, b2) { return (b2.ins.views || 0) - (a.ins.views || 0); }),
+      bySaved: M.slice().sort(function (a, b2) { return ((b2.ins.saved || 0) / Math.max(1, b2.ins.views || 0)) - ((a.ins.saved || 0) / Math.max(1, a.ins.views || 0)); })
+    };
+  }
   function myaKeepHtml() {
     const rivalN = (typeof northStars !== 'undefined' && Array.isArray(northStars)) ? northStars.length : 0;
     return cpVennHtml() +
@@ -56685,8 +56826,34 @@
   function myaWireBody() {
     const el = document.getElementById('mya-body'); if (!el) return;
     if (_myaPill === 'perf') {
+      // 🔌 인스타 연결(개발 모드)
+      const iggo = document.getElementById('mya-iggo');
+      if (iggo) iggo.onclick = async function () {
+        const t = (document.getElementById('mya-igtk') || {}).value.trim();
+        if (!t) { try { toast('토큰을 붙여넣어주세요'); } catch (e) {} return; }
+        iggo.disabled = true; iggo.textContent = '확인 중…';
+        try {
+          const d = await myaIgFetch(t);
+          localStorage.setItem('cm-mya-igtk', t); myaSet('cm-mya-ig', d);
+          myaRenderBody(); try { toast('🎉 인스타 연결 완료 — 실데이터로 전환됐습니다'); } catch (e) {}
+        } catch (e2) {
+          iggo.disabled = false; iggo.textContent = '연결';
+          try { toast('토큰이 유효하지 않아요 — 메타 콘솔에서 다시 생성해보세요'); } catch (e) {}
+        }
+      };
+      const igre = document.getElementById('mya-igre');
+      if (igre) igre.onclick = async function () {
+        igre.textContent = '수집 중…';
+        await myaIgSync(true); myaRenderBody();
+        try { toast('↻ 새로 수집했습니다'); } catch (e) {}
+      };
+      const igoff = document.getElementById('mya-igoff');
+      if (igoff) igoff.onclick = function () {
+        localStorage.removeItem('cm-mya-igtk'); localStorage.removeItem('cm-mya-ig');
+        myaRenderBody(); try { toast('연결을 해제했습니다 — 토큰도 이 기기에서 지워짐'); } catch (e) {}
+      };
       const av = document.getElementById('mya-av');
-      if (av) av.onclick = function () { try { toast('📷 인스타 연결(메타 검수 통과) 후 자동으로 채워집니다'); } catch (e) {} };
+      if (av && !myaIg()) av.onclick = function () { try { toast('📷 아래에 토큰을 넣어 연결하면 자동으로 채워집니다'); } catch (e) {} };
       ['mya-nm', 'mya-id'].forEach(function (id) {
         const i = document.getElementById(id); if (!i) return;
         i.addEventListener('change', function () {
@@ -56721,10 +56888,17 @@
         }
       };
       myaWkSync();
+      // 토큰은 있는데 캐시가 6시간 지났으면 자동 재수집
+      (function () {
+        const c = myaIg(); const had = c && c.t;
+        if (!localStorage.getItem('cm-mya-igtk')) return;
+        myaIgSync(false).then(function (d) { if (d && d.t !== had && _myaPill === 'perf') myaRenderBody(); });
+      })();
     }
     if (_myaPill === 'trk') {
       document.querySelectorAll('#mya-body .mya-sortc b').forEach(function (b) {
         b.onclick = function () {
+          if (myaIg() && b.dataset.s) { _myaSort = b.dataset.s; myaRenderBody(); return; }
           b.parentElement.querySelectorAll('b').forEach(function (x) { x.classList.toggle('on', x === b); });
           try { toast('정렬은 연동 후 실데이터로 작동합니다'); } catch (e) {}
         };
