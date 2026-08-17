@@ -1190,6 +1190,9 @@
   .sctv .top{ display:flex; gap: 12px; }
   .sctv .th{ flex:none; width: 132px; position: relative; cursor:pointer; }
   .sctv .th img{ width: 132px; height: 74px; object-fit: cover; border-radius: 10px; display:block; }
+  /* v727 · 쇼츠 = 세로 카드(9:16) — 옆 여백 없이 영상 부분만 깔끔하게 크롭 */
+  .sctv .th.vert{ width: 96px; }
+  .sctv .th.vert img{ width: 96px; height: 170px; }
   .sctv .th .dur{ position:absolute; right: 5px; bottom: 5px; font-size: 9px; font-weight: 800;
     background: rgba(0,0,0,.75); color:#fff; padding: 1px 5px; border-radius: 5px; }
   .sctv .th .pl{ position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); width: 28px; height: 28px;
@@ -1637,6 +1640,28 @@
     padding:4px 10px; font-size:9.5px; color:#8FA0BC; transition:all .2s; }
   .pv2-pmm .tg2.on{ color:#0B0E14; background:#9BE8B4; border-color:#9BE8B4; }
   .pv2-pmm .op{ cursor:pointer; color:#7EC8F5; font-weight:900; }
+  /* v729 · 카트 원고 칸 (A안) — 채우는 양식 문법 */
+  .sct-csh .sct-scr{ margin-top:8px; border:1.5px dashed rgba(255,255,255,.14); border-radius:10px; padding:8px 10px;
+    display:flex; align-items:center; gap:7px; font-size:10px; color:#5C6B87; font-weight:800; cursor:pointer; transition:border-color .2s; }
+  .sct-csh .sct-scr:hover{ border-color:rgba(126,200,245,.4); }
+  .sct-csh .sct-scr i{ font-style:normal; color:#7EC8F5; }
+  .sct-csh .sct-scr b{ margin-left:auto; color:#7EC8F5; font-weight:900; flex:none; }
+  .sct-csh .sct-scro{ margin-top:8px; border:1.5px dashed rgba(126,200,245,.4); border-radius:10px; padding:9px; }
+  .sct-csh .sct-scro textarea{ display:block; width:100%; min-height:72px; background:transparent; border:none; outline:none;
+    resize:vertical; font-family:inherit; font-size:16px; line-height:1.6; color:#EDF2FA; }
+  .sct-csh .sct-scro textarea::placeholder{ color:#3E4A63; font-size:11px; }
+  .sct-csh .sct-scro .bar{ display:flex; align-items:center; gap:8px; margin-top:7px; font-size:9px; color:#4A5670; font-weight:800; }
+  .sct-csh .sct-scro .bar button{ margin-left:auto; flex:none; font-family:inherit; cursor:pointer; font-size:10.5px; font-weight:900;
+    color:#0B0E14; background:#9BE8B4; border:none; border-radius:99px; padding:7px 14px; }
+  .sct-csh .sct-scro .bar button:active{ transform:scale(.95); }
+  .sct-csh .sct-scrd{ margin-top:8px; border:1px solid rgba(155,232,180,.35); border-radius:10px; padding:8px 10px; cursor:pointer;
+    background:rgba(155,232,180,.05); display:flex; align-items:center; gap:7px; flex-wrap:wrap; }
+  .sct-csh .sct-scrd b{ font-size:10px; font-weight:900; color:#9BE8B4; }
+  .sct-csh .sct-scrd .chips{ display:flex; gap:3px; flex-wrap:wrap; }
+  .sct-csh .sct-scrd .chips i{ font-style:normal; font-size:8px; font-weight:900; padding:2px 7px; border-radius:99px; color:#0B0E14; }
+  .sct-csh .sct-scrd u{ text-decoration:none; margin-left:auto; font-size:8.5px; color:#5C6B87; font-weight:800; flex:none; }
+  /* v726 · 스케줄 되돌리기 버튼 */
+  .plsc-ph .ctl .undo{ color:#9BE8B4; border-color:rgba(155,232,180,.45); }
   /* v724 · 디벨롭 ④클릭률 3요소 — 옛 rw-stage를 pv2 톤으로 */
   .pv2-ck{ display:flex; gap:14px; align-items:flex-start; }
   .pv2-ck .fcol{ flex:none; width:118px; }
@@ -34101,6 +34126,13 @@
   //   ①빨강 도입 · ②파랑 공감·고통 · ③노랑 원인·설명 · ④라임 방법·해결 · ⑤초록 결과·행동 · (틸=증거)
   //   ⚠️ 순서가 곧 우선순위다. 넓은 규칙(②)을 맨 뒤에 둬야 «진행상황»이 상황으로 안 샌다.
   const FLEX_LBL_COLORS = [
+    // ★v730 · 역할 사전 6 — «역할·세부» 새 표준 라벨은 접두로 즉시 판정 (옛 라벨은 아래 가족 규칙)
+    { re: /^도입부/, color: '#E25C5C' },
+    { re: /^공감/, color: '#5B8DEF' },
+    { re: /^근거/, color: '#D8B23A' },
+    { re: /^방법/, color: '#A9C437' },
+    { re: /^변화/, color: '#2FB6A0' },
+    { re: /^CTA/i, color: '#2FD07B' },
     // ① 도입 = 이득&손해 가족
     { re: /(후킹|도입|훅|이득|손해|주목|선언|소개)/, color: '#E25C5C' },
     // 틸 = 증명 가족 (위성색)
@@ -46847,10 +46879,11 @@
       '수식어유형: (그 표현이 쓴 무기 1~3개, 쉼표 — ' + BASE_COPY_TYPES.join(' · ') + ')',
       '원고구조: (캡션·자막에 원고가 보일 때만. 안 보이면 "없음" 한 단어만)',
       '(구조판정 — 기본형 / 기본형·확장 / 라이브러리 구조 이름 중 1개)',
-      '이득손해> (도입부 — 이 영상을 보면 «뭘 얻는지». 시청자가 원하는 것)',
-      '공감상황> (상황 감정묘사 — 구체적인 «고통점». 어 내 얘기다)',
+      '도입부> (멈추게 하는 첫 마디(훅). 세부가 있으면 도입부·숫자> 처럼 «역할·세부>»로)',
+      '공감> (상황 감정묘사 — 구체적인 «고통점». 어 내 얘기다)',
+      '근거> (왜 그런가 — 알면 안심하고 계속 봄. 여러 덩어리면 근거·원인> 근거·전문용어> 각 줄)',
       '방법> (실제로 어떻게 하는지. 여러 개면 방법1> 방법2> — ★묶는 법은 규칙 8번)',
-      '소구> (이걸 얻었을 때의 «기분·감정·효과»)',
+      '변화> (이걸 얻었을 때의 «기분·감정·효과·달라진 모습»)',
       'CTA> (선택지를 여는 한 줄 · 저장/공유/팔로우/DM 유도. 없으면 이 줄 통째로 빼)',
       '[끝]',
       '',
@@ -46869,29 +46902,35 @@
       '3. 원고가 캡션/자막에 없으면(말로만 하는 영상) 원고구조: 없음 — 이라고만 써.',
       '4. 블록 사이에 빈 줄 하나. [분해 N]과 [끝] 표기는 정확히.',
       '5. 여러 캡처가 같은 릴스면(썸네일+캡션) 한 블록으로 합쳐.',
-      '6. ★원고구조의 «기본»은 5칸(이득손해>공감상황>방법>소구>CTA). 대부분 이걸로 설명된다.',
+      '6. ★원고구조의 «기본»은 역할 6개(도입부>공감>근거>방법>변화>CTA). 대부분 이걸로 설명된다.',
       '   ★단, 순서는 «고정이 아니다». 만드는 사람마다 습관이 달라서 같은 내용인데도',
       '   순서가 바뀌는 일이 아주 흔하다 — 공감상황이 먼저 오기도 하고, 소구가 중간에 끼기도 한다.',
       '   그러니 «원고에 실제로 나온 순서» 그대로 적어라. 템플릿 자리에 맞추려고 옮기지 마.',
       '   라벨은 «자리»가 아니라 «역할(그 문단이 하는 일)»로 붙인다.',
       '   칸이 통째로 비어 있는 것도 정상이다 (소구 없음 · CTA 없음 등). 없으면 그 줄을 빼라.',
-      '7. ★★주제에 따라 더 맞는 흐름이 있으면 «라벨을 새로 만들어도 된다». 이게 핵심이야.',
-      '   컨텐츠는 분야마다 먹히는 순서가 다르다. 원고를 읽고 «이 주제엔 이 흐름»을 추론해',
-      '   가장 잘 설명하는 라벨을 붙여. 기본 5칸에 억지로 구겨 넣지 마.',
-      '   - 먼저 아래 [구조 라이브러리]에 맞는 게 있는지 보고, 있으면 그 단계 이름을 쓴다.',
-      '   - 없으면 «내용을 한 단어로 요약한 라벨»을 직접 만든다 (2~6자, 명사형).',
-      '   - 예) 건강·의학 릴스가 자주 쓰는 흐름:',
-      '        이득손해> 책상 짚을 때 통증 있는 분 주목',
-      '        공감상황> 짚고 일어날 때 손목이 저릿하다면 그냥 두면 안 됩니다',
-      '        전문용어> 이건 TFCC라는 손목 염증인데요',
-      '        발생원인> 컴퓨터를 오래 하거나 손목이 돌아가 있는 분이 잘 걸립니다',
-      '        문제인식> 만성이 될 수 있어서 일주일 넘게 안 가라앉으면 병원에 가야 합니다',
+      '7. ★★역할은 위 6개가 전부다 — «새 역할»은 만들지 마라. 대신 «세부 표현»은 자유다.',
+      '   표기법: 역할·세부> (예: 도입부·상식깨기> / 근거·전문용어> / 변화·후기>). 세부가 없으면 역할만.',
+      '   - 아래 [구조 라이브러리]의 단계 이름을 쓸 때도 앞에 역할을 붙여라 (예: 도입부·꿈소개> 근거·변곡점>).',
+      '   - 세부 표현 사전 (여기 없어도 뜻이 맞으면 2~6자 명사형으로 만들어 써라):',
+      '     · 도입부 ← 이득손해 · 숫자 · 상식깨기 · 가치입증 · 꿈소개 · 좌절 · 의심 · 문제',
+      '     · 공감 ← 상황 · 갈등 · 고통 · 투쟁 · 오해 · 실수',
+      '     · 근거 ← 원인 · 전문용어 · 설명 · 반박 · 문제인식 · 깨달음 · 가치입증 · 변곡점',
+      '     · 방법 ← 팁 · 단계 · 해결책 · 발견 · 전환점 · 도전 · 시술전후 · 재료 · 자세교정',
+      '     · 변화 ← 효과 · 진행상황 · 교훈 · 결말 · 후기',
+      '     · CTA ← 홍보 · 목적',
+      '   - ★가치입증(경력·건수·성과 제시)은 자리가 정해져 있지 않다 — 문단의 «일»로 판정해라:',
+      '     첫 마디로 멈추게 하면 → 도입부·가치입증> "저는 변호사를 10년 이상 해왔고, 이혼 변호만 1천 건 이상 해결했습니다"',
+      '     주장 뒤에서 믿게 하면 → 근거·가치입증> "...왜 이렇게 말하냐면, 제가 1천 건을 직접 봤거든요"',
+      '   - 예) 건강·의학 릴스의 흐름:',
+      '        도입부> 책상 짚을 때 통증 있는 분 주목',
+      '        공감> 짚고 일어날 때 손목이 저릿하다면 그냥 두면 안 됩니다',
+      '        근거·전문용어> 이건 TFCC라는 손목 염증인데요',
+      '        근거·원인> 컴퓨터를 오래 하거나 손목이 돌아가 있는 분이 잘 걸립니다',
+      '        근거·문제인식> 만성이 될 수 있어서 일주일 넘게 안 가라앉으면 병원에 가야 합니다',
       '        방법1> …  방법2> …  방법3> …',
       '        CTA> 손목 아픈 지인에게 공유해주세요',
-      '     → «전문용어·발생원인·문제인식»은 기본 5칸에 없지만 이 주제엔 이게 맞다. 이렇게 만들어라.',
-      '   - 다른 분야 예) 뷰티=시술전후·주의사항 / 재테크=수익공개·리스크 / 요리=재료·불조절 /',
-      '     운동=자세교정·호흡 / 육아=발달단계·주의신호 — 원고가 실제로 그렇게 흐를 때만.',
-      '   - 남용 금지: 라벨은 한 블록에 «최대 8개». 기본 5칸으로 설명되면 기본을 써라.',
+      '     → 근거가 여러 덩어리면 이렇게 «근거·세부>»로 각 줄. 원고에 나온 순서 그대로 보존된다.',
+      '   - 남용 금지: 라벨은 한 블록에 «최대 8개». 역할만으로 설명되면 역할만 써라.',
       '8. ★★라벨은 «문장»이 아니라 «의미 덩어리»에 붙인다. 이게 제일 중요해.',
       '   - 한 문장씩 자르지 마. 같은 이야기가 이어지면 문장이 3~4개여도 «한 라벨».',
       '   - 화제가 «다른 것»으로 바뀔 때만 다음 번호(방법1 → 방법2)로 넘어가.',
@@ -46901,30 +46940,33 @@
       '   - ❌ 이러면 틀림: 방법1, 방법2, 방법3 … 방법11 (문장마다 번호 = 잘못 자른 것)',
       '   - 방법은 «방법1 + 방법2»가 기본, 최대 3개. 4개 넘게 나오면 «잘못 자른 것»이니 다시 묶어.',
       '9. ★라벨을 못 정하겠으면 «그 줄을 빼». 억지로 아무 라벨이나 붙이지 마.',
-      '   특히 소구·CTA는 «없으면 없는 게 정상»이야. 마무리 인사·소감을 CTA로 넣지 마.',
+      '   특히 변화·CTA는 «없으면 없는 게 정상»이야. 마무리 인사·소감을 CTA로 넣지 마.',
       '',
-      '=== ★원고 라벨의 뜻 (여기서 제일 많이 틀린다) ===',
-      '· 이득손해 — «도입부». 이 영상을 봤을 때 시청자가 «얻는 것»을 제시. 1~3초 안에 멈추게 함.',
-      '     판정: "이걸 보면 내가 뭘 얻지?"의 답이면 이득손해.',
-      '     ✅ "얼굴 작아 보이는 앞뽑 만드는 방법 알려줄게"',
-      '     ✅ "묶은 머리 뜯기지 않고 푸는 방법"',
-      '     ✅ "사진 찍었을 때 비대칭 같다면? 완벽하게 고친 3가지 방법"',
-      '· 공감상황 — «상황 감정묘사». 일상에서 문제가 되는 현상을 «구체적인 고통점»으로.',
-      '     판정: "어 내 얘기다" 소리가 나오면 공감상황.',
+      '=== ★역할 6개의 뜻 (여기서 제일 많이 틀린다) ===',
+      '· 도입부 — «멈추게 하는 첫 마디(훅)». 1~3초 안에 손가락을 멈추게 함. 인사말은 도입부가 아니다.',
+      '     판정: "이게 사람을 멈추게 했나?"',
+      '     ✅ 도입부·이득손해> "얼굴 작아 보이는 앞뽑 만드는 방법 알려줄게"',
+      '     ✅ 도입부·숫자> "내 나이 30살, 이젠 하고 싶은 것보다 해야 하는 것을 해야 하는 나이이다"',
+      '     ✅ 도입부·숫자> "이거 했더니 효과가 100% 이상이에요" (숫자가 «주인공»일 때만 숫자)',
+      '     ✅ 도입부·상식깨기> "아침에 사과를 먹으면 보약이라는 말, 거짓말인 거 알고 계신가요?"',
+      '        (다들 믿는 상식 + "그거 아닌데요?" — 이어지는 이유는 근거로, 대안은 방법으로)',
+      '· 공감 — «상황 감정묘사». 일상 속 문제를 «구체적인 고통점»으로.',
+      '     판정: "어 내 얘기다" 소리가 나오면 공감.',
       '     ✅ "다들 헤어롤 이렇게 말지?"',
       '     ✅ "묶을 땐 괜찮은데 풀 때마다 뜯기는 머리카락이 고민이시라면?"',
-      '     ✅ "사진 찍었을 때 거울보다 못생기게 느껴지고"',
+      '· 근거 — «왜 그런가». 원인·전문용어·데이터·권위. 알면 안심하고 계속 본다.',
+      '     판정: "왜?"의 답이면 근거. 순서가 있으면 각 줄로 (근거·원인> 근거·전문용어> 근거·설명>).',
+      '     ✅ 근거·원인> "사과의 높은 당이 오히려 혈당을 확 올릴 수 있는데요"',
       '· 방법 — 실제로 «어떻게 하는지». 원리 + 구체 행동. "한번 해볼까"까지 가게 함.',
       '     판정: 따라 할 수 있는 «행동»이 들어 있으면 방법. 보통 «방법1 + 방법2» 두 덩어리.',
-      '· ★소구 — 이것을 «얻었을 때의 기분·감정·효과».',
-      '     판정 질문: "그래서 뭐가 좋아지는데?"의 답이면 소구. 결과·효과 표현도 소구가 맞다.',
+      '· ★변화 — 이것을 «얻었을 때의 기분·감정·효과·달라진 모습».',
+      '     판정 질문: "그래서 뭐가 좋아지는데?"의 답이면 변화. 결과·효과 표현도 변화가 맞다.',
       '     ✅ "1분 만에 유지력 진짜 오래가는 사이드뱅 완성~"',
       '     ✅ "이렇게 하면 손쉽게 풀립니다"',
-      '     ✅ "주황기는 잡고, 맑은 결은 살리고"',
       '     ✅ "아침에 머리 안 만져도 되고, 사람들이 어디서 했냐고 물어봐요"',
-      '     ❌ 방법을 다시 설명하는 문장(구체적 «행동 순서»)은 방법이지 소구가 아님',
+      '     ❌ 방법을 다시 설명하는 문장(구체적 «행동 순서»)은 방법이지 변화가 아님',
       '· ★CTA — Call To Action. «선택지를 여는 한 줄» 또는 저장·공유·팔로우·DM 유도.',
-      '     판정: 보는 사람이 «손가락을 움직여야» 하면 CTA. 아니면 CTA 아님.',
+      '     판정: 보는 사람이 «손가락을 움직여야» 하면 CTA. "자연스러워져요"=변화, "저장해두세요"=CTA.',
       '     ✅ "댓글로 아무거나 남겨 주시면 바로 보내드릴게요"',
       '     ✅ "더 많은 꿀팁은 팔로우 해주세요"  ✅ "고통받는 친구에게 공유해줘~"',
       '     ❌ "완전 진희들은 받아볼 것 같아" → 그냥 소감, CTA 아님 (줄을 빼)',
@@ -46945,40 +46987,39 @@
       '=== ★완본 예시 (원고구조 부분만 — 이 감각으로 잘라라) ===',
       '[예시 A · 기본 5칸으로 충분한 경우 — 뷰티/헤어]',
       '원고구조: 기본형',
-      '이득손해> 묶은 머리 뜯기지 않고 푸는 방법',
-      '공감상황> 묶을 땐 괜찮은데 풀 때마다 뜯기는 머리카락이 고민이시라면?',
+      '도입부> 묶은 머리 뜯기지 않고 푸는 방법',
+      '공감> 묶을 땐 괜찮은데 풀 때마다 뜯기는 머리카락이 고민이시라면?',
       '           머리카락 지키는 저만의 꿀팁 두 가지를 알려드릴게요',
       '방법1> (첫 번째 방법 문장들을 원문 그대로, 줄바꿈으로 이어서)',
       '방법2> (두 번째 방법 문장들)',
-      '소구> 이렇게 하면 손쉽게 풀립니다',
+      '변화> 이렇게 하면 손쉽게 풀립니다',
       'CTA> 더 많은 꿀팁은 팔로우 해주세요',
       '',
       '[예시 B · ★순서가 뒤바뀐 경우 — 뷰티/헤어. 아주 흔하다]',
       '원고구조: 기본형',
-      '공감상황> 다들 헤어롤 이렇게 말지?',
-      '이득손해> 얼굴 작아 보이는 앞뽑 만드는 방법 알려줄게',
+      '공감> 다들 헤어롤 이렇게 말지?',
+      '도입부·이득손해> 얼굴 작아 보이는 앞뽑 만드는 방법 알려줄게',
       '방법1> (첫 번째 방법)',
       '방법2> (두 번째 방법 + 중간에 특별한 팁)',
-      '소구> 1분 만에 유지력 진짜 오래가는 사이드뱅 완성~',
-      '→ 템플릿 순서는 «이득손해 → 공감상황»이지만 이 원고는 «공감상황»이 먼저 나왔다.',
+      '변화> 1분 만에 유지력 진짜 오래가는 사이드뱅 완성~',
+      '→ 템플릿 순서는 «도입부 → 공감»이지만 이 원고는 «공감»이 먼저 나왔다.',
       '   그럴 땐 «원고에 나온 순서» 그대로 써라. 자리를 맞추려고 옮기지 마.',
       '   CTA가 아예 없는 것도 정상이다 — 없으면 그 줄을 빼면 된다.',
       '',
-      '[예시 C · 주제에 맞게 라벨을 «만든» 경우 — 건강/의학]',
+      '[예시 C · 근거에 순서가 있는 경우 — 건강/의학]',
       '원고구조: 기본형·확장',
-      '이득손해> 책상 짚을 때 통증 있는 사람들 주목해주세요',
-      '공감상황> 책상 짚고 일어날 때 손목에 통증이 유발되고, 무거운 거 들 때나 손목을 돌릴 때',
+      '도입부> 책상 짚을 때 통증 있는 사람들 주목해주세요',
+      '공감> 책상 짚고 일어날 때 손목에 통증이 유발되고, 무거운 거 들 때나 손목을 돌릴 때',
       '           저릿저릿하게 통증이 있다면 가만히 냅두면 안 됩니다',
-      '전문용어> 이건 TFCC라고 손목 염증인데요',
-      '발생원인> 평소 컴퓨터를 많이 하거나 손목이 많이 돌아가 있는 분들이 자주 걸립니다',
-      '문제인식> 만성염증이 될 수 있어 일주일 이상 지났는데도 통증이 가라앉지 않고',
+      '근거·전문용어> 이건 TFCC라고 손목 염증인데요',
+      '근거·원인> 평소 컴퓨터를 많이 하거나 손목이 많이 돌아가 있는 분들이 자주 걸립니다',
+      '근거·문제인식> 만성염증이 될 수 있어 일주일 이상 지났는데도 통증이 가라앉지 않고',
       '           더 심해진다면 병원을 가봐야 합니다',
       '방법1> (관리법 1)',
       '방법2> (관리법 2)',
       '방법3> (관리법 3)',
       'CTA> 손목 통증으로 고생하는 지인들에게 공유해주세요',
-      '→ «전문용어·발생원인·문제인식»은 기본 5칸에 없다. 하지만 이 주제엔 이 흐름이 맞다.',
-      '   이렇게 «원고를 읽고 맥락으로 추론해서» 라벨을 만들어라. 문단(의미 덩어리) 단위로.',
+      '→ 역할은 6개뿐이지만 «근거·세부>»로 순서와 분야 맛을 다 살린다. 문단(의미 덩어리) 단위로.',
       '',
       '준비됐으면 "🤖 준비 완료! 캡처를 던져주세요"라고만 답해.'
     ]).join('\n');
@@ -47035,8 +47076,9 @@
         .slice(0, 12)
         .map(s => '· "' + String(s.name || '이름 없는 구조').replace(/\n/g, ' ') + '": ' + s.steps.map(st => String(st.label || '').trim()).filter(Boolean).join('> ') + '>');
     } catch (e) { mine = []; }
-    return ['=== 구조 라이브러리 (기본 5칸으로 안 맞을 때 여기서 고른다) ===',
-      '※ «라벨>» 형태로만 쓴다. 라벨에 괄호·설명을 붙이지 마 (아래 «=» 는 뜻풀이일 뿐이다).']
+    return ['=== 구조 라이브러리 (역할 6개만으로 안 맞을 때 여기서 고른다) ===',
+      '※ 단계 이름 앞에 역할을 붙여 «역할·단계이름>» 로 쓴다 (예: 도입부·꿈소개> 근거·변곡점> 변화·진행상황>).',
+      '※ 라벨에 괄호·설명을 붙이지 마 (아래 «=» 는 뜻풀이일 뿐이다).']
       .concat(CS_LIB_BUILTIN.map(x => '· ' + x[0] + ' — ' + x[1] + '\n    라벨: ' + x[2] + '\n    뜻: ' + x[3]))
       .concat(mine.length ? ['', '--- 내가 저장한 구조 ---'].concat(mine) : []);
   }
@@ -51311,7 +51353,7 @@
             ? '<button type="button" class="tos-close" id="tos-close">닫기</button>'
             : '<div class="tos-prog" id="tos-prog">⌄ 끝까지 스크롤해서 읽어주세요</div>' +
               '<label class="tos-agree dis" id="tos-lbl"><input type="checkbox" id="tos-chk" disabled />' +
-              '약관을 끝까지 읽었으며, 담는 자료의 권리 책임이 저에게 있음을 이해하고 동의합니다. (필수)</label>' +
+              '약관을 끝까지 읽었으며, 담는 자료의 권리 책임이 본인에게 있음을 이해하고 동의합니다. (필수)</label>' +
               '<button type="button" class="tos-go" id="tos-go" disabled>동의하고 시작하기</button>') +
         '</div>' +
       '</div>';
@@ -56151,7 +56193,7 @@
   /* ══ v701 · 스케줄(plsc) — 요일 루틴. plnv1과 달리 주가 바뀌어도 유지(습관이니까) ══ */
   var PLSC_KEY = 'plsched1';
   var PLSC_PAL = ['리서치', '분석', '디벨롭', '원고', '촬영', '편집', '배포', '회고', '휴무'];
-  var PLSC_COL = { '리서치': '#9BE8B4', '분석': '#7EC8F5', '디벨롭': '#C7B6FF', '원고': '#F09EB8', '촬영': '#F09EB8', '편집': '#F09EB8', '배포': '#F4D06A', '회고': '#F4D06A', '휴무': '#5C6B87' };   // v713 · 노을과 금
+  var PLSC_COL = { '리서치': '#9BE8B4', '분석': '#7EC8F5', '디벨롭': '#C7B6FF', '원고': '#F09EB8', '촬영': '#7EC8F5', '편집': '#F09EB8', '배포': '#F4D06A', '회고': '#F4D06A', '휴무': '#5C6B87' };   // v713 · 노을과 금
   var PLSC_RGB = { '#9BE8B4': '155,232,180', '#7EC8F5': '126,200,245', '#C7B6FF': '199,182,255', '#F5B08E': '245,176,142', '#C6FF4A': '198,255,74', '#F09EB8': '240,158,184', '#F4D06A': '244,208,106', '#5C6B87': '92,107,135' };
   var PLSC_SW = ['#9BE8B4', '#7EC8F5', '#C7B6FF', '#F09EB8', '#F4D06A'];
   var PLSC_DAYN = ['월', '화', '수', '목', '금', '토', '일'];
@@ -56177,6 +56219,24 @@
     return _plsc;
   }
   async function plscSave() { try { await window.storage.set(PLSC_KEY, JSON.stringify(_plsc)); } catch (e) {} }
+  /* v726 · 스케줄 편집 되돌리기 — 바꾸기 전 모습을 쌓아뒀다가 한 걸음씩 되돌린다(세션 한정, 최대 20) */
+  var _plscUndo = [];
+  function plscSnap() {
+    try { _plscUndo.push(JSON.stringify(_plsc)); if (_plscUndo.length > 20) _plscUndo.shift(); } catch (e) {}
+  }
+  async function plscUndoDo() {
+    if (!_plscUndo.length) return;
+    try { _plsc = JSON.parse(_plscUndo.pop()); } catch (e) { return; }
+    await plscSave(); plnRenderWs(false);
+    try { toast('↩ 한 걸음 전으로'); } catch (e) {}
+  }
+  document.addEventListener('keydown', function (ev) {   // 스케줄 편집 패널이 열려 있을 때만 Ctrl+Z
+    if (!(ev.ctrlKey || ev.metaKey) || ev.shiftKey || String(ev.key).toLowerCase() !== 'z') return;
+    var t = ev.target;
+    if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+    if (!document.querySelector('.plsc-p') || !_plscUndo.length) return;
+    ev.preventDefault(); plscUndoDo();
+  });
   /* v713 · 완료 도장 — 주간 리셋, 내 손으로 찍는다(자동 판정 없음) */
   function plscWk() {
     try { return cmWkId(new Date()); }
@@ -56250,6 +56310,7 @@
         }).join('') + '</div>';
       panel = '<div class="plsc-p"><div class="plsc-ph"><b>' + sg.d.map(function (d) { return PLSC_DAYN[d]; }).join('·') + '요일에 하는 일</b>' +
         '<div class="ctl">' +
+        (_plscUndo.length ? '<button type="button" class="undo" data-plscundo="1">↩ 되돌리기</button>' : '') +
         (_plscOpen > 0 ? '<button type="button" data-plscmgl="1">◀ 왼쪽과 합치기</button>' : '') +
         (_plscOpen < sc.segs.length - 1 ? '<button type="button" data-plscmgr="1">오른쪽과 합치기 ▶</button>' : '') +
         (sg.d.length > 1 ? '<button type="button" data-plscspl="1">요일 나누기</button>' : '') +
@@ -58231,6 +58292,7 @@
     wsin.querySelectorAll('[data-plscch]').forEach(function (el) {
       el.onclick = async function () {
         var sg = _plsc && _plsc.segs[_plscOpen]; if (!sg) return;
+        plscSnap();
         var nm = el.dataset.plscch;
         if (nm === '휴무') { sg.s = sg.s.indexOf('휴무') > -1 ? [] : ['휴무']; }   // 휴무는 단독
         else {
@@ -58243,6 +58305,7 @@
     });
     wsin.querySelectorAll('[data-plscstart]').forEach(function (el) {
       el.onclick = async function () {
+        plscSnap();
         _plsc.start = +el.dataset.plscstart;
         await plscSave(); plnRenderWs(false);
       };
@@ -58250,6 +58313,7 @@
     wsin.querySelectorAll('[data-plscsw]').forEach(function (el) {
       el.onclick = async function () {
         var sg = _plsc && _plsc.segs[_plscOpen]; if (!sg) return;
+        plscSnap();
         sg.c = el.dataset.plscsw === 'auto' ? null : el.dataset.plscsw;
         await plscSave(); plnRenderWs(false);
       };
@@ -58257,6 +58321,7 @@
     var mgl = wsin.querySelector('[data-plscmgl]');
     if (mgl) mgl.onclick = async function () {
       var sg = _plsc.segs[_plscOpen], left = _plsc.segs[_plscOpen - 1]; if (!sg || !left) return;
+      plscSnap();
       left.d = left.d.concat(sg.d);
       sg.s.forEach(function (x) { if (left.s.indexOf(x) < 0) left.s.push(x); });
       if (sg.c && !left.c) left.c = sg.c;
@@ -58266,15 +58331,19 @@
     var mgr = wsin.querySelector('[data-plscmgr]');
     if (mgr) mgr.onclick = async function () {
       var sg = _plsc.segs[_plscOpen], right = _plsc.segs[_plscOpen + 1]; if (!sg || !right) return;
+      plscSnap();
       sg.d = sg.d.concat(right.d);
       right.s.forEach(function (x) { if (sg.s.indexOf(x) < 0) sg.s.push(x); });
       if (right.c && !sg.c) sg.c = right.c;
       _plsc.segs.splice(_plscOpen + 1, 1);
       await plscSave(); plnRenderWs(false);
     };
+    var und = wsin.querySelector('[data-plscundo]');   // v726 · ↩ 되돌리기
+    if (und) und.onclick = plscUndoDo;
     var spl = wsin.querySelector('[data-plscspl]');
     if (spl) spl.onclick = async function () {
       var sg = _plsc.segs[_plscOpen]; if (!sg) return;
+      plscSnap();
       var parts = sg.d.map(function (d) { return { d: [d], s: sg.s.slice(), c: sg.c }; });
       _plsc.segs.splice.apply(_plsc.segs, [_plscOpen, 1].concat(parts));
       await plscSave(); plnRenderWs(false);
@@ -58436,6 +58505,7 @@
   var SCT_KEY = 'AIzaSyAx6v19d749Qs_cTikRyE_t1R12Hjw2l3c';
   var _sctMode = 'yt', _sctQ = '';
   var _sctPer = 'all', _sctSort = 'view', _sctFmt = 'all', _sctVids = [], _sctShown = 10;
+  var _sctScrOpen = '';   // v729 · 카트에서 원고 입력이 펼쳐진 영상 key
   var _sctChSort = 'view', _sctChFmt = 'all', _sctChVids = [], _sctChShown = 10, _sctChHd = '';
   var _sctCart = {}, _sctKb = [], _sctKbVals = ['', ''], _sctNvCache = {}, _sctEmbLoading = 0;
   var SCT_CAP = {   /* 정렬 설명 — 결론(색) 먼저, 계산법은 괄호 흐리게 */
@@ -58697,7 +58767,7 @@
       go.textContent = (_sctEp >= 0) ? '✦ ' + (_sctEp + 1) + '편 리서치로 담기' : '✦ 리서치로 담기';
     }
     if (note) note.textContent = keys.length
-      ? ((_sctEp >= 0) ? '영상→리서치 수확 · 키워드→원고 키워드 후보 · 댓글→분석 공감 후보' : '누르면 어느 편에 담을지 고릅니다')
+      ? ((_sctEp >= 0) ? '영상→리서치 수확 · 키워드→키워드 후보 · 댓글→공감 후보 · ✎원고 담긴 영상→레퍼런스 카드' : '누르면 어느 편에 담을지 고릅니다')
       : '';
     if (!keys.length) { box.innerHTML = '<div class="empty">카트가 비어 있어요.<br>영상·태그·댓글을 톡 치면 여기 담깁니다.</div>'; return; }
     box.innerHTML = keys.map(function (k) {
@@ -58710,9 +58780,25 @@
       c.cmts.forEach(function (cm, i) {
         picks += '<div class="pick"><span class="k2">댓글</span><span class="v2">👍' + sctN(cm.lk) + ' · ' + sctEsc(cm.t.slice(0, 70)) + (cm.t.length > 70 ? '…' : '') + '</span><span class="x" data-rx="c|' + k + '|' + i + '">×</span></div>';
       });
+      var scr = '';
+      if (c.video) {   // v729 · 원고 칸(A안) — 빈 슬롯 / 펼친 입력 / 담김
+        if (_sctScrOpen === k) {
+          scr = '<div class="sct-scro"><textarea id="sct-scrta-' + k + '" placeholder="여기에 던지세요 — 분해봇 결과(훅> 공감> …)든, 원고 AI 결과든 알아서 나눠 담아요"></textarea>' +
+            '<div class="bar"><span>라벨이 있으면 구간으로 · 없으면 통짜로</span><button type="button" data-scok="' + k + '">담기 ✓</button></div></div>';
+        } else if ((c.script || '').trim()) {
+          var segs9 = sctParseScript(c.script);
+          scr = '<div class="sct-scrd" data-scw="' + k + '"><b>✎ 원고 담김 — ' + segs9.length + '구간 · ' + c.script.replace(/\s/g, '').length + '자 ✓</b>' +
+            '<span class="chips">' + segs9.slice(0, 6).map(function (sg) {
+              var col9 = (typeof flexLabelColor === 'function' && sg.k !== '원고') ? flexLabelColor(sg.k) : '#8b9184';
+              return '<i style="background:' + col9 + '">' + sctEsc(String(sg.k).slice(0, 6)) + '</i>';
+            }).join('') + '</span><u>톡 = 고치기</u></div>';
+        } else {
+          scr = '<div class="sct-scr" data-scw="' + k + '"><i>✎</i>원고 · 비었음 — 원고 AI에서 복사해 오세요<b>붙이기 ›</b></div>';
+        }
+      }
       return '<div class="cv"><div class="vt">' +
         (c.v.th ? '<img src="' + sctEsc(c.v.th) + '" alt="">' : '<span class="vtn">N</span>') +
-        '<b>' + sctEsc(c.v.t) + '</b><i>' + (c.v.views ? '▶ ' + sctN(c.v.views) : '') + '</i></div>' + picks + '</div>';
+        '<b>' + sctEsc(c.v.t) + '</b><i>' + (c.v.views ? '▶ ' + sctN(c.v.views) : '') + '</i></div>' + picks + scr + '</div>';
     }).join('');
     box.querySelectorAll('[data-rx]').forEach(function (x) {
       x.onclick = function () {
@@ -58722,6 +58808,26 @@
         if (p[0] === 't') c.tags.splice(+p[2], 1);
         if (p[0] === 'c') c.cmts.splice(+p[2], 1);
         sctCartSync(true); sctCartRender();
+      };
+    });
+    // v729 · 원고 슬롯 — 톡=펼치기(있으면 프리필) · 담기=커밋 (입력 중 재렌더 0)
+    box.querySelectorAll('[data-scw]').forEach(function (el2) {
+      el2.onclick = function () {
+        var k2 = el2.dataset.scw, c2 = _sctCart[k2];
+        _sctScrOpen = k2;
+        sctCartRender();
+        var ta2 = document.getElementById('sct-scrta-' + k2);
+        if (ta2) { if (c2 && c2.script) ta2.value = c2.script; ta2.focus(); }
+      };
+    });
+    box.querySelectorAll('[data-scok]').forEach(function (b2) {
+      b2.onclick = function () {
+        var k2 = b2.dataset.scok, c2 = _sctCart[k2]; if (!c2) return;
+        var ta2 = document.getElementById('sct-scrta-' + k2);
+        c2.script = ta2 ? ta2.value.trim() : '';
+        _sctScrOpen = '';
+        sctCartRender();
+        try { toast(c2.script ? '✎ 원고 담김 — 리서치로 담으면 레퍼런스 카드가 됩니다' : '원고를 비웠어요'); } catch (er) {}
       };
     });
   }
@@ -58772,12 +58878,36 @@
         if (!e.scout.cmts.some(function (y) { return y.t === cm.t; })) { e.scout.cmts.push({ t: cm.t, lk: cm.lk }); nc++; }
       });
     });
+    // v729 · 원고가 담긴 영상 → 저장소 카드 생성 + 이 편 레퍼런스로 자동 합류 (칠하기 가능)
+    var madeCards = 0;
+    keys.forEach(function (x9) {
+      var c9 = _sctCart[x9];
+      if (!c9.video || !(c9.script || '').trim()) return;
+      var segs9 = sctParseScript(c9.script);
+      if (!segs9.length) return;
+      var no9 = 1;
+      try { no9 = rows.length ? Math.max.apply(null, rows.map(function (r9) { return r9.no || 0; })) + 1 : 1; } catch (er9) {}
+      var row9 = newRow(no9);
+      row9.hook = String(c9.v.t || '').slice(0, 80);
+      row9.views = c9.v.views || 0;
+      row9.url = 'https://www.youtube.com/watch?v=' + c9.v.id;
+      row9.platform = 'yt';
+      row9.author = c9.v.ch || '';
+      row9.scriptSecFlex = segs9;
+      rows.push(row9);
+      e.refs = e.refs || [];
+      e.refs.push({ id: row9.id, t: row9.hook.slice(0, 40), v: c9.v.views ? fmtViews(c9.v.views) : '' });
+      if (!e.rid) { e.rid = row9.id; e.ref = c9.v.views ? fmtViews(c9.v.views) : '—'; e.bone = plnBoneOf(row9); }
+      madeCards++;
+      sctThumbToRow(c9.v.th, row9.id);
+    });
+    if (madeCards) { try { await saveRows(); } catch (er8) {} }
     await plnSave();
     _sctCart = {};
     var sh = document.getElementById('sct-csh'); if (sh) sh.remove();
     _plnScout = 0; _plnEp = k;
     if (_plnCur === 1) plnRefresh(true); else plnGo(1);
-    try { toast('🔭 ' + (k + 1) + '편에 담았어요 — 영상 ' + nv + ' · 키워드 ' + nk + ' · 댓글 ' + nc); } catch (er) {}
+    try { toast('🔭 ' + (k + 1) + '편에 담았어요 — 영상 ' + nv + ' · 키워드 ' + nk + ' · 댓글 ' + nc + (madeCards ? ' · ✎ 레퍼런스 카드 ' + madeCards : '')); } catch (er) {}
   }
   /* ── 수확물 표시 — ①리서치 영상 · ②분석 댓글 (편 화면 소속) ── */
   function sctHvVidsHtml(e) {
@@ -59324,6 +59454,56 @@
     } catch (e) { out.innerHTML = '<div class="stat">⚠ 불러오기 실패: ' + sctEsc(e.message) + '</div>'; }
   }
   /* ── 카드 (공용) ── */
+  /* v729 · 카트 원고 붙여넣기 → 구간 [{k,t}] — «라벨> 문장» 문법 + 원고 AI 타임스탬프 제거 */
+  function sctParseScript(text) {
+    var lines = String(text || '').split(/\n/), segs = [], cur = null;
+    lines.forEach(function (ln) {
+      ln = ln.replace(/\[\d{1,2}:\d{2}(?::\d{2})?\s*(?:→|->|~)\s*\d{1,2}:\d{2}(?::\d{2})?\]\s*/g, '').trim();
+      if (!ln) return;
+      var m = /^([^>\n]{1,14})>\s*(.*)$/.exec(ln);
+      if (m && m[1].trim() && !/https?:/i.test(m[1])) {
+        cur = { k: m[1].trim(), t: (m[2] || '').trim() };
+        segs.push(cur);
+      } else if (cur) {
+        cur.t = (cur.t ? cur.t + '\n' : '') + ln;
+      } else {
+        cur = { k: '원고', t: ln };
+        segs.push(cur);
+      }
+    });
+    return segs.filter(function (sg) { return (sg.t || '').trim(); });
+  }
+  /* v729 · 유튜브 썸네일 URL → 카드 사진 저장 (CORS로 막히면 조용히 생략 — 🎬 자리 표시) */
+  function sctThumbToRow(thUrl, rowId) {
+    if (!thUrl || typeof saveImage !== 'function') return;
+    try {
+      fetch(thUrl).then(function (rs) { return rs.blob(); }).then(function (bl) {
+        var fr = new FileReader();
+        fr.onload = function () {
+          try {
+            var im = new Image();
+            im.onload = function () {
+              try {
+                var cv = document.createElement('canvas');
+                var sc2 = Math.min(1, 480 / im.width);
+                cv.width = Math.round(im.width * sc2); cv.height = Math.round(im.height * sc2);
+                cv.getContext('2d').drawImage(im, 0, 0, cv.width, cv.height);
+                saveImage(rowId, 'thumb', cv.toDataURL('image/jpeg', .82));
+              } catch (er2) {}
+            };
+            im.src = String(fr.result);
+          } catch (er3) {}
+        };
+        fr.readAsDataURL(bl);
+      }).catch(function () {});
+    } catch (er) {}
+  }
+  function sctCopyLink(id) {   // v728 · 유튜브 링크 복사 — 실패하면 prompt로 보여줘서 직접 복사
+    var url = 'https://www.youtube.com/watch?v=' + id;
+    var done = function () { try { toast('🔗 링크 복사됨 — 붙여넣기만 하세요'); } catch (e) {} };
+    var fall = function () { try { window.prompt('복사해서 쓰세요', url); } catch (e) {} };
+    try { navigator.clipboard.writeText(url).then(done, fall); } catch (e) { fall(); }
+  }
   function sctCard(v, i, mode) {
     var s = v.snippet, st = v.statistics || {};
     var tags = (s.tags || []).slice(0, 12);
@@ -59339,9 +59519,14 @@
         (v.__chth ? '<img class="av" src="' + sctEsc(v.__chth) + '" alt="">' : '') + sctEsc(s.channelTitle) +
         '<i class="ana">📊 채널 분석</i></span> · 구독 ' + (v.__subs === null ? '비공개' : sctN(v.__subs)) + ' · '
       : '';
+    var sec3 = sctDurSec(v.contentDetails && v.contentDetails.duration);
+    var isS3 = sec3 > 0 && sec3 <= 183;   // v727 · 쇼츠 판정 — 형식 필터와 같은 기준
+    var thu3 = (isS3
+      ? (s.thumbnails.high || s.thumbnails.medium || s.thumbnails.default || {})
+      : (s.thumbnails.medium || s.thumbnails.high || s.thumbnails.default || {})).url;
     return '<div class="card" id="sct-card-' + mode + '-' + i + '">' +
       '<div class="top">' +
-        '<div class="th" data-play="' + v.id + '" data-i="' + i + '" data-m="' + mode + '"><img src="' + sctEsc((s.thumbnails.medium || s.thumbnails.default || {}).url) + '" alt="">' +
+        '<div class="th' + (isS3 ? ' vert' : '') + '" data-play="' + v.id + '" data-i="' + i + '" data-m="' + mode + '"><img src="' + sctEsc(thu3) + '" alt="">' +
         '<span class="pl"></span><span class="dur">' + sctFmtDur(v.contentDetails && v.contentDetails.duration) + '</span></div>' +
         '<div class="bd">' +
           '<div class="tt">' + sctEsc(s.title) + '</div>' +
@@ -59353,6 +59538,7 @@
         '<span class="lnkb like">👍 좋아요 <b>' + sctN(st.likeCount) + '</b></span>' +
         '<button type="button" class="lnkb" data-stg="' + mode + '-' + i + '">🏷 태그 <b>' + tags.length + '</b></button>' +
         '<button type="button" class="lnkb" data-scm="' + mode + '-' + i + '" data-vid="' + v.id + '">💬 댓글 <b>' + sctN(st.commentCount) + '</b></button>' +
+        '<button type="button" class="lnkb" data-cpl="' + sctEsc(v.id) + '" title="링크 복사">🔗</button>' +
         '<button type="button" class="addv' + (ci.video ? ' done' : '') + '" data-addv="' + mode + '-' + i + '">' + (ci.video ? '✓ 담음 · 취소' : '🛒 담기') + '</button>' +
       '</div>' +
       '<div class="drawer" id="sct-tags-' + mode + '-' + i + '">' + (tags.length
@@ -59366,6 +59552,9 @@
   function sctWireCards(scope, pageVids, mode) {
     scope.querySelectorAll('[data-chgo]').forEach(function (c) {
       c.onclick = function () { sctChRun(c.dataset.chgo, c.dataset.chtt); };
+    });
+    scope.querySelectorAll('[data-cpl]').forEach(function (b) {   // v728 · 링크 복사
+      b.onclick = function () { sctCopyLink(b.dataset.cpl); };
     });
     scope.querySelectorAll('[data-stg]').forEach(function (b) {
       b.onclick = function () {
@@ -59449,9 +59638,11 @@
         d.className = 'inpl';
         d.innerHTML = '<div class="vh"><iframe src="https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0&playsinline=1" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe></div>' +
           '<div class="rw"><a class="lnkb" href="https://www.youtube.com/watch?v=' + id + '" target="_blank" rel="noopener">유튜브에서 크게 ↗</a>' +
+          '<button type="button" class="lnkb" data-cpl2="1">🔗 링크 복사</button>' +
           '<button type="button" class="lnkb" data-stopin="1">재생 닫기</button></div>';
         card.prepend(d);
         d.querySelector('[data-stopin]').onclick = function () { d.remove(); };
+        d.querySelector('[data-cpl2]').onclick = function () { sctCopyLink(id); };
       };
     });
   }
@@ -60561,9 +60752,9 @@
   const PX_ROLES = [
     ['도입부', '#E25C5C', /(후킹|훅|도입|오프닝|인트로|이득|손해|반전|깨달음|발견|계기|전환|인사이트|경고|호기심)/],
     ['공감', '#5B8DEF', /(공감|상황|장면|스토리|일상|사례|경험|좌절|문제|고민|실패|실수|위기|불안|불만|고통|착각|오해|통념|before)/i],
-    ['이유', '#D8B23A', /(원인|이유|진단|분석|배경)/],
+    ['근거', '#D8B23A', /(근거|원인|이유|진단|분석|배경|전문|설명|반박)/],
     ['해결책', '#A9C437', /(방법|과정|단계|꿀팁|팁|해결|솔루션|노하우|레시피|원리|after)/i],
-    ['증거', '#2FB6A0', /(증거|근거|숫자|데이터|비교|권위|인증|증명|후기|결과|변화|성장|완성|성공|효과)/],
+    ['변화', '#2FB6A0', /(변화|증거|숫자|데이터|비교|권위|인증|증명|후기|결과|성장|완성|성공|효과)/],
     ['CTA', '#2FD07B', /(CTA|저장|공유|팔로우|댓글|소구|예약|혜택)/i]
   ];
   function pxRole(lb) { const t = String(lb || ''); for (const R of PX_ROLES) if (R[2].test(t)) return R[0]; return t; }
