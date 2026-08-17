@@ -58729,11 +58729,18 @@
         if (t2) mains.push('<b style="color:' + v[2] + '">★</b>"' + esc(String(t2).slice(0, 22)) + '"');
       });
       if (mains.length) doneN++; if (e.hook) doneN++;
+      // v750 · 원고 줄 — 원고 없는 컨텐츠는 여기서 «원고 없음»으로 클릭 (확정 카운트 비포함)
+      var scrN2 = plnScrN(e);
       rows =
         pv2CfmRow('①', '고객 분석', mains.length ? mains.slice(0, 2).join(' · ') + (mains.length > 2 ? ' 외 ' + (mains.length - 2) : '') : '',
           !!mains.length, mains.length ? '정함 ✓' : '바구니에서 ★') +
         pv2CfmRow('②', '후킹 문구', e.hook ? '"' + esc(String(e.hook).slice(0, 24)) + '"' : '',
-          !!e.hook, e.hook ? '최종 ✓' : '최종 픽');
+          !!e.hook, e.hook ? '최종 ✓' : '최종 픽') +
+        '<div class="row"><span class="k"><i>＋</i>원고</span>' +
+          '<span class="v' + (scrN2 || e.noScript ? '' : ' ph') + '">' + (scrN2 ? '칠할 수 있는 원고 ' + scrN2 + '장' : (e.noScript ? '이 편은 원고 없이 갑니다' : '원고 없는 컨텐츠면 눌러주세요')) + '</span>' +
+          (scrN2 ? '<span class="ck">' + scrN2 + '장 ✓</span>'
+                 : '<span class="ck' + (e.noScript ? '' : ' no') + '" data-pv2noscr="1" style="cursor:pointer">' + (e.noScript ? '원고 없음 ✓' : '원고 없음') + '</span>') +
+        '</div>';
     } else { return ''; }
     var done = doneN >= total;
     return '<div class="pv2-cfm" style="--rc:' + rc + '">' +
