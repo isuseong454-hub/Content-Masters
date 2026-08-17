@@ -21656,7 +21656,7 @@
   .pt2{ --lime:#d7f34b; --acid:#e6fb62; --sub:#9aa08a; --faint:#6b715c; --line:rgba(255,255,255,.08);
     max-width:760px; margin:0 auto; padding:6px 16px 30px; width:100%; }
 
-/* ═══════ v737 · ⌖나 = 내 계정 분석 (mya-) — 저장소 톤(블랙+라임) · 시안 v6 확정판 ═══════ */
+/* ═══════ v740 · ⌖나 = 내 계정 분석 (mya-) — 저장소 톤(블랙+라임) · 시안 v6 확정판 ═══════ */
 .mya-pills{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin:0 0 14px;padding:2px}
 .mya-pills::-webkit-scrollbar{display:none}
 .mya-pills b{flex:none;font-size:12.5px;font-weight:700;color:#95a08b;padding:9px 15px;border-radius:13px;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.02);cursor:pointer;transition:.2s;white-space:nowrap}
@@ -21669,7 +21669,6 @@
 .mya-gline{font-size:clamp(20px,4.6vw,26px);font-weight:900;letter-spacing:-.03em;line-height:1.3;margin:2px 2px 14px}
 .mya-gline em{font-style:normal;background:linear-gradient(94deg,#EDF2E8 0%,#e4f0c2 55%,#cbe592 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
 .mya-gline em.mint{background:linear-gradient(94deg,#EDF2E8 0%,#cfe0da 55%,#a9cfd8 100%);-webkit-background-clip:text;background-clip:text}
-/* 프로필 */
 .mya-prof{border-radius:20px;overflow:hidden;border:1px solid rgba(255,255,255,.15);margin-bottom:12px}
 .mya-cover{height:96px;position:relative;background:linear-gradient(120deg,#141a10 0%,#18200f 45%,#101408 100%)}
 .mya-cover::after{content:"";position:absolute;inset:0;background:radial-gradient(80% 120% at 82% 0%,rgba(215,243,75,.13),transparent 60%)}
@@ -21690,7 +21689,6 @@
 .mya-pstats small{font-size:9.5px;color:#5d6656;font-weight:700}
 .mya-pcon{display:flex;align-items:center;gap:7px;margin-top:10px;font-size:11px;color:#95a08b}
 .mya-pcon i{width:7px;height:7px;border-radius:50%;background:#d7f34b;box-shadow:0 0 9px #d7f34b;flex:none}
-/* 챔피언 단상 */
 .mya-mon{display:flex;gap:6px;margin:0 0 11px}
 .mya-mon b{font-size:10.5px;font-weight:800;padding:6px 12px;border-radius:99px;border:1px solid rgba(255,255,255,.09);color:#95a08b;cursor:pointer}
 .mya-mon b.on{color:#141807;background:linear-gradient(120deg,#d7f34b,#b9dd2e);border-color:transparent}
@@ -21703,7 +21701,6 @@
 .mya-ped .v2{position:relative;margin-top:3px;font-size:12px;font-weight:800;color:#d7f34b}
 .mya-ped .avg2{position:relative;font-size:9px;color:#5d6656;margin-top:1px}
 .mya-ped .base{position:relative;margin:9px auto 0;width:74%;height:6px;border-radius:3px;background:linear-gradient(90deg,#2a3242,#4a5468,#2a3242)}
-/* 내 평균 그래프(막대+흰 기준선) + 4타일 */
 .mya-mrow{display:grid;grid-template-columns:104px 1fr 52px;gap:10px;align-items:center;margin-top:10px}
 .mya-mrow .k{font-size:11.5px;color:#95a08b;font-weight:700}
 .mya-mbar{position:relative;height:16px;border-radius:8px;background:rgba(255,255,255,.05);overflow:hidden}
@@ -21716,14 +21713,12 @@
 .mya-a4 .k{font-size:9.5px;color:#5d6656;font-weight:700}
 .mya-a4 .v{margin-top:2px;font-size:15px;font-weight:800}
 .mya-a4 small{font-size:9px;color:#d7f34b;font-weight:700}
-/* 이번 주 성적 입력 */
 .mya-week{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;margin-top:11px}
 .mya-week input{background:rgba(0,0,0,.28);border:1px solid rgba(255,255,255,.12);border-radius:12px;color:#eef2e6;padding:11px 13px;outline:none;font-family:inherit;font-size:16px;min-width:0}
 .mya-week input:focus{border-color:#fff}
-.mya-week button{font-size:12.5px;font-weight:800;color:#141807;background:linear-gradient(120deg,#d7f34b,#b9dd2e);border-radius:12px;padding:0 16px}
+.mya-week button{font-size:12.5px;font-weight:800;color:#141807;background:linear-gradient(120deg,#d7f34b,#b9dd2e);border-radius:12px;padding:0 16px;border:0;cursor:pointer}
 .mya-wlist{margin-top:10px;font-size:11px;color:#95a08b;line-height:1.8}
 .mya-wlist b{color:#eef2e6}
-/* 추적·시청자 공용 */
 .mya-post{display:grid;grid-template-columns:40px 1fr;gap:11px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.02);padding:11px 12px;margin-bottom:9px}
 .mya-post .th{width:40px;aspect-ratio:9/13;border-radius:7px;background:linear-gradient(160deg,#1c2412,#10160a)}
 .mya-post .tt{font-size:12px;font-weight:700}
@@ -21753,11 +21748,17 @@
 .mya-sortc b{flex:none;font-size:10.5px;font-weight:700;color:#95a08b;padding:6px 11px;border-radius:99px;border:1px solid rgba(255,255,255,.09);cursor:pointer}
 .mya-sortc b.on{color:#141807;background:linear-gradient(120deg,#d7f34b,#b9dd2e);font-weight:800;border-color:transparent}
 .mya-sortc span{margin-left:auto;font-size:9.5px;color:#5d6656;flex:none}
-/* 우리 방 */
 .mya-room-cta{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:4px}
 .mya-room-cta button{border:1px solid rgba(215,243,75,.35);border-radius:14px;padding:14px;background:rgba(215,243,75,.06);text-align:center;cursor:pointer}
 .mya-room-cta button b{display:block;font-size:13px;font-weight:800;color:#d7f34b}
 .mya-room-cta button small{font-size:10.5px;color:#95a08b}
+.mya-rform{display:none;margin-top:10px;gap:8px;grid-template-columns:1fr 1fr auto}
+.mya-rform.on{display:grid}
+.mya-rform input{background:rgba(0,0,0,.28);border:1px solid rgba(255,255,255,.12);border-radius:12px;color:#eef2e6;padding:11px 13px;outline:none;font-family:inherit;font-size:16px;min-width:0}
+.mya-rform input:focus{border-color:#fff}
+.mya-rform button{font-size:12.5px;font-weight:800;color:#141807;background:linear-gradient(120deg,#d7f34b,#b9dd2e);border-radius:12px;padding:0 16px;border:0;cursor:pointer}
+.mya-agree{margin-top:9px;display:flex;align-items:center;gap:8px;font-size:11px;color:#95a08b;cursor:pointer}
+.mya-agree input{width:15px;height:15px;accent-color:#d7f34b}
 .mya-mem{display:flex;align-items:center;gap:10px;padding:10px 2px;border-bottom:1px solid rgba(255,255,255,.07);font-size:12px}
 .mya-mem:last-child{border-bottom:0}
 .mya-mem .av2{width:32px;height:32px;border-radius:10px;flex:none;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px;border:1px solid rgba(255,255,255,.15)}
@@ -21766,7 +21767,6 @@
 .mya-mem .up2{margin-left:auto;font-size:11px;font-weight:800;color:#d7f34b;flex:none}
 .mya-feed{margin-top:10px;font-size:11px;color:#95a08b;line-height:1.9}
 .mya-feed b{color:#eef2e6}
-/* 트레이닝룸 홈 요약 카드 */
 .st2-myacard{display:block;width:100%;text-align:left;border:1px solid rgba(215,243,75,.25);border-radius:18px;background:linear-gradient(140deg,rgba(215,243,75,.07),rgba(255,255,255,.015) 60%);padding:15px 16px;margin:12px 0;cursor:pointer;transition:transform .18s cubic-bezier(.32,1.4,.36,1)}
 .st2-myacard:active{transform:scale(.98)}
 .st2-myacard .k{font-size:10px;font-weight:800;letter-spacing:.1em;color:#95a08b}
@@ -21775,7 +21775,7 @@
 .st2-myacard .nums{margin-top:8px;display:flex;gap:14px;font-size:11px;color:#95a08b}
 .st2-myacard .nums b{color:#eef2e6;font-weight:800}
 .st2-myacard .go{float:right;font-size:11px;font-weight:800;color:#d7f34b;margin-top:-2px}
-@media (max-width:560px){.mya-champ{grid-template-columns:1fr 1fr}.mya-avg4{grid-template-columns:1fr 1fr}.mya-week{grid-template-columns:1fr 1fr}.mya-week button{grid-column:1/-1;padding:11px}}
+@media (max-width:560px){.mya-champ{grid-template-columns:1fr 1fr}.mya-avg4{grid-template-columns:1fr 1fr}.mya-week{grid-template-columns:1fr 1fr}.mya-week button{grid-column:1/-1;padding:11px}.mya-rform{grid-template-columns:1fr 1fr}.mya-rform button{grid-column:1/-1;padding:11px}}
 </style>
 
 <!-- ============ CONTENT MASTERS 스플래시 인트로 ============ -->
@@ -23620,6 +23620,15 @@
             <div class="settings-section">
               <h4 class="settings-section-title">📊 데이터 현황</h4>
               <div class="settings-stats" id="settings-stats"></div>
+            </div>
+
+            <!-- 🚪 v740 · 커뮤니티 방 — 만들기/합류의 문 (본체=⌖나 «우리 방») -->
+            <div class="settings-section">
+              <h4 class="settings-section-title">🚪 커뮤니티 방</h4>
+              <p class="settings-section-desc">동료들과 성장을 나누는 방 — 만들기·합류는 여기서.</p>
+              <div class="settings-actions">
+                <button class="settings-btn" id="settings-room-btn"><span>🚪</span> 우리 방 열기 — 만들기 · 합류</button>
+              </div>
             </div>
 
             <!-- 📜 v592 · 이용약관 다시 보기 -->
@@ -51931,6 +51940,14 @@
     const tb = document.getElementById('settings-terms-btn');
     if (tb) tb.onclick = () => tosShow(true);
   } catch (e) {}
+  // v740 · 설정 > 커뮤니티 방 → ⌖나 «우리 방» 세그먼트
+  try {
+    const rb = document.getElementById('settings-room-btn');
+    if (rb) rb.onclick = function () {
+      try { if (typeof closeSettingsModal === 'function') closeSettingsModal(); } catch (e) {}
+      try { _myaPill = 'room'; switchWorkspace('compass'); cpSetTab('me'); } catch (e) {}
+    };
+  } catch (e) {}
   // v626 · 🧹 원고 칸 청소 — 자유 원고로 흘러든 분해 메타·구조 줄을 제자리로 (스캔→확인→적용)
   function cmScriptCleanScan(apply) {
     let metaMoved = 0, structUp = 0, touched = 0;
@@ -53026,6 +53043,11 @@
       '</div><div class="st2-hint">아래로<span class="ar">↓</span></div></div>';
     // 🏆 v695 · 트로피 진열장 — 완주=후광 · 자라는 중=지금 형태 (1막 바로 아래)
     h += '<div class="st2-rv" id="st2-shelf"></div>';
+    // ⌖ v740 · 내 계정 분석 요약 카드 — 본체는 ⌖나(한 기능 두 군데 금지: 여기는 문 1장)
+    h += '<button class="st2-myacard st2-rv" id="st2-myacard"><span class="go">⌖ 열기 ›</span>' +
+      '<div class="k">내 계정 분석</div>' +
+      '<div class="ln">이번 주, <em>저장</em>이 조회를 이겼다</div>' +
+      '<div class="nums"><span>공식 <b>4.2%</b>/5%</span><span>지속 <b>61%</b>/70%</span><span>클릭률 <b>0.21%</b> ↑</span></div></button>';
     // ── 2막 · 인사이트 — 왜 그런가 (4지표 + 맵) ──
     h += '<div class="st2-act st2-rv"><span class="n">01</span><span class="t">인사이트</span>' +
       '<span class="d">지난 4주의 나와 지금의 나를 비교해요. 남과의 비교가 아니라 <b>내 과거와의 비교</b>.</span></div>' +
@@ -53076,6 +53098,9 @@
     try { st2RenderWeek(); } catch (e) {}
     st2WireHome(goal, done);
     try { tfShelfRender(); } catch (e) {}   // v695 · 트로피 진열장
+    // ⌖ v740 · 요약 카드 → ⌖나
+    try { const mc = document.getElementById('st2-myacard');
+      if (mc) mc.onclick = function () { try { switchWorkspace('compass'); cpSetTab('me'); } catch (e) {} }; } catch (e) {}
   }
   function st2RenderMap3() {
     const el = document.getElementById('st2-map-m3'); if (!el) return;
@@ -56458,17 +56483,130 @@
       '<div class="cpv-decl">' + decl + '</div>' +
       '</div>';
   }
-  function cpRenderMe() {
-    const el = document.getElementById('cp-me'); if (!el) return;
-    // v693 · 벤의 ★황금 키워드 — 고객 방을 아직 안 열었으면 로드가 안 돼 있다. 오면 채워서 다시 그린다
-    try {
-      if (typeof _st2KwLoaded !== 'undefined' && !_st2KwLoaded && typeof st2KwLoad === 'function') {
-        st2KwLoad().then(function () { if (_cpTab === 'me') cpRenderMe(); }).catch(function () {});
-      }
-    } catch (e) {}
+  // ═══ v740 · ⌖나 = 내 계정 분석 (시안 v6 확정판 · 저장소 톤) ═══
+  //   메인=성과·추적·시청자·우리 방 / 기존 벤·바늘·라이벌 = «보관함» 세그먼트로 보존(삭제 아님 — 처분은 사장님 결정)
+  //   지금 분석 수치=견본. 인스타 연동(메타 검수)+주간 성적 서버(step12 SQL RUN) 후 실데이터로 교체.
+  var _myaPill = 'perf';
+  function myaGet(k, d) { try { return JSON.parse(localStorage.getItem(k) || JSON.stringify(d)); } catch (e) { return d; } }
+  function myaSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+  function myaCode() { const A = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789'; let s = ''; const u = new Uint32Array(6); crypto.getRandomValues(u); for (let i = 0; i < 6; i++) s += A[u[i] % A.length]; return s; }
+  function myaPerfHtml() {
+    const p = myaGet('cm-mya-prof', {}), wk = myaGet('cm-mya-wk', []);
+    const lastF = wk.length ? wk[wk.length - 1].f : '';
+    return '<div class="mya-prof"><div class="mya-cover"><span class="slot">🖼 커버 사진 칸 — 연동 후 교체</span></div>' +
+      '<div class="mya-pbody"><div class="mya-prow">' +
+        '<div class="mya-avatar" id="mya-av"><i>📷</i><b>인스타 프로필<br>사진 칸</b></div>' +
+        '<div class="mya-pmeta">' +
+          '<input class="nm" id="mya-nm" placeholder="이름" value="' + esc(p.nm || '').replace(/"/g, '&quot;') + '">' +
+          '<input class="id" id="mya-id" placeholder="@아이디" value="' + esc(p.id || '').replace(/"/g, '&quot;') + '">' +
+        '</div>' +
+        '<div class="mya-pstats">' +
+          '<div><b>' + (lastF ? Number(lastF).toLocaleString() : '—') + '</b><small>팔로워</small></div>' +
+          '<div><b>—</b><small>영상</small></div><div><b>—</b><small>누적 조회</small></div>' +
+        '</div></div>' +
+        '<div class="mya-pcon"><i></i>연동 전 — 메타 검수 통과 후 자동 수집이 켜집니다</div>' +
+      '</div></div>' +
+      '<div class="mya-card"><div class="t">🏆 챔피언 단상 — 평균을 이긴 것들이 늘 위에 <span style="color:#5d6656">(견본)</span></div>' +
+        '<div class="mya-mon" style="margin-top:11px"><b class="on">이번 주</b><b>이번 달</b><b>역대</b></div>' +
+        '<div class="mya-champ">' +
+          '<div class="mya-ped"><div class="cat">👁 조회 1등</div><div class="th"></div><div class="tt">앞머리 자르기 전에 꼭 보세요</div><div class="v2">3.1만 회</div><div class="avg2">내 평균의 2.4배</div><div class="base"></div></div>' +
+          '<div class="mya-ped"><div class="cat">💾 저장률 1등</div><div class="th" style="background:linear-gradient(160deg,#232c12,#141a0a)"></div><div class="tt">단골이 끊기는 진짜 이유</div><div class="v2">7.2%</div><div class="avg2">평균의 2.1배 · 목표 5% 돌파</div><div class="base"></div></div>' +
+          '<div class="mya-ped"><div class="cat">⏱ 지속 1등</div><div class="th" style="background:linear-gradient(160deg,#1a2410,#0e1408)"></div><div class="tt">파마 망하는 집 특징</div><div class="v2">76%</div><div class="avg2">목표 70% 돌파</div><div class="base"></div></div>' +
+        '</div>' +
+        '<div class="mya-aif">✦ 단상 3편의 공통점: <b>«~하기 전에 / ~하는 집» 형 대문</b> — 이 형이 당신의 승리 공식.</div></div>' +
+      '<div class="mya-gline">이번 주, <em>저장</em>이 <em class="mint">조회</em>를 이겼다</div>' +
+      '<div class="mya-card"><div class="t">📐 100만 공식 + 내 평균은 이거예요 <span style="color:#5d6656">(견본)</span></div>' +
+        '<div class="mya-mrow"><span class="k">저장+공유÷조회</span><div class="mya-mbar"><span class="me" style="width:84%"></span><span class="mk" style="left:100%"></span></div><span class="v" style="color:#6FE0C8">4.2%</span></div>' +
+        '<div class="mya-mrow"><span class="k">시청 지속</span><div class="mya-mbar"><span class="me" style="width:76%"></span><span class="mk" style="left:87%"></span></div><span class="v">61%</span></div>' +
+        '<div class="mya-mrow"><span class="k">클릭률</span><div class="mya-mbar"><span class="me" style="width:70%"></span><span class="mk" style="left:57%"></span></div><span class="v" style="color:#6FE0C8">0.21%</span></div>' +
+        '<div class="mya-mlg">청록 막대=내 이번 주 · 흰 선=목표(공식 5%·지속 70%) 또는 내 4주 평균</div>' +
+        '<div class="mya-avg4">' +
+          '<div class="mya-a4"><div class="k">평균 조회</div><div class="v">1.3만</div><small>+18% ↑</small></div>' +
+          '<div class="mya-a4"><div class="k">평균 저장률</div><div class="v">3.4%</div><small>+0.6%p ↑</small></div>' +
+          '<div class="mya-a4"><div class="k">평균 시청</div><div class="v">6.1초</div><small>+0.4초 ↑</small></div>' +
+          '<div class="mya-a4"><div class="k">평균 클릭률</div><div class="v">0.21%</div><small>4주 연속 ↑</small></div>' +
+        '</div></div>' +
+      '<div class="mya-card"><div class="t">✍️ 이번 주 성적 입력 — 인스타 연동 전엔 주 1회 30초면 됩니다</div>' +
+        '<div class="mya-week">' +
+          '<input id="mya-wf" inputmode="numeric" placeholder="팔로워 수 (예: 2140)">' +
+          '<input id="mya-wv" inputmode="numeric" placeholder="최고 조회수 (예: 31000)">' +
+          '<button id="mya-wgo">기록</button></div>' +
+        '<div class="mya-wlist" id="mya-wlist"></div></div>';
+  }
+  function myaTrkHtml() {
+    return '<div class="mya-gline">어떤 영상이 <em>손님</em>을 <em class="mint">데려왔나</em></div>' +
+      '<div class="mya-champ" style="margin-bottom:11px">' +
+        '<div class="mya-ped"><div class="cat">🏠 프로필 방문 1등</div><div class="th"></div><div class="tt">앞머리 자르기 전에</div><div class="v2">512명</div><div class="base"></div></div>' +
+        '<div class="mya-ped"><div class="cat">🔗 링크 클릭 1등</div><div class="th" style="background:linear-gradient(160deg,#232c12,#141a0a)"></div><div class="tt">단골이 끊기는 이유</div><div class="v2">89회</div><div class="base"></div></div>' +
+        '<div class="mya-ped"><div class="cat">➕ 팔로워 전환 1등</div><div class="th" style="background:linear-gradient(160deg,#1a2410,#0e1408)"></div><div class="tt">파마 망하는 집 특징</div><div class="v2">+74명</div><div class="base"></div></div>' +
+      '</div>' +
+      '<div class="mya-sortc"><b class="on">최신순</b><b>클릭률 높은 순</b><b>팔로워 전환 순</b><span>최근 30개까지 · 견본</span></div>' +
+      '<div class="mya-post"><div class="th"></div><div><div class="tt">앞머리 자르기 전에 꼭 보세요</div>' +
+        '<div class="nums"><span>조회 <b>3.1만</b></span><span style="color:#d7f34b">저장 6.8%</span><span>좋아요 <b>2.4천</b></span><span>댓글 <b>187</b></span></div>' +
+        '<div class="mya-fun">👁 <b>3.1만</b> <span class="ar">→</span> 프로필 <b>512</b> <span class="ar">→</span> 링크 <b>74</b> · DM <b>11</b> <span class="ar">→</span> 팔로우 <b>+61</b><span class="ctr">클릭률 0.24%</span></div>' +
+        '<div class="mya-aif">✦ <b>왜 통했나:</b> «자르기 전에» 마감 언어 — 저장을 부르는 형. <b>다음엔:</b> 같은 형으로 «파마 전에».</div></div></div>' +
+      '<div class="mya-post"><div class="th" style="background:linear-gradient(160deg,#232c12,#141a0a)"></div><div><div class="tt">옆볼륨 살리는 아이롱</div>' +
+        '<div class="nums"><span>조회 <b>2.2만</b></span><span>저장 3.1%</span><span>좋아요 <b>1.1천</b></span><span>댓글 <b>63</b></span></div>' +
+        '<div class="mya-fun">👁 <b>2.2만</b> <span class="ar">→</span> 프로필 <b>340</b> <span class="ar">→</span> 링크 <b>41</b> · DM <b>4</b> <span class="ar">→</span> 팔로우 <b>+38</b><span class="ctr">클릭률 0.19%</span></div>' +
+        '<div class="mya-aif rose">✦ <b>왜 샜나:</b> «누가 만들었지?»가 안 생김. <b>다음엔:</b> 대문에 결과 장면 + 끝에 «프로필에 순서표».</div></div></div>' +
+      '<div class="mya-post" style="opacity:.55"><div class="th" style="background:linear-gradient(160deg,#1a2410,#0e1408)"></div><div><div class="tt">단골이 끊기는 진짜 이유</div>' +
+        '<div class="nums"><span>조회 <b>1.8만</b></span><span style="color:#d7f34b">공유 2.4%</span><span>좋아요 <b>980</b></span></div>' +
+        '<div class="mya-fun">👁 <b>1.8만</b> <span class="ar">→</span> 프로필 <b>402</b> <span class="ar">→</span> 링크 <b>89</b> · DM <b>8</b> <span class="ar">→</span> 팔로우 <b>+52</b><span class="ctr">클릭률 0.49%</span></div></div></div>';
+  }
+  function myaAudHtml() {
+    return '<div class="mya-gline">누가, <em>언제</em>, <em class="mint">어디까지</em> 보나</div>' +
+      '<div class="mya-card"><div class="t">📺 유튜브 — 구간별 시청 곡선 (연동 시 자동 · 견본)</div>' +
+        '<div class="mya-ret">' +
+          '<i style="height:100%;background:rgba(215,243,75,.5)"></i><i style="height:88%;background:rgba(215,243,75,.45)"></i>' +
+          '<i class="dp" style="height:52%;background:rgba(240,161,172,.4)"></i><i style="height:48%;background:rgba(215,243,75,.3)"></i>' +
+          '<i style="height:46%;background:rgba(215,243,75,.3)"></i><i style="height:50%;background:rgba(215,243,75,.32)"></i>' +
+          '<i style="height:58%;background:rgba(215,243,75,.38)"></i><i style="height:56%;background:rgba(215,243,75,.36)"></i>' +
+          '<i style="height:44%;background:rgba(215,243,75,.28)"></i><i style="height:40%;background:rgba(215,243,75,.26)"></i>' +
+          '<i style="height:38%;background:rgba(215,243,75,.24)"></i><i style="height:36%;background:rgba(215,243,75,.22)"></i></div>' +
+        '<div class="mya-retx"><span>0:00</span><span>0:15</span><span>0:30</span><span>0:45</span><span>1:00</span></div>' +
+        '<div class="mya-aif rose" style="margin-top:11px">✦ <b>0:08~0:12에서 절반 이탈</b> — 인사+채널 소개 구간. 잘라내고 결과 장면을 앞으로.</div></div>' +
+      '<div class="mya-card"><div class="t">📸 인스타 — 평균 시청 시간 (인스타는 곡선을 안 내줍니다 · 평균만)</div>' +
+        '<div class="mya-ab"><span class="k3" style="width:110px">앞머리 자르기 전</span><div class="b3"><i style="width:82%;background:linear-gradient(90deg,#6FE0C8,rgba(111,224,200,.4))"></i></div><b>8.2초</b></div>' +
+        '<div class="mya-ab"><span class="k3" style="width:110px">옆볼륨 아이롱</span><div class="b3"><i style="width:41%;background:linear-gradient(90deg,#6FE0C8,rgba(111,224,200,.4))"></i></div><b>4.1초</b></div>' +
+        '<div class="mya-ab"><span class="k3" style="width:110px">단골 끊기는 이유</span><div class="b3"><i style="width:66%;background:linear-gradient(90deg,#6FE0C8,rgba(111,224,200,.4))"></i></div><b>6.6초</b></div></div>' +
+      '<div class="mya-card"><div class="t">🎂 연령 · 🚻 성별 · 📍 도시 (팔로워 100명↑ 시 자동)</div>' +
+        '<div class="mya-ab"><span class="k3">18–24</span><div class="b3"><i style="width:22%"></i></div><b>22%</b></div>' +
+        '<div class="mya-ab"><span class="k3">25–34</span><div class="b3"><i style="width:46%"></i></div><b>46%</b></div>' +
+        '<div class="mya-ab"><span class="k3">35–44</span><div class="b3"><i style="width:24%"></i></div><b>24%</b></div>' +
+        '<div class="mya-ab"><span class="k3">여성</span><div class="b3"><i style="width:78%"></i></div><b>78%</b></div>' +
+        '<p style="margin-top:9px;font-size:11px;color:#95a08b">서울 34% · 부산 11% · 인천 8%</p></div>' +
+      '<div class="mya-card"><div class="t">🕘 팔로워가 깨어 있는 시간 — 업로드 타이밍 지도</div>' +
+        '<div class="mya-heat"><i></i><i></i><i></i><i style="background:rgba(215,243,75,.12)"></i><i style="background:rgba(215,243,75,.18)"></i><i style="background:rgba(215,243,75,.25)"></i><i style="background:rgba(215,243,75,.3)"></i><i style="background:rgba(215,243,75,.4)"></i><i style="background:rgba(215,243,75,.5)"></i><i style="background:rgba(215,243,75,.75)"></i><i style="background:rgba(215,243,75,.95)"></i><i style="background:rgba(215,243,75,.55)"></i></div>' +
+        '<div class="mya-heatx"><span>0시</span><span>6시</span><span>12시</span><span>18시</span><span>21시 ★</span><span>23시</span></div>' +
+        '<div class="mya-aif" style="margin-top:11px">✦ 피크는 <b>수·목 21시</b> — 업로드 시간을 옮기면 초반 속도가 붙습니다.</div></div>';
+  }
+  function myaRoomHtml() {
+    const rm = myaGet('cm-mya-room', null);
+    if (!rm) {
+      return '<div class="mya-card"><div class="t">🚪 우리 방 — 동료의 성장이 보이면 멈추기 어렵습니다</div>' +
+        '<div class="mya-room-cta">' +
+          '<button id="mya-rc"><b>방 만들기</b><small>이름+비번 → 코드 발급</small></button>' +
+          '<button id="mya-rj"><b>방 합류</b><small>코드+비번으로 입장</small></button></div>' +
+        '<div class="mya-rform" id="mya-rcf"><input id="mya-rcn" placeholder="방 이름 (예: 3기 전사들)"><input id="mya-rcp" type="password" placeholder="입장 비밀번호"><button id="mya-rcgo">만들기</button></div>' +
+        '<div class="mya-rform" id="mya-rjf"><input id="mya-rjc" placeholder="방 코드 6자리" autocapitalize="characters"><input id="mya-rjp" type="password" placeholder="비밀번호"><button id="mya-rjgo">합류</button></div>' +
+        '<label class="mya-agree" id="mya-agr" style="display:none"><input type="checkbox" id="mya-agc"><span>방에 들어가면 내 주간 성적(상승률·배지·업로드 수)이 방 멤버에게 보입니다 — 동의</span></label>' +
+        '<p style="margin-top:10px;font-size:10.5px;color:#5d6656">지금은 이 기기 안에서만 작동(맛보기) — step12 SQL RUN 후 진짜 방이 열립니다</p></div>';
+    }
+    return '<div class="mya-card"><div class="t">🚪 ' + esc(rm.name) + ' <span style="color:#5d6656">· 코드 ' + esc(rm.code) + ' · ' + (rm.owner ? '내가 방장' : '멤버') + '</span></div>' +
+      '<div style="margin-top:11px">' +
+        '<div class="mya-mem"><span class="av2" style="background:linear-gradient(150deg,#1c2412,#10160a)">나</span><span><b>나</b><small>이번 주 업로드 2편</small></span><span class="up2">+12% ↑</span></div>' +
+        '<div class="mya-mem"><span class="av2" style="background:linear-gradient(150deg,#232c12,#141a0a)">민</span><span><b>민지</b><small>🥇 100만 달성!</small></span><span class="up2">+38% 🔥</span></div>' +
+        '<div class="mya-mem"><span class="av2" style="background:linear-gradient(150deg,#1a2410,#0e1408)">하</span><span><b>하늘</b><small>이번 주 업로드 3편</small></span><span class="up2">+6%</span></div>' +
+      '</div>' +
+      '<div class="mya-feed">🎉 <b>민지</b>님이 메달(100만)을 달성했어요 — 축하 6<br>📈 이번 주 방 전체 업로드 <b>19편</b> · 평균 상승률 <b>+12%</b></div>' +
+      '<div style="margin-top:12px;display:flex;gap:7px">' +
+        '<button class="mya-sortc-btn" id="mya-rinv" style="font-size:11px;font-weight:800;color:#d7f34b;border:1px solid rgba(215,243,75,.4);background:rgba(215,243,75,.07);border-radius:99px;padding:7px 13px;cursor:pointer">📋 초대 카드 복사</button>' +
+        '<button id="mya-rout" style="font-size:11px;font-weight:700;color:#95a08b;border:1px solid rgba(255,255,255,.1);background:none;border-radius:99px;padding:7px 13px;cursor:pointer">방 나가기</button></div>' +
+      '<p style="margin-top:10px;font-size:10.5px;color:#5d6656">멤버 성적은 견본 — step12 SQL RUN 후 진짜 방으로 전환</p></div>';
+  }
+  function myaKeepHtml() {
     const rivalN = (typeof northStars !== 'undefined' && Array.isArray(northStars)) ? northStars.length : 0;
-    el.innerHTML =
-      cpVennHtml() +
+    return cpVennHtml() +
       '<div class="cp-needle">' +
         '<div class="k">내가 누구에게 무슨 말을 하는가</div>' +
         '<div class="line">나는 <input class="to" id="cp-to" placeholder="누구" value="' + esc(needle.to).replace(/"/g, '&quot;') + '">에게<br>' +
@@ -56479,15 +56617,134 @@
       '<div class="cp-k">내 기준의 재료</div>' +
       '<button class="cp-card" id="cp-rival"><span class="ic">🥊</span><span><span class="tt">라이벌 멘토</span><br><span class="dd">' +
         (rivalN ? '내가 겨누는 채널 ' + rivalN + '개' : '내가 겨누는 사람 — 아직 비어 있어요') + '</span></span><span class="ar">→</span></button>';
-    const sv = document.getElementById('cp-save');
-    if (sv) sv.onclick = async function () {
-      const to = document.getElementById('cp-to'), ms = document.getElementById('cp-msg');
-      needle.to = to ? to.value.trim() : ''; needle.msg = ms ? ms.value.trim() : '';
-      await needleSave();
-      try { toast('✓ 정했어요 — 흔들리면 여기로 돌아오세요'); } catch (e) {}
-    };
-    const rv = document.getElementById('cp-rival');
-    if (rv) rv.onclick = function () { window.__rrFrom = 'compass'; try { switchWorkspace('northstar'); } catch (e) {} };
+  }
+  function myaWkList() {
+    const box = document.getElementById('mya-wlist'); if (!box) return;
+    const wk = myaGet('cm-mya-wk', []);
+    box.innerHTML = wk.length
+      ? wk.slice(-4).reverse().map(function (w) { return '📅 ' + esc(w.d) + ' — 팔로워 <b>' + Number(w.f || 0).toLocaleString() + '</b> · 최고 조회 <b>' + Number(w.v || 0).toLocaleString() + '</b>'; }).join('<br>')
+      : '아직 기록이 없어요 — 첫 숫자를 넣는 순간 추이가 시작됩니다';
+  }
+  function myaWireBody() {
+    const el = document.getElementById('mya-body'); if (!el) return;
+    if (_myaPill === 'perf') {
+      const av = document.getElementById('mya-av');
+      if (av) av.onclick = function () { try { toast('📷 인스타 연결(메타 검수 통과) 후 자동으로 채워집니다'); } catch (e) {} };
+      ['mya-nm', 'mya-id'].forEach(function (id) {
+        const i = document.getElementById(id); if (!i) return;
+        i.addEventListener('change', function () {
+          const p = myaGet('cm-mya-prof', {});
+          p.nm = (document.getElementById('mya-nm') || {}).value || '';
+          p.id = (document.getElementById('mya-id') || {}).value || '';
+          myaSet('cm-mya-prof', p);
+        });
+      });
+      document.querySelectorAll('#mya-body .mya-mon b').forEach(function (b) {
+        b.onclick = function () {
+          b.parentElement.querySelectorAll('b').forEach(function (x) { x.classList.toggle('on', x === b); });
+          try { toast('기간별 단상은 연동 후 자동 집계됩니다'); } catch (e) {}
+        };
+      });
+      const wgo = document.getElementById('mya-wgo');
+      if (wgo) wgo.onclick = function () {
+        const f = (document.getElementById('mya-wf') || {}).value, v = (document.getElementById('mya-wv') || {}).value;
+        if (!f && !v) { try { toast('팔로워나 최고 조회수, 하나는 넣어주세요'); } catch (e) {} return; }
+        const wk = myaGet('cm-mya-wk', []);
+        wk.push({ d: new Date().toLocaleDateString('ko-KR', { month: 'numeric', day: 'numeric' }), f: parseInt(String(f).replace(/[^0-9]/g, '') || '0', 10), v: parseInt(String(v).replace(/[^0-9]/g, '') || '0', 10) });
+        myaSet('cm-mya-wk', wk);
+        document.getElementById('mya-wf').value = ''; document.getElementById('mya-wv').value = '';
+        myaWkList();
+        try { toast('✓ 기록했습니다 — 매주 쌓이면 추이가 그려집니다'); } catch (e) {}
+      };
+      myaWkList();
+    }
+    if (_myaPill === 'trk') {
+      document.querySelectorAll('#mya-body .mya-sortc b').forEach(function (b) {
+        b.onclick = function () {
+          b.parentElement.querySelectorAll('b').forEach(function (x) { x.classList.toggle('on', x === b); });
+          try { toast('정렬은 연동 후 실데이터로 작동합니다'); } catch (e) {}
+        };
+      });
+    }
+    if (_myaPill === 'room') {
+      const rc = document.getElementById('mya-rc'), rj = document.getElementById('mya-rj');
+      const showAgr = function () { const a = document.getElementById('mya-agr'); if (a) a.style.display = 'flex'; };
+      if (rc) rc.onclick = function () { document.getElementById('mya-rcf').classList.add('on'); document.getElementById('mya-rjf').classList.remove('on'); showAgr(); };
+      if (rj) rj.onclick = function () { document.getElementById('mya-rjf').classList.add('on'); document.getElementById('mya-rcf').classList.remove('on'); showAgr(); };
+      const need = function () {
+        const c = document.getElementById('mya-agc');
+        if (!c || !c.checked) { try { toast('성적 공유 동의에 체크해야 들어갈 수 있어요'); } catch (e) {} return false; }
+        return true;
+      };
+      const rcgo = document.getElementById('mya-rcgo');
+      if (rcgo) rcgo.onclick = function () {
+        const n = (document.getElementById('mya-rcn') || {}).value.trim(), pw = (document.getElementById('mya-rcp') || {}).value;
+        if (!n || !pw) { try { toast('방 이름과 비밀번호를 넣어주세요'); } catch (e) {} return; }
+        if (!need()) return;
+        myaSet('cm-mya-room', { name: n, code: myaCode(), owner: true });
+        myaRenderBody(); try { toast('🚪 방이 열렸습니다 — 초대 카드를 복사해 뿌리세요'); } catch (e) {}
+      };
+      const rjgo = document.getElementById('mya-rjgo');
+      if (rjgo) rjgo.onclick = function () {
+        const c = (document.getElementById('mya-rjc') || {}).value.trim().toUpperCase(), pw = (document.getElementById('mya-rjp') || {}).value;
+        if (!c || !pw) { try { toast('코드와 비밀번호를 넣어주세요'); } catch (e) {} return; }
+        if (!need()) return;
+        myaSet('cm-mya-room', { name: '3기 전사들', code: c, owner: false });
+        myaRenderBody(); try { toast('🎉 합류했습니다 — 동료들이 보입니다'); } catch (e) {}
+      };
+      const inv = document.getElementById('mya-rinv');
+      if (inv) inv.onclick = function () {
+        const rm = myaGet('cm-mya-room', null); if (!rm) return;
+        const txt = '컨텐츠 마스터즈 · 우리 방 「' + rm.name + '」 · 코드 ' + rm.code + ' · 비번은 따로 물어보세요';
+        try { navigator.clipboard.writeText(txt).then(function () { toast('📋 초대 카드를 복사했습니다'); }).catch(function () { toast('복사가 막혔어요 — 길게 눌러 복사'); }); } catch (e) {}
+      };
+      const out = document.getElementById('mya-rout');
+      if (out) out.onclick = function () { localStorage.removeItem('cm-mya-room'); myaRenderBody(); try { toast('방에서 나왔습니다'); } catch (e) {} };
+    }
+    if (_myaPill === 'keep') {
+      const sv = document.getElementById('cp-save');
+      if (sv) sv.onclick = async function () {
+        const to = document.getElementById('cp-to'), ms = document.getElementById('cp-msg');
+        needle.to = to ? to.value.trim() : ''; needle.msg = ms ? ms.value.trim() : '';
+        await needleSave();
+        try { toast('✓ 정했어요 — 흔들리면 여기로 돌아오세요'); } catch (e) {}
+      };
+      const rv = document.getElementById('cp-rival');
+      if (rv) rv.onclick = function () { window.__rrFrom = 'compass'; try { switchWorkspace('northstar'); } catch (e) {} };
+    }
+  }
+  function myaRenderBody() {
+    const el = document.getElementById('mya-body'); if (!el) return;
+    el.innerHTML = (_myaPill === 'perf') ? myaPerfHtml()
+      : (_myaPill === 'trk') ? myaTrkHtml()
+      : (_myaPill === 'aud') ? myaAudHtml()
+      : (_myaPill === 'room') ? myaRoomHtml()
+      : myaKeepHtml();
+    myaWireBody();
+  }
+  function cpRenderMe() {
+    const el = document.getElementById('cp-me'); if (!el) return;
+    // v693 · 벤의 ★황금 키워드 — 보관함(옛 ⌖나)이 쓴다. 로드 전이면 채워서 다시
+    try {
+      if (typeof _st2KwLoaded !== 'undefined' && !_st2KwLoaded && typeof st2KwLoad === 'function') {
+        st2KwLoad().then(function () { if (_cpTab === 'me') cpRenderMe(); }).catch(function () {});
+      }
+    } catch (e) {}
+    el.innerHTML =
+      '<div class="mya-pills" id="mya-pills">' +
+        '<b data-p="perf">🏆 성과</b><b data-p="trk">🔬 추적</b><b data-p="aud">👥 시청자</b>' +
+        '<b data-p="room">🚪 우리 방</b><b data-p="keep">🗂 보관함</b>' +
+      '</div><div id="mya-body"></div>';
+    document.querySelectorAll('#mya-pills b').forEach(function (b) {
+      b.classList.toggle('on', b.dataset.p === _myaPill);
+      b.onclick = function () {
+        _myaPill = b.dataset.p;
+        document.querySelectorAll('#mya-pills b').forEach(function (x) { x.classList.toggle('on', x === b); });
+        myaRenderBody();
+        try { window.scrollTo({ top: 0 }); } catch (e) {}
+      };
+    });
+    myaRenderBody();
   }
   function cpSetTab(tab) {
     // v601 🚨 여기가 새고 있었다 — switchWorkspace('customer')는 «셀링포인트 껍데기»(v510에 고객이 이사 나간 방)로 간다.
