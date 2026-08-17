@@ -1553,6 +1553,14 @@
     white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   .pv2-refc i{ position:absolute; right:3px; top:3px; font-style:normal; font-size:11px; color:#C9CFDD; z-index:2;
     width:20px; height:20px; display:grid; place-items:center; border-radius:50%; background:rgba(6,8,12,.55); }
+  /* v748 · 카드 우상단 ↗(유튜브) + 좌하단 「대표」 픽 */
+  .pv2-refc .ytgo{ position:absolute; right:27px; top:3px; z-index:2; width:20px; height:20px; display:grid; place-items:center;
+    border-radius:50%; background:rgba(6,8,12,.55); color:#8EC7F6; font-size:11px; text-decoration:none; }
+  .pv2-refc .reppick{ position:absolute; left:6px; top:5px; z-index:2; font-style:normal; font-size:8.5px; font-weight:800;
+    border-radius:8px; padding:3px 7px; background:rgba(6,8,12,.6); border:1px solid rgba(255,255,255,.22); color:#C9CFDD; cursor:pointer; }
+  .pv2-refc .reppick.on{ background:#d7f34b; border-color:#d7f34b; color:#141604; }
+  .pln-tt3{ font-size:14px; font-weight:800; letter-spacing:-.2px; line-height:1.45; color:#AEB9CF; margin:0 0 10px;
+    overflow:hidden; display:-webkit-box; -webkit-line-clamp:1; -webkit-box-orient:vertical; }   /* v748 · 편 제목=조연 */
   .pv2-refc.on{ border-color:rgba(126,200,245,.7); box-shadow:0 0 20px rgba(126,200,245,.22); }
   .pv2-refc.add{ display:grid; place-items:center; align-content:center; text-align:center; border-style:dashed;
     background:rgba(255,255,255,.012); }
@@ -57906,9 +57914,9 @@
       br('후킹', fin ? '<b style="color:#7EC8F5">최종</b> ' + esc(fin) + (bak ? '<br><span style="opacity:.75">예비</span> ' + esc(bak) : '') : '', '②분석에서 최종을 고르면 실립니다') +
       br('공감', voc1 ? '"' + esc(voc1) + '"' : '', '②분석 4바구니에서 실립니다') +
       br('구조', esc((e.bone || []).join(' › '))) +
-      ((e.thumbs || []).length
-        ? '<div class="br"><span class="k">썸네일</span><span class="v"><img class="pv2-bimg" src="' + e.thumbs[e.rep || 0] + '" alt="대표 썸네일"></span></div>'
-        : br('썸네일', '', '①리서치에서 담으면 실립니다')) +
+      (plnRepTh(e)
+        ? '<div class="br"><span class="k">썸네일</span><span class="v"><img class="pv2-bimg" src="' + plnRepTh(e) + '" alt="대표 썸네일"></span></div>'
+        : br('썸네일', '', '①리서치 레퍼런스 카드에서 「대표」를 고르면 실립니다')) +
       br('그래서 나는', dev ? '<b style="color:#C7B6FF">' + dev[0] + '</b> — ' + dev[1] : '', '아래 4공식에서 고르면 실립니다') +
       '</div>';
   }
@@ -57990,6 +57998,8 @@
     return _pln;
   }
   async function plnSave() { try { await window.storage.set(PLN_KEY, JSON.stringify(_pln)); } catch (e) {} }
+  // v748 · 대표 썸네일 = 레퍼런스 카드에서 픽(e.repTh) — 없으면 옛 방식(참고 포인트 e.rep) 폴백
+  function plnRepTh(e) { return (e && (e.repTh || (e.thumbs || [])[e.rep || 0])) || ''; }
 
   /* ══ v701 · 스케줄(plsc) — 요일 루틴. plnv1과 달리 주가 바뀌어도 유지(습관이니까) ══ */
   var PLSC_KEY = 'plsched1';
@@ -58332,7 +58342,7 @@
       rec.rid = e.rid || null; rec.ref = e.ref || '—'; rec.hook = e.hook || '';
       rec.bone = (e.bone || []).slice();
       rec.cuts = (e.cuts || []).map(function (c) { return { b: c.b, s: c.s, v: c.v }; });
-      rec.thumb = (e.thumbs && e.thumbs.length) ? e.thumbs[e.rep || 0] : '';   // v701 · 서재 표지 = 대표 썸네일
+      rec.thumb = plnRepTh(e);   // v701 · 서재 표지 = 대표 썸네일 (v748 · 레퍼런스 카드 픽 우선)
     }
     _tro.push(rec);
     try { await window.storage.set('trov1', JSON.stringify(_tro)); } catch (er) {}
@@ -58438,7 +58448,7 @@
       var tfN = e ? Math.max(1, Math.min(5, e.step || 1)) : 0;
       var tf = e ? '<div class="plb-tf">' + tfFormHtml(tfN, 'tf-c-plan', true) +
         '<s>' + (tfN >= 5 ? '✦ 완주' : TF_NM[tfN - 1]) + '</s></div>' : '';
-      var mini = (e && e.thumbs && e.thumbs.length) ? '<img class="plb-mini" src="' + e.thumbs[e.rep || 0] + '" alt="">' : '';
+      var mini = plnRepTh(e) ? '<img class="plb-mini" src="' + plnRepTh(e) + '" alt="">' : '';
       return '<div class="plb-card' + (e ? '' : ' emp') + (_plnEp === k && plnSetN() ? ' on' : '') + '" data-plngo="' + (k + 1) + '" style="--bc:' + col + '">' +
         tf + head + '<div class="plb-rail">' + steps + '</div>' +
         '<div class="plb-ft">' + ft + '</div>' +
@@ -58480,7 +58490,7 @@
     var goal = plnGoal(), out = '<div class="pv2-eps">';
     for (var i = 0; i < goal; i++) {
       var e = _pln.eps[i];
-      var pth = (e && (e.thumbs || []).length) ? '<img class="pth" src="' + esc(e.thumbs[Math.min(e.rep || 0, e.thumbs.length - 1)]) + '" alt="">' : '';   // v747 · 편 칩에 대표 썸네일
+      var pth = plnRepTh(e) ? '<img class="pth" src="' + esc(plnRepTh(e)) + '" alt="">' : '';   // v747 · 편 칩에 대표 썸네일
       out += '<button type="button" class="pv2-ep' + (i === _plnEp ? ' on' : '') + '" data-pv2ep="' + i + '">' +
         (pth || '<span class="n">' + (i + 1) + '</span>') +
         (e ? '<span class="t">' + esc(String(e.t || '').slice(0, 24)) + '</span>' : '<span class="t dim">미정</span>') + '</button>';
@@ -58574,11 +58584,14 @@
     var cards = e.refs.map(function (rf, i) {
       var on = _pv2RefSel === i;
       var th = rf.th || _pv2RefTh[String(rf.id)] || '';   // v747 · 정찰 영상 카드는 썸네일을 직접 가짐
+      var isRep = !!(th && e.repTh === th);   // v748 · 대표 썸네일은 여기서 픽
       return '<div class="pv2-refc' + (on ? ' on' : '') + '" data-pv2refsel="' + i + '"' + (rf.id ? ' data-pv2refid="' + esc(String(rf.id)) + '"' : '') + '>' +
         (th ? '<img class="th" src="' + th + '" alt="">' : '<span class="ph">▶</span>') +
         '<u class="grad"></u>' +
         '<b>' + esc(String(rf.t || '(제목 없음)').slice(0, 30)) + '</b>' +
         '<s>' + (rf.v ? esc(rf.v) : (rf.yid ? '정찰 영상' : '원고 카드')) + '</s>' +
+        '<em class="reppick' + (isRep ? ' on' : '') + '" data-pv2refrep="' + i + '">' + (isRep ? '★ 대표' : '대표') + '</em>' +
+        (rf.yid ? '<a class="ytgo" href="https://www.youtube.com/watch?v=' + esc(String(rf.yid)) + '" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="유튜브에서 보기">↗</a>' : '') +
         '<i data-pv2refdel="' + i + '" title="빼기">×</i></div>';
     }).join('');
     // v721 · 계획표처럼 — 카드 «자리» 4칸이 미리 나열, 빈 칸은 ＋ (채우고 싶게)
@@ -58594,16 +58607,10 @@
       var rf2 = e.refs[_pv2RefSel];
       var r = (rows || []).filter(function (x) { return x && String(x.id) === String(rf2.id); })[0];
       if (!r || !prpHasScript(r)) {
-        // v747 · 정찰에서 온 영상 카드 = 유튜브로·참고 썸네일로 문이 열림
-        var ext7 = rf2.yid
-          ? '<div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap">' +
-            '<a href="https://www.youtube.com/watch?v=' + esc(String(rf2.yid)) + '" target="_blank" rel="noopener" style="font-size:11.5px;font-weight:800;color:#8EC7F6;text-decoration:none;border:1px solid rgba(142,199,246,.4);border-radius:10px;padding:7px 12px">↗ 유튜브에서 보기</a>' +
-            (rf2.th ? '<button type="button" data-pv2reftb="' + _pv2RefSel + '" style="font-size:11.5px;font-weight:800;color:#d7f34b;background:none;border:1px solid rgba(215,243,75,.4);border-radius:10px;padding:7px 12px;cursor:pointer;font-family:inherit">🖼 참고 썸네일로</button>' : '') +
-            '</div>'
-          : '';
+        // v748 · 원고 없음은 원고 없음으로만 — 문은 카드 우상단 ↗ 하나로 정리 (사장님 픽)
         panel = '<div class="pv2-rdpn"><div class="pv2-rdcap">' +
-          (rf2.yid ? '정찰에서 온 영상 — 원고를 붙이면(정찰 카트의 ✎원고 칸) 칠하기가 열려요' : '이 카드엔 원고가 없어요 — 분해 결과를 창고에 담으면 여기 떠요') +
-          '</div>' + ext7 + '</div>';
+          (rf2.yid ? '원고 없음 — 정찰 카트의 ✎원고 칸에 붙이면 여기서 칠하기가 열려요' : '원고 없음 — 분해 결과를 창고에 담으면 여기 떠요') +
+          '</div></div>';
       } else {
         e.paint = e.paint || {};
         var pm = e.paint[String(rf2.id)] || {};
@@ -58735,7 +58742,7 @@
       var ee = e || plnGhostE();
       var bone = plwBone(ee);
       var done = cntDoneN(ee, bone);
-      var th = (ee.thumbs || [])[ee.rep || 0] || '';
+      var th = plnRepTh(ee);
       var dots = '';
       bone.forEach(function (bn, i) {
         dots += '<i style="--k:' + plwRoleCol(bn, i) + '" class="' + ((ee.shot || {})[i] ? 'on' : '') + '"></i>';
@@ -58825,7 +58832,7 @@
         '<button type="button" data-pv2bak="' + i + '">' + (h.role === 'bak' ? '예비 ✓' : '예비') + '</button>' +
         '<button type="button" class="del" data-pv2hkdel="' + i + '">×</button></div>';
     }).join('') +
-      (e.hooks.length < 10 ? '<input id="pv2-hkin" type="text" maxlength="60" placeholder="＋ 후킹 문구 — 담아오거나 직접 쓰기" autocomplete="off">' : '') +
+      (e.hooks.length < 10 ? '<div style="display:flex;gap:8px"><input id="pv2-hkin" type="text" maxlength="60" placeholder="＋ 후킹 문구 — 담아오거나 직접 쓰기" autocomplete="off" style="flex:1"><button type="button" id="pv2-hkadd" style="flex:none;font-family:inherit;font-size:12px;font-weight:800;color:#7EC8F5;background:rgba(126,200,245,.08);border:1px solid rgba(126,200,245,.45);border-radius:10px;padding:0 16px;cursor:pointer">담기</button></div>' : '') +
       '</div>';
     // v698 · 시청자 공감 — 댓글 → 4바구니 (◉고객 확정색 재사용)
     var VOC4 = [['prob', '문제', '#E07B7B'], ['want', '욕구', '#7E9B72'], ['avoid', '회피', '#F0B24E'], ['resist', '저항', '#8FA0C9']];
@@ -58877,11 +58884,10 @@
             pv2FRow('왜 터졌나', e.why ? esc(e.why) : '', '이게 터진 이유를 한 줄로', '①', 'data-plnwhy="1"') +
             (e.rid ? pv2FRow('🖍 칠하기', '원본 원고에서 패턴 캐내기', '', '①', 'data-pv2paint="1"') : '') + '</div>';
         })() +
-        '<div class="pln-sec"><div class="pln-sech"><b>참고 썸네일</b><s>' + ((e.thumbs || []).length) + '/5 · 탭=대표</s></div>' +
+        '<div class="pln-sec"><div class="pln-sech"><b>참고 포인트</b><s>' + ((e.thumbs || []).length) + '/5 · 「이게 중요하다」 싶은 장면을 막 넣어두는 곳</s></div>' +
           '<div class="pv2-ths">' + (e.thumbs || []).map(function (src, i) {
-            var rep = (e.rep || 0) === i;
-            return '<div class="pv2-t' + (rep ? ' rep' : '') + '" data-pv2rep="' + i + '"><img src="' + src + '" alt="">' +
-              (rep ? '<b>대표</b>' : '') + '<s data-pv2thdel="' + i + '">×</s></div>';
+            return '<div class="pv2-t"><img src="' + src + '" alt="">' +
+              '<s data-pv2thdel="' + i + '">×</s></div>';
           }).join('') +
           (function () {   // v721 · 계획표처럼 — 5칸 자리가 미리 나열, 빈 칸은 ＋
             var thn = (e.thumbs || []).length, out = '';
@@ -59007,7 +59013,7 @@
         body;
     }
     return '<div class="pln-k">' + (_plnEp + 1) + '편 · ' + esc(e.src) + '에서</div>' +
-      (curSt === 0 ? '' : '<h2 class="pln-big sm">' + esc(e.t) + '</h2>') +   // v747 · 리서치는 편 칩에 제목이 있어 거대 제목 은퇴
+      (curSt === 0 ? '' : '<h2 class="pln-tt3">' + esc(e.t) + '</h2>') +   // v748 · 제목=작게(주인공은 방) · 리서치는 칩에 있어 은퇴
       (curSt === 4 ? pv2BriefBar(e) : '') +   // v713 · 한장요약(완성본)은 배포 칸에서만
       body +
       (curSt === 0 ? '<button class="pln-act2" data-plnagain="1">다른 걸로 바꾸기</button>' : '');
@@ -59075,11 +59081,7 @@
         '<button type="button" class="plw-lnk" data-plwlink="nv">' + PLW_LOGOS.nv + ' 네이버</button>' +
         '<button type="button" class="plw-lnk del" data-plwkwdel="1">지우기</button></div>'
       : '';
-    var emb = kws.length
-      ? '<button type="button" class="plw-embbtn" data-plwemb="1">📈 검색 흐름 이 화면에서 보기 <s>' +
-        ((kws.filter(function (k) { return k.star; }).length || Math.min(kws.length, 5))) + '개 비교 · 최근 12달</s></button>' +
-        '<div class="plw-emb" id="plw-emb"></div>'
-      : '';
+    var emb = '';   // v748 · «검색 흐름 보기» 은퇴(사장님 픽) — 흐름이 궁금하면 키워드 톡 → 트렌드 문으로
     return '<div class="plw-kwcap">핵심 키워드 <s>영상을 담으면 그 영상 키워드가 후보로 — ★ 톡 = 확정(2~3개)</s></div>' +
       '<div class="plw-kwrow">' + chips +
       '<span class="plw-kwadd"><input id="plw-kwin" type="text" maxlength="24" placeholder="＋ 키워드" autocomplete="off"></span>' +
@@ -60003,7 +60005,7 @@
     var th = (e.thumbs || []).slice();
     ((e.scout && e.scout.vids) || []).forEach(function (v) { if (v.th && th.indexOf(v.th) < 0) th.push(v.th); });
     th = th.slice(0, 5);
-    var rep = (e.thumbs || []).length ? e.thumbs[e.rep || 0] : th[0];
+    var rep = plnRepTh(e) || th[0];
     var shots = (e.cuts || []).filter(function (c) { return c.v === '촬영'; }).length;
     // v715 · 이력서 폼 — 왼쪽 항목명 · 오른쪽 기입칸 · 왼쪽 위 대표 썸네일 슬롯
     function fslot(k, v, step, ph, key, x) {
@@ -60219,16 +60221,21 @@
       };
     });
     var hin = document.getElementById('pv2-hkin');
-    if (hin) hin.addEventListener('keydown', function (ev) {
-      if (ev.key !== 'Enter' || ev.isComposing || ev.keyCode === 229) return;   // 한글 조합 가드
-      ev.preventDefault();
+    function hkAdd() {   // v748 · Enter 의존 제거 — 한글 조합 중 Enter가 무시돼 «안 써짐»으로 느껴지던 것
       var e = plnEnsureEp();   // v737 · 게이트 0
       var t = hin.value.trim(); if (!t) return;
       e.hooks = e.hooks || [];
       if (e.hooks.length >= 10) { try { toast('후킹은 10개까지 — 이제 좁힐 차례예요'); } catch (er) {} return; }
       e.hooks.push({ t: t, role: '' });
       plnSave(); plnRefresh(false);
+    }
+    if (hin) hin.addEventListener('keydown', function (ev) {
+      if (ev.key !== 'Enter' || ev.isComposing || ev.keyCode === 229) return;   // 한글 조합 가드
+      ev.preventDefault();
+      hkAdd();
     });
+    var hab = document.getElementById('pv2-hkadd');
+    if (hab) hab.onclick = hkAdd;
     // v707 · 시청자 공감 — 바구니 안에 인라인 입력칸이 핀다 (prompt 은퇴)
     wsin.querySelectorAll('[data-pv2voc]').forEach(function (b) {
       b.onclick = function () {
@@ -61233,7 +61240,7 @@
     // v717 · 레퍼런스 전시장 — 카드 선택/빼기/담기 + 5색 칠하기
     wsin.querySelectorAll('[data-pv2refsel]').forEach(function (b) {
       b.onclick = function (ev) {
-        if (ev.target.closest && ev.target.closest('[data-pv2refdel]')) return;
+        if (ev.target.closest && ev.target.closest('[data-pv2refdel],[data-pv2refrep],.ytgo')) return;
         var i = +b.dataset.pv2refsel;
         _pv2RefSel = (_pv2RefSel === i) ? -1 : i;
         plnRenderWs(false);
@@ -61250,18 +61257,17 @@
     });
     var ra = wsin.querySelector('[data-pv2refadd]');
     if (ra) ra.onclick = function () { plnStorePick(); };
-    // v747 · 정찰 영상 카드 → 참고 썸네일로
-    wsin.querySelectorAll('[data-pv2reftb]').forEach(function (b) {
+    // v748 · 레퍼런스 카드에서 「대표」 픽 — 대표 썸네일의 진실은 여기(e.repTh)
+    wsin.querySelectorAll('[data-pv2refrep]').forEach(function (b) {
       b.onclick = async function (ev) {
         ev.stopPropagation();
         var e = plnEnsureEp();
-        var rf = (e.refs || [])[+b.dataset.pv2reftb]; if (!rf || !rf.th) return;
-        e.thumbs = e.thumbs || [];
-        if (e.thumbs.indexOf(rf.th) > -1) { try { toast('이미 담겨 있어요'); } catch (er) {} return; }
-        if (e.thumbs.length >= 5) { try { toast('참고 썸네일은 5장까지 — 한 장을 빼고 담아주세요'); } catch (er) {} return; }
-        e.thumbs.push(rf.th);
+        var rf = (e.refs || [])[+b.dataset.pv2refrep]; if (!rf) return;
+        var th9 = rf.th || _pv2RefTh[String(rf.id)] || '';
+        if (!th9) { try { toast('이 카드엔 썸네일이 아직 없어요'); } catch (er) {} return; }
+        e.repTh = (e.repTh === th9) ? '' : th9;
         await plnSave(); plnRefresh(false);
-        try { toast('🖼 참고 썸네일에 담았어요'); } catch (er) {}
+        try { toast(e.repTh ? '★ 이 카드가 대표 썸네일이 됐어요' : '대표 해제'); } catch (er) {}
       };
     });
     pv2RefThFill(wsin);   // v725 · 레퍼런스 카드 썸네일 비동기 심기
