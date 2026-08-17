@@ -634,6 +634,8 @@
   .pv2-ep{ flex:none; display:flex; align-items:center; gap:7px; border:1px solid rgba(255,255,255,.11); border-radius:999px;
     padding:7px 14px; background:rgba(255,255,255,.035); cursor:pointer; max-width:230px; font-family:inherit; transition:.15s; }
   .pv2-ep .n{ font:800 10.5px/1 'JetBrains Mono',monospace; color:#7EC8F5; flex:none; }
+  .pv2-ep .pth{ width:24px; height:24px; border-radius:8px; object-fit:cover; flex:none;
+    border:1px solid rgba(255,255,255,.18); margin-left:-4px; }   /* v747 · 편 칩 = 대표 썸네일 얼굴 */
   .pv2-ep .t{ font-size:12px; font-weight:700; color:#DDE2F0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   .pv2-ep .t.dim{ color:#5C6B87; font-weight:600; }
   .pv2-ep.on{ border-color:#7EC8F5; box-shadow:0 0 0 1px #7EC8F5; }
@@ -2270,6 +2272,10 @@
     border-radius:9px; color:#EDF2FA; font-family:inherit; font-size:16px; padding:8px 11px; outline:none; }
   .pv2-vb .pv2-edit{ width:100%; background:rgba(255,255,255,.06); border:1px solid var(--vc,#8FA0C9);
     border-radius:9px; color:#EDF2FA; font-family:inherit; font-size:16px; padding:8px 11px; outline:none; margin-top:5px; }
+  /* v747 · 이 편 정리 인라인 입력 — 브라우저 기본 흰 상자로 나오던 것(대화창 이상) 수리 */
+  .pv2-frow .pv2-edit, .pv2-fs .pv2-edit{ flex:1; min-width:0; width:100%; background:rgba(255,255,255,.06);
+    border:1px solid rgba(126,200,245,.45); border-radius:10px; color:#EDF2FA; font-family:inherit;
+    font-size:16px; padding:9px 12px; outline:none; }
 
   .pv2-ghostnote{ margin:2px 0 12px; padding:11px 14px; border-radius:12px; cursor:pointer;
     border:1px dashed rgba(255,255,255,.22); color:#AEB9CF; font-size:12.5px; font-weight:700; line-height:1.5; }
@@ -58474,8 +58480,9 @@
     var goal = plnGoal(), out = '<div class="pv2-eps">';
     for (var i = 0; i < goal; i++) {
       var e = _pln.eps[i];
+      var pth = (e && (e.thumbs || []).length) ? '<img class="pth" src="' + esc(e.thumbs[Math.min(e.rep || 0, e.thumbs.length - 1)]) + '" alt="">' : '';   // v747 · 편 칩에 대표 썸네일
       out += '<button type="button" class="pv2-ep' + (i === _plnEp ? ' on' : '') + '" data-pv2ep="' + i + '">' +
-        '<span class="n">' + (i + 1) + '</span>' +
+        (pth || '<span class="n">' + (i + 1) + '</span>') +
         (e ? '<span class="t">' + esc(String(e.t || '').slice(0, 24)) + '</span>' : '<span class="t dim">미정</span>') + '</button>';
     }
     return out + '</div>';
@@ -58566,12 +58573,12 @@
     if (_pv2RefSel >= e.refs.length) _pv2RefSel = -1;
     var cards = e.refs.map(function (rf, i) {
       var on = _pv2RefSel === i;
-      var th = _pv2RefTh[String(rf.id)] || '';
-      return '<div class="pv2-refc' + (on ? ' on' : '') + '" data-pv2refsel="' + i + '" data-pv2refid="' + esc(String(rf.id)) + '">' +
+      var th = rf.th || _pv2RefTh[String(rf.id)] || '';   // v747 · 정찰 영상 카드는 썸네일을 직접 가짐
+      return '<div class="pv2-refc' + (on ? ' on' : '') + '" data-pv2refsel="' + i + '"' + (rf.id ? ' data-pv2refid="' + esc(String(rf.id)) + '"' : '') + '>' +
         (th ? '<img class="th" src="' + th + '" alt="">' : '<span class="ph">▶</span>') +
         '<u class="grad"></u>' +
         '<b>' + esc(String(rf.t || '(제목 없음)').slice(0, 30)) + '</b>' +
-        '<s>' + (rf.v ? esc(rf.v) : '원고 카드') + '</s>' +
+        '<s>' + (rf.v ? esc(rf.v) : (rf.yid ? '정찰 영상' : '원고 카드')) + '</s>' +
         '<i data-pv2refdel="' + i + '" title="빼기">×</i></div>';
     }).join('');
     // v721 · 계획표처럼 — 카드 «자리» 4칸이 미리 나열, 빈 칸은 ＋ (채우고 싶게)
@@ -58587,7 +58594,16 @@
       var rf2 = e.refs[_pv2RefSel];
       var r = (rows || []).filter(function (x) { return x && String(x.id) === String(rf2.id); })[0];
       if (!r || !prpHasScript(r)) {
-        panel = '<div class="pv2-rdpn"><div class="pv2-rdcap">이 카드엔 원고가 없어요 — 분해 결과를 창고에 담으면 여기 떠요</div></div>';
+        // v747 · 정찰에서 온 영상 카드 = 유튜브로·참고 썸네일로 문이 열림
+        var ext7 = rf2.yid
+          ? '<div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap">' +
+            '<a href="https://www.youtube.com/watch?v=' + esc(String(rf2.yid)) + '" target="_blank" rel="noopener" style="font-size:11.5px;font-weight:800;color:#8EC7F6;text-decoration:none;border:1px solid rgba(142,199,246,.4);border-radius:10px;padding:7px 12px">↗ 유튜브에서 보기</a>' +
+            (rf2.th ? '<button type="button" data-pv2reftb="' + _pv2RefSel + '" style="font-size:11.5px;font-weight:800;color:#d7f34b;background:none;border:1px solid rgba(215,243,75,.4);border-radius:10px;padding:7px 12px;cursor:pointer;font-family:inherit">🖼 참고 썸네일로</button>' : '') +
+            '</div>'
+          : '';
+        panel = '<div class="pv2-rdpn"><div class="pv2-rdcap">' +
+          (rf2.yid ? '정찰에서 온 영상 — 원고를 붙이면(정찰 카트의 ✎원고 칸) 칠하기가 열려요' : '이 카드엔 원고가 없어요 — 분해 결과를 창고에 담으면 여기 떠요') +
+          '</div>' + ext7 + '</div>';
       } else {
         e.paint = e.paint || {};
         var pm = e.paint[String(rf2.id)] || {};
@@ -58851,9 +58867,17 @@
           '<button type="button" class="pln-door" data-pv2mat="gold" style="--dc:#F4C842;--dcr:244,200,66"><span class="ic">' + PV2_ICO.gold + '</span><b>금맥</b><s>메타 · 올리브영 · 틱톡</s></button>' +
         '</div></div>' +
         pv2RefsHtml(e) +
-        '<div class="pln-sec"><div class="pln-sech"><b>모은 재료</b><s>캐온 것이 전부 여기 쌓여요</s></div>' +
-        '<div class="plw-kwbar" id="plw-kwbar">' + plwKwHtml(e) + '</div>' +
-        '<div class="pln-sech" style="margin-top:13px"><b>참고 썸네일</b><s>' + ((e.thumbs || []).length) + '/5 · 탭=대표</s></div>' +
+        '<div class="pln-sec"><div class="plw-kwbar" id="plw-kwbar">' + plwKwHtml(e) + '</div></div>' +
+        (function () {   // v747 · 이 편 정리 = 레퍼런스·키워드 바로 아래 (재료·언제 줄 은퇴)
+          var fn = [e.point, e.who, e.why].filter(Boolean).length;   // 이 방에서 채워야 할 3칸
+          return '<div class="pln-sec"><div class="pln-sech"><b>이 편 정리</b><s>한 줄씩 — 한장요약이 차요</s>' +
+            '<span class="fill' + (fn >= 3 ? ' done' : '') + '">' + (fn >= 3 ? '완료 ✓' : fn + '/3') + '</span></div>' +
+            pv2FRow('단 하나의<br>메시지', e.point ? esc(e.point) : '', '보고 나면 믿게 될 한 문장', '①', 'data-pv2point="1"', 1) +
+            pv2FRow('누구에게', e.who ? esc(e.who) : '', '이 편이 잡을 한 사람', '①', 'data-pv2who="1"') +
+            pv2FRow('왜 터졌나', e.why ? esc(e.why) : '', '이게 터진 이유를 한 줄로', '①', 'data-plnwhy="1"') +
+            (e.rid ? pv2FRow('🖍 칠하기', '원본 원고에서 패턴 캐내기', '', '①', 'data-pv2paint="1"') : '') + '</div>';
+        })() +
+        '<div class="pln-sec"><div class="pln-sech"><b>참고 썸네일</b><s>' + ((e.thumbs || []).length) + '/5 · 탭=대표</s></div>' +
           '<div class="pv2-ths">' + (e.thumbs || []).map(function (src, i) {
             var rep = (e.rep || 0) === i;
             return '<div class="pv2-t' + (rep ? ' rep' : '') + '" data-pv2rep="' + i + '"><img src="' + src + '" alt="">' +
@@ -58867,18 +58891,7 @@
             return out + (thn < 5 ? '<input id="pv2-thfile" type="file" accept="image/*" hidden>' : '');
           })() +
           '</div></div>' +
-        sctHvVidsHtml(e) + plnIdeaNotesHtml(e) +
-        (function () {
-          var fn = [e.point, e.who, e.why].filter(Boolean).length;   // 이 방에서 채워야 할 3칸
-          return '<div class="pln-sec"><div class="pln-sech"><b>이 편 정리</b><s>한 줄씩 — 한장요약이 차요</s>' +
-            '<span class="fill' + (fn >= 3 ? ' done' : '') + '">' + (fn >= 3 ? '완료 ✓' : fn + '/3') + '</span></div>' +
-            pv2FRow('단 하나의<br>메시지', e.point ? esc(e.point) : '', '보고 나면 믿게 될 한 문장', '①', 'data-pv2point="1"', 1) +
-            pv2FRow('누구에게', e.who ? esc(e.who) : '', '이 편이 잡을 한 사람', '①', 'data-pv2who="1"') +
-            pv2FRow('왜 터졌나', e.why ? esc(e.why) : '', '이게 터진 이유를 한 줄로', '①', 'data-plnwhy="1"') +
-            (e.rid ? pv2FRow('🖍 칠하기', '원본 원고에서 패턴 캐내기', '', '①', 'data-pv2paint="1"') : '') +
-            pv2FRow('재료', esc(e.mat || ''), '어디서 가져온 재료인가', '①', 'data-plnmat="1"') +
-            pv2FRow('언제', esc(e.day || ''), '만들 요일', '①', 'data-plnday="1"') + '</div>';
-        })() +
+        plnIdeaNotesHtml(e) +
         pv2CfmHtml(e, 1);
     } else if (curSt === 1) {
       body = pv2h('2', '분석', e.step >= 2) +
@@ -58994,7 +59007,7 @@
         body;
     }
     return '<div class="pln-k">' + (_plnEp + 1) + '편 · ' + esc(e.src) + '에서</div>' +
-      '<h2 class="pln-big sm">' + esc(e.t) + '</h2>' +
+      (curSt === 0 ? '' : '<h2 class="pln-big sm">' + esc(e.t) + '</h2>') +   // v747 · 리서치는 편 칩에 제목이 있어 거대 제목 은퇴
       (curSt === 4 ? pv2BriefBar(e) : '') +   // v713 · 한장요약(완성본)은 배포 칸에서만
       body +
       (curSt === 0 ? '<button class="pln-act2" data-plnagain="1">다른 걸로 바꾸기</button>' : '');
@@ -59067,7 +59080,7 @@
         ((kws.filter(function (k) { return k.star; }).length || Math.min(kws.length, 5))) + '개 비교 · 최근 12달</s></button>' +
         '<div class="plw-emb" id="plw-emb"></div>'
       : '';
-    return '<div class="plw-kwcap">핵심 키워드 <s>여러 개 모았다가, ★로 2~3개만 확정</s></div>' +
+    return '<div class="plw-kwcap">핵심 키워드 <s>영상을 담으면 그 영상 키워드가 후보로 — ★ 톡 = 확정(2~3개)</s></div>' +
       '<div class="plw-kwrow">' + chips +
       '<span class="plw-kwadd"><input id="plw-kwin" type="text" maxlength="24" placeholder="＋ 키워드" autocomplete="off"></span>' +
       sug + '</div>' + links + emb;
@@ -60084,8 +60097,10 @@
         var ws = $pln('pln-ws'); if (ws) ws.scrollTop = 0;
       }, 180);
     } else {
+      // v747 · 소규모 갱신(담기·칠하기·인라인 저장)은 보던 자리를 지킨다 — 맨 위로 튕기던 버그 수리
+      var ws0 = $pln('pln-ws'); var keep = ws0 ? ws0.scrollTop : 0;
       wsin.innerHTML = html; plnBind();
-      var ws = $pln('pln-ws'); if (ws) ws.scrollTop = 0;
+      var ws = $pln('pln-ws'); if (ws) ws.scrollTop = keep;
     }
   }
   function plnBind() {
@@ -60928,7 +60943,8 @@
     if (!_sctCart[v.id]) _sctCart[v.id] = { v: {
       id: v.id, t: v.snippet.title, ch: v.snippet.channelTitle,
       views: +v.statistics.viewCount || 0,
-      th: (v.snippet.thumbnails.medium || v.snippet.thumbnails.default || {}).url
+      th: (v.snippet.thumbnails.medium || v.snippet.thumbnails.default || {}).url,
+      vtags: (v.snippet.tags || []).slice(0, 20)   // v747 · 영상이 달고 있는 키워드 — 리서치에서 3개 선별용
     }, video: false, tags: [], cmts: [] };
     return _sctCart[v.id];
   }
@@ -61088,12 +61104,23 @@
     keys.forEach(function (x) {
       var c = _sctCart[x];
       if (c.video && !e.scout.vids.some(function (v) { return v.id === c.v.id; })) { e.scout.vids.push(c.v); nv++; }
+      // v747 · 영상을 담으면 그 영상의 키워드(태그)가 통째로 후보에 — 리서치에서 ★ 3개만 선별
+      if (c.video) (c.v.vtags || []).forEach(function (t3) {
+        t3 = String(t3).slice(0, 24);
+        if (t3 && !e.kw.some(function (kk) { return kk.t === t3; })) e.kw.push({ t: t3, star: 0 });
+      });
       c.tags.forEach(function (t2) {
         if (!e.kw.some(function (kk) { return kk.t === t2; })) { e.kw.push({ t: t2, star: 0 }); nk++; }
       });
       c.cmts.forEach(function (cm) {
         if (!e.scout.cmts.some(function (y) { return y.t === cm.t; })) { e.scout.cmts.push({ t: cm.t, lk: cm.lk }); nc++; }
       });
+      // v747 · 정찰에서 온 영상도 전부 레퍼런스 카드로 (원고 있는 건 아래서 저장소 카드로 승격)
+      if (c.video && !(c.script || '').trim()) {
+        e.refs = e.refs || [];
+        if (!e.refs.some(function (rf0) { return rf0.yid === c.v.id; }))
+          e.refs.push({ yid: c.v.id, t: String(c.v.t || '').slice(0, 40), v: c.v.views ? fmtViews(c.v.views) : '', th: c.v.th || '' });
+      }
     });
     // v729 · 원고가 담긴 영상 → 저장소 카드 생성 + 이 편 레퍼런스로 자동 합류 (칠하기 가능)
     var madeCards = 0;
@@ -61223,6 +61250,20 @@
     });
     var ra = wsin.querySelector('[data-pv2refadd]');
     if (ra) ra.onclick = function () { plnStorePick(); };
+    // v747 · 정찰 영상 카드 → 참고 썸네일로
+    wsin.querySelectorAll('[data-pv2reftb]').forEach(function (b) {
+      b.onclick = async function (ev) {
+        ev.stopPropagation();
+        var e = plnEnsureEp();
+        var rf = (e.refs || [])[+b.dataset.pv2reftb]; if (!rf || !rf.th) return;
+        e.thumbs = e.thumbs || [];
+        if (e.thumbs.indexOf(rf.th) > -1) { try { toast('이미 담겨 있어요'); } catch (er) {} return; }
+        if (e.thumbs.length >= 5) { try { toast('참고 썸네일은 5장까지 — 한 장을 빼고 담아주세요'); } catch (er) {} return; }
+        e.thumbs.push(rf.th);
+        await plnSave(); plnRefresh(false);
+        try { toast('🖼 참고 썸네일에 담았어요'); } catch (er) {}
+      };
+    });
     pv2RefThFill(wsin);   // v725 · 레퍼런스 카드 썸네일 비동기 심기
     var hk1 = wsin.querySelector('[data-pv2hk100]');
     if (hk1) hk1.onclick = pv2Hk100Open;
