@@ -2142,6 +2142,19 @@
   .pvbf .thref i::after{ content:'＋'; position:absolute; inset:0; display:grid; place-items:center; font-size:12px; color:#2E3852; }
   .pvbf .thref img{ display:block; width:100%; aspect-ratio:9/12; object-fit:cover; border-radius:8px;
     box-shadow:inset 0 0 0 1px rgba(255,255,255,.08); }
+  /* v752 · 원페이지 — 참고 컷=콘티 연동(컷 번호) · 레퍼런스 나열 · 원고 구간 나열 */
+  .pvbf .thref .tc{ position:relative; display:block; }
+  .pvbf .thref .tc b{ position:absolute; left:5px; top:5px; width:17px; height:17px; border-radius:6px; display:grid; place-items:center;
+    font:900 9.5px/1 'JetBrains Mono',monospace; color:#0B0E14; background:#EDF2FA; box-shadow:0 2px 6px rgba(0,0,0,.4); }
+  .pvbf .brrefs{ display:flex; flex-direction:column; gap:7px; width:100%; }
+  .pvbf .brref{ display:flex; align-items:center; gap:8px; font-size:12px; font-weight:700; color:#D9DFEA; }
+  .pvbf .brref a{ flex:none; color:#8EC7F6; text-decoration:none; font-weight:900; font-size:11px;
+    border:1px solid rgba(142,199,246,.4); border-radius:8px; padding:3px 8px; }
+  .pvbf .brref s{ text-decoration:none; color:#8FA0BC; font-size:10px; margin-left:auto; flex:none; }
+  .pvbf .brsegs{ display:flex; flex-direction:column; gap:9px; width:100%; max-height:360px; overflow:auto; }
+  .pvbf .brseg b{ display:inline-block; font-size:9px; font-weight:900; letter-spacing:.08em; color:var(--k);
+    border:1px solid var(--k); border-radius:6px; padding:2px 7px; opacity:.9; }
+  .pvbf .brseg p{ font-size:12px; line-height:1.75; color:#D9DFEA; margin-top:4px; white-space:pre-wrap; }
   .pvbf .kwgh{ display:flex; gap:6px; flex-wrap:wrap; align-items:center; }
   .pvbf .kwgh i{ font-style:normal; font-size:11px; font-weight:800; border-radius:99px; padding:5px 12px;
     color:#2E3852; border:1px dashed rgba(255,255,255,.12); }
@@ -60081,10 +60094,19 @@
         '<span class="dvline"><s>원본</s>' + esc(e.ref || '벤치마킹') + ' 구조 그대로<em>➜</em><s>내 편</s>' + esc(dev[1]) + '</span>'
       : '';
     var draft = String(e.draft || '');
-    var scV = draft
-      ? '<span class="dim3">' + draft.length.toLocaleString() + '자 — 펼쳐서 읽기</span>' +
-        '<span class="more"><span class="scbox">' + esc(draft.slice(0, 1500)) + (draft.length > 1500 ? '…' : '') + '</span></span>'
-      : '';
+    // v752 · 원고 = 구간별로 나열 정리 (접지 않고 바로 보임 · 원고 없이 가는 편은 그렇게 표기)
+    var segs52 = e.draftSegs || {};
+    var segRows52 = plwBone(e).map(function (bn52, i52) {
+      var t52 = String(segs52[i52] || '').trim();
+      if (!t52) return '';
+      return '<span class="brseg" style="--k:' + plwRoleCol(bn52, i52) + '"><b>' + esc(bn52) + '</b><p>' + esc(t52) + '</p></span>';
+    }).join('');
+    var scV = segRows52
+      ? '<span class="brsegs">' + segRows52 + '</span>'
+      : (draft
+        ? '<span class="dim3">' + draft.length.toLocaleString() + '자 — 펼쳐서 읽기</span>' +
+          '<span class="more"><span class="scbox">' + esc(draft.slice(0, 1500)) + (draft.length > 1500 ? '…' : '') + '</span></span>'
+        : (e.noScript ? '<span class="v">이 편은 원고 없이 갑니다 ✓</span>' : ''));
     var th = (e.thumbs || []).slice();
     ((e.scout && e.scout.vids) || []).forEach(function (v) { if (v.th && th.indexOf(v.th) < 0) th.push(v.th); });
     th = th.slice(0, 5);
@@ -60098,11 +60120,29 @@
         : '<div class="bslot' + (key ? ' key' : '') + '"><span class="step">' + step + '</span><span class="ph">' + ph + '</span></div>';
       return '<div class="frow"><span class="fk">' + k + '</span><div class="ff">' + body + '</div></div>';
     }
-    var refs = th.filter(function (x) { return x !== rep; }).slice(0, 4);
-    var refHtml = '<div class="thref">' +
-      [0, 1, 2, 3].map(function (i) {
-        return refs[i] ? '<img src="' + esc(refs[i]) + '" alt="">' : '<i></i>';
+    // v752 · 참고 컷 = 콘티 컷 사진(e.cph)이 컷 번호 달고 그대로 이어짐 — 없으면 옛 방식(참고 포인트)
+    var bone52 = plwBone(e), cph52 = e.cph || {};
+    var cuts52 = bone52.map(function (_, i52) { return { i: i52, src: cph52[i52] || '' }; }).filter(function (x52) { return x52.src; });
+    var refHtml;
+    if (cuts52.length) {
+      refHtml = '<div class="thref">' + cuts52.slice(0, 8).map(function (x52) {
+        return '<span class="tc"><img src="' + esc(x52.src) + '" alt=""><b>' + (x52.i + 1) + '</b></span>';
       }).join('') + '</div>';
+    } else {
+      var refs = th.filter(function (x) { return x !== rep; }).slice(0, 4);
+      refHtml = '<div class="thref">' +
+        [0, 1, 2, 3].map(function (i) {
+          return refs[i] ? '<img src="' + esc(refs[i]) + '" alt="">' : '<i></i>';
+        }).join('') + '</div>';
+    }
+    // v752 · 레퍼런스 나열 + 링크 — 리서치 카드가 원페이지까지 이어짐
+    var refList = (e.refs || []).map(function (rf9) {
+      var url9 = '';
+      if (rf9.yid) url9 = 'https://www.youtube.com/watch?v=' + rf9.yid;
+      else if (rf9.id) { try { var r9 = (rows || []).filter(function (x9) { return x9 && String(x9.id) === String(rf9.id); })[0]; url9 = (r9 && r9.url) || ''; } catch (er9) {} }
+      return '<span class="brref">' + (url9 ? '<a href="' + esc(url9) + '" target="_blank" rel="noopener">↗ 보기</a>' : '') +
+        esc(String(rf9.t || '(제목 없음)').slice(0, 26)) + (rf9.v ? '<s>' + esc(rf9.v) + '</s>' : '') + '</span>';
+    }).join('');
     var ov = document.createElement('div');
     ov.className = 'pvbf'; ov.id = 'pvbf';
     ov.innerHTML = '<div class="in">' +
@@ -60115,6 +60155,7 @@
         '<div class="btx"><span class="ep2">EP ' + (_plnEp + 1) + ' · CREATIVE BRIEF</span>' +
         '<h1' + (e.t ? '' : ' class="gh"') + '>' + (e.t ? esc(e.t) : '제목은 ①리서치에서 정합니다') + '</h1></div>' +
       '</div>' +
+      fslot('레퍼런스', refList ? '<span class="brrefs">' + refList + '</span>' : '', '①', '리서치에서 카드를 담으면 여기 나열됩니다') +
       '<div class="frow"><span class="fk">참고 컷</span><div class="ff">' + refHtml + '</div></div>' +
       fslot('단 하나의<br>메시지', e.point ? '<span class="quote">"' + esc(e.point) + '"</span>' : '',
             '①', '리서치 «핵심 포인트»에서 채워집니다', 1) +
@@ -60135,7 +60176,7 @@
           '<span class="rws" style="--k:#2FD07B"><span class="lb">소구</span><span class="beam"></span><span class="tie l"></span><span class="tie r"></span></span></span>') +
         '</div></div>' +
       fslot('설계', devV, '③', '4공식 중 하나를 고르면 실립니다') +
-      fslot('✎ 원고', scV, '④', '원고를 쓰면 여기 접혀 들어옵니다', 0, draft ? 'sc' : '') +
+      fslot('✎ 원고', scV, '④', '원고를 쓰면 구간별로 나열됩니다', 0, segRows52 ? '' : (draft ? 'sc' : '')) +
       '<div class="meta2">벤치마킹 <b>' + esc(e.ref || '—') + '</b> · ' + esc(e.src || '') + ' · ' + esc(e.day || '') +
         ' · 공정 <b>' + Math.min(e.step || 1, 5) + '/5</b>' +
         ((e.cuts || []).length ? ' · 컷 ' + e.cuts.length : '') + (shots ? ' · 찍을 것 <b>' + shots + '</b>' : '') + '</div>' +
