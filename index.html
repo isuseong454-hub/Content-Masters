@@ -46851,7 +46851,7 @@
   // v626 · 분해봇 메타 키 — 원고구조 «뒤»에 와도 원고로 흘리면 안 되는 줄들
   const CS_META_KEYS = ['후킹문구', '후킹', '계정명', '조회수', '링크', '유형', '주제', '썸네일유형', '주의끌기',
     '오래보기', '고객', '퍼널', '왜터졌나', '키워드', '수식어', '수식어유형'];
-  const CS_STRUCT_MAP = { '후킹': 'intro', '이득손해': 'gain', '이득·손해': 'gain', '이득&손해': 'gain', '공감상황': 'empathy', '공감': 'empathy', '방법': 'method', '소구': 'appeal', '소구포인트': 'appeal', 'CTA': 'cta', 'cta': 'cta' };
+  const CS_STRUCT_MAP = { '도입부': 'gain', '변화': 'appeal', '후킹': 'intro', '이득손해': 'gain', '이득·손해': 'gain', '이득&손해': 'gain', '공감상황': 'empathy', '공감': 'empathy', '방법': 'method', '소구': 'appeal', '소구포인트': 'appeal', 'CTA': 'cta', 'cta': 'cta' };
   const CS_FORMAT_MAP = { '문제해결': '문제 해결', '문제 해결': '문제 해결', '꿀팁': '꿀팁', '스토리': '스토리형', '스토리형': '스토리형', '욕구충족': '욕구 충족', '욕구 충족': '욕구 충족' };
   const CS_FUNNEL_MAP = { '유입': 'attract', '전환': 'convert', '세일즈': 'retain', '재구매': 'retain' };
 
@@ -47123,7 +47123,7 @@
         if (sm) {
           const lbl = sm[1].trim(), sval = sm[2].trim();
           const ckey = CS_STRUCT_MAP[lbl];
-          if (ckey || inStruct) {
+          if (ckey || inStruct || /^(도입부|근거|변화)/.test(lbl)) {   // v732 · 새 역할 라벨도 시동 열쇠
             if (!b.secList) b.secList = [];
             if (ckey) b.sections[ckey] = sval;
             b.secList.push({ k: lbl, c: ckey || '', t: sval });
@@ -50557,7 +50557,7 @@
     qcFreezeWatch('qsh-stage', 'qsh-frozen');
     qcFreezeWatch('qcf-cart', 'qsh-frozen');
     // v529 · 화면 밖 덩어리 재우기 — 렌더가 끝날 때마다 새로 생긴 것에도 붙는다
-    try { mzArm(); setInterval(mzArm, 4000); } catch (e) {}
+    try { mzArm(); setInterval(function () { if (!document.hidden) mzArm(); }, 4000); } catch (e) {}   // v731 · 백그라운드에선 감시도 쉼
     // 정리 방
     const bk = document.getElementById('cs-room-back'); if (bk) bk.onclick = () => { csCloseRoom(); csOpenFork(); };
     const ww = document.getElementById('cs-room-ware'); if (ww) ww.onclick = () => { csCloseRoom(); cmSweepRooms(); };   // v593 · 깔린 방 쓸기
@@ -51422,7 +51422,7 @@
         if (km && kkey === '원고구조') { changed = true; inStruct = true; return; }
         if (km && (CS_META_KEYS.indexOf(kkey) > -1 || kkey === '왜터짐')) { changed = true; meta++; return; }
         const sm = t.match(/^([가-힣A-Za-z0-9&·\s]{1,14}?)\s*(?:[（(][^)）]{0,40}[)）])?\s*>\s*(.+)$/);
-        if (sm && (CS_STRUCT_MAP[sm[1].trim()] || inStruct)) {
+        if (sm && (CS_STRUCT_MAP[sm[1].trim()] || inStruct || /^(도입부|근거|변화)/.test(sm[1].trim()))) {   // v732
           secs.push({ k: sm[1].trim(), c: CS_STRUCT_MAP[sm[1].trim()] || '', t: sm[2].trim() });
           changed = true; inStruct = true; return;
         }
@@ -56152,7 +56152,7 @@
     [/원인|이유|왜/, '왜 그런지 짚는다', '손으로 가리키며', '촬영'],
     [/전문|용어|근거|증거/, '근거를 띄운다', '도표 · 색상환 · 자막', '화면'],
     [/방법|해결|과정/, '실제로 해 보인다', '과정 클로즈업', '촬영'],
-    [/소구|가치|결과/, '결과를 보여준다', '빛에 비친 마무리', '촬영'],
+    [/변화|소구|가치|결과|효과/, '결과를 보여준다', '빛에 비친 마무리', '촬영'],
     [/CTA|홍보|예고/, '한 줄로 마무리', '자막 + 얼굴', '촬영']
   ];
   function plnCutFor(label) {
@@ -56405,7 +56405,7 @@
       var segs = prpSegsOf(row) || [];
       if (segs.length) return segs.map(function (x) { return x.k || '구간'; }).slice(0, 6);
     } catch (e) {}
-    return ['이득&손해', '공감', '이유', '해결', 'CTA'];
+    return ['도입부', '공감', '근거', '방법', '변화', 'CTA'];
   }
 
   /* ── 소켓 path ── */
@@ -56548,7 +56548,7 @@
     var cuts = (x.cuts || []).map(function (c) { return { b: c.b, s: c.s, v: c.v }; });
     _pln.eps[slot] = {
       rid: x.rid || null, t: t, src: '트로피', ref: x.ref || '—', hook: x.hook || '',
-      bone: (x.bone && x.bone.length) ? x.bone.slice() : ['이득&손해', '공감', '이유', '해결', 'CTA'],
+      bone: (x.bone && x.bone.length) ? x.bone.slice() : ['도입부', '공감', '근거', '방법', '변화', 'CTA'],
       cuts: cuts, day: PLN_DAYS[slot], mat: '완주한 편의 구조',
       step: cuts.length ? 3 : (x.hook ? 2 : 1)   // 첫날부터 차 있게 — 검증된 후킹·컷은 그대로 출발선
     };
@@ -56918,7 +56918,7 @@
     if (!e) {   // v721 · 빈 공정 = 빈 서류 — 리서치 포함 전 방이 점선 슬롯 폼으로 (흐림·배너 없음)
       ghost = true;
       e = { t: '', src: '', ref: '', hook: '', hooks: [], kw: [], voc: {},
-            bone: ['이득&손해', '공감', '이유', '해결', 'CTA'], cuts: [], thumbs: [], step: 1,
+            bone: ['도입부', '공감', '근거', '방법', '변화', 'CTA'], cuts: [], thumbs: [], step: 1,
             day: '—', mat: '', why: '', who: '', point: '', dev: null, refs: [], draftSegs: {} };
     }
     function plnCandHtml() {   // v721 · 빈 리서치 — 문 바로 아래 «골라온 후보»
@@ -57056,7 +57056,7 @@
         ((whyRows || ownWhy) ? '직접 쓰기 · 고치기' : '②분석에서 담아오거나, 직접 쓰기') + '</span></div>';
       var bones = (e.bone || []).length
         ? '<div class="pv2-bones">' + e.bone.map(function (bn, bi) {
-            return '<span class="rs" style="--k:' + PLW_RWC[bi % 5] + '"><u>' + esc(String(bn).slice(0, 7)) + '</u><em></em>' +
+            return '<span class="rs" style="--k:' + plwRoleCol(bn, bi) + '"><u>' + esc(String(bn).slice(0, 7)) + '</u><em></em>' +
               '<span class="mvs">' +
               (bi > 0 ? '<button type="button" data-pv2bmv="' + bi + ':-1">‹</button>' : '<b></b>') +
               (bi < e.bone.length - 1 ? '<button type="button" data-pv2bmv="' + bi + ':1">›</button>' : '<b></b>') +
@@ -57222,6 +57222,10 @@
     if (r) prpSegsOf(r).forEach(function (sg) { if (sg.k && !(sg.k in map)) map[sg.k] = prpClean(sg.t); });
     return map;
   }
+  function plwRoleCol(bn, i) {   // v731 · 구간 색 = 역할 사전 색 (모르는 라벨만 법정 5색 순환)
+    try { var c = flexLabelColor(bn); if (c && c !== '#8b9184') return c; } catch (e) {}
+    return PLW_RWC[i % 5];
+  }
   function plwBone(e) {
     return (e.bone || []).length ? e.bone : ['도입', '본론', '마무리'];
   }
@@ -57279,7 +57283,8 @@
     [/공감|문제|통념|장면|before/i, '고객이 실제로 한 말을 그대로 써보면?'],
     [/이유|근거|원인|해석|계기/, '"왜 그런지"를 한 겹만 벗겨서 설명한다면?'],
     [/해결|방법|행동|after|재정의/i, '10초 안에 따라할 수 있는 행동 하나는?'],
-    [/cta|소구|마무리|유도|본론/i, '유입이 목적이면 저장, 전환이 목적이면 예약으로?']
+    [/변화|효과|소구/, '"그래서 뭐가 좋아지는데?"의 답을 한 줄로?'],
+    [/cta|마무리|유도|본론/i, '유입이 목적이면 저장, 전환이 목적이면 예약으로?']
   ];
   function plwGhost(bn) {
     for (var i = 0; i < PLW_GHOSTS.length; i++) { if (PLW_GHOSTS[i][0].test(String(bn))) return PLW_GHOSTS[i][1]; }
@@ -57291,8 +57296,9 @@
     var old = document.getElementById('plw-pick'); if (old) old.remove();
     var tpls = (typeof RW_TPLS !== 'undefined' && RW_TPLS) ? RW_TPLS : [];
     var sts = (typeof structures !== 'undefined' && structures) ? structures : [];
+    var RN31 = { '이유': '근거', '해결책': '방법' };   // v731 · 역할 사전 개명
     var all = tpls.filter(function (t) { return (t.steps || []).length; }).map(function (t) {
-      return { nm: t.nm, bones: t.steps.map(function (x) { return String(x.lb || '').replace(/\s*\(.*\)$/, ''); }),
+      return { nm: t.nm, bones: t.steps.map(function (x) { var nm31 = String(x.lb || '').replace(/\s*\(.*\)$/, ''); return RN31[nm31] || nm31; }),
         cols: t.steps.map(function (x) { return x.k; }), src: '' };
     }).concat(sts.filter(function (st) { return st.steps && st.steps.length; }).slice(0, 12).map(function (st) {
       return { nm: st.name || '구조', bones: st.steps.slice(0, 8).map(function (x, i) { return x.label || ('단계 ' + (i + 1)); }),
@@ -57349,8 +57355,8 @@
       var s0 = full ? (pv2Sents(full)[0] || full).slice(0, 72) : '';
       var v = e.draftSegs[i] || '';
       var gh = plwGhost(bn);
-      return '<div class="plw-seg rail' + (v.trim() ? ' done' : '') + '" style="--k:' + PLW_RWC[i % 5] +
-        (i < bone.length - 1 ? ';--nk:' + PLW_RWC[(i + 1) % 5] : '') + '">' +
+      return '<div class="plw-seg rail' + (v.trim() ? ' done' : '') + '" style="--k:' + plwRoleCol(bn, i) +
+        (i < bone.length - 1 ? ';--nk:' + plwRoleCol(bone[i + 1], i + 1) : '') + '">' +
         '<span class="rl-knot"></span>' + (i < bone.length - 1 ? '<span class="rl-seg"></span>' : '') +
         '<div class="hd"><i></i><b>' + esc(bn) + '</b><s>' + (v.trim() ? '완료 ✓' : '비었음') + '</s></div>' +
         (s0 ? '<div class="bm2"><em>원본:</em> ' + esc(s0) + (full.length > 72 ? '…' : '') + '</div>' : '') +
@@ -57609,7 +57615,7 @@
       var e2 = _pln.eps[_plnEp];
       if (!e2) {
         _pln.eps[_plnEp] = { rid: c.id, t: (c.memo || '').trim().slice(0, 40), src: '아이디어', ref: '—', hook: '',
-          bone: ['이득&손해', '공감', '이유', '해결', 'CTA'], cuts: [], day: PLN_DAYS[_plnEp],
+          bone: ['도입부', '공감', '근거', '방법', '변화', 'CTA'], cuts: [], day: PLN_DAYS[_plnEp],
           mat: '아이디어 메모', step: 1 };
       } else {
         e2.scout = e2.scout || { vids: [], cmts: [] };
@@ -57661,7 +57667,7 @@
         var e3 = _pln.eps[_plnEp];
         if (!e3) {
           _pln.eps[_plnEp] = { rid: c.id, t: (c.memo || '').trim().slice(0, 40), src: '아이디어', ref: '—', hook: '',
-            bone: ['이득&손해', '공감', '이유', '해결', 'CTA'], cuts: [], day: PLN_DAYS[_plnEp],
+            bone: ['도입부', '공감', '근거', '방법', '변화', 'CTA'], cuts: [], day: PLN_DAYS[_plnEp],
             mat: '아이디어 메모', step: 1 };
         } else {
           e3.scout = e3.scout || { vids: [], cmts: [] };
@@ -57784,10 +57790,9 @@
           '<i class="stx' + (on ? ' on' : '') + '" data-brst="' + v[0] + ':' + vi + '">' + (on ? '★' : '☆') + '</i></span>';
       });
     });
-    var RWC = ['#E25C5C', '#5B8DEF', '#D8B23A', '#A9C437', '#2FD07B'];   // 기찻길 법정 5색
     var rail = (e.bone || []).length
       ? '<span class="rwt">' + e.bone.map(function (s2, ri) {
-          return '<span class="rws" style="--k:' + RWC[ri % 5] + '"><span class="lb">' + esc(String(s2).slice(0, 8)) + '</span>' +
+          return '<span class="rws" style="--k:' + plwRoleCol(s2, ri) + '"><span class="lb">' + esc(String(s2).slice(0, 8)) + '</span>' +
             '<span class="beam"></span><span class="tie l"></span><span class="tie r"></span></span>';
         }).join('') + '</span>'
       : '';
@@ -58432,7 +58437,7 @@
     if (slot < 0) { try { toast('목표 ' + plnGoal() + '편이 다 찼어요 — 목표를 늘리거나 한 편을 비워주세요'); } catch (e) {} return; }
     _pln.eps[slot] = {
       rid: c.id, t: (c.memo || '').trim().slice(0, 40), src: '아이디어', ref: '—', hook: '',
-      bone: ['이득&손해', '공감', '이유', '해결', 'CTA'], cuts: [], day: PLN_DAYS[slot],
+      bone: ['도입부', '공감', '근거', '방법', '변화', 'CTA'], cuts: [], day: PLN_DAYS[slot],
       mat: '아이디어 메모', step: 1
     };
     await plnSave();
@@ -58862,7 +58867,7 @@
       if (t === null) return;
       t = t.trim(); if (!t) return;
       e = _pln.eps[k] = { rid: null, t: t, src: '정찰', ref: fv ? fv.ch : '—', hook: '',
-        bone: ['이득&손해', '공감', '이유', '해결', 'CTA'], cuts: [], day: PLN_DAYS[k],
+        bone: ['도입부', '공감', '근거', '방법', '변화', 'CTA'], cuts: [], day: PLN_DAYS[k],
         mat: '정찰에서 담아옴', step: 1 };
     }
     e.scout = e.scout || { vids: [], cmts: [] };
@@ -61240,7 +61245,7 @@
   let _pxPop = null;
   function pxRolePop(anchor, ci, bi) {
     if (_pxPop) { _pxPop.remove(); _pxPop = null; }
-    const roles = [['도입부', '#E25C5C'], ['공감', '#5B8DEF'], ['이유', '#D8B23A'], ['해결책', '#A9C437'], ['증거', '#2FB6A0'], ['CTA', '#2FD07B']];
+    const roles = [['도입부', '#E25C5C'], ['공감', '#5B8DEF'], ['근거', '#D8B23A'], ['방법', '#A9C437'], ['변화', '#2FB6A0'], ['CTA', '#2FD07B']];   // v732 · 역할 사전 통일
     const p = document.createElement('div'); p.className = 'px-rpop';
     p.innerHTML = roles.map(R => '<button style="--pc:' + R[1] + '">' + R[0] + '</button>').join('');
     document.body.appendChild(p); _pxPop = p;
@@ -61778,7 +61783,6 @@
     }
     function step() {
       if (document.hidden) return;        // v529 · 화면을 안 볼 땐 스크롤을 읽지 않는다 (초당 8.3회 절약)
-      if (document.hidden) return;   // v595g · 백그라운드에선 폴링도 쉼
       const y = top();
       if (y !== last) {
         const dy = last < 0 ? 0 : y - last;
