@@ -1570,6 +1570,13 @@
     background:rgba(255,255,255,.02); padding:12px; }
   .pv2-pal{ display:flex; gap:6px; flex-wrap:wrap; margin-bottom:9px; }
   .pv2-palcap{ font-size:9px; font-weight:800; letter-spacing:.1em; color:#5C6B87; margin:2px 0 6px; }   /* v755 · 펜 두 줄 라벨 */
+  /* v762 · 구조 칠=밑줄(고객 형광펜과 한눈에 구분) + 자동 칠 버튼 + 구간 라벨 톡 */
+  .pv2-sent.mk.stx{ background:transparent !important; box-shadow:none !important;
+    border-bottom:2.5px solid var(--sc2); border-radius:0; padding-bottom:1px; }
+  .pv2-rseg .sl[data-pv2segall]{ cursor:pointer; }
+  .pv2-rseg .sl[data-pv2segall]:hover{ text-decoration:underline; }
+  .pv2-autostr{ display:block; width:100%; margin:2px 0 9px; font-family:inherit; font-size:11px; font-weight:800; cursor:pointer;
+    color:#7EC8F5; background:rgba(126,200,245,.06); border:1px dashed rgba(126,200,245,.4); border-radius:10px; padding:8px 10px; text-align:left; }
   .pv2-pal .pk{ font-family:inherit; font-size:10.5px; font-weight:900; cursor:pointer; border-radius:99px; padding:6px 12px;
     color:var(--pc); background:transparent; border:1.5px solid color-mix(in srgb, var(--pc) 45%, transparent);
     transition:all .2s; }
@@ -58702,7 +58709,7 @@
       try { loadImage(id, 'thumb').then(put, function () {}); } catch (er) {}
     });
   }
-  function pv2RefsHtml(e) {
+  function pv2RefsHtml(e, lite) {   // v762 · lite=리서치(담기·확인만) — 칠하기(고객·구성 펜)는 ②분석 소속
     e.refs = e.refs || [];
     if (_pv2RefSel >= e.refs.length) _pv2RefSel = -1;
     var cards = e.refs.map(function (rf, i) {
@@ -58756,45 +58763,59 @@
             ? ' <b data-pv2pmmsel="1">' + esc(String(pmm0.targetName || '이름 없는 타겟').slice(0, 14)) + ' ▾</b>'
             : ' <b data-pv2pmmopen="1">아직 없음 — 고객 방에서 만들기 ›</b>') +
           '<span class="tg2' + (_pv2PmmOn ? ' on' : '') + '" data-pv2pmmtg="1">쌓기' + (_pv2PmmOn ? ' ✓' : '') + '</span>' +
-          (pmm0 ? '<span class="op" data-pv2pmmopen="1">열기 ›</span>' : '') + '</div>';
-        // v755 · 펜 두 줄 — ①고객 분석(4바구니로 담김) ②구성(역할 사전 6 — 문장의 역할을 칠함) · 두 번 클릭 없이 전부 펼침
-        var pal = pmmRow +
-          '<div class="pv2-palcap">고객 분석 — 칠하면 아래 4바구니로</div>' +
-          '<div class="pv2-pal">' + PV2_PAINT.map(function (p) {
-            return '<button type="button" class="pk' + (_pv2PaintK === p[0] ? ' on' : '') + '" data-pv2pk="' + p[0] + '" style="--pc:' + p[2] + '">' + p[1] + '</button>';
-          }).join('') + '<button type="button" class="pk er' + (_pv2PaintK === 'er' ? ' on' : '') + '" data-pv2pk="er" style="--pc:#8FA0BC">지우개</button></div>' +
-          '<div class="pv2-palcap">구성 — 기본 틀 6 + 이 원고의 요소</div>' +
-          '<div class="pv2-pal">' + PV2_ROLES.map(function (r5, i5) {
-            return '<button type="button" class="pk' + (_pv2PaintK === 'rs:' + i5 ? ' on' : '') + '" data-pv2pk="rs:' + i5 + '" style="--pc:' + r5[1] + '">' + r5[0] + '</button>';
-          }).join('') +
-          (function () {   // v760 · 이 원고가 실제로 가진 요소(라벨)가 자동으로 펜이 된다 — 원고마다 나누는 법이 달라도 그대로 채택
-            var extra9 = [];
-            try {
-              prpSegsOf(r).forEach(function (sg9) {
-                var k9 = String(sg9.k || '').trim();
-                if (!k9 || k9 === '원고' || k9 === '구간') return;
-                var base9 = PV2_ROLES.some(function (r5) { return k9.indexOf(r5[0]) === 0; });
-                if (!base9 && extra9.indexOf(k9) < 0) extra9.push(k9);
-              });
-            } catch (er9) {}
-            return extra9.slice(0, 8).map(function (k9) {
-              return '<button type="button" class="pk' + (_pv2PaintK === 'rl:' + k9 ? ' on' : '') + '" data-pv2pk="rl:' + esc(k9) + '" style="--pc:' + flexLabelColor(k9) + '">' + esc(k9.slice(0, 7)) + '</button>';
-            }).join('');
-          })() + '</div>';
+          (pmm0 ? '<span class="op" data-pv2pmmpull="1">고객 분석에 담기</span>' : '') + '</div>';   // v762 · 보기 대신 담기 (사장님 픽)
+        // v762 · 펜은 지금 문에 맞는 한 줄만 — 고객 문=4바구니 펜 / 구조 문=구조 펜(기본 6+이 원고의 요소)
+        var pal;
+        if (_pv2AnTab === 'str') {
+          pal = pmmRow +
+            '<div class="pv2-palcap">구조 펜 — 기본 틀 6 + 이 원고의 요소 · 칠=밑줄</div>' +
+            '<div class="pv2-pal">' + PV2_ROLES.map(function (r5, i5) {
+              return '<button type="button" class="pk' + (_pv2PaintK === 'rs:' + i5 ? ' on' : '') + '" data-pv2pk="rs:' + i5 + '" style="--pc:' + r5[1] + '">' + r5[0] + '</button>';
+            }).join('') +
+            (function () {   // v760 · 이 원고가 실제로 가진 요소(라벨)가 자동으로 펜이 된다
+              var extra9 = [];
+              try {
+                prpSegsOf(r).forEach(function (sg9) {
+                  var k9 = String(sg9.k || '').trim();
+                  if (!k9 || k9 === '원고' || k9 === '구간') return;
+                  var base9 = PV2_ROLES.some(function (r5) { return k9.indexOf(r5[0]) === 0; });
+                  if (!base9 && extra9.indexOf(k9) < 0) extra9.push(k9);
+                });
+              } catch (er9) {}
+              return extra9.slice(0, 8).map(function (k9) {
+                return '<button type="button" class="pk' + (_pv2PaintK === 'rl:' + k9 ? ' on' : '') + '" data-pv2pk="rl:' + esc(k9) + '" style="--pc:' + flexLabelColor(k9) + '">' + esc(k9.slice(0, 7)) + '</button>';
+              }).join('');
+            })() +
+            '<button type="button" class="pk er' + (_pv2PaintK === 'er' ? ' on' : '') + '" data-pv2pk="er" style="--pc:#8FA0BC">지우개</button></div>' +
+            '<button type="button" class="pv2-autostr" data-pv2autostr="1">⚡ 라벨대로 자동 칠 — 구간 라벨(훅·공감…)을 구조로 한 번에</button>';
+        } else {
+          pal = pmmRow +
+            '<div class="pv2-palcap">고객 펜 — 칠하면 아래 4바구니로 · 칠=형광펜</div>' +
+            '<div class="pv2-pal">' + PV2_PAINT.map(function (p) {
+              return '<button type="button" class="pk' + (_pv2PaintK === p[0] ? ' on' : '') + '" data-pv2pk="' + p[0] + '" style="--pc:' + p[2] + '">' + p[1] + '</button>';
+            }).join('') + '<button type="button" class="pk er' + (_pv2PaintK === 'er' ? ' on' : '') + '" data-pv2pk="er" style="--pc:#8FA0BC">지우개</button></div>';
+        }
         var body2 = prpSegsOf(r).map(function (sg, gi) {
           var sents = pv2Sents(prpClean(sg.t));
           if (!sents.length) return '';
-          return '<div class="pv2-rseg"><span class="sl" style="--c:' + prpColor(sg) + '">' + esc(sg.k || '구간') + '</span> ' +
+          return '<div class="pv2-rseg"><span class="sl" style="--c:' + prpColor(sg) + '"' +
+            (!lite && _pv2AnTab === 'str' ? ' data-pv2segall="' + gi + '" title="톡 = 이 구간 통째로 칠"' : '') + '>' + esc(sg.k || '구간') + '</span> ' +
             sents.map(function (st2, si) {
               var key = gi + ':' + si, mk = pm[key];
               var col = mk ? pv2PaintCol(mk) : '';
-              return '<span class="pv2-sent' + (mk ? ' mk' : '') + '" data-pv2sent="' + key + '"' +
-                (col ? ' style="--sc2:' + col + '"' : '') + '>' + esc(st2) + '</span>';
+              var stx = mk && /^r[sl]:/.test(String(mk));   // v762 · 구조 칠=밑줄, 고객 칠=형광펜 — 합쳐 봐도 한눈에
+              return '<span class="pv2-sent' + (mk ? (stx ? ' mk stx' : ' mk') : '') + (lite ? '' : '" data-pv2sent="' + key) + '"' +
+                (col ? ' style="--sc2:' + col + (lite ? ';cursor:default' : '') + '"' : (lite ? ' style="cursor:default"' : '')) + '>' + esc(st2) + '</span>';
             }).join(' ') + '</div>';
         }).join('');
-        panel = '<div class="pv2-rdpn">' + pal +
-          '<div class="pv2-rdcap">펜을 고르고, 문장을 톡 — 그 색으로 칠해지고 분석 바구니에 자동으로 담겨요 (같은 문장 다시 톡 = 해제)</div>' +
-          '<div class="pv2-rdbody">' + body2 + '</div></div>';
+        panel = lite
+          ? '<div class="pv2-rdpn"><div class="pv2-rdcap">원고 읽기 — 칠하기(고객·구조 분석)는 ②분석 방에서</div>' +
+            '<div class="pv2-rdbody">' + body2 + '</div></div>'   // v762 · 리서치=읽기만, 펜·수배지 없음
+          : '<div class="pv2-rdpn">' + pal +
+            '<div class="pv2-rdcap">' + (_pv2AnTab === 'str'
+              ? '문장 톡=밑줄 · <b>구간 라벨 톡=그 구간 통째로</b> (다시 톡=해제)'
+              : '펜을 고르고, 문장을 톡 — 형광펜으로 칠해지고 4바구니에 자동으로 담겨요 (다시 톡=해제)') + '</div>' +
+            '<div class="pv2-rdbody">' + body2 + '</div></div>';
       }
     }
     return '<div class="pln-sec"><div class="pln-sech"><b>레퍼런스 카드</b><s>전시장 — 카드 톡 = 원고 열림</s>' +
@@ -58920,7 +58941,7 @@
       return '<div class="pv2-vb" style="--vc:' + col + '"><b>' + esc(nm) + '</b>' +
         (items || '<span style="font-size:10.5px;color:#4A5570">' + ph + '</span>') + '</div>';
     }
-    return '<div class="pln-sec"><div class="pln-sech"><b>구성 분석</b><s>구성 펜으로 칠한 문장이 역할별로 모여요</s>' +
+    return '<div class="pln-sec"><div class="pln-sech"><b>구조 분석</b><s>구조 펜으로 칠한 문장이 구간별로 모여요</s>' +
       '<span class="fill' + (n ? ' done' : '') + '">' + (n ? n + '개' : '카드에서 칠하기') + '</span></div>' +
       '<div class="pv2-voc">' +
       PV2_ROLES.map(function (r5, i5) { return bkt(r5[0], r5[1], buckets[i5], '레퍼런스 원고에서 이 역할을 칠하면 모여요'); }).join('') +
@@ -59080,7 +59101,7 @@
           '<button type="button" class="pln-door" data-pv2mat="store" style="--dc:#9BE8B4;--dcr:155,232,180"><span class="ic">' + PV2_ICO.store + '</span><b>저장소</b><s>카드 · 아이디어에서</s></button>' +
           '<button type="button" class="pln-door" data-pv2mat="gold" style="--dc:#F4C842;--dcr:244,200,66"><span class="ic">' + PV2_ICO.gold + '</span><b>금맥</b><s>메타 · 올리브영 · 틱톡</s></button>' +
         '</div></div>' +
-        pv2RefsHtml(e) +
+        pv2RefsHtml(e, 1) +   // v762 · 리서치=담기·확인만(lite) — 칠하기는 ②분석에서
         '<div class="pln-sec"><div class="plw-kwbar" id="plw-kwbar">' + plwKwHtml(e) + '</div></div>' +
         (function () {   // v747 · 이 편 정리 = 레퍼런스·키워드 바로 아래 (재료·언제 줄 은퇴)
           var fn = [e.point, e.who, e.why].filter(Boolean).length;   // 이 방에서 채워야 할 3칸
@@ -59114,10 +59135,10 @@
         '<button type="button" class="' + (_pv2AnTab === 'cus' ? 'on' : '') + '" data-pv2antab="cus" style="--k:#E07B7B">' +
           '<span class="dot' + (vn60 ? ' fill' : '') + '"></span><i>◉</i><b>고객 분석</b><s>왜 반응했나 — 4바구니</s></button>' +
         '<button type="button" class="' + (_pv2AnTab === 'str' ? 'on' : '') + '" data-pv2antab="str" style="--k:#7EC8F5">' +
-          '<span class="dot' + (sn60 ? ' fill' : '') + '"></span><i>⛓</i><b>구성 분석</b><s>어떻게 짜였나 — 역할별</s></button>' +
+          '<span class="dot' + (sn60 ? ' fill' : '') + '"></span><i>⛓</i><b>구조 분석</b><s>어떻게 짜였나 — 구간별</s></button>' +
         '</div>';
-      body = pv2h('2', '분석', e.step >= 2) + anDoors +
-        pv2RefsHtml(e) +
+      body = pv2h('2', '분석', e.step >= 2) +
+        pv2RefsHtml(e) + anDoors +   // v762 · 문 2개는 레퍼런스 카드 아래 (사장님 픽)
         (_pv2AnTab === 'cus'
           ? '<div class="pln-sec"><div class="pln-sech"><b>후킹 문구</b><s>최종 1 + 예비 1</s>' +
               '<span class="fill' + (e.hook ? ' done' : '') + '">' + (e.hook ? '완료 ✓' : e.hooks.length + '/10') + '</span></div>' + hookBoard +
@@ -61733,6 +61754,50 @@
     wsin.querySelectorAll('[data-pv2pk]').forEach(function (b) {
       b.onclick = function () { _pv2PaintK = b.dataset.pv2pk; plnRenderWs(false); };
     });
+    // v762 · 구간 라벨 톡 = 그 구간 통째로 현재 구조 펜 칠 (전부 같으면 해제)
+    wsin.querySelectorAll('[data-pv2segall]').forEach(function (b) {
+      b.onclick = async function (ev) {
+        ev.stopPropagation();
+        if (!/^r[sl]:/.test(_pv2PaintK)) { try { toast('구조 펜을 먼저 골라주세요'); } catch (er) {} return; }
+        var e = plnEnsureEp();
+        var rf = (e.refs || [])[_pv2RefSel]; if (!rf || !rf.id) return;
+        var r9 = (rows || []).filter(function (x9) { return x9 && String(x9.id) === String(rf.id); })[0]; if (!r9) return;
+        var gi = +b.dataset.pv2segall;
+        var sg = prpSegsOf(r9)[gi]; if (!sg) return;
+        var sents = pv2Sents(prpClean(sg.t));
+        e.paint = e.paint || {}; var pm = e.paint[String(rf.id)] = e.paint[String(rf.id)] || {};
+        var allSame = sents.every(function (_, si) { return pm[gi + ':' + si] === _pv2PaintK; });
+        sents.forEach(function (_, si) {
+          var key = gi + ':' + si;
+          if (allSame) { delete pm[key]; return; }
+          if (!pm[key] || /^r[sl]:/.test(String(pm[key]))) pm[key] = _pv2PaintK;   // 고객 형광펜은 보존
+        });
+        await plnSave(); plnRenderWs(false);
+        try { toast(allSame ? '구간 칠 해제' : '구간 통째로 칠했어요'); } catch (er) {}
+      };
+    });
+    // v762 · ⚡ 라벨대로 자동 칠 — 구간 라벨(훅·공감…)을 구조 칠로 한 번에
+    var ast = wsin.querySelector('[data-pv2autostr]');
+    if (ast) ast.onclick = async function () {
+      var e = plnEnsureEp();
+      var rf = (e.refs || [])[_pv2RefSel]; if (!rf || !rf.id) return;
+      var r9 = (rows || []).filter(function (x9) { return x9 && String(x9.id) === String(rf.id); })[0]; if (!r9) return;
+      e.paint = e.paint || {}; var pm = e.paint[String(rf.id)] = e.paint[String(rf.id)] || {};
+      var n9 = 0;
+      prpSegsOf(r9).forEach(function (sg, gi) {
+        var k9 = String(sg.k || '').trim();
+        if (!k9 || k9 === '원고' || k9 === '구간') return;
+        var v9 = null;
+        PV2_ROLES.forEach(function (r5, i5) { if (v9 === null && k9.indexOf(r5[0]) === 0) v9 = 'rs:' + i5; });
+        if (v9 === null) v9 = 'rl:' + k9;
+        pv2Sents(prpClean(sg.t)).forEach(function (_, si) {
+          var key = gi + ':' + si;
+          if (!pm[key] || /^r[sl]:/.test(String(pm[key]))) { pm[key] = v9; n9++; }
+        });
+      });
+      await plnSave(); plnRenderWs(false);
+      try { toast(n9 ? '⚡ 라벨대로 ' + n9 + '문장 칠했어요' : '칠할 라벨이 없어요 — 통짜 원고예요'); } catch (er) {}
+    };
     wsin.querySelectorAll('[data-pv2sent]').forEach(function (b) {
       b.onclick = async function () {
         var e = plnEnsureEp();   // v737 · 게이트 0
@@ -61809,6 +61874,24 @@
     wsin.querySelectorAll('[data-pv2pmmopen]').forEach(function (b) {
       b.onclick = function () { try { pv2PmmOvOpen(); } catch (e2) { try { switchWorkspace('cus'); } catch (e3) {} } };   // v761 · 방 이동 대신 오버레이
     });
+    // v762 · 수배지 → 이 편 고객 분석 4바구니로 담기 (중복은 건너뜀)
+    var ppl = wsin.querySelector('[data-pv2pmmpull]');
+    if (ppl) ppl.onclick = async function () {
+      var e = plnEnsureEp();
+      var pmm = pv2CurPmm();
+      if (!pmm || !Array.isArray(pmm.collect) || !pmm.collect.length) { try { toast('수배지가 비어 있어요 — 원고를 칠하면 쌓여요'); } catch (er) {} return; }
+      e.voc = e.voc || {};
+      var MAP9 = { pain: 'prob', desire: 'want', fear: 'avoid', resist: 'resist' };
+      var n9 = 0;
+      pmm.collect.forEach(function (c9) {
+        var k9 = MAP9[c9.basket]; if (!k9) return;
+        var t9 = String(c9.quote || '').slice(0, 80); if (!t9) return;
+        e.voc[k9] = e.voc[k9] || [];
+        if (e.voc[k9].indexOf(t9) < 0) { e.voc[k9].push(t9); n9++; }
+      });
+      await plnSave(); plnRefresh(false);
+      try { toast(n9 ? '◉ 수배지에서 고객 분석으로 ' + n9 + '개 담았어요' : '이미 다 담겨 있어요'); } catch (er) {}
+    };
     var psel = wsin.querySelector('[data-pv2pmmsel]');
     if (psel) psel.onclick = function () {
       var old = document.getElementById('plw-pick'); if (old) old.remove();
