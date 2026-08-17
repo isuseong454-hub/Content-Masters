@@ -1577,6 +1577,13 @@
   .pv2-rseg .sl[data-pv2segall]:hover{ text-decoration:underline; }
   .pv2-autostr{ display:block; width:100%; margin:2px 0 9px; font-family:inherit; font-size:11px; font-weight:800; cursor:pointer;
     color:#7EC8F5; background:rgba(126,200,245,.06); border:1px dashed rgba(126,200,245,.4); border-radius:10px; padding:8px 10px; text-align:left; }
+  /* v763 · 세부 제자리 펼침(A안) */
+  .pv2-subrow{ display:flex; gap:6px; flex-wrap:wrap; margin:0 0 9px; animation:pv2sub .28s cubic-bezier(.32,1.2,.36,1) both; }
+  @keyframes pv2sub{ from{ opacity:0; transform:translateY(-6px); } to{ opacity:1; transform:none; } }
+  .pv2-subrow .sub{ font-family:inherit; font-size:10.5px; font-weight:800; border-radius:10px; padding:6px 11px; cursor:pointer;
+    background:rgba(255,255,255,.04); color:#AEB9CF; border:1.5px dashed color-mix(in srgb, var(--pc) 55%, transparent); transition:all .15s; }
+  .pv2-subrow .sub:active{ transform:scale(.93); }
+  .pv2-subrow .sub.sel{ background:color-mix(in srgb, var(--pc) 20%, transparent); border-style:solid; border-color:var(--pc); color:#fff; }
   .pv2-pal .pk{ font-family:inherit; font-size:10.5px; font-weight:900; cursor:pointer; border-radius:99px; padding:6px 12px;
     color:var(--pc); background:transparent; border:1.5px solid color-mix(in srgb, var(--pc) 45%, transparent);
     transition:all .2s; }
@@ -57941,6 +57948,16 @@
   var PV2_PAINT = [['prob', '문제', '#E07B7B'], ['want', '욕구', '#7E9B72'], ['avoid', '회피', '#F0B24E'], ['resist', '저항', '#8FA0C9'], ['point', '핵심', '#7EC8F5']];
   /* v755 · 구성 펜 — 역할 사전 6 그대로 (문장이 구조에서 무슨 일을 하는지 칠한다) */
   var PV2_ROLES = [['도입부', '#E25C5C'], ['공감', '#5B8DEF'], ['근거', '#D8B23A'], ['방법', '#A9C437'], ['변화', '#2FB6A0'], ['CTA', '#2FD07B']];
+  /* v763 · 역할별 세부 구성 — 펜 톡=제자리 펼침(A안 픽), 세부 톡=펜이 «역할·세부»로 확정
+     ⚠️목록은 분해봇 프롬프트(csBuildPrompt 규칙 7)의 «세부 표현 사전» 그대로 — GPT 분해 라벨과 같은 언어 */
+  var PV2_ROLE_SUBS = [
+    ['이득손해', '숫자', '상식깨기', '가치입증', '꿈소개', '좌절', '의심', '문제'],
+    ['상황', '갈등', '고통', '투쟁', '오해', '실수'],
+    ['원인', '전문용어', '설명', '반박', '문제인식', '깨달음', '가치입증', '변곡점'],
+    ['팁', '단계', '해결책', '발견', '전환점', '도전', '시술전후', '재료', '자세교정'],
+    ['효과', '진행상황', '교훈', '결말', '후기'],
+    ['홍보', '목적']
+  ];
   function pv2PaintCol(k) {
     k = String(k);
     if (/^rs:/.test(k)) { var r5 = PV2_ROLES[+k.slice(3)]; return r5 ? r5[1] : ''; }
@@ -58087,7 +58104,7 @@
     return { b: lb + ' — 무엇을 보여줄까요', s: '탭해서 어떻게 찍을지 적기', v: '—' };
   }
   var _pln = null, _plnCur = 0, _plnInited = false, _plnLoaded = false, _plnWrite = 0, _plnKwSel = -1, _pv2St = -1,
-      _pv2RefSel = -1, _pv2PaintK = 'prob', _pv2ScrOpen = -1, _pv2AnTab = 'cus',   // v717 · 전시장 선택·칠 색 · v754 원고 붙이기 · v760 분석 두 문
+      _pv2RefSel = -1, _pv2PaintK = 'prob', _pv2ScrOpen = -1, _pv2AnTab = 'cus', _pv2PenOpen = -1,   // v717 전시장·칠 색 · v754 원고 붙이기 · v760 분석 두 문 · v763 세부 펼침
       _pv2PmmOn = true, _pv2PmmLoadTried = false;   // v720 · 수배지 쌓기 토글·로드 1회
   var _plwConti = 0, _prodCache = null;   // v735 · 콘티 모드 · 내 상품 자산 캐시
   var _cntView = 'map', _cntIdx = 0;   // v736 · 콘티 3면(map/board/stage) · 한 컷 무대 현재 컷
@@ -58767,10 +58784,23 @@
         // v762 · 펜은 지금 문에 맞는 한 줄만 — 고객 문=4바구니 펜 / 구조 문=구조 펜(기본 6+이 원고의 요소)
         var pal;
         if (_pv2AnTab === 'str') {
+          // v763 · 펜 톡=세부 제자리 펼침(A안) — 세부 픽=«역할·세부» 펜 확정 (사전=분해봇 프롬프트와 동일)
+          var penOnI = -1;
+          if (/^rs:/.test(_pv2PaintK)) penOnI = +_pv2PaintK.slice(3);
+          else if (/^rl:/.test(_pv2PaintK)) PV2_ROLES.forEach(function (r5, i5) { if (_pv2PaintK.indexOf('rl:' + r5[0] + '·') === 0) penOnI = i5; });
+          var penNow = /^rs:/.test(_pv2PaintK) ? (PV2_ROLES[+_pv2PaintK.slice(3)] || [])[0]
+            : (/^rl:/.test(_pv2PaintK) ? _pv2PaintK.slice(3) : '');
+          var subRow = (_pv2PenOpen >= 0 && PV2_ROLE_SUBS[_pv2PenOpen])
+            ? '<div class="pv2-subrow" style="--pc:' + PV2_ROLES[_pv2PenOpen][1] + '">' +
+              PV2_ROLE_SUBS[_pv2PenOpen].map(function (sb9) {
+                var v9 = 'rl:' + PV2_ROLES[_pv2PenOpen][0] + '·' + sb9;
+                return '<button type="button" class="sub' + (_pv2PaintK === v9 ? ' sel' : '') + '" data-pv2pksub="' + esc(v9) + '">' + esc(sb9) + '</button>';
+              }).join('') + '</div>'
+            : '';
           pal = pmmRow +
-            '<div class="pv2-palcap">구조 펜 — 기본 틀 6 + 이 원고의 요소 · 칠=밑줄</div>' +
+            '<div class="pv2-palcap">구조 펜 — 톡=세부 열림 · 칠=밑줄' + (penNow ? ' · 지금: <b style="color:#7EC8F5">' + esc(penNow) + '</b>' : '') + '</div>' +
             '<div class="pv2-pal">' + PV2_ROLES.map(function (r5, i5) {
-              return '<button type="button" class="pk' + (_pv2PaintK === 'rs:' + i5 ? ' on' : '') + '" data-pv2pk="rs:' + i5 + '" style="--pc:' + r5[1] + '">' + r5[0] + '</button>';
+              return '<button type="button" class="pk' + (i5 === penOnI ? ' on' : '') + '" data-pv2pk="rs:' + i5 + '" style="--pc:' + r5[1] + '">' + r5[0] + ' ⌄</button>';
             }).join('') +
             (function () {   // v760 · 이 원고가 실제로 가진 요소(라벨)가 자동으로 펜이 된다
               var extra9 = [];
@@ -58787,6 +58817,7 @@
               }).join('');
             })() +
             '<button type="button" class="pk er' + (_pv2PaintK === 'er' ? ' on' : '') + '" data-pv2pk="er" style="--pc:#8FA0BC">지우개</button></div>' +
+            subRow +
             '<button type="button" class="pv2-autostr" data-pv2autostr="1">⚡ 라벨대로 자동 칠 — 구간 라벨(훅·공감…)을 구조로 한 번에</button>';
         } else {
           pal = pmmRow +
@@ -61752,7 +61783,24 @@
     var hk1 = wsin.querySelector('[data-pv2hk100]');
     if (hk1) hk1.onclick = pv2Hk100Open;
     wsin.querySelectorAll('[data-pv2pk]').forEach(function (b) {
-      b.onclick = function () { _pv2PaintK = b.dataset.pv2pk; plnRenderWs(false); };
+      b.onclick = function () {
+        var v = b.dataset.pv2pk;
+        if (/^rs:/.test(v)) {   // v763 · 구조 펜 = 톡하면 세부가 제자리에 펼쳐진다 (재톡=접힘)
+          var i = +v.slice(3);
+          var already = (/^rs:/.test(_pv2PaintK) && +_pv2PaintK.slice(3) === i) || _pv2PaintK.indexOf('rl:' + PV2_ROLES[i][0] + '·') === 0;
+          _pv2PenOpen = (already && _pv2PenOpen === i) ? -1 : i;
+          _pv2PaintK = v;
+        } else { _pv2PaintK = v; _pv2PenOpen = -1; }
+        plnRenderWs(false);
+      };
+    });
+    // v763 · 세부 톡 = 펜이 «역할·세부»로 확정되고 줄이 접힌다
+    wsin.querySelectorAll('[data-pv2pksub]').forEach(function (b) {
+      b.onclick = function () {
+        _pv2PaintK = b.dataset.pv2pksub; _pv2PenOpen = -1;
+        plnRenderWs(false);
+        try { toast('펜: ' + b.dataset.pv2pksub.slice(3) + ' — 이제 문장·구간을 칠하세요'); } catch (er) {}
+      };
     });
     // v762 · 구간 라벨 톡 = 그 구간 통째로 현재 구조 펜 칠 (전부 같으면 해제)
     wsin.querySelectorAll('[data-pv2segall]').forEach(function (b) {
@@ -61858,6 +61906,7 @@
         // v753 · 칠은 즉시 — 서버 저장·전체 재렌더가 톡을 막지 않는다 (이질감의 정체 = await 저장 + 매번 통재렌더)
         var mk9 = pm[key];
         b.classList.toggle('mk', !!mk9);
+        b.classList.toggle('stx', !!mk9 && /^r[sl]:/.test(String(mk9)));   // v763 · 구조 칠=밑줄 즉시
         if (mk9) {
           var col9 = pv2PaintCol(mk9);
           if (col9) b.style.setProperty('--sc2', col9);
