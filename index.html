@@ -56494,6 +56494,29 @@
     const p = myaGet('cm-mya-prof', {}), wk = myaGet('cm-mya-wk', []);
     const ig = myaIg(), tk = localStorage.getItem('cm-mya-igtk');
     const S = ig ? myaIgStats(ig) : null;
+    // v743 · 연결 전 = 깔끔한 온보딩 한 장 (사장님: «중앙 살짝 위에 연결 줄이랑 설명서만»)
+    if (!ig) {
+      return '<div style="max-width:430px;margin:6vh auto 0;text-align:center">' +
+        '<div style="font-size:36px">🔌</div>' +
+        '<div class="mya-gline" style="text-align:center;margin-top:10px">내 <em>인스타 계정</em>을 <em class="mint">연결</em>하세요</div>' +
+        '<p style="font-size:12.5px;color:#95a08b;line-height:1.8;margin:2px 0 0">연결하는 순간 이 방이 살아납니다 —<br>챔피언 단상 · 100만 공식 채점 · 게시물 추적 · 시청자 분석이<br><b style="color:#eef2e6">전부 내 실측 데이터</b>로 채워져요.</p>' +
+        '<div class="mya-card" style="margin-top:20px;text-align:left">' +
+          '<div class="t">🔑 액세스 토큰 붙여넣기</div>' +
+          '<div class="mya-week" style="grid-template-columns:1fr auto">' +
+            '<input id="mya-igtk" type="password" placeholder="액세스 토큰" autocomplete="off">' +
+            '<button id="mya-iggo">연결</button></div>' +
+          '<p style="margin-top:9px;font-size:10.5px;color:#5d6656;line-height:1.8">토큰 받는 곳: developers.facebook.com → 내 앱 → 이용 사례 → Instagram 맞춤 설정 → <b>토큰 생성</b><br>토큰은 이 기기에만 저장됩니다 · 공용 컴퓨터에선 연결하지 마세요</p>' +
+        '</div>' +
+        '<div class="mya-card" style="margin-top:10px;text-align:left;opacity:.85">' +
+          '<div class="t">✍️ 아직 연결이 어렵다면 — 주 1회 성적 입력(30초)</div>' +
+          '<div class="mya-week">' +
+            '<input id="mya-wf" inputmode="numeric" placeholder="팔로워 수">' +
+            '<input id="mya-wv" inputmode="numeric" placeholder="최고 조회수">' +
+            '<button id="mya-wgo">기록</button></div>' +
+          '<div class="mya-wlist" id="mya-wlist"></div>' +
+        '</div>' +
+      '</div>';
+    }
     const lastF = ig ? ig.profile.followers_count : (wk.length ? wk[wk.length - 1].f : '');
     return '<div class="mya-prof"><div class="mya-cover"><span class="slot">🖼 커버 사진 칸</span></div>' +
       '<div class="mya-pbody"><div class="mya-prow">' +
