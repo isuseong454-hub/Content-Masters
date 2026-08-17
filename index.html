@@ -58000,6 +58000,18 @@
   async function plnSave() { try { await window.storage.set(PLN_KEY, JSON.stringify(_pln)); } catch (e) {} }
   // v748 · 대표 썸네일 = 레퍼런스 카드에서 픽(e.repTh) — 없으면 옛 방식(참고 포인트 e.rep) 폴백
   function plnRepTh(e) { return (e && (e.repTh || (e.thumbs || [])[e.rep || 0])) || ''; }
+  // v749 · 칠할 수 있는 원고가 담긴 레퍼런스 카드 수 (⚠️pv2CfmHtml 안에선 rows가 로컬 문자열에 가려짐 — 반드시 이 헬퍼로)
+  function plnScrN(e) {
+    var n = 0;
+    ((e && e.refs) || []).forEach(function (rf9) {
+      if (!rf9.id) return;
+      try {
+        var r9 = (rows || []).filter(function (x9) { return x9 && String(x9.id) === String(rf9.id); })[0];
+        if (r9 && prpHasScript(r9)) n++;
+      } catch (er) {}
+    });
+    return n;
+  }
 
   /* ══ v701 · 스케줄(plsc) — 요일 루틴. plnv1과 달리 주가 바뀌어도 유지(습관이니까) ══ */
   var PLSC_KEY = 'plsched1';
@@ -58607,10 +58619,13 @@
       var rf2 = e.refs[_pv2RefSel];
       var r = (rows || []).filter(function (x) { return x && String(x.id) === String(rf2.id); })[0];
       if (!r || !prpHasScript(r)) {
-        // v748 · 원고 없음은 원고 없음으로만 — 문은 카드 우상단 ↗ 하나로 정리 (사장님 픽)
+        // v748 · 원고 없음은 원고 없음으로만 · v749 · «원고 없이 간다» 설정 가능 (사장님 픽=둘 다)
         panel = '<div class="pv2-rdpn"><div class="pv2-rdcap">' +
-          (rf2.yid ? '원고 없음 — 정찰 카트의 ✎원고 칸에 붙이면 여기서 칠하기가 열려요' : '원고 없음 — 분해 결과를 창고에 담으면 여기 떠요') +
-          '</div></div>';
+          (rf2.noscr ? '원고 없이 가기로 한 카드 — 썸네일·지표만 참고해요'
+            : (rf2.yid ? '원고 없음 — 정찰 카트의 ✎원고 칸에 붙이면 여기서 칠하기가 열려요' : '원고 없음 — 분해 결과를 창고에 담으면 여기 떠요')) +
+          '</div><button type="button" data-pv2noscrc="' + _pv2RefSel + '" style="margin-top:10px;font-family:inherit;font-size:11.5px;font-weight:800;cursor:pointer;border-radius:10px;padding:7px 12px;' +
+          (rf2.noscr ? 'color:#d7f34b;background:rgba(215,243,75,.08);border:1px solid rgba(215,243,75,.45)' : 'color:#8FA0BC;background:none;border:1px solid rgba(255,255,255,.16)') + '">' +
+          (rf2.noscr ? '✓ 원고 없이 가는 카드' : '이 카드는 원고 없이 간다') + '</button></div>';
       } else {
         e.paint = e.paint || {};
         var pm = e.paint[String(rf2.id)] || {};
@@ -58691,12 +58706,19 @@
         refCells += ri < refN ? '<i></i>' : '<i class="gh">＋</i>';
       }
       refCells += '</span>';
+      // v749 · 원고 줄 — 있으면 n장, 없으면 «원고 없이 진행»을 여기서 설정 (확정 카운트엔 비포함)
+      var scrN = plnScrN(e);
       rows =
         pv2CfmRow('①', '주제', e.t ? esc(String(e.t).slice(0, 26)) : '', !!e.t, e.t ? '확정 ✓' : '리서치에서') +
         pv2CfmRow('②', '★키워드', stars.length
           ? '<span class="kwline">' + stars.slice(0, 3).map(function (k2) { return '<i>' + esc(k2.t) + '</i>'; }).join('') + '</span>'
           : '', !!stars.length, stars.length ? '확정 ✓' : '★로 확정') +
-        pv2CfmRow('③', '레퍼런스', refN ? refCells : '', !!refN, refN ? refN + '장 ✓' : '담기');
+        pv2CfmRow('③', '레퍼런스', refN ? refCells : '', !!refN, refN ? refN + '장 ✓' : '담기') +
+        '<div class="row"><span class="k"><i>＋</i>원고</span>' +
+          '<span class="v' + (scrN || e.noScript ? '' : ' ph') + '">' + (scrN ? '칠할 수 있는 원고 ' + scrN + '장' : (e.noScript ? '이 편은 원고 없이 갑니다' : '카드에 원고가 아직 없어요')) + '</span>' +
+          (scrN ? '<span class="ck">' + scrN + '장 ✓</span>'
+                : '<span class="ck' + (e.noScript ? '' : ' no') + '" data-pv2noscr="1" style="cursor:pointer">' + (e.noScript ? '없이 감 ✓' : '원고 없이 진행') + '</span>') +
+        '</div>';
     } else if (n === 2) {
       total = 2; goLabel = '분석 확정 ›';
       e.vmain = e.vmain || {};
@@ -58823,8 +58845,8 @@
     // v698 · 후킹 보드 — 넓게 모아(≤10) 최종 1 + 예비 1 (최종은 e.hook에 복사 = 트로피·컷 호환)
     if (!e.hooks) e.hooks = e.hook ? [{ t: e.hook, role: 'fin' }] : [];
     var hookGhost = e.hooks.length ? ''
-      : '<div class="pv2-ghs"><b>최종</b><span>이 편의 얼굴이 될 한 문장</span></div>' +
-        '<div class="pv2-ghs"><b>예비</b><span>후보 하나 더</span></div>';
+      : '<div class="pv2-ghs" data-pv2ghk="fin" style="cursor:text"><b>최종</b><span>이 편의 얼굴이 될 한 문장 — 톡 하고 바로 쓰세요</span></div>' +
+        '<div class="pv2-ghs" data-pv2ghk="bak" style="cursor:text"><b>예비</b><span>후보 하나 더</span></div>';
     var hookBoard = '<div class="pv2-hks">' + hookGhost + e.hooks.map(function (h, i) {
       return '<div class="pv2-hk' + (h.role === 'fin' ? ' fin' : h.role === 'bak' ? ' bak' : '') + '">' +
         '<span class="tx">' + esc(h.t) + '</span>' +
@@ -60186,6 +60208,32 @@
       var ad = wsin.querySelector('[data-plncutadd]'); if (ad) ad.click();
     };
     // v698 · 후킹 보드 — 최종/예비/삭제/직접 쓰기
+    // v749 · 최종·예비 빈 칸 = 바로 쓰는 칸 (입력칸처럼 생겼는데 안 써지던 혼란 해소)
+    wsin.querySelectorAll('[data-pv2ghk]').forEach(function (g) {
+      g.onclick = function () {
+        if (g.querySelector('input')) return;
+        var role = g.dataset.pv2ghk;
+        var kEl = g.querySelector('b');
+        g.innerHTML = (kEl ? kEl.outerHTML : '') +
+          '<input class="pv2-edit" type="text" maxlength="60" placeholder="' + (role === 'fin' ? '이 편의 얼굴이 될 한 문장' : '후보 하나 더') + '" style="flex:1;min-width:0">';
+        var inp = g.querySelector('input');
+        inp.focus();
+        var done = false;
+        inp.addEventListener('keydown', function (ev) {
+          if (ev.key === 'Enter' && !ev.isComposing && ev.keyCode !== 229) { ev.preventDefault(); inp.blur(); }
+        });
+        inp.addEventListener('blur', async function () {
+          if (done) return; done = true;
+          var t = inp.value.trim();
+          if (!t) { plnRefresh(false); return; }
+          var e = plnEnsureEp();
+          e.hooks = e.hooks || [];
+          e.hooks.push({ t: t.slice(0, 60), role: role });
+          if (role === 'fin') { e.hooks.forEach(function (x, xi) { if (x.role === 'fin' && xi !== e.hooks.length - 1) x.role = ''; }); e.hook = t.slice(0, 60); e.step = Math.max(e.step, 2); }
+          await plnSave(); plnRefresh(false);
+        });
+      };
+    });
     wsin.querySelectorAll('[data-pv2fin]').forEach(function (b) {
       b.onclick = async function () {
         var e = _pln.eps[_plnEp]; if (!e || !e.hooks) return;
@@ -61270,6 +61318,23 @@
         try { toast(e.repTh ? '★ 이 카드가 대표 썸네일이 됐어요' : '대표 해제'); } catch (er) {}
       };
     });
+    // v749 · 원고 없이 가기 — 카드 단위 토글 + 확정판 편 단위 토글
+    wsin.querySelectorAll('[data-pv2noscrc]').forEach(function (b) {
+      b.onclick = async function () {
+        var e = plnEnsureEp();
+        var rf = (e.refs || [])[+b.dataset.pv2noscrc]; if (!rf) return;
+        rf.noscr = rf.noscr ? 0 : 1;
+        await plnSave(); plnRefresh(false);
+        try { toast(rf.noscr ? '✓ 이 카드는 원고 없이 갑니다' : '원고 대기로 되돌렸어요'); } catch (er) {}
+      };
+    });
+    var nsc = wsin.querySelector('[data-pv2noscr]');
+    if (nsc) nsc.onclick = async function () {
+      var e = plnEnsureEp();
+      e.noScript = e.noScript ? 0 : 1;
+      await plnSave(); plnRefresh(false);
+      try { toast(e.noScript ? '✓ 이 편은 원고 없이 갑니다' : '원고 채우기로 되돌렸어요'); } catch (er) {}
+    };
     pv2RefThFill(wsin);   // v725 · 레퍼런스 카드 썸네일 비동기 심기
     var hk1 = wsin.querySelector('[data-pv2hk100]');
     if (hk1) hk1.onclick = pv2Hk100Open;
