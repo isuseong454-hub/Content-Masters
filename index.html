@@ -58870,6 +58870,7 @@
       ghost = true;
       e = plnGhostE();   // v737 · 고스트 편(공용)
     }
+    plnBoneFix(e);   // v756 · 통짜 «원고 1구간»으로 굳은 편도 기본 틀 6단으로 치유
     function plnCandHtml() {   // v721 · 빈 리서치 — 문 바로 아래 «골라온 후보»
       var cands = plnCandidates(3);
       if (!cands.length) return '<div class="pln-empty">고를 후보가 없어요.<br>위 세 문에서 재료를 캐오면 후보가 여기 올라옵니다.</div>';
@@ -59441,7 +59442,16 @@
     return PLW_RWC[i % 5];
   }
   function plwBone(e) {
-    return (e.bone || []).length ? e.bone : ['도입', '본론', '마무리'];
+    // v756 · 기본 틀 헌법 — 구조는 항상 역할 사전 6단 위에서 시작. 통짜 «원고» 1구간은 틀이 아니다
+    var b = (e.bone || []).filter(Boolean);
+    if (!b.length || (b.length === 1 && b[0] === '원고')) return ['도입부', '공감', '근거', '방법', '변화', 'CTA'];
+    return b;
+  }
+  function plnBoneFix(e) {   // v756 · 굳어버린 «원고 1구간» 편도 렌더 때 기본 틀로 치유
+    try {
+      var b = (e.bone || []).filter(Boolean);
+      if (!b.length || (b.length === 1 && b[0] === '원고')) e.bone = ['도입부', '공감', '근거', '방법', '변화', 'CTA'];
+    } catch (er) {}
   }
   function plwJoin(e) {
     var parts = [];
@@ -61516,7 +61526,12 @@
       rows.push(row9);
       try { await saveRows(); } catch (er9) {}
       rf.id = row9.id; rf.noscr = 0;
-      if (!e.rid) { e.rid = row9.id; e.ref = rf.v || '—'; try { e.bone = plnBoneOf(row9); } catch (er9) {} }
+      if (!e.rid) {
+        e.rid = row9.id; e.ref = rf.v || '—';
+        // v756 · 레퍼런스 구조가 2구간 이상일 때만 얹는다 — 통짜면 기본 틀(6단) 유지
+        try { var bn9 = plnBoneOf(row9); if (bn9 && bn9.length > 1) e.bone = bn9; } catch (er9) {}
+        plnBoneFix(e);
+      }
       try { if (rf.th) sctThumbToRow(rf.th, row9.id); } catch (er9) {}
       _pv2ScrOpen = -1;
       await plnSave(); plnRefresh(false);
