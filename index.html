@@ -1719,6 +1719,7 @@
   .cnt-ph{ transition:transform .18s cubic-bezier(.32,1.4,.36,1), border-color .18s, box-shadow .18s; }
   .cnt-ph.dz{ border:1.5px dashed #9BE8B4; box-shadow:0 0 0 3px rgba(155,232,180,.22), 0 0 20px rgba(155,232,180,.35); transform:scale(1.05); }
   .cnt-ph.popin img{ animation:cntPop .45s cubic-bezier(.3,1.5,.4,1) both; }
+  .cnt-ph.drag{ opacity:.6; transform:scale(1.08); box-shadow:0 12px 28px rgba(0,0,0,.55); z-index:3; }   /* v753 · 집힌 사진 */
   @keyframes cntPop{ from{ transform:scale(.5); opacity:0; } to{ transform:scale(1); opacity:1; } }
   .cnt-ph.fr{ width:72px; height:96px; }
   .cnt-ph.hero{ width:88px; height:117px; }
@@ -59167,6 +59168,14 @@
       (src ? '<img src="' + src + '" alt="">' : '<i>📷</i>') +
       '<span class="no">' + (i + 1) + '</span></div>';
   }
+  // v753 · 컷 사진 자리 바꾸기 — 꾹(폰)·드래그(PC)로 두 컷의 사진을 스왑
+  async function cntPhSwap(a, b) {
+    if (a === b || isNaN(a) || isNaN(b)) return;
+    var e = plnEnsureEp(); e.cph = e.cph || {};
+    var t = e.cph[a]; e.cph[a] = e.cph[b]; e.cph[b] = t;
+    await plnSave(); plnRefresh(false);
+    try { toast('📷 컷 ' + (a + 1) + ' ↔ 컷 ' + (b + 1) + ' 자리 바꿈'); } catch (er) {}
+  }
   // v751 · 참고 사진 골대 — 붙여넣기·드래그로 컷에 꽂기 (압축은 pv2Shrink=폭 240 헌법)
   function cntPhSet(i, file, boxEl) {
     try {
@@ -59796,15 +59805,54 @@
       plnSave(); plnRefresh(false);
     };
     wsin.querySelectorAll('[data-cntph]').forEach(function (p5) {   // 사진 상자 톡 = 내 자산에서 고르기
-      p5.onclick = function (ev5) { ev5.stopPropagation(); cntPhOpen(+p5.dataset.cntph); };
+      p5.onclick = function (ev5) { if (p5.__lpDone) return; ev5.stopPropagation(); cntPhOpen(+p5.dataset.cntph); };
       // v751 · 골대 — 드래그하면 칸이 반응하고, 놓으면 흡수 모션으로 꽂힌다
       p5.addEventListener('dragover', function (ev6) { ev6.preventDefault(); p5.classList.add('dz'); });
       p5.addEventListener('dragleave', function () { p5.classList.remove('dz'); });
       p5.addEventListener('drop', function (ev6) {
         ev6.preventDefault(); ev6.stopPropagation(); p5.classList.remove('dz');
+        var sw6 = '';
+        try { sw6 = ev6.dataTransfer.getData('text/cntswap'); } catch (er) {}
+        if (sw6 !== '' && sw6 !== null && sw6 !== undefined && sw6 !== 'undefined' && sw6.length) { cntPhSwap(+sw6, +p5.dataset.cntph); return; }   // v753 · 사진끼리 자리 바꾸기
         var f6 = ev6.dataTransfer && ev6.dataTransfer.files && ev6.dataTransfer.files[0];
         if (!f6 || !/^image\//.test(f6.type)) { try { toast('이미지 파일만 걸 수 있어요'); } catch (er) {} return; }
         cntPhSet(+p5.dataset.cntph, f6, p5);
+      });
+      // v753 · PC — 사진 있는 칸은 집어서 끌 수 있다
+      if (!p5.classList.contains('none')) {
+        p5.draggable = true;
+        p5.addEventListener('dragstart', function (ev6) {
+          try { ev6.dataTransfer.setData('text/cntswap', String(p5.dataset.cntph)); ev6.dataTransfer.effectAllowed = 'move'; } catch (er) {}
+          p5.classList.add('drag');
+        });
+        p5.addEventListener('dragend', function () { p5.classList.remove('drag'); });
+      }
+      // v753 · 폰 — 꾹(0.4초) 누르면 집히고, 끌어서 다른 칸에 놓으면 자리 바꿈
+      var lpT5 = null, lpOn5 = false;
+      p5.addEventListener('touchstart', function () {
+        if (p5.classList.contains('none')) return;
+        lpT5 = setTimeout(function () {
+          lpOn5 = true; p5.classList.add('drag');
+          try { if (navigator.vibrate) navigator.vibrate(12); } catch (er) {}
+        }, 400);
+      }, { passive: true });
+      p5.addEventListener('touchmove', function (ev8) {
+        if (!lpOn5) { clearTimeout(lpT5); return; }
+        ev8.preventDefault();
+        var t8 = ev8.touches[0];
+        var el8 = document.elementFromPoint(t8.clientX, t8.clientY);
+        var tgt8 = el8 && el8.closest ? el8.closest('[data-cntph]') : null;
+        document.querySelectorAll('.cnt-ph.dz').forEach(function (x8) { if (x8 !== tgt8) x8.classList.remove('dz'); });
+        if (tgt8 && tgt8 !== p5) tgt8.classList.add('dz');
+      }, { passive: false });
+      p5.addEventListener('touchend', function () {
+        clearTimeout(lpT5);
+        if (!lpOn5) return;
+        lpOn5 = false; p5.classList.remove('drag');
+        var tgt8 = document.querySelector('.cnt-ph.dz');
+        document.querySelectorAll('.cnt-ph.dz').forEach(function (x8) { x8.classList.remove('dz'); });
+        p5.__lpDone = true; setTimeout(function () { p5.__lpDone = false; }, 350);
+        if (tgt8 && tgt8 !== p5) cntPhSwap(+p5.dataset.cntph, +tgt8.dataset.cntph);
       });
     });
     // v751 · Ctrl+V — 복사한 이미지가 첫 빈 컷에 바로 꽂힌다 (문서에 한 번만 배선)
@@ -61497,7 +61545,16 @@
           }
           pm[key] = _pv2PaintK;
         }
-        await plnSave(); plnRenderWs(false);
+        // v753 · 칠은 즉시 — 서버 저장·전체 재렌더가 톡을 막지 않는다 (이질감의 정체 = await 저장 + 매번 통재렌더)
+        var mk9 = pm[key];
+        b.classList.toggle('mk', !!mk9);
+        if (mk9) {
+          var col9 = (PV2_PAINT.filter(function (p9) { return p9[0] === mk9; })[0] || [])[2];
+          if (col9) b.style.setProperty('--sc2', col9);
+        } else { b.style.removeProperty('--sc2'); }
+        plnSave();   // 저장은 뒤에서
+        clearTimeout(window.__pv2PaintRf);   // 바구니·수배지 동기화는 톡이 멈춘 뒤 한 번만
+        window.__pv2PaintRf = setTimeout(function () { try { plnRefresh(false); } catch (er9) {} }, 900);
         try { toast(msg); } catch (er) {}
       };
     });
