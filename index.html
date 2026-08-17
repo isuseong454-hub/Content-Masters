@@ -1715,7 +1715,11 @@
   .cnt-ph .no{ position:absolute; left:6px; top:6px; width:18px; height:18px; border-radius:6px; display:grid; place-items:center;
     font:900 10px/1 'JetBrains Mono',monospace; color:#0B0E14; background:#EDF2FA; z-index:2; box-shadow:0 2px 6px rgba(0,0,0,.4); }
   .cnt-ph.none{ border-style:dashed; }
-  .cnt-ph.mini{ width:62px; height:82px; }
+  .cnt-ph.mini{ width:100%; height:auto; aspect-ratio:3/4; }   /* v751 · 지도 참고 사진 = 5칸 그리드에 꽉 차게 */
+  .cnt-ph{ transition:transform .18s cubic-bezier(.32,1.4,.36,1), border-color .18s, box-shadow .18s; }
+  .cnt-ph.dz{ border:1.5px dashed #9BE8B4; box-shadow:0 0 0 3px rgba(155,232,180,.22), 0 0 20px rgba(155,232,180,.35); transform:scale(1.05); }
+  .cnt-ph.popin img{ animation:cntPop .45s cubic-bezier(.3,1.5,.4,1) both; }
+  @keyframes cntPop{ from{ transform:scale(.5); opacity:0; } to{ transform:scale(1); opacity:1; } }
   .cnt-ph.fr{ width:72px; height:96px; }
   .cnt-ph.hero{ width:88px; height:117px; }
   .cnt-ph.big{ width:118px; height:157px; }
@@ -1747,7 +1751,7 @@
   .cnt-cell .say{ font-size:10.5px; font-weight:800; line-height:1.45; margin-top:5px; color:#C9CFDD; }
   .cnt-shelf{ margin-top:11px; }
   .cnt-shelf .k{ font:800 8px/1.5 'JetBrains Mono',monospace; color:#5C6B87; letter-spacing:.14em; margin-bottom:6px; display:block; }
-  .cnt-shelf .row{ display:flex; gap:7px; overflow-x:auto; padding-bottom:4px; }
+  .cnt-shelf .row{ display:grid; grid-template-columns:repeat(5,1fr); gap:8px; padding-bottom:4px; }   /* v751 · 한 줄 5칸, 크게 */
   .cnt-shelf .cnt-ph.star{ border:1.5px solid rgba(240,158,184,.6); }
   .cnt-start{ display:block; width:100%; margin-top:10px; font-family:inherit; cursor:pointer; border:none; border-radius:13px; padding:13px;
     font-size:13.5px; font-weight:900; color:#07130B; background:linear-gradient(135deg,#C9F0D4,#9BE8B4);
@@ -59150,6 +59154,27 @@
       (src ? '<img src="' + src + '" alt="">' : '<i>📷</i>') +
       '<span class="no">' + (i + 1) + '</span></div>';
   }
+  // v751 · 참고 사진 골대 — 붙여넣기·드래그로 컷에 꽂기 (압축은 pv2Shrink=폭 240 헌법)
+  function cntPhSet(i, file, boxEl) {
+    try {
+      pv2Shrink(file, async function (durl) {
+        if (!durl) { try { toast('이미지를 못 읽었어요'); } catch (er) {} return; }
+        var e = plnEnsureEp();
+        e.cph = e.cph || {};
+        e.cph[i] = durl;
+        await plnSave();
+        if (boxEl && boxEl.isConnected) {
+          boxEl.classList.remove('none');
+          var ic = boxEl.querySelector('i'); if (ic) ic.remove();
+          var im = boxEl.querySelector('img');
+          if (!im) { im = document.createElement('img'); im.alt = ''; boxEl.insertBefore(im, boxEl.firstChild); }
+          im.src = durl;
+          boxEl.classList.remove('popin'); void boxEl.offsetWidth; boxEl.classList.add('popin');
+        } else { plnRefresh(false); }
+        try { toast('📷 컷 ' + (i + 1) + '에 걸었어요'); } catch (er) {}
+      });
+    } catch (er) {}
+  }
   function cntCamTxt(e, i, bn) {
     var cut = (e.cuts || [])[i] || plnCutFor(bn);
     return String(cut.b || '').slice(0, 40) + (cut.s ? ' · ' + String(cut.s).slice(0, 24) : '');
@@ -59759,7 +59784,36 @@
     };
     wsin.querySelectorAll('[data-cntph]').forEach(function (p5) {   // 사진 상자 톡 = 내 자산에서 고르기
       p5.onclick = function (ev5) { ev5.stopPropagation(); cntPhOpen(+p5.dataset.cntph); };
+      // v751 · 골대 — 드래그하면 칸이 반응하고, 놓으면 흡수 모션으로 꽂힌다
+      p5.addEventListener('dragover', function (ev6) { ev6.preventDefault(); p5.classList.add('dz'); });
+      p5.addEventListener('dragleave', function () { p5.classList.remove('dz'); });
+      p5.addEventListener('drop', function (ev6) {
+        ev6.preventDefault(); ev6.stopPropagation(); p5.classList.remove('dz');
+        var f6 = ev6.dataTransfer && ev6.dataTransfer.files && ev6.dataTransfer.files[0];
+        if (!f6 || !/^image\//.test(f6.type)) { try { toast('이미지 파일만 걸 수 있어요'); } catch (er) {} return; }
+        cntPhSet(+p5.dataset.cntph, f6, p5);
+      });
     });
+    // v751 · Ctrl+V — 복사한 이미지가 첫 빈 컷에 바로 꽂힌다 (문서에 한 번만 배선)
+    if (!window.__cntPasteWired) {
+      window.__cntPasteWired = 1;
+      document.addEventListener('paste', function (ev7) {
+        var shelf7 = document.querySelector('#pln-wsin .cnt-shelf, #pln-wsin .cnt-film'); if (!shelf7) return;
+        var tg7 = ev7.target;
+        if (tg7 && tg7.tagName && /INPUT|TEXTAREA/.test(tg7.tagName)) return;   // 메모 쓰는 중엔 방해 금지
+        var items7 = (ev7.clipboardData && ev7.clipboardData.items) || [];
+        var it7 = null;
+        for (var k7 = 0; k7 < items7.length; k7++) { if (items7[k7].type && items7[k7].type.indexOf('image') === 0) { it7 = items7[k7]; break; } }
+        if (!it7) return;
+        ev7.preventDefault();
+        var f7 = it7.getAsFile(); if (!f7) return;
+        var boxes7 = Array.prototype.slice.call(shelf7.querySelectorAll('[data-cntph]'));
+        if (!boxes7.length) boxes7 = Array.prototype.slice.call(document.querySelectorAll('#pln-wsin [data-cntph]'));
+        var tgt7 = boxes7.filter(function (b7) { return b7.classList.contains('none'); })[0] || boxes7[boxes7.length - 1];
+        if (!tgt7) return;
+        cntPhSet(+tgt7.dataset.cntph, f7, tgt7);
+      });
+    }
     var nt5 = wsin.querySelector('[data-plwnote]');   // 현장 메모 — 입력 중 재렌더 0
     if (nt5) {
       var ntT = 0;
