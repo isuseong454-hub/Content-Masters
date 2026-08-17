@@ -51292,7 +51292,8 @@
         else if (go === 'plan') { csCloseFork(); cmSweepRooms(); try { switchWorkspace('plan'); } catch (e) {} } // v646 · ◈ 기획
         else if (go === 'cmu') { csCloseFork(); try { cmuOpen('plaza'); cmuAchSync(); } catch (e) {} } // v744 · 🏙 커뮤니티
         else if (go === 'qc') qcOpen(); // ⚡ 빠른 담기
-        else { csCloseFork(); cmSweepRooms(); } // ware/skip — v593 · 깔린 분류·손질 방까지 쓸어 닫는다
+        else if (go === 'ware') { csCloseFork(); cmSweepRooms(); try { switchWorkspace('home'); } catch (e) {} } // v745 · 내 창고 = 창고 홈으로 (트레이닝 바탕이 그대로 드러나던 사고 수리)
+        else { csCloseFork(); cmSweepRooms(); } // skip — v593 · 하던 화면 유지, 깔린 분류·손질 방만 쓸어 닫는다
       });
     });
     // ⚡ 빠른 담기 방 — B안: 타일 = 위저드 시작 (분해만 AI 정리 방으로)
