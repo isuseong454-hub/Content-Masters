@@ -56501,7 +56501,7 @@
           '<input class="id" id="mya-id" placeholder="@아이디" value="' + esc(p.id || '').replace(/"/g, '&quot;') + '">' +
         '</div>' +
         '<div class="mya-pstats">' +
-          '<div><b>' + (lastF ? Number(lastF).toLocaleString() : '—') + '</b><small>팔로워</small></div>' +
+          '<div><b id="mya-st-f">' + (lastF ? Number(lastF).toLocaleString() : '—') + '</b><small>팔로워</small></div>' +
           '<div><b>—</b><small>영상</small></div><div><b>—</b><small>누적 조회</small></div>' +
         '</div></div>' +
         '<div class="mya-pcon"><i></i>연동 전 — 메타 검수 통과 후 자동 수집이 켜집니다</div>' +
@@ -56580,6 +56580,11 @@
         '<div class="mya-heatx"><span>0시</span><span>6시</span><span>12시</span><span>18시</span><span>21시 ★</span><span>23시</span></div>' +
         '<div class="mya-aif" style="margin-top:11px">✦ 피크는 <b>수·목 21시</b> — 업로드 시간을 옮기면 초반 속도가 붙습니다.</div></div>';
   }
+  // v741 · 우리 방 = 진짜 서버(step12 RPC) — cm-mya-room은 «내 방 캐시»일 뿐, 진실은 서버
+  async function myaRpc(fn, params) {
+    try { if (typeof cmRpc === 'function') return await cmRpc(fn, params); } catch (e) {}
+    return { ok: false, reason: 'noclient' };
+  }
   function myaRoomHtml() {
     const rm = myaGet('cm-mya-room', null);
     if (!rm) {
@@ -56590,19 +56595,58 @@
         '<div class="mya-rform" id="mya-rcf"><input id="mya-rcn" placeholder="방 이름 (예: 3기 전사들)"><input id="mya-rcp" type="password" placeholder="입장 비밀번호"><button id="mya-rcgo">만들기</button></div>' +
         '<div class="mya-rform" id="mya-rjf"><input id="mya-rjc" placeholder="방 코드 6자리" autocapitalize="characters"><input id="mya-rjp" type="password" placeholder="비밀번호"><button id="mya-rjgo">합류</button></div>' +
         '<label class="mya-agree" id="mya-agr" style="display:none"><input type="checkbox" id="mya-agc"><span>방에 들어가면 내 주간 성적(상승률·배지·업로드 수)이 방 멤버에게 보입니다 — 동의</span></label>' +
-        '<p style="margin-top:10px;font-size:10.5px;color:#5d6656">지금은 이 기기 안에서만 작동(맛보기) — step12 SQL RUN 후 진짜 방이 열립니다</p></div>';
+        '<p style="margin-top:10px;font-size:10.5px;color:#5d6656">방은 서버에 만들어지고, 모든 방은 운영자 관제에 보입니다</p></div>';
     }
-    return '<div class="mya-card"><div class="t">🚪 ' + esc(rm.name) + ' <span style="color:#5d6656">· 코드 ' + esc(rm.code) + ' · ' + (rm.owner ? '내가 방장' : '멤버') + '</span></div>' +
-      '<div style="margin-top:11px">' +
-        '<div class="mya-mem"><span class="av2" style="background:linear-gradient(150deg,#1c2412,#10160a)">나</span><span><b>나</b><small>이번 주 업로드 2편</small></span><span class="up2">+12% ↑</span></div>' +
-        '<div class="mya-mem"><span class="av2" style="background:linear-gradient(150deg,#232c12,#141a0a)">민</span><span><b>민지</b><small>🥇 100만 달성!</small></span><span class="up2">+38% 🔥</span></div>' +
-        '<div class="mya-mem"><span class="av2" style="background:linear-gradient(150deg,#1a2410,#0e1408)">하</span><span><b>하늘</b><small>이번 주 업로드 3편</small></span><span class="up2">+6%</span></div>' +
-      '</div>' +
-      '<div class="mya-feed">🎉 <b>민지</b>님이 메달(100만)을 달성했어요 — 축하 6<br>📈 이번 주 방 전체 업로드 <b>19편</b> · 평균 상승률 <b>+12%</b></div>' +
-      '<div style="margin-top:12px;display:flex;gap:7px">' +
-        '<button class="mya-sortc-btn" id="mya-rinv" style="font-size:11px;font-weight:800;color:#d7f34b;border:1px solid rgba(215,243,75,.4);background:rgba(215,243,75,.07);border-radius:99px;padding:7px 13px;cursor:pointer">📋 초대 카드 복사</button>' +
-        '<button id="mya-rout" style="font-size:11px;font-weight:700;color:#95a08b;border:1px solid rgba(255,255,255,.1);background:none;border-radius:99px;padding:7px 13px;cursor:pointer">방 나가기</button></div>' +
-      '<p style="margin-top:10px;font-size:10.5px;color:#5d6656">멤버 성적은 견본 — step12 SQL RUN 후 진짜 방으로 전환</p></div>';
+    return '<div class="mya-card"><div class="t">🚪 ' + esc(rm.name || '우리 방') + ' <span style="color:#5d6656">· 코드 ' + esc(rm.code) + ' · ' + (rm.owner ? '내가 방장' : '멤버') + '</span></div>' +
+      '<div id="mya-rmlist" style="margin-top:11px;font-size:11.5px;color:#95a08b">동료들을 불러오는 중…</div>' +
+      '<div class="mya-feed" id="mya-rmfeed"></div>' +
+      '<div style="margin-top:12px;display:flex;gap:7px;flex-wrap:wrap">' +
+        '<button id="mya-rinv" style="font-size:11px;font-weight:800;color:#d7f34b;border:1px solid rgba(215,243,75,.4);background:rgba(215,243,75,.07);border-radius:99px;padding:7px 13px;cursor:pointer">📋 초대 카드 복사</button>' +
+        '<button id="mya-rout" style="font-size:11px;font-weight:700;color:#95a08b;border:1px solid rgba(255,255,255,.1);background:none;border-radius:99px;padding:7px 13px;cursor:pointer">방 나가기</button>' +
+        (rm.owner ? '<button id="mya-rdel" style="font-size:11px;font-weight:700;color:#F0A1B5;border:1px solid rgba(240,161,181,.3);background:none;border-radius:99px;padding:7px 13px;cursor:pointer">방 닫기(삭제)</button>' : '') +
+      '</div></div>';
+  }
+  async function myaRoomSync() {
+    const a = window.__cmAuth; if (!a) return;
+    const rm = myaGet('cm-mya-room', null);
+    if (!rm) {
+      // 서버에 내 방이 이미 있나 (다른 기기에서 만들었을 수도)
+      const r = await myaRpc('cm_room_mine', { p_code: a.code, p_pin_hash: a.pinHash });
+      if (r && r.ok && Array.isArray(r.rooms) && r.rooms.length) {
+        const m = r.rooms.find(function (x) { return !x.closed; }) || r.rooms[0];
+        myaSet('cm-mya-room', { code: m.code, name: m.name, owner: !!m.owner });
+        if (_myaPill === 'room') myaRenderBody();
+      }
+      return;
+    }
+    const b = await myaRpc('cm_room_board', { p_code: a.code, p_pin_hash: a.pinHash, p_room: rm.code });
+    const list = document.getElementById('mya-rmlist'); if (!list) return;
+    if (!(b && b.ok)) {
+      if (b && (b.reason === 'notfound' || b.reason === 'notmember')) {
+        localStorage.removeItem('cm-mya-room'); myaRenderBody();
+        try { toast('방이 닫혔거나 나간 상태예요'); } catch (e) {} return;
+      }
+      list.textContent = '연결이 원활하지 않아요 — 잠시 후 다시'; return;
+    }
+    const GR = ['#1c2412,#10160a', '#232c12,#141a0a', '#1a2410,#0e1408', '#20260f,#12160a'];
+    let ups = 0;
+    list.innerHTML = (b.members || []).map(function (m, i) {
+      const w0 = (m.weeks && m.weeks[0]) || {}, w1 = (m.weeks && m.weeks[1]) || {};
+      ups += (w0.uploads || 0);
+      let delta = '';
+      if (w0.followers && w1.followers) {
+        const d = Math.round((w0.followers - w1.followers) / Math.max(1, w1.followers) * 100);
+        delta = (d >= 0 ? '+' : '') + d + '%' + (d >= 20 ? ' 🔥' : d > 0 ? ' ↑' : '');
+      } else if (w0.followers) { delta = Number(w0.followers).toLocaleString(); }
+      else { delta = '기록 전'; }
+      const me = (m.code === a.code);
+      return '<div class="mya-mem"><span class="av2" style="background:linear-gradient(150deg,' + GR[i % GR.length] + ')">' + esc(String(m.name || m.code).slice(0, 1)) + '</span>' +
+        '<span><b>' + esc(me ? '나' : (m.name || m.code)) + '</b><small>이번 주 업로드 ' + (w0.uploads || 0) + '편</small></span>' +
+        '<span class="up2">' + delta + '</span></div>';
+    }).join('') || '<div style="font-size:11.5px;color:#5d6656">아직 나 혼자 — 초대 카드를 뿌려보세요</div>';
+    const fd = document.getElementById('mya-rmfeed');
+    if (fd) fd.innerHTML = (b.notice ? '📣 <b>' + esc(b.notice) + '</b><br>' : '') +
+      '📈 이번 주 방 전체 업로드 <b>' + ups + '편</b> · 멤버 ' + (b.members || []).length + '명';
   }
   function myaKeepHtml() {
     const rivalN = (typeof northStars !== 'undefined' && Array.isArray(northStars)) ? northStars.length : 0;
@@ -56618,12 +56662,25 @@
       '<button class="cp-card" id="cp-rival"><span class="ic">🥊</span><span><span class="tt">라이벌 멘토</span><br><span class="dd">' +
         (rivalN ? '내가 겨누는 채널 ' + rivalN + '개' : '내가 겨누는 사람 — 아직 비어 있어요') + '</span></span><span class="ar">→</span></button>';
   }
-  function myaWkList() {
+  // v741 · 주간 성적 = 서버(cm_weekly_*) — 실패 시에만 로컬 보관
+  function myaWkRender(list) {
     const box = document.getElementById('mya-wlist'); if (!box) return;
-    const wk = myaGet('cm-mya-wk', []);
-    box.innerHTML = wk.length
-      ? wk.slice(-4).reverse().map(function (w) { return '📅 ' + esc(w.d) + ' — 팔로워 <b>' + Number(w.f || 0).toLocaleString() + '</b> · 최고 조회 <b>' + Number(w.v || 0).toLocaleString() + '</b>'; }).join('<br>')
+    box.innerHTML = (list && list.length)
+      ? list.slice(0, 4).map(function (w) {
+          return '📅 ' + esc(String(w.wk || '').replace(/^\d{4}-/, '')) + '주 — 팔로워 <b>' + Number(w.followers || 0).toLocaleString() + '</b> · 최고 조회 <b>' + Number(w.bestViews || 0).toLocaleString() + '</b>';
+        }).join('<br>')
       : '아직 기록이 없어요 — 첫 숫자를 넣는 순간 추이가 시작됩니다';
+  }
+  async function myaWkSync() {
+    const a = window.__cmAuth;
+    if (!a) { myaWkRender(myaGet('cm-mya-wk-srv', [])); return; }
+    const r = await myaRpc('cm_weekly_list', { p_code: a.code, p_pin_hash: a.pinHash });
+    if (r && r.ok) {
+      myaSet('cm-mya-wk-srv', r.weeks || []);
+      myaWkRender(r.weeks || []);
+      const f = r.weeks && r.weeks[0] && r.weeks[0].followers;
+      const st = document.getElementById('mya-st-f'); if (st && f) st.textContent = Number(f).toLocaleString();
+    } else myaWkRender(myaGet('cm-mya-wk-srv', []));
   }
   function myaWireBody() {
     const el = document.getElementById('mya-body'); if (!el) return;
@@ -56646,17 +56703,24 @@
         };
       });
       const wgo = document.getElementById('mya-wgo');
-      if (wgo) wgo.onclick = function () {
+      if (wgo) wgo.onclick = async function () {
         const f = (document.getElementById('mya-wf') || {}).value, v = (document.getElementById('mya-wv') || {}).value;
         if (!f && !v) { try { toast('팔로워나 최고 조회수, 하나는 넣어주세요'); } catch (e) {} return; }
-        const wk = myaGet('cm-mya-wk', []);
-        wk.push({ d: new Date().toLocaleDateString('ko-KR', { month: 'numeric', day: 'numeric' }), f: parseInt(String(f).replace(/[^0-9]/g, '') || '0', 10), v: parseInt(String(v).replace(/[^0-9]/g, '') || '0', 10) });
-        myaSet('cm-mya-wk', wk);
-        document.getElementById('mya-wf').value = ''; document.getElementById('mya-wv').value = '';
-        myaWkList();
-        try { toast('✓ 기록했습니다 — 매주 쌓이면 추이가 그려집니다'); } catch (e) {}
+        const nf = f ? parseInt(String(f).replace(/[^0-9]/g, '') || '0', 10) : null;
+        const nv = v ? parseInt(String(v).replace(/[^0-9]/g, '') || '0', 10) : null;
+        const a = window.__cmAuth;
+        wgo.disabled = true;
+        const r = a ? await myaRpc('cm_weekly_set', { p_code: a.code, p_pin_hash: a.pinHash, p_followers: nf, p_best_views: nv, p_uploads: null }) : null;
+        wgo.disabled = false;
+        if (r && r.ok) {
+          document.getElementById('mya-wf').value = ''; document.getElementById('mya-wv').value = '';
+          try { toast('✓ 서버에 기록했습니다 — 매주 쌓이면 추이가 그려집니다'); } catch (e) {}
+          myaWkSync();
+        } else {
+          try { toast('연결이 원활하지 않아요 — 잠시 후 다시'); } catch (e) {}
+        }
       };
-      myaWkList();
+      myaWkSync();
     }
     if (_myaPill === 'trk') {
       document.querySelectorAll('#mya-body .mya-sortc b').forEach(function (b) {
@@ -56677,20 +56741,34 @@
         return true;
       };
       const rcgo = document.getElementById('mya-rcgo');
-      if (rcgo) rcgo.onclick = function () {
+      if (rcgo) rcgo.onclick = async function () {
         const n = (document.getElementById('mya-rcn') || {}).value.trim(), pw = (document.getElementById('mya-rcp') || {}).value;
         if (!n || !pw) { try { toast('방 이름과 비밀번호를 넣어주세요'); } catch (e) {} return; }
         if (!need()) return;
-        myaSet('cm-mya-room', { name: n, code: myaCode(), owner: true });
-        myaRenderBody(); try { toast('🚪 방이 열렸습니다 — 초대 카드를 복사해 뿌리세요'); } catch (e) {}
+        const a = window.__cmAuth; if (!a) { try { toast('로그인 정보를 못 찾았어요'); } catch (e) {} return; }
+        rcgo.disabled = true;
+        const r = await myaRpc('cm_room_create', { p_code: a.code, p_pin_hash: a.pinHash, p_name: n, p_room_pin_hash: await sha256('cmroom:' + pw) });
+        rcgo.disabled = false;
+        if (r && r.ok) {
+          myaSet('cm-mya-room', { name: n, code: r.room, owner: true });
+          myaRenderBody(); try { toast('🚪 방이 열렸습니다 — 초대 카드를 복사해 뿌리세요'); } catch (e) {}
+        } else { try { toast('연결이 원활하지 않아요 — 잠시 후 다시'); } catch (e) {} }
       };
       const rjgo = document.getElementById('mya-rjgo');
-      if (rjgo) rjgo.onclick = function () {
+      if (rjgo) rjgo.onclick = async function () {
         const c = (document.getElementById('mya-rjc') || {}).value.trim().toUpperCase(), pw = (document.getElementById('mya-rjp') || {}).value;
         if (!c || !pw) { try { toast('코드와 비밀번호를 넣어주세요'); } catch (e) {} return; }
         if (!need()) return;
-        myaSet('cm-mya-room', { name: '3기 전사들', code: c, owner: false });
-        myaRenderBody(); try { toast('🎉 합류했습니다 — 동료들이 보입니다'); } catch (e) {}
+        const a = window.__cmAuth; if (!a) { try { toast('로그인 정보를 못 찾았어요'); } catch (e) {} return; }
+        rjgo.disabled = true;
+        const r = await myaRpc('cm_room_join', { p_code: a.code, p_pin_hash: a.pinHash, p_room: c, p_room_pin_hash: await sha256('cmroom:' + pw) });
+        rjgo.disabled = false;
+        if (r && r.ok) {
+          myaSet('cm-mya-room', { name: r.name || c, code: r.room || c, owner: false });
+          myaRenderBody(); try { toast('🎉 합류했습니다 — 동료들이 보입니다'); } catch (e) {}
+        } else if (r && r.reason === 'badpin') { try { toast('비밀번호가 달라요'); } catch (e) {} }
+        else if (r && r.reason === 'notfound') { try { toast('그 코드의 방이 없어요 (닫혔을 수도)'); } catch (e) {} }
+        else { try { toast('연결이 원활하지 않아요 — 잠시 후 다시'); } catch (e) {} }
       };
       const inv = document.getElementById('mya-rinv');
       if (inv) inv.onclick = function () {
@@ -56699,7 +56777,21 @@
         try { navigator.clipboard.writeText(txt).then(function () { toast('📋 초대 카드를 복사했습니다'); }).catch(function () { toast('복사가 막혔어요 — 길게 눌러 복사'); }); } catch (e) {}
       };
       const out = document.getElementById('mya-rout');
-      if (out) out.onclick = function () { localStorage.removeItem('cm-mya-room'); myaRenderBody(); try { toast('방에서 나왔습니다'); } catch (e) {} };
+      if (out) out.onclick = async function () {
+        const rm = myaGet('cm-mya-room', null), a = window.__cmAuth;
+        if (rm && a) { try { await myaRpc('cm_room_leave', { p_code: a.code, p_pin_hash: a.pinHash, p_room: rm.code }); } catch (e) {} }
+        localStorage.removeItem('cm-mya-room'); myaRenderBody(); try { toast('방에서 나왔습니다'); } catch (e) {}
+      };
+      const rdel = document.getElementById('mya-rdel');
+      if (rdel) rdel.onclick = async function () {
+        const rm = myaGet('cm-mya-room', null), a = window.__cmAuth; if (!rm || !a) return;
+        rdel.disabled = true;
+        const r = await myaRpc('cm_room_delete', { p_code: a.code, p_pin_hash: a.pinHash, p_room: rm.code });
+        rdel.disabled = false;
+        if (r && r.ok) { localStorage.removeItem('cm-mya-room'); myaRenderBody(); try { toast('방을 닫았습니다 — 멤버들에게도 사라집니다'); } catch (e) {} }
+        else { try { toast('연결이 원활하지 않아요 — 잠시 후 다시'); } catch (e) {} }
+      };
+      myaRoomSync();
     }
     if (_myaPill === 'keep') {
       const sv = document.getElementById('cp-save');
