@@ -58655,7 +58655,7 @@
       return '<div class="pv2-refc' + (on ? ' on' : '') + '" data-pv2refsel="' + i + '"' + (rf.id ? ' data-pv2refid="' + esc(String(rf.id)) + '"' : '') + '>' +
         (th ? '<img class="th" src="' + th + '" alt="">' : '<span class="ph">▶</span>') +
         '<u class="grad"></u>' +
-        '<b>' + esc(String(rf.t || '(제목 없음)').slice(0, 30)) + '</b>' +
+        '<b>' + esc((String(rf.t || '').replace(/#[^\s#]+/g, '').replace(/\s+/g, ' ').trim() || '(제목 없음)').slice(0, 30)) + '</b>' +
         '<s>' + (rf.v ? esc(rf.v) : (rf.yid ? '정찰 영상' : '원고 카드')) + '</s>' +
         '<em class="reppick' + (isRep ? ' on' : '') + '" data-pv2refrep="' + i + '">' + (isRep ? '★ 대표' : '대표') + '</em>' +
         (rf.yid ? '<a class="ytgo" href="https://www.youtube.com/watch?v=' + esc(String(rf.yid)) + '" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="유튜브에서 보기">↗</a>' : '') +
@@ -58819,6 +58819,36 @@
       rows +
       '<div class="ft"><button type="button" class="pv2-cfmgo' + (done ? '' : ' wait') + '" data-pv2cfmgo="' + goTo + ':' + (done ? 1 : 0) + '">' + goLabel + '</button></div>' +
       '</div>';
+  }
+  /* v759 · 구성 분석 — 구성 펜(rs:)으로 칠한 문장이 역할 6바구니로 모인다 (분석 방 두 번째 파트) */
+  function pv2StructHtml(e) {
+    var buckets = [[], [], [], [], [], []];
+    try {
+      Object.keys(e.paint || {}).forEach(function (rid) {
+        var pm = e.paint[rid] || {};
+        var r = (rows || []).filter(function (x) { return x && String(x.id) === String(rid); })[0];
+        if (!r) return;
+        var segs = prpSegsOf(r);
+        Object.keys(pm).forEach(function (key) {
+          var v = pm[key];
+          if (!/^rs:/.test(String(v))) return;
+          var ri = +String(v).slice(3);
+          var p = key.split(':'); var sg = segs[+p[0]]; if (!sg) return;
+          var st = pv2Sents(prpClean(sg.t))[+p[1]]; if (!st) return;
+          if (buckets[ri]) buckets[ri].push(st);
+        });
+      });
+    } catch (er) {}
+    var n = buckets.reduce(function (a, b) { return a + b.length; }, 0);
+    return '<div class="pln-sec"><div class="pln-sech"><b>구성 분석</b><s>구성 펜으로 칠한 문장이 역할별로 모여요</s>' +
+      '<span class="fill' + (n ? ' done' : '') + '">' + (n ? n + '개' : '카드에서 칠하기') + '</span></div>' +
+      '<div class="pv2-voc">' + PV2_ROLES.map(function (r5, i5) {
+        var items = buckets[i5].map(function (t) {
+          return '<span class="pv2-vit"><s style="cursor:default">' + esc(String(t).slice(0, 90)) + '</s></span>';
+        }).join('');
+        return '<div class="pv2-vb" style="--vc:' + r5[1] + '"><b>' + r5[0] + '</b>' +
+          (items || '<span style="font-size:10.5px;color:#4A5570">레퍼런스 원고에서 이 역할을 칠하면 모여요</span>') + '</div>';
+      }).join('') + '</div></div>';
   }
   /* v716 · 공정 방의 기입칸 한 줄 — 비면 점선 슬롯(+공정칩), 차면 실선 */
   function pv2FRow(k, val, ph, step, attr, key) {
@@ -59009,7 +59039,9 @@
         '<div class="pln-sec"><div class="pln-sech"><b>고객 분석</b><s>댓글을 4바구니로</s>' +
           (function () { var vn = 0; VOC4.forEach(function (v) { vn += ((e.voc || {})[v[0]] || []).length; });
             return '<span class="fill' + (vn >= 4 ? ' done' : '') + '">' + (vn >= 4 ? '완료 ✓' : vn + '개') + '</span>'; })() +
-          '</div>' + vocHtml + '</div>' + sctHvCmtsHtml(e) +
+          '</div>' + vocHtml + '</div>' +
+        pv2StructHtml(e) +   // v759 · 분석 = 두 파트 — ①고객 분석 ②구성 분석
+        sctHvCmtsHtml(e) +
         '<div class="pln-rowl" data-pv2pattern="1"><span class="k">🔍 패턴 파악</span><span class="v">잘된 원고들을 나란히 — 공통 구조 찾기</span><span class="go">›</span></div>' +
         pv2CfmHtml(e, 2);
     } else if (curSt === 2) {
@@ -60261,43 +60293,14 @@
           return refs[i] ? '<img src="' + esc(refs[i]) + '" alt="">' : '<i></i>';
         }).join('') + '</div>';
     }
-    // v752 · 레퍼런스 나열 + 링크 — 리서치 카드가 원페이지까지 이어짐
+    // v752 · 레퍼런스 나열 + 링크 — 리서치 카드가 원페이지까지 이어짐 (v759 · 제목=해시태그 걷어내고 깔끔하게)
     var refList = (e.refs || []).map(function (rf9) {
       var url9 = '';
       if (rf9.yid) url9 = 'https://www.youtube.com/watch?v=' + rf9.yid;
       else if (rf9.id) { try { var r9 = (rows || []).filter(function (x9) { return x9 && String(x9.id) === String(rf9.id); })[0]; url9 = (r9 && r9.url) || ''; } catch (er9) {} }
+      var tt9 = String(rf9.t || '').replace(/#[^\s#]+/g, '').replace(/\s+/g, ' ').replace(/[\s·,]+$/, '').trim() || '(제목 없음)';
       return '<span class="brref">' + (url9 ? '<a href="' + esc(url9) + '" target="_blank" rel="noopener">↗ 보기</a>' : '') +
-        esc(String(rf9.t || '(제목 없음)').slice(0, 26)) + (rf9.v ? '<s>' + esc(rf9.v) + '</s>' : '') + '</span>';
-    }).join('');
-    // v758 · 원페이지 2.0 — 위계: 라벨(작은 자간)‹보통 글자‹중요 포인트(크고 흼). 레퍼런스 미니 카드+↗ · 세로 구성 레일(역할→원고→작은 컷 사진)
-    var refCards2 = (e.refs || []).map(function (rf9) {
-      var url9 = '';
-      if (rf9.yid) url9 = 'https://www.youtube.com/watch?v=' + rf9.yid;
-      else if (rf9.id) { try { var r9b = (rows || []).filter(function (x9) { return x9 && String(x9.id) === String(rf9.id); })[0]; url9 = (r9b && r9b.url) || ''; } catch (er9) {} }
-      var th9 = rf9.th || _pv2RefTh[String(rf9.id)] || '';
-      var inner9 = (th9 ? '<img src="' + esc(th9) + '" alt="">' : '<span class="ph2">▶</span>') +
-        '<span><b>' + esc(String(rf9.t || '(제목 없음)').slice(0, 34)) + '</b>' +
-        '<s>' + (rf9.v ? esc(rf9.v) : '') + (url9 ? (rf9.v ? ' · ' : '') + '<em>↗ 보기</em>' : '') + '</s></span>';
-      return url9
-        ? '<a class="brc" href="' + esc(url9) + '" target="_blank" rel="noopener">' + inner9 + '</a>'
-        : '<span class="brc">' + inner9 + '</span>';
-    }).join('');
-    var vocMains = '';
-    BRF_VOC.forEach(function (v) {
-      var mi = e.vmain[v[0]];
-      var t9 = (typeof mi === 'number') ? (((e.voc || {})[v[0]]) || [])[mi] : null;
-      if (t9) vocMains += '<span class="vm" style="--vc:' + v[2] + '"><b>' + v[1] + '</b>"' + esc(String(t9).slice(0, 70)) + '"</span>';
-    });
-    var railRows = bone52.map(function (bn9, i9) {
-      var t9 = String(segs52[i9] || '').trim();
-      var ph9 = cph52[i9] || '';
-      return '<div class="brw" style="--k:' + plwRoleCol(bn9, i9) + '">' +
-        '<span class="rl">' + esc(String(bn9).slice(0, 5)) + '</span>' +
-        '<div class="bd">' +
-          (t9 ? '<p class="tx">' + esc(t9) + '</p>'
-              : '<p class="tx dim2">' + (e.noScript ? '원고 없이 가는 편' : esc(String(plwEx(bn9) || '쓰기 문에서').slice(0, 32))) + '</p>') +
-          (ph9 ? '<img class="cph" src="' + ph9 + '" alt="">' : '') +
-        '</div></div>';
+        esc(tt9.slice(0, 30)) + (rf9.v ? '<s>' + esc(rf9.v) + '</s>' : '') + '</span>';
     }).join('');
     var ov = document.createElement('div');
     ov.className = 'pvbf'; ov.id = 'pvbf';
@@ -60311,22 +60314,28 @@
         '<div class="btx"><span class="ep2">EP ' + (_plnEp + 1) + ' · CREATIVE BRIEF</span>' +
         '<h1' + (e.t ? '' : ' class="gh"') + '>' + (e.t ? esc(e.t) : '제목은 ①리서치에서 정합니다') + '</h1></div>' +
       '</div>' +
-      '<div class="bs"><span class="bsl">레퍼런스 — 무엇을 보고 만들었나</span>' +
-        (refCards2 ? '<div class="brcs">' + refCards2 + '</div>' : '<p class="bdim">리서치에서 카드를 담으면 여기 나열됩니다</p>') + '</div>' +
-      '<div class="bs"><span class="bsl">단 하나의 메시지</span>' +
-        (e.point ? '<div class="bmsg">"' + esc(e.point) + '"</div>' : '<p class="bdim">①리서치 «핵심 포인트»에서 채워집니다</p>') +
-        '<div class="btwo">' +
-          '<div class="bmini"><span class="bsl2">누구에게</span><p>' + (e.who ? esc(e.who) : '<span class="bdim">이 편이 잡을 한 사람</span>') + '</p></div>' +
-          '<div class="bmini"><span class="bsl2">왜 터졌나</span><p>' + (e.why ? esc(e.why) : '<span class="bdim">터진 이유 한 줄</span>') + '</p></div>' +
-        '</div>' +
-        (kwV ? '<div class="bhk">' + kwV + '</div>' : '') +
-        (hkV ? '<div class="bhk">' + hkV + '</div>' : '') +
-        (vocMains ? '<div class="bvocm">' + vocMains + '</div>' : '') +
-      '</div>' +
-      '<div class="bs"><span class="bsl">구성 × 원고 × 컷' + (e.noScript ? ' — 원고 없이 가는 편 ✓' : '') + '</span>' +
-        '<div class="brail">' + railRows + '</div>' +
-        (devV ? '<div class="bhk">' + devV + '</div>' : '') +
-      '</div>' +
+      fslot('레퍼런스', refList ? '<span class="brrefs">' + refList + '</span>' : '', '①', '리서치에서 카드를 담으면 여기 나열됩니다') +
+      '<div class="frow"><span class="fk">참고 컷</span><div class="ff">' + refHtml + '</div></div>' +
+      fslot('단 하나의<br>메시지', e.point ? '<span class="quote">"' + esc(e.point) + '"</span>' : '',
+            '①', '리서치 «핵심 포인트»에서 채워집니다', 1) +
+      fslot('누구에게', e.who ? '<span class="v">' + esc(e.who) + '</span>' : '', '①', '이 편이 잡을 한 사람') +
+      fslot('왜 터졌나', e.why ? '<span class="v">' + esc(e.why) + '</span>' : '', '①', '터진 이유 한 줄') +
+      fslot('★키워드', kwV, '②', '<span class="kwgh"><i>＋ 키워드</i><i>＋</i><i>＋</i></span>', 0, kwX) +
+      fslot('후킹', hkV, '②', '<span style="display:block;width:100%"><span class="hkgh">최종 1개가 여기 들어옵니다</span>' +
+            '<span class="hkgh">예비 1개</span></span>', 0, hkRest.length ? 'hk' : '') +
+      fslot('고객 분석', vocRows ? '<span class="mlab2">★ = 이 편의 메인 목소리 (톡=지정)</span>' + vocRows : '',
+            '②', '<span style="display:block;width:100%">' + BRF_VOC.map(function (v) {
+              return '<span class="vocgh" style="--vc:' + v[2] + '"><b>' + v[1] + '</b><span>—</span></span>';
+            }).join('') + '</span>') +
+      '<div class="frow"><span class="fk">구조</span><div class="ff" style="padding-top:15px">' +
+        (rail || '<span class="rwt gh"><span class="rws" style="--k:#E25C5C"><span class="lb">도입부</span><span class="beam"></span><span class="tie l"></span><span class="tie r"></span></span>' +
+          '<span class="rws" style="--k:#5B8DEF"><span class="lb">이득손해</span><span class="beam"></span><span class="tie l"></span><span class="tie r"></span></span>' +
+          '<span class="rws" style="--k:#D8B23A"><span class="lb">방법1</span><span class="beam"></span><span class="tie l"></span><span class="tie r"></span></span>' +
+          '<span class="rws" style="--k:#A9C437"><span class="lb">방법2</span><span class="beam"></span><span class="tie l"></span><span class="tie r"></span></span>' +
+          '<span class="rws" style="--k:#2FD07B"><span class="lb">소구</span><span class="beam"></span><span class="tie l"></span><span class="tie r"></span></span></span>') +
+        '</div></div>' +
+      fslot('설계', devV, '③', '4공식 중 하나를 고르면 실립니다') +
+      fslot('✎ 원고', scV, '④', '원고를 쓰면 구간별로 나열됩니다', 0, segRows52 ? '' : (draft ? 'sc' : '')) +
       '<div class="meta2">벤치마킹 <b>' + esc(e.ref || '—') + '</b> · ' + esc(e.src || '') + ' · ' + esc(e.day || '') +
         ' · 공정 <b>' + Math.min(e.step || 1, 5) + '/5</b>' +
         ((e.cuts || []).length ? ' · 컷 ' + e.cuts.length : '') + (shots ? ' · 찍을 것 <b>' + shots + '</b>' : '') + '</div>' +
