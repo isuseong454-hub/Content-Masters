@@ -2144,6 +2144,36 @@
   .pvbf .thref i::after{ content:'＋'; position:absolute; inset:0; display:grid; place-items:center; font-size:12px; color:#2E3852; }
   .pvbf .thref img{ display:block; width:100%; aspect-ratio:9/12; object-fit:cover; border-radius:8px;
     box-shadow:inset 0 0 0 1px rgba(255,255,255,.08); }
+  /* v758 · 원페이지 2.0 — 위계 타이포 + 미니 레퍼런스 카드 + 세로 구성 레일 */
+  .pvbf .bs{ margin-top:18px; border-top:1px solid rgba(255,255,255,.06); padding-top:15px; }
+  .pvbf .bsl{ display:block; font-size:9px; font-weight:800; letter-spacing:.22em; color:#5C6B87; margin-bottom:11px; }
+  .pvbf .bdim{ font-size:11.5px; color:#4A5570; }
+  .pvbf .brcs{ display:flex; gap:8px; flex-wrap:wrap; }
+  .pvbf .brc{ display:flex; gap:9px; align-items:center; text-decoration:none; border:1px solid rgba(255,255,255,.09);
+    border-radius:12px; padding:7px 11px 7px 7px; background:rgba(255,255,255,.025); max-width:250px; }
+  .pvbf a.brc:hover{ border-color:rgba(142,199,246,.5); }
+  .pvbf .brc img{ width:38px; height:50px; object-fit:cover; border-radius:7px; flex:none; }
+  .pvbf .brc .ph2{ width:38px; height:50px; border-radius:7px; background:#131826; display:grid; place-items:center; color:#5C6B87; font-size:11px; flex:none; }
+  .pvbf .brc b{ display:block; font-size:10.5px; font-weight:800; color:#E8ECF8; line-height:1.35; max-height:2.7em; overflow:hidden; }
+  .pvbf .brc s{ display:block; text-decoration:none; font-size:9.5px; color:#8FA0BC; margin-top:3px; }
+  .pvbf .brc s em{ font-style:normal; color:#8EC7F6; font-weight:800; }
+  .pvbf .bmsg{ font-size:19px; font-weight:900; letter-spacing:-.4px; line-height:1.5; color:#fff; }
+  .pvbf .btwo{ display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:12px; }
+  .pvbf .bmini{ border:1px solid rgba(255,255,255,.07); border-radius:12px; padding:10px 12px; background:rgba(255,255,255,.02); }
+  .pvbf .bsl2{ display:block; font-size:8.5px; font-weight:800; letter-spacing:.18em; color:#5C6B87; margin-bottom:5px; }
+  .pvbf .bmini p{ font-size:12px; color:#D9DFEA; line-height:1.55; }
+  .pvbf .bhk{ margin-top:12px; }
+  .pvbf .bvocm{ display:flex; flex-direction:column; gap:6px; margin-top:12px; }
+  .pvbf .bvocm .vm{ display:flex; gap:8px; align-items:baseline; font-size:12px; color:#D9DFEA; line-height:1.5; }
+  .pvbf .bvocm .vm b{ flex:none; font-size:9px; font-weight:900; color:var(--vc); border:1px solid var(--vc); border-radius:6px; padding:2px 7px; }
+  .pvbf .brail{ display:flex; flex-direction:column; }
+  .pvbf .brw{ position:relative; display:flex; gap:11px; padding:9px 0 13px 15px; border-left:2.5px solid var(--k); margin-left:7px; }
+  .pvbf .brw::before{ content:''; position:absolute; left:-6px; top:12px; width:9px; height:9px; border-radius:50%; background:var(--k); box-shadow:0 0 8px var(--k); }
+  .pvbf .brw .rl{ flex:none; width:46px; font-size:9.5px; font-weight:900; letter-spacing:.08em; color:var(--k); padding-top:3px; }
+  .pvbf .brw .bd{ flex:1; min-width:0; display:flex; flex-direction:column; gap:7px; }
+  .pvbf .brw .tx{ font-size:12px; line-height:1.7; color:#D9DFEA; white-space:pre-wrap; }
+  .pvbf .brw .tx.dim2{ color:#4A5570; }
+  .pvbf .brw .cph{ width:46px; height:60px; object-fit:cover; border-radius:8px; border:1px solid rgba(255,255,255,.12); align-self:flex-start; }
   /* v752 · 원페이지 — 참고 컷=콘티 연동(컷 번호) · 레퍼런스 나열 · 원고 구간 나열 */
   .pvbf .thref .tc{ position:relative; display:block; }
   .pvbf .thref .tc b{ position:absolute; left:5px; top:5px; width:17px; height:17px; border-radius:6px; display:grid; place-items:center;
@@ -60239,6 +60269,36 @@
       return '<span class="brref">' + (url9 ? '<a href="' + esc(url9) + '" target="_blank" rel="noopener">↗ 보기</a>' : '') +
         esc(String(rf9.t || '(제목 없음)').slice(0, 26)) + (rf9.v ? '<s>' + esc(rf9.v) + '</s>' : '') + '</span>';
     }).join('');
+    // v758 · 원페이지 2.0 — 위계: 라벨(작은 자간)‹보통 글자‹중요 포인트(크고 흼). 레퍼런스 미니 카드+↗ · 세로 구성 레일(역할→원고→작은 컷 사진)
+    var refCards2 = (e.refs || []).map(function (rf9) {
+      var url9 = '';
+      if (rf9.yid) url9 = 'https://www.youtube.com/watch?v=' + rf9.yid;
+      else if (rf9.id) { try { var r9b = (rows || []).filter(function (x9) { return x9 && String(x9.id) === String(rf9.id); })[0]; url9 = (r9b && r9b.url) || ''; } catch (er9) {} }
+      var th9 = rf9.th || _pv2RefTh[String(rf9.id)] || '';
+      var inner9 = (th9 ? '<img src="' + esc(th9) + '" alt="">' : '<span class="ph2">▶</span>') +
+        '<span><b>' + esc(String(rf9.t || '(제목 없음)').slice(0, 34)) + '</b>' +
+        '<s>' + (rf9.v ? esc(rf9.v) : '') + (url9 ? (rf9.v ? ' · ' : '') + '<em>↗ 보기</em>' : '') + '</s></span>';
+      return url9
+        ? '<a class="brc" href="' + esc(url9) + '" target="_blank" rel="noopener">' + inner9 + '</a>'
+        : '<span class="brc">' + inner9 + '</span>';
+    }).join('');
+    var vocMains = '';
+    BRF_VOC.forEach(function (v) {
+      var mi = e.vmain[v[0]];
+      var t9 = (typeof mi === 'number') ? (((e.voc || {})[v[0]]) || [])[mi] : null;
+      if (t9) vocMains += '<span class="vm" style="--vc:' + v[2] + '"><b>' + v[1] + '</b>"' + esc(String(t9).slice(0, 70)) + '"</span>';
+    });
+    var railRows = bone52.map(function (bn9, i9) {
+      var t9 = String(segs52[i9] || '').trim();
+      var ph9 = cph52[i9] || '';
+      return '<div class="brw" style="--k:' + plwRoleCol(bn9, i9) + '">' +
+        '<span class="rl">' + esc(String(bn9).slice(0, 5)) + '</span>' +
+        '<div class="bd">' +
+          (t9 ? '<p class="tx">' + esc(t9) + '</p>'
+              : '<p class="tx dim2">' + (e.noScript ? '원고 없이 가는 편' : esc(String(plwEx(bn9) || '쓰기 문에서').slice(0, 32))) + '</p>') +
+          (ph9 ? '<img class="cph" src="' + ph9 + '" alt="">' : '') +
+        '</div></div>';
+    }).join('');
     var ov = document.createElement('div');
     ov.className = 'pvbf'; ov.id = 'pvbf';
     ov.innerHTML = '<div class="in">' +
@@ -60251,28 +60311,22 @@
         '<div class="btx"><span class="ep2">EP ' + (_plnEp + 1) + ' · CREATIVE BRIEF</span>' +
         '<h1' + (e.t ? '' : ' class="gh"') + '>' + (e.t ? esc(e.t) : '제목은 ①리서치에서 정합니다') + '</h1></div>' +
       '</div>' +
-      fslot('레퍼런스', refList ? '<span class="brrefs">' + refList + '</span>' : '', '①', '리서치에서 카드를 담으면 여기 나열됩니다') +
-      '<div class="frow"><span class="fk">참고 컷</span><div class="ff">' + refHtml + '</div></div>' +
-      fslot('단 하나의<br>메시지', e.point ? '<span class="quote">"' + esc(e.point) + '"</span>' : '',
-            '①', '리서치 «핵심 포인트»에서 채워집니다', 1) +
-      fslot('누구에게', e.who ? '<span class="v">' + esc(e.who) + '</span>' : '', '①', '이 편이 잡을 한 사람') +
-      fslot('왜 터졌나', e.why ? '<span class="v">' + esc(e.why) + '</span>' : '', '①', '터진 이유 한 줄') +
-      fslot('★키워드', kwV, '②', '<span class="kwgh"><i>＋ 키워드</i><i>＋</i><i>＋</i></span>', 0, kwX) +
-      fslot('후킹', hkV, '②', '<span style="display:block;width:100%"><span class="hkgh">최종 1개가 여기 들어옵니다</span>' +
-            '<span class="hkgh">예비 1개</span></span>', 0, hkRest.length ? 'hk' : '') +
-      fslot('고객 분석', vocRows ? '<span class="mlab2">★ = 이 편의 메인 목소리 (톡=지정)</span>' + vocRows : '',
-            '②', '<span style="display:block;width:100%">' + BRF_VOC.map(function (v) {
-              return '<span class="vocgh" style="--vc:' + v[2] + '"><b>' + v[1] + '</b><span>—</span></span>';
-            }).join('') + '</span>') +
-      '<div class="frow"><span class="fk">구조</span><div class="ff" style="padding-top:15px">' +
-        (rail || '<span class="rwt gh"><span class="rws" style="--k:#E25C5C"><span class="lb">도입부</span><span class="beam"></span><span class="tie l"></span><span class="tie r"></span></span>' +
-          '<span class="rws" style="--k:#5B8DEF"><span class="lb">이득손해</span><span class="beam"></span><span class="tie l"></span><span class="tie r"></span></span>' +
-          '<span class="rws" style="--k:#D8B23A"><span class="lb">방법1</span><span class="beam"></span><span class="tie l"></span><span class="tie r"></span></span>' +
-          '<span class="rws" style="--k:#A9C437"><span class="lb">방법2</span><span class="beam"></span><span class="tie l"></span><span class="tie r"></span></span>' +
-          '<span class="rws" style="--k:#2FD07B"><span class="lb">소구</span><span class="beam"></span><span class="tie l"></span><span class="tie r"></span></span></span>') +
-        '</div></div>' +
-      fslot('설계', devV, '③', '4공식 중 하나를 고르면 실립니다') +
-      fslot('✎ 원고', scV, '④', '원고를 쓰면 구간별로 나열됩니다', 0, segRows52 ? '' : (draft ? 'sc' : '')) +
+      '<div class="bs"><span class="bsl">레퍼런스 — 무엇을 보고 만들었나</span>' +
+        (refCards2 ? '<div class="brcs">' + refCards2 + '</div>' : '<p class="bdim">리서치에서 카드를 담으면 여기 나열됩니다</p>') + '</div>' +
+      '<div class="bs"><span class="bsl">단 하나의 메시지</span>' +
+        (e.point ? '<div class="bmsg">"' + esc(e.point) + '"</div>' : '<p class="bdim">①리서치 «핵심 포인트»에서 채워집니다</p>') +
+        '<div class="btwo">' +
+          '<div class="bmini"><span class="bsl2">누구에게</span><p>' + (e.who ? esc(e.who) : '<span class="bdim">이 편이 잡을 한 사람</span>') + '</p></div>' +
+          '<div class="bmini"><span class="bsl2">왜 터졌나</span><p>' + (e.why ? esc(e.why) : '<span class="bdim">터진 이유 한 줄</span>') + '</p></div>' +
+        '</div>' +
+        (kwV ? '<div class="bhk">' + kwV + '</div>' : '') +
+        (hkV ? '<div class="bhk">' + hkV + '</div>' : '') +
+        (vocMains ? '<div class="bvocm">' + vocMains + '</div>' : '') +
+      '</div>' +
+      '<div class="bs"><span class="bsl">구성 × 원고 × 컷' + (e.noScript ? ' — 원고 없이 가는 편 ✓' : '') + '</span>' +
+        '<div class="brail">' + railRows + '</div>' +
+        (devV ? '<div class="bhk">' + devV + '</div>' : '') +
+      '</div>' +
       '<div class="meta2">벤치마킹 <b>' + esc(e.ref || '—') + '</b> · ' + esc(e.src || '') + ' · ' + esc(e.day || '') +
         ' · 공정 <b>' + Math.min(e.step || 1, 5) + '/5</b>' +
         ((e.cuts || []).length ? ' · 컷 ' + e.cuts.length : '') + (shots ? ' · 찍을 것 <b>' + shots + '</b>' : '') + '</div>' +
