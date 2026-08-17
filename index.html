@@ -21656,6 +21656,126 @@
   .pt2{ --lime:#d7f34b; --acid:#e6fb62; --sub:#9aa08a; --faint:#6b715c; --line:rgba(255,255,255,.08);
     max-width:760px; margin:0 auto; padding:6px 16px 30px; width:100%; }
 
+/* ═══════ v737 · ⌖나 = 내 계정 분석 (mya-) — 저장소 톤(블랙+라임) · 시안 v6 확정판 ═══════ */
+.mya-pills{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin:0 0 14px;padding:2px}
+.mya-pills::-webkit-scrollbar{display:none}
+.mya-pills b{flex:none;font-size:12.5px;font-weight:700;color:#95a08b;padding:9px 15px;border-radius:13px;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.02);cursor:pointer;transition:.2s;white-space:nowrap}
+.mya-pills b.on{color:#141807;background:linear-gradient(120deg,#d7f34b,#b9dd2e);font-weight:800;border-color:transparent}
+.mya-pane{display:none}
+.mya-pane.on{display:block;animation:myaIn .3s cubic-bezier(.22,.61,.36,1)}
+@keyframes myaIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.mya-card{border:1px solid rgba(255,255,255,.08);border-radius:18px;background:#10130c;padding:16px;margin-bottom:11px}
+.mya-card .t{font-size:11px;font-weight:800;letter-spacing:.08em;color:#95a08b}
+.mya-gline{font-size:clamp(20px,4.6vw,26px);font-weight:900;letter-spacing:-.03em;line-height:1.3;margin:2px 2px 14px}
+.mya-gline em{font-style:normal;background:linear-gradient(94deg,#EDF2E8 0%,#e4f0c2 55%,#cbe592 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.mya-gline em.mint{background:linear-gradient(94deg,#EDF2E8 0%,#cfe0da 55%,#a9cfd8 100%);-webkit-background-clip:text;background-clip:text}
+/* 프로필 */
+.mya-prof{border-radius:20px;overflow:hidden;border:1px solid rgba(255,255,255,.15);margin-bottom:12px}
+.mya-cover{height:96px;position:relative;background:linear-gradient(120deg,#141a10 0%,#18200f 45%,#101408 100%)}
+.mya-cover::after{content:"";position:absolute;inset:0;background:radial-gradient(80% 120% at 82% 0%,rgba(215,243,75,.13),transparent 60%)}
+.mya-cover .slot{position:absolute;right:10px;top:10px;font-size:9.5px;font-weight:700;color:rgba(238,242,230,.5);border:1px dashed rgba(255,255,255,.3);border-radius:8px;padding:4px 9px}
+.mya-pbody{position:relative;background:#10130c;padding:0 16px 14px}
+.mya-avatar{position:relative;margin-top:-30px;width:64px;height:64px;border-radius:50%;border:3px solid #10130c;background:#151a10;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1px;flex:none;cursor:pointer}
+.mya-avatar b{font-size:8px;color:#5d6656;font-weight:700;text-align:center;line-height:1.3}
+.mya-avatar i{font-style:normal;font-size:13px;opacity:.5}
+.mya-avatar::after{content:"";position:absolute;inset:-3px;border-radius:50%;border:1.5px dashed rgba(215,243,75,.35);pointer-events:none}
+.mya-prow{display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap}
+.mya-pmeta{padding-top:8px;min-width:0}
+.mya-pmeta input{background:none;border:0;outline:none;color:#eef2e6;font-family:inherit;display:block;padding:0}
+.mya-pmeta .nm{font-size:17px;font-weight:900;letter-spacing:-.02em;width:160px}
+.mya-pmeta .id{font-size:12px;color:#d7f34b;font-weight:700;margin-top:1px;width:160px}
+.mya-pstats{margin-left:auto;display:flex;gap:14px;padding-top:10px}
+.mya-pstats div{text-align:center}
+.mya-pstats b{display:block;font-size:15px;font-weight:800}
+.mya-pstats small{font-size:9.5px;color:#5d6656;font-weight:700}
+.mya-pcon{display:flex;align-items:center;gap:7px;margin-top:10px;font-size:11px;color:#95a08b}
+.mya-pcon i{width:7px;height:7px;border-radius:50%;background:#d7f34b;box-shadow:0 0 9px #d7f34b;flex:none}
+/* 챔피언 단상 */
+.mya-mon{display:flex;gap:6px;margin:0 0 11px}
+.mya-mon b{font-size:10.5px;font-weight:800;padding:6px 12px;border-radius:99px;border:1px solid rgba(255,255,255,.09);color:#95a08b;cursor:pointer}
+.mya-mon b.on{color:#141807;background:linear-gradient(120deg,#d7f34b,#b9dd2e);border-color:transparent}
+.mya-champ{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.mya-ped{position:relative;border-radius:15px;padding:16px 10px 12px;text-align:center;overflow:hidden;background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.012));border:1px solid rgba(255,255,255,.09);border-top-color:rgba(255,255,255,.2)}
+.mya-ped::before{content:"";position:absolute;left:50%;top:-28%;width:140%;height:85%;transform:translateX(-50%);background:radial-gradient(ellipse at 50% 0%,rgba(255,255,255,.09),transparent 65%)}
+.mya-ped .cat{position:relative;font-size:9px;font-weight:800;letter-spacing:.1em;color:#d7f34b}
+.mya-ped .th{position:relative;width:44px;aspect-ratio:9/13;border-radius:8px;margin:8px auto 0;background:linear-gradient(160deg,#1c2412,#10160a);box-shadow:0 8px 18px rgba(215,243,75,.1)}
+.mya-ped .tt{position:relative;margin-top:8px;font-size:10.5px;font-weight:800;line-height:1.35;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
+.mya-ped .v2{position:relative;margin-top:3px;font-size:12px;font-weight:800;color:#d7f34b}
+.mya-ped .avg2{position:relative;font-size:9px;color:#5d6656;margin-top:1px}
+.mya-ped .base{position:relative;margin:9px auto 0;width:74%;height:6px;border-radius:3px;background:linear-gradient(90deg,#2a3242,#4a5468,#2a3242)}
+/* 내 평균 그래프(막대+흰 기준선) + 4타일 */
+.mya-mrow{display:grid;grid-template-columns:104px 1fr 52px;gap:10px;align-items:center;margin-top:10px}
+.mya-mrow .k{font-size:11.5px;color:#95a08b;font-weight:700}
+.mya-mbar{position:relative;height:16px;border-radius:8px;background:rgba(255,255,255,.05);overflow:hidden}
+.mya-mbar .me{position:absolute;inset:0 auto 0 0;border-radius:8px;background:linear-gradient(90deg,#6FE0C8,rgba(111,224,200,.35))}
+.mya-mbar .mk{position:absolute;top:-2px;bottom:-2px;width:2px;background:rgba(255,255,255,.6)}
+.mya-mrow .v{font-size:12.5px;font-weight:800;text-align:right}
+.mya-mlg{margin-top:8px;font-size:9.5px;color:#5d6656}
+.mya-avg4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:11px}
+.mya-a4{border:1px solid rgba(255,255,255,.08);border-radius:13px;padding:11px 10px 9px;background:rgba(255,255,255,.02)}
+.mya-a4 .k{font-size:9.5px;color:#5d6656;font-weight:700}
+.mya-a4 .v{margin-top:2px;font-size:15px;font-weight:800}
+.mya-a4 small{font-size:9px;color:#d7f34b;font-weight:700}
+/* 이번 주 성적 입력 */
+.mya-week{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;margin-top:11px}
+.mya-week input{background:rgba(0,0,0,.28);border:1px solid rgba(255,255,255,.12);border-radius:12px;color:#eef2e6;padding:11px 13px;outline:none;font-family:inherit;font-size:16px;min-width:0}
+.mya-week input:focus{border-color:#fff}
+.mya-week button{font-size:12.5px;font-weight:800;color:#141807;background:linear-gradient(120deg,#d7f34b,#b9dd2e);border-radius:12px;padding:0 16px}
+.mya-wlist{margin-top:10px;font-size:11px;color:#95a08b;line-height:1.8}
+.mya-wlist b{color:#eef2e6}
+/* 추적·시청자 공용 */
+.mya-post{display:grid;grid-template-columns:40px 1fr;gap:11px;border:1px solid rgba(255,255,255,.08);border-radius:14px;background:rgba(255,255,255,.02);padding:11px 12px;margin-bottom:9px}
+.mya-post .th{width:40px;aspect-ratio:9/13;border-radius:7px;background:linear-gradient(160deg,#1c2412,#10160a)}
+.mya-post .tt{font-size:12px;font-weight:700}
+.mya-post .nums{margin-top:3px;display:flex;gap:9px;font-size:10px;color:#95a08b;flex-wrap:wrap}
+.mya-post .nums b{color:#eef2e6}
+.mya-fun{display:flex;align-items:center;gap:5px;flex-wrap:wrap;margin-top:8px;padding-top:8px;border-top:1px dashed rgba(255,255,255,.09);font-size:10px;font-weight:600;color:#5d6656}
+.mya-fun b{font-weight:800;color:#eef2e6}
+.mya-fun .ar{opacity:.4}
+.mya-fun .ctr{margin-left:auto;font-weight:800;padding:3px 8px;border-radius:99px;font-size:9.5px;border:1px solid rgba(215,243,75,.35);color:#d7f34b}
+.mya-aif{margin-top:8px;font-size:11px;line-height:1.6;border-radius:10px;padding:8px 11px;background:rgba(215,243,75,.07);border:1px solid rgba(215,243,75,.2);color:#95a08b}
+.mya-aif b{font-weight:800;color:#d7f34b}
+.mya-aif.rose{background:rgba(240,161,181,.08);border-color:rgba(240,161,181,.25)}
+.mya-aif.rose b{color:#F0A1B5}
+.mya-ret{display:flex;align-items:flex-end;gap:2px;height:54px;margin-top:11px}
+.mya-ret i{flex:1;border-radius:3px 3px 0 0}
+.mya-ret i.dp{outline:1.5px solid #F0A1B5}
+.mya-retx{display:flex;justify-content:space-between;font-size:8.5px;color:#5d6656;margin-top:4px}
+.mya-ab{display:flex;align-items:center;gap:8px;margin-top:7px;font-size:11px;color:#95a08b}
+.mya-ab .k3{width:42px;font-weight:700;flex:none}
+.mya-ab .b3{flex:1;height:8px;border-radius:99px;background:rgba(255,255,255,.07);overflow:hidden}
+.mya-ab .b3 i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#d7f34b,#9fc02f)}
+.mya-ab b{width:32px;text-align:right;font-weight:800;color:#eef2e6;flex:none}
+.mya-heat{display:grid;grid-template-columns:repeat(12,1fr);gap:3px;margin-top:11px}
+.mya-heat i{aspect-ratio:1;border-radius:4px;background:rgba(215,243,75,.06)}
+.mya-heatx{display:flex;justify-content:space-between;font-size:8.5px;color:#5d6656;margin-top:4px}
+.mya-sortc{display:flex;gap:6px;margin:12px 0 11px;align-items:center;overflow-x:auto;scrollbar-width:none}
+.mya-sortc b{flex:none;font-size:10.5px;font-weight:700;color:#95a08b;padding:6px 11px;border-radius:99px;border:1px solid rgba(255,255,255,.09);cursor:pointer}
+.mya-sortc b.on{color:#141807;background:linear-gradient(120deg,#d7f34b,#b9dd2e);font-weight:800;border-color:transparent}
+.mya-sortc span{margin-left:auto;font-size:9.5px;color:#5d6656;flex:none}
+/* 우리 방 */
+.mya-room-cta{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:4px}
+.mya-room-cta button{border:1px solid rgba(215,243,75,.35);border-radius:14px;padding:14px;background:rgba(215,243,75,.06);text-align:center;cursor:pointer}
+.mya-room-cta button b{display:block;font-size:13px;font-weight:800;color:#d7f34b}
+.mya-room-cta button small{font-size:10.5px;color:#95a08b}
+.mya-mem{display:flex;align-items:center;gap:10px;padding:10px 2px;border-bottom:1px solid rgba(255,255,255,.07);font-size:12px}
+.mya-mem:last-child{border-bottom:0}
+.mya-mem .av2{width:32px;height:32px;border-radius:10px;flex:none;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px;border:1px solid rgba(255,255,255,.15)}
+.mya-mem b{font-weight:800}
+.mya-mem small{font-size:10px;color:#5d6656;display:block}
+.mya-mem .up2{margin-left:auto;font-size:11px;font-weight:800;color:#d7f34b;flex:none}
+.mya-feed{margin-top:10px;font-size:11px;color:#95a08b;line-height:1.9}
+.mya-feed b{color:#eef2e6}
+/* 트레이닝룸 홈 요약 카드 */
+.st2-myacard{display:block;width:100%;text-align:left;border:1px solid rgba(215,243,75,.25);border-radius:18px;background:linear-gradient(140deg,rgba(215,243,75,.07),rgba(255,255,255,.015) 60%);padding:15px 16px;margin:12px 0;cursor:pointer;transition:transform .18s cubic-bezier(.32,1.4,.36,1)}
+.st2-myacard:active{transform:scale(.98)}
+.st2-myacard .k{font-size:10px;font-weight:800;letter-spacing:.1em;color:#95a08b}
+.st2-myacard .ln{margin-top:6px;font-size:14.5px;font-weight:800}
+.st2-myacard .ln em{font-style:normal;color:#d7f34b}
+.st2-myacard .nums{margin-top:8px;display:flex;gap:14px;font-size:11px;color:#95a08b}
+.st2-myacard .nums b{color:#eef2e6;font-weight:800}
+.st2-myacard .go{float:right;font-size:11px;font-weight:800;color:#d7f34b;margin-top:-2px}
+@media (max-width:560px){.mya-champ{grid-template-columns:1fr 1fr}.mya-avg4{grid-template-columns:1fr 1fr}.mya-week{grid-template-columns:1fr 1fr}.mya-week button{grid-column:1/-1;padding:11px}}
 </style>
 
 <!-- ============ CONTENT MASTERS 스플래시 인트로 ============ -->
@@ -57596,10 +57716,11 @@
       if (!(e.cuts || []).length) needs.push('컷 깔기');
       if (e.step < 4) needs.push('원고 완성');
       body = pv2h('5', '배포', e.step >= 5) +
-        (e.step >= 4
-          ? '<button class="pln-act" data-plndist="1">⬡ 배포로 보내기' + (e.step >= 5 ? ' — 다녀옴 ✓' : '') + '</button>'
-          : '<div class="pln-fld empty"><div class="v">남은 걸음 ' + needs.length + '</div>' +
-            '<div class="m">' + needs.join(' · ') + ' — 채우면 배포가 열립니다</div></div>') +
+        '<button class="pln-act" data-plndist="1">⬡ 배포로 보내기' + (e.step >= 5 ? ' — 다녀옴 ✓' : '') + '</button>' +
+        (needs.length && e.step < 5
+          ? '<div class="pln-fld empty"><div class="v">아직 남은 걸음 ' + needs.length + '</div>' +
+            '<div class="m">' + needs.join(' · ') + ' — 그래도 문은 열려 있어요</div></div>'
+          : '') +
         '<div class="pln-rowl" data-pv2door="osmu"><span class="k">⬡ 여러 판에</span><span class="v">한 편을 인스타 · 유튜브 · 블로그 판으로</span><span class="go">›</span></div>' +
         shelf;
     }
