@@ -2187,6 +2187,20 @@
   .pvbf .brseg b{ display:inline-block; font-size:9px; font-weight:900; letter-spacing:.08em; color:var(--k);
     border:1px solid var(--k); border-radius:6px; padding:2px 7px; opacity:.9; }
   .pvbf .brseg p{ font-size:12px; line-height:1.75; color:#D9DFEA; margin-top:4px; white-space:pre-wrap; }
+  /* v761 · 수배지 오버레이 — WANTED 요약 (pvbf 겉옷 재사용) */
+  .pvbf .pmwt{ text-align:center; font-size:12px; font-weight:800; letter-spacing:.5em; color:#E8837F; margin-top:6px; }
+  .pvbf .pmnm{ text-align:center; font-size:19px; font-weight:900; letter-spacing:-.4px; color:#fff; margin-top:8px; }
+  .pvbf .pmcnt{ text-align:center; font-size:10.5px; color:#8FA0BC; margin:6px 0 14px; }
+  .pvbf .pmbk{ border:1px solid rgba(255,255,255,.08); border-top:2.5px solid var(--vc); border-radius:13px;
+    padding:11px 13px; background:rgba(255,255,255,.02); margin-top:9px; }
+  .pvbf .pmbk b{ display:flex; align-items:baseline; gap:6px; font-size:11px; font-weight:900; color:var(--vc); }
+  .pvbf .pmbk b s{ text-decoration:none; font-size:9.5px; color:#5C6B87; font-weight:700; }
+  .pvbf .pmbk p{ font-size:11.5px; color:#D9DFEA; line-height:1.6; margin-top:7px; }
+  .pvbf .pmbk p em{ font-style:normal; color:#F4D06A; margin-right:3px; }
+  .pvbf .pmbk p u{ text-decoration:none; display:block; font-size:9px; color:#5C6B87; margin-top:2px; }
+  .pvbf .pmbk p.gh{ color:#4A5570; }
+  .pvbf .pmgo{ display:block; width:100%; margin-top:14px; font-family:inherit; font-size:12px; font-weight:800; cursor:pointer;
+    color:#8FA0BC; background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.12); border-radius:12px; padding:11px; }
   .pvbf .kwgh{ display:flex; gap:6px; flex-wrap:wrap; align-items:center; }
   .pvbf .kwgh i{ font-style:normal; font-size:11px; font-weight:800; border-radius:99px; padding:5px 12px;
     color:#2E3852; border:1px dashed rgba(255,255,255,.12); }
@@ -57926,6 +57940,41 @@
     if (/^rl:/.test(k)) { try { return flexLabelColor(k.slice(3)) || '#8b9184'; } catch (er) { return '#8b9184'; } }   // v760 · 원고 요소 펜
     return (PV2_PAINT.filter(function (p5) { return p5[0] === k; })[0] || [])[2] || '';
   }
+  // v761 · 수배지 = 분석 «위에» 새 창(오버레이) — 방 이동 없이 보고 닫는다 (사장님: 흐름 끊기지 않게)
+  function pv2PmmOvOpen() {
+    pv2PmmEnsure();
+    var pmm = pv2CurPmm();
+    var old = document.getElementById('pv2-pmmov'); if (old) old.remove();
+    var BK9 = [['pain', '문제', '#E07B7B'], ['desire', '욕구', '#7E9B72'], ['fear', '회피', '#F0B24E'], ['resist', '저항', '#8FA0C9']];
+    var body;
+    if (!pmm) {
+      body = '<div style="text-align:center;padding:34px 10px;color:#8FA0BC;font-size:12.5px">아직 수배지가 없어요.<br>고객 방에서 타겟을 만들면 여기 뜹니다.</div>';
+    } else {
+      var col9 = Array.isArray(pmm.collect) ? pmm.collect : [];
+      var goldN = col9.filter(function (c) { return c.gold; }).length;
+      body = '<div class="pmwt">W A N T E D</div>' +
+        '<div class="pmnm">' + esc(String(pmm.targetName || '이름 없는 타겟')) + '</div>' +
+        '<div class="pmcnt">모은 목소리 ' + col9.length + '개' + (goldN ? ' · ★골드 ' + goldN : '') + '</div>' +
+        BK9.map(function (b9) {
+          var items9 = col9.filter(function (c) { return c.basket === b9[0]; });
+          return '<div class="pmbk" style="--vc:' + b9[2] + '"><b>' + b9[1] + ' <s>' + items9.length + '</s></b>' +
+            (items9.length ? items9.slice(0, 12).map(function (c) {
+              return '<p>' + (c.gold ? '<em>★</em>' : '') + '"' + esc(String(c.quote || '').slice(0, 90)) + '"' +
+                (c.source ? '<u>' + esc(String(c.source).slice(0, 24)) + '</u>' : '') + '</p>';
+            }).join('') : '<p class="gh">아직 비어 있어요 — 원고를 칠하면 쌓여요</p>') + '</div>';
+        }).join('');
+    }
+    var ov9 = document.createElement('div');
+    ov9.className = 'pvbf'; ov9.id = 'pv2-pmmov';
+    ov9.innerHTML = '<div class="in" style="max-width:560px">' +
+      '<button type="button" class="x" data-pmmovx="1">닫기 ×</button>' + body +
+      '<button type="button" class="pmgo" data-pmmovgo="1">고객 방에서 크게 보기 ›</button></div>';
+    document.body.appendChild(ov9);
+    ov9.addEventListener('click', function (ev9) {
+      if (ev9.target === ov9 || (ev9.target.closest && ev9.target.closest('[data-pmmovx]'))) { ov9.remove(); return; }
+      if (ev9.target.closest && ev9.target.closest('[data-pmmovgo]')) { ov9.remove(); try { switchWorkspace('cus'); } catch (e2) {} }
+    });
+  }
   function pv2StructN(e) {   // v760 · 구성 칠 총 개수(문 점등용)
     var n = 0;
     try { Object.keys(e.paint || {}).forEach(function (rid) { var pm = e.paint[rid] || {};
@@ -61758,7 +61807,7 @@
     var ptg = wsin.querySelector('[data-pv2pmmtg]');
     if (ptg) ptg.onclick = function () { _pv2PmmOn = !_pv2PmmOn; plnRenderWs(false); };
     wsin.querySelectorAll('[data-pv2pmmopen]').forEach(function (b) {
-      b.onclick = function () { try { switchWorkspace('cus'); } catch (e2) {} };
+      b.onclick = function () { try { pv2PmmOvOpen(); } catch (e2) { try { switchWorkspace('cus'); } catch (e3) {} } };   // v761 · 방 이동 대신 오버레이
     });
     var psel = wsin.querySelector('[data-pv2pmmsel]');
     if (psel) psel.onclick = function () {
