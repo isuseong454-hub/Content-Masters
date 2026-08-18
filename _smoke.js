@@ -1,0 +1,104 @@
+/* ══════════════════════════════════════════════════════════════
+   🚨 배포 전 자동 점검 (스모크 테스트) — 컨텐츠 마스터즈
+   쓰는 법: 프리뷰(localhost:5173)를 로그인 상태로 띄우고 이 파일 전체를 실행.
+            결과가 표로 나오고, 빨간 줄이 하나라도 있으면 배포하지 않는다.
+   설계: «오늘 실제로 터진 사고»를 항목으로 만든다. 사고가 나면 여기 한 줄 추가.
+   ⚠️ 읽기만 한다 — 어떤 데이터도 만들거나 지우지 않는다(안전).
+   ══════════════════════════════════════════════════════════════ */
+(async function smoke() {
+  const R = [];   // {name, ok, msg, level}
+  const add = (name, ok, msg, level) => R.push({ name, ok: !!ok, msg: msg || '', level: level || 'err' });
+  const vis = el => { if (!el) return false; const b = el.getBoundingClientRect(); return b.width > 0 && b.height > 0; };
+  const src = (() => { let t = ''; for (const s of document.scripts) if ((s.text || '').length > t.length) t = s.text; return t; })();
+
+  // ── 1. 문법 — 스크립트가 통째로 죽는 사고(v767) ──
+  try { new Function(src); add('스크립트 문법', true, (src.length / 1024 / 1024).toFixed(2) + 'MB 파싱 OK'); }
+  catch (e) { add('스크립트 문법', false, String(e.message).slice(0, 80)); }
+
+  // ── 2. 필수 함수 정의 — 삭제하다 같이 잘리는 사고(v766→767) ──
+  const FN = ['gwanjeomMessage', 'cmMark', 'csParse', 'csSaveToWarehouse', 'saveRows', 'rowHasContent',
+    'plnEnsureEp', 'plwContiHtml', 'cntRoomHtml', 'myaDxHtml', 'termsGate', 'slvOpen', 'openContentShop'];
+  const missFn = FN.filter(f => src.indexOf('function ' + f) < 0);
+  add('필수 함수 정의', !missFn.length, missFn.length ? '사라짐: ' + missFn.join(', ') : FN.length + '개 모두 존재');
+
+  // ── 3. 필수 버튼·칸 — 마크업에서 실종되는 사고(v771 저장 버튼) ──
+  const IDS = ['cso-paste', 'cso-go', 'cso-save', 'cso-row', 'cs-room', 'slv',
+    'room-rail', 'settings-modal', 'settings-export-vault-btn', 'admin-tabs', 'admin-list',
+    'topbar-logout-btn', 'auth-code-input'];
+  const missId = IDS.filter(i => !document.getElementById(i));
+  add('필수 요소(id)', !missId.length, missId.length ? '없음: ' + missId.join(', ') : IDS.length + '개 모두 존재');
+
+  // ── 4. 분해 파서 — 카드가 안 만들어지는 사고(v766) ──
+  //     실제 UI를 건드리지 않고, 파서 입력만 시뮬레이션할 수 없으므로 소스 규칙으로 검사
+  add('분해 파서 관용', src.indexOf('_sniff') > -1, '[분해] 마커 없어도 인식하는 보정 존재 여부');
+
+  // ── 5. CSS 이름 충돌 — 신호등이 부풀던 사고(v773) ──
+  const shortCls = [];
+  try {
+    const seen = {};
+    for (const sh of document.styleSheets) {
+      let rules; try { rules = sh.cssRules; } catch (e) { continue; }
+      for (const r of rules || []) {
+        const sel = r.selectorText; if (!sel) continue;
+        sel.split(',').forEach(one => {
+          const m = one.trim().match(/^\.([a-z0-9-]{1,3})$/i);   // .s3 처럼 «너무 짧은 전역 클래스»
+          if (m) { seen[m[1]] = (seen[m[1]] || 0) + 1; }
+        });
+      }
+    }
+    Object.keys(seen).forEach(k => shortCls.push('.' + k));
+  } catch (e) {}
+  add('짧은 전역 CSS 이름', !shortCls.length, shortCls.length ? '충돌 위험: ' + shortCls.join(' ') : '없음', 'warn');
+
+  // ── 6. 화면 넘침 — 폰에서 가로로 새는 사고 ──
+  const over = document.documentElement.scrollWidth - document.documentElement.clientWidth;
+  add('가로 넘침', over <= 1, over > 1 ? over + 'px 넘침' : '0px');
+
+  // ── 7. 로그인 상태·데이터 무결 ──
+  const auth = window.__cmAuth || {};
+  add('로그인', !!auth.code, auth.code ? auth.code + ' 로그인됨' : '로그인 후 다시 실행하세요');
+  if (auth.code) {
+    try {
+      const r = await window.storage.get('shv4-rows');
+      const rows = r && r.value ? JSON.parse(r.value) : [];
+      const empty = rows.filter(x => !String(x.hook || '').trim() && !String(x.url || '').trim() && !(x.views | 0)).length;
+      add('시트 빈 줄 오염', empty === 0, empty ? '빈 줄 ' + empty + '개가 서버에 저장돼 있음' : rows.length + '행 · 빈 줄 0');
+      const noScript = rows.filter(x => (x.scriptSections && Object.keys(x.scriptSections).length) && !(x.scriptSecFlex || []).length).length;
+      add('원고 라벨 보존', noScript === 0, noScript ? noScript + '행이 옛 5칸으로만 저장됨(원고 안 보일 수 있음)' : '이상 없음', 'warn');
+    } catch (e) { add('시트 읽기', false, String(e).slice(0, 60)); }
+    try {
+      const t = await window.storage.get('cm-terms-agree');
+      add('약관 동의(계정)', !!(t && t.value), t && t.value ? '계정에 기록됨 — 기기 바뀌어도 안 뜸' : '계정 기록 없음(재동의 뜰 수 있음)', 'warn');
+    } catch (e) {}
+  }
+
+  // ── 8. 내비 통일 — 왼쪽 위는 «‹ 갈림길» 하나 ──
+  try {
+    const rail = document.getElementById('room-rail');
+    const shown = rail ? [...rail.querySelectorAll('.rr-btn')].filter(vis) : [];
+    add('내비 통일', shown.length === 1 && /갈림길/.test(shown[0].textContent),
+      shown.length ? shown.map(b => b.textContent.trim()).join(' / ') : '레일 없음');
+  } catch (e) {}
+
+  // ── 9. 설정 다이어트 — 없앤 것이 되살아나지 않았나 ──
+  const GONE = ['settings-export-btn', 'settings-import-input', 'settings-room-btn', 'settings-trash-btn', 'settings-logout-btn'];
+  const back = GONE.filter(i => document.getElementById(i));
+  add('설정 군더더기', !back.length, back.length ? '되살아남: ' + back.join(', ') : '없음');
+
+  // ── 10. 폐기된 것 — 다시 나타나지 않았나 ──
+  add('폐기 확인(캐릭터·1억뷰·라이벌)',
+    src.indexOf("function gwanjeomSvg(size, level, mood) { return ''; }") > -1 &&
+    src.indexOf('«1억 뷰의 세계» 전면 폐기') > -1 && !document.getElementById('cp-rival'),
+    '캐릭터 스텁 · 1억뷰 차단 · 라이벌 입구 제거');
+
+  /* ── 결과 출력 ── */
+  const bad = R.filter(x => !x.ok && x.level !== 'warn');
+  const warn = R.filter(x => !x.ok && x.level === 'warn');
+  const line = x => (x.ok ? '✅' : x.level === 'warn' ? '⚠️' : '❌') + ' ' + x.name + (x.msg ? ' — ' + x.msg : '');
+  const report = R.map(line).join('\n');
+  console.log('%c🚨 배포 전 자동 점검', 'font-size:15px;font-weight:900');
+  console.log(report);
+  console.log(bad.length ? '%c⛔ 배포 금지 — 빨간 줄 ' + bad.length + '개' : '%c✅ 배포 가능' + (warn.length ? ' (경고 ' + warn.length + ')' : ''),
+    'font-size:14px;font-weight:900;color:' + (bad.length ? '#E0564B' : '#9BE8B4'));
+  return { verdict: bad.length ? 'BLOCK' : (warn.length ? 'PASS_WITH_WARN' : 'PASS'), fail: bad.length, warn: warn.length, report };
+})();
