@@ -52309,19 +52309,24 @@
     go.onclick = async () => {
       go.disabled = true; go.textContent = '저장 중…';
       try { await window.storage.set(TOS_KEY, JSON.stringify({ ver: TOS_VER, at: Date.now() })); } catch (e) {}
+      try { localStorage.setItem(TOS_KEY, JSON.stringify({ ver: TOS_VER, at: Date.now() })); } catch (e) {}   // v770 · 기기 사본(이중 안전망 — 주머니 저장이 늦거나 실패해도 재출현 방지)
       ov.remove();
       try { toast('📜 약관 동의 완료 — 환영합니다!'); } catch (e) {}
     };
   }
   async function termsGate() {
     try {
+      let v = null;
       const r = await window.storage.get(TOS_KEY);
-      if (r) {
-        const v = JSON.parse(r.value !== undefined ? r.value : r);   // ⚠️ storage.get은 {key,value} — 언랩
-        if (v && v.ver >= TOS_VER) {
-          try { window.storage.set(TOS_KEY, JSON.stringify(v)); } catch (e2) {}   // v766 · 옛 «기기 로컬» 동의를 서버로 승격
-          return;   // 이미 동의함 (버전 올리면 재동의)
-        }
+      if (r) { try { v = JSON.parse(r.value !== undefined ? r.value : r); } catch (e1) {} }   // ⚠️ storage.get은 {key,value} — 언랩
+      if (!(v && v.ver >= TOS_VER)) {
+        // v770 · 계정 주머니에 없어도 — v766 이전 «기기 로컬» 동의 기록을 직접 확인 (기존 사용자에게 매번 뜨던 사고 수리)
+        try { const lv = JSON.parse(localStorage.getItem(TOS_KEY) || 'null'); if (lv && lv.ver >= TOS_VER) v = lv; } catch (e1) {}
+      }
+      if (v && v.ver >= TOS_VER) {
+        try { window.storage.set(TOS_KEY, JSON.stringify(v)); } catch (e2) {}          // 계정 주머니로 승격
+        try { localStorage.setItem(TOS_KEY, JSON.stringify(v)); } catch (e2) {}        // 기기에도 사본(이중 안전망)
+        return;   // 이미 동의함 (버전 올리면 재동의)
       }
     } catch (e) {}   // 기록 없음/오류 → 동의 화면 (다시 물어도 해는 없다)
     tosShow(false);
