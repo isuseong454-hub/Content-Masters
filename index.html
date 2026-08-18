@@ -1683,18 +1683,20 @@
   .plw-conti:active{ transform:scale(.95); }
   .plw-conti.on{ color:#0B0E14; background:#7EC8F5; border-color:#7EC8F5; }
   /* v737 · 원고실 3문 스트립 — 설계·쓰기·콘티 상시 개방 (잠금·숨김 0) */
-  .wr-strip{ display:flex; gap:6px; margin:2px 0 13px; }
-  .wr-strip button{ flex:1; font-family:inherit; cursor:pointer; border-radius:13px; padding:9px 4px 8px; text-align:center; position:relative;
-    background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.09); transition:all .2s; }
-  .wr-strip button i{ font-style:normal; display:block; font-size:14px; }
-  .wr-strip button b{ display:block; font-size:10.5px; font-weight:900; color:#C9CFDD; margin-top:3px; }
-  .wr-strip button s{ text-decoration:none; display:block; font-size:8px; color:#5C6B87; font-weight:800; margin-top:2px; }
-  .wr-strip button.on{ background:linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03)); border-color:var(--k);
-    box-shadow:0 0 14px color-mix(in srgb, var(--k) 30%, transparent), inset 0 1px 0 rgba(255,255,255,.12); }
-  .wr-strip button.on b{ color:var(--k); }
-  .wr-strip button:active{ transform:scale(.96); }
-  .wr-strip .dot{ position:absolute; right:8px; top:8px; width:6px; height:6px; border-radius:50%; background:var(--k); opacity:.25; }
-  .wr-strip .dot.fill{ opacity:1; box-shadow:0 0 7px var(--k); }
+  /* v776 · 문 스트립 = 한 줄 세그먼트 — «고르는 곳»이라 낮고 조용하게(사장님: 이미지가 공간만 먹는다) */
+  .wr-strip{ display:flex; gap:3px; margin:2px 0 11px; padding:3px; border-radius:12px;
+    background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.07); }
+  .wr-strip button{ flex:1; font-family:inherit; cursor:pointer; border:none; background:transparent; border-radius:9px;
+    padding:8px 6px; display:flex; align-items:center; justify-content:center; gap:6px; position:relative; transition:all .18s; }
+  .wr-strip button i{ font-style:normal; font-size:12px; line-height:1; opacity:.75; }
+  .wr-strip button b{ font-size:11.5px; font-weight:800; color:#9aa08a; letter-spacing:-.01em; }
+  .wr-strip button s{ display:none; }
+  .wr-strip button.on{ background:rgba(255,255,255,.09); box-shadow:inset 0 1px 0 rgba(255,255,255,.12); }
+  .wr-strip button.on i{ opacity:1; }
+  .wr-strip button.on b{ color:var(--k); font-weight:900; }
+  .wr-strip button:active{ transform:scale(.97); }
+  .wr-strip .dot{ position:absolute; right:7px; top:7px; width:5px; height:5px; border-radius:50%; background:var(--k); opacity:0; }
+  .wr-strip .dot.fill{ opacity:.9; box-shadow:0 0 6px var(--k); }
   /* v738 · 콘티 방 — 이번 주 오버뷰 */
   .cnt-back{ display:flex; align-items:center; gap:8px; margin-bottom:10px; }
   .cnt-back button{ font-family:inherit; cursor:pointer; font-size:10px; font-weight:900; color:#8FA0BC;
@@ -59479,6 +59481,8 @@
   function pv2RefsHtml(e, lite) {   // v762 · lite=리서치(담기·확인만) — 칠하기(고객·구성 펜)는 ②분석 소속
     e.refs = e.refs || [];
     if (_pv2RefSel >= e.refs.length) _pv2RefSel = -1;
+    // v776 · 원고는 «눌러야 나오는 것»이 아니다 — 카드가 있으면 첫 장을 펼쳐 둔다(게이트 0 헌법)
+    if (_pv2RefSel < 0 && e.refs.length) _pv2RefSel = 0;
     var cards = e.refs.map(function (rf, i) {
       var on = _pv2RefSel === i;
       var th = rf.th || _pv2RefTh[String(rf.id)] || '';   // v747 · 정찰 영상 카드는 썸네일을 직접 가짐
@@ -62488,7 +62492,7 @@
       b.onclick = function (ev) {
         if (ev.target.closest && ev.target.closest('[data-pv2refdel],[data-pv2refrep],.ytgo')) return;
         var i = +b.dataset.pv2refsel;
-        _pv2RefSel = (_pv2RefSel === i) ? -1 : i;
+        _pv2RefSel = i;   // v776 · 톡=그 카드로 전환(해제 없음 — 원고가 사라지는 느낌 제거)
         plnRenderWs(false);
       };
     });
