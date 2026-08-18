@@ -29579,6 +29579,61 @@
   // 왼쪽 아래의 친근한 봇 캐릭터를 그대로 사용
   // 동글이 — 빨간 동글 캐릭터 (검정+청록 눈, 짧은 팔). size: sm|md|lg|xl
   function gwanjeomSvg(size, level, mood) { return ''; }   // v766 · 관점이 캐릭터 전면 폐기(사장님 지시 2026-08-18) — 빈 상태 카드·토스트는 글로만
+  function cmMark(tone, px) {
+    px = px || 22;
+    var isF = (tone === 'flare' || tone === 'orange');
+    var col = isF ? '#FF7A33' : '#d7f34b';
+    var ctr = isF ? '#FFB877' : '#7DF3B0';
+    var gc = isF ? '255,122,51' : '215,243,75';
+    var filt = 'filter:drop-shadow(0 0 ' + Math.max(3, Math.round(px * 0.16)) + 'px rgba(' + gc + ',.9)) drop-shadow(0 0 ' + Math.max(8, Math.round(px * 0.4)) + 'px rgba(' + gc + ',.5));';
+    var body;
+    if (isF) {
+      var petals = [0, 45, 90, 135, 180, 225, 270, 315].map(function (k) { return '<ellipse cx="60" cy="30" rx="15" ry="24" transform="rotate(' + k + ' 60 60)"/>'; }).join('');
+      body = '<g fill="' + col + '">' + petals + '</g><circle cx="60" cy="60" r="16" fill="' + ctr + '"/>';
+    } else {
+      body = '<g fill="' + col + '"><rect x="50" y="6" width="20" height="108" rx="10"/><rect x="50" y="6" width="20" height="108" rx="10" transform="rotate(60 60 60)"/><rect x="50" y="6" width="20" height="108" rx="10" transform="rotate(120 60 60)"/></g><circle cx="60" cy="60" r="13" fill="' + ctr + '"/>';
+    }
+    return '<svg class="cm-mark" viewBox="0 0 120 120" width="' + px + '" height="' + px + '" style="' + filt + 'display:inline-block;vertical-align:middle;">' + body + '</svg>';
+  }
+
+  // 관점이 메시지 (말풍선 옵션)
+  // ctx: { space, isEmpty, milestone, ... }
+  function gwanjeomMessage(ctx) {
+    ctx = ctx || {};
+    const cardCount = scripts ? scripts.length : 0;
+    const rowsFilled = rows ? rows.filter(isFilled).length : 0;
+
+    // 마일스톤별
+    if (ctx.milestone === 'firstBench')   return ['👋 첫 벤치마킹 완료!', '잘하고 있어요. 이렇게 5개 모이면 패턴이 보이기 시작해요.'];
+    if (ctx.milestone === 'fiveBench')    return ['🔥 5개 분석 돌파!', '이제 슬슬 감이 잡힐 거예요. 자주 보이는 후킹 유형을 메모해두세요.'];
+    if (ctx.milestone === 'tenBench')     return ['⚡ 10개 분석!', '벤치마킹 잘 쌓이고 있어요. 이제 원고도 한 편 써보면 어떨까요?'];
+    if (ctx.milestone === 'firstScript')  return ['✍️ 첫 원고 작성!', '시작이 반이에요. 이 흐름을 일주일만 유지해봐요.'];
+    if (ctx.milestone === 'fiveScripts')  return ['🎉 5개 원고 완성!', '한 달이면 20개. 진짜 콘텐츠 채널 하나 만들 수 있어요.'];
+    if (ctx.milestone === 'firstDone')    return ['✓ 원고 완료!', '뿌듯하죠? 이게 쌓이면 진짜 변화가 와요.'];
+    if (ctx.milestone === 'tenDone')      return ['🚀 10개 완료!', '이 정도면 본인만의 패턴이 보일 거예요.'];
+
+    // 빈 상태
+    if (ctx.space === 'sheet' && ctx.isEmpty) {
+      return ['벤치마킹 시작해볼까요?', '잘 된 인스타 영상 하나 골라서 분석부터 해봐요.\n3개만 모아도 패턴이 보일 거예요.'];
+    }
+    if (ctx.space === 'home' && ctx.isEmpty) {
+      return [`안녕하세요! 저는 관점이에요`, '왼쪽에서 벤치마킹 시트부터 시작해봐요.\n분석한 영상이 카드가 되어 여기로 옵니다.'];
+    }
+    if (ctx.space === 'scripts' && ctx.isEmpty) {
+      return ['아직 원고가 없네요', '홈의 카드에서 시작하거나,\n바로 위에서 새 원고를 써보세요.'];
+    }
+    if (ctx.space === 'formatboard' && ctx.isEmpty) {
+      return ['카드를 유형별로 정리해볼까요?', '시트에서 분석한 행을 드래그해서\n유형 칸에 옮길 수 있어요.'];
+    }
+
+    // 기본 인사
+    if (cardCount === 0 && rowsFilled === 0) {
+      return ['처음 오셨네요!', '벤치마킹 시트에서 첫 영상부터\n분석해보면 어떨까요?'];
+    }
+    return ['👋 안녕하세요', '오늘도 한 걸음씩!'];
+  }
+
+  // 빈 상태 카드 (관점이 + 메시지 + 액션)
   // ctx: { space, isEmpty, actionLabel, onAction }
   function renderGwanjeomEmpty(ctx) {
     const [title, body] = gwanjeomMessage(ctx);
@@ -41072,7 +41127,7 @@
     });
     var startH = Math.max(26, base * _crPrevPct);
     return '<div class="cr-room" id="cr-room">' +
-      '<div class="cr-head"><span class="cr-tier" style="color:' + tc + ';border-color:' + tc + '55;background:' + tc + '14;">💎 눈높이 · ' + CR_TIER_LBS[tier] + ' 기준</span><span style="display:flex;gap:5px;"><button class="cr-introbtn" id="cr-views-btn">👀 조회수</button><button class="cr-introbtn" id="cr-intro-btn">🔭 1억의 세계</button></span></div>' +
+      '<div class="cr-head"><span class="cr-tier" style="color:' + tc + ';border-color:' + tc + '55;background:' + tc + '14;">💎 눈높이 · ' + CR_TIER_LBS[tier] + ' 기준</span><span style="display:flex;gap:5px;"><button class="cr-introbtn" id="cr-views-btn">👀 조회수</button></span></div>' +
       '<div class="cr-zone">' +
         '<div class="cr-ground"></div>' +
         (tier < 5 ? '<div class="cr-ghost" id="cr-ghost" style="height:' + Math.round(base * 1.1) + 'px;' + (open ? 'opacity:.5;' : '') + '">' + crSvg(tier + 1, nc, true) + '</div>' : '') +
@@ -41109,6 +41164,7 @@
     } else if (tier < last) { dashData.lastTier = tier; saveDash(); } // 값 정정 시 조용히 동기화
   }
   function showCrystalIntro(force) {
+    return;   // v767 · «1억 뷰의 세계» 전면 폐기(사장님 지시 2026-08-18)
     if (!force && dashData.introSeen) return;
     if (document.getElementById('cr-intro-ov')) return;
     var H = [34, 58, 94, 152, 246, 392], W = [22, 32, 46, 66, 96, 132], X = [318, 274, 220, 156, 80, 2];
@@ -41770,7 +41826,6 @@
         var _hv = document.getElementById('home-view');
         if (_hv && _hv.offsetParent !== null) {
           window.__crIntroShown = true;
-          setTimeout(function () { try { showCrystalIntro(false); } catch (e) {} }, 1800);
         }
       } catch (e) {}
     }
@@ -46664,6 +46719,7 @@
       await setAutologin(autoLogin);
       addRecentCode(res.user.code); // 내가 쓴 코드 기기에 저장 → 다음에 자동 표시
       await setCurrentUser({ code: res.user.code, name: res.user.name, is_master: !!res.user.is_master, pinHash: hash, expiresAt: (res.user.expiresAt != null ? res.user.expiresAt : (res.user.expires_at != null ? res.user.expires_at : null)), mode: res.user.mode || null, status: res.user.status || 'active', challenge: !!res.user.challenge, wkGoal: res.user.wkGoal || 3, streak: res.user.streak || 0, grace: !!res.user.grace, graceUntil: (res.user.graceUntil != null ? res.user.graceUntil : null), signedUpAt: (res.user.signedUpAt != null ? res.user.signedUpAt : null), hardDone: !!res.user.hardDone });
+      try { var _ao = document.getElementById('admin-overlay'); if (_ao) _ao.classList.remove('show'); } catch (e) {}   // v767 · 이전 사용 잔재(관리자 화면 등)가 새 로그인에 노출되지 않게
       hideAuth();
       onLoggedIn();
     });
@@ -46740,6 +46796,7 @@
       try { fu = await cmRpc('cm_login', { p_code: _pendingCode, p_pin_hash: hash }); } catch (e) {}
       const uu = (fu && fu.ok && fu.user) ? fu.user : res.user;
       await setCurrentUser({ code: uu.code, name: uu.name, is_master: !!uu.is_master, pinHash: hash, expiresAt: (uu.expiresAt != null ? uu.expiresAt : (uu.expires_at != null ? uu.expires_at : null)), mode: uu.mode || null, status: uu.status || 'active', challenge: !!uu.challenge, wkGoal: uu.wkGoal || 3, streak: uu.streak || 0, grace: !!uu.grace, graceUntil: (uu.graceUntil != null ? uu.graceUntil : null), signedUpAt: (uu.signedUpAt != null ? uu.signedUpAt : null), hardDone: !!uu.hardDone });
+      try { var _ao = document.getElementById('admin-overlay'); if (_ao) _ao.classList.remove('show'); } catch (e) {}   // v767 · 이전 사용 잔재(관리자 화면 등)가 새 로그인에 노출되지 않게
       hideAuth();
       onLoggedIn();
     };
