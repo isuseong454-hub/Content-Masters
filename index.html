@@ -2533,6 +2533,12 @@
   #room-rail .rr-btn.here{ width:auto; padding:0 13px; gap:7px; }
   #room-rail .rr-btn.here .t{ display:inline; font-size:11.5px; font-weight:800; letter-spacing:-.01em; }
   #room-rail .rr-btn:not(.here) .g{ opacity:.72; }
+  /* v774 · 내비 통일 — 왼쪽 위는 «‹ 갈림길» 하나. 방 고르기는 갈림길 시트가 한다(한 기능 한 군데) */
+  #room-rail .rr-home, #room-rail .rr-mk, #room-rail .rr-pl{ display:none !important; }
+  #room-rail .rr-fork{ width:auto !important; padding:0 13px !important; gap:7px !important; }
+  #room-rail .rr-fork .t{ display:inline !important; font-size:11.5px; font-weight:800; letter-spacing:-.01em; }
+  #room-rail .rr-where{ font-size:11px; font-weight:800; color:rgba(233,240,228,.55); letter-spacing:-.01em;
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:52vw; }
   #room-rail .rr-btn:not(.here):hover .g{ opacity:1; }
   /* ⚠️ v571 · 갈림길 3방 색과 한 혈통으로 맞춘다 — 초록(AI 정리) › 파랑(창고=홈) › 보라(제작소).
      옛 값(시안·라임)은 갈림길과 어긋나 «어디가 어디인지»가 안 이어졌다 */
@@ -22394,7 +22400,7 @@
 <div class="cs-ov" id="qc-room">
   <div class="cs-air">
     <div class="cs-wrap">
-      <div class="cs-top"><button class="cs-back" id="qc-back" style="margin-left:auto">‹ 뒤로</button></div>
+      <div class="cs-top"><button class="cs-back" id="qc-back" style="margin-left:auto">‹ 갈림길</button></div><!-- v774 · 내비 통일 — 폼 안에서만 «‹ 뒤로»로 바뀐다 -->
       <div class="cs-greet" style="text-align:left">
         <div class="qsh-head">
           <div>
@@ -37673,7 +37679,8 @@
     rail.querySelectorAll('.rr-btn').forEach(b => b.classList.toggle('here', b.dataset.room === room));
     const w = document.getElementById('rr-where');
     // v673 · 나침반 간판은 v649에 없앴다 — 트렌드는 저장소 소속이므로 «내 창고»로 부른다
-    if (w) w.textContent = (room === 'studio' ? '트레이닝 룸' : room === 'plan' ? '기획' : '내 창고') +
+    // v774 · 통일 — «· 지금 방(· 세부)» 한 줄. 왼쪽 위엔 갈림길 버튼 하나뿐이라 여기가 «지금 어디»를 말한다
+    if (w) w.textContent = '· ' + (room === 'studio' ? '트레이닝 룸' : room === 'plan' ? '기획' : '내 창고') +
       (RR_LABELS[ws] && ws !== 'studio' && ws !== 'compass' && ws !== 'plan' ? ' · ' + RR_LABELS[ws] : '');
     // 제작소 소속이면 탭 줄이 따라온다 (A안 v434) — 되돌아가기 버튼은 필요 없어짐
     document.body.classList.toggle('in-studio', room === 'studio');
@@ -51544,6 +51551,16 @@
       if (_qcw) { qcwBack(); return; }
       qcClose(); csOpenFork();
     };
+    // v774 · 내비 통일 — 폼 안이면 «‹ 뒤로»(한 걸음), 아니면 «‹ 갈림길»(방 이동의 한 입구)
+    try {
+      const _qcs = document.getElementById('qc-room');
+      if (_qcs && !_qcs._lblObs) {
+        _qcs._lblObs = new MutationObserver(function () {
+          const b = document.getElementById('qc-back'); if (b) b.textContent = (typeof _qcw !== 'undefined' && _qcw) ? '‹ 뒤로' : '‹ 갈림길';
+        });
+        _qcs._lblObs.observe(_qcs, { childList: true, subtree: true });
+      }
+    } catch (e) {}
     document.querySelectorAll('#qc-room [data-qc]').forEach(t => t.addEventListener('click', () => {
       const k = t.dataset.qc;
       if (k === 'ai') { qcClose(); csOpenRoom(); return; }
@@ -58461,9 +58478,7 @@
     var add = hit('data-musadd');
     if (add) { var i1 = document.getElementById('mus-in'); if (i1) { musAdd(i1.value); i1.value = ''; } return; }
 
-    var flt = hit('data-musflt');
-    if (flt) { _musFilter = flt; musRender(); return; }
-
+    // ⚠️ × 삭제는 태그 버튼 «안»에 있다 — 필터보다 먼저 잡지 않으면 필터가 삼킨다
     var tdel = hit('data-mustagdel');
     if (tdel) {
       ev.stopPropagation();
@@ -58472,6 +58487,9 @@
       if (_musFilter === tdel) _musFilter = 'all';
       musRender(); musSave(); return;
     }
+    var flt = hit('data-musflt');
+    if (flt) { _musFilter = flt; musRender(); return; }
+
     if (hit('data-mustagedit')) { _musEditTags = !_musEditTags; musRender(); return; }
     if (hit('data-mustagadd')) {
       var nm2 = window.prompt('새 태그 이름 (이모지도 됩니다 — 예: 🎬 시네마틱)');
@@ -61088,6 +61106,11 @@
         '</div></div>' +
       fslot('설계', devV, '③', '4공식 중 하나를 고르면 실립니다') +
       fslot('✎ 원고', scV, '④', '원고를 쓰면 구간별로 나열됩니다', 0, segRows52 ? '' : (draft ? 'sc' : '')) +
+      fslot('🎵 음악', (e.music && e.music.url)
+        ? '<span class="brref"><a href="' + esc(e.music.url) + '" target="_blank" rel="noopener">↗ 듣기</a>' +
+          esc(String(e.music.title || '').slice(0, 34)) +
+          '<s>' + (e.music.kind === 'ig' ? '인스타' : (e.music.kind === 'yt' ? '유튜브' : '링크')) + '</s></span>' : '',
+        '③', '음악 서랍에서 고르면 여기 실립니다') +
       '<div class="meta2">벤치마킹 <b>' + esc(e.ref || '—') + '</b> · ' + esc(e.src || '') + ' · ' + esc(e.day || '') +
         ' · 공정 <b>' + Math.min(e.step || 1, 5) + '/5</b>' +
         ((e.cuts || []).length ? ' · 컷 ' + e.cuts.length : '') + (shots ? ' · 찍을 것 <b>' + shots + '</b>' : '') + '</div>' +
