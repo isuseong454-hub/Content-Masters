@@ -50565,7 +50565,9 @@
       const structN = Object.keys(b.sections).filter(k => b.sections[k]).length;
       const flexList = b.secList || [];
       if (b.structType) r.structType = b.structType;
-      if (flexList.length && flexList.some(x => !x.c)) {
+      // v772 🚨 원고가 «가끔 안 나오던» 진범 — 라벨이 전부 표준(역할 6)이면 원문 순서를 안 남기고
+      //   옛 5칸(scriptSections)으로만 저장돼, 매핑 밖 라벨은 통째로 사라졌다. 이제 flex가 있으면 항상 남긴다.
+      if (flexList.length) {
         r.scriptSecFlex = flexList.map(x => ({ k: x.k, c: x.c || '', t: x.t }));
         r.scriptSections = Object.assign({}, b.sections);
         r.scriptMode = 'sections';
