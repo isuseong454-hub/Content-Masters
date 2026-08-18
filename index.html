@@ -888,6 +888,13 @@
   @keyframes tfFloat{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-2.5px); } }
   @keyframes tfPulse{ 0%,100%{ opacity:.8; } 50%{ opacity:1; } }
   @keyframes tfTw{ 0%,100%{ opacity:.3; } 50%{ opacity:1; } }
+  /* ══ v777 · 상시 반복 모션 전면 정지 (사장님 «눈 아프다» 2026-08-18) ══
+     끝없이 도는 것(맥박·점멸·둥둥·흐름)만 끈다 — 호버·탭 반응과 등장/퇴장 전환은 그대로 산다.
+     발열 헌법(화면 안 쓰면 모션 OFF)과 한 몸. 되돌리려면 이 블록만 지우면 원상복구. */
+  *, *::before, *::after{ animation-iteration-count:1 !important; }
+  /* 예외 — «기다리는 중»을 보여주는 것만 계속 돈다 */
+  .cmvt .spin, .auth-big-btn.loading::after, .admin-create-btn.loading::after,
+  .sh-spin, .cs-spin, .qc-spin{ animation-iteration-count:infinite !important; }
   .tf-fin.live img{ animation:tfFloat 3.4s ease-in-out infinite; }
   .tf-fin.live::before{ animation:tfPulse 3.4s ease-in-out infinite; }
   .tf-fin.live .sp{ animation:tfTw 2.6s ease-in-out infinite; }
