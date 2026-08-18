@@ -26886,7 +26886,8 @@
       'hmv1-home', 'hmv1-challenges', 'hmv1-seen',
       'hmv1-acc', 'hmv1-ach', 'hmv1-weekcounts', 'hmv1-funnelcounts', 'hmv1-uploadgoal', 'hmv1-funnelup', 'hmv1-goalperiod', 'hmv1-uploadmanual', 'st2-goldkw', 'st2-focus', 'st2-plan', 'st2-osmu', 'st2-goals',
       'hmv1-northstars', 'hmv1-visitdays', 'hmv1-ideaboards', 'hmv1-structures',
-      'hmv1-growth', 'shv4-custom-thumb-types', 'shv4-custom-copy-types', 'hmv1-dash'
+      'hmv1-growth', 'shv4-custom-thumb-types', 'shv4-custom-copy-types', 'hmv1-dash',
+      'cm-terms-agree'   // v766 · 약관 동의=계정 동기화(기기가 바뀌어도 재동의 안 뜨게)
     ]);
     // 이미지 키(벤치마킹 시트) → Supabase Storage 버킷
     const IMG_BUCKET = 'cm-images';
@@ -29577,98 +29578,7 @@
   // level: 0|1|2 (활동량 기반 강조)
   // 왼쪽 아래의 친근한 봇 캐릭터를 그대로 사용
   // 동글이 — 빨간 동글 캐릭터 (검정+청록 눈, 짧은 팔). size: sm|md|lg|xl
-  function gwanjeomSvg(size, level, mood) {
-    const sizes = { sm: 40, md: 70, lg: 110, xl: 160 };
-    const px = sizes[size] || 70;
-    const uid = 'gj' + Math.random().toString(36).slice(2, 7);
-    const body = '#e8454f', lite = '#ff6f6f', dark = '#c2333c', teal = '#2fd6d6';
-    // 표정(mood): 입·볼 추가 — mood 안 주면 기존 모습 그대로(다른 화면 영향 없음)
-    const blush = '<ellipse cx="76" cy="118" rx="7.5" ry="4.2" fill="rgba(255,120,120,0.45)"/><ellipse cx="144" cy="118" rx="7.5" ry="4.2" fill="rgba(255,120,120,0.45)"/>';
-    let face = '';
-    if (mood === 'talk') face = `<path d="M101,125 Q110,131 119,125" stroke="${dark}" stroke-width="3.2" fill="none" stroke-linecap="round"/>`;
-    else if (mood === 'happy') face = blush + `<path d="M96,124 Q110,136 124,124" stroke="${dark}" stroke-width="3.4" fill="none" stroke-linecap="round"/>`;
-    else if (mood === 'cheer') face = blush + `<path d="M98,123 Q110,141 122,123 Z" fill="${dark}"/><path d="M101,126 Q110,131 119,126 Z" fill="${lite}"/>`;
-    const eyeHappy = (mood === 'happy' || mood === 'cheer');
-    const eye = (x) => eyeHappy
-      ? `<path d="M${x - 9},101 Q${x},92 ${x + 9},101" stroke="#1c1820" stroke-width="4.5" fill="none" stroke-linecap="round"/>`
-      : `<circle cx="${x}" cy="99" r="11" fill="#1c1820"/><circle cx="${x}" cy="99" r="5.5" fill="${teal}"/>` +
-        `<circle cx="${x - 3.5}" cy="95" r="2.9" fill="#fff"/><circle cx="${x + 3.3}" cy="102.3" r="1.4" fill="rgba(255,255,255,0.75)"/>`;
-    return `
-      <svg class="gwanjeom-svg" viewBox="0 0 220 208" xmlns="http://www.w3.org/2000/svg" style="width:${px}px;height:${Math.round(px * 208 / 220)}px;overflow:visible;">
-        <defs>
-          <radialGradient id="${uid}b" cx="38%" cy="28%" r="80%">
-            <stop offset="0%" stop-color="${lite}"/><stop offset="100%" stop-color="${body}"/>
-          </radialGradient>
-        </defs>
-        <ellipse cx="110" cy="196" rx="46" ry="8" fill="rgba(0,0,0,0.32)"/>
-        <path d="M88,52 Q80,24 72,15 M132,52 Q140,24 148,15" stroke="${dark}" stroke-width="5" fill="none" stroke-linecap="round"/>
-        <circle cx="72" cy="14" r="7" fill="${body}"/><circle cx="148" cy="14" r="7" fill="${body}"/>
-        <rect x="92" y="151" width="11" height="27" rx="5.5" fill="${dark}"/><rect x="117" y="151" width="11" height="27" rx="5.5" fill="${dark}"/>
-        <ellipse cx="54" cy="124" rx="16" ry="17" fill="${body}" transform="rotate(16 54 124)"/>
-        <ellipse cx="166" cy="124" rx="16" ry="17" fill="${body}" transform="rotate(-16 166 124)"/>
-        <circle cx="110" cy="106" r="62" fill="url(#${uid}b)"/>
-        <ellipse cx="85" cy="80" rx="25" ry="15" fill="rgba(255,255,255,0.16)"/>
-        ${eye(90)}${eye(130)}${face}
-      </svg>
-    `;
-  }
-
-  // === 빛나는 마크 엠블럼 (초록 별표 / 주황 꽃버스트) — 다크+네온 무드 ===
-  function cmMark(tone, px) {
-    px = px || 22;
-    var isF = (tone === 'flare' || tone === 'orange');
-    var col = isF ? '#FF7A33' : '#d7f34b';
-    var ctr = isF ? '#FFB877' : '#7DF3B0';
-    var gc = isF ? '255,122,51' : '215,243,75';
-    var filt = 'filter:drop-shadow(0 0 ' + Math.max(3, Math.round(px * 0.16)) + 'px rgba(' + gc + ',.9)) drop-shadow(0 0 ' + Math.max(8, Math.round(px * 0.4)) + 'px rgba(' + gc + ',.5));';
-    var body;
-    if (isF) {
-      var petals = [0, 45, 90, 135, 180, 225, 270, 315].map(function (k) { return '<ellipse cx="60" cy="30" rx="15" ry="24" transform="rotate(' + k + ' 60 60)"/>'; }).join('');
-      body = '<g fill="' + col + '">' + petals + '</g><circle cx="60" cy="60" r="16" fill="' + ctr + '"/>';
-    } else {
-      body = '<g fill="' + col + '"><rect x="50" y="6" width="20" height="108" rx="10"/><rect x="50" y="6" width="20" height="108" rx="10" transform="rotate(60 60 60)"/><rect x="50" y="6" width="20" height="108" rx="10" transform="rotate(120 60 60)"/></g><circle cx="60" cy="60" r="13" fill="' + ctr + '"/>';
-    }
-    return '<svg class="cm-mark" viewBox="0 0 120 120" width="' + px + '" height="' + px + '" style="' + filt + 'display:inline-block;vertical-align:middle;">' + body + '</svg>';
-  }
-
-  // 관점이 메시지 (말풍선 옵션)
-  // ctx: { space, isEmpty, milestone, ... }
-  function gwanjeomMessage(ctx) {
-    ctx = ctx || {};
-    const cardCount = scripts ? scripts.length : 0;
-    const rowsFilled = rows ? rows.filter(isFilled).length : 0;
-
-    // 마일스톤별
-    if (ctx.milestone === 'firstBench')   return ['👋 첫 벤치마킹 완료!', '잘하고 있어요. 이렇게 5개 모이면 패턴이 보이기 시작해요.'];
-    if (ctx.milestone === 'fiveBench')    return ['🔥 5개 분석 돌파!', '이제 슬슬 감이 잡힐 거예요. 자주 보이는 후킹 유형을 메모해두세요.'];
-    if (ctx.milestone === 'tenBench')     return ['⚡ 10개 분석!', '벤치마킹 잘 쌓이고 있어요. 이제 원고도 한 편 써보면 어떨까요?'];
-    if (ctx.milestone === 'firstScript')  return ['✍️ 첫 원고 작성!', '시작이 반이에요. 이 흐름을 일주일만 유지해봐요.'];
-    if (ctx.milestone === 'fiveScripts')  return ['🎉 5개 원고 완성!', '한 달이면 20개. 진짜 콘텐츠 채널 하나 만들 수 있어요.'];
-    if (ctx.milestone === 'firstDone')    return ['✓ 원고 완료!', '뿌듯하죠? 이게 쌓이면 진짜 변화가 와요.'];
-    if (ctx.milestone === 'tenDone')      return ['🚀 10개 완료!', '이 정도면 본인만의 패턴이 보일 거예요.'];
-
-    // 빈 상태
-    if (ctx.space === 'sheet' && ctx.isEmpty) {
-      return ['벤치마킹 시작해볼까요?', '잘 된 인스타 영상 하나 골라서 분석부터 해봐요.\n3개만 모아도 패턴이 보일 거예요.'];
-    }
-    if (ctx.space === 'home' && ctx.isEmpty) {
-      return [`안녕하세요! 저는 관점이에요`, '왼쪽에서 벤치마킹 시트부터 시작해봐요.\n분석한 영상이 카드가 되어 여기로 옵니다.'];
-    }
-    if (ctx.space === 'scripts' && ctx.isEmpty) {
-      return ['아직 원고가 없네요', '홈의 카드에서 시작하거나,\n바로 위에서 새 원고를 써보세요.'];
-    }
-    if (ctx.space === 'formatboard' && ctx.isEmpty) {
-      return ['카드를 유형별로 정리해볼까요?', '시트에서 분석한 행을 드래그해서\n유형 칸에 옮길 수 있어요.'];
-    }
-
-    // 기본 인사
-    if (cardCount === 0 && rowsFilled === 0) {
-      return ['처음 오셨네요!', '벤치마킹 시트에서 첫 영상부터\n분석해보면 어떨까요?'];
-    }
-    return ['👋 안녕하세요', '오늘도 한 걸음씩!'];
-  }
-
-  // 빈 상태 카드 (관점이 + 메시지 + 액션)
+  function gwanjeomSvg(size, level, mood) { return ''; }   // v766 · 관점이 캐릭터 전면 폐기(사장님 지시 2026-08-18) — 빈 상태 카드·토스트는 글로만
   // ctx: { space, isEmpty, actionLabel, onAction }
   function renderGwanjeomEmpty(ctx) {
     const [title, body] = gwanjeomMessage(ctx);
@@ -29679,7 +29589,6 @@
     ` : '';
     return `
       <div class="gwanjeom-empty">
-        <div class="gwanjeom-avatar gwanjeom-bob">${gwanjeomSvg('lg')}</div>
         <div class="gwanjeom-bubble">
           <div class="gwanjeom-title">${esc(title)}</div>
           <div class="gwanjeom-body">${esc(body).replace(/\n/g, '<br/>')}</div>
@@ -29695,7 +29604,6 @@
     const el = document.createElement('div');
     el.className = 'gwanjeom-toast';
     el.innerHTML = `
-      <div class="gwanjeom-toast-avatar">${gwanjeomSvg('sm')}</div>
       <div class="gwanjeom-toast-body">
         <div class="gwanjeom-toast-title">${esc(title)}</div>
         <div class="gwanjeom-toast-text">${esc(body)}</div>
@@ -46826,7 +46734,12 @@
         return;
       }
       await setAutologin(true);
-      await setCurrentUser({ code: res.user.code, name: res.user.name, is_master: !!res.user.is_master, pinHash: hash, expiresAt: (res.user.expiresAt != null ? res.user.expiresAt : (res.user.expires_at != null ? res.user.expires_at : null)), mode: res.user.mode || null, status: res.user.status || 'active', challenge: !!res.user.challenge, wkGoal: res.user.wkGoal || 3, streak: res.user.streak || 0, grace: !!res.user.grace, graceUntil: (res.user.graceUntil != null ? res.user.graceUntil : null), signedUpAt: (res.user.signedUpAt != null ? res.user.signedUpAt : null), hardDone: !!res.user.hardDone });
+      // v766 · 가입 응답(cm_signup)엔 챌린지 필드가 없다 — 곧바로 로그인을 한 번 더 불러
+      //        전체 필드로 채운다(가입한 기기에서도 모드 선택·동면 게이트가 뜨게)
+      let fu = null;
+      try { fu = await cmRpc('cm_login', { p_code: _pendingCode, p_pin_hash: hash }); } catch (e) {}
+      const uu = (fu && fu.ok && fu.user) ? fu.user : res.user;
+      await setCurrentUser({ code: uu.code, name: uu.name, is_master: !!uu.is_master, pinHash: hash, expiresAt: (uu.expiresAt != null ? uu.expiresAt : (uu.expires_at != null ? uu.expires_at : null)), mode: uu.mode || null, status: uu.status || 'active', challenge: !!uu.challenge, wkGoal: uu.wkGoal || 3, streak: uu.streak || 0, grace: !!uu.grace, graceUntil: (uu.graceUntil != null ? uu.graceUntil : null), signedUpAt: (uu.signedUpAt != null ? uu.signedUpAt : null), hardDone: !!uu.hardDone });
       hideAuth();
       onLoggedIn();
     };
@@ -47984,7 +47897,9 @@
     const idxs = []; let mm;
     while ((mm = re.exec(text)) !== null) idxs.push({ at: mm.index, len: mm[0].length });
     if (!idxs.length) {
-      if (/후킹문구\s*[:：]/.test(text)) idxs.push({ at: 0, len: 0 });
+      // v766 · [분해] 마커가 없어도 — 봇 답의 흔적(후킹·메타·원고구조·역할 라벨)이 보이면 통짜 1블록으로 받아준다
+      const _sniff = /후킹\s*문구\s*[:：]|원고\s*구조\s*[:：]|계정명\s*[:：]|조회수\s*[:：]|^(도입부|공감|근거|방법|변화|CTA)[^>\n]{0,20}>/m;
+      if (_sniff.test(text)) idxs.push({ at: 0, len: 0 });
       else return [];
     }
     for (let i = 0; i < idxs.length; i++) {
@@ -48009,16 +47924,17 @@
             inStruct = true; return;
           }
         }
-        const km = t.match(/^([가-힣A-Za-z]{1,8})\s*[:：]\s*(.*)$/);
-        if (km && (km[1] === '원고구조')) {
+        const km = t.match(/^([가-힣A-Za-z][가-힣A-Za-z\s]{0,10}?)\s*[:：]\s*(.*)$/);
+        const fk = km ? km[1].replace(/\s+/g, '') : '';   // v766 · «후킹 문구:»처럼 띄어 써도 같은 키
+        if (km && (fk === '원고구조')) {
           inStruct = true; const v2 = km[2].trim();
           if (v2 && /^\(?[가-힣A-Za-z0-9·&\s]{1,18}\)?$/.test(v2) && /형/.test(v2)) b.structType = v2.replace(/^\(/, '').replace(/\)$/, ''); // 구조판정 (기본형·확장 등)
           else if (v2 && !/^없음[\s\-—–~.!…]*$/.test(v2)) b.scriptFree = v2;
           return;
         }
-        if (km && !inStruct) { b.fields[km[1].trim()] = km[2].trim(); return; }
+        if (km && !inStruct && fk.length <= 8) { b.fields[fk] = km[2].trim(); return; }
         // v626 · GPT가 순서를 바꿔 메타 줄을 원고구조 뒤에 뱉어도 원고로 흘리지 않는다
-        if (km && CS_META_KEYS.indexOf(km[1].trim()) > -1) { b.fields[km[1].trim()] = km[2].trim(); return; }
+        if (km && CS_META_KEYS.indexOf(fk) > -1) { b.fields[fk] = km[2].trim(); return; }
         if (inStruct && !b.secList && !b.scriptFree && /^\(?[가-힣A-Za-z0-9·&\s]{1,18}\)?$/.test(t) && /형/.test(t)) { b.structType = t.replace(/[()]/g, ''); return; } // 판정이 다음 줄에 온 경우
         // 🚨 v691 · 라벨 없는 줄 = «직전 구간이 이어지는 줄»이다.
         //   프롬프트가 «한 라벨 안의 여러 문장은 줄바꿈으로 이어 붙여»라고 시키므로 이런 줄이 정상적으로 온다.
@@ -50189,7 +50105,13 @@
     var el = csoQ('cso-paste'); var txt = (el || {}).value || '';
     if (txt.trim().length < 15) return false;
     var blocks = csParse(txt);
-    if (!blocks.length){ if (!silent) csToast('아직 [분해] 블록이 안 보여요 — 봇 답 전체를 붙여넣었는지 확인'); return false; }
+    if (!blocks.length){
+      if (!silent){
+        csToast('🧐 카드로 만들 내용을 못 찾았어요 — 봇의 «답 전체»를 복사해 붙여주세요');
+        try { el.classList.add('cso-shake'); setTimeout(function(){ el.classList.remove('cso-shake'); }, 500); } catch (e) {}
+      }
+      return false;
+    }
     // v623 · 누적 — 나눠 던져도 앞 카드가 안 사라진다
     _csBlocks = _csBlocks.concat(blocks);
     if (_csBlocks.length > blocks.length) csToast('🧩 +' + blocks.length + '장 — 총 ' + _csBlocks.length + '장');
@@ -52286,7 +52208,10 @@
       const r = await window.storage.get(TOS_KEY);
       if (r) {
         const v = JSON.parse(r.value !== undefined ? r.value : r);   // ⚠️ storage.get은 {key,value} — 언랩
-        if (v && v.ver >= TOS_VER) return;   // 이미 동의함 (버전 올리면 재동의)
+        if (v && v.ver >= TOS_VER) {
+          try { window.storage.set(TOS_KEY, JSON.stringify(v)); } catch (e2) {}   // v766 · 옛 «기기 로컬» 동의를 서버로 승격
+          return;   // 이미 동의함 (버전 올리면 재동의)
+        }
       }
     } catch (e) {}   // 기록 없음/오류 → 동의 화면 (다시 물어도 해는 없다)
     tosShow(false);
