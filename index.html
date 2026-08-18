@@ -22804,7 +22804,7 @@
         <div class="cso-tray-h"><span class="t">컨텐츠 분해 카드</span><span class="c" id="cso-cnt"></span><span class="sp"></span><button type="button" id="cso-clear" style="display:none">비우기</button><span class="dn" id="cso-dn"></span></div>
         <div class="cso-row" id="cso-row"><span class="cso-empty">무대에 던지면 여기 좌르륵 — 카드가 채워져요</span></div>
         <!-- v543 · 다음 방 예고 — 저장 «전»에 보여준다 (팝업으로 묻는 대신) -->
-        <div class="cso-savebar"><span class="tx" id="cso-savetx">완성 카드만 창고로</span></div>
+        <div class="cso-savebar"><span class="tx" id="cso-savetx">완성 카드만 창고로</span><button type="button" id="cso-save" disabled>창고에 넣기 ›</button></div><!-- v771 · 실종됐던 저장 버튼 복원 — 2단계 카드→3단계 분류가 끊겨 있던 진범 -->
         <button type="button" class="cso-peek" id="cso-peek">
           <span class="ic">🦾</span>
           <span class="tx"><span class="t1">분류로 이동</span><span class="t2" id="cso-peek-s">저장하면 미분류가 기다려요</span></span>
@@ -23949,94 +23949,41 @@
           </div>
           <div class="settings-modal-body">
 
-            <!-- v676 · 왼쪽 목록을 없애면서, 거기서만 갈 수 있던 방들을 여기로 -->
+            <!-- v771 · 설정 다이어트 — 관리만 남긴다 (방 이동·백업 잡동사니 제거, 사장님 지시 2026-08-18) -->
+
+            <!-- 🔐 자산 금고 (백업의 전부) -->
             <div class="settings-section">
-              <div class="settings-section-title">다른 방</div>
-              <div class="st-rooms">
-                <button type="button" class="st-room" data-ws="northstar"><span class="i">🥊</span><span class="t">라이벌 멘토</span><span class="g">›</span></button>
-                <button type="button" class="st-room" data-ws="diagnose"><span class="i">🩺</span><span class="t">릴스 진단</span><span class="g">›</span></button>
-                <button type="button" class="st-room" id="st-room-engine"><span class="i">◎</span><span class="t">내 컨텐츠 알고리즘</span><span class="g">›</span></button>
-                <button type="button" class="st-room" id="st-room-trash"><span class="i">🗑</span><span class="t">휴지통</span><span class="g">›</span></button>
-                <button type="button" class="st-room" id="st-room-logout"><span class="i">⏻</span><span class="t">로그아웃</span><span class="g">›</span></button>
+              <h4 class="settings-section-title">🔐 자산 금고</h4>
+              <p class="settings-section-desc">내 모든 기록과 사진이 <b>한 파일</b>로 — 인터넷 없이 열리고, 평생 보관됩니다.</p>
+              <div class="settings-actions">
+                <button class="settings-btn settings-btn-primary bkz-btn" id="settings-export-vault-btn">
+                  <span>🔐</span> <b>자산 금고로 받기 (.html)</b>
+                </button>
               </div>
+              <div class="backup-status" id="backup-status"></div>
             </div>
 
-            <!-- 📷 v587 · 쓴 만큼 -->
+            <!-- 📷 사진 · 쓴 만큼 -->
             <div class="settings-section">
               <h4 class="settings-section-title">📷 사진 · 쓴 만큼</h4>
-              <p class="settings-section-desc">사진은 한 장이 여러 화면에 보여도 <b>저장은 한 번</b>이에요. 아래는 지금까지 담은 양입니다.</p>
+              <p class="settings-section-desc">사진은 한 장이 여러 화면에 보여도 <b>저장은 한 번</b>이에요.</p>
               <div class="usg" id="usg"></div>
             </div>
 
-            <!-- 백업/내보내기 -->
-            <div class="settings-section">
-              <h4 class="settings-section-title">📦 백업 / 내보내기</h4>
-              <p class="settings-section-desc">모든 데이터를 JSON 파일로 다운로드해서 안전하게 보관하세요. 다른 기기에서도 가져올 수 있어요.</p>
-              <div class="settings-actions">
-                <button class="settings-btn settings-btn-primary" id="settings-export-btn">
-                  <span>⬇</span> 전체 내보내기 (.json)
-                </button>
-                <!-- 📦 v734 · 자산 금고 — 인터넷 없이 열리는 한 파일 뷰어 -->
-                <button class="settings-btn bkz-btn" id="settings-export-vault-btn">
-                  <span>🔐</span> <b>자산 금고로 받기 (.html)</b>
-                </button>
-                <!-- 📦 v582 · 사람이 열어보는 백업 — 보고서 + 사진 + 글이 폴더째 -->
-                <button class="settings-btn bkz-btn" id="settings-export-zip-btn">
-                  <span>📦</span> <b>정리해서 받기 (.zip)</b>
-                </button>
-                <button class="settings-btn" id="settings-export-rows-btn">
-                  벤치마킹만 내보내기
-                </button>
-                <button class="settings-btn" id="settings-export-scripts-btn">
-                  원고만 내보내기
-                </button>
-              </div>
-              <div class="bkz-note">📦 <b>정리해서 받기</b>는 <b>보고서 한 장 · 사진 폴더 · 글 폴더</b>가 든 압축 파일이에요.
-                풀어서 <b>보고서.html</b>을 열면 그동안 한 게 한눈에 보입니다. <span class="bkz-prog" id="bkz-prog"></span></div>
-              <div class="backup-status" id="backup-status"></div>
-              <button type="button" id="settings-backup-guide" onclick="if(window.__openBackupGuide)window.__openBackupGuide()" style="margin-top:9px;background:none;border:none;color:var(--emerald);font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;padding:2px 0;text-decoration:underline;">📖 백업 방법 자세히 보기</button>
-            </div>
-
-            <!-- 가져오기 -->
-            <div class="settings-section">
-              <h4 class="settings-section-title">📥 가져오기</h4>
-              <p class="settings-section-desc">이전에 내보낸 JSON 파일을 불러와요. 같은 ID 항목은 덮어쓰고, 없는 건 새로 추가됩니다.</p>
-              <div class="settings-actions">
-                <label class="settings-btn settings-btn-primary" for="settings-import-input">
-                  <span>⬆</span> JSON 파일 가져오기
-                </label>
-                <input type="file" id="settings-import-input" accept=".json,application/json" style="display:none;" />
-              </div>
-              <div class="settings-import-result" id="settings-import-result"></div>
-            </div>
-
-            <!-- 데이터 현황 -->
+            <!-- 📊 데이터 현황 -->
             <div class="settings-section">
               <h4 class="settings-section-title">📊 데이터 현황</h4>
               <div class="settings-stats" id="settings-stats"></div>
             </div>
 
-            <!-- 🚪 v740 · 커뮤니티 방 — 만들기/합류의 문 (본체=⌖나 «우리 방») -->
+            <!-- 🧰 관리 -->
             <div class="settings-section">
-              <h4 class="settings-section-title">🚪 커뮤니티 방</h4>
-              <p class="settings-section-desc">동료들과 성장을 나누는 방 — 만들기·합류는 여기서.</p>
-              <div class="settings-actions">
-                <button class="settings-btn" id="settings-room-btn"><span>🚪</span> 우리 방 열기 — 만들기 · 합류</button>
-              </div>
-            </div>
-
-            <!-- 📜 v592 · 이용약관 다시 보기 -->
-            <div class="settings-section">
-              <h4 class="settings-section-title">📜 이용약관</h4>
-              <p class="settings-section-desc">동의하신 약관 전문을 언제든 다시 볼 수 있어요.</p>
+              <h4 class="settings-section-title">🧰 관리</h4>
               <div class="settings-actions">
                 <button class="settings-btn" id="settings-scriptclean-btn"><span>🧹</span> 원고 칸 청소 — 흘러든 분해 줄 정리</button>
                 <div id="settings-scriptclean-res" style="width:100%;font-size:12px;line-height:1.5;color:#d7f34b;"></div>
                 <button class="settings-btn" id="settings-terms-btn"><span>📜</span> 이용약관 전문 보기</button>
-                <!-- v596 · 서랍 소멸로 로그아웃·휴지통·운영자 문이 설정 안으로 이사 -->
-                <button class="settings-btn" id="settings-trash-btn"><span>🗑</span> 유형 휴지통</button>
                 <button class="settings-btn" id="settings-admin-btn" style="display:none;"><span>🔥</span> 운영자 채널</button>
-                <button class="settings-btn" id="settings-logout-btn"><span>⏻</span> 로그아웃</button>
               </div>
             </div>
           </div>
@@ -28364,9 +28311,21 @@
     if (!Array.isArray(r.trendKw)) r.trendKw = [];
   }
 
+  // v771 · «완전 빈 줄» 판정 — 신규 시트의 100줄 발판이 서버·분류로 새 나가지 않게
+  function rowHasContent(r) {
+    if (!r) return false;
+    const tx = ['hook', 'url', 'idea', 'memo', 'author', 'why', 'script', 'intro', 'outro', 'cta', 'rival', 'format', 'topicMain', 'topicSub', 'funnelStage'];
+    for (const k of tx) { if (String(r[k] || '').trim()) return true; }
+    if ((r.views | 0) || (r.likes | 0) || (r.saves | 0) || (r.shares | 0) || (r.commentsNum | 0) || (r.rating | 0)) return true;
+    const ar = ['tags', 'hookTypes', 'partTypes', 'thumbTypes', 'copyTypes', 'techniques', 'viralTypes', 'keywords', 'custMind', 'scriptSecFlex'];
+    for (const k of ar) { if (Array.isArray(r[k]) && r[k].length) return true; }
+    if (r.hasThumb || r.thumbStrong || r.copyStrong || r.sortQueued) return true;
+    if (r.prep && ((r.prep.marks && Object.keys(r.prep.marks).length) || (r.prep.done))) return true;
+    return false;
+  }
   async function saveRows() {
     try { insInvalidate(); } catch (e) {}   // 통찰 인덱스 재계산 예약
-    try { await window.storage.set(ROWS_KEY, JSON.stringify(rows)); }
+    try { await window.storage.set(ROWS_KEY, JSON.stringify(rows.filter(rowHasContent))); }   // v771 · 빈 발판 줄 제외
     catch (e) { toast('저장 실패'); }
   }
 
@@ -48200,6 +48159,7 @@
   //   트렌드는 화면에 «(선택)»이라 적혀 있으므로 여기 기준에서 뺀다.
   function slvUnsorted() {
     return (rows || []).filter(function (r) {
+      if (!rowHasContent(r)) return false;                        // v771 · 빈 발판 줄은 미분류가 아니다
       if (!(r.thumbTypes || []).length) return true;              // 봇도 못 읽은 것 = 진짜 미분류
       // v665 · 나머지는 «이번에 담은 것»만. 예전 것까지 다 부르면 빚 독촉이 된다.
       return !!r.sortQueued && (!r.funnelStage || !(r.rating > 0));
@@ -48904,6 +48864,7 @@
     let sort = 0, prep = 0, ready = 0, month = 0;
     const now = new Date(), y = now.getFullYear(), m = now.getMonth();
     rs.forEach(function (r) {
+      if (!rowHasContent(r)) return;   // v771 · 빈 발판 줄은 일감이 아니다
       // v665 · 레일의 «분류» 숫자도 slvUnsorted와 같은 셈법 (어긋나면 못 믿는다)
       const needSort = !(r.thumbTypes || []).length
         || (!!r.sortQueued && (!r.funnelStage || !(r.rating > 0)));
@@ -57753,9 +57714,7 @@
         '<div class="hint">이 한 문장이 바뀌면, 아래 재료가 전부 다시 읽힙니다.</div>' +
         '<button class="cp-save" id="cp-save">이걸로 정하기</button>' +
       '</div>' +
-      '<div class="cp-k">내 기준의 재료</div>' +
-      '<button class="cp-card" id="cp-rival"><span class="ic">🥊</span><span><span class="tt">라이벌 멘토</span><br><span class="dd">' +
-        (rivalN ? '내가 겨누는 채널 ' + rivalN + '개' : '내가 겨누는 사람 — 아직 비어 있어요') + '</span></span><span class="ar">→</span></button>';
+      '';   // v771 · 🥊 라이벌 멘토 전면 폐기(사장님 지시 2026-08-18) — 카드 입구 제거
   }
   // v741 · 주간 성적 = 서버(cm_weekly_*) — 실패 시에만 로컬 보관
   function myaWkRender(list) {
@@ -57933,8 +57892,7 @@
         await needleSave();
         try { toast('✓ 정했어요 — 흔들리면 여기로 돌아오세요'); } catch (e) {}
       };
-      const rv = document.getElementById('cp-rival');
-      if (rv) rv.onclick = function () { window.__rrFrom = 'compass'; try { switchWorkspace('northstar'); } catch (e) {} };
+      // v771 · 라이벌 멘토 폐기 — 입구 배선 제거
     }
   }
   function myaRenderBody() {
