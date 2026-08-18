@@ -1584,6 +1584,14 @@
     background:rgba(255,255,255,.04); color:#AEB9CF; border:1.5px dashed color-mix(in srgb, var(--pc) 55%, transparent); transition:all .15s; }
   .pv2-subrow .sub:active{ transform:scale(.93); }
   .pv2-subrow .sub.sel{ background:color-mix(in srgb, var(--pc) 20%, transparent); border-style:solid; border-color:var(--pc); color:#fff; }
+  /* v764 · 소속 캡슐 — 역할(주) 안에 세부(부)가 들어앉은 알약 */
+  .pv2-segbdg{ display:inline-flex; align-items:center; gap:5px; margin:0 6px 0 2px; vertical-align:middle;
+    border:1.5px solid var(--k); border-radius:9px; padding:2px 5px 2px 9px; color:var(--k); font-weight:900; font-size:10px; }
+  .pv2-segbdg i{ font-style:normal; font-size:9px; font-weight:800; color:var(--k);
+    background:color-mix(in srgb, var(--k) 16%, transparent); border-radius:6px; padding:2px 7px; }
+  .pv2-segbdg u{ text-decoration:none; font-size:9px; opacity:.85; }
+  .pv2-vb b i.subn{ font-style:normal; font-size:9px; font-weight:800; margin-left:5px;
+    background:color-mix(in srgb, var(--vc) 16%, transparent); border-radius:6px; padding:2px 7px; }
   .pv2-pal .pk{ font-family:inherit; font-size:10.5px; font-weight:900; cursor:pointer; border-radius:99px; padding:6px 12px;
     color:var(--pc); background:transparent; border:1.5px solid color-mix(in srgb, var(--pc) 45%, transparent);
     transition:all .2s; }
@@ -58104,7 +58112,7 @@
     return { b: lb + ' — 무엇을 보여줄까요', s: '탭해서 어떻게 찍을지 적기', v: '—' };
   }
   var _pln = null, _plnCur = 0, _plnInited = false, _plnLoaded = false, _plnWrite = 0, _plnKwSel = -1, _pv2St = -1,
-      _pv2RefSel = -1, _pv2PaintK = 'prob', _pv2ScrOpen = -1, _pv2AnTab = 'cus', _pv2PenOpen = -1,   // v717 전시장·칠 색 · v754 원고 붙이기 · v760 분석 두 문 · v763 세부 펼침
+      _pv2RefSel = -1, _pv2PaintK = 'prob', _pv2ScrOpen = -1, _pv2AnTab = 'cus', _pv2PenOpen = -1, _pv2SegOpen = -1,   // v717 전시장 · v754 원고 붙이기 · v760 두 문 · v763 세부 펼침 · v764 칸 톡 확정
       _pv2PmmOn = true, _pv2PmmLoadTried = false;   // v720 · 수배지 쌓기 토글·로드 1회
   var _plwConti = 0, _prodCache = null;   // v735 · 콘티 모드 · 내 상품 자산 캐시
   var _cntView = 'map', _cntIdx = 0;   // v736 · 콘티 3면(map/board/stage) · 한 컷 무대 현재 컷
@@ -58829,8 +58837,37 @@
         var body2 = prpSegsOf(r).map(function (sg, gi) {
           var sents = pv2Sents(prpClean(sg.t));
           if (!sents.length) return '';
+          // v764 · 구간이 한 값으로 확정돼 있으면 «소속 캡슐»(도입부 안의 [숫자]) 배지
+          var segBadge = '';
+          var vals9 = sents.map(function (_, si) { return pm[gi + ':' + si]; });
+          var uni9 = (vals9.length && vals9[0] && /^r[sl]:/.test(String(vals9[0])) && vals9.every(function (v9) { return v9 === vals9[0]; })) ? String(vals9[0]) : null;
+          if (uni9) {
+            var mainN = '', subN = '';
+            if (/^rs:/.test(uni9)) mainN = (PV2_ROLES[+uni9.slice(3)] || [])[0] || '';
+            else { var ps9 = uni9.slice(3).split('·'); mainN = ps9[0]; subN = ps9.slice(1).join('·'); }
+            segBadge = '<span class="pv2-segbdg" style="--k:' + pv2PaintCol(uni9) + '">' + esc(mainN) + (subN ? '<i>' + esc(subN) + '</i>' : '') + '<u>✓</u></span>';
+          }
+          // v764 · 칸 톡 = 그 자리에서 세부 펼침 → 픽 = 구간 통째 확정 (사장님 시안 픽)
+          var segSub = '';
+          if (!lite && _pv2AnTab === 'str' && _pv2SegOpen === gi) {
+            var ri9 = -1;
+            PV2_ROLES.forEach(function (r5, i5) { if (ri9 < 0 && String(sg.k || '').indexOf(r5[0]) === 0) ri9 = i5; });
+            if (ri9 >= 0) {
+              segSub = '<div class="pv2-subrow" style="--pc:' + PV2_ROLES[ri9][1] + ';margin:7px 0 4px">' +
+                '<button type="button" class="sub" data-pv2segpick="' + gi + '|rs:' + ri9 + '">' + PV2_ROLES[ri9][0] + '만</button>' +
+                PV2_ROLE_SUBS[ri9].map(function (sb9) {
+                  return '<button type="button" class="sub" data-pv2segpick="' + gi + '|rl:' + esc(PV2_ROLES[ri9][0] + '·' + sb9) + '">' + esc(sb9) + '</button>';
+                }).join('') + '</div>';
+            } else {
+              segSub = '<div class="pv2-subrow" style="--pc:#7EC8F5;margin:7px 0 4px">' +
+                PV2_ROLES.map(function (r5, i5) {
+                  return '<button type="button" class="sub" data-pv2segpick="' + gi + '|rs:' + i5 + '" style="--pc:' + r5[1] + '">' + r5[0] + '</button>';
+                }).join('') + '</div>';
+            }
+          }
           return '<div class="pv2-rseg"><span class="sl" style="--c:' + prpColor(sg) + '"' +
-            (!lite && _pv2AnTab === 'str' ? ' data-pv2segall="' + gi + '" title="톡 = 이 구간 통째로 칠"' : '') + '>' + esc(sg.k || '구간') + '</span> ' +
+            (!lite && _pv2AnTab === 'str' ? ' data-pv2segall="' + gi + '" title="톡 = 이 구간 확정하기"' : '') + '>' + esc(sg.k || '구간') + (!lite && _pv2AnTab === 'str' ? ' ⌄' : '') + '</span> ' +
+            segBadge + segSub +
             sents.map(function (st2, si) {
               var key = gi + ':' + si, mk = pm[key];
               var col = mk ? pv2PaintCol(mk) : '';
@@ -58969,7 +59006,10 @@
       var items = arr.map(function (t) {
         return '<span class="pv2-vit"><s style="cursor:default">' + esc(String(t).slice(0, 90)) + '</s></span>';
       }).join('');
-      return '<div class="pv2-vb" style="--vc:' + col + '"><b>' + esc(nm) + '</b>' +
+      // v764 · 위계 표기 — 역할(주) 안에 세부(부)가 들어앉은 알약
+      var ps9 = String(nm).split('·');
+      var head9 = esc(ps9[0]) + (ps9.length > 1 ? '<i class="subn">' + esc(ps9.slice(1).join('·')) + '</i>' : '');
+      return '<div class="pv2-vb" style="--vc:' + col + '"><b>' + head9 + '</b>' +
         (items || '<span style="font-size:10.5px;color:#4A5570">' + ph + '</span>') + '</div>';
     }
     return '<div class="pln-sec"><div class="pln-sech"><b>구조 분석</b><s>구조 펜으로 칠한 문장이 구간별로 모여요</s>' +
@@ -61802,26 +61842,35 @@
         try { toast('펜: ' + b.dataset.pv2pksub.slice(3) + ' — 이제 문장·구간을 칠하세요'); } catch (er) {}
       };
     });
-    // v762 · 구간 라벨 톡 = 그 구간 통째로 현재 구조 펜 칠 (전부 같으면 해제)
+    // v764 · 구간 라벨 톡 = 그 자리에서 세부 펼침 (재톡=접힘) — 픽하면 구간 통째 확정
     wsin.querySelectorAll('[data-pv2segall]').forEach(function (b) {
+      b.onclick = function (ev) {
+        ev.stopPropagation();
+        var gi = +b.dataset.pv2segall;
+        _pv2SegOpen = (_pv2SegOpen === gi) ? -1 : gi;
+        plnRenderWs(false);
+      };
+    });
+    wsin.querySelectorAll('[data-pv2segpick]').forEach(function (b) {
       b.onclick = async function (ev) {
         ev.stopPropagation();
-        if (!/^r[sl]:/.test(_pv2PaintK)) { try { toast('구조 펜을 먼저 골라주세요'); } catch (er) {} return; }
+        var p9 = b.dataset.pv2segpick.split('|');
+        var gi = +p9[0], v9 = p9[1];
         var e = plnEnsureEp();
         var rf = (e.refs || [])[_pv2RefSel]; if (!rf || !rf.id) return;
         var r9 = (rows || []).filter(function (x9) { return x9 && String(x9.id) === String(rf.id); })[0]; if (!r9) return;
-        var gi = +b.dataset.pv2segall;
         var sg = prpSegsOf(r9)[gi]; if (!sg) return;
         var sents = pv2Sents(prpClean(sg.t));
         e.paint = e.paint || {}; var pm = e.paint[String(rf.id)] = e.paint[String(rf.id)] || {};
-        var allSame = sents.every(function (_, si) { return pm[gi + ':' + si] === _pv2PaintK; });
+        var allSame = sents.every(function (_, si) { return pm[gi + ':' + si] === v9; });
         sents.forEach(function (_, si) {
           var key = gi + ':' + si;
-          if (allSame) { delete pm[key]; return; }
-          if (!pm[key] || /^r[sl]:/.test(String(pm[key]))) pm[key] = _pv2PaintK;   // 고객 형광펜은 보존
+          if (allSame) { delete pm[key]; return; }   // 같은 걸 다시 픽 = 해제
+          if (!pm[key] || /^r[sl]:/.test(String(pm[key]))) pm[key] = v9;   // 고객 형광펜은 보존
         });
+        _pv2SegOpen = -1;
         await plnSave(); plnRenderWs(false);
-        try { toast(allSame ? '구간 칠 해제' : '구간 통째로 칠했어요'); } catch (er) {}
+        try { toast(allSame ? '구간 확정 해제' : '구간 확정: ' + (v9.indexOf('rl:') === 0 ? v9.slice(3) : (PV2_ROLES[+v9.slice(3)] || [])[0])); } catch (er) {}
       };
     });
     // v762 · ⚡ 라벨대로 자동 칠 — 구간 라벨(훅·공감…)을 구조 칠로 한 번에
