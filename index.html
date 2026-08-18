@@ -56941,12 +56941,44 @@
               '<div class="mya-a4"><div class="k">평균 시청</div><div class="v">6.1초</div><small>+0.4초 ↑</small></div>' +
               '<div class="mya-a4"><div class="k">평균 클릭률</div><div class="v">0.21%</div><small>4주 연속 ↑</small></div>' +
             '</div></div>') +
-      '<div class="mya-card"><div class="t">✍️ 이번 주 성적 입력 — 인스타 연동 전엔 주 1회 30초면 됩니다</div>' +
-        '<div class="mya-week">' +
-          '<input id="mya-wf" inputmode="numeric" placeholder="팔로워 수 (예: 2140)">' +
-          '<input id="mya-wv" inputmode="numeric" placeholder="최고 조회수 (예: 31000)">' +
-          '<button id="mya-wgo">기록</button></div>' +
-        '<div class="mya-wlist" id="mya-wlist"></div></div>';
+      // v765 · 📈 팔로워 추이 — 30일 일별(API) + 주간 장기(스냅샷)
+      (function () {
+        const fs = (ig && ig.fseries) || [];
+        const wks = (myaGet('cm-mya-wk-srv', []) || []).slice(0, 8).reverse();   // 오래된 → 최신
+        let spark = '';
+        if (fs.length >= 2) {
+          const vs = fs.map(function (x) { return x.v; });
+          const mn = Math.min.apply(null, vs), mx = Math.max.apply(null, vs), sp = Math.max(1, mx - mn);
+          const pts = fs.map(function (x, i) {
+            return (i / (fs.length - 1) * 100).toFixed(1) + ',' + (30 - (x.v - mn) / sp * 26).toFixed(1);
+          }).join(' ');
+          const d30 = vs[vs.length - 1] - vs[0];
+          spark = '<div style="display:flex;align-items:baseline;gap:10px;margin-top:10px"><span style="font-size:24px;font-weight:900;color:' + (d30 >= 0 ? '#d7f34b' : '#E07B7B') + '">' + (d30 >= 0 ? '+' : '') + Number(d30).toLocaleString() + '</span><span style="font-size:10.5px;color:#95a08b">최근 30일</span></div>' +
+            '<svg viewBox="0 0 100 32" preserveAspectRatio="none" style="display:block;width:100%;height:44px;margin-top:6px"><polyline points="' + pts + '" fill="none" stroke="#d7f34b" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/></svg>';
+        }
+        let bars = '';
+        if (wks.length >= 2) {
+          const fvs = wks.map(function (w) { return w.followers || 0; });
+          const mx2 = Math.max.apply(null, fvs) || 1;
+          const dW = fvs[fvs.length - 1] - fvs[fvs.length - 2];
+          bars = '<div style="display:flex;justify-content:space-between;align-items:baseline;margin-top:14px"><span style="font-size:10px;color:#5d6656;font-weight:800">주간 장기</span><span style="font-size:11px;font-weight:800;color:' + (dW >= 0 ? '#d7f34b' : '#E07B7B') + '">이번 주 ' + (dW >= 0 ? '+' : '') + Number(dW).toLocaleString() + '</span></div>' +
+            '<div style="display:flex;gap:5px;align-items:flex-end;height:46px;margin-top:7px">' + wks.map(function (w) {
+              return '<span style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px"><i style="display:block;width:100%;border-radius:4px 4px 0 0;background:rgba(215,243,75,.55);height:' + Math.max(8, (w.followers || 0) / mx2 * 40).toFixed(0) + 'px"></i><small style="font-size:8px;color:#5d6656">' + String(w.wk || '').slice(5) + '주</small></span>';
+            }).join('') + '</div>';
+        }
+        const body9 = (spark || bars) ? (spark + bars)
+          : '<p style="margin-top:9px;font-size:11px;color:#5d6656">' + (ig ? '숫자가 쌓이는 중 — 매주 자동으로 찍혀서 다음 주부터 선이 그려집니다' : '연동하거나 주 1회 기록하면 추이가 그려집니다') + '</p>';
+        return '<div class="mya-card"><div class="t">📈 팔로워 추이' + (ig ? ' — 자동' : '') + '</div>' + body9 + '</div>';
+      })() +
+      (ig
+        ? '<div class="mya-card"><div class="t">⚡ 성적 자동 기록 중 — 연동 계정은 주 1회 자동으로 찍힙니다</div>' +
+          '<div class="mya-wlist" id="mya-wlist"></div></div>'
+        : '<div class="mya-card"><div class="t">✍️ 이번 주 성적 입력 — 인스타 연동 전엔 주 1회 30초면 됩니다</div>' +
+          '<div class="mya-week">' +
+            '<input id="mya-wf" inputmode="numeric" placeholder="팔로워 수 (예: 2140)">' +
+            '<input id="mya-wv" inputmode="numeric" placeholder="최고 조회수 (예: 31000)">' +
+            '<button id="mya-wgo">기록</button></div>' +
+          '<div class="mya-wlist" id="mya-wlist"></div></div>');
   }
   function myaTrkHtml() {
     const ig = myaIg();
@@ -57133,7 +57165,35 @@
       }));
       out.push.apply(out, part);
     }
-    return { t: Date.now(), profile: pr, media: out };
+    // v765 · 팔로워 일별 추이(최근 30일) — 인스타 정책상 팔로워 100명 미만 계정은 안 줌(조용히 스킵)
+    let fs = [];
+    try {
+      const fr = await (await fetch(base + '/me/insights?metric=follower_count&period=day&access_token=' + encodeURIComponent(tk))).json();
+      fs = (((fr.data || [])[0] || {}).values || []).map(function (v) { return { d: v.end_time, v: v.value || 0 }; });
+    } catch (e) {}
+    return { t: Date.now(), profile: pr, media: out, fseries: fs };
+  }
+  // v765 · 연동 계정 = 주 1회 자동 스냅샷(팔로워·최고 조회) — 수동 입력 은퇴
+  function myaWkKey() {
+    const d = new Date(); const t = new Date(d.getFullYear(), d.getMonth(), d.getDate() - ((d.getDay() + 6) % 7));
+    const y = t.getFullYear(); const j4 = new Date(y, 0, 4);
+    const w = Math.round(((t - new Date(y, 0, 4 - ((j4.getDay() + 6) % 7))) / 86400000) / 7) + 1;
+    return y + '-' + String(w).padStart(2, '0');
+  }
+  async function myaAutoWk(d) {
+    try {
+      if (!d || !d.profile || !window.__cmAuth) return;
+      let best = 0; (d.media || []).forEach(function (m) { best = Math.max(best, (m.ins && m.ins.views) || 0); });
+      // v765 · 이번 주 업로드 수도 자동 — 인스타 media 타임스탬프로 셈 (커뮤니티 체크인·판정까지 자동 반영)
+      const now = new Date(); const mon = new Date(now.getFullYear(), now.getMonth(), now.getDate() - ((now.getDay() + 6) % 7));
+      const upN = (d.media || []).filter(function (m) { return new Date(m.timestamp).getTime() >= mon.getTime(); }).length;
+      const sig = myaWkKey() + '|' + (d.profile.followers_count || 0) + '|' + best + '|' + upN;
+      if (myaGet('cm-mya-autowk', '') === sig) return;   // 값이 그대로면 조용히
+      const a = window.__cmAuth;
+      const r = await myaRpc('cm_weekly_set', { p_code: a.code, p_pin_hash: a.pinHash,
+        p_followers: d.profile.followers_count || null, p_best_views: best || null, p_uploads: upN || null });
+      if (r && r.ok) { myaSet('cm-mya-autowk', sig); myaWkSync(); }
+    } catch (e) {}
   }
   async function myaIgSync(force) {
     const tk = localStorage.getItem('cm-mya-igtk'); if (!tk) return null;
@@ -57669,6 +57729,7 @@
         try {
           const d = await myaIgFetch(t);
           localStorage.setItem('cm-mya-igtk', t); myaSet('cm-mya-ig', d);
+          myaAutoWk(d);   // v765 · 연결 즉시 이번 주 스냅샷
           myaRenderBody(); try { toast('🎉 인스타 연결 완료 — 실데이터로 전환됐습니다'); } catch (e) {}
         } catch (e2) {
           iggo.disabled = false; iggo.textContent = '연결';
@@ -57726,7 +57787,10 @@
       (function () {
         const c = myaIg(); const had = c && c.t;
         if (!localStorage.getItem('cm-mya-igtk')) return;
-        myaIgSync(false).then(function (d) { if (d && d.t !== had && _myaPill === 'perf') myaRenderBody(); });
+        myaIgSync(false).then(function (d) {
+          if (d) myaAutoWk(d);   // v765 · 주 1회 자동 스냅샷
+          if (d && d.t !== had && _myaPill === 'perf') myaRenderBody();
+        });
       })();
     }
     if (_myaPill === 'trk') {
