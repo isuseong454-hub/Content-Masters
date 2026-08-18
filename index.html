@@ -59168,7 +59168,7 @@
       br('누구에게', e.who ? esc(e.who) : '', '①리서치에서 적으면 실립니다') +
       br('핵심 포인트', e.point ? esc(e.point) : '', '①리서치에서 적으면 실립니다') +
       br('왜 터짐', e.why ? esc(e.why) : '', '①리서치에서 적으면 실립니다') +
-      br('★키워드', esc(stars), '②분석에서 ★을 박으면 실립니다') +
+      br('★키워드', esc(stars), '①리서치 키워드 줄에서 ★을 박으면 실립니다') +
       br('후킹', fin ? '<b style="color:#7EC8F5">최종</b> ' + esc(fin) + (bak ? '<br><span style="opacity:.75">예비</span> ' + esc(bak) : '') : '', '②분석에서 최종을 고르면 실립니다') +
       br('공감', voc1 ? '"' + esc(voc1) + '"' : '', '②분석 4바구니에서 실립니다') +
       br('구조', esc((e.bone || []).join(' › '))) +
@@ -60990,6 +60990,7 @@
   }
   function plwKwAdd(e, t) {
     t = String(t || '').trim(); if (!t) return;
+    e = plnEnsureEp();   // v779 · 고스트 편에 담고 사라지는 것 방지 — 담는 순간이 실체화 지점
     e.kw = e.kw || [];
     if (e.kw.some(function (k) { return k.t === t; })) { try { toast('이미 있는 키워드예요'); } catch (er) {} return; }
     e.kw.push({ t: t, star: 0 });
@@ -61015,6 +61016,7 @@
     bar.querySelectorAll('[data-plwstar]').forEach(function (s) {
       s.onclick = function (ev) {
         ev.stopPropagation();
+        e = plnEnsureEp();   // v779 · 이 bind의 e를 실체 편으로 승격(고스트에 박히면 저장이 안 된다)
         var k = (e.kw || [])[+s.dataset.plwstar]; if (!k) return;
         if (!k.star && (e.kw || []).filter(function (x) { return x.star; }).length >= 3) {
           try { toast('★은 3개까지 — 다 박으면 아무것도 안 박혀요'); } catch (er) {}
@@ -61512,7 +61514,7 @@
       ? '<span class="kws">' + (stars.length ? stars : cands.slice(0, 3)).map(function (k) {
           return '<i class="kwp' + (k.star ? ' star' : '') + '">' + (k.star ? '★ ' : '') + esc(k.t) + '</i>';
         }).join('') + '</span>' +
-        (kwX ? '<span class="more"><span class="mlab2">후보 전체 — ②분석에서 캔 것</span><span class="kws dim2">' +
+        (kwX ? '<span class="more"><span class="mlab2">후보 전체 — ①리서치에서 캔 것</span><span class="kws dim2">' +
           cands.map(function (k) { return '<i class="kwp">' + esc(k.t) + '</i>'; }).join('') + '</span></span>' : '')
       : '';
     var hkFin = ((e.hooks || []).filter(function (h) { return h.role === 'fin'; })[0] || {}).t;
@@ -62231,7 +62233,10 @@
     });
     // v698 · ②분석 키워드 서랍 — ④원고에서 이사해 온 층 (plw 함수 재사용, 마운트만 편 화면)
     if (wsin.querySelector('#plw-kwbar')) {
-      var ke = _pln.eps[_plnEp];
+      /* v779 · 🚨 편이 아직 실체화 안 됐으면 배선을 통째로 걸렀다 —
+         새 편에서 키워드 Enter도 ★ 톡도 먹지 않던 진범(그래서 확정판 ★키워드가 영영 비었다).
+         게이트 0 헌법대로 «빈 편도 열려 있다» → 고스트로라도 배선하고, 실체화는 행동(입력·★) 순간에. */
+      var ke = _pln.eps[_plnEp] || plnGhostE();
       if (ke) {
         plwKwBind(ke);
         try {
