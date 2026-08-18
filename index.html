@@ -17205,6 +17205,29 @@
     overflow-y: auto;
   }
   .admin-overlay.show { display: block; }
+  /* v768 · 관리자 탭 4 — 허브 규격 단장 */
+  .admin-tabs{ position:sticky; top:0; z-index:5; display:flex; gap:6px; padding:10px 16px 10px;
+    background:linear-gradient(180deg, rgba(8,10,8,.97), rgba(8,10,8,.88)); backdrop-filter:blur(8px);
+    border-bottom:1px solid rgba(255,255,255,.07); }
+  .admin-tabs button{ font-family:inherit; cursor:pointer; font-size:12px; font-weight:800; color:#8A94A6;
+    background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.1); border-radius:99px; padding:8px 14px;
+    display:flex; align-items:center; gap:5px; transition:all .18s; }
+  .admin-tabs button:active{ transform:scale(.96); }
+  .admin-tabs button.on{ color:#0B0C0A; background:linear-gradient(135deg,#e6fb62,#c2f24a); border-color:transparent;
+    box-shadow:0 4px 14px rgba(215,243,75,.18); }
+  .admin-tabs button .n{ font-size:10px; font-weight:900; opacity:.75; }
+  .admin-pane{ display:none; }
+  .admin-pane.on{ display:block; }
+  .admin-section-title .admin-sub{ text-decoration:none; font-size:10px; font-weight:700; color:#5C6B87; margin-left:7px; }
+  .admin-search{ width:100%; box-sizing:border-box; margin:2px 0 10px; font-size:16px; }
+  .admin-issued{ display:flex; align-items:center; gap:10px; margin-top:10px; border-radius:12px; padding:11px 13px;
+    background:rgba(215,243,75,.07); border:1px solid rgba(215,243,75,.35); }
+  .admin-issued .k{ font-size:10px; font-weight:800; color:#8A94A6; }
+  .admin-issued b{ font-family:'JetBrains Mono',monospace; font-size:17px; letter-spacing:.14em; color:#e6fb62; }
+  .admin-issued button{ margin-left:auto; font-family:inherit; cursor:pointer; font-size:11px; font-weight:800; color:#0B0C0A;
+    background:#e6fb62; border:none; border-radius:8px; padding:7px 13px; }
+  .chg-ccp{ font-family:inherit; cursor:pointer; font-size:10px; color:#8A94A6; background:rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.14); border-radius:6px; padding:3px 7px; margin-left:5px; }
   .admin-header {
     display: flex;
     align-items: center;
@@ -23084,64 +23107,91 @@
     <button class="admin-back" id="admin-close">← 뒤로</button>
     <h1 class="admin-h1">🔥 운영자 채널</h1>
   </header>
+  <!-- v768 · 관리자 방 단장 — 탭 4(허브 규격) · 기존 기능 전부 보존 -->
+  <nav class="admin-tabs" id="admin-tabs">
+    <button class="on" data-atab="issue">🎫 발급</button>
+    <button data-atab="users">👥 수강생 <span class="n" id="atab-users-n"></span></button>
+    <button data-atab="chg">🎯 챌린지</button>
+    <button data-atab="usage">📊 현황</button>
+  </nav>
 
   <main class="admin-main">
-    <!-- 새 코드 생성 -->
-    <section class="admin-section">
-      <h2 class="admin-section-title">새 코드 생성</h2>
-      <div class="admin-form">
-        <label class="admin-label">수강생 이름</label>
-        <input type="text" class="auth-input" id="admin-new-name" placeholder="이름 입력" maxlength="40" />
+    <!-- ══ 🎫 발급 ══ -->
+    <div class="admin-pane on" data-apane="issue">
+      <section class="admin-section">
+        <h2 class="admin-section-title">새 코드 생성 <s class="admin-sub">일반 수강생</s></h2>
+        <div class="admin-form">
+          <label class="admin-label">수강생 이름</label>
+          <input type="text" class="auth-input" id="admin-new-name" placeholder="이름 입력" maxlength="40" />
 
-        <label class="admin-label">사용 기간</label>
-        <select class="admin-select" id="admin-new-period">
-          <option value="90">3개월 (90일)</option>
-          <option value="180">6개월 (180일)</option>
-          <option value="365">12개월 (365일)</option>
-          <option value="lifetime">평생</option>
-        </select>
+          <label class="admin-label">사용 기간</label>
+          <select class="admin-select" id="admin-new-period">
+            <option value="90">3개월 (90일)</option>
+            <option value="180">6개월 (180일)</option>
+            <option value="365">12개월 (365일)</option>
+            <option value="lifetime">평생</option>
+          </select>
 
-        <button class="admin-create-btn" id="admin-create-code">코드 생성하기 🔥</button>
-      </div>
-    </section>
-
-    <!-- 수강생 목록 -->
-    <section class="admin-section">
-      <div class="admin-list-head">
-        <h2 class="admin-section-title">수강생 목록</h2>
-        <div class="admin-list-count" id="admin-list-count">전체 0명</div>
-      </div>
-      <div class="admin-usage-summary" id="admin-usage-summary"></div>
-      <div class="admin-filters">
-        <button class="admin-filter-btn on" data-filter="all">전체</button>
-        <button class="admin-filter-btn" data-filter="active">사용중</button>
-        <button class="admin-filter-btn" data-filter="expired">만료</button>
-      </div>
-      <div class="admin-list" id="admin-list"></div>
-    </section>
-
-    <!-- v711 · 🎯 챌린지 코드 — 모드는 수강생이 첫 로그인 때 선택 -->
-    <section class="admin-section">
-      <h2 class="admin-section-title">🎯 챌린지 코드</h2>
-      <div style="font-size:11px;color:#8A94A6;margin:4px 0 10px">코드만 발급합니다 — 프리/하드는 수강생이 직접 선택 · 잠든 코드는 여기서만 깨울 수 있어요</div>
-      <button class="admin-create-btn" id="chg-new" style="width:auto;padding:10px 20px">＋ 챌린지 코드 발급</button>
-      <div id="chg-form">
-        <label class="admin-label">수강생 이름</label>
-        <input type="text" class="auth-input" id="chg-name" placeholder="예: 고객관점 3기 — 김수강" maxlength="40" />
-        <label class="admin-label">사용 기간</label>
-        <div class="chg-chips" id="chg-per">
-          <button data-v="30">1개월</button><button class="on" data-v="90">3개월</button>
-          <button data-v="180">6개월</button><button data-v="365">1년</button><button data-v="lifetime">평생</button>
+          <button class="admin-create-btn" id="admin-create-code">코드 생성하기 🔥</button>
+          <div id="admin-issue-result"></div>
         </div>
-        <label class="admin-label">주간 목표 (하드 선택 시)</label>
-        <div class="chg-chips" id="chg-goal">
-          <button data-v="2">2편</button><button class="on" data-v="3">3편</button><button data-v="5">5편</button>
+      </section>
+
+      <section class="admin-section">
+        <h2 class="admin-section-title">🎯 챌린지 코드 발급 <s class="admin-sub">100일 챌린지</s></h2>
+        <div style="font-size:11px;color:#8A94A6;margin:4px 0 10px">코드만 발급합니다 — 프리/하드는 수강생이 직접 선택합니다</div>
+        <button class="admin-create-btn" id="chg-new" style="width:auto;padding:10px 20px">＋ 챌린지 코드 발급</button>
+        <div id="chg-form">
+          <label class="admin-label">수강생 이름</label>
+          <input type="text" class="auth-input" id="chg-name" placeholder="예: 고객관점 3기 — 김수강" maxlength="40" />
+          <label class="admin-label">사용 기간</label>
+          <div class="chg-chips" id="chg-per">
+            <button data-v="30">1개월</button><button class="on" data-v="90">3개월</button>
+            <button data-v="180">6개월</button><button data-v="365">1년</button><button data-v="lifetime">평생</button>
+          </div>
+          <label class="admin-label">주간 목표 (하드 선택 시)</label>
+          <div class="chg-chips" id="chg-goal">
+            <button data-v="2">2편</button><button class="on" data-v="3">3편</button><button data-v="5">5편</button>
+          </div>
+          <button class="admin-create-btn" id="chg-make">발급하기 🎯</button>
+          <div style="font-size:10px;color:#5C6B87;margin-top:8px;line-height:1.6">발급되면 🎯챌린지 탭 목록에 떠요 · 수강생이 첫 로그인에서 프리/하드를 고르면 모드가 표시됩니다</div>
         </div>
-        <button class="admin-create-btn" id="chg-make">발급하기 🎯</button>
-        <div style="font-size:10px;color:#5C6B87;margin-top:8px;line-height:1.6">발급되면 코드가 아래 목록에 떠요 · 수강생이 첫 로그인에서 프리/하드를 고르면 모드가 표시됩니다</div>
-      </div>
-      <div id="chg-list"></div>
-    </section>
+      </section>
+    </div>
+
+    <!-- ══ 👥 수강생 ══ -->
+    <div class="admin-pane" data-apane="users">
+      <section class="admin-section">
+        <div class="admin-list-head">
+          <h2 class="admin-section-title">수강생 목록</h2>
+          <div class="admin-list-count" id="admin-list-count">전체 0명</div>
+        </div>
+        <input type="text" class="auth-input admin-search" id="admin-search" placeholder="🔍 이름·코드 검색" autocomplete="off" />
+        <div class="admin-filters">
+          <button class="admin-filter-btn on" data-filter="all">전체</button>
+          <button class="admin-filter-btn" data-filter="active">사용중</button>
+          <button class="admin-filter-btn" data-filter="unused">미사용</button>
+          <button class="admin-filter-btn" data-filter="expired">만료</button>
+        </div>
+        <div class="admin-list" id="admin-list"></div>
+      </section>
+    </div>
+
+    <!-- ══ 🎯 챌린지 ══ -->
+    <div class="admin-pane" data-apane="chg">
+      <section class="admin-section">
+        <h2 class="admin-section-title">🎯 챌린지 현황 <s class="admin-sub">잠든 코드는 여기서만 깨울 수 있어요</s></h2>
+        <div id="chg-list"></div>
+      </section>
+    </div>
+
+    <!-- ══ 📊 현황 ══ -->
+    <div class="admin-pane" data-apane="usage">
+      <section class="admin-section">
+        <h2 class="admin-section-title">📊 창고 사용량</h2>
+        <div class="admin-usage-summary" id="admin-usage-summary"></div>
+      </section>
+    </div>
   </main>
 </div>
 
@@ -45924,6 +45974,7 @@
   let _adminUsers = [];     // 관리자 목록 (Supabase에서 로드)
   let _currentUser = null;
   let _adminListFilter = 'all';
+  let _adminSearchQ = '';   // v768 · 수강생 검색
   let _pendingCode = null; // 코드 검증 통과 후 임시 보관
   let _signupPin1Cache = ''; // 가입 1단계 입력값
 
@@ -52435,6 +52486,17 @@
       document.body.style.overflow = '';
     };
 
+    // v768 · 관리자 탭 4 전환
+    document.querySelectorAll('#admin-tabs button').forEach(tb => {
+      tb.onclick = () => {
+        document.querySelectorAll('#admin-tabs button').forEach(x => x.classList.toggle('on', x === tb));
+        document.querySelectorAll('.admin-pane').forEach(p => p.classList.toggle('on', p.dataset.apane === tb.dataset.atab));
+      };
+    });
+    // v768 · 수강생 검색 — 입력 중 재렌더는 목록만
+    const _asIn = document.getElementById('admin-search');
+    if (_asIn) _asIn.addEventListener('input', () => { _adminSearchQ = _asIn.value.trim().toLowerCase(); renderAdminList(); });
+
     document.getElementById('admin-create-code').onclick = async () => {
       const name = document.getElementById('admin-new-name').value.trim();
       const period = document.getElementById('admin-new-period').value;
@@ -52442,6 +52504,9 @@
       const res = await cmRpc('cm_admin_create', { p_admin_pw: _adminPw, p_name: name, p_period: period });
       if (!res || !res.ok) { toast('코드 생성 실패' + (res && res._error ? ' (' + res._error + ')' : '')); return; }
       document.getElementById('admin-new-name').value = '';
+      const _rc = document.getElementById('admin-issue-result');   // v768 · 결과 카드 — 코드 크게 + 복사
+      if (_rc) _rc.innerHTML = '<div class="admin-issued"><span class="k">새 코드</span><b>' + res.code + '</b>' +
+        '<button type="button" onclick="if(window.__copyCode)window.__copyCode(\'' + res.code + '\')">복사</button></div>';
       await loadAdminUsers();
       renderAdminList();
       toast(`코드 생성: ${res.code}`);
@@ -52512,11 +52577,14 @@
                : '<span class="chg-bdg q">미선택</span>';
         var st = x.status === 'sleep' ? '<span class="chg-bdg s">😴 동면</span>'
                : x.hardDone ? '<span class="chg-bdg f">🎓 완주</span>' : '진행 중';
-        return '<tr><td><b>' + x.code + '</b></td><td>' + String(x.name || '').replace(/</g, '&lt;') + '</td>' +
+        return '<tr><td><b>' + x.code + '</b><button type="button" class="chg-ccp" data-chgcopy="' + x.code + '">⧉</button></td><td>' + String(x.name || '').replace(/</g, '&lt;') + '</td>' +
           '<td>' + md + '</td><td>주 ' + (x.wkGoal || 3) + '편</td>' +
           '<td>' + (x.streak ? '🔥 ' + x.streak + '주' : '—') + '</td><td>' + st + '</td>' +
           '<td>' + (x.status === 'sleep' ? '<button class="wake" data-chgwake="' + x.code + '">깨우기</button>' : '') + '</td></tr>';
       }).join('') + '</table>';
+    box.querySelectorAll('[data-chgcopy]').forEach(function (b) {   // v768 · 챌린지 코드 복사
+      b.onclick = function () { if (window.__copyCode) window.__copyCode(b.dataset.chgcopy); };
+    });
     box.querySelectorAll('[data-chgwake]').forEach(function (b) {
       b.onclick = async function () {
         if (!confirm(b.dataset.chgwake + ' 코드를 깨울까요? (동면 해제)')) return;
@@ -52533,12 +52601,15 @@
     if (!el) return;
 
     let items = _adminUsers.slice().sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
-    if (_adminListFilter === 'active') items = items.filter(c => !isCodeExpired(c));
+    if (_adminListFilter === 'active') items = items.filter(c => !isCodeExpired(c) && c.signedUpAt);
+    else if (_adminListFilter === 'unused') items = items.filter(c => !isCodeExpired(c) && !c.signedUpAt);   // v768
     else if (_adminListFilter === 'expired') items = items.filter(c => isCodeExpired(c));
+    if (_adminSearchQ) items = items.filter(c => String(c.name || '').toLowerCase().indexOf(_adminSearchQ) > -1 || String(c.code || '').toLowerCase().indexOf(_adminSearchQ) > -1);   // v768 · 검색
 
     const total = _adminUsers.length;
     const active = _adminUsers.filter(c => !isCodeExpired(c)).length;
     if (countEl) countEl.textContent = `전체 ${total}명 · 사용중 ${active}명`;
+    const _tn = document.getElementById('atab-users-n'); if (_tn) _tn.textContent = total || '';
 
     // === 전체 창고 사용량 요약 (무료 한도 대략: DB 500MB · 사진 1GB) ===
     const sumEl = document.getElementById('admin-usage-summary');
