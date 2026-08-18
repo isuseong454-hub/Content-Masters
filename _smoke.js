@@ -17,7 +17,9 @@
 
   // ── 2. 필수 함수 정의 — 삭제하다 같이 잘리는 사고(v766→767) ──
   const FN = ['gwanjeomMessage', 'cmMark', 'csParse', 'csSaveToWarehouse', 'saveRows', 'rowHasContent',
-    'plnEnsureEp', 'plwContiHtml', 'cntRoomHtml', 'myaDxHtml', 'termsGate', 'slvOpen', 'openContentShop'];
+    'plnEnsureEp', 'plwContiHtml', 'cntRoomHtml', 'myaDxHtml', 'termsGate', 'slvOpen', 'openContentShop',
+    // v775 · 🎵 음악 서랍 — 담기(빠른담기)·보기(분류방)·편 연결이 한 몸이라 하나만 잘려도 끊긴다
+    'musParse', 'musAdd', 'musBodyHtml', 'musBoardRender', 'musEpRowHtml'];
   const missFn = FN.filter(f => src.indexOf('function ' + f) < 0);
   add('필수 함수 정의', !missFn.length, missFn.length ? '사라짐: ' + missFn.join(', ') : FN.length + '개 모두 존재');
 
@@ -31,6 +33,17 @@
   // ── 4. 분해 파서 — 카드가 안 만들어지는 사고(v766) ──
   //     실제 UI를 건드리지 않고, 파서 입력만 시뮬레이션할 수 없으므로 소스 규칙으로 검사
   add('분해 파서 관용', src.indexOf('_sniff') > -1, '[분해] 마커 없어도 인식하는 보정 존재 여부');
+
+  // ── 4-b. v775 · 🎵 음악 서랍 입구 — 타일/탭이 마크업에서 사라지면 담을 길이 끊긴다 ──
+  const musTile = !!document.querySelector('#qsh-stage [data-qc="music"]');
+  const musTab  = !!document.querySelector('[data-fbmode="music"]');
+  const musSeg  = src.indexOf('data-qcseg') > -1;                       // 썸네일↔수식어 갈래 스위치
+  add('🎵 음악 입구', musTile && musTab && musSeg,
+    (musTile ? '' : '빠른담기 타일 없음 ') + (musTab ? '' : '분류 탭 없음 ') + (musSeg ? '' : '갈래 스위치 없음 ') || '타일·분류탭·갈래스위치 모두 존재');
+  // 태그 × 삭제가 필터 클릭에 먹히던 사고(v775) — 삭제 분기가 «필터보다 먼저» 있어야 한다
+  const iDel = src.indexOf("hit('data-mustagdel')"), iFlt = src.indexOf("hit('data-musflt')");
+  add('태그 × 삭제 순서', iDel > -1 && iFlt > -1 && iDel < iFlt,
+    (iDel > -1 && iFlt > -1 && iDel < iFlt) ? '삭제가 필터보다 먼저 — 정상' : '필터가 × 삭제를 삼킬 수 있음');
 
   // ── 5. CSS 이름 충돌 — 신호등이 부풀던 사고(v773) ──
   const shortCls = [];
