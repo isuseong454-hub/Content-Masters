@@ -20099,6 +20099,117 @@
   /* v612 · 클릭의 방 진입 버튼은 .rm-pill(가운데 알약)로 갈아탔다 — 옛 .ck-quiz 스타일 제거 */
   @media(prefers-reduced-motion:reduce){ #tq *{ animation:none !important; } }
   /* ═══ v602 · 100만 조회수 공식 두 줄 (사장님 확정 문구 — 부연설명 없음) ═══ */
+  /* ══ v778 · 🏋️ 트레이닝실 — 시네마 무대(힉스필드) + 활동 링. 상시 모션 0, 깊이·빛·타이포로만 ══ */
+  .tgs-door{ display:flex; align-items:center; gap:12px; width:100%; margin:12px 0 2px; padding:14px 15px; border-radius:16px;
+    font-family:inherit; cursor:pointer; text-align:left; color:#EDEAF6;
+    background:linear-gradient(150deg, rgba(179,157,251,.14), rgba(179,157,251,.03));
+    border:1px solid rgba(179,157,251,.34); box-shadow:0 12px 28px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.1); }
+  .tgs-door:active{ transform:scale(.985); }
+  .tgs-door .ic{ flex:none; font-size:20px; }
+  .tgs-door .bd{ flex:1; min-width:0; }
+  .tgs-door .t{ font-size:14.5px; font-weight:900; }
+  .tgs-door .s{ font-size:10px; color:#8a83a3; font-weight:800; margin-top:3px; }
+  .tgs-door .go{ flex:none; font-size:17px; color:#B39DFB; font-weight:900; }
+  /* 무대 오버레이 */
+  .tgs{ position:fixed; inset:0; z-index:9400; display:none; overflow-y:auto; -webkit-overflow-scrolling:touch;
+    background:radial-gradient(120% 70% at 50% 0%, #14101f, #08060e 56%, #050308); }
+  .tgs.show{ display:block; }
+  .tgs-in{ max-width:430px; margin:0 auto; padding:calc(14px + env(safe-area-inset-top,0px)) 14px calc(26px + env(safe-area-inset-bottom,0px)); }
+  .tgs-hd{ display:flex; align-items:center; gap:8px; margin-bottom:10px; }
+  .tgs-hd .bk{ font-family:inherit; cursor:pointer; font-size:11px; font-weight:900; color:#8a83a3;
+    background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.12); border-radius:99px; padding:7px 12px; }
+  .tgs-hd s{ text-decoration:none; margin-left:auto; font:800 9px/1 'JetBrains Mono',monospace; color:#615c75; }
+  .tgs-hd s em{ font-style:normal; color:#B39DFB; }
+  .tgs-aura{ position:absolute; left:50%; top:74px; width:300px; height:300px; transform:translateX(-50%); pointer-events:none;
+    background:radial-gradient(circle, rgba(179,157,251,.2), transparent 66%); filter:blur(12px); transition:background .5s ease; }
+  .tgs-eb{ position:relative; text-align:center; font:900 8px/1 'JetBrains Mono',monospace; letter-spacing:.3em; color:#7d76a0; }
+  .tgs-huge{ position:relative; text-align:center; font-size:46px; font-weight:900; line-height:1.02; letter-spacing:-.038em; margin-top:11px;
+    background:linear-gradient(180deg,#F6F2FF,var(--k,#B39DFB) 80%); -webkit-background-clip:text; background-clip:text; color:transparent;
+    transition:opacity .3s ease; }
+  .tgs-lead{ position:relative; text-align:center; font-size:11px; color:#8a83a3; font-weight:800; margin-top:10px; line-height:1.65;
+    transition:opacity .3s ease; }
+  .tgs-lead em{ font-style:normal; color:var(--k,#B39DFB); }
+  .tgs-deck{ position:relative; margin-top:22px; height:236px; }
+  .tgs-cd{ position:absolute; left:50%; top:0; width:206px; border-radius:21px; padding:16px 15px 15px; cursor:pointer;
+    background:linear-gradient(168deg, rgba(255,255,255,.09), rgba(255,255,255,.02)); border:1px solid rgba(255,255,255,.14);
+    box-shadow:0 22px 48px rgba(0,0,0,.6), inset 0 1px 0 rgba(255,255,255,.16);
+    transition:transform .42s cubic-bezier(.2,.9,.3,1), opacity .42s, filter .42s; backdrop-filter:blur(8px); }
+  .tgs-cd .rowt{ display:flex; align-items:flex-start; gap:10px; }
+  .tgs-cd .tx{ flex:1; min-width:0; }
+  .tgs-cd .ic{ font-size:19px; }
+  .tgs-cd .nm{ font-size:15.5px; font-weight:900; margin-top:7px; letter-spacing:-.01em; }
+  .tgs-cd .ds{ font-size:9.5px; color:#8a83a3; font-weight:800; margin-top:4px; line-height:1.5; }
+  .tgs-cd .gap{ font-size:10px; font-weight:800; color:#8a83a3; margin-top:13px; }
+  .tgs-cd .gap em{ font-style:normal; color:var(--k); font-weight:900; }
+  .tgs-cd .st{ display:flex; gap:6px; margin-top:11px; transition:opacity .3s; }
+  .tgs-cd .st i{ flex:1; text-align:center; font-style:normal; border-radius:9px; padding:7px 2px;
+    background:rgba(255,255,255,.05); font:900 11px/1 'JetBrains Mono',monospace; color:#EDEAF6; }
+  .tgs-cd .st i s{ text-decoration:none; display:block; font-size:8px; color:#7d76a0; font-weight:800; margin-top:4px;
+    font-family:Pretendard,sans-serif; }
+  .tgs-cd.c0{ transform:translate(-50%,0) scale(1); z-index:5; }
+  .tgs-cd.c1{ transform:translate(calc(-50% + 132px),18px) scale(.85) rotateY(-16deg); opacity:.46; filter:blur(1.2px); z-index:4; }
+  .tgs-cd.c2{ transform:translate(calc(-50% - 132px),18px) scale(.85) rotateY(16deg); opacity:.46; filter:blur(1.2px); z-index:4; }
+  .tgs-cd.c1 .st, .tgs-cd.c2 .st{ opacity:0; }
+  .tgs-cd.soon .nm::after{ content:' · 준비 중'; font-size:9px; color:#7d76a0; font-weight:800; }
+  .tgs-dots{ display:flex; justify-content:center; gap:6px; margin-top:2px; }
+  .tgs-dots i{ width:6px; height:6px; border-radius:50%; background:#3b3550; transition:width .3s, background .3s; }
+  .tgs-dots i.on{ width:18px; border-radius:99px; background:#B39DFB; box-shadow:0 0 8px rgba(179,157,251,.6); }
+  .tgs-cta{ display:block; width:100%; margin-top:20px; font-family:inherit; cursor:pointer; border:none; border-radius:16px; padding:16px;
+    color:#120a20; background:linear-gradient(135deg,#E6DCFF,var(--k,#B39DFB)); box-shadow:0 14px 32px rgba(179,157,251,.26);
+    transition:background .45s ease, box-shadow .45s ease, opacity .3s ease, transform .15s; }
+  .tgs-cta b{ display:block; font-size:15.5px; font-weight:900; }
+  .tgs-cta s{ text-decoration:none; display:block; font-size:9.5px; font-weight:800; opacity:.62; margin-top:4px; }
+  .tgs-cta:active{ transform:scale(.97); }
+  .tgs-cta[disabled]{ opacity:.4; cursor:default; }
+  .tgs-rec{ margin-top:14px; border-top:1px dashed rgba(255,255,255,.09); padding-top:10px; }
+  .tgs-rec .r{ display:flex; align-items:center; gap:9px; padding:5px 2px; font-size:10px; font-weight:800; color:#8a83a3; }
+  .tgs-rec .r i{ font-style:normal; font:800 8.5px/1 'JetBrains Mono',monospace; color:#615c75; width:34px; flex:none; }
+  .tgs-rec .r b{ margin-left:auto; font:900 11px/1 'JetBrains Mono',monospace; color:#EDEAF6; }
+  .tgs-rec .none{ font-size:10.5px; color:#5d5a70; font-weight:800; text-align:center; padding:12px 6px; line-height:1.7; }
+  /* 게임 */
+  .tgs-gp{ display:flex; align-items:center; gap:8px; margin-bottom:14px; }
+  .tgs-gp .n{ font:900 9.5px/1 'JetBrains Mono',monospace; color:var(--k,#43e0e6); flex:none; }
+  .tgs-gp .bar{ flex:1; height:5px; border-radius:99px; background:rgba(255,255,255,.08); overflow:hidden; }
+  .tgs-gp .bar i{ display:block; height:100%; background:var(--k,#43e0e6); border-radius:99px; transition:width .3s; }
+  .tgs-q{ text-align:center; font-size:14px; font-weight:900; margin-bottom:14px; line-height:1.5; }
+  .tgs-q s{ text-decoration:none; display:block; font-size:9.5px; color:#615c75; font-weight:800; margin-top:5px; }
+  .tgs-cds{ display:flex; flex-direction:column; gap:11px; }
+  .tgs-pick{ border-radius:17px; padding:17px 15px; cursor:pointer; position:relative; overflow:hidden; text-align:left;
+    font-family:inherit; color:#EDEAF6; width:100%;
+    background:linear-gradient(168deg,#171326,#0f0c1a); border:1.5px solid rgba(255,255,255,.11); transition:all .22s; }
+  .tgs-pick:active{ transform:scale(.98); }
+  .tgs-pick .lb{ font:900 8px/1 'JetBrains Mono',monospace; color:#5d5a70; letter-spacing:.18em; }
+  .tgs-pick .tx2{ font-size:15.5px; font-weight:900; line-height:1.5; margin-top:9px; letter-spacing:-.01em; }
+  .tgs-pick .mt{ display:none; align-items:center; gap:7px; margin-top:11px; font-size:10px; font-weight:800; color:#8a83a3; }
+  .tgs-pick.rv .mt{ display:flex; }
+  .tgs-pick .mt b{ font:900 14px/1 'JetBrains Mono',monospace; }
+  .tgs-pick.win{ border-color:#8fe86a; box-shadow:0 0 24px rgba(143,232,106,.18); }
+  .tgs-pick.win .mt b{ color:#8fe86a; }
+  .tgs-pick.lose{ opacity:.45; }
+  .tgs-pick .mk{ position:absolute; right:13px; top:13px; display:none; font:900 9px/1 'JetBrains Mono',monospace;
+    padding:5px 9px; border-radius:99px; color:#0B0913; background:#8fe86a; }
+  .tgs-pick.win .mk{ display:block; }
+  .tgs-res{ display:none; margin-top:13px; border-radius:15px; padding:13px;
+    background:linear-gradient(180deg, rgba(143,232,106,.08), rgba(143,232,106,.02)); border:1px solid rgba(143,232,106,.3); }
+  .tgs-res.on{ display:block; }
+  .tgs-res.bad{ background:linear-gradient(180deg, rgba(224,120,140,.08), rgba(224,120,140,.02)); border-color:rgba(224,120,140,.3); }
+  .tgs-res .k{ font:900 8.5px/1 'JetBrains Mono',monospace; letter-spacing:.16em; color:#8fe86a; }
+  .tgs-res.bad .k{ color:#E0788C; }
+  .tgs-res .t{ font-size:13.5px; font-weight:900; margin-top:7px; line-height:1.5; }
+  .tgs-res .w{ font-size:10px; color:#8a83a3; font-weight:800; margin-top:7px; line-height:1.65; }
+  .tgs-res .nx{ display:block; width:100%; margin-top:11px; font-family:inherit; cursor:pointer; border:none; border-radius:13px;
+    padding:13px; font-size:13.5px; font-weight:900; color:#120a20; background:linear-gradient(135deg,#E6DCFF,#B39DFB); }
+  /* 결과 */
+  .tgs-fin{ text-align:center; padding:26px 0 8px; }
+  .tgs-fin .k{ font:900 8px/1 'JetBrains Mono',monospace; letter-spacing:.3em; color:#7d76a0; }
+  .tgs-fin .sc{ font-size:72px; font-weight:900; line-height:1; letter-spacing:-.05em; margin-top:14px;
+    background:linear-gradient(180deg,#F6F2FF,#B39DFB 78%); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .tgs-fin .of{ font-size:12px; color:#8a83a3; font-weight:800; margin-top:8px; }
+  .tgs-fin .of b{ color:#EDEAF6; }
+  .tgs-fin .up{ display:inline-block; margin-top:14px; font-size:11px; font-weight:900; color:#8fe86a;
+    background:rgba(143,232,106,.1); border:1px solid rgba(143,232,106,.32); border-radius:99px; padding:7px 14px; }
+  .tgs-empty{ font-size:11px; color:#8a83a3; font-weight:800; text-align:center; padding:26px 14px; line-height:1.8; }
+  .tgs-empty b{ color:#B39DFB; }
   .tgym-law{ margin:10px 0 2px; display:flex; flex-direction:column; gap:6px; }
   .tgym-law s{ display:block; text-decoration:none; font-family:'JetBrains Mono',monospace;
     font-size:8.5px; letter-spacing:.26em; color:var(--st2-faint,#7b8478); text-align:center; margin-bottom:2px; }
@@ -23259,6 +23370,9 @@
 </div>
 
 <!-- ============ ADMIN PAGE OVERLAY ============ -->
+<!-- v778 · 🏋️ 트레이닝실 무대 -->
+<div class="tgs" id="tgs"><div class="tgs-in" id="tgs-in"></div></div>
+
 <div class="admin-overlay" id="admin-overlay">
   <header class="admin-header">
     <button class="admin-back" id="admin-close">← 뒤로</button>
@@ -26547,6 +26661,7 @@
           <div class="tgym-cap"><b>오늘의 바벨</b><span>원판 4장 = 아래 목표 4수치 — 채울수록 무거워져요</span></div>
           <div class="tgym-brk" id="tgym-brk"></div>
           <div class="tgym-law" id="tgym-law"></div>
+          <button type="button" class="tgs-door" id="tgs-door"><span class="ic">🏋️</span><span class="bd"><span class="t">트레이닝실</span><span class="s">도입부 · 클릭률 · 구성 — 게임으로 기른다</span></span><span class="go">›</span></button><!-- v778 · 트레이닝실 입구(홈은 그대로) -->
           <div class="board" id="tgym-board"></div>
           <button type="button" class="tgym-weak" id="tgym-weak" style="display:none"></button>
         </div>
@@ -56655,6 +56770,254 @@
   async function eyeLoad() { return rmLoad(); }
 
   // v597→v611 · ◔ 시선의 방 — 그림 · 내 인사이트 · 🎬 트레이닝 · 기록 넷만 남긴다
+  /* ══ v778 · 🏋️ 트레이닝실 — 시네마 무대 + 첫 문장 대진 ══
+     방 3 = 100만 공식 3축(도입부·클릭률·구성). 방 화면은 따로 없다 — 무대 카드가 곧 방이다.
+     문제 재료 = 저장소에 쌓인 내 카드(도입부 구간 + 조회수). 카드를 담을수록 훈련이 풍부해진다. */
+  var TGS_KEY = 'tgs-log1';
+  var _tgsLog = null, _tgsOrder = [2, 0, 1], _tgsQ = [], _tgsI = 0, _tgsHit = 0, _tgsStreak = 0, _tgsBest = 0, _tgsRoom = 0;
+  var TGS_ROOMS = [
+    { id:'intro', k:'#43e0e6', ic:'🎬', nm:'도입부', ds:'첫 3초에 잡는 눈', goal:60,
+      big:'도입부', lead:'첫 3초에서 <em>절반이 떠납니다</em><br>여기부터 올리면 가장 빨리 바뀝니다',
+      cta:'🎬 첫 문장 대진 시작', sub:'10문제 · 1분 · 정답은 실제 조회수', ready:1 },
+    { id:'clk', k:'#E0788C', ic:'🧲', nm:'클릭률', ds:'누르게 만드는 얼굴', goal:10,
+      big:'클릭률', lead:'열에 하나가 <em>눌러줍니다</em><br>얼굴을 바꾸면 조회수가 통째로 움직여요',
+      cta:'🧲 썸네일 대진 열기', sub:'기존 3초 트레이닝으로 이어집니다', ready:1 },
+    { id:'flow', k:'#b07bf0', ic:'🧩', nm:'구성', ds:'끝까지 보게 하는 순서', goal:70,
+      big:'구성', lead:'끝까지 남는 사람이 <em>10명 중 6명</em><br>순서를 바꾸면 여기가 올라갑니다',
+      cta:'🧩 구간 순서 퍼즐', sub:'준비 중 — 다음 단계에 열립니다', ready:0 }
+  ];
+  async function tgsLoad() {
+    if (_tgsLog) return _tgsLog;
+    try { var r = await window.storage.get(TGS_KEY); _tgsLog = r && r.value ? JSON.parse(r.value) : []; }
+    catch (e) { _tgsLog = []; }
+    if (!Array.isArray(_tgsLog)) _tgsLog = [];
+    return _tgsLog;
+  }
+  function tgsStat(id) {   // 방별 평균·최고·판수
+    var L = (_tgsLog || []).filter(function (x) { return x.g === id; });
+    if (!L.length) return { avg:null, best:null, n:0 };
+    var sum = 0, best = 0;
+    L.forEach(function (x) { sum += x.s; if (x.s > best) best = x.s; });
+    return { avg: Math.round(sum / L.length), best: best, n: L.length };
+  }
+  function tgsNow(id) {   // 내 실측 수치 — 연동 전엔 null(«—»)
+    try {
+      if (id === 'intro') return rmNow('eye');
+      if (id === 'clk') return rmNow('clk');
+      if (id === 'flow') return rmPctNow('stay');
+    } catch (e) {}
+    return null;
+  }
+  function tgsRing(r) {
+    var now = tgsNow(r.id), C = 125.6;
+    if (now === null) {
+      return '<svg width="52" height="52" viewBox="0 0 52 52"><circle cx="26" cy="26" r="20" fill="none" stroke="rgba(255,255,255,.09)" stroke-width="6"/>' +
+        '<text x="26" y="30" text-anchor="middle" font-size="12" font-weight="900" fill="#4a4658" font-family="JetBrains Mono,monospace">—</text></svg>';
+    }
+    var pct = Math.max(4, Math.min(100, now / r.goal * 100)), off = C - (C * pct / 100);
+    return '<svg width="52" height="52" viewBox="0 0 52 52"><circle cx="26" cy="26" r="20" fill="none" stroke="rgba(255,255,255,.09)" stroke-width="6"/>' +
+      '<circle cx="26" cy="26" r="20" fill="none" stroke="' + r.k + '" stroke-width="6" stroke-linecap="round" stroke-dasharray="' + C +
+      '" stroke-dashoffset="' + off.toFixed(1) + '" transform="rotate(-90 26 26)" style="filter:drop-shadow(0 0 6px ' + r.k + 'aa)"/>' +
+      '<text x="26" y="30" text-anchor="middle" font-size="13" font-weight="900" fill="#EDEAF6" font-family="JetBrains Mono,monospace">' + Math.round(now) + '</text></svg>';
+  }
+  function tgsWeakFirst() {   // 제일 모자란 방을 무대 중앙에 — 수치가 없으면 판수가 적은 방
+    var worst = 0, gapMax = -1;
+    TGS_ROOMS.forEach(function (r, i) {
+      if (!r.ready) return;
+      var now = tgsNow(r.id);
+      var gap = (now === null) ? (100 - tgsStat(r.id).n) : ((r.goal - now) / r.goal * 100);
+      if (gap > gapMax) { gapMax = gap; worst = i; }
+    });
+    _tgsOrder = [0, 0, 0];
+    _tgsOrder[worst] = 0;
+    var rest = [0, 1, 2].filter(function (i) { return i !== worst; });
+    _tgsOrder[rest[0]] = 1; _tgsOrder[rest[1]] = 2;
+  }
+  function tgsStageHtml() {
+    var doneN = (_tgsLog || []).length, best = 0;
+    (_tgsLog || []).forEach(function (x) { if (x.s > best) best = x.s; });
+    var cards = TGS_ROOMS.map(function (r, i) {
+      var st = tgsStat(r.id), now = tgsNow(r.id);
+      return '<div class="tgs-cd c' + _tgsOrder[i] + (r.ready ? '' : ' soon') + '" data-tgsi="' + i + '" style="--k:' + r.k + '">' +
+        '<div class="rowt"><div class="tx"><div class="ic">' + r.ic + '</div><div class="nm">' + r.nm + '</div>' +
+        '<div class="ds">' + r.ds + '</div></div>' + tgsRing(r) + '</div>' +
+        '<div class="gap">' + (now === null ? '목표 ' + r.goal + '% — <em>연결하면 채워져요</em>'
+          : '목표 ' + r.goal + '% — <em>' + Math.max(0, Math.round(r.goal - now)) + '%p</em> 남았어요') + '</div>' +
+        '<div class="st"><i>' + (st.avg === null ? '—' : st.avg) + '<s>평균</s></i><i>' + (st.best === null ? '—' : st.best) +
+        '<s>최고</s></i><i>' + st.n + '<s>판</s></i></div></div>';
+    }).join('');
+    var mid = _tgsOrder.indexOf(0), r0 = TGS_ROOMS[mid];
+    var rec = (_tgsLog || []).slice(-3).reverse().map(function (x) {
+      var rm = TGS_ROOMS.filter(function (y) { return y.id === x.g; })[0];
+      return '<div class="r"><i>' + (x.d || '') + '</i>' + (rm ? rm.nm : x.g) + ' 대진<b>' + x.s + '</b></div>';
+    }).join('');
+    return '<div class="tgs-hd"><button type="button" class="bk" data-tgsx="1">‹ 트레이닝룸</button>' +
+        '<s>' + (doneN ? '누적 <em>' + doneN + '판</em> · 최고 ' + best : '첫 판을 기다립니다') + '</s></div>' +
+      '<div class="tgs-aura" id="tgs-aura"></div>' +
+      '<div class="tgs-eb">' + (tgsNow(r0.id) === null ? 'START HERE' : "TODAY'S WEAK POINT") + '</div>' +
+      '<div class="tgs-huge" id="tgs-huge" style="--k:' + r0.k + '">' + r0.big + '</div>' +
+      '<div class="tgs-lead" id="tgs-lead" style="--k:' + r0.k + '">' + r0.lead + '</div>' +
+      '<div class="tgs-deck" id="tgs-deck">' + cards + '</div>' +
+      '<div class="tgs-dots" id="tgs-dots"></div>' +
+      '<button type="button" class="tgs-cta" id="tgs-cta" style="--k:' + r0.k + '"' + (r0.ready ? '' : ' disabled') + '>' +
+        '<b>' + r0.cta + '</b><s>' + r0.sub + '</s></button>' +
+      '<div class="tgs-rec">' + (rec || '<div class="none">아직 판이 없어요 —<br>한 판이면 여기에 점수가 남습니다</div>') + '</div>';
+  }
+  function tgsPaint() {   // 카드는 다시 그리지 않고 «자리»만 — 색·글자가 한 박자로 흐른다
+    var d = document.getElementById('tgs-deck'); if (!d) return;
+    d.querySelectorAll('.tgs-cd').forEach(function (el) {
+      var i = +el.dataset.tgsi;
+      el.className = 'tgs-cd c' + _tgsOrder[i] + (TGS_ROOMS[i].ready ? '' : ' soon');
+    });
+    var mid = _tgsOrder.indexOf(0), r = TGS_ROOMS[mid];
+    var hg = document.getElementById('tgs-huge'), ld = document.getElementById('tgs-lead'), c = document.getElementById('tgs-cta');
+    if (hg) { hg.style.opacity = .25; ld.style.opacity = .25; c.style.opacity = .55; }
+    setTimeout(function () {
+      if (!hg || !hg.isConnected) return;
+      hg.textContent = r.big; hg.style.setProperty('--k', r.k);
+      ld.innerHTML = r.lead;  ld.style.setProperty('--k', r.k);
+      c.innerHTML = '<b>' + r.cta + '</b><s>' + r.sub + '</s>';
+      c.style.setProperty('--k', r.k); c.disabled = !r.ready;
+      hg.style.opacity = 1; ld.style.opacity = 1; c.style.opacity = r.ready ? 1 : .4;
+    }, 150);
+    var au = document.getElementById('tgs-aura');
+    if (au) au.style.background = 'radial-gradient(circle, ' + r.k + '33, transparent 66%)';
+    var dt = document.getElementById('tgs-dots');
+    if (dt) dt.innerHTML = TGS_ROOMS.map(function (x, i) { return '<i class="' + (_tgsOrder[i] === 0 ? 'on' : '') + '"></i>'; }).join('');
+    _tgsRoom = mid;
+  }
+  function tgsBind() {
+    var box = document.getElementById('tgs-in'); if (!box) return;
+    var x = box.querySelector('[data-tgsx]');
+    if (x) x.onclick = function () { tgsClose(); };
+    box.querySelectorAll('.tgs-cd').forEach(function (el) {
+      el.onclick = function () {
+        var i = +el.dataset.tgsi; if (_tgsOrder[i] === 0) return;
+        var shift = _tgsOrder[i] === 1 ? 2 : 1;
+        _tgsOrder = _tgsOrder.map(function (v) { return (v + shift) % 3; });
+        tgsPaint();
+      };
+    });
+    var c = document.getElementById('tgs-cta');
+    if (c) c.onclick = function () {
+      var r = TGS_ROOMS[_tgsRoom];
+      if (!r.ready) return;
+      if (r.id === 'clk') { tgsClose(); try { st2SetTab('3sec'); } catch (e) {} return; }   // 썸네일 대진=기존 방
+      tgsGameStart();
+    };
+  }
+  /* ── 🎬 첫 문장 대진 — 내 카드에서 문제를 뽑는다 ── */
+  function tgsMakeQ() {
+    var pool = [];
+    try {
+      (rows || []).forEach(function (r) {
+        if (!r || !(r.views > 0)) return;
+        var segs = prpSegsOf(r);
+        var first = segs && segs.length ? prpClean(segs[0].t) : '';
+        if (!first) return;
+        var one = (pv2Sents(first)[0] || first).trim();
+        if (one.length < 6 || one.length > 70) return;
+        pool.push({ t: one, v: r.views });
+      });
+    } catch (e) {}
+    var qs = [];
+    for (var i = 0; i < pool.length; i++) {
+      for (var j = i + 1; j < pool.length; j++) {
+        if (pool[i].v === pool[j].v) continue;
+        if (Math.max(pool[i].v, pool[j].v) < Math.min(pool[i].v, pool[j].v) * 1.8) continue;   // 차이가 뚜렷한 짝만
+        qs.push(pool[i].v > pool[j].v ? { a: pool[i], b: pool[j] } : { a: pool[j], b: pool[i] });
+      }
+    }
+    for (var k = qs.length - 1; k > 0; k--) { var m = (k * 7 + 3) % (k + 1); var t = qs[k]; qs[k] = qs[m]; qs[m] = t; }
+    return qs.slice(0, 10);
+  }
+  function tgsGameStart() {
+    _tgsQ = tgsMakeQ(); _tgsI = 0; _tgsHit = 0; _tgsStreak = 0; _tgsBest = 0;
+    var box = document.getElementById('tgs-in');
+    if (_tgsQ.length < 3) {
+      box.innerHTML = '<div class="tgs-hd"><button type="button" class="bk" data-tgsback="1">‹ 무대</button></div>' +
+        '<div class="tgs-empty">문제를 만들 <b>카드가 아직 적어요</b><br>원고가 담긴 카드가 <b>3장 이상</b> 있으면 대진이 열립니다.<br><br>' +
+        '분해 정리에서 카드를 담아보세요 — 담을수록 문제가 늘어납니다.</div>';
+      var b = box.querySelector('[data-tgsback]'); if (b) b.onclick = tgsOpen;
+      return;
+    }
+    tgsGameQ();
+  }
+  function tgsGameQ() {
+    var box = document.getElementById('tgs-in'), q = _tgsQ[_tgsI], swap = _tgsI % 2 === 1;
+    var L = swap ? q.b : q.a, R = swap ? q.a : q.b;
+    box.innerHTML = '<div class="tgs-hd"><button type="button" class="bk" data-tgsback="1">‹ 무대</button>' +
+        '<s>' + (_tgsStreak ? '<em>' + _tgsStreak + '연속</em> ✓' : '') + '</s></div>' +
+      '<div class="tgs-gp" style="--k:#43e0e6"><span class="n">' + (_tgsI + 1) + '/' + _tgsQ.length + '</span>' +
+        '<span class="bar"><i style="width:' + ((_tgsI + 1) / _tgsQ.length * 100) + '%"></i></span></div>' +
+      '<div class="tgs-q">어느 쪽을 <b>더 볼</b> 것 같나요?<s>내 창고에 담긴 두 원고의 도입부 첫 문장</s></div>' +
+      '<div class="tgs-cds">' +
+        '<button type="button" class="tgs-pick" data-tgspick="' + (swap ? 'b' : 'a') + '"><span class="lb">A</span>' +
+          '<div class="tx2">' + esc(L.t) + '</div><div class="mt">▶ <b>' + fmtViews(L.v) + '</b></div><span class="mk">실제 1위</span></button>' +
+        '<button type="button" class="tgs-pick" data-tgspick="' + (swap ? 'a' : 'b') + '"><span class="lb">B</span>' +
+          '<div class="tx2">' + esc(R.t) + '</div><div class="mt">▶ <b>' + fmtViews(R.v) + '</b></div><span class="mk">실제 1위</span></button>' +
+      '</div><div class="tgs-res" id="tgs-res"></div>';
+    box.querySelector('[data-tgsback]').onclick = tgsOpen;
+    box.querySelectorAll('[data-tgspick]').forEach(function (b) {
+      b.onclick = function () { tgsPick(b.dataset.tgspick); };
+    });
+  }
+  function tgsPick(p) {
+    var ok = p === 'a';
+    if (ok) { _tgsHit++; _tgsStreak++; if (_tgsStreak > _tgsBest) _tgsBest = _tgsStreak; } else { _tgsStreak = 0; }
+    document.querySelectorAll('[data-tgspick]').forEach(function (b) {
+      b.classList.add('rv', b.dataset.tgspick === 'a' ? 'win' : 'lose'); b.onclick = null;
+    });
+    var q = _tgsQ[_tgsI], gapX = Math.round(q.a.v / Math.max(1, q.b.v) * 10) / 10;
+    var r = document.getElementById('tgs-res');
+    r.className = 'tgs-res on' + (ok ? '' : ' bad');
+    r.innerHTML = '<div class="k">' + (ok ? '정답' : '아쉬워요') + '</div>' +
+      '<div class="t">' + (ok ? '맞혔어요 — 이 감각이 도입부입니다' : '실제로는 A가 이겼어요') + '</div>' +
+      '<div class="w">A가 B보다 <b style="color:#8fe86a">' + gapX + '배</b> 더 봤습니다. 첫 문장 하나로 갈린 차이예요.</div>' +
+      '<button type="button" class="nx" id="tgs-nx">' + (_tgsI + 1 >= _tgsQ.length ? '결과 보기 →' : '다음 문제 →') + '</button>';
+    document.getElementById('tgs-nx').onclick = function () {
+      if (_tgsI + 1 >= _tgsQ.length) { tgsFinish(); return; }
+      _tgsI++; tgsGameQ();
+    };
+  }
+  async function tgsFinish() {
+    var score = Math.round(_tgsHit / _tgsQ.length * 100);
+    var st0 = tgsStat('intro');
+    var d = new Date(), dd = (d.getMonth() + 1) + '/' + d.getDate();
+    _tgsLog = _tgsLog || [];
+    _tgsLog.push({ g: 'intro', s: score, n: _tgsQ.length, d: dd, at: Date.now() });
+    if (_tgsLog.length > 60) _tgsLog = _tgsLog.slice(-60);
+    try { await window.storage.set(TGS_KEY, JSON.stringify(_tgsLog)); } catch (e) {}
+    var st1 = tgsStat('intro');
+    var box = document.getElementById('tgs-in');
+    box.innerHTML = '<div class="tgs-hd"><button type="button" class="bk" data-tgsback="1">‹ 무대</button><s>첫 문장 대진</s></div>' +
+      '<div class="tgs-fin"><div class="k">SCORE</div><div class="sc">' + score + '</div>' +
+        '<div class="of">' + _tgsQ.length + '문제 중 <b>' + _tgsHit + '개</b> 정답 · 최고 연속 ' + _tgsBest + '</div>' +
+        (st0.avg !== null && st1.avg !== st0.avg
+          ? '<div class="up">' + (st1.avg > st0.avg ? '↑' : '↓') + ' 내 평균 ' + st0.avg + ' → ' + st1.avg + '</div>'
+          : '<div class="up">평균 ' + st1.avg + ' · ' + st1.n + '판째</div>') + '</div>' +
+      '<button type="button" class="tgs-cta" id="tgs-again" style="--k:#43e0e6;margin-top:22px"><b>한 판 더</b><s>다음 ' + _tgsQ.length + '문제</s></button>';
+    box.querySelector('[data-tgsback]').onclick = tgsOpen;
+    document.getElementById('tgs-again').onclick = tgsGameStart;
+  }
+  async function tgsOpen() {
+    await tgsLoad();
+    try { if (!_rmLoaded) await rmLoad(); } catch (e) {}
+    tgsWeakFirst();
+    var ov = document.getElementById('tgs'); if (!ov) return;
+    document.getElementById('tgs-in').innerHTML = tgsStageHtml();
+    ov.classList.add('show'); document.body.style.overflow = 'hidden';
+    tgsBind(); tgsPaint();
+  }
+  function tgsClose() {
+    var ov = document.getElementById('tgs'); if (ov) ov.classList.remove('show');
+    document.body.style.overflow = '';
+  }
+  window.__openTraining = tgsOpen;
+  document.addEventListener('click', function (e) {   // v778 · 트레이닝실 입구
+    var t = e.target && e.target.closest && e.target.closest('#tgs-door');
+    if (t) { try { tgsOpen(); } catch (er) {} }
+  });
   function st2Render3sec() {
     const el = document.getElementById('st2-3sec'); if (!el) return;
     if (!_rmLoaded) { rmLoad().then(function () { try { st2Render3sec(); } catch (e) {} }); }

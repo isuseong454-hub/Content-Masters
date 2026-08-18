@@ -19,7 +19,9 @@
   const FN = ['gwanjeomMessage', 'cmMark', 'csParse', 'csSaveToWarehouse', 'saveRows', 'rowHasContent',
     'plnEnsureEp', 'plwContiHtml', 'cntRoomHtml', 'myaDxHtml', 'termsGate', 'slvOpen', 'openContentShop',
     // v775 · 🎵 음악 서랍 — 담기(빠른담기)·보기(분류방)·편 연결이 한 몸이라 하나만 잘려도 끊긴다
-    'musParse', 'musAdd', 'musBodyHtml', 'musBoardRender', 'musEpRowHtml'];
+    'musParse', 'musAdd', 'musBodyHtml', 'musBoardRender', 'musEpRowHtml',
+    // v778 · 🏋️ 트레이닝실 — 무대·게임·기록이 한 몸이라 하나만 잘려도 훈련이 끊긴다
+    'tgsOpen', 'tgsStageHtml', 'tgsPaint', 'tgsMakeQ', 'tgsGameStart', 'tgsFinish'];
   const missFn = FN.filter(f => src.indexOf('function ' + f) < 0);
   add('필수 함수 정의', !missFn.length, missFn.length ? '사라짐: ' + missFn.join(', ') : FN.length + '개 모두 존재');
 
@@ -44,6 +46,10 @@
   const iDel = src.indexOf("hit('data-mustagdel')"), iFlt = src.indexOf("hit('data-musflt')");
   add('태그 × 삭제 순서', iDel > -1 && iFlt > -1 && iDel < iFlt,
     (iDel > -1 && iFlt > -1 && iDel < iFlt) ? '삭제가 필터보다 먼저 — 정상' : '필터가 × 삭제를 삼킬 수 있음');
+
+  // ── 4-c. v778 · 🏋️ 트레이닝실 입구·무대 — 마크업에서 사라지면 훈련으로 갈 길이 끊긴다 ──
+  add('🏋️ 트레이닝실', !!document.getElementById('tgs-door') && !!document.getElementById('tgs'),
+    (document.getElementById('tgs-door') ? '' : '입구 없음 ') + (document.getElementById('tgs') ? '' : '무대 없음 ') || '입구·무대 존재');
 
   // ── 5. CSS 이름 충돌 — 신호등이 부풀던 사고(v773) ──
   const shortCls = [];
