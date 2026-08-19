@@ -1575,6 +1575,13 @@
   .pv2-refc.add s{ position:static; margin-top:4px; }
   .pv2-rdpn{ margin-top:10px; border-radius:14px; border:1px solid rgba(255,255,255,.07);
     background:rgba(255,255,255,.02); padding:12px; }
+  /* v783 · 편집 도구는 «아래»에 — 원고를 보면서 고른다(판독지 .rd-dock과 같은 문법) */
+  .pv2-pendock{ position:sticky; bottom:0; z-index:5; margin:10px -12px -12px; padding:10px 12px 12px;
+    background:linear-gradient(180deg, rgba(12,16,24,.4), rgba(12,16,24,.96) 38%);
+    border-top:1px solid rgba(255,255,255,.08); border-radius:0 0 14px 14px; }
+  .pv2-pendock .pv2-pal{ margin-bottom:0; }
+  .pv2-pendock .pv2-palcap{ margin:0 0 6px; }
+  .pv2-pendock .pv2-subrow{ margin-top:8px; }
   .pv2-pal{ display:flex; gap:6px; flex-wrap:wrap; margin-bottom:9px; }
   .pv2-palcap{ font-size:9px; font-weight:800; letter-spacing:.1em; color:#5C6B87; margin:2px 0 6px; }   /* v755 · 펜 두 줄 라벨 */
   /* v762 · 구조 칠=밑줄(고객 형광펜과 한눈에 구분) + 자동 칠 버튼 + 구간 라벨 톡 */
@@ -60222,11 +60229,12 @@
         panel = lite
           ? '<div class="pv2-rdpn"><div class="pv2-rdcap">원고 읽기 — 칠하기(고객·구조 분석)는 ②분석 방에서</div>' +
             '<div class="pv2-rdbody">' + body2 + '</div></div>'   // v762 · 리서치=읽기만, 펜·수배지 없음
-          : '<div class="pv2-rdpn">' + pal +
+          : '<div class="pv2-rdpn">' +
             '<div class="pv2-rdcap">' + (_pv2AnTab === 'str'
               ? '문장 톡=밑줄 · <b>구간 라벨 톡=그 구간 통째로</b> (다시 톡=해제)'
               : '펜을 고르고, 문장을 톡 — 형광펜으로 칠해지고 4바구니에 자동으로 담겨요 (다시 톡=해제)') + '</div>' +
-            '<div class="pv2-rdbody">' + body2 + '</div></div>';
+            '<div class="pv2-rdbody">' + body2 + '</div>' +
+            '<div class="pv2-pendock">' + pal + '</div></div>';   // v783 · 펜은 아래(하단 고정)
       }
     }
     return '<div class="pln-sec"><div class="pln-sech"><b>레퍼런스 카드</b><s>전시장 — 카드 톡 = 원고 열림</s>' +
