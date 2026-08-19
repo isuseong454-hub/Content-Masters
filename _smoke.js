@@ -51,6 +51,41 @@
   add('🏋️ 트레이닝실', !!document.getElementById('tgs-door') && !!document.getElementById('tgs'),
     (document.getElementById('tgs-door') ? '' : '입구 없음 ') + (document.getElementById('tgs') ? '' : '무대 없음 ') || '입구·무대 존재');
 
+  // ── 4-d. v779 · 🚨 기획 ①리서치 키워드 배선 — 편이 없으면 bind를 통째로 걸러
+  //         키워드 Enter도 ★ 톡도 안 먹고, 확정판 «★키워드»가 영영 비던 사고 ──
+  add('키워드 바 배선(게이트 0)', src.indexOf("_pln.eps[_plnEp] || plnGhostE();\n      if (ke)") > -1,
+    src.indexOf("var ke = _pln.eps[_plnEp];") > -1 ? '편이 없으면 배선을 거른다 — 새 편에서 ★이 안 박힘' : '빈 편에서도 배선됨');
+
+  // ── 4-e. v780 · 🚨 대진 기준선 — 판(플랫폼)이 다른 것을 절대 조회수로 견주면
+  //         «문장»이 아니라 «판»이 정답이 된다. 짝 만들 때 platform을 보는지 확인 ──
+  add('대진 기준선(플랫폼)', src.indexOf('function tgsPairs(same)') > -1 && src.indexOf("pool.push({ t: one, v: r.views, p:") > -1,
+    src.indexOf('function tgsPairs(same)') > -1 ? '같은 판끼리 우선 · 모자라면 평균 대비로' : '조회수만 보고 아무 짝이나 만든다');
+
+  // ── 4-f. v784 · 📺 유튜브 방 — 시트가 아니라 별도 서랍(ytv1). 입구·데이터 계층이 살아 있는지 ──
+  add('📺 유튜브 방', !!document.querySelector('[data-fbmode="yt"]') && src.indexOf('function ytvBoardRender') > -1,
+    (document.querySelector('[data-fbmode="yt"]') ? '' : '분류 탭 없음 ') +
+    (src.indexOf('function ytvBoardRender') > -1 ? '' : '보드 함수 없음 ') || '탭·보드 존재');
+
+  // ── 4-g. 🚨 «먹통»의 진짜 조건 — 열린 오버레이는 없는데 스크롤 잠금(ov-open)만 남은 상태.
+  //         이러면 화면이 멀쩡해 보여도 아무것도 안 눌리는 것처럼 느껴진다 ──
+  try {
+    const lock = document.body.classList.contains('ov-open');
+    // ⚠️ 껍데기(#cs-fork)는 자식이 fixed라 높이가 0으로 잡힌다 → «열림» 표시 클래스로도 인정
+    const openOv = ['cs-fork', 'qc-room', 'cmu-ov', 'ytv-ov', 'prp', 'sh-modal', 'tos-ov', 'cs-room']
+      .map(id => document.getElementById(id))
+      .filter(el => el && (el.classList.contains('show') || el.classList.contains('on') || vis(el))).length;
+    add('스크롤 잠금 잔류', !(lock && !openOv),
+      lock ? (openOv ? '잠김 · 열린 화면 ' + openOv + '개 — 정상' : '🚨 열린 화면이 없는데 잠금만 남음') : '잠금 없음');
+  } catch (e) {}
+
+  // ── 4-h. 🚨🚨 v791 · MutationObserver 자기 물기 — 감시 대상 «안»의 글자를 조건 없이 바꾸면
+  //         콜백 → 변경 → 콜백 … 무한 루프로 브라우저가 통째로 얼어붙는다.
+  //         (v774 #qc-back 라벨이 그랬다 — «빠르게 담기 누르면 먹통»의 진범)
+  add('옵서버 무한 루프', src.indexOf("if (b.textContent === want) return;") > -1,
+    src.indexOf("if (b.textContent === want) return;") > -1
+      ? '값이 같으면 안 쓴다 — 자기 발화 차단됨'
+      : '🚨 qc-back 라벨 옵서버가 조건 없이 textContent를 쓴다');
+
   // ── 5. CSS 이름 충돌 — 신호등이 부풀던 사고(v773) ──
   const shortCls = [];
   try {
@@ -95,8 +130,10 @@
   try {
     const rail = document.getElementById('room-rail');
     const shown = rail ? [...rail.querySelectorAll('.rr-btn')].filter(vis) : [];
-    add('내비 통일', shown.length === 1 && /갈림길/.test(shown[0].textContent),
-      shown.length ? shown.map(b => b.textContent.trim()).join(' / ') : '레일 없음');
+    // 손질·분해처럼 «전체 화면을 덮는 방»에선 레일이 가려진다 — 그건 정상이므로 경고로만
+    if (!shown.length) add('내비 통일', false, '지금 화면이 레일을 덮고 있음(전체 화면 방이면 정상)', 'warn');
+    else add('내비 통일', shown.length === 1 && /갈림길/.test(shown[0].textContent),
+      shown.map(b => b.textContent.trim()).join(' / '));
   } catch (e) {}
 
   // ── 9. 설정 다이어트 — 없앤 것이 되살아나지 않았나 ──
