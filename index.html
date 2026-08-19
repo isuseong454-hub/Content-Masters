@@ -1650,6 +1650,17 @@
   .qcw-mwhere{ margin-top:9px; border-radius:11px; padding:9px 11px; font-size:10.5px; font-weight:800; line-height:1.65;
     background:rgba(95,211,196,.08); border:1px dashed rgba(95,211,196,.32); color:#8ba392; }
   .qcw-mwhere em{ font-style:normal; color:#5FD3C4; }
+  /* v796 · 트레이닝 홈의 «이번 달 계획표» — 본체는 기획으로, 여기엔 문 한 줄만 */
+  .st2-caldoor{ display:flex; align-items:center; gap:11px; width:100%; margin:14px 0 4px; cursor:pointer;
+    font-family:inherit; text-align:left; border-radius:15px; padding:14px 15px;
+    background:linear-gradient(166deg, rgba(126,200,245,.1), rgba(126,200,245,.03));
+    border:1px solid rgba(126,200,245,.28); }
+  .st2-caldoor .ic{ flex:none; font-size:19px; }
+  .st2-caldoor .tx{ flex:1; min-width:0; }
+  .st2-caldoor .tx b{ display:block; font-size:13px; font-weight:900; color:#CFE6F7; }
+  .st2-caldoor .tx s{ text-decoration:none; display:block; font-size:10.5px; font-weight:800; color:#7d94a6; margin-top:4px; line-height:1.55; }
+  .st2-caldoor .go{ flex:none; font-size:15px; color:#7EC8F5; }
+  .st2-caldoor:active{ transform:scale(.985); }
   .ytv-wrap{ display:block; }
   .ytv-srch{ display:flex; align-items:center; gap:8px; border-radius:99px; padding:10px 13px; margin-bottom:11px;
     background:rgba(0,0,0,.3); border:1px solid rgba(255,255,255,.09); box-shadow:inset 0 2px 7px rgba(0,0,0,.6); }
@@ -23923,7 +23934,7 @@
       <span class="sh-topbar-title">Benchmark <span class="em">Sheet</span></span>
       <span class="sh-topbar-meta" id="sh-meta">000 / 100</span>
       <span class="sh-sring"><input type="text" class="sh-search" id="sh-search" placeholder="검색 — 후킹·메모·작성자·태그…" /></span>
-      <button id="csh-open-btn" type="button" title="콘텐츠 쇼핑 — 내 레퍼런스 둘러보고 이번 주에 담기" style="flex:0 0 auto;display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:9px;background:var(--emerald-faint);border:1px solid var(--emerald-line);color:var(--emerald);font-family:inherit;font-weight:800;font-size:12px;cursor:pointer;white-space:nowrap;">🛍 쇼핑</button>
+      <!-- v796 · 🛍 콘텐츠 쇼핑 폐기(사장님 확정) — 입구만 없앤다. 코드는 남기되 부르는 데가 없다. -->
       <div class="sh-spacer"></div>
     </div>
 
@@ -54317,14 +54328,22 @@
         '<div class="st2i-pane" id="st2i-pane"></div>' +
       '</div></div>' +
       '<div class="st2-lean st2-rv" id="st2-lean"></div>' +
-      '<div class="st2-calsum st2-rv" id="st2-calsum"></div>' +
-      '<div class="st2-rv" id="st2-calbox"></div>' +
+      /* v796 · 달력 본체는 ◈기획으로 이사 — 여기선 «가는 문»만 (계획은 만드는 방에서 세운다) */
+      '<button type="button" class="st2-caldoor st2-rv" id="st2-caldoor">' +
+        '<span class="ic">📅</span><span class="tx"><b>이번 달 계획표</b>' +
+        '<s>어떤 편을 언제 올릴지 — <b style="color:#7EC8F5">◈ 기획의 방</b>에서 정합니다</s></span>' +
+        '<span class="go">›</span></button>' +
       '<div class="st2-endcap st2-rv">곡선은 계속한 사람 뒤에서 옵니다.</div>';
     el.innerHTML = h;
     // v596 · 홈 다이어트(사장님 확정) — 홈 = 전술보드+올린횟수 그래프+월간 계획+목표.
     //   코어·지표·맵은 🧭 나침반 홈으로 이사(cpRenderInsight) — 여기선 CSS(.st2-slim)로 접는다 (마크업·로직 보존)
     el.classList.add('st2-slim');
     st2RenderGrowth(); st2RenderFocap(); st2RenderMini(); st2RenderCal(); st2RenderLean();
+    // v796 · 계획표 문 → ◈기획 (데이터 st2-plan은 그대로 보존 — 옮긴 게 아니라 «세우는 자리»만 바꿨다)
+    try {
+      var _cd = document.getElementById('st2-caldoor');
+      if (_cd) _cd.onclick = function () { try { switchWorkspace('plan'); } catch (e) {} };
+    } catch (e) {}
     // 🎯 v585 · 저장소에서 한 번만 읽고 그린다 (읽기 전이면 읽은 뒤 다시)
     if (_stgLoaded) { try { st2RenderGoal(); } catch (e) {} }
     else { st2GoalLoad().then(function () { try { st2RenderGoal(); } catch (e) {} }); }
