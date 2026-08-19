@@ -2393,6 +2393,18 @@
   .qcw-seg button.on{ background:rgba(var(--qc),.18); color:rgb(var(--qc)); }
   /* v775 · 음악 담기 — 링크 한 줄 + 태그 */
   /* ⚠️ 글칸 자동 높이(grow)가 [data-qta] 전부에 걸리므로 링크 칸은 높이를 못 박는다 */
+  /* v800 · 🎵 곡 이름 자동완성 — 유튜브가 실제로 추천하는 말 그대로 */
+  .qcw-sug{ display:none; flex-wrap:wrap; gap:5px; align-items:center; margin:7px 0 2px; }
+  .qcw-sug.on{ display:flex; }
+  .qcw-sug .cap{ width:100%; font-size:9.5px; font-weight:800; color:#5d6b62; margin-bottom:1px; }
+  .qcw-sug button{ font-family:inherit; font-size:11px; font-weight:700; color:#C9D6CD; cursor:pointer;
+    padding:5px 10px; border-radius:20px; border:1px solid rgba(255,255,255,.13); background:rgba(255,255,255,.04); }
+  .qcw-sug button:active{ transform:scale(.95); }
+  /* v800 · 인스타 링크를 넣으면 «캡처»가 유일한 단서가 된다 — 그 자리를 켠다(재렌더 없이 클래스만) */
+  .qcw-slot.sm.hot{ border-color:rgba(215,243,75,.5) !important; background:rgba(215,243,75,.06) !important; }
+  .qcw-slot.sm.hot .pl{ color:#D7F34B; }
+  .qcw-slot.sm.hot .s{ color:#D7F34B; }
+  .qcw-slot.sm.hot .s::after{ content:' — 인스타는 제목을 못 가져와요'; opacity:.8; font-weight:700; }
   .qcw-mlink{ width:100%; height:46px !important; background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.12);
     border-radius:12px; padding:12px 13px; font-family:inherit; font-size:16px; color:#EDF2EA; outline:none; }
   .qcw-mlink:focus{ border-color:rgba(var(--qc),.55); background:rgba(var(--qc),.05); }
@@ -51589,8 +51601,9 @@
     // v775 · 🎵 음악 — 링크 한 줄이면 끝 (유튜브는 제목·그림까지 앱이 가져온다)
     music: [
       { t: 'musiclink',  lb: '음악 링크', s: '인스타 오디오 페이지 · 유튜브 주소 — 붙여넣기만 하면 앱이 나눠요' },
-      { t: 'musictitle', lb: '곡 이름 · 가수', s: '나중에 이 말로 찾습니다', ph: '예) 잔잔한 피아노 — Someone' },
-      { t: 'photo',      lb: '오디오 페이지 캡처 (선택)', s: '인스타는 제목을 못 가져와요 — 캡처 한 장이면 가수·제목이 그림으로 남습니다' },
+      /* v800 · 캡처가 링크 «바로 아래»다 — 인스타는 제목을 못 가져와서 이 한 장이 유일한 단서다 */
+      { t: 'photo',      lb: '오디오 페이지 캡처', s: '인스타 곡이면 여기 한 장 — 가수·제목이 그림으로 남습니다 (유튜브는 안 넣어도 돼요)' },
+      { t: 'musictitle', lb: '곡 이름 · 가수', s: '치는 대로 유튜브가 추천해줍니다', ph: '예) 잔잔한 피아노 — Someone' },
       { t: 'musictag',   lb: '어떤 느낌이에요?', s: '나중에 이 느낌으로 찾습니다 — 여러 개 골라도 돼요' }
     ],
     idea: [
@@ -51921,7 +51934,8 @@
       /* v794 · 유튜브면 앱이 채워주니 «비워두셔도 됩니다», 인스타면 여기가 유일한 이름표다 */
       /* ⚠️ 링크를 친 뒤 이 칸을 다시 그리면 타이핑 포커스가 날아간다 → 조건 없이 항상 둔다 */
       return '<input class="qcw-in" data-qta="mtitle" value="' + esc(_qcw.mtitle || '') + '" maxlength="90" ' +
-        'placeholder="' + esc(f.ph || '') + '">' +
+        'placeholder="' + esc(f.ph || '') + '" autocomplete="off">' +
+        '<div class="qcw-sug" id="qcw-msug"></div>' +   /* v800 · 유튜브 추천어가 여기 뜬다 */
         '<button type="button" class="qcw-mfind" data-qmfind="1">🔍 유튜브에서 이 곡 찾기</button>' +
         '<div class="qcw-mnote">유튜브 주소는 <em>제목·그림이 자동</em>으로 오고 <em>앱에서 바로 들립니다</em>.<br>' +
         '인스타 곡이면 이름을 적고 위 버튼으로 찾아, 그 주소를 «음악 링크»에 넣으세요 — 인스타 주소는 카드에서 따로 이어둘 수 있어요.</div>';
@@ -52055,6 +52069,39 @@
       if (!q) { try { toast('먼저 곡 이름을 적어주세요'); } catch (e) {} return; }
       try { window.open('https://www.youtube.com/results?search_query=' + encodeURIComponent(q), '_blank', 'noopener'); } catch (e) {}
     });
+    /* v800 · 🎵 곡 이름 자동완성 — 정찰의 sctYtSug(유튜브 추천어)를 그대로 쓴다.
+       유튜브 검색창에서 치는 것과 같은 말이 떠서, 그 이름 그대로 적어두면 나중에 찾기 쉽다. */
+    (function () {
+      const ti = w.querySelector('[data-qta="mtitle"]'); if (!ti) return;
+      const box = w.querySelector('#qcw-msug'); if (!box) return;
+      let timer = 0, seq = 0;
+      const draw = function (list) {
+        if (!list || !list.length) { box.className = 'qcw-sug'; box.innerHTML = ''; return; }
+        box.className = 'qcw-sug on';
+        box.innerHTML = '<span class="cap">유튜브에서는 이렇게 찾아요 — 톡하면 채워집니다</span>' +
+          list.slice(0, 6).map(function (x, i) {
+            return '<button type="button" data-msug="' + i + '">' + esc(x) + '</button>';
+          }).join('');
+        box.querySelectorAll('[data-msug]').forEach(function (b) {
+          b.onclick = function () {
+            const v = list[+b.dataset.msug];
+            ti.value = v; _qcw.mtitle = v;
+            box.className = 'qcw-sug'; box.innerHTML = '';
+            try { ti.focus(); } catch (e) {}
+          };
+        });
+      };
+      ti.addEventListener('input', function () {
+        const q = String(ti.value || '').trim();
+        clearTimeout(timer);
+        if (q.length < 2) { draw(null); return; }
+        const my = ++seq;
+        timer = setTimeout(function () {
+          if (typeof sctYtSug !== 'function') return;     // 정찰 배관이 없으면 조용히 넘어간다
+          sctYtSug(q).then(function (list) { if (my === seq) draw(list); });
+        }, 300);
+      });
+    })();
     // v775 · 🎵 링크를 치는 즉시 «어디 링크인지» 알려준다 (재렌더 없이 그 자리에서)
     (function () {
       const li = w.querySelector('[data-qta="mlink"]'); if (!li) return;
@@ -52062,12 +52109,23 @@
       const paint = function () {
         if (!pv) return;
         const p = (typeof musParse === 'function') ? musParse(li.value) : null;
+        /* v800b · 링크를 지우면 «캡처» 강조도 같이 꺼져야 한다 — 여기서 return하면 켜진 채 남는다 */
+        try {
+          const s0 = w.querySelector('#qcw-slot');
+          if (s0) s0.classList.toggle('hot', !!(p && p.kind === 'ig'));
+        } catch (e) {}
         if (!p) { pv.innerHTML = ''; return; }
         const nm = p.kind === 'ig' ? ['📷', '인스타', '오디오 페이지로 바로 열려요']
                  : (p.kind === 'yt' ? ['▶', '유튜브', '제목·그림은 담을 때 자동으로 채워집니다']
                                     : ['🔗', '링크', '인스타·유튜브가 아니면 링크만 보관해요']);
         pv.innerHTML = '<div class="qcw-mprev"><div class="a">' + nm[0] + '</div>' +
           '<div><div class="t">' + nm[1] + ' 링크로 담깁니다</div><div class="s">' + nm[2] + '</div></div></div>';
+        /* v800 · 인스타면 «캡처» 자리를 켠다 — 제목을 못 가져오니 그 한 장이 유일한 단서다.
+           ⚠️ 여기서 폼을 재렌더하면 타이핑 포커스가 날아간다 → 클래스만 토글한다. */
+        try {
+          const slot = w.querySelector('#qcw-slot');
+          if (slot) slot.classList.toggle('hot', p.kind === 'ig');
+        } catch (e) {}
       };
       li.addEventListener('input', paint);
       paint();

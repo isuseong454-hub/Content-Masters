@@ -124,7 +124,19 @@
     try {
       const r = await window.storage.get('shv4-rows');
       const rows = r && r.value ? JSON.parse(r.value) : [];
-      const empty = rows.filter(x => !String(x.hook || '').trim() && !String(x.url || '').trim() && !(x.views | 0)).length;
+      /* v800 · 오탐 수리 — 원래 잡으려던 사고는 «INITIAL_ROWS=100 빈 줄이 통째로 서버에 실린 것»(v771)이다.
+         후킹·링크·조회수만 보면 «원고만 있는 행»·«썸네일 유형만 고른 행»까지 빈 줄로 잡혀 BLOCK이 났다.
+         → 뼈대 칸(id·번호·시각·플랫폼·모드)을 뺀 «실제 내용»이 하나도 없을 때만 빈 줄로 센다. */
+      const SKEL = ['id', 'no', 'createdAt', 'updatedAt', 'platform', 'scriptMode'];
+      const isEmptyRow = (x) => !Object.keys(x || {}).some(k => {
+        if (SKEL.indexOf(k) > -1) return false;
+        const v = x[k];
+        if (v == null || v === '' || v === false || v === 0) return false;
+        if (Array.isArray(v)) return v.length > 0;
+        if (typeof v === 'object') return Object.keys(v).length > 0;
+        return String(v).trim() !== '';
+      });
+      const empty = rows.filter(isEmptyRow).length;
       add('시트 빈 줄 오염', empty === 0, empty ? '빈 줄 ' + empty + '개가 서버에 저장돼 있음' : rows.length + '행 · 빈 줄 0');
       const noScript = rows.filter(x => (x.scriptSections && Object.keys(x.scriptSections).length) && !(x.scriptSecFlex || []).length).length;
       add('원고 라벨 보존', noScript === 0, noScript ? noScript + '행이 옛 5칸으로만 저장됨(원고 안 보일 수 있음)' : '이상 없음', 'warn');
