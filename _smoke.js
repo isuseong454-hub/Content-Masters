@@ -66,6 +66,15 @@
     (document.querySelector('[data-fbmode="yt"]') ? '' : '분류 탭 없음 ') +
     (src.indexOf('function ytvBoardRender') > -1 ? '' : '보드 함수 없음 ') || '탭·보드 존재');
 
+  // ── 4-f2. v799 · 🔭정찰 → 🎵음악 서랍. 버튼·서랍·배선 세 짝이 다 있어야 담긴다 ──
+  //    (유튜브 API는 라이브 도메인에서만 응답해 카드가 안 그려지므로 «소스에 있는지»로 본다)
+  add('🔭 정찰 음악 담기',
+    src.indexOf('data-scmus="') > -1 && src.indexOf('async function sctMusDraw') > -1 &&
+    src.indexOf("querySelectorAll('[data-scmus]')") > -1,
+    (src.indexOf('data-scmus="') > -1 ? '' : '버튼 없음 ') +
+    (src.indexOf('async function sctMusDraw') > -1 ? '' : '서랍 함수 없음 ') +
+    (src.indexOf("querySelectorAll('[data-scmus]')") > -1 ? '' : '배선 없음 ') || '버튼·서랍·배선 존재');
+
   // ── 4-g. 🚨 «먹통»의 진짜 조건 — 열린 오버레이는 없는데 스크롤 잠금(ov-open)만 남은 상태.
   //         이러면 화면이 멀쩡해 보여도 아무것도 안 눌리는 것처럼 느껴진다 ──
   try {
