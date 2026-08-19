@@ -1576,6 +1576,40 @@
   .pv2-rdpn{ margin-top:10px; border-radius:14px; border:1px solid rgba(255,255,255,.07);
     background:rgba(255,255,255,.02); padding:12px; }
   /* v783 · 편집 도구는 «아래»에 — 원고를 보면서 고른다(판독지 .rd-dock과 같은 문법) */
+  /* v784 · 📺 유튜브 방 — 담기는 3초, 카드엔 썸네일·조회수·제목만. 밑단 3px 빨강이 «유튜브»를 말한다 */
+  .ytv-wrap{ display:block; }
+  .ytv-srch{ display:flex; align-items:center; gap:8px; border-radius:99px; padding:10px 13px; margin-bottom:11px;
+    background:rgba(0,0,0,.3); border:1px solid rgba(255,255,255,.09); box-shadow:inset 0 2px 7px rgba(0,0,0,.6); }
+  .ytv-srch .ic{ font-size:12px; color:#5c6b60; }
+  .ytv-srch input{ flex:1; min-width:0; font-family:inherit; font-size:12px; font-weight:800; color:#E4EEE6;
+    background:transparent; border:none; outline:none; }
+  .ytv-srch .n{ font:800 9px/1 'JetBrains Mono',monospace; color:#5c6b60; }
+  .ytv-flds{ display:flex; gap:6px; overflow-x:auto; scrollbar-width:none; margin-bottom:12px; padding-bottom:2px; }
+  .ytv-flds::-webkit-scrollbar{ display:none; }
+  .ytv-fd{ flex:none; display:flex; align-items:center; gap:5px; font-size:10.5px; font-weight:900; padding:8px 12px;
+    border-radius:99px; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1); color:#8ba392; cursor:pointer; }
+  .ytv-fd i{ font-style:normal; font:800 9px/1 'JetBrains Mono',monospace; opacity:.7; }
+  .ytv-fd.on{ background:rgba(215,243,75,.14); border-color:rgba(215,243,75,.42); color:#D7F34B; }
+  .ytv-fd.add{ border-style:dashed; color:#5c6b60; }
+  .ytv-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:9px; }
+  @media (min-width:720px){ .ytv-grid{ grid-template-columns:repeat(4,1fr); } }
+  .ytv-c{ position:relative; border-radius:14px; overflow:hidden; cursor:pointer;
+    background:linear-gradient(166deg,#152318,#0a120d); border:1px solid rgba(255,255,255,.09);
+    box-shadow:0 10px 22px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.06); transition:transform .2s; }
+  .ytv-c:active{ transform:scale(.975); }
+  .ytv-c .ph{ position:relative; display:grid; place-items:center; font-size:22px; aspect-ratio:9/16;
+    background:linear-gradient(158deg,#223a2b,#101d15); }
+  .ytv-c .ph img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .ytv-c .ph::after{ content:''; position:absolute; inset:0; background:linear-gradient(180deg,transparent 46%,rgba(0,0,0,.72)); }
+  .ytv-c .v{ position:absolute; left:8px; bottom:7px; z-index:2; font:900 10px/1 'JetBrains Mono',monospace; color:#fff;
+    text-shadow:0 1px 4px rgba(0,0,0,.9); }
+  .ytv-c .cap2{ position:absolute; right:6px; top:6px; z-index:2; font:800 7.5px/1 'JetBrains Mono',monospace;
+    padding:4px 7px; border-radius:99px; background:rgba(0,0,0,.6); color:#D7F34B; }
+  .ytv-c .tx{ padding:8px 9px 9px; font-size:10px; font-weight:900; line-height:1.42; color:#C9D6CD; height:44px; overflow:hidden; }
+  .ytv-c .foot{ height:3px; width:100%; background:#E5333F; }
+  .ytv-empty{ border-radius:15px; padding:22px 16px; text-align:center; font-size:11.5px; font-weight:800; line-height:1.75;
+    color:#8ba392; background:rgba(255,255,255,.03); border:1px dashed rgba(255,255,255,.13); }
+  .ytv-empty b{ color:#E4EEE6; } .ytv-empty s{ text-decoration:none; display:block; margin-top:8px; font-size:10.5px; color:#5c6b60; }
   .pv2-pendock{ position:sticky; bottom:0; z-index:5; margin:10px -12px -12px; padding:10px 12px 12px;
     background:linear-gradient(180deg, rgba(12,16,24,.4), rgba(12,16,24,.96) 38%);
     border-top:1px solid rgba(255,255,255,.08); border-radius:0 0 14px 14px; }
@@ -25933,6 +25967,7 @@
           <button class="fb-toggle-btn" data-fbmode="idea">💡 아이디어</button>
           <button class="fb-toggle-btn" data-fbmode="comment" style="display:none;">💬 공감댓글</button>
           <button class="fb-toggle-btn" data-fbmode="audio" style="display:none;">🎵 오디오</button>
+          <button class="fb-toggle-btn" data-fbmode="yt">📺 유튜브</button><!-- v784 · 반응 수집고(시트와 별개) -->
           <button class="fb-toggle-btn" data-fbmode="music">🎵 음악</button><!-- v775 · 음악 서랍(링크 보관) — 위 «오디오»(옛 브금 유형 라벨)와 다른 것 -->
         </div>
         <div class="tb-search-wrap" id="fb-search-wrap">
@@ -27207,7 +27242,8 @@
       'hmv1-northstars', 'hmv1-visitdays', 'hmv1-ideaboards', 'hmv1-structures',
       'hmv1-growth', 'shv4-custom-thumb-types', 'shv4-custom-copy-types', 'hmv1-dash',
       'cm-terms-agree',   // v766 · 약관 동의=계정 동기화(기기가 바뀌어도 재동의 안 뜨게)
-      'musv1'             // v771 · 🎵 음악 서랍(링크+태그) — 기기 바뀌어도 내 목록 그대로
+      'musv1',            // v771 · 🎵 음악 서랍(링크+태그) — 기기 바뀌어도 내 목록 그대로
+      'ytv1'              // v784 · 📺 유튜브 방(반응 수집고) — 담기는 3초, 찾기는 검색으로
     ]);
     // 이미지 키(벤치마킹 시트) → Supabase Storage 버킷
     const IMG_BUCKET = 'cm-images';
@@ -29198,6 +29234,7 @@
       kw:      { eb: '분류 · 소재 모아보기', t: '모아둔 <span class="em">키워드</span> 한눈에', s: '자주 쓰는 키워드를 황금(★)으로 올려두고<br/>다음 콘텐츠에 바로 꺼내 쓰세요.' },
       comment: { eb: '분류 · 소재 모아보기', t: '저장한 <span class="em">공감댓글</span>', s: '사람들이 반응한 댓글을 유형별로 모아<br/>어떤 말에 반응하는지 찾으세요.' },
       idea:    { eb: '분류 · 소재 모아보기', t: '모아둔 <span class="em">아이디어</span>', s: '떠오른 아이디어를 쌓아두고<br/>하나씩 콘텐츠로 실행하세요.' },
+      yt:      { eb: '저장소 · 반응 수집고', t: '사람들이 반응한 <span class="em">유튜브</span>', s: '담기는 3초 — 제목·조회수·태그가 자동으로 따라옵니다.<br/>파고 싶어지면 그때 시트로 올리세요.' },
       audio:   { eb: '분류 · 소재 모아보기', t: '기록한 <span class="em">오디오</span>', s: '쓴 음원을 분류별로 모아<br/>다음 릴스에 재활용하세요.' },
       music:   { eb: '분류 · 소재 모아보기', t: '모아둔 <span class="em">음악</span> 서랍', s: '좋은 브금을 링크로 담아두고<br/>만들 때 그 느낌으로 바로 꺼내 쓰세요.' }   // v775
     };
@@ -29207,6 +29244,8 @@
     const _sEl = document.querySelector('#fb-view .fb-sub'); if (_sEl) _sEl.innerHTML = _fbh.s;
     // v775 · 🎵 음악 서랍 — 시트 카드가 아니라 링크 카드라 전용 보드를 그린다
     if (fbGroupMode === 'music') { try { musBoardRender('fb-columns'); } catch (e) {} return; }
+    // v784 · 📺 유튜브 방 — 시트 카드가 아니라 «반응 기록»이라 전용 보드
+    if (fbGroupMode === 'yt') { try { ytvBoardRender('fb-columns'); } catch (e) {} return; }
     // 키워드·공감댓글·아이디어·오디오는 몰아보기 보드를 분류 뷰(fb-columns)에 그려준다
     if (fbGroupMode === 'kw' || fbGroupMode === 'comment' || fbGroupMode === 'idea' || fbGroupMode === 'audio'
         || fbGroupMode === 'thumb' || fbGroupMode === 'copy') {   // v647 · 썸네일·수식어도 저장소 허브에서
@@ -58994,6 +59033,99 @@
   //   저장: 'musv1' (PROFILE_KEYS 등록 = 계정 주머니 → 기기 바뀌어도 내 목록 그대로)
   //   구조: { tags:[{id,label}], items:[{id,url,kind,ytid,title,tags:[],at}] }
   // ══════════════════════════════════════════════════════════════
+  /* ══ v784 · 📺 유튜브 방 — 사람들이 반응한 것을 «많이» 모으고 «빨리» 찾는 수집고 ══
+     저장: 'ytv1' (PROFILE_KEYS 등록 = 계정 주머니)
+     항목: { id, vid, t, ch, views, th, tags[], cap, dur, folder, at }
+     ⚠️ 시트(rows)와 섞지 않는다 — 여긴 3초에 한 장, 시트는 30분에 한 장. */
+  var YTV_KEY = 'ytv1';
+  var _ytv = null, _ytvLoaded = false, _ytvQ = '', _ytvFolder = '';
+  function ytvBlank() { return { items: [], folders: [] }; }
+  async function ytvLoad() {
+    if (_ytvLoaded) return _ytv;
+    try {
+      var r = await window.storage.get(YTV_KEY);
+      _ytv = (r && r.value) ? JSON.parse(r.value) : ytvBlank();
+    } catch (e) { _ytv = ytvBlank(); }
+    if (!_ytv || !Array.isArray(_ytv.items)) _ytv = ytvBlank();
+    if (!Array.isArray(_ytv.folders)) _ytv.folders = [];
+    _ytvLoaded = true; return _ytv;
+  }
+  async function ytvSave() { try { await window.storage.set(YTV_KEY, JSON.stringify(_ytv)); } catch (e) {} }
+  function ytvNum(n) { try { return fmtViews(n || 0); } catch (e) { return String(n || 0); } }
+  /* 정찰·붙여넣기 어디서 담아도 여기로 온다 — 같은 영상은 한 번만 */
+  async function ytvAdd(v, folder) {
+    await ytvLoad();
+    var vid = String((v && v.id) || '').trim(); if (!vid) return false;
+    if (_ytv.items.some(function (x) { return x.vid === vid; })) return false;
+    _ytv.items.unshift({
+      id: 'yv_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7),
+      vid: vid, t: String(v.t || '').slice(0, 120), ch: String(v.ch || '').slice(0, 40),
+      views: +v.views || 0, th: v.th || '', tags: (v.vtags || v.tags || []).slice(0, 20),
+      cap: v.cap ? 1 : 0, dur: v.dur || '', folder: folder || '', at: Date.now()
+    });
+    if (_ytv.items.length > 600) _ytv.items = _ytv.items.slice(0, 600);
+    await ytvSave(); return true;
+  }
+  function ytvFiltered() {
+    var q = String(_ytvQ || '').trim().toLowerCase();
+    return (_ytv.items || []).filter(function (x) {
+      if (_ytvFolder && x.folder !== _ytvFolder) return false;
+      if (!q) return true;
+      return String(x.t || '').toLowerCase().indexOf(q) > -1
+        || String(x.ch || '').toLowerCase().indexOf(q) > -1
+        || (x.tags || []).some(function (t) { return String(t).toLowerCase().indexOf(q) > -1; });
+    });
+  }
+  function ytvBodyHtml() {
+    var all = _ytv.items || [], list = ytvFiltered();
+    var fcnt = {}; all.forEach(function (x) { if (x.folder) fcnt[x.folder] = (fcnt[x.folder] || 0) + 1; });
+    var folds = '<span class="ytv-fd' + (_ytvFolder ? '' : ' on') + '" data-ytvfd="">전체 <i>' + all.length + '</i></span>' +
+      (_ytv.folders || []).map(function (f) {
+        return '<span class="ytv-fd' + (_ytvFolder === f ? ' on' : '') + '" data-ytvfd="' + esc(f) + '">' + esc(f) + ' <i>' + (fcnt[f] || 0) + '</i></span>';
+      }).join('') + '<span class="ytv-fd add" data-ytvnewfd="1">＋ 폴더</span>';
+    var grid = list.length
+      ? '<div class="ytv-grid">' + list.map(function (x) {
+          return '<div class="ytv-c" data-ytvopen="' + x.id + '">' +
+            '<div class="ph">' + (x.th ? '<img src="' + esc(x.th) + '" alt="" loading="lazy">' : '📺') +
+              (x.cap ? '<span class="cap2">📝 자막</span>' : '') +
+              (x.views ? '<span class="v">▶ ' + ytvNum(x.views) + '</span>' : '') + '</div>' +
+            '<div class="tx">' + esc(String(x.t || '').slice(0, 46)) + '</div><div class="foot"></div></div>';
+        }).join('') + '</div>'
+      : (all.length
+        ? '<div class="ytv-empty"><b>찾는 게 없어요</b><s>다른 말로 검색하거나 폴더를 «전체»로 바꿔보세요</s></div>'
+        : '<div class="ytv-empty"><b>여기는 «사람들이 반응한 것»을 모으는 곳이에요</b>' +
+          '<s>기획 ①리서치의 🔭 정찰에서 유튜브를 뒤져 담으면 여기 쌓입니다.<br>담기는 3초 — 제목·조회수·썸네일·태그가 자동으로 따라와요.</s></div>');
+    return '<div class="ytv-wrap">' +
+      '<div class="ytv-srch"><span class="ic">🔍</span>' +
+        '<input id="ytv-q" placeholder="제목·채널·태그로 찾기" value="' + esc(_ytvQ) + '">' +
+        '<span class="n">' + list.length + '</span></div>' +
+      '<div class="ytv-flds">' + folds + '</div>' + grid + '</div>';
+  }
+  async function ytvBoardRender(hostId) {
+    await ytvLoad();
+    var host = document.getElementById(hostId); if (!host) return;
+    host.innerHTML = ytvBodyHtml();
+    var q = document.getElementById('ytv-q');
+    if (q) {
+      q.oninput = function () { _ytvQ = q.value; var at = q.selectionStart; ytvBoardRender(hostId).then(function () {
+        var q2 = document.getElementById('ytv-q'); if (q2) { q2.focus(); try { q2.setSelectionRange(at, at); } catch (e) {} }
+      }); };
+    }
+    host.querySelectorAll('[data-ytvfd]').forEach(function (el) {
+      el.onclick = function () { _ytvFolder = el.dataset.ytvfd || ''; ytvBoardRender(hostId); };
+    });
+    var nf = host.querySelector('[data-ytvnewfd]');
+    if (nf) nf.onclick = async function () {
+      var nm = prompt('새 폴더 이름은? (예: 앞머리)'); if (nm === null) return;
+      nm = String(nm).trim().slice(0, 14); if (!nm) return;
+      if ((_ytv.folders || []).indexOf(nm) < 0) { _ytv.folders.push(nm); await ytvSave(); }
+      _ytvFolder = nm; ytvBoardRender(hostId);
+    };
+    host.querySelectorAll('[data-ytvopen]').forEach(function (el) {
+      el.onclick = function () { try { toast('상세 화면은 다음 단계에서 열립니다'); } catch (e) {} };
+    });
+  }
+
   var MUS_KEY = 'musv1';
   var _mus = null, _musLoaded = false;
   var _musFilter = 'all', _musOpenId = '', _musEditTags = false, _musPick = null;
