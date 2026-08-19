@@ -1586,6 +1586,47 @@
   .sh-stg i.f1{ background:#8FA0C9; } .sh-stg i.f2{ background:#7EC8F5; } .sh-stg i.f3{ background:#D7F34B; }
   .sh-stg i.now{ box-shadow:0 0 5px 1px currentColor; }
   .sh-stg i.now.f1{ color:#8FA0C9; } .sh-stg i.now.f2{ color:#7EC8F5; } .sh-stg i.now.f3{ color:#D7F34B; }
+  /* v789 · 👩‍🏫 선생님 — 커뮤니티 안의 «1:1» 자리 */
+  .mtr-hero{ border-radius:15px; padding:15px 14px; margin-bottom:12px;
+    background:linear-gradient(166deg, rgba(255,158,122,.12), rgba(255,158,122,.03));
+    border:1px solid rgba(255,158,122,.3); }
+  .mtr-hero b{ display:block; font-size:14px; font-weight:900; color:#FFD2BE; }
+  .mtr-hero s{ text-decoration:none; display:block; font-size:11px; font-weight:800; color:#c99a86; margin-top:7px; line-height:1.7; }
+  .mtr-f{ display:flex; flex-direction:column; gap:8px; margin-top:12px; }
+  .mtr-f input, .mtr-f textarea{ font-family:inherit; font-size:13px; font-weight:700; color:#EDEAE2;
+    background:rgba(0,0,0,.28); border:1px solid rgba(255,255,255,.12); border-radius:11px; padding:11px 12px; outline:none; }
+  .mtr-f textarea{ min-height:74px; resize:vertical; line-height:1.6; }
+  .mtr-f input:focus, .mtr-f textarea:focus{ border-color:rgba(255,158,122,.55); }
+  .mtr-agree{ display:flex; align-items:flex-start; gap:8px; font-size:11px; font-weight:800; color:#c99a86; line-height:1.6; cursor:pointer; }
+  .mtr-agree input{ margin-top:2px; flex:none; }
+  .mtr-btn{ width:100%; font-family:inherit; cursor:pointer; border:none; border-radius:14px; padding:14px;
+    font-size:13.5px; font-weight:900; color:#2a1408; background:linear-gradient(135deg,#FFC5A6,#FF9E7A);
+    box-shadow:0 12px 28px rgba(255,158,122,.24); }
+  .mtr-btn[disabled]{ opacity:.45; cursor:default; box-shadow:none; }
+  .mtr-btn.sub2{ background:rgba(255,255,255,.06); color:#C9D6CD; border:1px solid rgba(255,255,255,.14); box-shadow:none; }
+  .mtr-card{ border-radius:14px; padding:12px 13px; margin-bottom:9px;
+    background:rgba(255,255,255,.035); border:1px solid rgba(255,255,255,.09); }
+  .mtr-card .hd2{ display:flex; align-items:center; gap:7px; margin-bottom:8px; }
+  .mtr-card .hd2 b{ font-size:11.5px; font-weight:900; color:#EDEAE2; }
+  .mtr-card .hd2 s{ text-decoration:none; margin-left:auto; font:800 9px/1 'JetBrains Mono',monospace; color:#7d6a5e; }
+  .mtr-card .bd2{ font-size:12px; font-weight:800; line-height:1.75; color:#C9C0B6; white-space:pre-wrap; }
+  .mtr-card.unread{ border-color:rgba(255,158,122,.45); }
+  .mtr-refs{ display:flex; flex-direction:column; gap:5px; margin-top:9px; }
+  .mtr-ref{ display:flex; gap:7px; align-items:center; font-size:10.5px; font-weight:800; color:#9a8e84;
+    border-radius:9px; padding:7px 9px; background:rgba(0,0,0,.22); }
+  .mtr-ref a{ margin-left:auto; color:#FF9E7A; text-decoration:none; font-size:10px; }
+  .mtr-acts2{ display:flex; gap:6px; margin-top:10px; }
+  .mtr-acts2 button{ flex:1; font-family:inherit; cursor:pointer; font-size:10.5px; font-weight:900; border-radius:10px; padding:9px 6px;
+    background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.12); color:#C9D6CD; }
+  .mtr-acts2 button.on{ background:rgba(215,243,75,.14); border-color:rgba(215,243,75,.4); color:#D7F34B; }
+  .mtr-pick{ display:flex; align-items:center; gap:9px; border-radius:11px; padding:9px 10px; margin-bottom:6px; cursor:pointer;
+    background:rgba(255,255,255,.035); border:1px solid rgba(255,255,255,.09); }
+  .mtr-pick.on{ border-color:rgba(255,158,122,.5); background:rgba(255,158,122,.08); }
+  .mtr-pick .t2{ flex:1; min-width:0; font-size:11.5px; font-weight:800; color:#C9C0B6; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .mtr-pick .n2{ font:800 9px/1 'JetBrains Mono',monospace; color:#7d6a5e; }
+  .mtr-empty{ border-radius:14px; padding:20px 15px; text-align:center; font-size:11.5px; font-weight:800; line-height:1.8;
+    color:#9a8e84; background:rgba(255,255,255,.03); border:1px dashed rgba(255,255,255,.13); }
+  .mtr-empty b{ color:#EDEAE2; }
   .ytv-wrap{ display:block; }
   .ytv-srch{ display:flex; align-items:center; gap:8px; border-radius:99px; padding:10px 13px; margin-bottom:11px;
     background:rgba(0,0,0,.3); border:1px solid rgba(255,255,255,.09); box-shadow:inset 0 2px 7px rgba(0,0,0,.6); }
@@ -58364,6 +58405,174 @@
   const CMU_NOUN = ['가위손', '업로더', '파마왕', '관찰자', '펌기계', '컷마스터', '스타일러', '도전자', '드라이꾼', '기록자'];
   function cmuNick() { return CMU_ADJ[Math.floor(Math.random() * CMU_ADJ.length)] + ' ' + CMU_NOUN[Math.floor(Math.random() * CMU_NOUN.length)]; }
   function cmuEl() { return document.getElementById('cmu-body'); }
+  /* ══ v789 · 👩‍🏫 선생님 — 서버(cm_master_*)는 이미 있었고 여기가 «반대편»이다 ══
+     ⚠️ 이 함수들은 p_token을 쓴다(컨모 강사 쪽과 같은 함수) → 코드+PIN으로 토큰을 한 번 받아 캐시. */
+  var _mtrTok = null, _mtrLink = null, _mtrFb = [], _mtrReq = [], _mtrPick = {}, _mtrTab = 'fb';
+  async function mtrToken() {
+    if (_mtrTok) return _mtrTok;
+    var a = window.__cmAuth || {};
+    if (!a.code || !a.pinHash) return null;
+    var r = await cmRpc('cm_session_issue', { p_code: a.code, p_pin_hash: a.pinHash });
+    if (r && r.ok && r.token) { _mtrTok = r.token; return _mtrTok; }
+    return null;
+  }
+  async function mtrLoad() {
+    var t = await mtrToken(); if (!t) return;
+    try { _mtrLink = await cmRpc('cm_link_me', { p_token: t }); } catch (e) { _mtrLink = null; }
+    try { _mtrFb = await cmRpc('cm_fb_list', { p_token: t }) || []; } catch (e) { _mtrFb = []; }
+    try { _mtrReq = await cmRpc('cm_req_mine', { p_token: t }) || []; } catch (e) { _mtrReq = []; }
+  }
+  function mtrStatus() {
+    var L = _mtrLink;
+    if (!L) return 'none';
+    if (L.status) return L.status;
+    if (Array.isArray(L) && L[0] && L[0].status) return L[0].status;
+    return 'none';
+  }
+  function mtrEsc(v) { return esc(String(v == null ? '' : v)); }
+  function mtrApplyHtml() {
+    return '<div class="mtr-hero"><b>👩‍🏫 선생님에게 봐달라고 하기</b>' +
+      '<s>연결하면 내 원고를 보내 <b style="color:#FFD2BE">1:1 피드백</b>을 받을 수 있어요.<br>' +
+      '보내는 건 <b style="color:#FFD2BE">내가 고른 카드만</b> — 나머지 자료는 넘어가지 않습니다.</s></div>' +
+      '<div class="mtr-f">' +
+      '<input id="mtr-name" placeholder="이름 (예: 이수성)" maxlength="30">' +
+      '<input id="mtr-ig" placeholder="인스타 아이디 (@ 없이)" maxlength="40">' +
+      '<textarea id="mtr-intro" placeholder="어떤 콘텐츠를 하시나요 — 두세 줄이면 충분해요" maxlength="200"></textarea>' +
+      '<label class="mtr-agree"><input type="checkbox" id="mtr-agree">' +
+      '<span>위 정보(이름·인스타·소개)와 <b>내가 보내는 카드</b>를 선생님이 보는 것에 동의합니다.</span></label>' +
+      '<button type="button" class="mtr-btn" id="mtr-send" disabled>연결 신청하기</button></div>';
+  }
+  function mtrPendingHtml() {
+    return '<div class="mtr-hero"><b>⏳ 수락을 기다리는 중</b>' +
+      '<s>선생님이 확인하면 여기서 바로 알려드릴게요.<br>그동안 원고를 더 다듬어두시면 좋아요.</s></div>' +
+      '<button type="button" class="mtr-btn sub2" id="mtr-cancel">신청 취소</button>';
+  }
+  function mtrFbHtml() {
+    if (!_mtrFb.length) return '<div class="mtr-empty"><b>아직 받은 피드백이 없어요</b><br>' +
+      '아래 «봐달라고 보내기»로 원고를 보내면 선생님이 답을 줍니다.</div>';
+    return _mtrFb.map(function (f) {
+      var refs = (f.refs || []).map(function (r) {
+        return '<div class="mtr-ref"><span>📎 ' + mtrEsc(r.title || '자료') + '</span>' +
+          (r.url ? '<a href="' + mtrEsc(r.url) + '" target="_blank" rel="noopener">열기 ↗</a>' : '') + '</div>';
+      }).join('');
+      var d = f.created_at ? String(f.created_at).slice(5, 10).replace('-', '/') : '';
+      return '<div class="mtr-card' + (f.read_at ? '' : ' unread') + '" data-mtrfb="' + mtrEsc(f.id) + '">' +
+        '<div class="hd2"><b>👩‍🏫 선생님</b><s>' + d + (f.read_at ? '' : ' · 새 글') + '</s></div>' +
+        '<div class="bd2">' + mtrEsc(f.body) + '</div>' +
+        (refs ? '<div class="mtr-refs">' + refs + '</div>' : '') +
+        '<div class="mtr-acts2"><button data-mtrhelp="' + mtrEsc(f.id) + '" class="' + (f.helpful ? 'on' : '') + '">' +
+        (f.helpful ? '✓ 도움이 됐어요' : '도움이 됐어요') + '</button></div></div>';
+    }).join('');
+  }
+  function mtrSendHtml() {
+    var cand = (rows || []).filter(function (r) { return rowHasContent(r) && prpHasScript(r); }).slice(0, 12);
+    var pend = (_mtrReq || []).filter(function (q) { return q.status === 'pending'; }).length;
+    return '<div class="mtr-hero"><b>✉️ 봐달라고 보내기</b>' +
+      '<s>원고가 있는 카드에서 <b style="color:#FFD2BE">최대 3개</b>까지 골라 보낼 수 있어요.' +
+      (pend ? '<br>지금 <b style="color:#FFD2BE">' + pend + '건</b>이 답을 기다리는 중입니다.' : '') + '</s></div>' +
+      (cand.length
+        ? cand.map(function (r) {
+            return '<div class="mtr-pick' + (_mtrPick[r.id] ? ' on' : '') + '" data-mtrpick="' + mtrEsc(r.id) + '">' +
+              '<span class="t2">' + mtrEsc(String(r.hook || '제목 없음').slice(0, 34)) + '</span>' +
+              '<span class="n2">' + (r.views ? fmtViews(r.views) : '—') + '</span></div>';
+          }).join('') +
+          '<div class="mtr-f" style="margin-top:10px">' +
+          '<textarea id="mtr-memo" placeholder="어떤 점이 궁금한가요 — 예: 도입부가 약한 것 같아요" maxlength="300"></textarea>' +
+          '<button type="button" class="mtr-btn" id="mtr-reqsend">이 카드로 봐달라고 하기</button></div>'
+        : '<div class="mtr-empty"><b>보낼 원고가 아직 없어요</b><br>분해 정리에서 원고가 담긴 카드를 만들면 여기 나옵니다.</div>');
+  }
+  async function cmuRenderMentor() {
+    var el = cmuEl(); if (!el) return;
+    el.innerHTML = '<div class="cmu-card" style="text-align:center;color:#5d6656;font-size:12px">불러오는 중…</div>';
+    await mtrLoad();
+    var st = mtrStatus();
+    if (st === 'linked') {
+      el.innerHTML = '<div class="mtr-hero"><b>👩‍🏫 선생님과 연결돼 있어요</b>' +
+          '<s>받은 피드백을 읽고, 새 원고를 보낼 수 있습니다.</s></div>' +
+        '<div class="mtr-acts2" style="margin-bottom:12px">' +
+          '<button data-mtrtab="fb" class="' + (_mtrTab === 'fb' ? 'on' : '') + '">💬 받은 피드백' +
+            ((_mtrFb || []).filter(function (f) { return !f.read_at; }).length ? ' ●' : '') + '</button>' +
+          '<button data-mtrtab="send" class="' + (_mtrTab === 'send' ? 'on' : '') + '">✉️ 봐달라고 보내기</button></div>' +
+        (_mtrTab === 'fb' ? mtrFbHtml() : mtrSendHtml());
+    } else if (st === 'pending') {
+      el.innerHTML = mtrPendingHtml();
+    } else {
+      el.innerHTML = mtrApplyHtml();
+    }
+    mtrBind();
+  }
+  function mtrBind() {
+    var el = cmuEl(); if (!el) return;
+    el.querySelectorAll('[data-mtrtab]').forEach(function (b) {
+      b.onclick = function () { _mtrTab = b.dataset.mtrtab; cmuRenderMentor(); };
+    });
+    var ag = document.getElementById('mtr-agree'), sd = document.getElementById('mtr-send');
+    if (ag && sd) ag.onchange = function () { sd.disabled = !ag.checked; };
+    if (sd) sd.onclick = async function () {
+      var t = await mtrToken(); if (!t) { try { toast('로그인이 필요해요'); } catch (e) {} return; }
+      sd.disabled = true; sd.textContent = '보내는 중…';
+      var r = await cmRpc('cm_link_send', {
+        p_token: t,
+        p_name: (document.getElementById('mtr-name') || {}).value || '',
+        p_ig: (document.getElementById('mtr-ig') || {}).value || '',
+        p_intro: (document.getElementById('mtr-intro') || {}).value || '',
+        p_agree: true
+      });
+      if (r && r.ok) { try { toast('✉️ 신청했어요 — 수락되면 알려드릴게요'); } catch (e) {} _mtrLink = null; cmuRenderMentor(); }
+      else { try { toast((r && r.msg) || '신청하지 못했어요'); } catch (e) {} sd.disabled = false; sd.textContent = '연결 신청하기'; }
+    };
+    var cn = document.getElementById('mtr-cancel');
+    if (cn) cn.onclick = async function () {
+      var t = await mtrToken(); if (!t) return;
+      await cmRpc('cm_link_off_me', { p_token: t });
+      _mtrLink = null; cmuRenderMentor();
+    };
+    el.querySelectorAll('[data-mtrfb]').forEach(function (c) {
+      c.onclick = async function (e) {
+        if (e.target.closest('[data-mtrhelp]') || e.target.closest('a')) return;
+        if (!c.classList.contains('unread')) return;
+        var t = await mtrToken(); if (!t) return;
+        await cmRpc('cm_fb_read', { p_token: t, p_id: c.dataset.mtrfb });
+        c.classList.remove('unread'); cmuRenderMentor();
+      };
+    });
+    el.querySelectorAll('[data-mtrhelp]').forEach(function (b) {
+      b.onclick = async function (e) {
+        e.stopPropagation();
+        var t = await mtrToken(); if (!t) return;
+        var on = b.classList.contains('on');
+        await cmRpc('cm_fb_helpful', { p_token: t, p_id: b.dataset.mtrhelp, p_v: !on });
+        cmuRenderMentor();
+      };
+    });
+    el.querySelectorAll('[data-mtrpick]').forEach(function (p) {
+      p.onclick = function () {
+        var id = p.dataset.mtrpick;
+        if (_mtrPick[id]) { delete _mtrPick[id]; }
+        else {
+          if (Object.keys(_mtrPick).length >= 3) { try { toast('한 번에 3개까지 보낼 수 있어요'); } catch (e) {} return; }
+          _mtrPick[id] = 1;
+        }
+        p.classList.toggle('on', !!_mtrPick[id]);
+      };
+    });
+    var rs = document.getElementById('mtr-reqsend');
+    if (rs) rs.onclick = async function () {
+      var ids = Object.keys(_mtrPick);
+      if (!ids.length) { try { toast('보낼 카드를 골라주세요'); } catch (e) {} return; }
+      var t = await mtrToken(); if (!t) return;
+      var items = ids.map(function (id) {
+        var r = (rows || []).filter(function (x) { return x.id === id; })[0] || {};
+        var segs = [];
+        try { segs = prpSegsOf(r).map(function (g) { return { k: g.k, t: prpClean(g.t).slice(0, 600) }; }); } catch (e) {}
+        return { id: id, title: String(r.hook || '').slice(0, 60), url: r.url || '', views: r.views || 0, segs: segs };
+      });
+      rs.disabled = true; rs.textContent = '보내는 중…';
+      var r2 = await cmRpc('cm_req_send', { p_token: t, p_items: items, p_memo: (document.getElementById('mtr-memo') || {}).value || '' });
+      if (r2 && r2.ok) { _mtrPick = {}; _mtrTab = 'fb'; try { toast('✉️ 보냈어요 — 답이 오면 여기 뜹니다'); } catch (e) {} cmuRenderMentor(); }
+      else { try { toast((r2 && r2.msg) || '보내지 못했어요'); } catch (e) {} rs.disabled = false; rs.textContent = '이 카드로 봐달라고 하기'; }
+    };
+  }
   function cmuOpen(view) {
     document.getElementById('cmu-ov').classList.add('show');
     _cmuView = view || 'plaza'; cmuRender();
@@ -58388,6 +58597,13 @@
     ]);
     if (_cmuLive === false) { cmuRenderServerless(); return; }
     let h = '';
+    /* v789 · 👩‍🏫 선생님 — 같이 달리는 방(광장) 옆의 «1:1» 자리.
+       새 피드백이 있으면 점이 붙는다(읽으면 사라짐). */
+    let _mtrDot = '';
+    try { _mtrDot = (_mtrFb || []).some(function (f) { return !f.read_at; }) ? ' ●' : ''; } catch (e) {}
+    h += '<div class="cmu-res ok" id="cmu-go-mentor" style="cursor:pointer;border-color:rgba(255,158,122,.4);background:rgba(255,158,122,.08)">' +
+      '<span style="font-size:17px">👩‍🏫</span><span><b>선생님에게 봐달라고 하기' + _mtrDot + '</b>' +
+      '<small>내 원고를 보내고 1:1 피드백을 받는 곳</small></span><span class="go3">열기 →</span></div>';
     // 방장 신청함 배너
     const apps = (ap && ap.ok && ap.apps) || [];
     if (apps.length) h += '<div class="cmu-res ok" id="cmu-go-apps" style="cursor:pointer"><span style="font-size:17px">✉️</span><span><b>참여 신청 ' + apps.length + '건</b><small>새 플레이어가 노크했어요</small></span><span class="go3">확인 →</span></div>';
@@ -58466,6 +58682,8 @@
     el.innerHTML = h;
     // 배선
     const mk = document.getElementById('cmu-mk'); if (mk) mk.onclick = function () { _cmuView = 'create'; cmuRender(); };
+    const gm = document.getElementById('cmu-go-mentor');   // v789 · 👩‍🏫 선생님
+    if (gm) gm.onclick = function () { _cmuView = 'mentor'; cmuRender(); };
     const ga = document.getElementById('cmu-go-apps'); if (ga) ga.onclick = function () { _cmuView = 'apps'; cmuRender(); };
     // v746 · 내 공간 젤리 배선
     const jm = document.getElementById('cmu-j-my'); if (jm) jm.onclick = function () {
@@ -58752,13 +58970,15 @@
   }
   function cmuRender() {
     const tt = document.getElementById('cmu-tt');
-    if (tt) tt.textContent = _cmuView === 'hall' ? '🏛 마스터즈 전당' : _cmuView === 'room' ? '🚪 우리 방' : '🏙 커뮤니티';
+    if (tt) tt.textContent = _cmuView === 'hall' ? '🏛 마스터즈 전당' : _cmuView === 'room' ? '🚪 우리 방'
+      : _cmuView === 'mentor' ? '👩‍🏫 선생님' : '🏙 커뮤니티';
     if (_cmuView === 'plaza') cmuRenderPlaza();
     else if (_cmuView === 'create') cmuRenderCreate();
     else if (_cmuView === 'apply') cmuRenderApply();
     else if (_cmuView === 'apps') cmuRenderApps();
     else if (_cmuView === 'room') cmuRenderRoom();
     else if (_cmuView === 'hall') cmuRenderHall();
+    else if (_cmuView === 'mentor') cmuRenderMentor();   // v789
     try { window.scrollTo({ top: 0 }); document.getElementById('cmu-ov').scrollTop = 0; } catch (e) {}
   }
   // 업적 자동 등록(⌖나 인스타 캐시 → 서버) + 무대 연출(새 업적 1회)
