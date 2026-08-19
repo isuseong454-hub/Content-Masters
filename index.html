@@ -59107,7 +59107,9 @@
       id: 'yv_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7),
       vid: vid, t: String(v.t || '').slice(0, 120), ch: String(v.ch || '').slice(0, 40),
       views: +v.views || 0, th: v.th || '', tags: (v.vtags || v.tags || []).slice(0, 20),
-      cap: v.cap ? 1 : 0, dur: v.dur || '', folder: folder || '', at: Date.now()
+      cap: v.cap ? 1 : 0, dur: v.dur || '', folder: folder || '', at: Date.now(),
+      likes: +v.likes || 0, cmtN: +v.cmtN || 0,
+      cmts: (v.cmts || []).slice(0, 8)   // v786 · 정찰에서 같이 담은 댓글 = 상세 «05 고객의 말»
     });
     if (_ytv.items.length > 600) _ytv.items = _ytv.items.slice(0, 600);
     await ytvSave(); return true;
@@ -63140,7 +63142,9 @@
     var d = document.createElement('div');
     d.className = 'sct-csh on'; d.id = 'sct-csh';
     d.innerHTML = '<div class="in2"><h2>🛒 컨텐츠 카트 <s id="sct-cart-clear">비우기</s></h2><div id="sct-cart-list"></div>' +
-      '<button type="button" class="go" id="sct-cart-go"></button><div class="note" id="sct-cart-note"></div></div>';
+      '<button type="button" class="go" id="sct-cart-go"></button>' +
+      '<button type="button" class="go" id="sct-cart-keep" style="margin-top:7px;background:rgba(255,255,255,.06);color:#C9D6CD;border:1px solid rgba(255,255,255,.14)"></button>' +
+      '<div class="note" id="sct-cart-note"></div></div>';
     document.body.appendChild(d);
     d.addEventListener('click', function (ev) {
       if (ev.target !== d) return;
@@ -63151,6 +63155,8 @@
     });
     document.getElementById('sct-cart-clear').onclick = function () { _sctCart = {}; sctCartSync(true); sctCartRender(); };
     document.getElementById('sct-cart-go').onclick = sctHarvest;
+    var _keepBtn = document.getElementById('sct-cart-keep');
+    if (_keepBtn) _keepBtn.onclick = sctKeepToStore;   // v786
     sctCartRender();
   }
   function sctCartRender() {
@@ -63163,8 +63169,15 @@
       go.style.display = keys.length ? '' : 'none';
       go.textContent = (_sctEp >= 0) ? '✦ ' + (_sctEp + 1) + '편 리서치로 담기' : '✦ 리서치로 담기';
     }
-    if (note) note.textContent = keys.length
-      ? ((_sctEp >= 0) ? '영상→리서치 수확 · 키워드→키워드 후보 · 댓글→공감 후보 · ✎원고 담긴 영상→레퍼런스 카드' : '누르면 어느 편에 담을지 고릅니다')
+    var keep = document.getElementById('sct-cart-keep');   // v786 · 편과 별개로, 자산으로 남길 것만
+    if (keep) {
+      keep.style.display = keys.length ? '' : 'none';
+      keep.textContent = '📺 저장소에 보관';
+    }
+    if (note) note.innerHTML = keys.length
+      ? ((_sctEp >= 0) ? '영상→리서치 수확 · 키워드→키워드 후보 · 댓글→공감 후보 · ✎원고 담긴 영상→레퍼런스 카드'
+                       : '누르면 어느 편에 담을지 고릅니다') +
+        '<br><span style="opacity:.75">보관 = 편과 별개로 자산에 남기기 — 원고 붙인 건 시트 카드로, 아닌 건 📺 유튜브 방으로</span>'
       : '';
     if (!keys.length) { box.innerHTML = '<div class="empty">카트가 비어 있어요.<br>영상·태그·댓글을 톡 치면 여기 담깁니다.</div>'; return; }
     box.innerHTML = keys.map(function (k) {
@@ -63246,6 +63259,61 @@
     });
     var go = document.getElementById('sct-cart-go'); if (go) go.style.display = 'none';
     var note = document.getElementById('sct-cart-note'); if (note) note.textContent = '';
+  }
+  /* v786 · 저장소 보관 — 편과 무관하게 «자산»으로만 남긴다(카트는 비우지 않는다) */
+  async function sctKeepToStore() {
+    var keys = Object.keys(_sctCart).filter(function (x) {
+      var c = _sctCart[x]; return c.video || c.tags.length || c.cmts.length;
+    });
+    if (!keys.length) { try { toast('카트가 비어 있어요'); } catch (e) {} return; }
+    var nCard = 0, nYtv = 0, nKw = 0;
+    for (var i = 0; i < keys.length; i++) {
+      var c = _sctCart[keys[i]];
+      // ① 원고가 붙은 영상 = 이미 «판» 것 → 시트 카드
+      if (c.video && (c.script || '').trim()) {
+        try {
+          var segs = sctParseScript(c.script);
+          if (segs.length) {
+            var no = 1;
+            try { no = rows.length ? Math.max.apply(null, rows.map(function (r0) { return r0.no || 0; })) + 1 : 1; } catch (e2) {}
+            var row = newRow(no);
+            row.hook = String(c.v.t || '').slice(0, 80);
+            row.views = c.v.views || 0;
+            row.url = 'https://www.youtube.com/watch?v=' + c.v.id;
+            row.platform = 'yt';
+            row.author = c.v.ch || '';
+            row.scriptSecFlex = segs;
+            row.keywords = (c.v.vtags || []).slice(0, 10);
+            rows.push(row); nCard++;
+            try { sctThumbToRow(c.v.th, row.id); } catch (e3) {}
+          }
+        } catch (e4) {}
+      } else if (c.video) {
+        // ② 원고 없는 영상 = 아직 «반응»일 뿐 → 📺 유튜브 방 (그 영상에서 담은 댓글도 함께)
+        try {
+          var vv = {};
+          for (var kk in c.v) vv[kk] = c.v[kk];
+          vv.cmts = (c.cmts || []).slice(0, 8);
+          if (await ytvAdd(vv)) nYtv++;
+        } catch (e5) {}
+      }
+      // ③ 키워드 → 🏷 키워드 서랍 (톡한 태그 + 영상이 달고 있던 태그)
+      try {
+        var tg = [].concat(c.tags || [], (c.video ? (c.v.vtags || []).slice(0, 6) : []));
+        st2Kw.normal = st2Kw.normal || [];
+        tg.forEach(function (t) {
+          t = String(t || '').trim().slice(0, 24); if (!t) return;
+          if (st2Kw.normal.indexOf(t) < 0 && (st2Kw.gold || []).indexOf(t) < 0) { st2Kw.normal.push(t); nKw++; }
+        });
+      } catch (e6) {}
+    }
+    if (nCard) { try { await saveRows(); } catch (e8) {} }
+    if (nKw) { try { await st2KwSave(); } catch (e9) {} }
+    try {
+      toast('📦 보관했어요 — ' + (nCard ? '시트 카드 ' + nCard + ' · ' : '') +
+        (nYtv ? '📺 유튜브 방 ' + nYtv + ' · ' : '') + '키워드 ' + nKw +
+        ' (카트는 그대로 — 편에도 담을 수 있어요)');
+    } catch (e10) {}
   }
   async function sctHarvestTo(k) {
     var e = _pln.eps[k];
