@@ -1627,6 +1627,18 @@
   .mtr-empty{ border-radius:14px; padding:20px 15px; text-align:center; font-size:11.5px; font-weight:800; line-height:1.8;
     color:#9a8e84; background:rgba(255,255,255,.03); border:1px dashed rgba(255,255,255,.13); }
   .mtr-empty b{ color:#EDEAE2; }
+  /* v792 · 🎵 음악 담기 — 인스타/유튜브가 어떻게 다른지 그 자리에서 */
+  .qcw-mhow{ display:flex; flex-direction:column; gap:6px; margin-top:9px; }
+  .qcw-mhow .r{ display:flex; gap:8px; align-items:flex-start; border-radius:11px; padding:9px 10px;
+    background:rgba(255,255,255,.035); border:1px solid rgba(255,255,255,.08); }
+  .qcw-mhow .r b{ flex:none; font-size:9.5px; font-weight:900; padding:4px 8px; border-radius:99px; }
+  .qcw-mhow .r.ig b{ background:rgba(176,123,240,.16); color:#B07BF0; }
+  .qcw-mhow .r.yt b{ background:rgba(229,51,63,.15); color:#F0707A; }
+  .qcw-mhow .r s{ text-decoration:none; flex:1; min-width:0; font-size:10.5px; font-weight:800; line-height:1.6; color:#8ba392; }
+  .qcw-mhow .r s em{ font-style:normal; color:#C9D6CD; }
+  .qcw-mwhere{ margin-top:9px; border-radius:11px; padding:9px 11px; font-size:10.5px; font-weight:800; line-height:1.65;
+    background:rgba(95,211,196,.08); border:1px dashed rgba(95,211,196,.32); color:#8ba392; }
+  .qcw-mwhere em{ font-style:normal; color:#5FD3C4; }
   .ytv-wrap{ display:block; }
   .ytv-srch{ display:flex; align-items:center; gap:8px; border-radius:99px; padding:10px 13px; margin-bottom:11px;
     background:rgba(0,0,0,.3); border:1px solid rgba(255,255,255,.09); box-shadow:inset 0 2px 7px rgba(0,0,0,.6); }
@@ -51659,7 +51671,13 @@
       funnel: '', rating: 0, trend: 0, trendkw: '',
       mlink: '', mtags: [],         // v775 · 🎵 음악 — 링크 + 고른 느낌 태그들
       splitIdx: 0, splitPos: 0 };   // v562 · 붙여넣어 자르기 진행 상태
-    if (kind === 'music') { try { musLoad(); } catch (e) {} }   // 태그 목록을 미리 데워둔다
+    // v792b · 태그는 비동기로 온다 — 다 오면 그 화면만 다시 그린다(안 그러면 «태그 없음»으로 굳는다)
+    if (kind === 'music') {
+      try {
+        var _ml = musLoad();
+        if (_ml && _ml.then) _ml.then(function () { try { if (_qcw && _qcw.kind === 'music') qcwRender(); } catch (e) {} });
+      } catch (e) {}
+    }
     const r = document.getElementById('qc-room');
     if (r) { const t = r.querySelector('.qc-tiles'), g = r.querySelector('.cs-greet'), hn = document.getElementById('qc-hint');
       if (t) t.style.display = 'none'; if (g) g.style.display = 'none'; if (hn) hn.style.display = 'none'; }
@@ -51817,18 +51835,28 @@
     }
     // v775 · 🎵 음악 — 링크 한 칸 + 느낌 태그(여러 개 가능)
     if (f.t === 'musiclink') {
+      /* v792 · 어디 링크를 어떻게 따오는지 — 매체마다 절차가 달라서 여기서 바로 알려준다 */
       return '<input type="url" class="qcw-mlink" data-qta="mlink" value="' + esc(_qcw.mlink || '') +
         '" placeholder="🔗 링크 붙여넣기" autocomplete="off" inputmode="url">' +
-        '<div id="qcw-mprev"></div>';
+        '<div id="qcw-mprev"></div>' +
+        '<div class="qcw-mhow">' +
+          '<div class="r ig"><b>인스타</b><s>릴스에서 <em>아래 음악 이름을 톡</em> → 오디오 페이지 → <em>공유·링크 복사</em><br>' +
+            '제목은 앱이 못 가져와요 — 담은 뒤 <em>이름을 붙여주세요</em></s></div>' +
+          '<div class="r yt"><b>유튜브</b><s>영상 <em>주소를 그대로</em> 붙여넣으면 끝<br>' +
+            '<em>제목·그림을 앱이 가져옵니다</em></s></div>' +
+        '</div>';
     }
     if (f.t === 'musictag') {
       var mtg = [];
       try { mtg = (_mus && _mus.tags) ? _mus.tags : []; } catch (e) {}
-      if (!mtg.length) return '<div class="qcw-none">링크를 담으면 느낌 태그를 고를 수 있어요</div>';
+      if (!mtg.length) return '<div class="qcw-none">느낌 태그를 불러오는 중이에요…</div>';   // v792b
       return '<div class="qcw-chips">' + mtg.map(function (t) {
         var on = (_qcw.mtags || []).indexOf(t.id) >= 0;
         return '<button type="button" class="qcw-chip' + (on ? ' on' : '') + '" data-qmtg="' + esc(t.id) + '">' + esc(t.label) + '</button>';
-      }).join('') + '</div>';
+      }).join('') + '</div>' +
+        /* v792 · 담고 나면 어디로 가는지 — 못 찾으면 담아도 없는 것과 같다 */
+        '<div class="qcw-mwhere">담은 음악은 <em>저장소 › 분류 › 🎵 음악</em>에서 봅니다.<br>' +
+        '거기서 <em>태그를 더하거나 지울 수</em> 있고, 기획의 «이 편 음악»으로도 붙습니다.</div>';
     }
     if (f.t === 'ctype') {
       let cts = []; try { cts = activeComment(); } catch (e) {}
@@ -52075,6 +52103,7 @@
       const mit = await musAdd(_qcw.mlink, _qcw.mtags || []);
       if (!mit) return;
       try { musBoardRefresh(); } catch (e) {}
+      try { toast('🎵 담았어요 — 저장소 › 분류 › 🎵 음악에서 볼 수 있어요'); } catch (e) {}   // v792
       qcwHome();
       qshFlyFrom('music');
       return;
