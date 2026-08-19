@@ -25660,6 +25660,10 @@
     .prp-mv button{width:30px;height:30px;border-radius:9px;border:1px solid rgba(255,255,255,.16);
       background:rgba(255,255,255,.06);color:#e8e9e6;font-weight:800;font-size:14px;cursor:pointer}
     .prp-mv button:active{transform:scale(.92)}
+    .prp-cswap{grid-column:1/-1;font-family:inherit;font-size:10.5px;font-weight:800;cursor:pointer;
+      padding:8px 10px;border-radius:9px;border:1px dashed rgba(255,255,255,.2);
+      background:rgba(255,255,255,.03);color:#8b9184}
+    .prp-cswap:hover{border-color:rgba(255,255,255,.34);color:#c9d6cd}
     #prp.structing .prp-sgl{animation:prpSglPulse 1.6s ease-in-out infinite}
     @keyframes prpSglPulse{0%,100%{box-shadow:0 0 0 0 rgba(95,176,232,0)}50%{box-shadow:0 0 0 4px rgba(95,176,232,.28)}}
     #prp.structing .prp-sgt{opacity:.62}
@@ -49413,6 +49417,7 @@
     ['후속 예고', ''], ['CTA', 'cta']
   ];
   let _prpQ = [], _prpCur = null, _prpTool = null, _prpPainting = false, _prpInited = false, _prpCut = false;
+  let _prpCascSwap = 0;   // v782 · 라벨 서랍이 «역할 고르기» 단계인가 (기본 0 = 세부 고르기)
   let _prpHist = [], _prpRedo = [], _prpHistFor = null, _prpLastXY = null;   // v622 · 되돌리기 10단계 + 보간
   let _prpDtapAt = 0, _prpDtapEl = null;   // v625 · 두 번 톡 = 문장
 
@@ -49611,7 +49616,7 @@
         if (w) { prpDoCut(w); return; }
       }
       const lb = e.target.closest('.prp-sgl');
-      if (lb) { prpCascOpen(lb); e.stopPropagation(); }
+      if (lb) { _prpCascSwap = 0; prpCascOpen(lb); e.stopPropagation(); }   // v782 · 늘 세부부터
     });
   }
 
@@ -50058,13 +50063,30 @@
     const casc = document.getElementById('prp-casc');
     _prpCascSg = lb.closest('.prp-sg');
     const nowLb = (_prpCascSg.querySelector('.prp-sgl') || {}).textContent || '';
-    casc.innerHTML = '<div class="prp-ctit">이 구간을 무엇이라 부를까요</div><div class="prp-cgrid">' +
-      PRP_LBLS.map(function (L, i) {
-        const col = L[1] ? (SCRIPT_SECTIONS.find(s => s.key === L[1]) || {}).color : flexLabelColor(L[0]);
-        const on = nowLb.indexOf(L[0]) === 0 ? ' on' : '';
-        return '<button type="button" class="prp-ci' + on + '" style="transition-delay:' + Math.min(i * 14, 200) + 'ms" data-lb="' + esc(L[0]) + '" data-sk="' + L[1] + '" data-col="' + col + '">' +
-          '<span class="sw" style="--c:' + col + '"></span>' + esc(L[0]) + '</button>';
-      }).join('') + '</div>' +
+    /* v782 · 분해봇·기획·판독지와 같은 언어로 — «역할 6»이 기본이고 «세부»는 그 안에서 고른다.
+       흔한 일(세부 정하기)은 바로, 드문 일(역할 자체 바꾸기)은 한 걸음 뒤에. */
+    var _role = String(nowLb).split('·')[0].replace(/[▾\s]/g, '').trim();
+    var _sub = (String(nowLb).split('·')[1] || '').replace(/[▾\s]/g, '').trim();
+    var _ri = -1; PV2_ROLES.forEach(function (p, n) { if (p[0] === _role) _ri = n; });
+    var _grid;
+    if (_prpCascSwap || _ri < 0) {
+      _grid = '<div class="prp-ctit">이 구간의 역할</div><div class="prp-cgrid">' +
+        PV2_ROLES.map(function (p, i) {
+          return '<button type="button" class="prp-ci prp-crole' + (i === _ri ? ' on' : '') +
+            '" style="transition-delay:' + Math.min(i * 14, 200) + 'ms" data-lb="' + esc(p[0]) + '" data-sk="" data-col="' + p[1] + '">' +
+            '<span class="sw" style="--c:' + p[1] + '"></span>' + esc(p[0]) + '</button>';
+        }).join('') + '</div>';
+    } else {
+      var _col = PV2_ROLES[_ri][1];
+      _grid = '<div class="prp-ctit">' + esc(_role) + ' — 어떤 ' + esc(_role) + '인가요</div><div class="prp-cgrid">' +
+        (PV2_ROLE_SUBS[_ri] || []).map(function (v, i) {
+          return '<button type="button" class="prp-ci' + (_sub === v ? ' on' : '') +
+            '" style="transition-delay:' + Math.min(i * 14, 200) + 'ms" data-lb="' + esc(_role + '·' + v) + '" data-sk="" data-col="' + _col + '">' +
+            '<span class="sw" style="--c:' + _col + '"></span>' + esc(v) + '</button>';
+        }).join('') +
+        '<button type="button" class="prp-cswap" style="transition-delay:210ms">역할 바꾸기 ›</button></div>';
+    }
+    casc.innerHTML = _grid +
       '<div class="prp-cd"></div><div class="prp-ctit">이 구간 손보기</div><div class="prp-cact">' +
       '<button type="button" data-a="up" style="transition-delay:210ms" title="위로">↑ 위로</button>' +
       '<button type="button" data-a="dn" style="transition-delay:224ms" title="아래로">↓ 아래로</button>' +
@@ -50125,7 +50147,23 @@
       if (a >= 0) { r.scriptSecFlex[a].k = ci.dataset.lb; r.scriptSecFlex[a].c = ci.dataset.sk || ''; saveRows(); }
       _prpCascSg.querySelector('.prp-sgl').innerHTML = esc(ci.dataset.lb) + ' <span class="cv">▾</span>';
       _prpCascSg.style.color = ci.dataset.col;
+      // v782 · 역할만 골랐으면 «어떤 ○○인가요»를 이어서 묻는다 (세부는 자유 · 안 고르고 닫아도 된다)
+      if (ci.classList.contains('prp-crole')) {
+        var _i782 = +_prpCascSg.dataset.i;
+        prpLadder(); _prpCascSwap = 0;
+        var _sg782 = document.querySelector('.prp-sg[data-i="' + _i782 + '"]');
+        var _lb782 = _sg782 && _sg782.querySelector('.prp-sgl');
+        if (_lb782) prpCascOpen(_lb782); else prpCascClose();
+        return;
+      }
       prpLadder(); prpCascClose(); return;
+    }
+    const swp = e.target.closest('.prp-cswap');
+    if (swp && _prpCascSg) {   // v782 · 한 걸음 뒤 = 역할 6
+      _prpCascSwap = 1;
+      var _lbS = _prpCascSg.querySelector('.prp-sgl');
+      if (_lbS) prpCascOpen(_lbS);
+      return;
     }
     const act = e.target.closest('.prp-cact button');
     if (act && _prpCascSg) {
