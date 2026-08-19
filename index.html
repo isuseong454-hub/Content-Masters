@@ -51448,15 +51448,33 @@
   // ---- ⚡ 빠른 담기 방 (4번째 갈림길) — B안 «한번에 하나» 위저드 (v498) ----
   function qcOpen() {
     csCloseFork();
-    const r = document.getElementById('qc-room'); if (!r) return;
+    const r = document.getElementById('qc-room');
+    if (!r) { qcUnstick(); return; }   // v790 · 방이 없으면 잠금부터 푼다(갇히지 않게)
     r.classList.add('show'); document.body.style.overflow = 'hidden';
     ovFreeze(true);                                            // v529 · 뒤에 깔린 본체 재우기
-    qcwHome();
-    qshSeed(); qshRenderLoad(false); qshPaint();
-    const st = document.getElementById('qsh-stage'); if (st) st.classList.remove('qsh-frozen');
-    const tiles = r.querySelectorAll('.qsh-w');   // 등장은 투명도만 (transform은 bob이 씀)
-    tiles.forEach(t => { t.style.opacity = '0'; });
-    tiles.forEach((t, i) => setTimeout(() => { t.style.transition = 'opacity .38s ease'; t.style.opacity = ''; }, 70 + i * 65));
+    /* v790 · 🚨 여기서 예외가 나면 «잠금만 남고 방은 빈 채»가 된다 = 아무것도 안 눌리는 먹통.
+       그리는 일은 전부 감싸고, 실패해도 방은 열린 상태로 남긴다(나가기 버튼이 살아 있게). */
+    try {
+      qcwHome();
+      qshSeed(); qshRenderLoad(false); qshPaint();
+      const st = document.getElementById('qsh-stage'); if (st) st.classList.remove('qsh-frozen');
+      const tiles = r.querySelectorAll('.qsh-w');   // 등장은 투명도만 (transform은 bob이 씀)
+      tiles.forEach(t => { t.style.opacity = '0'; });
+      tiles.forEach((t, i) => setTimeout(() => { t.style.transition = 'opacity .38s ease'; t.style.opacity = ''; }, 70 + i * 65));
+    } catch (e) {
+      try { console.warn('[qcOpen]', e); } catch (e2) {}
+      try { r.querySelectorAll('.qsh-w').forEach(function (t) { t.style.opacity = ''; }); } catch (e3) {}
+      try { toast('담기 화면을 여는 중 문제가 있었어요 — «‹ 갈림길»로 나갈 수 있습니다'); } catch (e4) {}
+    }
+  }
+  /* v790 · 잠금만 남은 «먹통» 자가 복구 — 열린 화면이 하나도 없는데 잠겨 있으면 푼다 */
+  function qcUnstick() {
+    try {
+      const open = ['qc-room', 'cs-fork', 'cmu-ov', 'ytv-ov', 'prp', 'sh-modal', 'tos-ov']
+        .map(function (id) { return document.getElementById(id); })
+        .filter(function (el) { return el && el.getBoundingClientRect().height > 0; }).length;
+      if (!open) { document.body.style.overflow = ''; ovFreeze(false); }
+    } catch (e) {}
   }
   function qcClose() {
     const r = document.getElementById('qc-room'); if (r) r.classList.remove('show');
@@ -52169,7 +52187,7 @@
         else if (go === 'compass') { csCloseFork(); cmSweepRooms(); try { switchWorkspace('compass'); } catch (e) {} } // v595 · 🧭 나침반(분해 후에도 문은 살아있다)
         else if (go === 'plan') { csCloseFork(); cmSweepRooms(); try { switchWorkspace('plan'); } catch (e) {} } // v646 · ◈ 기획
         else if (go === 'cmu') { csCloseFork(); try { cmuOpen('plaza'); cmuAchSync(); } catch (e) {} } // v744 · 🏙 커뮤니티
-        else if (go === 'qc') qcOpen(); // ⚡ 빠른 담기
+        else if (go === 'qc') { try { qcUnstick(); } catch (e) {} qcOpen(); } // ⚡ 빠른 담기 (v790 · 잠금 잔류 자가 복구)
         else if (go === 'ware') { csCloseFork(); cmSweepRooms(); try { switchWorkspace('home'); } catch (e) {} } // v745 · 내 창고 = 창고 홈으로 (트레이닝 바탕이 그대로 드러나던 사고 수리)
         else { csCloseFork(); cmSweepRooms(); } // skip — v593 · 하던 화면 유지, 깔린 분류·손질 방만 쓸어 닫는다
       });
@@ -52184,8 +52202,17 @@
     try {
       const _qcs = document.getElementById('qc-room');
       if (_qcs && !_qcs._lblObs) {
+        /* 🚨 v791 · 이 옵서버는 «자기가 감시하는 곳 안»의 버튼 글자를 바꾼다.
+           textContent는 같은 값을 써도 텍스트 노드가 교체돼 변경으로 잡히므로,
+           그냥 쓰면 콜백 → 변경 → 콜백 … 무한 루프가 되어 화면이 통째로 얼어붙는다
+           (사장님: «갈림길에서 빠르게 담기를 누르면 먹통»). 값이 다를 때만, 옵서버를 끄고 쓴다. */
         _qcs._lblObs = new MutationObserver(function () {
-          const b = document.getElementById('qc-back'); if (b) b.textContent = (typeof _qcw !== 'undefined' && _qcw) ? '‹ 뒤로' : '‹ 갈림길';
+          const b = document.getElementById('qc-back'); if (!b) return;
+          const want = (typeof _qcw !== 'undefined' && _qcw) ? '‹ 뒤로' : '‹ 갈림길';
+          if (b.textContent === want) return;                      // ① 같으면 손대지 않는다
+          try { _qcs._lblObs.disconnect(); } catch (e) {}          // ② 쓰는 동안은 감시 정지
+          b.textContent = want;
+          try { _qcs._lblObs.observe(_qcs, { childList: true, subtree: true }); } catch (e) {}
         });
         _qcs._lblObs.observe(_qcs, { childList: true, subtree: true });
       }
