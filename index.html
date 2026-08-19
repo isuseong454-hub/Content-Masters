@@ -1662,6 +1662,39 @@
   .st2-caldoor .tx s{ text-decoration:none; display:block; font-size:10.5px; font-weight:800; color:#7d94a6; margin-top:4px; line-height:1.55; }
   .st2-caldoor .go{ flex:none; font-size:15px; color:#7EC8F5; }
   .st2-caldoor:active{ transform:scale(.985); }
+
+  /* ═══════════ v798 · UX 마감 ═══════════════════════════════════════
+     ux-scenes + wihwagam-polish 전수 감사 뒤, «파손 위험 없이 효과가 큰 것»만.
+     전부 새 규칙만 더한다 — 기존 규칙은 한 줄도 고치지 않는다. */
+
+  /* ① 눌림 반응 백필 — 누르면 손끝에 반응이 온다 (효과 대비 가장 쌈)
+       ⚠️ 특이도를 일부러 낮게 잡았다: button:active = (0,1,1).
+          이미 눌림을 가진 «.클래스:active» 171곳은 (0,2,0)이라 그대로 이긴다.
+          즉 «눌림이 없던 버튼»에만 붙는다. */
+  button:active{ transform:scale(.96); }
+  button{ transition:transform 120ms cubic-bezier(.2,0,0,1); }
+  button:disabled:active{ transform:none; }
+  /* ⚠️⚠️ 상시 transform을 쓰는 버튼은 scale만 걸면 «원래 자리»가 지워져 화면이 밀린다.
+          감사에서 두 곳을 찾았다 — 반드시 이어 붙인다. */
+  .s3t-qw button:active{ transform:translateY(-50%) scale(.96); }
+  .prp-cact button:active{ transform:translateY(-7px) scale(.96); }
+
+  /* ② 고무줄 — 목록 끝에서 더 당길 때 뒤 화면이 딸려오는 것 (폰 위화감 4대 중 ③)
+       감사 결과 규칙이 단 1곳뿐이었다. */
+  html, body{ overscroll-behavior-y:none; }
+  .ov, .sheet, .cmu-ov, .ytv-ov, [role="dialog"]{ overscroll-behavior:contain; }
+
+  /* ③ 한국어 줄바꿈 마감 — 제목은 줄 길이를 고르게, 본문은 «외톨이 한 글자» 방지.
+       레이아웃을 밀지 않고 줄 나누는 위치만 바뀐다. */
+  h1, h2, h3{ text-wrap:balance; }
+  p{ text-wrap:pretty; }
+
+  /* ④ 움직임 줄이기 — 위에서 더한 눌림도 함께 끈다 (헌법 §3) */
+  @media (prefers-reduced-motion:reduce){
+    button{ transition:none; }
+    button:active, .s3t-qw button:active, .prp-cact button:active{ transform:none; }
+  }
+  /* ═══════════ v798 끝 ═══════════════════════════════════════════ */
   .ytv-wrap{ display:block; }
   .ytv-srch{ display:flex; align-items:center; gap:8px; border-radius:99px; padding:10px 13px; margin-bottom:11px;
     background:rgba(0,0,0,.3); border:1px solid rgba(255,255,255,.09); box-shadow:inset 0 2px 7px rgba(0,0,0,.6); }
