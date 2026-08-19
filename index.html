@@ -1577,6 +1577,15 @@
     background:rgba(255,255,255,.02); padding:12px; }
   /* v783 · 편집 도구는 «아래»에 — 원고를 보면서 고른다(판독지 .rd-dock과 같은 문법) */
   /* v784 · 📺 유튜브 방 — 담기는 3초, 카드엔 썸네일·조회수·제목만. 밑단 3px 빨강이 «유튜브»를 말한다 */
+  /* v787 · 시트 카드 — 글자 대신 «막대 3개»(원고 분석 단계)와 밑단 3px(출처) */
+  .sh-card{ position:relative; }
+  .sh-card[data-pf="yt"]::after{ content:''; position:absolute; left:0; right:0; bottom:0; height:3px;
+    background:#E5333F; border-radius:0 0 var(--r, 12px) var(--r, 12px); pointer-events:none; }
+  .sh-stg{ display:inline-flex; gap:2.5px; margin-left:6px; vertical-align:middle; }
+  .sh-stg i{ display:block; width:8px; height:3px; border-radius:2px; background:rgba(255,255,255,.13); }
+  .sh-stg i.f1{ background:#8FA0C9; } .sh-stg i.f2{ background:#7EC8F5; } .sh-stg i.f3{ background:#D7F34B; }
+  .sh-stg i.now{ box-shadow:0 0 5px 1px currentColor; }
+  .sh-stg i.now.f1{ color:#8FA0C9; } .sh-stg i.now.f2{ color:#7EC8F5; } .sh-stg i.now.f3{ color:#D7F34B; }
   .ytv-wrap{ display:block; }
   .ytv-srch{ display:flex; align-items:center; gap:8px; border-radius:99px; padding:10px 13px; margin-bottom:11px;
     background:rgba(0,0,0,.3); border:1px solid rgba(255,255,255,.09); box-shadow:inset 0 2px 7px rgba(0,0,0,.6); }
@@ -1653,6 +1662,10 @@
   .ytv-acts button{ flex:1; font-family:inherit; cursor:pointer; border-radius:14px; padding:13px 6px; font-size:12px; font-weight:900;
     border:1px solid rgba(255,255,255,.11); background:rgba(255,255,255,.05); color:#C9D6CD; }
   .ytv-acts button.main{ border-color:transparent; color:#08150d; background:linear-gradient(135deg,#EAFBA8,#D7F34B); }
+  .ytv-paste{ width:100%; font-family:inherit; cursor:pointer; margin-bottom:11px; border-radius:13px; padding:12px;
+    font-size:11.5px; font-weight:900; color:#C9D6CD; background:rgba(255,255,255,.05);
+    border:1px dashed rgba(255,255,255,.18); }
+  .ytv-paste:active{ transform:scale(.985); }
   .ytv-empty{ border-radius:15px; padding:22px 16px; text-align:center; font-size:11.5px; font-weight:800; line-height:1.75;
     color:#8ba392; background:rgba(255,255,255,.03); border:1px dashed rgba(255,255,255,.13); }
   .ytv-empty b{ color:#E4EEE6; } .ytv-empty s{ text-decoration:none; display:block; margin-top:8px; font-size:10.5px; color:#5c6b60; }
@@ -3528,6 +3541,19 @@
 
   /* ── 수정 모드: 읽는 화면이 «그 자리에서» 고치는 화면이 된다 (레이아웃은 안 움직인다) ── */
   /* v781 · 원고 칸 — 단계 막대 · 역할 게이지 · 라벨 팝 · 고객 펜 독 */
+  /* v788 · 05 고객의 말 · 06 키워드 — 유튜브 상세와 같은 자리 */
+  .rd-vsec { margin-top: 16px; }
+  .rd-vrow { display: flex; align-items: flex-start; gap: 8px; border-radius: 11px; padding: 9px 11px; margin-bottom: 6px;
+    background: rgba(255,255,255,.035); border: 1px solid var(--line); }
+  .rd-vrow .bk { flex: none; font-size: 9.5px; font-weight: 900; padding: 4px 8px; border-radius: 99px;
+    background: rgba(255,255,255,.06); }
+  .rd-vrow .tx { flex: 1; min-width: 0; font-size: 11.5px; font-weight: 800; line-height: 1.55; color: var(--text-main); }
+  .rd-kw { display: inline-flex; font-size: 10.5px; font-weight: 800; padding: 6px 10px; border-radius: 99px; cursor: pointer;
+    margin: 0 5px 5px 0; background: rgba(255,255,255,.05); border: 1px solid var(--line); color: var(--text-sub); }
+  .rd-kw.on { background: rgba(215,243,75,.13); border-color: rgba(215,243,75,.38); color: var(--lime, #d7f34b); }
+  .rd-vempty { border-radius: 12px; padding: 12px; font-size: 10.5px; font-weight: 800; line-height: 1.7;
+    color: var(--text-faint); background: rgba(255,255,255,.02); border: 1px dashed var(--line); }
+  .rd-vempty em { font-style: normal; color: var(--lime, #d7f34b); }
   .rd-shead { display: flex; align-items: center; gap: 8px; margin: 0 0 8px; }
   .rd-shead b { font-size: 12.5px; font-weight: 900; color: var(--text-main); }
   .rd-shead s { text-decoration: none; margin-left: auto; font-size: 10.5px; font-weight: 800; color: var(--text-faint); }
@@ -27046,6 +27072,8 @@
               <div class="rd-ro" id="rd-memo-ro"></div>
               <div class="rd-pick" style="display:none" id="rd-memo-wrap"><textarea class="rd-memo" id="rd-memo" placeholder="이건 왜 통했을까 — 한 줄로"></textarea></div></div>
             <div id="rd-script"></div>
+            <div id="rd-voc"></div><!-- v788 · 05 고객의 말 -->
+            <div id="rd-kws"></div><!-- v788 · 06 키워드 -->
             <div class="rd-foot">
               <button type="button" class="rd-btn" id="rd-paint">🖍 칠하기</button>
               <button type="button" class="rd-btn" id="rd-open-script">✎ 원고 열기</button>
@@ -32408,7 +32436,7 @@
       const em = effScriptMode(r);
       const cardTitle = r.hook || r.copyText || stripHtml(r.script || '').slice(0, 60) || r.why || ('No.' + String(r.no).padStart(3, '0'));
       return `
-        <div class="sh-card ${filled ? 'filled' : ''} ${r.favorite ? 'fav' : ''}" data-id="${r.id}" data-no="${r.no}">
+        <div class="sh-card ${filled ? 'filled' : ''} ${r.favorite ? 'fav' : ''}" data-id="${r.id}" data-no="${r.no}" data-pf="${esc(r.platform || 'ig')}">
           <div class="sh-card-body">
             <div class="sh-card-media">
               <div class="sh-slot ${r.hasThumb ? 'has-img' : ''}" data-img-target="thumb" data-row="${r.id}">
@@ -32425,10 +32453,12 @@
                 <span class="sh-head-right">
                   <span class="sh-link-wrap" data-link-cell data-row="${r.id}">
                     ${r.url ?
-                      `<a class="sh-link active" href="${esc(r.url)}" target="_blank" rel="noopener" data-act="openlink" data-id="${r.id}" title="원본 열기 — 길게 누르면 수정">🔗 링크</a>` :
-                      `<button class="sh-link empty" data-act="addlink" data-id="${r.id}">🔗 링크</button>`
+                      `<a class="sh-link active" href="${esc(r.url)}" target="_blank" rel="noopener" data-act="openlink" data-id="${r.id}" title="원본 열기 — 길게 누르면 수정">🔗</a>` :
+                      `<button class="sh-link empty" data-act="addlink" data-id="${r.id}" title="원본 링크 넣기">🔗</button>`
                     }
                   </span>
+                  ${(function(){ try{ var n=rdStage(r); return '<span class="sh-stg" title="원고 분석 '+n+'단계 — 핵심·구조·고객">'+
+                    [1,2,3].map(function(i){ return '<i class="'+(i<=n?'f'+i:'')+(i===n?' now':'')+'"></i>'; }).join('')+'</span>'; }catch(e){ return ''; } })()}
                   <button class="sh-detail-btn sh-detail-mini ${detailFilled ? 'has-detail' : ''}" data-act="detail" data-id="${r.id}" title="${detailFilled ? '분해됨 — 유형·강점 편집' : '분해 — 유형·강점 태그'}">⚙</button>
                 </span>
               </div>
@@ -33072,6 +33102,9 @@
 
     // ⑥ 원고 = 시간 흐름
     rdRenderScript(r);
+    // v788 · 05 고객의 말 · 06 키워드 — 유튜브 상세와 같은 순서로 이어 붙는다
+    try { rdRenderVoc(r); } catch (e) {}
+    try { rdRenderKws(r); } catch (e) {}
   }
   /* v781 · 원고 분석 3단계 — «순서»가 아니라 «세 항목»이다.
      구조는 담을 때 분해봇이 자동으로 붙여주므로 «1을 해야 2가 열린다»로 두면 맞지 않는다. */
@@ -33172,6 +33205,50 @@
         if (_rdPen === 'er' || prev === _rdPen) { if (prev) drop(prev); delete r.vocMap[i]; }
         else { if (prev) drop(prev); (r.voc[_rdPen] = r.voc[_rdPen] || []).push(txt); r.vocMap[i] = _rdPen; }
         rdRenderScript(r);
+        try { rdRenderVoc(r); } catch (e) {}   // v788 · 담자마자 아래 «고객의 말»에 뜬다
+      };
+    });
+  }
+  /* v788 · 05 고객의 말 — v781 펜으로 담은 4바구니를 그대로 보여준다(기획으로도 그대로 간다) */
+  function rdRenderVoc(r) {
+    var host = document.getElementById('rd-voc'); if (!host) return;
+    var v = r.voc || {}, rows = '';
+    PV2_PAINT.forEach(function (p) {
+      if (p[0] === 'point') return;
+      (v[p[0]] || []).forEach(function (t) {
+        rows += '<div class="rd-vrow"><span class="bk" style="color:' + p[2] + '">' + p[1] + '</span>' +
+          '<span class="tx">"' + esc(String(t).slice(0, 120)) + '"</span></div>';
+      });
+    });
+    var n = 0; ['prob', 'want', 'avoid', 'resist'].forEach(function (k) { n += (v[k] || []).length; });
+    host.innerHTML = '<div class="rd-vsec"><div class="rd-shead"><b>💬 고객의 말</b>' +
+      '<s>' + (n ? n + '개 담김' : '아직 없음') + '</s></div>' +
+      (rows || '<div class="rd-vempty">위 원고에서 <em>문장을 톡</em> 하면(수정하기 → 아래 펜) 여기 담깁니다 — ' +
+        '이 원고가 <em>누구의 어떤 마음</em>을 건드렸는지가 남아요.</div>') + '</div>';
+  }
+  /* v788 · 06 키워드 — 톡 = 키워드 서랍으로 (유튜브 상세와 같은 동작) */
+  function rdRenderKws(r) {
+    var host = document.getElementById('rd-kws'); if (!host) return;
+    var ks = (r.keywords || []).concat(r.trendKw || []).filter(Boolean);
+    var seen = {}, uniq = [];
+    ks.forEach(function (k) { k = String(k).trim(); if (k && !seen[k]) { seen[k] = 1; uniq.push(k); } });
+    host.innerHTML = '<div class="rd-vsec"><div class="rd-shead"><b>🏷 키워드</b>' +
+      '<s>' + (uniq.length ? '톡 = 키워드 서랍으로' : '없음') + '</s></div>' +
+      (uniq.length
+        ? '<div>' + uniq.slice(0, 20).map(function (k) {
+            return '<span class="rd-kw" data-rdkw="' + esc(k) + '">' + esc(k) + '</span>';
+          }).join('') + '</div>'
+        : '<div class="rd-vempty">이 카드엔 키워드가 없어요 — 유튜브에서 담은 카드는 <em>태그가 자동으로</em> 따라옵니다.</div>') + '</div>';
+    host.querySelectorAll('[data-rdkw]').forEach(function (el) {
+      el.onclick = async function () {
+        var t = el.dataset.rdkw;
+        try {
+          st2Kw.normal = st2Kw.normal || [];
+          if (st2Kw.normal.indexOf(t) < 0 && (st2Kw.gold || []).indexOf(t) < 0) {
+            st2Kw.normal.push(t); await st2KwSave(); el.classList.add('on');
+            try { toast('🏷 «' + t + '» 키워드 서랍에 담았어요'); } catch (e) {}
+          } else { try { toast('이미 담긴 키워드예요'); } catch (e) {} }
+        } catch (e) {}
       };
     });
   }
@@ -59084,7 +59161,7 @@
      항목: { id, vid, t, ch, views, th, tags[], cap, dur, folder, at }
      ⚠️ 시트(rows)와 섞지 않는다 — 여긴 3초에 한 장, 시트는 30분에 한 장. */
   var YTV_KEY = 'ytv1';
-  var _ytv = null, _ytvLoaded = false, _ytvQ = '', _ytvFolder = '';
+  var _ytv = null, _ytvLoaded = false, _ytvQ = '', _ytvFolder = '', _ytvCapOnly = 0;
   function ytvBlank() { return { items: [], folders: [] }; }
   async function ytvLoad() {
     if (_ytvLoaded) return _ytv;
@@ -59117,6 +59194,7 @@
   function ytvFiltered() {
     var q = String(_ytvQ || '').trim().toLowerCase();
     return (_ytv.items || []).filter(function (x) {
+      if (_ytvCapOnly && !x.cap) return false;   // v787 · 원고를 딸 수 있는 것만
       if (_ytvFolder && x.folder !== _ytvFolder) return false;
       if (!q) return true;
       return String(x.t || '').toLowerCase().indexOf(q) > -1
@@ -59130,7 +59208,10 @@
     var folds = '<span class="ytv-fd' + (_ytvFolder ? '' : ' on') + '" data-ytvfd="">전체 <i>' + all.length + '</i></span>' +
       (_ytv.folders || []).map(function (f) {
         return '<span class="ytv-fd' + (_ytvFolder === f ? ' on' : '') + '" data-ytvfd="' + esc(f) + '">' + esc(f) + ' <i>' + (fcnt[f] || 0) + '</i></span>';
-      }).join('') + '<span class="ytv-fd add" data-ytvnewfd="1">＋ 폴더</span>';
+      }).join('') +
+      '<span class="ytv-fd' + (_ytvCapOnly ? ' on' : '') + '" data-ytvcap="1">📝 자막만 <i>' +
+        all.filter(function (x) { return x.cap; }).length + '</i></span>' +
+      '<span class="ytv-fd add" data-ytvnewfd="1">＋ 폴더</span>';
     var grid = list.length
       ? '<div class="ytv-grid">' + list.map(function (x) {
           return '<div class="ytv-c" data-ytvopen="' + x.id + '">' +
@@ -59147,7 +59228,9 @@
       '<div class="ytv-srch"><span class="ic">🔍</span>' +
         '<input id="ytv-q" placeholder="제목·채널·태그로 찾기" value="' + esc(_ytvQ) + '">' +
         '<span class="n">' + list.length + '</span></div>' +
-      '<div class="ytv-flds">' + folds + '</div>' + grid + '</div>';
+      '<div class="ytv-flds">' + folds + '</div>' +
+      '<button type="button" class="ytv-paste" data-ytvpaste="1">＋ 유튜브 링크 붙여 담기</button>' +
+      grid + '</div>';
   }
   /* ── 상세: 판독지와 «같은 틀» — 섹션 순서를 맞춘다 ── */
   var _ytvCur = null;
@@ -59281,6 +59364,26 @@
     host.querySelectorAll('[data-ytvfd]').forEach(function (el) {
       el.onclick = function () { _ytvFolder = el.dataset.ytvfd || ''; ytvBoardRender(hostId); };
     });
+    var capEl = host.querySelector('[data-ytvcap]');
+    if (capEl) capEl.onclick = function () { _ytvCapOnly = _ytvCapOnly ? 0 : 1; ytvBoardRender(hostId); };
+    var pst = host.querySelector('[data-ytvpaste]');
+    if (pst) pst.onclick = async function () {
+      /* v787 · 정찰을 안 거치고도 담는 길. 유튜브 API는 라이브 도메인에서만 도니
+         메타를 못 가져오면 «링크만» 담고 제목은 나중에 채우게 둔다(담는 걸 막지 않는다). */
+      var u = prompt('유튜브 링크를 붙여넣으세요'); if (u === null) return;
+      u = String(u).trim(); if (!u) return;
+      var m = u.match(/(?:v=|youtu\.be\/|shorts\/|embed\/)([A-Za-z0-9_-]{6,})/);
+      var vid = m ? m[1] : (/^[A-Za-z0-9_-]{8,}$/.test(u) ? u : '');
+      if (!vid) { try { toast('유튜브 링크가 아닌 것 같아요'); } catch (e) {} return; }
+      var v = { id: vid, t: '', ch: '', views: 0, th: 'https://i.ytimg.com/vi/' + vid + '/hqdefault.jpg', vtags: [] };
+      try {
+        if (typeof sctFetchMeta === 'function') { var mt = await sctFetchMeta(vid); if (mt) v = mt; }
+      } catch (e) {}
+      if (!v.t) v.t = '(제목은 라이브에서 채워집니다)';
+      var ok = await ytvAdd(v, _ytvFolder);
+      try { toast(ok ? '📺 담았어요' : '이미 담긴 영상이에요'); } catch (e) {}
+      ytvBoardRender(hostId);
+    };
     var nf = host.querySelector('[data-ytvnewfd]');
     if (nf) nf.onclick = async function () {
       var nm = prompt('새 폴더 이름은? (예: 앞머리)'); if (nm === null) return;
