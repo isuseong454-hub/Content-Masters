@@ -14115,6 +14115,26 @@
   /* 키워드 몰아보기 칩 */
   .tb-kw-wrap { display: flex; flex-wrap: wrap; gap: 8px; }
   .tb-kw-chip { display: inline-flex; align-items: center; gap: 7px; font-size: 13px; color: var(--text-main); background: var(--bg-card); border: 1px solid var(--line); border-radius: 9px; padding: 7px 9px 7px 12px; }
+  /* v801 · 검색 의도 — 키워드를 톡하면 «이 말을 치는 사람이 원하는 것»이 열린다 */
+  .tb-kw-chip { cursor: pointer; }
+  .tb-kw-chip.has-int { border-color: rgba(67,224,230,.42); }
+  .tb-kw-chip .kwi-dot { width: 5px; height: 5px; border-radius: 50%; background: #43E0E6; flex: none; }
+  .tb-kwi { margin: 8px 0 4px; border: 1px solid rgba(67,224,230,.28); border-radius: 12px;
+    padding: 11px 12px; background: linear-gradient(160deg, rgba(67,224,230,.06), rgba(67,224,230,.015)); }
+  .tb-kwi .h { font-size: 11px; font-weight: 900; color: #43E0E6; margin-bottom: 3px; }
+  .tb-kwi .h b { color: #fff; }
+  .tb-kwi .s { font-size: 10.5px; color: #7d8f83; line-height: 1.65; margin-bottom: 9px; }
+  .tb-kwi textarea { width: 100%; min-height: 62px; resize: vertical; font-family: inherit; font-size: 16px;
+    line-height: 1.6; color: var(--text-main); background: rgba(0,0,0,.28); border: 1px solid rgba(255,255,255,.12);
+    border-radius: 9px; padding: 10px 11px; }
+  .tb-kwi textarea:focus { outline: none; border-color: rgba(67,224,230,.5); }
+  .tb-kwi .row { display: flex; gap: 7px; margin-top: 8px; }
+  .tb-kwi .row button { flex: 1; padding: 9px; border-radius: 9px; font-family: inherit; font-size: 12px;
+    font-weight: 900; cursor: pointer; border: 1px solid rgba(67,224,230,.4);
+    background: rgba(67,224,230,.14); color: #43E0E6; }
+  .tb-kwi .row button.gh { border-color: rgba(255,255,255,.14); background: rgba(255,255,255,.04); color: #8d9c93; }
+  .tb-kwi .ex { font-size: 10px; color: #5d6b62; line-height: 1.7; margin-top: 8px; }
+  .tb-kwi .ex em { font-style: normal; color: #9fb0a5; }
   .tb-kw-chip.gold { color: #FFD700; border-color: rgba(255,215,0,0.4); background: rgba(255,215,0,0.06); }
   .tb-kw-cnt { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; color: var(--text-faint); background: var(--bg-void); border-radius: 6px; padding: 1px 6px; }
   .tb-kw-chip.gold .tb-kw-cnt { color: #FFD700; }
@@ -28142,7 +28162,8 @@
   let customCopyTypes = [];  // 입력카드 수식어 유형 커스텀
   let scripts = []; // 내 원고들
   let pmms = []; // 고객 분석 (PMM)
-  let keywords = []; // 키워드 풀 (반응하는 단어)
+  let keywords = []; // 키워드 풀 (반응하는 단어) — v801 · 항목에 intent(검색 의도) 한 줄이 붙는다
+  let _tbKwOpen = null;   // v801 · 분류 › 키워드에서 «의도»를 펼쳐둔 키워드 라벨
 
   // PMM 5가지 질문
   const PMM_QUESTIONS = [
@@ -29879,12 +29900,33 @@
       const normList = pool.filter(k => !k.gold && tbHit(k.label));
       Object.keys(used).forEach(l => { if (!poolLabels.has(l) && tbHit(l)) normList.push({ label: l, gold: false }); });
       const inPool = (label) => keywords.some(k => k.label === label);
-      const chip = k => '<span class="tb-kw-chip' + (k.gold ? ' gold' : '') + '">' + esc(k.label) + '<span class="tb-kw-cnt">' + (used[k.label] || 0) + '</span>' + (inPool(k.label) ? '<button class="tb-kw-star' + (k.gold ? ' on' : '') + '" data-kwgold="' + esc(k.label) + '" title="황금 키워드 토글">★</button>' : '') + '</span>';
+      /* v801 · 의도가 적힌 키워드는 파란 점 하나로 표시하고, 칩을 톡하면 그 아래가 열린다 */
+      const intOf = (label) => { const k9 = keywords.find(x => x.label === label); return (k9 && k9.intent) || ''; };
+      const chip = k => '<span class="tb-kw-chip' + (k.gold ? ' gold' : '') + (intOf(k.label) ? ' has-int' : '') +
+        '" data-kwint="' + esc(k.label) + '">' +
+        (intOf(k.label) ? '<i class="kwi-dot"></i>' : '') + esc(k.label) +
+        '<span class="tb-kw-cnt">' + (used[k.label] || 0) + '</span>' +
+        (inPool(k.label) ? '<button class="tb-kw-star' + (k.gold ? ' on' : '') + '" data-kwgold="' + esc(k.label) + '" title="황금 키워드 토글">★</button>' : '') + '</span>';
       let h = '';
       if (!tbQ().trim())
         h += '<div class="es-hint" style="margin:0 0 10px;">★ 를 눌러 <b>황금 키워드</b>로 올리거나 내릴 수 있어요.</div>';
-      if (goldList.length) h += '<div class="tb-sec"><div class="tb-sec-head">★ 황금 키워드 <span class="tb-sec-cnt">' + goldList.length + '</span></div><div class="tb-kw-wrap">' + goldList.map(chip).join('') + '</div></div>';
-      if (normList.length) h += '<div class="tb-sec"><div class="tb-sec-head">키워드 <span class="tb-sec-cnt">' + normList.length + '</span></div><div class="tb-kw-wrap">' + normList.map(chip).join('') + '</div></div>';
+      /* v801 · 열어둔 키워드가 어느 묶음에 있든 그 묶음 바로 아래에 칸이 붙는다 */
+      const intBox = (label) => {
+        const k9 = keywords.find(x => x.label === label);
+        return '<div class="tb-kwi">' +
+          '<div class="h">🔍 <b>' + esc(label) + '</b> — 이 말을 치는 사람이 원하는 것</div>' +
+          '<div class="s">이걸 적어두면 <b style="color:#9fb0a5">제목과 첫 문장이 여기서 나옵니다</b>. ' +
+          '유튜브·네이버는 사람이 직접 검색해서 들어와요.</div>' +
+          '<textarea data-kwitxt="' + esc(label) + '" placeholder="예) 미용실 가기는 애매하고, 혼자 자르다 망한 적이 있어서 «실패하지 않는 법»을 찾는 사람">' +
+          esc((k9 && k9.intent) || '') + '</textarea>' +
+          '<div class="row"><button type="button" data-kwisave="' + esc(label) + '">저장</button>' +
+          '<button type="button" class="gh" data-kwiclose="1">닫기</button></div>' +
+          '<div class="ex">이 한 줄이 있으면 — <em>제목</em>은 그 바람을 그대로 쓰고, <em>첫 3초</em>는 그 걱정을 먼저 건드립니다.</div>' +
+        '</div>';
+      };
+      const opN = (list) => list.some(k => k.label === _tbKwOpen) ? intBox(_tbKwOpen) : '';
+      if (goldList.length) h += '<div class="tb-sec"><div class="tb-sec-head">★ 황금 키워드 <span class="tb-sec-cnt">' + goldList.length + '</span></div><div class="tb-kw-wrap">' + goldList.map(chip).join('') + '</div>' + opN(goldList) + '</div>';
+      if (normList.length) h += '<div class="tb-sec"><div class="tb-sec-head">키워드 <span class="tb-sec-cnt">' + normList.length + '</span></div><div class="tb-kw-wrap">' + normList.map(chip).join('') + '</div>' + opN(normList) + '</div>';
       el.innerHTML = (goldList.length || normList.length) ? h
         : (tbQ().trim() ? tbNoHit('키워드')
           : '<div class="tb-empty">아직 키워드가 없어요. 분해하기에서 키워드를 입력하거나, 고객 분석에서 추가해보세요.</div>');
@@ -29895,6 +29937,30 @@
           if (kw) { kw.gold = !kw.gold; await saveKeywordsList(); rerender(); }
         };
       });
+      /* v801 · 칩 톡 = 의도 칸 열기·닫기 (★ 버튼은 위에서 stopPropagation으로 이미 갈라진다) */
+      el.querySelectorAll('[data-kwint]').forEach(c => {
+        c.onclick = () => {
+          const lb = c.dataset.kwint;
+          _tbKwOpen = (_tbKwOpen === lb) ? null : lb;
+          rerender();
+        };
+      });
+      const _ti = el.querySelector('[data-kwitxt]');
+      if (_ti) {
+        try { _ti.focus(); _ti.setSelectionRange(_ti.value.length, _ti.value.length); } catch (e) {}
+        const save = async () => {
+          const lb = _ti.dataset.kwitxt;
+          let kw = keywords.find(k => k.label === lb);
+          /* 담은 영상에만 있고 풀에는 없던 키워드도 여기서 처음 풀로 올라온다 */
+          if (!kw) { kw = { label: lb, gold: false, createdAt: Date.now() }; keywords.push(kw); }
+          kw.intent = String(_ti.value || '').trim().slice(0, 300);
+          await saveKeywordsList();
+          _tbKwOpen = null; rerender();
+          try { toast('🔍 적어뒀어요 — 제목·첫 문장 쓸 때 여기서 꺼내 쓰세요'); } catch (e) {}
+        };
+        const sv = el.querySelector('[data-kwisave]'); if (sv) sv.onclick = save;
+        const cl = el.querySelector('[data-kwiclose]'); if (cl) cl.onclick = () => { _tbKwOpen = null; rerender(); };
+      }
       bindTbToggle();
       return;
     }
