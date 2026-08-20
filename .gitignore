@@ -1,0 +1,19 @@
+# ── 올리지 않는 것 ──
+# 개인 키·메모 (절대 공개 금지)
+출판키 메모장/
+meta-token.txt
+토큰.txt
+
+# 백업본 (수 MB짜리, 저장소만 무거워짐)
+index.bak-*
+*.bak
+_보관(구자료)/
+_icon-backup/
+
+# 서버 SQL (공개 저장소에 스키마·정책 노출 안 함)
+supabase/
+
+# 작업용
+.claude/
+.DS_Store
+분해봇-프롬프트-*.txt

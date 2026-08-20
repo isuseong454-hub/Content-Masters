@@ -2844,7 +2844,7 @@
   .rr-push{ animation:rrPush .34s cubic-bezier(.2,.85,.3,1) both !important; }
   .rr-pop{ animation:rrPop .34s cubic-bezier(.2,.85,.3,1) both !important; }
   @media(prefers-reduced-motion:reduce){ .rr-push,.rr-pop{ animation:none } }
-  #room-rail .rr-where{ margin-left:auto; font-family:'JetBrains Mono',monospace; font-size:9px;
+  #room-rail .rr-where{ margin-left:auto; font-family:'JetBrains Mono',monospace; font-size:11px;
     letter-spacing:.14em; color:var(--law-faint); white-space:nowrap; }
   @media(max-width:420px){ #room-rail .rr-btn.here{ padding:0 11px; } #room-rail .rr-btn.here .t{ font-size:11px; } }
   body.cm-ov-open #room-rail{ display:none; }
@@ -9293,6 +9293,47 @@
     background: var(--wine-soft);
     color: var(--wine);
   }
+  /* ════ v799 · 설정 우상단 «로그아웃» ════
+     v771 다이어트 때 설정 안의 로그아웃 줄이 사라져 «나가는 문»이 없어졌다.
+     머리(우상단)로 되돌린다 — ×(닫기) 왼쪽, 같은 30px 높이로 한 줄에 선다.
+     배선은 이미 있던 settings-logout-btn 핸들러를 그대로 탄다(확인창 → __logout). */
+  .settings-modal-head-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .settings-modal-logout {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 30px;
+    padding: 0 12px;
+    border-radius: 999px;
+    background: rgba(176, 75, 75, 0.10);
+    border: 1px solid var(--wine-line);
+    color: #E08484;
+    font-family: 'Pretendard', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background .18s ease, color .18s ease, border-color .18s ease, box-shadow .18s ease, transform .12s ease;
+  }
+  .settings-modal-logout:hover {
+    background: var(--wine);
+    color: #fff;
+    border-color: var(--wine);
+    box-shadow: 0 0 12px var(--wine-soft);
+  }
+  .settings-modal-logout:active { transform: translateY(1px); }
+  /* 좁은 폰에서는 글자를 접고 아이콘만 — 제목과 안 부딪히게 */
+  @media (max-width: 400px) {
+    .settings-modal-logout { padding: 0 9px; }
+    .settings-modal-logout .sml-t { display: none; }
+  }
   .settings-modal-body {
     padding: 20px 24px 24px;
     overflow-y: auto;
@@ -13712,7 +13753,7 @@
   }
   .sc-ref-filter-label {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 9.5px;
+    font-size: 11px;
     letter-spacing: 0.18em;
     color: var(--text-mute);
     text-transform: uppercase;
@@ -16641,8 +16682,8 @@
     box-shadow: 0 -4px 20px rgba(0,0,0,0.4);
   }
   /* v676 · 칸이 7개가 되었다 — 글자를 한 단계 줄여 한 줄에 담는다 */
-  .bottom-nav .bn-lab { font-size: 9.5px; letter-spacing: -.04em; }
-  @media (max-width:400px){ .bottom-nav .bn-lab { font-size: 8.8px; } }
+  .bottom-nav .bn-lab { font-size: 11px; letter-spacing: -.04em; }
+  @media (max-width:400px){ .bottom-nav .bn-lab { font-size: 10px; } }
   .bn-tab {
     flex: 1;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -16767,7 +16808,10 @@
     position: fixed;
     inset: 0;
     background: radial-gradient(circle at 50% 26%, #0a2a1f 0%, #061009 46%, #040709 100%);
-    z-index: 5000;
+    /* 🚨 v800 · 옛 5000은 갈림길(#cs-fork = 6000)보다 «아래»였다.
+       → 로그아웃하면 로그인 화면이 갈림길 밑에 깔려서 «아무 일도 안 일어난다»로 보였다.
+       로그인 화면은 방·갈림길·설정(6500) 위, 확인창(100200) 아래에 선다. */
+    z-index: 7000;
     display: none;
     align-items: center;
     justify-content: center;
@@ -20247,7 +20291,7 @@
     border:1px solid rgba(255,255,255,.11); }
   #tq .tq-bulbs{ position:absolute; left:9px; right:9px; top:5px; display:flex; justify-content:space-between; }
   #tq .tq-bulbs i{ width:3.5px; height:3.5px; border-radius:50%; background:#F0B24E;
-    box-shadow:0 0 7px #F0B24E; animation:tqBlink 2.6s infinite; }
+    box-shadow:0 0 7px #F0B24E; animation:tqBlink 2.6s 1; }
   #tq .tq-bulbs i:nth-child(2n){ animation-delay:.42s; }
   #tq .tq-bulbs i:nth-child(3n){ animation-delay:.86s; }
   @keyframes tqBlink{ 0%,100%{opacity:1} 50%{opacity:.34} }
@@ -23020,7 +23064,7 @@
       .o-dunk .net{position:absolute;left:50%;top:136px;transform:translateX(-50%);width:176px;height:92px;z-index:2;background:repeating-linear-gradient(74deg,rgba(230,251,98,.32) 0 1px,transparent 1px 16px),repeating-linear-gradient(-74deg,rgba(230,251,98,.32) 0 1px,transparent 1px 16px);-webkit-mask:linear-gradient(#000,transparent 90%);mask:linear-gradient(#000,transparent 90%);clip-path:polygon(6% 0,94% 0,74% 100%,26% 100%);transform-origin:top}
       .cso-stage.dunk-go .o-dunk .net{animation:csoSwish .6s ease-out}
       @keyframes csoSwish{0%{transform:translateX(-50%) scaleY(1)}25%{transform:translateX(-50%) scaleY(1.6)}55%{transform:translateX(-50%) scaleY(.82)}100%{transform:translateX(-50%) scaleY(1)}}
-      .o-dunk .cutie{position:absolute;left:50%;top:108px;transform:translateX(-50%);font-size:38px;z-index:5;filter:drop-shadow(0 6px 9px rgba(0,0,0,.5));animation:csoBob 2.2s ease-in-out infinite}
+      .o-dunk .cutie{position:absolute;left:50%;top:108px;transform:translateX(-50%);font-size:38px;z-index:5;filter:drop-shadow(0 6px 9px rgba(0,0,0,.5));animation:csoBob 900ms cubic-bezier(.23,1,.32,1) 1 both}
       @keyframes csoBob{50%{transform:translateX(-50%) translateY(-6px)}}
       .cso-stage.dunk-go .o-dunk .cutie{animation:csoDunk .6s cubic-bezier(.4,0,.6,1)}
       @keyframes csoDunk{38%{transform:translateX(-50%) translateY(-44px) scale(.78) rotate(200deg)}72%{transform:translateX(-50%) translateY(6px) scale(1.08)}100%{transform:translateX(-50%) translateY(0) scale(1)}}
@@ -24521,7 +24565,10 @@
               <div class="settings-modal-eyebrow">⚙ SETTINGS · 설정</div>
               <h3 class="settings-modal-title">설정</h3>
             </div>
-            <button class="settings-modal-close" id="settings-modal-close">×</button>
+            <div class="settings-modal-head-actions">
+              <button type="button" class="settings-modal-logout" id="settings-logout-btn" title="로그아웃" aria-label="로그아웃"><span aria-hidden="true">⏻</span><span class="sml-t">로그아웃</span></button>
+              <button class="settings-modal-close" id="settings-modal-close">×</button>
+            </div>
           </div>
           <div class="settings-modal-body">
 
@@ -25640,7 +25687,7 @@
     .fork-hero .d b{color:var(--text-sub,#aab29a)}
     .fork-rail{margin:12px 0 2px;border:1px solid rgba(255,255,255,.09);border-radius:13px;overflow:hidden}
     .fork-rail .cmr{border-bottom:none}
-    .fork-bd{display:inline-block;margin-top:6px;font-family:'JetBrains Mono',monospace;font-size:8.5px;
+    .fork-bd{display:inline-block;margin-top:6px;font-family:'JetBrains Mono',monospace;font-size:10px;white-space:nowrap;
       font-weight:700;padding:2px 8px;border-radius:999px}
     .fork-bd:empty{display:none}
 
@@ -25711,7 +25758,7 @@
       animation:cmrLamp 2.8s ease-in-out infinite}
     @keyframes cmrLamp{50%{opacity:.55}}
     .cmr-mp{position:absolute;left:50%;bottom:0;transform:translateX(-50%) rotate(-32deg);font-size:11px;font-style:normal;
-      animation:cmrPen 1.4s ease-in-out infinite}
+      animation:cmrPen 700ms cubic-bezier(.23,1,.32,1) 1 both}
     @keyframes cmrPen{50%{transform:translateX(-46%) rotate(-18deg)}}
     /* 🏁 마무리 더미 */
     .cmr-tot{position:absolute;right:5px;bottom:31px;width:52px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:1px}
@@ -53442,6 +53489,10 @@
     try { _ok = await appConfirm('로그아웃 하시겠어요?'); }
     finally { _loggingOut = false; }
     if (!_ok) return;
+    // v800 · 나가기 전에 열려 있던 화면을 «실제로» 닫는다 —
+    //        z만 올려두면 로그인 화면 뒤에 갈림길이 살아 있어, 돌아왔을 때 남의 기록이 얼비친다.
+    try { document.querySelectorAll('.cs-ov.show, .settings-modal.show').forEach(function (el) { el.classList.remove('show'); }); } catch (e) {}
+    try { document.body.classList.remove('ov-open', 'cm-ov-open'); } catch (e) {}
     await setCurrentUser(null);
     await setAutologin(false);
     // 운영자 메뉴 숨김
