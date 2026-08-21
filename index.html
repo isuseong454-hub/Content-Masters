@@ -9226,6 +9226,91 @@
       .st-room .i{font-size:15px;flex:none}
       .st-room .t{flex:1;min-width:0}
       .st-room .g{color:#6E6790;font-size:14px;flex:none}
+  /* ════════ v803 · 📥 모으기 (1단계 저장소) ════════
+     선반 = 목록 한 줄 · 카드 = 시트 row · 테두리색 = 앱의 조회수 사다리 그대로 */
+  .gth-wrap { padding: 18px 14px 90px; max-width: 760px; margin: 0 auto; }
+  .gth-top { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; margin-bottom:14px; }
+  .gth-k { font-family:'JetBrains Mono',monospace; font-size:9.5px; font-weight:700; letter-spacing:.2em;
+    color: var(--emerald); text-transform:uppercase; }
+  .gth-t { font-size:22px; font-weight:800; letter-spacing:-.03em; margin:6px 0 0; line-height:1.15; }
+  .gth-n { font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.12em; color:var(--text-faint); margin-top:6px; }
+  .gth-n b { color: var(--emerald); }
+  .gth-cart { flex:none; font-family:inherit; font-size:12.5px; font-weight:800; letter-spacing:-.02em;
+    padding:10px 15px; border-radius:999px; background:var(--emerald); color:#0B0C0A; border:0; cursor:pointer;
+    box-shadow:0 0 18px var(--emerald-glow); transition:transform .14s cubic-bezier(.23,1,.32,1); }
+  .gth-cart:active { transform:scale(.95); }
+
+  /* 선반 */
+  .gth-shelf { margin-bottom:18px; }
+  .gth-sh-t { display:flex; align-items:baseline; justify-content:space-between; gap:10px; margin-bottom:8px; padding:0 2px; }
+  .gth-sh-t b { font-size:14px; font-weight:800; letter-spacing:-.02em; color:var(--text-main); }
+  .gth-more { margin-left:7px; font-family:inherit; font-size:14px; line-height:1; padding:2px 7px;
+    border-radius:7px; background:transparent; border:1px solid transparent; color:var(--text-faint); cursor:pointer; }
+  .gth-more:hover { color:var(--text-sub); border-color:var(--line); }
+  .gth-seeall { font-family:'JetBrains Mono',monospace; font-size:9px; font-weight:700; letter-spacing:.06em;
+    color:var(--text-faint); background:transparent; border:0; cursor:pointer; padding:3px 0; white-space:nowrap; }
+  .gth-seeall em { font-style:normal; font-family:'Pretendard',sans-serif; font-size:11px; font-weight:800;
+    color:var(--emerald); letter-spacing:-.02em; margin-left:6px; }
+  .gth-rail { display:flex; gap:8px; overflow-x:auto; padding-bottom:4px;
+    scrollbar-width:none; -ms-overflow-style:none; }
+  .gth-rail::-webkit-scrollbar { height:0; display:none; }
+  .gth-rail .gth-card { flex:none; width:104px; }
+  .gth-add { flex:none; width:56px; border:1px dashed var(--line); border-radius:12px; background:transparent;
+    color:var(--text-faint); font-size:18px; cursor:pointer; font-family:inherit; }
+  .gth-add:hover { color:var(--emerald); border-color:var(--emerald-line); }
+
+  /* 카드 */
+  .gth-card { position:relative; border-radius:12px; overflow:hidden; cursor:pointer; background:var(--bg-input);
+    border:1.5px solid var(--gtc, var(--line)); aspect-ratio:9/13; display:flex; flex-direction:column;
+    justify-content:flex-end; padding:0; font-family:inherit; text-align:left;
+    transition:transform .16s cubic-bezier(.23,1,.32,1); }
+  .gth-card:active { transform:scale(.965); }
+  .gth-card .ph { position:absolute; inset:0; background-size:cover; background-position:center; }
+  .gth-card .ph.none { background:linear-gradient(152deg, var(--bg-elev), var(--bg-void)); }
+  .gth-card .sh { position:absolute; inset:0;
+    background:linear-gradient(180deg, rgba(0,0,0,.12) 0%, rgba(0,0,0,.04) 32%, rgba(0,0,0,.88) 100%); }
+  .gth-card .hk { position:relative; padding:8px; font-size:11px; font-weight:800; line-height:1.32;
+    letter-spacing:-.03em; color:#fff; text-shadow:0 2px 6px rgba(0,0,0,.9);
+    display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
+  .gth-card .vw { position:absolute; top:6px; left:6px; font-family:'JetBrains Mono',monospace; font-size:9px;
+    font-weight:700; padding:3px 6px; border-radius:999px; background:rgba(0,0,0,.62); color:var(--gtc, #fff);
+    backdrop-filter:blur(3px); -webkit-backdrop-filter:blur(3px); }
+
+  /* 목록 펼친 화면 */
+  .gth-axhead { margin-bottom:14px; padding:0 2px; }
+  .gth-back { font-family:'JetBrains Mono',monospace; font-size:10.5px; font-weight:700; color:var(--text-faint);
+    letter-spacing:.06em; background:transparent; border:0; cursor:pointer; padding:0; }
+  .gth-back:hover { color:var(--text-sub); }
+  .gth-axttl { font-size:20px; font-weight:800; letter-spacing:-.03em; margin-top:8px; }
+  .gth-axsub { font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--text-faint);
+    letter-spacing:.12em; margin-top:6px; }
+  .gth-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+  .gth-gadd { border:1px dashed var(--line); border-radius:12px; background:transparent; color:var(--text-faint);
+    cursor:pointer; aspect-ratio:9/13; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:5px; font-family:inherit; font-size:19px; }
+  .gth-gadd span { font-size:10.5px; font-weight:700; letter-spacing:-.02em; }
+
+  /* 새 목록 · 빈 화면 */
+  .gth-newlist { width:100%; margin-top:6px; font-family:inherit; font-size:12.5px; font-weight:800;
+    letter-spacing:-.02em; padding:13px; border-radius:12px; background:transparent;
+    border:1px dashed var(--emerald-line); color:var(--emerald); cursor:pointer; }
+  .gth-newlist:active { transform:scale(.99); }
+  .gth-empty { text-align:center; padding:44px 18px; }
+  .gth-empty .e1 { font-size:34px; }
+  .gth-empty .e2 { font-size:16px; font-weight:800; letter-spacing:-.025em; margin-top:12px; }
+  .gth-empty .e3 { font-size:12.5px; color:var(--text-mute); line-height:1.65; margin-top:8px; }
+  .gth-nudge { margin-bottom:16px; padding:13px 14px; border-radius:13px; line-height:1.6;
+    background:rgba(215,243,75,.08); border:1px solid var(--emerald-line); font-size:12.5px; color:var(--text-sub); }
+  .gth-nudge b { color:var(--emerald); font-weight:800; }
+  .gth-nudge button { display:block; width:100%; margin-top:10px; font-family:inherit; font-size:12.5px;
+    font-weight:800; padding:10px; border-radius:10px; background:var(--emerald); color:#0B0C0A; border:0; cursor:pointer; }
+  @media (max-width:400px){ .gth-rail .gth-card { width:92px; } .gth-t { font-size:19px; } }
+
+  /* v805 · 정찰 검색 한도 표시 */
+  #sct-quota { font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:700; letter-spacing:.1em;
+    color: var(--text-faint); padding: 5px 2px 0; }
+  #sct-quota.full { color: var(--flare); }
+
   .settings-modal {
     display: none;
     position: fixed;
@@ -23825,6 +23910,7 @@
   <!-- ===== 모바일 하단 탭바 (네이버 클립 스타일) ===== -->
   <nav class="bottom-nav" id="bottom-nav">
     <button class="bn-tab" data-ws="home"><span class="bn-ico">⌂</span><span class="bn-lab">홈</span></button>
+    <button class="bn-tab" data-ws="gather"><span class="bn-ico">▤▤</span><span class="bn-lab">모으기</span></button>
     <button class="bn-tab" data-ws="sheet"><span class="bn-ico">▤</span><span class="bn-lab">시트</span></button>
     <button class="bn-tab" data-ws="scripts"><span class="bn-ico">✎</span><span class="bn-lab">원고</span></button>
     <button class="bn-tab" data-ws="thumb"><span class="bn-ico">▣</span><span class="bn-lab">썸네일</span></button>
@@ -26226,6 +26312,21 @@
         </div>
       </div>
     </div>
+    <!-- ════════ v803 · 📥 모으기 — 1단계 저장소 (초보 크리에이터) ════════
+         목록(사용자가 만든 담는 자리)마다 선반 한 줄 · «전체 보기»로 그 목록만 격자로 파고든다.
+         카드는 시트 rows를 그대로 쓴다 (새 데이터 안 만듦 — 이사 0 원칙). -->
+    <div id="gather-view" class="gth-wrap" style="display:none;">
+      <div class="gth-top">
+        <div>
+          <div class="gth-k">STEP 1 · 모으기</div>
+          <h2 class="gth-t">내 창고</h2>
+          <div class="gth-n" id="gth-count"></div>
+        </div>
+        <button type="button" class="gth-cart" id="gth-cart">⚡ 담기</button>
+      </div>
+      <div id="gth-body"></div>
+    </div>
+
     <div id="fb-view" class="fb-wrap" style="display:none;">
       <section class="fb-header">
         <div class="fb-page"><span class="em">02</span> / 03</div>
@@ -35408,6 +35509,9 @@
     // Training room init
     try { initTrainingRoom(); } catch (e) { console.error('[init] initTrainingRoom 실패:', e); }
 
+    // 📥 v803 · 모으기 — 목록 불러오기 + 클릭 배선
+    try { gthWire(); await gthLoad(); } catch (e) { console.error('[init] 모으기 실패:', e); }
+
     // Settings modal init
     try { initSettingsModal(); } catch (e) { console.error('[init] initSettingsModal 실패:', e); }
     try { initTrSummaryModal(); } catch (e) { console.error('[init] initTrSummaryModal 실패:', e); }
@@ -38396,7 +38500,7 @@
   }
 
   // 🧭 방 레일 — 어느 방/어느 화면인지 항상 표시
-  const RR_LABELS = { home: '홈', sheet: '벤치마킹 시트', customer: '고객 분석',
+  const RR_LABELS = { home: '홈', gather: '모으기', sheet: '벤치마킹 시트', customer: '고객 분석',
     formatboard: '분류', northstar: '라이벌 멘토', diagnose: '릴스 진단',
     scripts: '내 원고', thumb: '썸네일', studio: '트레이닝 룸', compass: '나침반' };
   function rrUpdate(ws) {
@@ -38423,7 +38527,7 @@
     rrSlide();
   }
   // 새로 열린 화면이 옆에서 밀려 들어오게 (뒤로 갈 땐 반대 방향)
-  const RR_VIEWS = ['home-view','sh-sheet-view','sh-stats-view','mb-view','fb-view','thumb-view',
+  const RR_VIEWS = ['home-view','gather-view','sh-sheet-view','sh-stats-view','mb-view','fb-view','thumb-view',
     'sc-view','customer-view','northstar-view','diagnose-view','st2-view','cp-view'];
   function rrSlide() {
     const cls = window.__rrDir === 'back' ? 'rr-pop' : 'rr-push';
@@ -38464,6 +38568,312 @@
 
   // v667 · 어느 방으로 옮기든, 고객 방에 안 저장된 글이 있으면 먼저 담는다
   function _flushBeforeLeave() { try { if (window._cus2FlushAll) window._cus2FlushAll(); } catch (e) {} }
+  /* ═══════════════════════════════════════════════════════════════
+     📥 v803 · 모으기 — 1단계 저장소 (초보 크리에이터)
+     · 목록 = 사용자가 «직접 만드는» 담는 자리. 앱이 정해주지 않는다.
+     · 카드 = 시트 rows 그대로 (새 데이터 안 만듦). row.shelf 한 칸만 늘렸다.
+     · 선반(가로 한 줄) → «전체 보기 ›» → 그 목록만 격자로 파고든다.
+     · 목록이 0개여도 담을 수 있다 — 5장 쌓이면 «이것들 뭐라고 부를까요?» 하고 그때 묻는다.
+       (첫 화면에서 «이름부터 지으세요»는 초보가 막히는 바로 그 벽이라 피했다.)
+     ═══════════════════════════════════════════════════════════════ */
+  const GTH_KEY = 'gather-shelves-v1';
+  let gthShelves = [];        // [{id, name}]
+  let gthOpenId = null;       // null이면 선반 목록, 값이 있으면 그 목록만 펼침
+  let gthNudged = false;
+
+  async function gthLoad() {
+    try {
+      const r = await window.storage.get(GTH_KEY);
+      gthShelves = r && r.value ? JSON.parse(r.value) : [];
+    } catch (e) { gthShelves = []; }
+    if (!Array.isArray(gthShelves)) gthShelves = [];
+  }
+  async function gthSave() {
+    try { await window.storage.set(GTH_KEY, JSON.stringify(gthShelves)); }
+    catch (e) { toast('목록 저장 실패'); }
+  }
+  function gthNum(v) {
+    v = Number(v) || 0;
+    if (v >= 10000) return (v / 10000 >= 100 ? Math.round(v / 10000) : (v / 10000).toFixed(0)) + '만';
+    return v.toLocaleString();
+  }
+  function gthTier(v) {
+    v = Number(v) || 0;
+    return v >= 5000000 ? 'var(--law-tier5)' : v >= 1000000 ? 'var(--law-tier4)'
+         : v >= 500000 ? 'var(--law-tier3)' : v >= 300000 ? 'var(--law-tier2)' : 'var(--law-tier1)';
+  }
+  function gthCards() { return rows.filter(rowHasContent); }
+  function gthOf(shelfId) {
+    return gthCards().filter(r => (r.shelf || '') === (shelfId || ''));
+  }
+  function gthCardHtml(r) {
+    const hook = esc(r.hook || r.idea || r.copyText || '제목 없음');
+    return '<button type="button" class="gth-card" data-gcard="' + r.id + '" style="--gtc:' + gthTier(r.views) + '">' +
+      '<span class="ph none" data-gimg="' + r.id + '"></span><span class="sh"></span>' +
+      (r.views ? '<span class="vw">' + gthNum(r.views) + '</span>' : '') +
+      '<span class="hk">' + hook + '</span></button>';
+  }
+  /* 썸네일은 저장소에서 따로 불러온다 (base64라 한 번에 다 그리면 무거워서 나중에 채운다) */
+  function gthPaintImgs(scope) {
+    (scope || document).querySelectorAll('.gth-card .ph[data-gimg]').forEach(async el => {
+      const id = el.dataset.gimg;
+      try {
+        const d = await loadImage(id, 'thumb');
+        if (d) { el.style.backgroundImage = 'url(' + d + ')'; el.classList.remove('none'); }
+      } catch (e) {}
+    });
+  }
+
+  function gthRender() {
+    const body = document.getElementById('gather-body') || document.getElementById('gth-body');
+    if (!body) return;
+    if (gthPending) { gthClaimPending().then(() => gthRender()); return; }
+    const all = gthCards();
+    const un = gthOf('');                    // 아직 목록에 안 넣은 것
+    const cnt = document.getElementById('gth-count');
+    if (cnt) cnt.innerHTML = '모은 것 <b>' + all.length + '</b>' +
+      (gthShelves.length ? ' · 목록 ' + gthShelves.length + '개' : '');
+
+    /* ── 한 목록만 펼친 화면 ── */
+    if (gthOpenId !== null) {
+      const sh = gthShelves.find(x => x.id === gthOpenId);
+      const name = sh ? sh.name : '아직 이름 없는 것들';
+      const list = gthOf(sh ? sh.id : '').slice().sort((a, b) => (b.views || 0) - (a.views || 0));
+      const top = list[0];
+      body.innerHTML =
+        '<div class="gth-axhead">' +
+          '<button type="button" class="gth-back" id="gth-back">‹ 목록으로</button>' +
+          '<div class="gth-axttl">' + esc(name) + '</div>' +
+          '<div class="gth-axsub">' + list.length + '개' +
+            (top && top.views ? ' · 최고 ' + gthNum(top.views) : '') + '</div>' +
+        '</div>' +
+        '<div class="gth-grid">' + list.map(gthCardHtml).join('') +
+          '<button type="button" class="gth-gadd" data-gadd="' + (sh ? sh.id : '') + '">＋<span>담기</span></button>' +
+        '</div>';
+      gthPaintImgs(body);
+      return;
+    }
+
+    /* ── 아무것도 없을 때 ── */
+    if (!all.length) {
+      body.innerHTML = '<div class="gth-empty">' +
+        '<div class="e1">📥</div>' +
+        '<div class="e2">아직 담은 게 없어요</div>' +
+        '<div class="e3">좋은 릴스를 봤을 때 <b>캡처 한 장</b>이면 됩니다.<br>' +
+        '목록은 나중에 만들어도 돼요 — 먼저 담아보세요.</div>' +
+        '</div>';
+      return;
+    }
+
+    /* ── 선반 화면 ── */
+    let html = '';
+    /* 목록이 아직 없는데 5장 넘게 쌓였으면 그때 이름을 묻는다 */
+    if (!gthShelves.length && un.length >= 5 && !gthNudged) {
+      html += '<div class="gth-nudge">' +
+        '<b>' + un.length + '개</b>나 담으셨네요. 이것들 뭐라고 부를까요?<br>' +
+        '비슷한 것끼리 묶어두면 나중에 찾기가 훨씬 쉬워집니다.' +
+        '<button type="button" id="gth-nudge-go">첫 목록 만들기</button></div>';
+    }
+    gthShelves.forEach(sh => {
+      const list = gthOf(sh.id).slice().sort((a, b) => (b.views || 0) - (a.views || 0));
+      html += '<div class="gth-shelf">' +
+        '<div class="gth-sh-t"><b>' + esc(sh.name) +
+          '<button type="button" class="gth-more" data-gmore="' + sh.id + '" title="목록 관리">⋯</button></b>' +
+          '<button type="button" class="gth-seeall" data-gopen="' + sh.id + '">' +
+            list.length + '개<em>전체 보기 ›</em></button></div>' +
+        '<div class="gth-rail">' + list.map(gthCardHtml).join('') +
+          '<button type="button" class="gth-add" data-gadd="' + sh.id + '">＋</button></div>' +
+      '</div>';
+    });
+    if (un.length) {
+      const list = un.slice().sort((a, b) => (b.views || 0) - (a.views || 0));
+      html += '<div class="gth-shelf">' +
+        '<div class="gth-sh-t"><b>아직 이름 없는 것들</b>' +
+          '<button type="button" class="gth-seeall" data-gopen="">' +
+            list.length + '개<em>전체 보기 ›</em></button></div>' +
+        '<div class="gth-rail">' + list.map(gthCardHtml).join('') +
+          '<button type="button" class="gth-add" data-gadd="">＋</button></div>' +
+      '</div>';
+    }
+    html += '<button type="button" class="gth-newlist" id="gth-newlist">＋ 새 목록 만들기</button>';
+    body.innerHTML = html;
+    gthPaintImgs(body);
+  }
+
+  /* 목록 이름 묻는 창 — 앱 색으로. window.prompt는 폰에서 볼품없다 */
+  function gthAsk(pre) {
+    return new Promise(resolve => {
+      const ov = document.createElement('div');
+      ov.style.cssText = 'position:fixed;inset:0;z-index:100300;display:flex;align-items:center;justify-content:center;' +
+        'background:rgba(0,0,0,.65);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);padding:24px';
+      ov.innerHTML = '<div style="width:100%;max-width:340px;background:var(--bg-card);border:1px solid var(--line);' +
+        'border-radius:16px;padding:20px 18px;box-shadow:0 20px 60px rgba(0,0,0,.7)">' +
+        '<div style="font-size:15px;font-weight:800;letter-spacing:-.02em">' + (pre ? '이름 바꾸기' : '새 목록 만들기') + '</div>' +
+        '<div style="font-size:12px;color:var(--text-mute);margin-top:6px;line-height:1.55">' +
+        '비슷한 것끼리 묶을 이름을 지어보세요. 나중에 바꿔도 됩니다.</div>' +
+        '<input id="gthq-in" placeholder="예: 앞머리 고민" autocomplete="off" value="' + esc(pre || '') + '" ' +
+        'style="width:100%;margin-top:14px;padding:12px;border-radius:11px;background:var(--bg-input);' +
+        'border:1px solid var(--line);color:var(--text-main);font-family:inherit;font-size:14px">' +
+        '<div style="display:flex;gap:9px;margin-top:14px">' +
+        '<button id="gthq-no" style="flex:1;padding:11px;border-radius:11px;border:1px solid var(--line);' +
+        'background:transparent;color:var(--text-mute);font-family:inherit;font-size:13.5px;font-weight:600">취소</button>' +
+        '<button id="gthq-ok" style="flex:1;padding:11px;border-radius:11px;border:1px solid var(--emerald);' +
+        'background:var(--emerald);color:#0B0C0A;font-family:inherit;font-size:13.5px;font-weight:800">만들기</button>' +
+        '</div></div>';
+      document.body.appendChild(ov);
+      const inp = ov.querySelector('#gthq-in');
+      const done = v => { ov.remove(); document.removeEventListener('keydown', onKey); resolve(v); };
+      function onKey(e) { if (e.key === 'Escape') done(''); else if (e.key === 'Enter') done(inp.value); }
+      ov.querySelector('#gthq-no').onclick = () => done('');
+      ov.querySelector('#gthq-ok').onclick = () => done(inp.value);
+      ov.onclick = e => { if (e.target === ov) done(''); };
+      document.addEventListener('keydown', onKey);
+      setTimeout(() => { try { inp.focus(); } catch (e) {} }, 40);
+    });
+  }
+
+  /* 목록 관리 — 이름 바꾸기 · 지우기. 지워도 카드는 «아직 이름 없는 것들»로 돌아갈 뿐 안 사라진다 */
+  function gthManage(shelfId) {
+    const sh = gthShelves.find(x => x.id === shelfId); if (!sh) return;
+    const n = gthOf(sh.id).length;
+    const ov = document.createElement('div');
+    ov.style.cssText = 'position:fixed;inset:0;z-index:100300;display:flex;align-items:flex-end;justify-content:center;' +
+      'background:rgba(0,0,0,.65);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)';
+    ov.innerHTML = '<div style="width:100%;max-width:440px;background:var(--bg-card);border:1px solid var(--line);' +
+      'border-radius:20px 20px 0 0;padding:20px 18px calc(20px + env(safe-area-inset-bottom))">' +
+      '<div style="font-size:15px;font-weight:800;letter-spacing:-.02em">' + esc(sh.name) + '</div>' +
+      '<div style="font-size:12px;color:var(--text-mute);margin-top:5px">카드 ' + n + '개</div>' +
+      '<button type="button" id="gthm-ren" style="width:100%;margin-top:14px;padding:12px;border-radius:11px;' +
+      'border:1px solid var(--line);background:var(--bg-elev);color:var(--text-main);font-family:inherit;' +
+      'font-size:13.5px;font-weight:700">✎ 이름 바꾸기</button>' +
+      '<button type="button" id="gthm-del" style="width:100%;margin-top:8px;padding:12px;border-radius:11px;' +
+      'border:1px solid var(--wine-line);background:rgba(192,72,72,.1);color:#E08484;font-family:inherit;' +
+      'font-size:13.5px;font-weight:700">🗑 목록 지우기' + (n ? ' (카드 ' + n + '개는 남습니다)' : '') + '</button>' +
+      '<button type="button" id="gthm-no" style="width:100%;margin-top:8px;padding:11px;border-radius:11px;' +
+      'border:1px solid var(--line);background:transparent;color:var(--text-mute);font-family:inherit;' +
+      'font-size:13px;font-weight:600">닫기</button></div>';
+    document.body.appendChild(ov);
+    const close = () => ov.remove();
+    ov.onclick = e => { if (e.target === ov) close(); };
+    ov.querySelector('#gthm-no').onclick = close;
+    ov.querySelector('#gthm-ren').onclick = async () => {
+      close();
+      const nm = (await gthAsk(sh.name)).trim();
+      if (!nm) return;
+      sh.name = nm; await gthSave(); gthRender(); toast('이름을 바꿨어요');
+    };
+    ov.querySelector('#gthm-del').onclick = async () => {
+      close();
+      let ok = true;
+      try { ok = await appConfirm('「' + sh.name + '」 목록을 지울까요?\n카드 ' + n + '개는 «아직 이름 없는 것들»로 돌아갑니다.', { danger: true }); }
+      catch (e) {}
+      if (!ok) return;
+      gthOf(sh.id).forEach(r => { r.shelf = ''; r.updatedAt = Date.now(); });
+      gthShelves = gthShelves.filter(x => x.id !== sh.id);
+      await gthSave(); await saveRows();
+      if (gthOpenId === sh.id) gthOpenId = null;
+      gthRender(); toast('목록을 지웠어요 — 카드는 그대로예요');
+    };
+  }
+
+  /* 담기 직전에 «어느 선반의 ＋를 눌렀는지» 기억해뒀다가, 돌아오면 그 목록에 넣는다 */
+  let gthPending = null;
+  async function gthClaimPending() {
+    if (!gthPending || !gthPending.shelf) { gthPending = null; return; }
+    const fresh = rows.filter(r => !r.shelf && (r.createdAt || 0) >= gthPending.at - 2000);
+    if (!fresh.length) { gthPending = null; return; }
+    fresh.forEach(r => { r.shelf = gthPending.shelf; r.updatedAt = Date.now(); });
+    gthPending = null;
+    await saveRows();
+  }
+
+  /* 카드를 어느 목록에 넣을지 고르는 시트 */
+  function gthPickShelf(rowId) {
+    const r = rows.find(x => x.id === rowId); if (!r) return;
+    const ov = document.createElement('div');
+    ov.style.cssText = 'position:fixed;inset:0;z-index:100300;display:flex;align-items:flex-end;justify-content:center;' +
+      'background:rgba(0,0,0,.65);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px)';
+    ov.innerHTML = '<div style="width:100%;max-width:440px;background:var(--bg-card);border:1px solid var(--line);' +
+      'border-radius:20px 20px 0 0;padding:20px 18px calc(20px + env(safe-area-inset-bottom))">' +
+      '<div style="font-size:15px;font-weight:800;letter-spacing:-.02em">어느 목록에 넣을까요?</div>' +
+      '<div style="font-size:12px;color:var(--text-mute);margin-top:5px">' + esc(r.hook || '제목 없음') + '</div>' +
+      '<div id="gthp-list" style="display:flex;flex-wrap:wrap;gap:7px;margin-top:14px">' +
+        gthShelves.map(sh => '<button type="button" data-gp="' + sh.id + '" style="font-family:inherit;font-size:12.5px;' +
+          'font-weight:700;padding:9px 14px;border-radius:999px;background:var(--bg-elev);border:1px solid var(--line);' +
+          'color:var(--text-sub);cursor:pointer">' + esc(sh.name) + '</button>').join('') +
+        '<button type="button" data-gp="__new" style="font-family:inherit;font-size:12.5px;font-weight:700;' +
+        'padding:9px 14px;border-radius:999px;background:transparent;border:1px dashed var(--emerald-line);' +
+        'color:var(--emerald);cursor:pointer">＋ 새 목록</button>' +
+      '</div>' +
+      '<button type="button" id="gthp-open" style="width:100%;margin-top:14px;padding:11px;border-radius:11px;' +
+      'border:1px solid var(--line);background:transparent;color:var(--text-mute);font-family:inherit;' +
+      'font-size:13px;font-weight:600">그냥 카드 열기</button></div>';
+    document.body.appendChild(ov);
+    const close = () => ov.remove();
+    ov.onclick = e => { if (e.target === ov) close(); };
+    ov.querySelector('#gthp-open').onclick = () => { close(); try { openDetail(rowId); } catch (e) {} };
+    ov.querySelectorAll('[data-gp]').forEach(b => b.onclick = async () => {
+      let sid = b.dataset.gp;
+      close();
+      if (sid === '__new') { await gthNewShelf(); sid = gthShelves.length ? gthShelves[gthShelves.length - 1].id : ''; }
+      if (!sid) return;
+      r.shelf = sid; r.updatedAt = Date.now();
+      await saveRows();
+      const nm = (gthShelves.find(x => x.id === sid) || {}).name || '';
+      toast('「' + nm + '」에 넣었어요');
+      gthRender();
+    });
+  }
+
+  async function gthNewShelf() {
+    let name = await gthAsk();
+    name = (name || '').trim();
+    if (!name) return;
+    if (gthShelves.some(x => x.name === name)) { toast('같은 이름이 이미 있어요'); return; }
+    gthShelves.push({ id: 'sh_' + Date.now().toString(36), name: name });
+    await gthSave();
+    gthNudged = true;
+    gthRender();
+    toast('「' + name + '」 목록을 만들었어요');
+  }
+
+  /* 클릭 배선 — 화면을 다시 그려도 살아 있도록 위임으로 건다 */
+  function gthWire() {
+    const gv = document.getElementById('gather-view');
+    if (!gv || gv._gwired) return;
+    gv._gwired = true;
+    gv.addEventListener('click', function (e) {
+      const more = e.target.closest('[data-gmore]');
+      if (more) { gthManage(more.dataset.gmore); return; }
+      const open = e.target.closest('[data-gopen]');
+      if (open) { gthOpenId = open.dataset.gopen; gthRender(); return; }
+      if (e.target.closest('#gth-back')) { gthOpenId = null; gthRender(); return; }
+      if (e.target.closest('#gth-newlist') || e.target.closest('#gth-nudge-go')) { gthNewShelf(); return; }
+      const addBtn = e.target.closest('#gth-cart') || e.target.closest('[data-gadd]');
+      if (addBtn) {
+        /* 🚨 v804 · 옛 배선은 «빠른 담기» 방을 통째로 열어서 6갈래 갈림길(썸네일·정식분해·음악·
+           아이디어·고객·공감댓글)이 먼저 떴다. 1단계 초보한테 없애려던 바로 그 벽이라 건너뛴다.
+           → 카트를 지나치고 «캡처 담기» 화면으로 곧장 들어간다. */
+        const sid = addBtn.dataset ? (addBtn.dataset.gadd || '') : '';
+        gthPending = { shelf: sid, at: Date.now() };
+        try {
+          if (typeof qcOpen === 'function') qcOpen();
+          if (typeof qcwStart === 'function') qcwStart(_qcwLastShot || 'shot');
+          return;
+        } catch (err) { console.error('[모으기] 담기 열기 실패', err); }
+        switchWorkspace('sheet');
+        return;
+      }
+      const card = e.target.closest('[data-gcard]');
+      if (card) {
+        /* 「아직 이름 없는 것들」 안에서 누르면 «어느 목록에 넣을까»부터 묻는다.
+           이미 목록이 정해진 카드는 바로 원페이지를 연다. */
+        if (gthOpenId === '' && gthShelves.length) { gthPickShelf(card.dataset.gcard); return; }
+        try { openDetail(card.dataset.gcard); } catch (err) {}
+      }
+    });
+  }
+
   function switchWorkspace(ws) {
     _flushBeforeLeave();   // v667 · 고객 방에 안 저장된 글이 있으면 먼저 담고 옮긴다
     // v674 · 고객·트렌드·알고리즘은 방이 따로 없고 «탭»이다 — 어디서 부르든 한 길로 모은다.
@@ -38522,8 +38932,20 @@
       if (cpView) cpView.style.display = 'none';   // v595
       const ivEl = document.getElementById('idea-view'); if (ivEl) ivEl.style.display = 'none';   // v643
       const pvEl = document.getElementById('plan-view'); if (pvEl) pvEl.style.display = 'none';   // v645
+      const gvEl = document.getElementById('gather-view'); if (gvEl) gvEl.style.display = 'none';   // v803
     };
 
+    if (ws === 'gather') {   // v803 · 📥 모으기 — 1단계 저장소
+      hideAll();
+      const gv = document.getElementById('gather-view');
+      if (gv) gv.style.display = 'block';
+      sheetSb.style.display = 'none';
+      mbSb.style.display = 'none';
+      if (cuSb) cuSb.style.display = 'none';
+      topbar.style.display = 'none';
+      try { gthRender(); } catch (e) { console.error('[gather]', e); }
+      return;
+    }
     if (ws === 'plan') {   // v645 · ◈ 기획 — 홈 + 이번 주 5편
       hideAll();
       const pv = document.getElementById('plan-view');
@@ -63595,7 +64017,43 @@
      카트 수확: 영상→①리서치 수확 · 태그/키워드→e.kw 후보 · 댓글→②분석 공감 후보.
      유튜브 키는 공개키(배포 후 웹사이트 제한) · 네이버 비밀키는 서버 다리(cm_kwtool)에만. */
   var _plnScout = 0, _sctEp = -1;
-  var SCT_KEY = 'AIzaSyAx6v19d749Qs_cTikRyE_t1R12Hjw2l3c';
+  /* 🚨 v805 · 유튜브 열쇠를 앱에서 걷어냈다.
+     옛날엔 여기 `var SCT_KEY = '…열쇠…'` 가 평문으로 있었고 저장소가 공개라 누구나 주웠다.
+     «주소 제한(referer)»은 헤더만 붙이면 뚫려서 보안 장치가 못 된다(2026-08-21 실증).
+     이제 열쇠는 슈파베이스 엣지 함수 `yt` 안에만 있고 브라우저로 절대 안 나온다.
+     한도는 «검색»에만 하루 10회(관리자 무제한) · 같은 검색은 24시간 캐시라 점수 0. */
+  var _sctQuota = null;   // {search, limit, master}
+  async function sctYt(kind, params) {
+    var t = null;
+    try { t = await mtrToken(); } catch (e) {}
+    if (!t) return { error: { message: '로그인이 필요해요 — 다시 들어와 주세요' } };
+    try {
+      var r = await fetch(SUPABASE_URL + '/functions/v1/yt', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ kind: kind, params: params, token: t })
+      }).then(function (x) { return x.json(); });
+      if (r && r.ok) {
+        if (r.today) { _sctQuota = { search: r.today.search, limit: r.today.limit, master: !!r.master }; }
+        try { sctQuotaPaint(); } catch (e) {}
+        return r.data;
+      }
+      if (r && r.quota) {
+        _sctQuota = { search: r.used, limit: r.limit, master: false };
+        try { sctQuotaPaint(); } catch (e) {}
+        return { error: { message: r.msg }, __quota: true };
+      }
+      return { error: { message: (r && (r.msg || r.reason)) || '불러오기 실패' } };
+    } catch (e) { return { error: { message: String((e && e.message) || e) } }; }
+  }
+  /* 「오늘 검색 3/10」 — 조용히 알려준다. 관리자에겐 안 보인다 */
+  function sctQuotaPaint() {
+    var el = document.getElementById('sct-quota'); if (!el) return;
+    var q = _sctQuota;
+    if (!q || q.master || q.limit == null) { el.style.display = 'none'; return; }
+    el.style.display = '';
+    el.textContent = '오늘 검색 ' + q.search + '/' + q.limit;
+    el.classList.toggle('full', q.search >= q.limit);
+  }
   var _sctMode = 'yt', _sctQ = '';
   var _sctPer = 'all', _sctSort = 'view', _sctFmt = 'all', _sctVids = [], _sctShown = 10;
   var _sctScrOpen = '';   // v729 · 카트에서 원고 입력이 펼쳐진 영상 key
@@ -63720,6 +64178,8 @@
       '<div id="sct-kwview"' + (_sctMode === 'yt' ? '' : ' style="display:none"') + '>' +
         '<div class="bar"><input id="sct-q" type="text" placeholder="키워드 — 예: 단발" autocomplete="off" value="' + sctEsc(_sctQ) + '"><button id="sct-go">정찰</button></div>' +
         '<div class="sct-sug" id="sct-sug"></div>' +
+        /* v805 · 검색만 하루 10회 — 조용히 알려준다(관리자는 안 보임) */
+        '<div id="sct-quota" style="display:none"></div>' +
         '<div class="tgs">' +
           '<div class="tg" id="sct-tg-per"><span class="lb">기간</span>' + tb('p', 'all', _sctPer, '전체 (3년)') + tb('p', '7', _sctPer, '최근 7일') + tb('p', '30', _sctPer, '최근 30일') + '</div>' +
           '<div class="tg" id="sct-tg-fmt"><span class="lb">형식</span>' + tb('f', 'all', _sctFmt, '전체') + tb('f', 'shorts', _sctFmt, '쇼츠') + tb('f', 'long', _sctFmt, '일반 영상') + '</div>' +
@@ -63781,6 +64241,7 @@
     document.getElementById('sct-mt-gd').classList.toggle('on', m === 'gold');
   }
   function sctOpen(ep, mode) {
+    try { sctQuotaLoad(); } catch (e) {}   // v805 · 오늘 검색 몇 번 썼나
     _sctEp = (typeof ep === 'number') ? ep : -1;
     if (mode) _sctMode = mode;   // v713 · 금맥 문 → 금맥 탭으로 열기
     _plnScout = 1;
@@ -64527,6 +64988,7 @@
       }
       var btn = this;
       btn.disabled = true; btn.textContent = '네이버에 물어보는 중…';
+      _sctTrend = null;   // v806 · 키워드가 바뀌면 추이도 다시 받는다
       await Promise.all(_sctKb.map(sctNvFetch));
       btn.disabled = false; btn.textContent = '⚖ 비교하기';
       sctKbRender();
@@ -64603,6 +65065,86 @@
       });
     });
   }
+  /* ══ v806 · 📈 네이버 데이터랩 «언제 뜨나» ══
+     키워드도구는 «이번 달 얼마나»를 준다. 데이터랩은 «일 년 중 언제»를 준다 — 서로 다른 질문이다.
+     헤어는 계절을 크게 타서(앞머리=환절기, 펌=초겨울) 이게 «지금 올릴 때인가»를 말해준다.
+     데이터랩은 절대 검색량을 안 준다 — 그 묶음 안에서의 «상대값(0~100)»만 준다. 그래서 «높낮이»로만 읽는다. */
+  var _sctTrend = null, _sctTrendBusy = false;
+  async function sctTrendFetch(words) {
+    var t = null;
+    try { t = await mtrToken(); } catch (e) {}
+    if (!t) return { err: '로그인이 필요해요' };
+    try {
+      var r = await fetch(SUPABASE_URL + '/functions/v1/nvtrend', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ words: words, token: t })
+      }).then(function (x) { return x.json(); });
+      if (r && r.ok) return { data: r.data, cached: !!r.cached };
+      return { err: (r && (r.msg || r.reason)) || '불러오기 실패' };
+    } catch (e) { return { err: String((e && e.message) || e) } }
+  }
+  /* 상대값 꺾은선 — 라이브러리 0, 순수 SVG. 색은 비교판 칸 색과 같은 혈통 */
+  function sctTrendSvg(res) {
+    var g = (res && res.results) || [];
+    if (!g.length) return '<div class="kb-sub">추이 자료가 없어요.</div>';
+    var W = 320, H = 108, PL = 6, PR = 6, PT = 8, PB = 18;
+    var months = (g[0].data || []).map(function (d) { return d.period; });
+    var n = months.length; if (n < 2) return '<div class="kb-sub">기간이 짧아 그래프를 못 그려요.</div>';
+    var maxV = 0;
+    g.forEach(function (s) { (s.data || []).forEach(function (d) { if (+d.ratio > maxV) maxV = +d.ratio; }); });
+    if (!maxV) maxV = 100;
+    var x = function (i) { return PL + (W - PL - PR) * (i / (n - 1)); };
+    var y = function (v) { return PT + (H - PT - PB) * (1 - v / maxV); };
+    var lines = g.map(function (s, gi) {
+      var col = SCT_KBC[gi % SCT_KBC.length];
+      var pts = (s.data || []).map(function (d, i) { return x(i).toFixed(1) + ',' + y(+d.ratio).toFixed(1); }).join(' ');
+      var top = 0, topI = 0;
+      (s.data || []).forEach(function (d, i) { if (+d.ratio > top) { top = +d.ratio; topI = i; } });
+      return '<polyline points="' + pts + '" fill="none" stroke="' + col + '" stroke-width="2" ' +
+             'stroke-linecap="round" stroke-linejoin="round" opacity=".9"/>' +
+             '<circle cx="' + x(topI).toFixed(1) + '" cy="' + y(top).toFixed(1) + '" r="3.2" fill="' + col + '"/>';
+    }).join('');
+    var labs = months.map(function (m, i) {
+      if (n > 6 && i % 2) return '';
+      return '<text x="' + x(i).toFixed(1) + '" y="' + (H - 5) + '" text-anchor="middle" ' +
+        'font-size="7.5" fill="#4A4A4A" font-family="JetBrains Mono,monospace">' + m.slice(5, 7) + '</text>';
+    }).join('');
+    /* 각 키워드가 «몇 월에 제일 높았나» — 그래프보다 이 한 줄이 더 잘 읽힌다 */
+    var peaks = g.map(function (s, gi) {
+      var top = 0, topM = '';
+      (s.data || []).forEach(function (d) { if (+d.ratio > top) { top = +d.ratio; topM = d.period; } });
+      return '<div class="kb-row"><span class="w" style="color:' + SCT_KBC[gi % SCT_KBC.length] + '">' +
+        sctEsc(s.title) + '</span><span class="n" style="flex:1;text-align:right">' +
+        (topM ? (+topM.slice(5, 7)) + '월이 제일 높음' : '—') + '</span></div>';
+    }).join('');
+    return '<svg viewBox="0 0 ' + W + ' ' + H + '" style="width:100%;height:auto;display:block">' +
+      lines + labs + '</svg>' + peaks;
+  }
+  function sctTrendBox() {
+    if (_sctTrendBusy) return '<div class="kb-sec"><b>📈 언제 뜨나</b><div class="kb-sub">네이버에 물어보는 중…</div></div>';
+    if (!_sctTrend) {
+      return '<div class="kb-sec"><b>📈 언제 뜨나 <s>일 년 중 어느 달에 사람이 몰리는지</s></b>' +
+        '<div class="kb-btns"><button type="button" class="kb-go" id="sct-trend-go">📈 1년 추이 보기</button></div>' +
+        '<div class="kb-sub">헤어는 계절을 탑니다 — 앞머리는 환절기, 펌은 초겨울. «지금 올릴 때인가»를 알려줍니다.</div></div>';
+    }
+    if (_sctTrend.err) {
+      return '<div class="kb-sec"><b>📈 언제 뜨나</b><div class="kb-sub">⚠ ' + sctEsc(_sctTrend.err) + '</div>' +
+        '<div class="kb-btns"><button type="button" class="kb-go" id="sct-trend-go">다시 시도</button></div></div>';
+    }
+    return '<div class="kb-sec"><b>📈 언제 뜨나 <s>최근 1년 · 높낮이만 봅니다(절대 검색량 아님)</s></b>' +
+      sctTrendSvg(_sctTrend.data) +
+      '<div class="kb-sub">' + (_sctTrend.cached ? '저장해둔 것 (오늘 안에는 그대로예요)' : '방금 받아왔어요') + '</div></div>';
+  }
+  function sctTrendWire() {
+    var b = document.getElementById('sct-trend-go'); if (!b) return;
+    b.onclick = async function () {
+      if (!_sctKb.length) return;
+      _sctTrendBusy = true; sctKbRender();
+      _sctTrend = await sctTrendFetch(_sctKb);
+      _sctTrendBusy = false; sctKbRender();
+    };
+  }
+
   function sctKbRender() {
     var out = document.getElementById('sct-kb-out'); if (!out) return;
     var norms = _sctKb.map(function (w) { return w.replace(/\s/g, ''); });
@@ -64645,6 +65187,7 @@
           '<a class="kb-lnk" target="_blank" rel="noopener" href="https://trends.google.co.kr/trends/explore?hl=ko&geo=KR&q=' + encodeURIComponent(_sctKb.join(',')) + '"><svg viewBox="0 0 24 24" width="15" height="15"><path d="M2 18.5l6.5-7.5 4.5 3.7 5-5.7" stroke="#4285F4" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path fill="#4285F4" d="M15.5 4.5H23V12z"/></svg> 구글 트렌드 바로가기</a>' +
         '</div>' +
         '<div class="kb-sub">데이터랩 버튼 = 첫 키워드가 복사된 채 열림 (붙여넣기 한 번 — 성별·연령대는 거기서) · 트렌드 버튼 = 키워드들이 실린 채 열림.</div></div>' +
+      sctTrendBox() +
       '<div class="kb-sec"><b>📈 구글 트렌드 — 시간 흐름 <s>최근 12개월 · 같은 그래프에 겹침</s></b><div class="nv-emb on" id="sct-kb-emb"></div>' +
         '<div class="kb-sub">네이버 숫자가 «지금 얼마나»라면, 이 곡선은 «커지는 중인가 식는 중인가»입니다.<br>' +
         '그래프 자리에 «문제가 발생했습니다»가 뜨면 구글이 잠깐 막은 것 — ' +
@@ -64652,6 +65195,7 @@
         '<a class="lnkb" style="color:#B9F5D2;text-decoration:none" target="_blank" rel="noopener" href="https://trends.google.co.kr/trends/explore?hl=ko&geo=KR&q=' + encodeURIComponent(_sctKb.join(',')) + '">새 탭에서 보기 ↗</a></div></div>' +
       '<div class="kb-sec"><b>⛏ 숨은 수요 발굴 <s>입력한 키워드들의 연관을 합쳐 상위 30</s></b>' +
         (digs || '<div class="kb-sub">발굴된 연관 키워드가 없어요.</div>') + '</div>';
+    try { sctTrendWire(); } catch (e) {}   // v806 · 네이버 추이 버튼
     out.querySelectorAll('[data-kbadd]').forEach(function (btn) {
       btn.onclick = function () {
         var x = pool[+btn.dataset.kbadd]; if (!x) return;
@@ -64700,6 +65244,14 @@
     document.head.appendChild(s);
   }
   /* ── 유튜브 정찰 — 50개 1회 수신, 형식·정렬·더보기는 전부 공짜(클라이언트) ── */
+  /* 화면 열 때 «오늘 몇 번 썼나»를 한 번 물어본다 (검색 안 해도 보이게) */
+  async function sctQuotaLoad() {
+    try {
+      var t = await mtrToken(); if (!t) return;
+      var r = await cmRpc('cm_yt_today', { p_token: t });
+      if (r && r.ok) { _sctQuota = { search: r.search, limit: r.limit, master: !!r.master }; sctQuotaPaint(); }
+    } catch (e) {}
+  }
   async function sctRun() {
     var q = _sctQ.trim();
     var out = document.getElementById('sct-out');
@@ -64707,18 +65259,20 @@
     out.innerHTML = '<div class="stat">정찰 중…</div>';
     try {
       var order = (_sctSort === 'rel') ? 'relevance' : 'viewCount';
-      var su = 'https://www.googleapis.com/youtube/v3/search?part=snippet&type=video&regionCode=KR&relevanceLanguage=ko&maxResults=50&order=' + order + '&q=' + encodeURIComponent(q) + '&key=' + SCT_KEY;
       var days = (_sctPer === 'all') ? 365 * 3 : +_sctPer;
-      su += '&publishedAfter=' + new Date(Date.now() - days * 86400000).toISOString();
-      var sr = await fetch(su).then(function (r) { return r.json(); });
+      var sr = await sctYt('search', {
+        part: 'snippet', type: 'video', regionCode: 'KR', relevanceLanguage: 'ko',
+        maxResults: '50', order: order, q: q,
+        publishedAfter: new Date(Date.now() - days * 86400000).toISOString()
+      });
       if (sr.error) { out.innerHTML = '<div class="stat">⚠ ' + sctEsc(sr.error.message).slice(0, 120) + '</div>'; return; }
       var ids = (sr.items || []).map(function (x) { return x.id.videoId; }).filter(Boolean);
       if (!ids.length) { out.innerHTML = '<div class="stat">이 조건으로는 결과가 없어요.</div>'; return; }
-      var vr = await fetch('https://www.googleapis.com/youtube/v3/videos?part=snippet,contentDetails,statistics,status&id=' + ids.join(',') + '&key=' + SCT_KEY).then(function (r) { return r.json(); });
+      var vr = await sctYt('videos', { part: 'snippet,contentDetails,statistics,status', id: ids.join(',') });
       _sctVids = vr.items || [];
       var chIds = {};
       _sctVids.forEach(function (v) { chIds[v.snippet.channelId] = 1; });
-      var cr = await fetch('https://www.googleapis.com/youtube/v3/channels?part=snippet,statistics&id=' + Object.keys(chIds).join(',') + '&key=' + SCT_KEY).then(function (r) { return r.json(); });
+      var cr = await sctYt('channels', { part: 'snippet,statistics', id: Object.keys(chIds).join(',') });
       var subs = {}, thumbs = {};
       (cr.items || []).forEach(function (c) {
         subs[c.id] = c.statistics.hiddenSubscriberCount ? null : (+c.statistics.subscriberCount || 0);
@@ -64743,14 +65297,15 @@
     document.getElementById('sct-chhd').innerHTML = _sctChHd;
     out.innerHTML = '<div class="stat">채널 훑는 중…</div>';
     try {
-      var cr = await fetch('https://www.googleapis.com/youtube/v3/channels?part=snippet,statistics,contentDetails,brandingSettings&id=' + chId + '&key=' + SCT_KEY).then(function (r) { return r.json(); });
+      var cr = await sctYt('channels', { part: 'snippet,statistics,contentDetails,brandingSettings', id: chId });
+      if (cr.error) { out.innerHTML = '<div class="stat">⚠ ' + sctEsc(cr.error.message).slice(0, 140) + '</div>'; return; }
       var ch = (cr.items || [])[0];
       if (!ch) { out.innerHTML = '<div class="stat">채널을 못 찾았어요.</div>'; return; }
       var upl = ch.contentDetails.relatedPlaylists.uploads;
-      var pr = await fetch('https://www.googleapis.com/youtube/v3/playlistItems?part=contentDetails&maxResults=50&playlistId=' + upl + '&key=' + SCT_KEY).then(function (r) { return r.json(); });
+      var pr = await sctYt('playlistItems', { part: 'contentDetails', maxResults: '50', playlistId: upl });
       var ids = (pr.items || []).map(function (x) { return x.contentDetails.videoId; }).filter(Boolean);
       if (!ids.length) { out.innerHTML = '<div class="stat">영상이 없어요.</div>'; return; }
-      var vr = await fetch('https://www.googleapis.com/youtube/v3/videos?part=snippet,contentDetails,statistics,status&id=' + ids.join(',') + '&key=' + SCT_KEY).then(function (r) { return r.json(); });
+      var vr = await sctYt('videos', { part: 'snippet,contentDetails,statistics,status', id: ids.join(',') });
       _sctChVids = vr.items || [];
       var subs = ch.statistics.hiddenSubscriberCount ? null : (+ch.statistics.subscriberCount || 0);
       // 평타 = 최근 50개 조회수 «중간값» — 대박 한두 개에 안 끌려가는 정직한 평균
@@ -64977,7 +65532,7 @@
         if (box.dataset.done) return;
         box.innerHTML = '<div class="no2">댓글 불러오는 중…</div>';
         try {
-          var r = await fetch('https://www.googleapis.com/youtube/v3/commentThreads?part=snippet&order=relevance&maxResults=100&textFormat=plainText&videoId=' + b.dataset.vid + '&key=' + SCT_KEY).then(function (x) { return x.json(); });
+          var r = await sctYt('commentThreads', { part: 'snippet', order: 'relevance', maxResults: '100', textFormat: 'plainText', videoId: b.dataset.vid });
           if (r.error) { box.innerHTML = '<div class="no2">이 영상은 댓글을 볼 수 없어요 (꺼져 있거나 제한)</div>'; box.dataset.done = 1; return; }
           var cs = (r.items || []).map(function (it) { return it.snippet.topLevelComment.snippet; })
             .sort(function (a, b2) { return (+b2.likeCount || 0) - (+a.likeCount || 0); });

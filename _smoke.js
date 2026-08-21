@@ -158,7 +158,8 @@
   } catch (e) {}
 
   // ── 9. 설정 다이어트 — 없앤 것이 되살아나지 않았나 ──
-  const GONE = ['settings-export-btn', 'settings-import-input', 'settings-room-btn', 'settings-trash-btn', 'settings-logout-btn'];
+  // v799 · settings-logout-btn 은 «되살린 것»이라 목록에서 뺐다 (사장님 지시 — 설정 우상단 로그아웃)
+  const GONE = ['settings-export-btn', 'settings-import-input', 'settings-room-btn', 'settings-trash-btn'];
   const back = GONE.filter(i => document.getElementById(i));
   add('설정 군더더기', !back.length, back.length ? '되살아남: ' + back.join(', ') : '없음');
 
@@ -167,6 +168,42 @@
     src.indexOf("function gwanjeomSvg(size, level, mood) { return ''; }") > -1 &&
     src.indexOf('«1억 뷰의 세계» 전면 폐기') > -1 && !document.getElementById('cp-rival'),
     '캐릭터 스텁 · 1억뷰 차단 · 라이벌 입구 제거');
+
+  // ── 11. 📥 모으기 (v803) — 탭·화면·목록 배선 ──
+  try {
+    const gTab = document.querySelector('.bn-tab[data-ws="gather"]');
+    const gView = document.getElementById('gather-view');
+    add('모으기 입구', !!(gTab && gView), gTab ? '탭·화면 있음' : '탭이 사라짐');
+    const gFns = ['gthRender', 'gthLoad', 'gthSave', 'gthWire', 'gthNewShelf', 'gthManage', 'gthPickShelf'];
+    const missG = gFns.filter(f => src.indexOf('function ' + f) < 0);
+    add('모으기 함수', !missG.length, missG.length ? '사라짐: ' + missG.join(', ') : gFns.length + '개 모두 존재');
+    // 🚨 v804 사고 — 담기가 «빠른 담기» 6갈래 갈림길로 새어 나갔다. 곧장 캡처 화면으로 가야 한다
+    add('모으기 담기 직행', src.indexOf('qcwStart(_qcwLastShot') > -1,
+      '카트 6갈래를 건너뛰고 캡처 담기로 바로 들어가는가');
+    // 목록을 지워도 카드는 남아야 한다
+    add('목록 삭제 안전', src.indexOf("r.shelf = ''") > -1, '목록을 지워도 카드는 «이름 없는 것들»로 남는가');
+  } catch (e) { add('모으기', false, String(e.message).slice(0, 60)); }
+
+  // ── 12. 🔐 유튜브 열쇠 (v805) — 평문 열쇠가 되살아나지 않았나 ──
+  try {
+    add('유튜브 열쇠 노출', src.indexOf('AIza') < 0, src.indexOf('AIza') < 0 ? '평문 열쇠 없음' : '🚨 평문 열쇠가 다시 박혔다');
+    add('유튜브 직접 호출', src.indexOf('googleapis.com/youtube/v3') < 0,
+      '전부 엣지 함수 yt 를 거치는가');
+    add('유튜브 창구 함수', src.indexOf('function sctYt') > -1 && (src.match(/await sctYt\(/g) || []).length === 7,
+      '창구 함수 + 호출 7군데');
+  } catch (e) { add('유튜브 열쇠', false, String(e.message).slice(0, 60)); }
+
+  // ── 13. 📈 네이버 검색 추이 (v806) ──
+  try {
+    const tf = ['sctTrendFetch', 'sctTrendSvg', 'sctTrendBox', 'sctTrendWire'];
+    const missT = tf.filter(f => src.indexOf('function ' + f) < 0);
+    add('추이 함수', !missT.length, missT.length ? '사라짐: ' + missT.join(', ') : tf.length + '개 존재');
+    add('추이 창구', src.indexOf("functions/v1/nvtrend") > -1, '엣지 함수 nvtrend 를 부르는가');
+    add('추이 화면 연결', src.indexOf('sctTrendBox() +') > -1 && src.indexOf('sctTrendWire();') > -1,
+      '키워드 비교판에 붙어 있고 버튼이 배선됐는가');
+    // 네이버 열쇠가 앱에 새어들지 않았나 (유튜브와 같은 사고 재발 방지)
+    add('네이버 열쇠 노출', !/X-Naver-Client-Secret|NV_SECRET\s*=/.test(src), '앱에 네이버 비밀키 없음');
+  } catch (e) { add('추이', false, String(e.message).slice(0, 60)); }
 
   /* ── 결과 출력 ── */
   const bad = R.filter(x => !x.ok && x.level !== 'warn');
