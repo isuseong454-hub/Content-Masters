@@ -1649,37 +1649,18 @@ function savePillars(){S.pillars=[pl0.value.trim(),pl1.value.trim(),pl2.value.tr
       (ppl.length > 1 ? '<div class="rope"></div>' : '') + climbers +
       '<div class="vcap"><b>' + capB + '</b><s>' + capS + '</s></div></div>';
   }
-  async function cmuRenderPlaza() {
+  async function cmuRenderRooms() {
     const el = cmuEl(); if (!el) return;
     el.innerHTML = '<div class="cmu-card" style="text-align:center;color:#5d6656;font-size:12px">불러오는 중…</div>';
-    const [sr, ms, ap] = await Promise.all([
-      cmuRpc('cm_room_search'), cmuRpc('cm_room_mystate'), cmuRpc('cm_room_apps')
-    ]);
-    if (_cmuLive === false) { cmuRenderServerless(); return; }
-    let h = '';
-    /* v789 · 👩‍🏫 선생님 — 같이 달리는 방(광장) 옆의 «1:1» 자리.
-       새 피드백이 있으면 점이 붙는다(읽으면 사라짐). */
-
-    // 방장 신청함 배너
+    const [sr, ms, ap] = await Promise.all([cmuRpc('cm_room_search'), cmuRpc('cm_room_mystate'), cmuRpc('cm_room_apps')]);
     const apps = (ap && ap.ok && ap.apps) || [];
-    if (apps.length) h += '<div class="cmu-res ok" id="cmu-go-apps" style="cursor:pointer"><span style="font-size:17px">✉️</span><span><b>참여 신청 ' + apps.length + '건</b><small>새 플레이어가 노크했어요</small></span><span class="go3">확인 →</span></div>';
     const mine2 = (ms && ms.ok && ms.mine) || [];
     const myR = mine2.find(function (m) { return m.state === 'active'; });
-    // 내 신청 결과 배너
-    ((ms && ms.ok && ms.mine) || []).forEach(function (m) {
-      if (m.state === 'active' && !m.owner) {
-        const seen = myaGet('cm-cmu-seen', {});
-        if (!seen['ok' + m.room]) h += '<div class="cmu-res ok"><span style="font-size:17px">🎉</span><span><b>«' + esc(m.roomName) + '» 승인되었습니다!</b><small>' + (m.startedMs ? '이미 달리는 중 — 합류하세요' : '출발일에 함께 뜁니다') + '</small></span><span class="go3" data-cmu-room="' + esc(m.room) + '">방 입장 →</span></div>';
-      }
-      if (m.state === 'rejected') {
-        const seen = myaGet('cm-cmu-seen', {});
-        if (!seen['no' + m.room]) h += '<div class="cmu-res no" data-cmu-dismiss="no' + esc(m.room) + '" style="cursor:pointer"><span style="font-size:17px">🙏</span><span><b>«' + esc(m.roomName) + '»는 이번엔 함께 못 하게 됐어요</b><small>다음 시즌에 다시 노크해요 · 눌러서 닫기</small></span></div>';
-      }
-    });
-    // 방 목록
     const rooms = (sr && sr.ok && sr.rooms) || [];
     const rec = rooms.filter(function (r) { return !r.startedMs; });
-    const play = rooms.filter(function (r) { return r.startedMs; });    h += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px"><span class="cmu-lbl" style="margin:0">✋ 모집 중 — 노크하세요</span>' +
+    const play = rooms.filter(function (r) { return r.startedMs; });
+    let h = '';
+    h += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px"><span class="cmu-lbl" style="margin:0">✋ 모집 중 — 노크하세요</span>' +
       '<button class="cmu-go" id="cmu-mk" style="padding:7px 13px;font-size:11.5px;border-radius:99px">🚪 방 만들기</button></div>';
     h += rec.length ? rec.map(function (r) {
       const dash = Array.from({ length: 10 }, function (_, i) { return '<i' + (i < Math.min(10, r.members) ? ' class="on"' : '') + '></i>'; }).join('');
@@ -1706,11 +1687,50 @@ function savePillars(){S.pillars=[pl0.value.trim(),pl1.value.trim(),pl2.value.tr
     }).join('') : '<div class="cmu-room cmu-ghost"><span class="cmu-exl">예시 — 출발하면 이렇게 달립니다</span>' +
       '<div style="display:flex;align-items:center;gap:9px;margin-top:7px"><span class="cmu-rname">3기 전사들</span><span class="cmu-pill lime">플레이 중</span><span class="cmu-dday">D+37/100</span></div></div>';
 
-    // 🏛 전당 — 로비의 골드 문 (완주자의 다음 시즌 예고 포함)
-    h += '<div class="cmu-jgrid" style="grid-template-columns:1fr;margin-top:14px"><div class="cmu-jelly gold" id="cmu-j-hall" style="display:flex;align-items:center;gap:11px;text-align:left;padding:13px 15px">' +
-      '<span class="ic" style="font-size:22px">🏛</span><span style="flex:1"><b style="font-size:13px">마스터즈 전당</b>' +
-      '<small style="display:block">100만의 벽 · 완주자는 다음 시즌의 방장이 됩니다</small></span><span style="color:#F4D06A;font-size:12px;font-weight:800">입장 →</span></div></div>';
-    // 히어로 — «정상에서 보이는 것» (2026-08-22 픽): 진짜 멤버·전당 불빛만
+
+    h += '<button style="background:none;border:0;color:#5d6656;font-size:12px;cursor:pointer;padding:10px 4px" id="cmu-rooms-back">← 로비로</button>';
+    el.innerHTML = h;
+    const mk = document.getElementById('cmu-mk'); if (mk) mk.onclick = function () { _cmuView = 'create'; cmuRender(); };
+    const rb = document.getElementById('cmu-rooms-back'); if (rb) rb.onclick = function () { _cmuView = 'plaza'; cmuRender(); };
+    el.querySelectorAll('[data-cmu-apply]').forEach(function (c) { c.onclick = function () { _cmuApplyTo = c.dataset.cmuApply; _cmuView = 'apply'; cmuRender(); }; });
+    el.querySelectorAll('[data-cmu-wait]').forEach(function (c) { c.onclick = function () { try { toast('이미 노크했어요 — 방장의 수락을 기다리는 중'); } catch (e) {} }; });
+    el.querySelectorAll('[data-cmu-room]').forEach(function (c) {
+      c.onclick = function (e) { e.stopPropagation();
+        if (c.dataset.mine === '0') { try { toast('진행 중인 방이에요 — 다음 시즌에 노크!'); } catch (e2) {} return; }
+        _cmuRoomCode = c.dataset.cmuRoom; _cmuView = 'room'; cmuRender(); };
+    });
+  }
+  async function cmuRenderPlaza() {
+    const el = cmuEl(); if (!el) return;
+    el.innerHTML = '<div class="cmu-card" style="text-align:center;color:#5d6656;font-size:12px">불러오는 중…</div>';
+    const [sr, ms, ap] = await Promise.all([
+      cmuRpc('cm_room_search'), cmuRpc('cm_room_mystate'), cmuRpc('cm_room_apps')
+    ]);
+    if (_cmuLive === false) { cmuRenderServerless(); return; }
+    let h = '';
+    /* v789 · 👩‍🏫 선생님 — 같이 달리는 방(광장) 옆의 «1:1» 자리.
+       새 피드백이 있으면 점이 붙는다(읽으면 사라짐). */
+
+    // 방장 신청함 배너
+    const apps = (ap && ap.ok && ap.apps) || [];
+    if (apps.length) h += '<div class="cmu-res ok" id="cmu-go-apps" style="cursor:pointer"><span style="font-size:17px">✉️</span><span><b>참여 신청 ' + apps.length + '건</b><small>새 플레이어가 노크했어요</small></span><span class="go3">확인 →</span></div>';
+    const mine2 = (ms && ms.ok && ms.mine) || [];
+    const myR = mine2.find(function (m) { return m.state === 'active'; });
+    const rooms = (sr && sr.ok && sr.rooms) || [];
+    const rec = rooms.filter(function (r) { return !r.startedMs; });
+    const play = rooms.filter(function (r) { return r.startedMs; });
+    // 내 신청 결과 배너
+    ((ms && ms.ok && ms.mine) || []).forEach(function (m) {
+      if (m.state === 'active' && !m.owner) {
+        const seen = myaGet('cm-cmu-seen', {});
+        if (!seen['ok' + m.room]) h += '<div class="cmu-res ok"><span style="font-size:17px">🎉</span><span><b>«' + esc(m.roomName) + '» 승인되었습니다!</b><small>' + (m.startedMs ? '이미 달리는 중 — 합류하세요' : '출발일에 함께 뜁니다') + '</small></span><span class="go3" data-cmu-room="' + esc(m.room) + '">방 입장 →</span></div>';
+      }
+      if (m.state === 'rejected') {
+        const seen = myaGet('cm-cmu-seen', {});
+        if (!seen['no' + m.room]) h += '<div class="cmu-res no" data-cmu-dismiss="no' + esc(m.room) + '" style="cursor:pointer"><span style="font-size:17px">🙏</span><span><b>«' + esc(m.roomName) + '»는 이번엔 함께 못 하게 됐어요</b><small>다음 시즌에 다시 노크해요 · 눌러서 닫기</small></span></div>';
+      }
+    });
+    // 히어로 데이터 — 전당 불빛 수 + 내 방 멤버(업로드 많은 순 = 더 높이)
     var hallN = 0;
     try { var hl = await cmuRpc('cm_hall'); hallN = ((hl && hl.wall) || []).length + ((hl && hl.grads) || []).length; } catch (e) {}
     var myClimbers = null;
@@ -1729,6 +1749,11 @@ function savePillars(){S.pillars=[pl0.value.trim(),pl1.value.trim(),pl2.value.tr
     else if (myR) { capB = '⛺ «' + esc(myR.roomName) + '» 출발 대기'; capS = '마감일이 지나면 자동으로 출발 — 지금은 몸을 풀 시간'; }
     else { capB = '⛰ 100일을 함께 뛰면, 혼자보다 멀리'; capS = '주 3편 · 일요일 자정 판정 · 완주하면 저 금빛 불빛(전당)에 오릅니다'; }
     h += vHeroHtml(myR, myClimbers, hallN, capB, capS);
+    // 🚪 문 3개 — 커뮤니티방 · 전당 · 피드백 실
+    h += '<div class="cmu-jgrid" style="grid-template-columns:1fr 1fr 1fr;margin-top:2px">' +
+      '<div class="cmu-jelly" id="cmu-j-rooms"><span class="ic">🚪</span><b>커뮤니티방</b><small>' + (rec.length ? '모집 ' + rec.length : (play.length ? '달리는 중 ' + play.length : '방 열기')) + '</small></div>' +
+      '<div class="cmu-jelly gold" id="cmu-j-hall"><span class="ic">🏛</span><b>전당</b><small>100만의 벽</small></div>' +
+      '<div class="cmu-jelly" id="cmu-j-fb"><span class="ic">💬</span><b>피드백 실</b><small>선생님 1:1</small></div></div>';
     // 내 방 배너 (방이 있는데 로비에 온 경우)
     if (myR) h = '<div class="cmu-res ok" id="cmu-goback-room" style="cursor:pointer"><span style="font-size:17px">⛺</span><span><b>«' + esc(myR.roomName) + '» — 내 방으로</b><small>' + (myR.startedMs ? 'D+' + cmuDplus(myR.startedMs) + ' 달리는 중' : '출발 대기') + '</small></span><span class="go3">입장 →</span></div>' + h;
     // ✋ 대기석 — 노크하고 기다리는 중이면
@@ -1737,9 +1762,7 @@ function savePillars(){S.pillars=[pl0.value.trim(),pl1.value.trim(),pl2.value.tr
     });
     let _mtrDot = '';
     try { _mtrDot = (_mtrFb || []).some(function (f) { return !f.read_at; }) ? ' ●' : ''; } catch (e) {}
-    h += '<div class="cmu-res ok" id="cmu-go-mentor" style="cursor:pointer;border-color:rgba(255,158,122,.4);background:rgba(255,158,122,.08)">' +
-      '<span style="font-size:17px">👩‍🏫</span><span><b>선생님에게 봐달라고 하기' + _mtrDot + '</b>' +
-      '<small>내 원고를 보내고 1:1 피드백을 받는 곳</small></span><span class="go3">열기 →</span></div>';
+
     el.innerHTML = h;
     // 배선
     const mk = document.getElementById('cmu-mk'); if (mk) mk.onclick = function () { _cmuView = 'create'; cmuRender(); };
@@ -1747,6 +1770,8 @@ function savePillars(){S.pillars=[pl0.value.trim(),pl1.value.trim(),pl2.value.tr
     if (gm) gm.onclick = function () { try { toast('👩‍🏫 선생님 1:1은 다음 이사 때 열려요'); } catch (e) {} };
     const ga = document.getElementById('cmu-go-apps'); if (ga) ga.onclick = function () { _cmuView = 'apps'; cmuRender(); };
     var jh3 = document.getElementById('cmu-j-hall'); if (jh3) jh3.onclick = function () { _cmuView = 'hall'; cmuRender(); };
+    var jr3 = document.getElementById('cmu-j-rooms'); if (jr3) jr3.onclick = function () { _cmuView = 'rooms'; cmuRender(); };
+    var jf3 = document.getElementById('cmu-j-fb'); if (jf3) jf3.onclick = function () { try { toast('👩‍🏫 피드백 실은 다음 이사 때 열려요'); } catch (e) {} };
     var gb2 = document.getElementById('cmu-goback-room'); if (gb2) gb2.onclick = function () { _cmuRoomCode = myR.room; _cmuView = 'room'; cmuRender(); };
     el.querySelectorAll('[data-cmu-apply]').forEach(function (c) {
       c.onclick = function () {
@@ -1987,6 +2012,7 @@ function savePillars(){S.pillars=[pl0.value.trim(),pl1.value.trim(),pl2.value.tr
     if (cg) cg.onclick = async function () {
       const inp = document.getElementById('cmu-cm-in'); const v = (inp.value || '').trim();
       if (!v) return;
+      if (window.textAllowed && !window.textAllowed(v)) { try { toast('여기엔 담기 어려운 말이 섞여 있어요'); } catch (e) {} return; }
       cg.disabled = true;
       const r = await cmuRpc('cm_post_add', { p_room: _cmuRoomCode, p_body: v });
       cg.disabled = false;
@@ -2020,9 +2046,10 @@ function savePillars(){S.pillars=[pl0.value.trim(),pl1.value.trim(),pl2.value.tr
   }
   function cmuRender() {
     const tt = document.getElementById('cmu-tt');
-    if (tt) tt.textContent = _cmuView === 'hall' ? '🏛 마스터즈 전당' : _cmuView === 'room' ? '🚪 우리 방'
+    if (tt) tt.textContent = _cmuView === 'hall' ? '🏛 마스터즈 전당' : _cmuView === 'room' ? '🚪 우리 방' : _cmuView === 'rooms' ? '🚪 커뮤니티방'
       : _cmuView === 'mentor' ? '👩‍🏫 선생님' : '👥 커뮤니티';
     if (_cmuView === 'plaza') cmuRenderPlaza();
+    else if (_cmuView === 'rooms') cmuRenderRooms();
     else if (_cmuView === 'create') cmuRenderCreate();
     else if (_cmuView === 'apply') cmuRenderApply();
     else if (_cmuView === 'apps') cmuRenderApps();
@@ -2170,9 +2197,16 @@ async function loadWall(){
      :'<div class="empty">이번 주 첫 글을 남겨보세요</div>';
   }catch(e){box.innerHTML='<div class="empty">담벼락을 못 불러왔어요 — 잠시 뒤 다시</div>'}
 }
+const BAD_WORDS=/시발|씨발|씨빨|ㅅㅂ|ㅆㅂ|병신|ㅂㅅ|지랄|ㅈㄹ|좆|존나|ㅈㄴ|새끼|섹스|야동|야사|자위|보지|자지|딸딸이|창녀|걸레년|개년|니미|엠창|애미|느금/i;
+function textAllowed(t){
+  if(BAD_WORDS.test(String(t||'')))return false;
+  return true;
+}
+window.textAllowed=textAllowed;
 async function postWall(){
   const b=document.getElementById('wallBody').value.trim();
   if(!b)return toast('한 줄만 적어주세요');
+  if(!textAllowed(b))return toast('여기엔 담기 어려운 말이 섞여 있어요');
   try{const r=await rpc('cm2_wall_post',{p_code:AUTH.code,p_pin_hash:AUTH.pinHash,p_name:AUTH.name,p_body:b});
     if(!r.ok)throw 0;document.getElementById('wallBody').value='';toast('담벼락에 붙였어요');loadWall();
   }catch(e){toast('지금은 안 붙여져요 — 잠시 뒤 다시')}
