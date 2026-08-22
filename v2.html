@@ -1968,7 +1968,7 @@ function savePillars(){S.pillars=[pl0.value.trim(),pl1.value.trim(),pl2.value.tr
       h += '<div class="cmu-card" style="font-size:12px;color:#95a08b">모집 중 — 마감일이 지나면 자동으로 출발합니다 · 지금 멤버 ' + mems.length + '명</div>';
     }
     // 세그
-    const segs = [['team', '팀원', act.length], ['ach', '업적', ((ac && ac.items) || []).length], ['talk', '댓글', ((ps && ps.posts) || []).length]];
+    const segs = [['team', '팀원', act.length], ['ach', '업적', ((ac && ac.items) || []).length], ['talk', '벽', ((ps && ps.posts) || []).length]];
     const si = segs.findIndex(function (s) { return s[0] === _cmuSeg; });
     h += '<div class="cmu-seg" id="cmu-seg"><span class="pill2" style="transform:translateX(' + (si * 100) + '%)"></span>' +
       segs.map(function (s) { return '<b data-seg="' + s[0] + '"' + (s[0] === _cmuSeg ? ' class="on"' : '') + '>' + cmuIcSvg(s[0]) + s[1] + ' <span class="n3">' + s[2] + '</span></b>'; }).join('') + '</div>';
@@ -2006,11 +2006,20 @@ function savePillars(){S.pillars=[pl0.value.trim(),pl1.value.trim(),pl2.value.tr
     // 댓글
     if (_cmuSeg === 'talk') {
       const posts = (ps && ps.ok && ps.posts) || [];
-      h += posts.map(function (p) {
-        return '<div class="cmu-cm">' + cmuAv(p.nickname) + '<span><b>' + esc(p.nickname) + '</b><small>' + new Date(p.createdMs).toLocaleDateString('ko-KR', { month: 'numeric', day: 'numeric' }) + '</small><p>' + esc(p.body) + '</p></span>' +
-          '<button class="lk" data-cmucheer="' + p.id + '">👏 ' + (p.cheers || 0) + '</button>' +
-          (p.mine || bd.owner === (window.__cmAuth || {}).code ? '<button class="lk" data-cmupdel="' + p.id + '" style="color:#5d6656">✕</button>' : '') + '</div>';
-      }).join('') || '<div class="cmu-card" style="font-size:12px;color:#5d6656">첫 응원을 남겨보세요 — 한 줄이면 충분해요</div>';
+      // 우리 방의 벽 — 낙서장 (id 시드로 자리·기울기·분필색 고정)
+      const seed = function (n) { var x = Math.sin(n * 127.1) * 43758.5453; return x - Math.floor(x); };
+      const WH = Math.max(240, 80 + posts.length * 72);
+      h += '<div class="wallboard" style="min-height:' + WH + 'px;margin-bottom:10px">' +
+        (posts.length ? posts.map(function (p, i) {
+          const s1 = seed(p.id), s2 = seed(p.id * 7 + 3), s3 = seed(p.id * 13 + 5);
+          const col = (i % 2 === 0) ? (4 + s1 * 22) : (48 + s1 * 18);
+          const top = 22 + i * 66 + (s2 * 24 - 12);
+          const rot = (s3 * 12 - 6).toFixed(1);
+          return '<div class="graf c' + (p.id % 6) + '" style="left:' + col.toFixed(1) + '%;top:' + top.toFixed(0) + 'px;transform:rotate(' + rot + 'deg)">' +
+            esc(p.body) + '<small>— ' + esc(p.nickname) + ' · ' + new Date(p.createdMs).toLocaleDateString('ko-KR', { month: 'numeric', day: 'numeric' }) +
+            ' &nbsp;<b class="lk" data-cmucheer="' + p.id + '" style="cursor:pointer;font-family:Pretendard">👏' + (p.cheers || 0) + '</b></small>' +
+            (p.mine || bd.owner === (window.__cmAuth || {}).code ? '<button class="gx" data-cmupdel="' + p.id + '">✕</button>' : '') + '</div>';
+        }).join('') : '<div class="graf-empty">아직 빈 벽 —<br>첫 낙서를 남겨보세요 ✏️</div>') + '</div>';
       h += '<div class="cmu-cmin"><input id="cmu-cm-in" placeholder="예: 이번 주도 다들 무사히… 🙏" maxlength="200"><button id="cmu-cm-go">남기기</button></div>';
     }
     h += '</div><button style="background:none;border:0;color:#5d6656;font-size:12px;cursor:pointer;padding:4px" id="cmu-r-back">← 광장으로</button>';
@@ -2142,19 +2151,16 @@ function renderCommunity(){
    :'<p class="muted" style="margin-bottom:11px">주 1회, 세 숫자만 — 팔로워 · 최고 조회수 · 업로드 수.<br>방 판과 내 추이가 이 표를 읽어요. (인스타 연동하면 자동)</p>'+
     '<button class="btn" onclick="openWeekly()">이번 주 성적 적기</button>')+
   '</div></section>'+
-  '<section id="sec-wall"><div class="cmu-lbl">🧱 로비 담벼락 — 한 줄 남기기</div><div class="cmu-card">'+
-  '<textarea class="inp" id="wallBody" rows="2" placeholder="이번 주 한 일, 다짐, 응원 — 뭐든 한 줄" style="background:rgba(0,0,0,.3)"></textarea>'+
-  '<button class="cmu-go" style="width:100%;margin-top:10px" onclick="postWall()">담벼락에 붙이기</button></div>'+
-  '<div id="wallList" style="margin-top:10px"><div class="empty">불러오는 중…</div></div></section>'+
+
   '<section><button class="btn ghost" onclick="goFork()">갈림길로</button></section>';
-  show('scr-room');loadWall();
+  show('scr-room');
   // 성적은 «방 안» 물건, 담벼락은 «로비» 물건 — 화면 제목을 보고 토글
   const _tt=document.getElementById('cmu-tt');
   if(_tt&&!_tt._mo){_tt._mo=new MutationObserver(()=>{
     const v=(window._cmuState&&window._cmuState())||'plaza';
     const w=document.getElementById('sec-weekly'),l=document.getElementById('sec-wall');
     if(w)w.style.display=(v==='room')?'':'none';
-    if(l)l.style.display=(v==='plaza')?'':'none';
+    
   });_tt._mo.observe(_tt,{childList:true,characterData:true,subtree:true})}
   (async()=>{
     try{
