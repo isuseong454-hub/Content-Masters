@@ -2,7 +2,7 @@
 (async function(){
   const R=[];const ok=(n,c)=>R.push((c?'🟢':'🔴')+' '+n);
   // 1) 핵심 함수 존재
-  ['checkCode','doLogin','enterRoom','goTab','addCard','quickAdd','openBunhae','saveBunhae','openSort','pickCat',
+  ['doLogin','enterRoom','goTab','addCard','quickAdd','openBunhae','saveBunhae','openSort','pickCat',
    'saveObs','savePillars','openMimic','saveMimic','openConv','saveConv','saveCustomer','saveProduct','pinVal','wirePin','doLogout',
    'loadWall','postWall','render','buildDock','esc','sha256'].forEach(f=>ok('함수 '+f,(()=>{try{return typeof eval(f)==='function'}catch(e){return false}})()));
   // 2) 격 테이블 — 방 4 + 도크 6

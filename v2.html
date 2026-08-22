@@ -558,6 +558,7 @@ function renderHome(){
         ?'보급방에서 담은 카드가 여기 <b>미분류</b>로 올라와요. 뜯어서(분해) → 정리하고(분류) → <b>따라 쓰면(훈련)</b> 내 원고가 생겨요.'
         :'분해되고 분류된 것들이 여기선 <b>공식</b>으로 정리돼요. 상품 판을 채우고, 원고를 전환 잣대로 점검하세요.')+'</p></div></section>'+
       pipeSection()+
+      (ROOM==='master'?funnelLights():'')+
       '<section><div class="row"><button class="btn" style="flex:1" onclick="goTab(4)">'+(ROOM==='mid'?'따라 쓰러 가기':'전환 점검하기')+'</button>'+
       '<button class="btn ghost" style="flex:1" onclick="goTab('+(ROOM==='mid'?3:5)+')">'+(ROOM==='mid'?'분류 정리':'상품 판')+'</button></div></section>';
   }
@@ -611,6 +612,28 @@ function pipeSection(){
   '<div class="stg'+(a&&a>=b?' act':'')+'"><div class="n">'+a+'</div><div class="t">담김</div></div><div class="arw">›</div>'+
   '<div class="stg'+(b>a?' act':'')+'"><div class="n">'+b+'</div><div class="t">분해됨</div></div><div class="arw">›</div>'+
   '<div class="stg"><div class="n">'+c+'</div><div class="t">분류됨</div></div></div></section>';
+}
+
+function funnelLights(){
+  // 신호등 — 점수가 아니라 «어디가 비었나». 초록/노랑/빨강 3단
+  const sorted=S.cards.filter(c=>c.stage>=3).length;
+  const p=S.product||{};const pf=[p.name,p.selling,p.proof,p.resist].filter(x=>x&&x.trim()).length;
+  const conv=(S.works||[]).filter(w=>w.conv).length;
+  const L=(state,name,why,tab)=>{
+    const col=state==='g'?'#7ED9A0':state==='y'?'#F0D080':'#E08585';
+    return '<div class="item" onclick="goTab('+tab+')"><div class="th" style="font-size:11px">'+
+    '<span style="width:12px;height:12px;border-radius:50%;background:'+col+';box-shadow:0 0 10px '+col+'66;display:block"></span></div>'+
+    '<div class="bd"><div class="ti">'+name+'</div><div class="st">'+why+'</div></div>'+
+    (state!=='g'?'<span class="pill">채우기</span>':'<span class="pill gray">✓</span>')+'</div>';
+  };
+  const s1=sorted>=3?'g':sorted>=1?'y':'r';
+  const s2=pf>=4?'g':pf>=2?'y':'r';
+  const s3=conv>=1?'g':(S.works||[]).length?'y':'r';
+  return '<section><div class="lbl">퍼널 신호등</div>'+
+   L(s1,'유입 재료',sorted?'분류된 공식 '+sorted+'개'+(s1==='g'?'':' — 3개부터 안정'):'분류된 공식이 아직 없어요',3)+
+   L(s2,'상품 판',pf?'네 칸 중 '+pf+'칸 채움':'상품 판이 비어 있어요',5)+
+   L(s3,'전환 점검',conv?'점검한 원고 '+conv+'개':((S.works||[]).length?'원고는 있는데 점검 전이에요':'점검할 원고가 아직 없어요'),4)+
+   '<p class="muted" style="margin-top:9px">셋 다 초록이면 팔 준비가 된 거예요. 빨강부터 눌러서 채워요.</p></section>';
 }
 
 /* ── 담기 ── */
@@ -699,6 +722,10 @@ function renderBunryu(){
   let h='<div class="top"><div class="h1">'+(isMaster?'<em>공식 서재</em>':'미분류를 <em>정리해요</em>')+'</div></div>';
   if(isMaster){
     if(!sorted.length)return h+'<section><div class="empty">아래 방에서 분해·분류된 것들이<br>여기 공식으로 쌓여요. 아직 비어 있어요.</div></section>';
+    const fq2={};sorted.forEach(c=>{const f=(c.notes&&c.notes.frame||'').trim();if(f)fq2[f]=(fq2[f]||0)+1});
+    const top2=Object.entries(fq2).sort((a,b)=>b[1]-a[1]).slice(0,4);
+    if(top2.length)h+='<section><div class="lbl">내 공식 — 반복되는 뼈대</div><div class="chips">'+
+      top2.map(([f,n2])=>'<span class="chip on" style="cursor:default">'+esc(f)+(n2>1?' ×'+n2:'')+'</span>').join('')+'</div></section>';
     const by={};sorted.forEach(c=>{(by[c.cat||'기타']=by[c.cat||'기타']||[]).push(c)});
     Object.keys(by).forEach(k=>{h+='<section><div class="lbl">'+esc(k)+' · '+by[k].length+'</div>'+
       by[k].map(c=>'<div class="item" data-open="'+c.id+'"><div class="th">📐</div><div class="bd"><div class="ti">'+esc(c.notes&&c.notes.frame||cardTitle(c))+'</div>'+
@@ -762,6 +789,11 @@ function renderTrain(){
     const works=S.works||[];
     let h='<div class="top"><div class="h1">'+g.trainT+'</div>'+(works.length?'<div class="badge">🎖 내 원고 · '+works.length+'개</div>':'')+'</div>';
     h+='<section><div class="robot"><div class="face">'+g.robot+'</div><p><b>모방이 사람을 제작자로 만들어요.</b> 분해한 뼈대를 하나 골라, 그 순서 그대로 <b>내 얘기</b>로 바꿔 써보는 훈련이에요.</p></div></section>';
+    const fq={};done.forEach(c=>{const f=(c.notes&&c.notes.frame||'').trim();if(f)fq[f]=(fq[f]||0)+1});
+    const top=Object.entries(fq).sort((a,b)=>b[1]-a[1]).slice(0,3);
+    if(top.length&&top[0][1]>=2)h+='<section><div class="lbl">자주 보인 뼈대</div><div class="chips">'+
+      top.map(([f,n2])=>'<span class="chip on" style="cursor:default">'+esc(f)+' ×'+n2+'</span>').join('')+'</div>'+
+      '<p class="muted" style="margin-top:8px">여러 번 담긴 뼈대 = 내 눈이 반응하는 구조예요. 여기서 골라 쓰는 게 제일 빨라요.</p></section>';
     h+='<section><div class="lbl">뼈대 고르기 · '+done.length+'개</div>';
     h+=done.length?done.slice().reverse().map(c=>
      '<div class="item" onclick="openMimic(\''+c.id+'\')"><div class="th">📐</div><div class="bd"><div class="ti">'+esc(c.notes&&c.notes.frame||cardTitle(c))+'</div>'+
@@ -787,7 +819,15 @@ function renderTrain(){
 
 function openMimic(id){
   const c=S.cards.find(x=>x.id===id);if(!c)return;const n=c.notes||{};
-  openSheet('<h3>따라 쓰기</h3><div class="sub">뼈대: <b style="color:var(--tone)">'+esc(n.frame||cardTitle(c))+'</b>'+(n.hook?' · 훅: '+esc(n.hook):'')+'</div>'+
+  const cust=S.customer&&S.customer.who
+    ?'<div class="note" style="margin:0 0 13px;padding:10px 13px"><b>내 고객:</b> '+esc(S.customer.who)+(S.customer.pain?' — «'+esc(S.customer.pain)+'»':'')+'<br>이 사람한테 하는 말인지만 지키면 돼요.</div>'
+    :'<div class="note" style="margin:0 0 13px;padding:10px 13px">아직 <b>내 고객</b>이 비어 있어요 — 「고객」 칸을 먼저 채우면 원고가 훨씬 쉬워져요.</div>';
+  openSheet('<h3>따라 쓰기</h3><div class="sub">원본에서 뜯어낸 뼈대예요 — 순서만 빌리고, 내용은 내 것으로.</div>'+
+  '<div class="card" style="padding:12px 14px;margin-bottom:13px">'+
+  '<div style="font-size:12.5px;line-height:1.7;color:var(--text-sub)">'+
+  '① 훅 · <b style="color:var(--tone-hi)">'+esc(n.hook||'?')+'</b><br>'+
+  '② 판 · <b style="color:var(--tone-hi)">'+esc(n.frame||'?')+'</b><br>'+
+  '③ 왜 터졌나 · <b style="color:var(--tone-hi)">'+esc(n.why||'?')+'</b></div></div>'+cust+
   '<div class="lbl">① 내 첫 3초 — 같은 방식, 내 얘기로</div><textarea class="inp" id="mk1" rows="2" placeholder="예) 원본이 질문 훅이면, 내 주제로 질문을 만들어요"></textarea>'+
   '<div class="lbl" style="margin-top:13px">② 본문 — 뼈대 순서 그대로</div><textarea class="inp" id="mk2" rows="4" placeholder="'+esc(n.frame||'문제 → 공감 → 방법 → 한 방')+' 순서로"></textarea>'+
   '<button class="btn" style="margin-top:15px" onclick="saveMimic(\''+id+'\')">원고로 저장</button>');
@@ -800,14 +840,21 @@ function saveMimic(id){
 }
 function openWork(i){
   const w=(S.works||[])[i];if(!w)return;
-  openSheet('<h3>'+esc(w.hook||'내 원고')+'</h3><div class="sub">'+daysAgo(w.ts)+' · 뼈대: '+esc(w.frame||'')+'</div>'+
+  openSheet('<h3>'+esc(w.hook||'내 원고')+'</h3><div class="sub">'+daysAgo(w.ts)+' · 뼈대: '+esc(w.frame||'')+
+  (w.conv?' · <b style="color:var(--tone)">전환 점검 완료</b>':'')+'</div>'+
   '<div class="card" style="white-space:pre-wrap;font-size:13.5px;line-height:1.7">'+esc(w.body||'')+'</div>'+
-  '<div class="row" style="margin-top:13px"><button class="btn ghost" style="flex:1" onclick="delWork('+i+')">지우기</button></div>');
+  (w.conv?'<div class="note" style="margin:13px 0 0;padding:10px 13px">저장: '+esc(w.conv.save||'—')+'<br>공유: '+esc(w.conv.share||'—')+'<br>DM: '+esc(w.conv.dm||'—')+'</div>':'')+
+  '<div class="row" style="margin-top:13px">'+
+  (w.conv?'':'<button class="btn" style="flex:2" onclick="closeSheet();enterRoom(\'master\');goTab(4);setTimeout(()=>openConv('+i+'),350)">마스터즈에서 전환 점검</button>')+
+  '<button class="btn ghost" style="flex:1" onclick="delWork('+i+')">지우기</button></div>');
 }
 function delWork(i){S.works.splice(i,1);save();closeSheet();render();toast('지웠어요')}
 function openConv(i){
   const w=(S.works||[])[i];if(!w)return;const v=w.conv||{};
-  openSheet('<h3>전환 점검</h3><div class="sub">'+esc(w.hook||w.body.slice(0,30))+'</div>'+
+  const p=S.product||{};
+  const sell=p.selling?'<div class="note" style="margin:0 0 13px;padding:10px 13px"><b>내 셀링포인트:</b> '+esc(p.selling)+'<br>이 원고가 결국 여기로 이어지는지 보면서 점검해요.</div>'
+    :'<div class="note" style="margin:0 0 13px;padding:10px 13px">아직 <b>상품 판</b>이 비어 있어요 — 「상품」 칸을 채우면 점검 잣대가 생겨요.</div>';
+  openSheet('<h3>전환 점검</h3><div class="sub">'+esc(w.hook||w.body.slice(0,30))+'</div>'+sell+
   '<div class="lbl">① 저장할 이유가 있나요? (다시 볼 가치)</div><textarea class="inp" id="cv1" rows="2">'+esc(v.save||'')+'</textarea>'+
   '<div class="lbl" style="margin-top:13px">② 공유할 이유가 있나요? (남 주고 싶은 것)</div><textarea class="inp" id="cv2" rows="2">'+esc(v.share||'')+'</textarea>'+
   '<div class="lbl" style="margin-top:13px">③ DM이 올 이유가 있나요? (다음 행동)</div><textarea class="inp" id="cv3" rows="2">'+esc(v.dm||'')+'</textarea>'+
