@@ -504,9 +504,57 @@ body.hidden-pause .ln-flo{animation-play-state:paused}
 .cmu-forkmsg small{font-size:10px;color:#95a08b}
 .cmu-forkmsg .n{margin-left:auto;min-width:20px;height:20px;border-radius:50%;background:#F09AA6;color:#0b0e0a;font-size:11px;font-weight:900;display:flex;align-items:center;justify-content:center;padding:0 5px}
 @media (max-width:560px){.cmu-wall{grid-template-columns:1fr 1fr}.cmu-plq{grid-template-columns:1fr 1fr}.cmu-two{grid-template-columns:1fr}}
-</style>
 
-<!-- ============ CONTENT MASTERS 스플래시 인트로 ============ -->
+
+
+
+/* ═══ 커뮤니티 로비 히어로 — «정상에서 보이는 것» (2026-08-22 픽) ═══ */
+.vhero{position:relative;border-radius:22px;overflow:hidden;border:1px solid rgba(255,255,255,.1);height:300px;margin-bottom:14px;
+ background:radial-gradient(130% 90% at 50% 0%,#0c1420 0%,#080d15 46%,#05070a 78%,#030405);
+ box-shadow:0 24px 60px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.08)}
+.vhero .st{position:absolute;width:2px;height:2px;border-radius:50%;background:#cfe4ff;animation:vtw 3.2s ease-in-out infinite}
+.vhero .st.hall{width:3.5px;height:3.5px;background:#F4D06A;box-shadow:0 0 8px rgba(244,208,106,.8);animation-duration:2.4s}
+@keyframes vtw{0%,100%{opacity:.15}50%{opacity:.95}}
+.vhero .neon{position:absolute;left:0;right:0;top:30px;text-align:center;font-size:21px;font-weight:900;letter-spacing:.03em;
+ color:#d7f34b;text-shadow:0 0 8px rgba(215,243,75,.7),0 0 30px rgba(215,243,75,.3);
+ animation:vign 7s steps(1,end) 1 both, vbre 4.5s ease-in-out 7s infinite}
+.vhero .neon small{display:block;font-size:9px;font-weight:700;letter-spacing:.38em;color:#8EC7F6;margin-top:6px;
+ text-shadow:0 0 10px rgba(142,199,246,.55)}
+@keyframes vign{0%,8%{opacity:0}9%,11%{opacity:.7}12%,15%{opacity:.1}16%,19%{opacity:1}20%,22%{opacity:.25}23%,100%{opacity:1}}
+@keyframes vbre{0%,100%{text-shadow:0 0 8px rgba(215,243,75,.7),0 0 30px rgba(215,243,75,.3)}
+ 50%{text-shadow:0 0 10px rgba(215,243,75,.9),0 0 44px rgba(215,243,75,.45)}}
+.vhero .haze{position:absolute;left:50%;top:22px;width:280px;height:100px;transform:translateX(-50%);
+ background:radial-gradient(50% 55% at 50% 50%,rgba(215,243,75,.1),transparent 70%);filter:blur(6px)}
+.vhero .mt2{position:absolute;bottom:0;left:-4%;right:-4%;height:172px;
+ background:linear-gradient(196deg,#2a3850 0%,#141c2b 34%,#0a0f17 75%);
+ clip-path:polygon(0 100%,10% 72%,52% 10%,70% 62%,86% 42%,100% 100%);
+ filter:drop-shadow(0 -1px 0 rgba(190,215,255,.22))}
+.vhero .ridge{position:absolute;bottom:0;left:-4%;right:-4%;height:172px;pointer-events:none;
+ background:linear-gradient(115deg,rgba(190,215,255,.13),transparent 45%);
+ clip-path:polygon(52% 10%,57% 24%,52% 100%,38% 100%)}
+.vhero .mt1{position:absolute;bottom:0;left:-4%;right:-4%;height:112px;
+ background:linear-gradient(200deg,#1a2333 0%,#0d1119 40%,#070a10 80%);
+ clip-path:polygon(0 100%,22% 78%,44% 88%,60% 26%,80% 66%,100% 40%,100% 100%);
+ filter:drop-shadow(0 -1px 0 rgba(190,215,255,.14))}
+.vhero .vflag{position:absolute;left:52%;bottom:154px;transform:translateX(-1px);filter:drop-shadow(0 0 5px rgba(215,243,75,.3))}
+.vhero .vflag .pole{position:absolute;left:0;bottom:0;width:2px;height:15px;background:rgba(230,240,255,.75);border-radius:1px}
+.vhero .vflag .cloth{position:absolute;left:2px;bottom:8px;width:10px;height:7px;background:#e0574b;
+ clip-path:polygon(0 0,100% 18%,72% 50%,100% 82%,0 100%);transform-origin:0 50%;animation:vflut 1.6s ease-in-out infinite}
+@keyframes vflut{0%,100%{transform:scaleX(1)}50%{transform:scaleX(.86) skewY(-4deg)}}
+.vhero .rope{position:absolute;bottom:102px;left:26%;width:23%;height:2px;background:rgba(255,255,255,.22);transform:rotate(-30deg)}
+.vhero .clm{position:absolute;font-size:13px;animation:vbob 1.9s ease-in-out infinite;filter:drop-shadow(0 2px 6px rgba(0,0,0,.7))}
+.vhero .clm i{position:absolute;left:50%;top:-13px;transform:translateX(-50%);font-style:normal;font:800 8.5px Pretendard;
+ color:#0A0D12;background:#d7f34b;border-radius:99px;padding:1.5px 6px;white-space:nowrap;opacity:.95}
+.vhero .clm.c2{animation-delay:.4s}.vhero .clm.c3{animation-delay:.8s}
+@keyframes vbob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+.vhero .lamp{position:absolute;width:3px;height:3px;border-radius:50%;background:#fff3c0;box-shadow:0 0 7px rgba(255,240,180,.9);animation:vtw 1.8s ease-in-out infinite}
+.vhero .vcap{position:absolute;left:0;right:0;bottom:0;padding:12px 16px 13px;z-index:4;
+ background:linear-gradient(transparent,rgba(3,4,5,.72) 55%)}
+.vhero .vcap b{font-size:13.5px;display:block;letter-spacing:-.01em}
+.vhero .vcap s{text-decoration:none;font-size:11px;color:rgba(255,255,255,.6);display:block;margin-top:3px;line-height:1.5}
+body.hidden-pause .vhero *{animation-play-state:paused}
+@media (prefers-reduced-motion:reduce){.vhero *{animation:none!important}}
+
 </style></head>
 <body data-room="basic">
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -1571,6 +1619,36 @@ function savePillars(){S.pillars=[pl0.value.trim(),pl1.value.trim(),pl2.value.tr
   function cmuJudgeLeft() { const day = new Date().getDay(); const rem = (7 - day) % 7; return rem === 0 ? '오늘 밤' : rem + '일'; }
 
   // ── 광장 ──
+  function vHeroHtml(myR, names, hallN, capB, capS) {
+    // 등반가 3자리 — 진짜 이름만 앉힌다 (없으면 «나» 혼자)
+    var spots = [
+      { l: '25%', b: 82, lamp: 90 },
+      { l: '37%', b: 112, lamp: 120 },
+      { l: '47%', b: 138, lamp: 146 }
+    ];
+    var ppl = (names && names.length ? names : [{ name: '나', ups: null }]).slice(0, 3);
+    // 실측 배치: 이번 주 업로드 많은 사람이 더 높은 자리 (spots[2]=정상 쪽)
+    var climbers = ppl.map(function (p, i) {
+      var sp = spots[ppl.length - 1 - i];   // 0번(1등)이 제일 높은 칸
+      var nm = typeof p === 'string' ? p : p.name;
+      var tag = esc(String(nm).slice(0, 5)) + (p && p.ups != null ? ' · ' + p.ups + '편' : '');
+      return '<span class="clm' + (i ? ' c' + (i + 1) : '') + '" style="left:' + sp.l + ';bottom:' + sp.b + 'px"><i>' + tag + '</i>🧗</span>' +
+        '<i class="lamp" style="left:calc(' + sp.l + ' + 6px);bottom:' + sp.lamp + 'px;animation-delay:' + (i * .6) + 's"></i>';
+    }).join('');
+    var halls = '';
+    var hp = [['16%', 34], ['85%', 42], ['73%', 78], ['28%', 66], ['62%', 24]];
+    for (var i = 0; i < Math.min(hallN || 0, 5); i++)
+      halls += '<i class="st hall" style="left:' + hp[i][0] + ';top:' + hp[i][1] + 'px;animation-delay:' + (i * .5) + 's"></i>';
+    return '<div class="vhero">' +
+      '<i class="st" style="left:10%;top:20px"></i><i class="st" style="left:33%;top:14px;animation-delay:.7s"></i>' +
+      '<i class="st" style="left:68%;top:12px;animation-delay:1.4s"></i><i class="st" style="left:90%;top:60px;animation-delay:.4s"></i>' +
+      halls +
+      '<div class="haze"></div><div class="neon">100일, 함께<small>TOGETHER WE RUN</small></div>' +
+      '<div class="mt2"></div><div class="ridge"></div><div class="mt1"></div>' +
+      '<span class="vflag"><span class="pole"></span><span class="cloth"></span></span>' +
+      (ppl.length > 1 ? '<div class="rope"></div>' : '') + climbers +
+      '<div class="vcap"><b>' + capB + '</b><s>' + capS + '</s></div></div>';
+  }
   async function cmuRenderPlaza() {
     const el = cmuEl(); if (!el) return;
     el.innerHTML = '<div class="cmu-card" style="text-align:center;color:#5d6656;font-size:12px">불러오는 중…</div>';
@@ -1632,26 +1710,25 @@ function savePillars(){S.pillars=[pl0.value.trim(),pl1.value.trim(),pl2.value.tr
     h += '<div class="cmu-jgrid" style="grid-template-columns:1fr;margin-top:14px"><div class="cmu-jelly gold" id="cmu-j-hall" style="display:flex;align-items:center;gap:11px;text-align:left;padding:13px 15px">' +
       '<span class="ic" style="font-size:22px">🏛</span><span style="flex:1"><b style="font-size:13px">마스터즈 전당</b>' +
       '<small style="display:block">100만의 벽 · 완주자는 다음 시즌의 방장이 됩니다</small></span><span style="color:#F4D06A;font-size:12px;font-weight:800">입장 →</span></div></div>';
-    // 히어로 — 방 없는 신규에게만 (규칙 소개)
-    if (!myR) {
-    h += '<div class="cmu-hero">';
-    if (myR && myR.startedMs) {
-      const dp = cmuDplus(myR.startedMs);
-      h += '<div class="hh">⛰ «' + esc(myR.roomName) + '» 시즌</div>' +
-        '<h3>산은 오늘<br><b>해발 ' + dp + '일</b>입니다</h3>' +
-        '<div class="dnum">D+' + dp + '<small> /100</small></div>' +
-        '<div class="hm"><span>일요일 자정 <b>판정</b></span><span>판정까지 <b>' + cmuJudgeLeft() + '</b></span></div>' +
-        '<div class="cmu-hdots">' + Array.from({ length: 50 }, function (_, i) { return '<i' + (i < Math.max(1, Math.min(50, Math.round(dp / 2))) ? ' class="on"' : '') + '></i>'; }).join('') + '</div>';
-    } else if (myR) {
-      h += '<div class="hh">⛺ «' + esc(myR.roomName) + '» 출발 대기</div>' +
-        '<h3>마감일이 지나면<br><b>자동으로 출발</b>합니다</h3>' +
-        '<div class="hm"><span>모집이 끝나는 날, 함께 첫 발을 뗍니다</span></div>';
-    } else {
-      h += '<div class="hh">🤚 100일 챌린지</div>' +
-        '<h3>100일을 함께 뛰면<br><b>혼자보다 멀리</b> 갑니다</h3>' +
-        '<div class="hm"><span>주 <b>3편</b></span><span>일요일 자정 <b>판정</b></span><span>완주는 <b>전당</b>에</span></div>';
+    // 히어로 — «정상에서 보이는 것» (2026-08-22 픽): 진짜 멤버·전당 불빛만
+    var hallN = 0;
+    try { var hl = await cmuRpc('cm_hall'); hallN = ((hl && hl.wall) || []).length + ((hl && hl.grads) || []).length; } catch (e) {}
+    var myClimbers = null;
+    if (myR) {
+      try {
+        var bd0 = await cmuRpc('cm_room_board2', { p_room: myR.room });
+        if (bd0 && bd0.ok) {
+          myClimbers = (bd0.members || []).filter(function (m) { return m.state === 'active'; })
+            .sort(function (a, b) { return (b.ups || 0) - (a.ups || 0) || (b.streak || 0) - (a.streak || 0); })
+            .slice(0, 3).map(function (m) { return { name: m.me ? '나' : (m.nickname || '?'), ups: m.ups || 0 }; });
+        }
+      } catch (e) {}
     }
-    h += '</div>'; }
+    var capB, capS;
+    if (myR && myR.startedMs) { capB = '⛰ «' + esc(myR.roomName) + '» — 해발 ' + cmuDplus(myR.startedMs) + '일'; capS = '일요일 자정 판정 · 판정까지 ' + cmuJudgeLeft() + ' · 정상의 네온까지 함께'; }
+    else if (myR) { capB = '⛺ «' + esc(myR.roomName) + '» 출발 대기'; capS = '마감일이 지나면 자동으로 출발 — 지금은 몸을 풀 시간'; }
+    else { capB = '⛰ 100일을 함께 뛰면, 혼자보다 멀리'; capS = '주 3편 · 일요일 자정 판정 · 완주하면 저 금빛 불빛(전당)에 오릅니다'; }
+    h += vHeroHtml(myR, myClimbers, hallN, capB, capS);
     // 내 방 배너 (방이 있는데 로비에 온 경우)
     if (myR) h = '<div class="cmu-res ok" id="cmu-goback-room" style="cursor:pointer"><span style="font-size:17px">⛺</span><span><b>«' + esc(myR.roomName) + '» — 내 방으로</b><small>' + (myR.startedMs ? 'D+' + cmuDplus(myR.startedMs) + ' 달리는 중' : '출발 대기') + '</small></span><span class="go3">입장 →</span></div>' + h;
     // ✋ 대기석 — 노크하고 기다리는 중이면
