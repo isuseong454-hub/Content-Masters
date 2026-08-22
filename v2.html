@@ -575,6 +575,7 @@ function render(){
     els.forEach(el=>el.classList.add('pre'));
     els.forEach((el,i)=>setTimeout(()=>el.classList.remove('pre'),30+i*40));
   }
+  if(ROOM==='master'&&TAB===0)renderScore();
 }
 
 /* ── 홈: A→B 자동 전환 ── */
@@ -593,7 +594,7 @@ function renderHome(){
         ?'보급방에서 담은 카드가 여기 <b>미분류</b>로 올라와요. 뜯어서(분해) → 정리하고(분류) → <b>따라 쓰면(훈련)</b> 내 원고가 생겨요.'
         :'분해되고 분류된 것들이 여기선 <b>공식</b>으로 정리돼요. 상품 판을 채우고, 원고를 전환 잣대로 점검하세요.')+'</p></div></section>'+
       pipeSection()+gameCard()+
-      (ROOM==='master'?funnelLights():'')+
+      (ROOM==='master'?funnelLights()+'<div id="scoreBox"></div>':'')+
       '<section><div class="row"><button class="btn" style="flex:1" onclick="goTab(4)">'+(ROOM==='mid'?'따라 쓰러 가기':'전환 점검하기')+'</button>'+
       '<button class="btn ghost" style="flex:1" onclick="goTab('+(ROOM==='mid'?3:5)+')">'+(ROOM==='mid'?'분류 정리':'상품 판')+'</button></div></section>';
   }
@@ -669,6 +670,104 @@ function funnelLights(){
    L(s2,'상품 판',pf?'네 칸 중 '+pf+'칸 채움':'상품 판이 비어 있어요',5)+
    L(s3,'전환 점검',conv?'점검한 원고 '+conv+'개':((S.works||[]).length?'원고는 있는데 점검 전이에요':'점검할 원고가 아직 없어요'),4)+
    '<p class="muted" style="margin-top:9px">셋 다 초록이면 팔 준비가 된 거예요. 빨강부터 눌러서 채워요.</p></section>';
+}
+
+/* ── 성적표 — 인스타 유입/전환 갈라 보기 (옛 앱 v742 연동 공법·키 재사용) ── */
+const IG_BASE='https://graph.instagram.com/v23.0';
+async function igFetch(tk){
+  const pr=await(await fetch(IG_BASE+'/me?fields=username,followers_count,media_count&access_token='+encodeURIComponent(tk))).json();
+  if(pr.error)throw new Error(pr.error.message||'token');
+  const md=await(await fetch(IG_BASE+'/me/media?fields=id,caption,media_type,media_product_type,timestamp,thumbnail_url,media_url,permalink&limit=30&access_token='+encodeURIComponent(tk))).json();
+  const items=md.data||[];const out=[];
+  for(let i=0;i<items.length;i+=10){
+    const part=await Promise.all(items.slice(i,i+10).map(async m=>{
+      let ins={};
+      try{
+        const met=(m.media_product_type==='REELS')?'views,reach,saved,shares,total_interactions':'views,reach,saved,shares,total_interactions';
+        const r=await(await fetch(IG_BASE+'/'+m.id+'/insights?metric='+met+'&access_token='+encodeURIComponent(tk))).json();
+        (r.data||[]).forEach(d=>{ins[d.name]=(d.values&&d.values[0]&&d.values[0].value)||0});
+      }catch(e){}
+      return Object.assign({},m,{ins});
+    }));
+    out.push.apply(out,part);
+  }
+  return {t:Date.now(),profile:pr,media:out};
+}
+async function igSync(force){
+  const tk=localStorage.getItem('cm-mya-igtk');if(!tk)return null;
+  let c=null;try{c=JSON.parse(localStorage.getItem('cm2_ig')||'null')}catch(e){}
+  if(!force&&c&&c.t&&(Date.now()-c.t)<6*3600*1000)return c;   // 6시간 캐시 — 발열·쿼터 아낌
+  try{const d=await igFetch(tk);localStorage.setItem('cm2_ig',JSON.stringify(d));return d}
+  catch(e){toast('인스타 연결 오류 — 토큰이 만료됐을 수 있어요');return c||null}
+}
+function igNum(n){n=n||0;if(n>=10000)return(n/10000).toFixed(n>=100000?0:1)+'만';return Number(n).toLocaleString()}
+function igClass(m){  // 유입형/전환형 이름표 — 저장+공유 비중으로
+  const v=(m.ins&&m.ins.views)||(m.ins&&m.ins.reach)||0;
+  const cv=((m.ins&&m.ins.saved)||0)+((m.ins&&m.ins.shares)||0);
+  return (cv>=5&&v>0&&cv/v>=0.008)?'cv':'in';
+}
+async function renderScore(){
+  const box=document.getElementById('scoreBox');if(!box)return;
+  const tk=localStorage.getItem('cm-mya-igtk');
+  if(!tk){
+    box.innerHTML='<section><div class="lbl">성적표</div><div class="card">'+
+    '<p class="muted" style="margin-bottom:11px">인스타 계정을 연결하면 실적이 <b style="color:var(--text-main)">유입/전환</b>으로 갈라져 보여요. 토큰은 <b style="color:var(--text-main)">이 기기에만</b> 저장돼요.</p>'+
+    '<input class="inp" id="igTk" placeholder="인스타 액세스 토큰 붙여넣기">'+
+    '<button class="btn" style="margin-top:11px" onclick="igConnect()">연결하기</button></div></section>';
+    return;
+  }
+  box.innerHTML='<section><div class="lbl">성적표 · 최근 30개</div><div class="card"><p class="muted">불러오는 중…</p></div></section>';
+  const d=await igSync();
+  if(!d||!d.media||!d.media.length){
+    box.innerHTML='<section><div class="lbl">성적표</div><div class="card"><p class="muted">아직 불러올 실적이 없어요. <b style="color:var(--text-main);cursor:pointer" onclick="igReset()">연결 다시 하기</b></p></div></section>';
+    return;
+  }
+  const M=d.media.filter(m=>m.ins&&(m.ins.views||m.ins.reach));
+  const sum=k=>M.reduce((s2,m)=>s2+((m.ins&&m.ins[k])||0),0);
+  const vIn=sum('views')||sum('reach');
+  const saved=sum('saved'),shares=sum('shares');
+  const vCv=saved+shares;
+  const nCv=M.filter(m=>igClass(m)==='cv').length;
+  const rate=vIn?(vCv/vIn*100):0;
+  // «할 것 하나» — 신호등 문법: 어디가 비었나
+  let todo;
+  if(!M.length)todo='실적이 잡히는 릴스가 아직 없어요 — 이번 주 하나 올려보세요';
+  else if(rate<0.5)todo='저장을 부르는 콘텐츠가 부족해요 — 공식 서재에서 뼈대 하나 골라 전환용으로 만들어 보세요';
+  else if(nCv<2)todo='전환형이 '+nCv+'개뿐이에요 — 유입형 사이에 전환용 하나를 끼워 넣을 차례예요';
+  else todo='유입·전환이 같이 돌고 있어요 — 상품 판을 점검하고 DM 동선을 붙일 때예요';
+  box.innerHTML='<section><div class="lbl">성적표 · @'+esc(d.profile.username||'')+' · 최근 '+M.length+'개'+
+  ' <span style="cursor:pointer" onclick="renderScoreForce()">↻</span></div>'+
+  '<div class="card hi" style="margin-bottom:10px;padding:13px 15px"><div style="font-size:13.5px;font-weight:800;line-height:1.55">'+todo+'</div></div>'+
+  '<div class="row">'+
+  '<div class="stg" style="flex:1;cursor:pointer" onclick="openScoreList(\'in\')"><div class="n" style="color:var(--ice)">'+igNum(vIn)+'</div><div class="t">🌊 유입 (조회·도달)</div></div>'+
+  '<div class="stg act" style="flex:1;cursor:pointer" onclick="openScoreList(\'cv\')"><div class="n">'+igNum(vCv)+'</div><div class="t">💰 전환 (저장 '+igNum(saved)+' · 공유 '+igNum(shares)+')</div></div>'+
+  '</div>'+
+  '<p class="muted" style="margin-top:9px">유입 100명당 전환 신호 '+(vIn?(vCv/vIn*100).toFixed(1):'0')+'개 · 기둥을 누르면 콘텐츠별로 펼쳐져요</p></section>';
+}
+function renderScoreForce(){localStorage.removeItem('cm2_ig');renderScore()}
+function igConnect(){
+  const v=document.getElementById('igTk').value.trim();if(!v)return toast('토큰을 붙여넣어 주세요');
+  localStorage.setItem('cm-mya-igtk',v);renderScore();
+}
+function igReset(){localStorage.removeItem('cm-mya-igtk');localStorage.removeItem('cm2_ig');renderScore()}
+function openScoreList(kind){
+  let d=null;try{d=JSON.parse(localStorage.getItem('cm2_ig')||'null')}catch(e){}
+  if(!d)return;
+  const M=d.media.filter(m=>m.ins&&(m.ins.views||m.ins.reach)).filter(m=>igClass(m)===kind);
+  const rows=M.sort((a,b)=>{
+    const ka=kind==='cv'?((a.ins.saved||0)+(a.ins.shares||0)):(a.ins.views||a.ins.reach||0);
+    const kb=kind==='cv'?((b.ins.saved||0)+(b.ins.shares||0)):(b.ins.views||b.ins.reach||0);
+    return kb-ka;
+  }).slice(0,15).map(m=>{
+    const cap=esc(String(m.caption||'(제목 없음)').split('\n')[0].slice(0,36));
+    return '<a class="item" href="'+esc(m.permalink||'#')+'" target="_blank" style="text-decoration:none;color:inherit">'+
+    '<div class="th">🎬</div><div class="bd"><div class="ti">'+cap+'</div>'+
+    '<div class="st">조회 '+igNum(m.ins.views||m.ins.reach)+' · 저장 '+igNum(m.ins.saved)+' · 공유 '+igNum(m.ins.shares)+'</div></div>'+
+    '<span class="pill'+(kind==='cv'?'':' gray')+'">'+(kind==='cv'?'전환형':'유입형')+'</span></a>';
+  }).join('');
+  openSheet('<h3>'+(kind==='cv'?'💰 전환형 콘텐츠':'🌊 유입형 콘텐츠')+'</h3>'+
+  '<div class="sub">'+(kind==='cv'?'저장·공유가 붙은 것들 — 이 뼈대가 파는 뼈대예요':'조회는 나오는데 저장은 약한 것들 — 문을 여는 역할이에요')+'</div>'+
+  (rows||'<div class="empty">이쪽으로 분류된 콘텐츠가 아직 없어요</div>'));
 }
 
 /* ── 1분 게임 — 코너 속 코너: 잠깐 하고 홈으로 ── */
