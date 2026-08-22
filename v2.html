@@ -39,7 +39,7 @@
 }
 [data-room="mid"]{--tone:#d7f34b;--tone-hi:#e6fb84;--tone-glow:rgba(215,243,75,.16);--tone-line:rgba(215,243,75,.36);--tone-faint:rgba(215,243,75,.09);--orb2:rgba(120,200,120,.08)}
 [data-room="master"]{--tone:#F5E6D3;--tone-hi:#FBF3E6;--tone-glow:rgba(245,230,211,.17);--tone-line:rgba(245,230,211,.34);--tone-faint:rgba(245,230,211,.08);--orb2:rgba(255,200,120,.08)}
-[data-room="community"]{--tone:#FF7A33;--tone-hi:#FFA26B;--tone-glow:rgba(255,122,51,.18);--tone-line:rgba(255,122,51,.4);--tone-faint:rgba(255,122,51,.09);--orb2:rgba(255,80,80,.08)}
+[data-room="community"]{--tone:#d7f34b;--tone-hi:#e6fb84;--tone-glow:rgba(215,243,75,.13);--tone-line:rgba(215,243,75,.32);--tone-faint:rgba(215,243,75,.07);--orb2:rgba(142,199,246,.09)}
 
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
@@ -2000,7 +2000,7 @@ function renderCommunity(){
   document.getElementById('tabbody').innerHTML=
   '<div class="top" style="padding-bottom:2px"><div class="h1" id="cmu-tt">🏙 커뮤니티</div></div>'+
   '<section style="margin-top:12px"><div id="cmu-body"></div></section>'+
-  '<section><div class="lbl">✍️ 이번 주 성적 · '+wkKey()+'</div><div class="card">'+
+  '<section><div class="cmu-lbl">✍️ 이번 주 성적 · '+wkKey()+'</div><div class="cmu-card">'+
   (wk?'<div class="pipe">'+
     '<div class="stg"><div class="n">'+Number(wk.followers||0).toLocaleString()+'</div><div class="t">팔로워</div></div>'+
     '<div class="stg"><div class="n">'+Number(wk.best||0).toLocaleString()+'</div><div class="t">최고 조회</div></div>'+
@@ -2009,10 +2009,10 @@ function renderCommunity(){
    :'<p class="muted" style="margin-bottom:11px">주 1회, 세 숫자만 — 팔로워 · 최고 조회수 · 업로드 수.<br>방 판과 내 추이가 이 표를 읽어요. (인스타 연동하면 자동)</p>'+
     '<button class="btn" onclick="openWeekly()">이번 주 성적 적기</button>')+
   '</div></section>'+
-  '<section><div class="card hi"><div class="lbl" style="margin-bottom:9px">이번 주 담벼락 — 한 줄 남기기</div>'+
-  '<textarea class="inp" id="wallBody" rows="2" placeholder="이번 주 한 일, 다짐, 응원 — 뭐든 한 줄"></textarea>'+
-  '<button class="btn" style="margin-top:11px" onclick="postWall()">담벼락에 붙이기</button></div></section>'+
-  '<section><div class="lbl">이번 주 글</div><div id="wallList"><div class="empty">불러오는 중…</div></div></section>'+
+  '<section><div class="cmu-lbl">🧱 이번 주 담벼락 — 한 줄 남기기</div><div class="cmu-card">'+
+  '<textarea class="inp" id="wallBody" rows="2" placeholder="이번 주 한 일, 다짐, 응원 — 뭐든 한 줄" style="background:rgba(0,0,0,.3)"></textarea>'+
+  '<button class="cmu-go" style="width:100%;margin-top:10px" onclick="postWall()">담벼락에 붙이기</button></div>'+
+  '<div id="wallList" style="margin-top:10px"><div class="empty">불러오는 중…</div></div></section>'+
   '<section><button class="btn ghost" onclick="goFork()">갈림길로</button></section>';
   show('scr-room');loadWall();
   _cmuSetView('plaza');
