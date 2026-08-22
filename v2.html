@@ -594,7 +594,7 @@ body.hidden-pause .ln-flo{animation-play-state:paused}
       </button>
       <button class="door" data-go="community" style="animation-delay:.21s;position:relative">
         <span id="commBadge" style="display:none;position:absolute;top:12px;right:60px;background:#d7f34b;color:#0A0D12;font:800 10px Pretendard;padding:3px 8px;border-radius:999px"></span>
-        <span class="dtag">함께</span><div class="ic">🔥</div>
+        <span class="dtag">함께</span><div class="ic">👥</div>
         <div class="dt">커뮤니티</div>
         <div class="dd">같이 하는 사람들. 이번 주 기록과 응원.</div>
       </button>
@@ -1601,7 +1601,8 @@ function savePillars(){S.pillars=[pl0.value.trim(),pl1.value.trim(),pl2.value.tr
     // 방 목록
     const rooms = (sr && sr.ok && sr.rooms) || [];
     const rec = rooms.filter(function (r) { return !r.startedMs; });
-    const play = rooms.filter(function (r) { return r.startedMs; });    h += '<div class="cmu-lbl">✋ 모집 중 — 노크하세요</div>';
+    const play = rooms.filter(function (r) { return r.startedMs; });    h += '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px"><span class="cmu-lbl" style="margin:0">✋ 모집 중 — 노크하세요</span>' +
+      '<button class="cmu-go" id="cmu-mk" style="padding:7px 13px;font-size:11.5px;border-radius:99px">🚪 방 만들기</button></div>';
     h += rec.length ? rec.map(function (r) {
       const dash = Array.from({ length: 10 }, function (_, i) { return '<i' + (i < Math.min(10, r.members) ? ' class="on"' : '') + '></i>'; }).join('');
       return '<div class="cmu-room rec" ' + (r.mine ? 'data-cmu-room="' + esc(r.code) + '" data-mine="1"' : (r.pending ? 'data-cmu-wait="1"' : 'data-cmu-apply="' + esc(r.code) + '"')) + '>' +
@@ -1626,8 +1627,6 @@ function savePillars(){S.pillars=[pl0.value.trim(),pl1.value.trim(),pl2.value.tr
         '<span style="font-size:10.5px;color:#95a08b">' + r.members + '명' + (r.mine ? ' · <b style="color:#d7f34b">내 방 — 입장</b>' : ' · 진행 중이라 신청 불가') + '</span></div></div>';
     }).join('') : '<div class="cmu-room cmu-ghost"><span class="cmu-exl">예시 — 출발하면 이렇게 달립니다</span>' +
       '<div style="display:flex;align-items:center;gap:9px;margin-top:7px"><span class="cmu-rname">3기 전사들</span><span class="cmu-pill lime">플레이 중</span><span class="cmu-dday">D+37/100</span></div></div>';
-    // 방 만들기
-    h += '<div style="display:flex;gap:8px;margin:12px 0 14px"><button class="cmu-go" id="cmu-mk" style="flex:1">🚪 방 만들기 — 방장이 됩니다</button></div>';
 
     // 🏛 전당 — 로비의 골드 문 (완주자의 다음 시즌 예고 포함)
     h += '<div class="cmu-jgrid" style="grid-template-columns:1fr;margin-top:14px"><div class="cmu-jelly gold" id="cmu-j-hall" style="display:flex;align-items:center;gap:11px;text-align:left;padding:13px 15px">' +
@@ -1945,7 +1944,7 @@ function savePillars(){S.pillars=[pl0.value.trim(),pl1.value.trim(),pl2.value.tr
   function cmuRender() {
     const tt = document.getElementById('cmu-tt');
     if (tt) tt.textContent = _cmuView === 'hall' ? '🏛 마스터즈 전당' : _cmuView === 'room' ? '🚪 우리 방'
-      : _cmuView === 'mentor' ? '👩‍🏫 선생님' : '🏙 커뮤니티';
+      : _cmuView === 'mentor' ? '👩‍🏫 선생님' : '👥 커뮤니티';
     if (_cmuView === 'plaza') cmuRenderPlaza();
     else if (_cmuView === 'create') cmuRenderCreate();
     else if (_cmuView === 'apply') cmuRenderApply();
@@ -2004,7 +2003,7 @@ function renderCommunity(){
   window.__cmAuth=AUTH;
   const wk=S.weekly&&S.weekly[wkKey()];
   document.getElementById('tabbody').innerHTML=
-  '<div class="top" style="padding-bottom:2px"><div class="h1" id="cmu-tt">🏙 커뮤니티</div></div>'+
+  '<div class="top" style="padding-bottom:2px"><div class="h1" id="cmu-tt">👥 커뮤니티</div></div>'+
   '<section style="margin-top:12px"><div id="cmu-body"></div></section>'+
   '<section id="sec-weekly" style="display:none"><div class="cmu-lbl">✍️ 이번 주 성적 · '+wkKey()+'</div><div class="cmu-card">'+
   (wk?'<div class="pipe">'+
