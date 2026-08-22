@@ -237,6 +237,26 @@ body.hidden-pause .ln-flo{animation-play-state:paused}
 .stg.act{border-color:var(--tone-line);background:linear-gradient(180deg,var(--tone-faint),var(--glass))}
 .stg.act .n{color:var(--tone-hi)}
 .arw{align-self:center;color:var(--text-faint);font-size:12px}
+
+/* ─── 획득 연출 (드문 순간 — 즐거움 예산) ─── */
+.award-ov{position:fixed;inset:0;z-index:90;background:rgba(6,8,12,.7);backdrop-filter:blur(10px);
+ display:grid;place-items:center;opacity:0;pointer-events:none;transition:opacity 280ms var(--e-out)}
+.award-ov.on{opacity:1;pointer-events:auto}
+.award-box{text-align:center;transform:scale(.9);opacity:0;transition:transform 400ms var(--e-out),opacity 400ms var(--e-out)}
+.award-ov.on .award-box{transform:none;opacity:1}
+.award-ring{width:130px;height:130px;margin:0 auto 18px;border-radius:50%;display:grid;place-items:center;font-size:58px;
+ background:radial-gradient(circle,var(--tone-faint),transparent 70%);
+ border:1px solid var(--tone-line);box-shadow:0 0 60px var(--tone-glow),inset 0 1px 0 rgba(255,255,255,.15)}
+.award-t{font-size:20px;font-weight:800;letter-spacing:-.01em}
+.award-s{font-size:13px;color:var(--text-mute);margin-top:7px;line-height:1.6}
+.award-tap{font-size:11px;color:var(--text-faint);margin-top:22px}
+
+/* ─── 1분 게임 ─── */
+.gtimer{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.gtimer .gbar{flex:1;height:6px;border-radius:3px;background:rgba(255,255,255,.08);overflow:hidden}
+.gtimer .gfill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--tone-hi),var(--tone));width:100%;transition:width 1s linear}
+.gtimer .gnum{font-size:13px;font-weight:800;color:var(--tone-hi);min-width:30px;text-align:right}
+.gscore{font-size:12px;font-weight:700;color:var(--text-faint)}
 </style></head>
 <body data-room="basic">
 
@@ -338,6 +358,14 @@ body.hidden-pause .ln-flo{animation-play-state:paused}
 <div class="sheetbg" id="sheetbg" onclick="closeSheet()"></div>
 <div class="sheet" id="sheet"></div>
 <div class="toast" id="toast"></div>
+<div class="award-ov" id="awardOv" onclick="this.classList.remove('on')">
+  <div class="award-box">
+    <div class="award-ring" id="awRing">🔩</div>
+    <div class="award-t" id="awT"></div>
+    <div class="award-s" id="awS"></div>
+    <div class="award-tap">아무 데나 눌러서 닫기</div>
+  </div>
+</div>
 
 <script>
 /* ═══════════ 연결 — 본체와 같은 집 ═══════════ */
@@ -511,13 +539,20 @@ function buildDock(){
    '<button class="dk'+(i===TAB?' on':'')+(dimTab(i)?' dim':'')+'" onclick="goTab('+i+')"><i>'+DOCK_ICONS[i]+'</i>'+t+'</button>').join('');
 }
 function goTab(i){TAB=i;_animNext=true;buildDock();render()}
+function award(emoji,title,sub){
+  document.getElementById('awRing').textContent=emoji;
+  document.getElementById('awT').textContent=title;
+  document.getElementById('awS').textContent=sub||'';
+  document.getElementById('awardOv').classList.add('on');
+}
+const MILESTONES=[1,5,10,20,30,50,100];
 function toast(t){const el=document.getElementById('toast');el.textContent=t;el.classList.add('on');
  clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove('on'),2200)}
 
 /* ═══════════ 시트 ═══════════ */
 function openSheet(html){const _sh=document.getElementById('sheet');_sh.style.transition='';_sh.style.transform='';_sh.innerHTML='<div class="grab"></div>'+html;
  document.getElementById('sheetbg').classList.add('on');document.getElementById('sheet').classList.add('on')}
-function closeSheet(){document.getElementById('sheetbg').classList.remove('on');document.getElementById('sheet').classList.remove('on')}
+function closeSheet(){if(_gT){clearInterval(_gT);_gT=null}document.getElementById('sheetbg').classList.remove('on');document.getElementById('sheet').classList.remove('on')}
 
 /* ═══════════ 카드 유틸 ═══════════ */
 // stage: 0 담김 · 1 관찰(왜 적음) · 2 분해됨 · 3 분류됨
@@ -557,7 +592,7 @@ function renderHome(){
       '<section><div class="robot"><div class="face">'+g.robot+'</div><p>'+(ROOM==='mid'
         ?'보급방에서 담은 카드가 여기 <b>미분류</b>로 올라와요. 뜯어서(분해) → 정리하고(분류) → <b>따라 쓰면(훈련)</b> 내 원고가 생겨요.'
         :'분해되고 분류된 것들이 여기선 <b>공식</b>으로 정리돼요. 상품 판을 채우고, 원고를 전환 잣대로 점검하세요.')+'</p></div></section>'+
-      pipeSection()+
+      pipeSection()+gameCard()+
       (ROOM==='master'?funnelLights():'')+
       '<section><div class="row"><button class="btn" style="flex:1" onclick="goTab(4)">'+(ROOM==='mid'?'따라 쓰러 가기':'전환 점검하기')+'</button>'+
       '<button class="btn ghost" style="flex:1" onclick="goTab('+(ROOM==='mid'?3:5)+')">'+(ROOM==='mid'?'분류 정리':'상품 판')+'</button></div></section>';
@@ -571,7 +606,7 @@ function renderHome(){
     '<p class="muted" style="margin-top:10px">고를 필요 없어요. 방금 본 것, 그거면 돼요.</p>'+
     '<button class="btn" style="margin-top:14px" onclick="goTab(1)">주소 붙여넣고 담기</button></div></section>'+
     '<section><div class="robot"><div class="face">'+g.robot+'</div><p>담고 나면 딱 한 줄만 물어볼게요 — <b>「이거 왜 멈춰서 봤어요?」</b><br>그 한 줄이 나중에 전부 재료가 돼요.</p></div></section>'+
-    '<section><div class="lbl">지금까지 담은 것</div>'+shelfHtml(6)+
+    gameCard()+'<section><div class="lbl">지금까지 담은 것</div>'+shelfHtml(6)+
     '<p class="muted" style="margin-top:9px">5장이 모이면 <b style="color:var(--tone)">분해</b> 칸이 켜져요. ('+n+'/5)</p></section>';
   }
   head+='<div class="h1">선반에 <em>'+n+'장</em> 쌓였어요</div><div class="badge">'+g.mark+' '+g.markT(n)+'</div></div>';
@@ -585,7 +620,7 @@ function renderHome(){
     mid='<section><div class="card hi"><div style="font-size:15.5px;font-weight:800;line-height:1.5">오늘도 <em style="font-style:none;color:var(--tone)">한 장</em> 담아볼까요?</div>'+
     '<button class="btn" style="margin-top:13px" onclick="goTab(1)">주소 붙여넣고 담기</button></div></section>';
   }
-  return head+'<section><div class="lbl">내 선반</div>'+shelfHtml()+'</section>'+mid+pipeSection()+
+  return head+'<section><div class="lbl">내 선반</div>'+shelfHtml()+'</section>'+mid+gameCard()+pipeSection()+
    '<section><div class="lbl">최근에 담은 것</div>'+recentHtml(4)+'</section>';
 }
 function shelfHtml(slots){
@@ -636,6 +671,88 @@ function funnelLights(){
    '<p class="muted" style="margin-top:9px">셋 다 초록이면 팔 준비가 된 거예요. 빨강부터 눌러서 채워요.</p></section>';
 }
 
+/* ── 1분 게임 — 코너 속 코너: 잠깐 하고 홈으로 ── */
+let _gT=null,_gLeft=0,_gScore=0,_gQueue=[];
+function gameLabel(){
+  return ROOM==='basic'?{t:'⚡ 1분 게임 — 왜 멈췄더라',s:'안 물어본 카드에 한 줄씩. 60초에 몇 장?'}
+   :ROOM==='mid'?{t:'⚡ 1분 게임 — 선반 정리',s:'미분류 카드를 선반에 척척. 60초에 몇 장?'}
+   :{t:'⚡ 1분 게임 — 공식 뒤집기',s:'훅만 보고 뼈대 맞추기. 내 공식이 몸에 붙었나?'};
+}
+function gameCard(){
+  const g=gameLabel();
+  const ready=ROOM==='basic'?S.cards.filter(c=>c.stage===0).length
+    :ROOM==='mid'?S.cards.filter(c=>c.stage===2).length
+    :S.cards.filter(c=>c.stage>=3&&c.notes&&c.notes.hook&&c.notes.frame).length;
+  if(ROOM==='master'&&ready<2)return'';
+  if(ROOM!=='master'&&ready<1)return'';
+  return'<section><div class="card" style="display:flex;align-items:center;gap:13px">'+
+  '<div style="font-size:26px">🎮</div><div style="flex:1;min-width:0">'+
+  '<div style="font-size:14px;font-weight:800">'+g.t+'</div>'+
+  '<div class="muted" style="margin-top:3px">'+g.s+'</div></div>'+
+  '<button class="btn" style="width:auto;padding:11px 16px;font-size:13px" onclick="gameStart()">시작</button></div></section>';
+}
+function gameStart(){
+  _gScore=0;_gLeft=60;
+  if(ROOM==='basic')_gQueue=S.cards.filter(c=>c.stage===0).slice();
+  else if(ROOM==='mid')_gQueue=S.cards.filter(c=>c.stage===2).slice();
+  else _gQueue=S.cards.filter(c=>c.stage>=3&&c.notes&&c.notes.hook&&c.notes.frame).sort(()=>((_gScore+_gQueue.length)%2)?-1:1).slice();
+  if(!_gQueue.length)return toast('지금은 정리할 게 없어요');
+  gameTick(true);
+  clearInterval(_gT);_gT=setInterval(()=>{
+    _gLeft--;const f=document.getElementById('gFill'),n=document.getElementById('gNum');
+    if(f)f.style.width=(_gLeft/60*100)+'%';if(n)n.textContent=_gLeft;
+    if(_gLeft<=0)gameEnd();
+  },1000);
+}
+function gameHead(){
+  return'<div class="gtimer"><div class="gbar"><div class="gfill" id="gFill"></div></div><div class="gnum" id="gNum">'+_gLeft+'</div></div>'+
+  '<div class="gscore" style="margin-bottom:12px">정리한 것 · '+_gScore+'개</div>';
+}
+function gameTick(first){
+  if(!_gQueue.length)return gameEnd();
+  const c=_gQueue[0];
+  if(ROOM==='basic'){
+    openSheet('<h3>이거 왜 멈춰서 봤어요?</h3><div class="sub">'+esc(cardTitle(c))+'</div>'+gameHead()+
+    '<textarea class="inp" id="gWhy2" rows="2" placeholder="한 줄이면 돼요"></textarea>'+
+    '<div class="row" style="margin-top:12px"><button class="btn" style="flex:2" onclick="gameAnswerWhy(\''+c.id+'\')">다음 →</button>'+
+    '<button class="btn ghost" style="flex:1" onclick="gameSkip()">넘기기</button></div>');
+  }else if(ROOM==='mid'){
+    openSheet('<h3>어느 선반에?</h3><div class="sub">'+esc(cardTitle(c))+(c.notes&&c.notes.why?' — '+esc(c.notes.why):'')+'</div>'+gameHead()+
+    '<div class="chips">'+S.cats.map(k=>'<button class="chip" onclick="gameAnswerCat(\''+c.id+'\',\''+esc(k)+'\')">'+esc(k)+'</button>').join('')+'</div>'+
+    '<button class="btn ghost" style="margin-top:12px" onclick="gameSkip()">넘기기</button>');
+  }else{
+    const pool=[...new Set(S.cards.filter(x=>x.stage>=3&&x.notes&&x.notes.frame).map(x=>x.notes.frame))];
+    const opts=[c.notes.frame,...pool.filter(f=>f!==c.notes.frame)].slice(0,3);
+    opts.sort(()=>(c.id.charCodeAt(1)%2)?-1:1);
+    openSheet('<h3>이 훅의 뼈대는?</h3><div class="sub">훅 · «'+esc(c.notes.hook)+'»</div>'+gameHead()+
+    '<div style="display:grid;gap:8px">'+opts.map(o=>
+      '<button class="btn ghost" style="text-align:left" onclick="gameAnswerQuiz(\''+c.id+'\',this.textContent)">'+esc(o)+'</button>').join('')+'</div>');
+  }
+  if(first){/* 시트 이미 열림 */}
+}
+function gameSkip(){_gQueue.push(_gQueue.shift());gameTick()}
+function gameAnswerWhy(id){
+  const v=document.getElementById('gWhy2').value.trim();if(!v)return toast('한 줄만!');
+  const c=S.cards.find(x=>x.id===id);if(c){c.why=v;c.stage=1}
+  _gQueue.shift();_gScore++;save();gameTick();
+}
+function gameAnswerCat(id,cat){
+  const c=S.cards.find(x=>x.id===id);if(c){c.cat=cat;c.stage=3}
+  _gQueue.shift();_gScore++;save();gameTick();
+}
+function gameAnswerQuiz(id,ans){
+  const c=S.cards.find(x=>x.id===id);
+  const ok=c&&c.notes.frame===ans.trim();
+  toast(ok?'맞았어요!':'아까워요 — '+(c?c.notes.frame:''));
+  _gQueue.shift();if(ok)_gScore++;
+  if(!_gQueue.length)return gameEnd();gameTick();
+}
+function gameEnd(){
+  clearInterval(_gT);_gT=null;closeSheet();buildDock();render();
+  if(_gScore>=3)award('🎮','1분에 '+_gScore+'개!','게임처럼 하다 보면 잘할 수밖에 없어요.');
+  else if(_gScore>0)toast(_gScore+'개 정리했어요');
+}
+
 /* ── 담기 ── */
 function renderGather(){
   return'<div class="top"><div class="h1">방금 본 그거, <em>담아요</em></div></div>'+
@@ -652,14 +769,17 @@ function quickAdd(){
   if(!url&&!why)return toast('주소나 한 줄, 하나는 있어야 해요');
   S.cards.push({id:'c'+Date.now(),url,why,ts:Date.now(),stage:why?1:0,cat:null,notes:{}});
   save();document.getElementById('qUrl').value='';document.getElementById('qWhy').value='';
-  toast('보급방 선반에 올렸어요 · '+S.cards.length+'장째');
+  if(MILESTONES.includes(S.cards.length))award('🔩','작은 나사 '+S.cards.length+'개','담는 손이 쌓이고 있어요.');
+  else toast('보급방 선반에 올렸어요 · '+S.cards.length+'장째');
 }
 function addCard(){
   const url=document.getElementById('gUrl').value.trim();
   const why=document.getElementById('gWhy').value.trim();
   if(!url&&!why)return toast('주소나 한 줄, 하나는 있어야 해요');
   S.cards.push({id:'c'+Date.now(),url,why,ts:Date.now(),stage:why?1:0,cat:null,notes:{}});
-  save();toast('선반에 올렸어요 · '+S.cards.length+'장째');
+  save();
+  if(MILESTONES.includes(S.cards.length))award('🔩','작은 나사 '+S.cards.length+'개','담는 손이 쌓이고 있어요. 이게 전부 재료가 돼요.');
+  else toast('선반에 올렸어요 · '+S.cards.length+'장째');
   TAB=0;buildDock();render();
 }
 function openNextUnasked(){const c=S.cards.find(x=>x.stage===0);if(c)openCard(c.id)}
@@ -836,7 +956,7 @@ function saveMimic(id){
   const c=S.cards.find(x=>x.id===id);const hook=mk1.value.trim(),body=mk2.value.trim();
   if(!hook&&!body)return toast('한 칸이라도 적어야 원고예요');
   (S.works=S.works||[]).push({cardId:id,frame:c&&c.notes&&c.notes.frame||'',hook,body,ts:Date.now(),conv:null});
-  save();closeSheet();render();toast('내 원고가 생겼어요 · '+S.works.length+'개');
+  save();closeSheet();render();award('🎖','뱃지 획득 — 원고 '+S.works.length+'호','분해한 뼈대로 내 것을 만들었어요. 이게 제작자의 첫 걸음이에요.');
 }
 function openWork(i){
   const w=(S.works||[])[i];if(!w)return;
@@ -864,7 +984,7 @@ function saveConv(i){
   const w=(S.works||[])[i];if(!w)return;
   w.conv={save:cv1.value.trim(),share:cv2.value.trim(),dm:cv3.value.trim()};
   if(!w.conv.save&&!w.conv.share&&!w.conv.dm)return toast('한 칸이라도 적어야 점검이에요');
-  save();closeSheet();render();toast('전환 점검 완료');
+  save();closeSheet();render();award('🏆','트로피 '+(S.works||[]).filter(w=>w.conv).length+'좌','저장·공유·DM 잣대를 통과했어요. 파는 사람의 원고예요.');
 }
 
 /* ── 축 (기둥/고객/상품) ── */
