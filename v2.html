@@ -592,7 +592,8 @@ body.hidden-pause .ln-flo{animation-play-state:paused}
         <div class="dt">마스터즈방</div>
         <div class="dd">쌓인 공식으로 전환을 설계해요.<br>여기는 만드는 방이 아니라 파는 방이에요.</div>
       </button>
-      <button class="door" data-go="community" style="animation-delay:.21s">
+      <button class="door" data-go="community" style="animation-delay:.21s;position:relative">
+        <span id="commBadge" style="display:none;position:absolute;top:12px;right:60px;background:#d7f34b;color:#0A0D12;font:800 10px Pretendard;padding:3px 8px;border-radius:999px"></span>
         <span class="dtag">함께</span><div class="ic">🔥</div>
         <div class="dt">커뮤니티</div>
         <div class="dd">같이 하는 사람들. 이번 주 기록과 응원.</div>
@@ -777,7 +778,20 @@ function doLogout(){
   if(!confirm('로그아웃할까요?'))return;
   localStorage.removeItem('cm2_auth');localStorage.removeItem('cm2_state');location.reload();
 }
-function goFork(){document.body.dataset.room='basic';show('scr-fork')}
+function goFork(){document.body.dataset.room='basic';show('scr-fork');updateCommBadge()}
+async function updateCommBadge(){
+  const el=document.getElementById('commBadge');if(!el||!AUTH)return;
+  try{
+    const [ap,ms]=await Promise.all([
+      rpc('cm_room_apps',{p_code:AUTH.code,p_pin_hash:AUTH.pinHash}),
+      rpc('cm_room_mystate',{p_code:AUTH.code,p_pin_hash:AUTH.pinHash})]);
+    const knocks=(ap&&ap.ok&&ap.apps||[]).length;
+    let seen={};try{seen=JSON.parse(localStorage.getItem('cm-cmu-seen')||'{}')}catch(e){}
+    const news=(ms&&ms.ok&&ms.mine||[]).filter(m=>(m.state==='active'&&!m.owner&&!seen['ok'+m.room])||(m.state==='rejected'&&!seen['no'+m.room])).length;
+    const n=knocks+news;
+    el.style.display=n?'':'none';el.textContent=knocks?('노크 '+knocks):'소식 '+news;
+  }catch(e){}
+}
 document.querySelectorAll('.door').forEach(d=>d.onclick=()=>enterRoom(d.dataset.go));
 function enterRoom(r){ROOM=r;TAB=0;S.room=r;save();_animNext=true;
   document.body.dataset.room=r;
@@ -1567,14 +1581,12 @@ function savePillars(){S.pillars=[pl0.value.trim(),pl1.value.trim(),pl2.value.tr
     let h = '';
     /* v789 · 👩‍🏫 선생님 — 같이 달리는 방(광장) 옆의 «1:1» 자리.
        새 피드백이 있으면 점이 붙는다(읽으면 사라짐). */
-    let _mtrDot = '';
-    try { _mtrDot = (_mtrFb || []).some(function (f) { return !f.read_at; }) ? ' ●' : ''; } catch (e) {}
-    h += '<div class="cmu-res ok" id="cmu-go-mentor" style="cursor:pointer;border-color:rgba(255,158,122,.4);background:rgba(255,158,122,.08)">' +
-      '<span style="font-size:17px">👩‍🏫</span><span><b>선생님에게 봐달라고 하기' + _mtrDot + '</b>' +
-      '<small>내 원고를 보내고 1:1 피드백을 받는 곳</small></span><span class="go3">열기 →</span></div>';
+
     // 방장 신청함 배너
     const apps = (ap && ap.ok && ap.apps) || [];
     if (apps.length) h += '<div class="cmu-res ok" id="cmu-go-apps" style="cursor:pointer"><span style="font-size:17px">✉️</span><span><b>참여 신청 ' + apps.length + '건</b><small>새 플레이어가 노크했어요</small></span><span class="go3">확인 →</span></div>';
+    const mine2 = (ms && ms.ok && ms.mine) || [];
+    const myR = mine2.find(function (m) { return m.state === 'active'; });
     // 내 신청 결과 배너
     ((ms && ms.ok && ms.mine) || []).forEach(function (m) {
       if (m.state === 'active' && !m.owner) {
@@ -1586,43 +1598,10 @@ function savePillars(){S.pillars=[pl0.value.trim(),pl1.value.trim(),pl2.value.tr
         if (!seen['no' + m.room]) h += '<div class="cmu-res no" data-cmu-dismiss="no' + esc(m.room) + '" style="cursor:pointer"><span style="font-size:17px">🙏</span><span><b>«' + esc(m.roomName) + '»는 이번엔 함께 못 하게 됐어요</b><small>다음 시즌에 다시 노크해요 · 눌러서 닫기</small></span></div>';
       }
     });
-    // v746 · 히어로 — 내 시즌이 있으면 그 산을, 없으면 초대장을 (오리지널 앱톤 확정판)
-    const mine2 = (ms && ms.ok && ms.mine) || [];
-    const myR = mine2.find(function (m) { return m.state === 'active'; });
-    h += '<div class="cmu-hero">';
-    if (myR && myR.startedMs) {
-      const dp = cmuDplus(myR.startedMs);
-      h += '<div class="hh">⛰ «' + esc(myR.roomName) + '» 시즌</div>' +
-        '<h3>산은 오늘<br><b>해발 ' + dp + '일</b>입니다</h3>' +
-        '<div class="dnum">D+' + dp + '<small> /100</small></div>' +
-        '<div class="hm"><span>일요일 자정 <b>판정</b></span><span>판정까지 <b>' + cmuJudgeLeft() + '</b></span></div>' +
-        '<div class="cmu-hdots">' + Array.from({ length: 50 }, function (_, i) { return '<i' + (i < Math.max(1, Math.min(50, Math.round(dp / 2))) ? ' class="on"' : '') + '></i>'; }).join('') + '</div>';
-    } else if (myR) {
-      h += '<div class="hh">⛺ «' + esc(myR.roomName) + '» 출발 대기</div>' +
-        '<h3>마감일이 지나면<br><b>자동으로 출발</b>합니다</h3>' +
-        '<div class="hm"><span>모집이 끝나는 날, 함께 첫 발을 뗍니다</span></div>';
-    } else {
-      h += '<div class="hh">🤚 100일 챌린지</div>' +
-        '<h3>100일을 함께 뛰면<br><b>혼자보다 멀리</b> 갑니다</h3>' +
-        '<div class="hm"><span>주 <b>3편</b></span><span>일요일 자정 <b>판정</b></span><span>완주는 <b>전당</b>에</span></div>';
-    }
-    h += '</div>';
-    // v746 · 내 공간 — 문 4개 (없는 문은 흐리게, 약속으로)
-    h += '<div class="cmu-lbl">🚪 내 공간</div><div class="cmu-jgrid">' +
-      (myR ? '<div class="cmu-jelly my" id="cmu-j-my"><span class="ic">⛺</span><b>내 방</b><small>' + (myR.startedMs ? 'D+' + cmuDplus(myR.startedMs) : '출발 대기') + '</small></div>'
-           : '<div class="cmu-jelly off" id="cmu-j-my"><span class="ic">⛺</span><b>내 방</b><small>합류하면 열려요</small></div>') +
-      (apps.length ? '<div class="cmu-jelly" id="cmu-j-apps"><span class="ic">✉️</span><b>신청함</b><small>새 노크 ' + apps.length + '</small></div>'
-           : '<div class="cmu-jelly off" id="cmu-j-apps"><span class="ic">✉️</span><b>신청함</b><small>방장의 우편함</small></div>') +
-      '<div class="cmu-jelly' + (myR ? '' : ' off') + '" id="cmu-j-ach"><span class="ic">🏆</span><b>내 업적</b><small>' + (myR ? '방에 전시' : '⌖나 연결 시 자동') + '</small></div>' +
-      '<div class="cmu-jelly gold" id="cmu-j-hall"><span class="ic">🏛</span><b>전당</b><small>100만의 벽</small></div>' +
-      '</div>';
-    // 방 만들기
-    h += '<div style="display:flex;gap:8px;margin:12px 0 14px"><button class="cmu-go" id="cmu-mk" style="flex:1">🚪 방 만들기 — 방장이 됩니다</button></div>';
     // 방 목록
     const rooms = (sr && sr.ok && sr.rooms) || [];
     const rec = rooms.filter(function (r) { return !r.startedMs; });
-    const play = rooms.filter(function (r) { return r.startedMs; });
-    h += '<div class="cmu-lbl">✋ 모집 중 — 노크하세요</div>';
+    const play = rooms.filter(function (r) { return r.startedMs; });    h += '<div class="cmu-lbl">✋ 모집 중 — 노크하세요</div>';
     h += rec.length ? rec.map(function (r) {
       const dash = Array.from({ length: 10 }, function (_, i) { return '<i' + (i < Math.min(10, r.members) ? ' class="on"' : '') + '></i>'; }).join('');
       return '<div class="cmu-room rec" ' + (r.mine ? 'data-cmu-room="' + esc(r.code) + '" data-mine="1"' : (r.pending ? 'data-cmu-wait="1"' : 'data-cmu-apply="' + esc(r.code) + '"')) + '>' +
@@ -1647,26 +1626,52 @@ function savePillars(){S.pillars=[pl0.value.trim(),pl1.value.trim(),pl2.value.tr
         '<span style="font-size:10.5px;color:#95a08b">' + r.members + '명' + (r.mine ? ' · <b style="color:#d7f34b">내 방 — 입장</b>' : ' · 진행 중이라 신청 불가') + '</span></div></div>';
     }).join('') : '<div class="cmu-room cmu-ghost"><span class="cmu-exl">예시 — 출발하면 이렇게 달립니다</span>' +
       '<div style="display:flex;align-items:center;gap:9px;margin-top:7px"><span class="cmu-rname">3기 전사들</span><span class="cmu-pill lime">플레이 중</span><span class="cmu-dday">D+37/100</span></div></div>';
+    // 방 만들기
+    h += '<div style="display:flex;gap:8px;margin:12px 0 14px"><button class="cmu-go" id="cmu-mk" style="flex:1">🚪 방 만들기 — 방장이 됩니다</button></div>';
+
+    // 🏛 전당 — 로비의 골드 문 (완주자의 다음 시즌 예고 포함)
+    h += '<div class="cmu-jgrid" style="grid-template-columns:1fr;margin-top:14px"><div class="cmu-jelly gold" id="cmu-j-hall" style="display:flex;align-items:center;gap:11px;text-align:left;padding:13px 15px">' +
+      '<span class="ic" style="font-size:22px">🏛</span><span style="flex:1"><b style="font-size:13px">마스터즈 전당</b>' +
+      '<small style="display:block">100만의 벽 · 완주자는 다음 시즌의 방장이 됩니다</small></span><span style="color:#F4D06A;font-size:12px;font-weight:800">입장 →</span></div></div>';
+    // 히어로 — 방 없는 신규에게만 (규칙 소개)
+    if (!myR) {
+    h += '<div class="cmu-hero">';
+    if (myR && myR.startedMs) {
+      const dp = cmuDplus(myR.startedMs);
+      h += '<div class="hh">⛰ «' + esc(myR.roomName) + '» 시즌</div>' +
+        '<h3>산은 오늘<br><b>해발 ' + dp + '일</b>입니다</h3>' +
+        '<div class="dnum">D+' + dp + '<small> /100</small></div>' +
+        '<div class="hm"><span>일요일 자정 <b>판정</b></span><span>판정까지 <b>' + cmuJudgeLeft() + '</b></span></div>' +
+        '<div class="cmu-hdots">' + Array.from({ length: 50 }, function (_, i) { return '<i' + (i < Math.max(1, Math.min(50, Math.round(dp / 2))) ? ' class="on"' : '') + '></i>'; }).join('') + '</div>';
+    } else if (myR) {
+      h += '<div class="hh">⛺ «' + esc(myR.roomName) + '» 출발 대기</div>' +
+        '<h3>마감일이 지나면<br><b>자동으로 출발</b>합니다</h3>' +
+        '<div class="hm"><span>모집이 끝나는 날, 함께 첫 발을 뗍니다</span></div>';
+    } else {
+      h += '<div class="hh">🤚 100일 챌린지</div>' +
+        '<h3>100일을 함께 뛰면<br><b>혼자보다 멀리</b> 갑니다</h3>' +
+        '<div class="hm"><span>주 <b>3편</b></span><span>일요일 자정 <b>판정</b></span><span>완주는 <b>전당</b>에</span></div>';
+    }
+    h += '</div>'; }
+    // 내 방 배너 (방이 있는데 로비에 온 경우)
+    if (myR) h = '<div class="cmu-res ok" id="cmu-goback-room" style="cursor:pointer"><span style="font-size:17px">⛺</span><span><b>«' + esc(myR.roomName) + '» — 내 방으로</b><small>' + (myR.startedMs ? 'D+' + cmuDplus(myR.startedMs) + ' 달리는 중' : '출발 대기') + '</small></span><span class="go3">입장 →</span></div>' + h;
+    // ✋ 대기석 — 노크하고 기다리는 중이면
+    mine2.filter(function (m) { return m.state === 'pending'; }).forEach(function (m) {
+      h = '<div class="cmu-res" style="border-color:rgba(142,199,246,.4);background:rgba(142,199,246,.07)"><span style="font-size:17px">✋</span><span><b>«' + esc(m.roomName) + '» 대기석</b><small>노크했어요 — 방장의 수락을 기다리는 중. 그동안 담벼락에 인사를 남겨보세요</small></span></div>' + h;
+    });
+    let _mtrDot = '';
+    try { _mtrDot = (_mtrFb || []).some(function (f) { return !f.read_at; }) ? ' ●' : ''; } catch (e) {}
+    h += '<div class="cmu-res ok" id="cmu-go-mentor" style="cursor:pointer;border-color:rgba(255,158,122,.4);background:rgba(255,158,122,.08)">' +
+      '<span style="font-size:17px">👩‍🏫</span><span><b>선생님에게 봐달라고 하기' + _mtrDot + '</b>' +
+      '<small>내 원고를 보내고 1:1 피드백을 받는 곳</small></span><span class="go3">열기 →</span></div>';
     el.innerHTML = h;
     // 배선
     const mk = document.getElementById('cmu-mk'); if (mk) mk.onclick = function () { _cmuView = 'create'; cmuRender(); };
     const gm = document.getElementById('cmu-go-mentor');   // v789 · 👩‍🏫 선생님
     if (gm) gm.onclick = function () { try { toast('👩‍🏫 선생님 1:1은 다음 이사 때 열려요'); } catch (e) {} };
     const ga = document.getElementById('cmu-go-apps'); if (ga) ga.onclick = function () { _cmuView = 'apps'; cmuRender(); };
-    // v746 · 내 공간 젤리 배선
-    const jm = document.getElementById('cmu-j-my'); if (jm) jm.onclick = function () {
-      if (myR) { _cmuRoomCode = myR.room; _cmuView = 'room'; cmuRender(); }
-      else { try { toast('아직 방이 없어요 — 노크하거나 방을 여세요'); } catch (e) {} }
-    };
-    const ja2 = document.getElementById('cmu-j-apps'); if (ja2) ja2.onclick = function () {
-      if (apps.length) { _cmuView = 'apps'; cmuRender(); }
-      else { try { toast('방장이 되면 신청서가 여기 도착해요'); } catch (e) {} }
-    };
-    const jc2 = document.getElementById('cmu-j-ach'); if (jc2) jc2.onclick = function () {
-      if (myR) { _cmuRoomCode = myR.room; _cmuSeg = 'ach'; _cmuView = 'room'; cmuRender(); }
-      else { try { toast('방에 합류하면 업적이 전시돼요 — ⌖나 연결 시 자동'); } catch (e) {} }
-    };
-    const jh2 = document.getElementById('cmu-j-hall'); if (jh2) jh2.onclick = function () { _cmuView = 'hall'; cmuRender(); };
+    var jh3 = document.getElementById('cmu-j-hall'); if (jh3) jh3.onclick = function () { _cmuView = 'hall'; cmuRender(); };
+    var gb2 = document.getElementById('cmu-goback-room'); if (gb2) gb2.onclick = function () { _cmuRoomCode = myR.room; _cmuView = 'room'; cmuRender(); };
     el.querySelectorAll('[data-cmu-apply]').forEach(function (c) {
       c.onclick = function () {
         _cmuApplyTo = c.dataset.cmuApply; _cmuView = 'apply'; cmuRender();
@@ -1813,7 +1818,8 @@ function savePillars(){S.pillars=[pl0.value.trim(),pl1.value.trim(),pl2.value.tr
         '<li>🎯 ' + days + '일 · 주 ' + goal + '편 — 일요일 자정 판정</li>' +
         '<li>⚠️ 미달=경고 · 경고 3번째=👁 관전(응원은 계속)</li>' +
         '<li>🧊 4주 연속 생존=보호권 1개 — 미달 주에 자동으로 막아줌</li>' +
-        '<li>🌱 첫 주는 적응 주간 — 판정 없음</li></ul>' +
+        '<li>🌱 첫 주는 적응 주간 — 판정 없음</li>' +
+        '<li>👁 관전이 되어도 끝이 아니에요 — 다음 시즌에 다시 뜁니다</li></ul>' +
         '<div style="margin-top:12px;text-align:center"><button class="cmu-go" id="cmu-rules-ok" style="padding:9px 26px;display:inline-block">알겠다, 간다 →</button></div></div>';
     }
     // 진행상황(밤하늘 등반)
@@ -1986,7 +1992,7 @@ function savePillars(){S.pillars=[pl0.value.trim(),pl1.value.trim(),pl2.value.tr
       const nn = document.getElementById('cmu-forkmsg-n'); if (nn) nn.textContent = n;
     } catch (e) {}
   }
-  window.cmuRender=cmuRender;window.cmuAchSync=cmuAchSync;window._cmuSetView=function(v){_cmuView=v;cmuRender()};
+  window.cmuRender=cmuRender;window.cmuAchSync=cmuAchSync;window._cmuSetView=function(v){_cmuView=v;cmuRender()};window._cmuGoRoom=function(c){_cmuRoomCode=c;_cmuView='room';cmuRender()};window._cmuState=function(){return _cmuView};
 })();
 
 /* ── 커뮤니티 — 옛 컨마 기능 재구성 (서버 배선은 나중, 지금은 내 기기 안에서만) ── */
@@ -2000,7 +2006,7 @@ function renderCommunity(){
   document.getElementById('tabbody').innerHTML=
   '<div class="top" style="padding-bottom:2px"><div class="h1" id="cmu-tt">🏙 커뮤니티</div></div>'+
   '<section style="margin-top:12px"><div id="cmu-body"></div></section>'+
-  '<section><div class="cmu-lbl">✍️ 이번 주 성적 · '+wkKey()+'</div><div class="cmu-card">'+
+  '<section id="sec-weekly" style="display:none"><div class="cmu-lbl">✍️ 이번 주 성적 · '+wkKey()+'</div><div class="cmu-card">'+
   (wk?'<div class="pipe">'+
     '<div class="stg"><div class="n">'+Number(wk.followers||0).toLocaleString()+'</div><div class="t">팔로워</div></div>'+
     '<div class="stg"><div class="n">'+Number(wk.best||0).toLocaleString()+'</div><div class="t">최고 조회</div></div>'+
@@ -2009,13 +2015,28 @@ function renderCommunity(){
    :'<p class="muted" style="margin-bottom:11px">주 1회, 세 숫자만 — 팔로워 · 최고 조회수 · 업로드 수.<br>방 판과 내 추이가 이 표를 읽어요. (인스타 연동하면 자동)</p>'+
     '<button class="btn" onclick="openWeekly()">이번 주 성적 적기</button>')+
   '</div></section>'+
-  '<section><div class="cmu-lbl">🧱 이번 주 담벼락 — 한 줄 남기기</div><div class="cmu-card">'+
+  '<section id="sec-wall"><div class="cmu-lbl">🧱 로비 담벼락 — 한 줄 남기기</div><div class="cmu-card">'+
   '<textarea class="inp" id="wallBody" rows="2" placeholder="이번 주 한 일, 다짐, 응원 — 뭐든 한 줄" style="background:rgba(0,0,0,.3)"></textarea>'+
   '<button class="cmu-go" style="width:100%;margin-top:10px" onclick="postWall()">담벼락에 붙이기</button></div>'+
   '<div id="wallList" style="margin-top:10px"><div class="empty">불러오는 중…</div></div></section>'+
   '<section><button class="btn ghost" onclick="goFork()">갈림길로</button></section>';
   show('scr-room');loadWall();
-  _cmuSetView('plaza');
+  // 성적은 «방 안» 물건, 담벼락은 «로비» 물건 — 화면 제목을 보고 토글
+  const _tt=document.getElementById('cmu-tt');
+  if(_tt&&!_tt._mo){_tt._mo=new MutationObserver(()=>{
+    const v=(window._cmuState&&window._cmuState())||'plaza';
+    const w=document.getElementById('sec-weekly'),l=document.getElementById('sec-wall');
+    if(w)w.style.display=(v==='room')?'':'none';
+    if(l)l.style.display=(v==='plaza')?'':'none';
+  });_tt._mo.observe(_tt,{childList:true,characterData:true,subtree:true})}
+  (async()=>{
+    try{
+      const ms=await rpc('cm_room_mystate',{p_code:AUTH.code,p_pin_hash:AUTH.pinHash});
+      const myR=(ms&&ms.ok&&ms.mine||[]).find(m=>m.state==='active');
+      if(myR){window._cmuGoRoom(myR.room);return}
+    }catch(e){}
+    _cmuSetView('plaza');
+  })();
   try{cmuAchSync()}catch(e){}
 }
 function openWeekly(){
