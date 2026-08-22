@@ -237,6 +237,36 @@ body.hidden-pause .ln-flo{animation-play-state:paused}
 .stg.act{border-color:var(--tone-line);background:linear-gradient(180deg,var(--tone-faint),var(--glass))}
 .stg.act .n{color:var(--tone-hi)}
 .arw{align-self:center;color:var(--text-faint);font-size:12px}
+.mk{display:inline-block;vertical-align:-3px}
+/* ─── 로봇 히어로 (담기·분해의 주인공 — 컨모 덜컹이 문법) ─── */
+.bot{display:flex;flex-direction:column;align-items:center;text-align:center;gap:3px;
+ padding:16px 14px 13px;border-radius:18px;background:var(--glass);border:1px solid var(--glass-line);
+ backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+ box-shadow:0 8px 32px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.14);transition:border-color .3s;margin-bottom:14px}
+.bot.on{border-color:rgba(201,138,91,.4)}
+.bot.ok{border-color:var(--tone-line)}
+.bot svg.stagevg{width:150px;height:150px;overflow:visible}
+.bot .rob{transform-origin:50% 80%}
+.bot b{font-size:13.5px;font-weight:800}
+.bot s{text-decoration:none;font-size:10px;font-weight:700;color:var(--text-faint)}
+.bot.on s{color:#C98A5B}.bot.ok s{color:var(--tone)}
+@keyframes rattle{
+ 0%{transform:rotate(0) translate(0,0)}7%{transform:rotate(-2.4deg) translate(-1.2px,.8px)}
+ 14%{transform:rotate(1.8deg) translate(1px,-.4px)}22%{transform:rotate(-1deg) translate(-.6px,1px)}
+ 30%{transform:rotate(2.4deg) translate(1.2px,.4px)}40%,48%{transform:rotate(1.2deg) translate(.6px,1.6px)}
+ 58%{transform:rotate(-3deg) translate(-1.6px,-.8px)}70%{transform:rotate(4deg) translate(2.4px,1.2px)}
+ 82%{transform:rotate(-3deg) translate(-1.8px,-.6px)}92%{transform:rotate(1.6deg) translate(1px,.5px)}
+ 100%{transform:rotate(0) translate(0,0)}}
+.bot.on .rob{animation:rattle 1.7s ease-in-out infinite both}
+.bot .eye{fill:#242a38;transition:fill .3s}
+.bot.on .eye{fill:#C98A5B}
+.bot.ok .eye{fill:var(--tone)}
+.bot .zzz{opacity:.8;transition:opacity .3s}
+.bot.on .zzz,.bot.ok .zzz{opacity:0}
+.bot .sheet2{opacity:0}
+.bot.ok .sheet2{animation:sheetup .6s cubic-bezier(.34,1.56,.64,1) 1 both}
+@keyframes sheetup{0%{opacity:0;transform:translateY(10px) rotate(-8deg)}60%{transform:translateY(-3px) rotate(3deg)}100%{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.bot.on .rob{animation:none}}
 
 /* ─── 획득 연출 (드문 순간 — 즐거움 예산) ─── */
 .award-ov{position:fixed;inset:0;z-index:90;background:rgba(6,8,12,.7);backdrop-filter:blur(10px);
@@ -259,6 +289,16 @@ body.hidden-pause .ln-flo{animation-play-state:paused}
 .gscore{font-size:12px;font-weight:700;color:var(--text-faint)}
 </style></head>
 <body data-room="basic">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="mk-basic" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round">
+    <path d="M12 4l2.2 4.9 5.3.5-4 3.6 1.2 5.2L12 15.4 7.3 18.2l1.2-5.2-4-3.6 5.3-.5z" opacity=".35"/>
+    <path d="M12 4l2.2 4.9 5.3.5-4 3.6 1.2 5.2L12 15.4V4z"/></g></symbol>
+  <symbol id="mk-mid" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round">
+    <path d="M12 3.5l2.3 5 5.4.6-4.1 3.7 1.2 5.3L12 15.5 7.2 18.1l1.2-5.3-4.1-3.7 5.4-.6z"/></g></symbol>
+  <symbol id="mk-master" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round">
+    <path d="M12 5l1.8 3.9 4.2.5-3.2 2.9.9 4.2L12 14.4l-3.7 2.1.9-4.2L6 9.4l4.2-.5z"/>
+    <path d="M4 12c0 6 3.5 8.5 8 9.5 4.5-1 8-3.5 8-9.5" opacity=".55"/></g></symbol>
+</svg>
 
 <!-- ═══════════ 로그인 게이트 ═══════════ -->
 <div id="loginGate">
@@ -271,9 +311,9 @@ body.hidden-pause .ln-flo{animation-play-state:paused}
       </svg>
       <span class="ln-pod"></span>
       <div class="ln-core">🏆</div>
-      <div class="ln-node" style="left:60px;top:40px"><div class="ln-flo" style="animation-delay:0s"><span class="ln-tile">🔩</span><span class="ln-lab">보급방</span></div></div>
-      <div class="ln-node" style="left:240px;top:40px"><div class="ln-flo" style="animation-delay:.6s"><span class="ln-tile">🎖</span><span class="ln-lab">중급방</span></div></div>
-      <div class="ln-node" style="left:60px;top:170px"><div class="ln-flo" style="animation-delay:.3s"><span class="ln-tile">📐</span><span class="ln-lab">공식 서재</span></div></div>
+      <div class="ln-node" style="left:60px;top:40px"><div class="ln-flo" style="animation-delay:0s"><span class="ln-tile" style="color:var(--ice)"><svg class="mk" width="21" height="21"><use href="#mk-basic"/></svg></span><span class="ln-lab">보급방</span></div></div>
+      <div class="ln-node" style="left:240px;top:40px"><div class="ln-flo" style="animation-delay:.6s"><span class="ln-tile" style="color:var(--lime)"><svg class="mk" width="21" height="21"><use href="#mk-mid"/></svg></span><span class="ln-lab">중급방</span></div></div>
+      <div class="ln-node" style="left:60px;top:170px"><div class="ln-flo" style="animation-delay:.3s"><span class="ln-tile" style="color:var(--cream)"><svg class="mk" width="21" height="21"><use href="#mk-master"/></svg></span><span class="ln-lab">공식 서재</span></div></div>
       <div class="ln-node" style="left:240px;top:170px"><div class="ln-flo" style="animation-delay:.9s"><span class="ln-tile">🔥</span><span class="ln-lab">커뮤니티</span></div></div>
     </div>
     <div class="logo">
@@ -318,17 +358,17 @@ body.hidden-pause .ln-flo{animation-play-state:paused}
     </section>
     <div class="fork">
       <button class="door" data-go="basic" style="animation-delay:.03s">
-        <span class="dtag">1단계</span><div class="ic">🔩</div>
+        <span class="dtag">1단계</span><div class="ic" style="color:var(--ice)"><svg class="mk" width="26" height="26"><use href="#mk-basic"/></svg></div>
         <div class="dt">보급방</div>
         <div class="dd">멈춰서 본 릴스를 담고, 왜 멈췄는지만 적어요.<br>몰라도 돼요 — 담기만 해도 시작이에요.</div>
       </button>
       <button class="door" data-go="mid" style="animation-delay:.09s">
-        <span class="dtag">2단계</span><div class="ic">🎖</div>
+        <span class="dtag">2단계</span><div class="ic" style="color:var(--lime)"><svg class="mk" width="26" height="26"><use href="#mk-mid"/></svg></div>
         <div class="dt">중급방</div>
         <div class="dd">담아둔 걸 뜯어보고, 뼈대를 골라 내 것으로 만들어요.<br>만드는 과정 자체가 훈련이에요.</div>
       </button>
       <button class="door" data-go="master" style="animation-delay:.15s">
-        <span class="dtag">3단계</span><div class="ic">🏆</div>
+        <span class="dtag">3단계</span><div class="ic" style="color:var(--cream)"><svg class="mk" width="26" height="26"><use href="#mk-master"/></svg></div>
         <div class="dt">마스터즈방</div>
         <div class="dd">쌓인 공식으로 전환을 설계해요.<br>여기는 만드는 방이 아니라 파는 방이에요.</div>
       </button>
@@ -493,14 +533,15 @@ wirePin('pinRow2',()=>doLogin());
 document.getElementById('inCode').addEventListener('keydown',e=>{if(e.key==='Enter')document.querySelector('#pinRow .pinbox').focus()});
 
 /* ═══════════ 격 테이블 — 한 벌 + 옷 ═══════════ */
+function markSvg(room,size){return '<svg class="mk" width="'+(size||14)+'" height="'+(size||14)+'"><use href="#mk-'+(room||ROOM)+'"/></svg>'}
 const GYEOK={
- basic:{name:'보급방',mark:'🔩',markT:n=>'작은 나사 · '+n+'개',robot:'🤖',
+ basic:{name:'보급방',get mark(){return markSvg('basic')},markT:n=>'별 조각 · '+n+'개',robot:'🤖',
    dock:['홈','담기','분해','분류','훈련','기둥'],
    trainT:'관찰 훈련',axisT:'내 기둥 3개'},
- mid:{name:'중급방',mark:'🎖',markT:n=>'뱃지 · '+n+'개',robot:'🦾',
+ mid:{name:'중급방',get mark(){return markSvg('mid')},markT:n=>'별 · '+n+'개',robot:'🦾',
    dock:['홈','담기','분해','분류','훈련','고객'],
    trainT:'분해·모방 훈련',axisT:'내 고객'},
- master:{name:'마스터즈방',mark:'🏆',markT:n=>'트로피 · '+n+'좌',robot:'🎩',
+ master:{name:'마스터즈방',get mark(){return markSvg('master')},markT:n=>'트로피 · '+n+'좌',robot:'🎩',
    dock:['홈','담기','분해','공식 서재','훈련','상품'],
    trainT:'전환 훈련',axisT:'내 상품·퍼널'},
  community:{name:'커뮤니티',mark:'🔥',markT:n=>'이번 주',robot:'🔥',dock:[],trainT:'',axisT:''}
@@ -540,7 +581,7 @@ function buildDock(){
 }
 function goTab(i){TAB=i;_animNext=true;buildDock();render()}
 function award(emoji,title,sub){
-  document.getElementById('awRing').textContent=emoji;
+  document.getElementById('awRing').innerHTML=emoji;
   document.getElementById('awT').textContent=title;
   document.getElementById('awS').textContent=sub||'';
   document.getElementById('awardOv').classList.add('on');
@@ -852,11 +893,65 @@ function gameEnd(){
   else if(_gScore>0)toast(_gScore+'개 정리했어요');
 }
 
+/* ── 로봇 히어로 (원본 로봇 + 가슴 별 마크) ── */
+const BOT_NAMES={basic:['고물이','보급방 지킴이'],mid:['단단이','중급방 지킴이'],master:['마스터봇','마스터즈방 지킴이']};
+function botHero(say){
+  const [nm,sub]=BOT_NAMES[ROOM]||BOT_NAMES.basic;
+  return '<figure class="bot" id="botHero">'+
+  '<svg class="stagevg" viewBox="0 0 120 124"><g class="rob">'+
+  '<rect x="34" y="52" width="52" height="42" rx="10" fill="rgba(255,255,255,.09)" stroke="var(--tone-line)"/>'+
+  '<rect x="40" y="22" width="40" height="30" rx="9" fill="rgba(255,255,255,.12)" stroke="var(--tone-line)"/>'+
+  '<circle class="eye" cx="52" cy="37" r="4.4"/><circle class="eye" cx="68" cy="37" r="4.4"/>'+
+  '<rect x="24" y="58" width="10" height="24" rx="5" fill="rgba(255,255,255,.08)" stroke="var(--tone-line)"/>'+
+  '<rect x="86" y="58" width="10" height="24" rx="5" fill="rgba(255,255,255,.08)" stroke="var(--tone-line)"/>'+
+  '<rect x="44" y="94" width="10" height="14" rx="4" fill="rgba(255,255,255,.08)" stroke="var(--tone-line)"/>'+
+  '<rect x="66" y="94" width="10" height="14" rx="4" fill="rgba(255,255,255,.08)" stroke="var(--tone-line)"/>'+
+  (ROOM!=='master'
+   ?'<line x1="60" y1="22" x2="60" y2="13" stroke="var(--tone-line)" stroke-width="2"/><circle cx="60" cy="11" r="3" fill="var(--tone)"/>'
+   :'<rect x="44" y="8" width="32" height="10" rx="2" fill="#14120E" stroke="var(--tone-line)" stroke-width="1.4"/>'+
+    '<rect x="38" y="16" width="44" height="5" rx="2.5" fill="#14120E" stroke="var(--tone-line)" stroke-width="1.4"/>'+
+    '<rect x="44" y="13" width="32" height="4" fill="var(--tone)" opacity=".6"/>'+
+    '<path d="M54 52 l6 5 6-5 -6 -3z" fill="var(--tone)" opacity=".9"/>')+
+  (ROOM==='basic'
+   ?'<rect x="72" y="56" width="12" height="5" rx="2" fill="rgba(201,138,91,.5)" transform="rotate(-12 78 58)"/>'+
+    '<circle cx="41" cy="88" r="2" fill="rgba(0,0,0,.5)" stroke="var(--tone-line)"/>':'')+
+  (ROOM==='mid'
+   ?'<rect x="34" y="50" width="12" height="6" rx="2" fill="var(--tone)" opacity=".55"/>'+
+    '<rect x="74" y="50" width="12" height="6" rx="2" fill="var(--tone)" opacity=".55"/>':'')+
+  '<circle cx="60" cy="75" r="10" fill="rgba(0,0,0,.25)" stroke="var(--tone-line)" stroke-width="1.4"/>'+
+  '<g color="var(--tone)"><use href="#mk-'+ROOM+'" x="52.5" y="67.5" width="15" height="15"/></g>'+
+  '</g>'+
+  '<text class="zzz" x="95" y="24" font-size="11" fill="var(--text-faint)" font-weight="800">z</text>'+
+  '<text class="zzz" x="103" y="16" font-size="8" fill="var(--text-faint)" font-weight="800">z</text>'+
+  '<g class="sheet2"><rect x="90" y="90" width="24" height="30" rx="4" fill="rgba(255,255,255,.14)" stroke="var(--tone)"/>'+
+  '<line x1="95" y1="99" x2="109" y2="99" stroke="var(--tone)" stroke-width="2"/>'+
+  '<line x1="95" y1="105" x2="106" y2="105" stroke="var(--tone-line)" stroke-width="2"/></g></svg>'+
+  '<b>'+BOT_NAMES[ROOM][0]+'</b><s id="botState">쿨쿨 자는 중 — 링크를 주면 깨어나요</s>'+
+  '<p class="muted" style="margin-top:5px;max-width:320px">'+say+'</p></figure>';
+}
+function botWake(){const b=document.getElementById('botHero');if(!b)return;
+  if(!b.classList.contains('on')&&!b.classList.contains('ok')){b.classList.add('on');
+    const st=document.getElementById('botState');if(st)st.textContent='덜컹덜컹 — 일하는 중…'}}
+function botDone(after){const b=document.getElementById('botHero');
+  if(!b){if(after)after();return}
+  b.classList.add('on');b.classList.remove('ok');
+  const st=document.getElementById('botState');if(st)st.textContent='덜컹덜컹 — 일하는 중…';
+  setTimeout(()=>{const b2=document.getElementById('botHero');if(!b2){if(after)after();return}
+    b2.classList.remove('on');b2.classList.add('ok');
+    const st2=document.getElementById('botState');if(st2)st2.textContent='됐다! 선반에 올려뒀어요';
+    setTimeout(()=>{if(after)after()},900);
+  },1100);
+}
+
 /* ── 담기 ── */
 function renderGather(){
+  const says={basic:'멈춰서 본 릴스 주소를 주면, 제가 선반에 올려둘게요.',
+   mid:'뼈대까지 뜯을 준비 됐어요. 주소 주세요.',
+   master:'이번 건 유입용입니까, 전환용입니까 — 제가 감별해 드리죠.'};
   return'<div class="top"><div class="h1">방금 본 그거, <em>담아요</em></div></div>'+
+  '<section>'+botHero(says[ROOM]||says.basic)+'</section>'+
   '<section><div class="card hi"><div class="lbl" style="margin-bottom:9px">릴스 주소</div>'+
-  '<input class="inp" id="gUrl" placeholder="https:// 링크 붙여넣기" inputmode="url">'+
+  '<input class="inp" id="gUrl" placeholder="https:// 링크 붙여넣기" inputmode="url" oninput="botWake()">'+
   '<div class="lbl" style="margin:15px 0 9px">이거 왜 멈춰서 봤어요? <span style="color:var(--text-faint);font-weight:500">(한 줄이면 돼요 · 나중에 적어도 돼요)</span></div>'+
   '<textarea class="inp" id="gWhy" rows="2" placeholder="예) 첫 마디가 나 들으라는 말 같았음"></textarea>'+
   '<button class="btn" style="margin-top:14px" onclick="addCard()">선반에 올리기</button></div></section>'+
@@ -868,7 +963,7 @@ function quickAdd(){
   if(!url&&!why)return toast('주소나 한 줄, 하나는 있어야 해요');
   S.cards.push({id:'c'+Date.now(),url,why,ts:Date.now(),stage:why?1:0,cat:null,notes:{}});
   save();document.getElementById('qUrl').value='';document.getElementById('qWhy').value='';
-  if(MILESTONES.includes(S.cards.length))award('🔩','작은 나사 '+S.cards.length+'개','담는 손이 쌓이고 있어요.');
+  if(MILESTONES.includes(S.cards.length))award(markSvg('basic',52),'별 조각 '+S.cards.length+'개','담는 손이 쌓이고 있어요.');
   else toast('보급방 선반에 올렸어요 · '+S.cards.length+'장째');
 }
 function addCard(){
@@ -876,10 +971,12 @@ function addCard(){
   const why=document.getElementById('gWhy').value.trim();
   if(!url&&!why)return toast('주소나 한 줄, 하나는 있어야 해요');
   S.cards.push({id:'c'+Date.now(),url,why,ts:Date.now(),stage:why?1:0,cat:null,notes:{}});
-  save();
-  if(MILESTONES.includes(S.cards.length))award('🔩','작은 나사 '+S.cards.length+'개','담는 손이 쌓이고 있어요. 이게 전부 재료가 돼요.');
-  else toast('선반에 올렸어요 · '+S.cards.length+'장째');
-  TAB=0;buildDock();render();
+  save();document.getElementById('gUrl').value='';document.getElementById('gWhy').value='';
+  botDone(()=>{
+    if(MILESTONES.includes(S.cards.length))award(markSvg('basic',52),'별 조각 '+S.cards.length+'개','담는 손이 쌓이고 있어요. 이게 전부 재료가 돼요.');
+    else toast('선반에 올렸어요 · '+S.cards.length+'장째');
+    buildDock();render();
+  });
 }
 function openNextUnasked(){const c=S.cards.find(x=>x.stage===0);if(c)openCard(c.id)}
 function openCard(id){
@@ -906,6 +1003,7 @@ function renderBunhae(){
   const ready=S.cards.filter(c=>c.stage===1);
   const done=S.cards.filter(c=>c.stage>=2);
   let h='<div class="top"><div class="h1">한 장씩 <em>뜯어봐요</em></div></div>';
+  h+='<section>'+botHero(ROOM==='basic'?'카드를 골라주면 같이 뜯어봐요. 세 가지만 물어볼게요.':'뼈대만 남기고 발라낼게요. 카드를 골라주세요.')+'</section>';
   h+='<section><div class="lbl">뜯을 수 있는 것 · '+ready.length+'장</div>';
   h+=ready.length?ready.slice().reverse().map(c=>
    '<div class="item" onclick="openBunhae(\''+c.id+'\')"><div class="th">⚙</div><div class="bd"><div class="ti">'+esc(cardTitle(c))+'</div>'+
@@ -930,7 +1028,8 @@ function saveBunhae(id){
   const c=S.cards.find(x=>x.id===id);if(!c)return;
   c.notes={hook:bh1.value.trim(),frame:bh2.value.trim(),why:bh3.value.trim()};
   if(!c.notes.hook&&!c.notes.frame&&!c.notes.why)return toast('한 칸이라도 적어야 분해예요');
-  c.stage=2;save();closeSheet();buildDock();render();toast('미분류로 올라갔어요');
+  c.stage=2;save();closeSheet();
+  botDone(()=>{buildDock();render();toast('미분류로 올라갔어요')});
 }
 
 /* ── 분류 / 공식 서재 ── */
@@ -1055,7 +1154,7 @@ function saveMimic(id){
   const c=S.cards.find(x=>x.id===id);const hook=mk1.value.trim(),body=mk2.value.trim();
   if(!hook&&!body)return toast('한 칸이라도 적어야 원고예요');
   (S.works=S.works||[]).push({cardId:id,frame:c&&c.notes&&c.notes.frame||'',hook,body,ts:Date.now(),conv:null});
-  save();closeSheet();render();award('🎖','뱃지 획득 — 원고 '+S.works.length+'호','분해한 뼈대로 내 것을 만들었어요. 이게 제작자의 첫 걸음이에요.');
+  save();closeSheet();render();award(markSvg('mid',52),'별 획득 — 원고 '+S.works.length+'호','분해한 뼈대로 내 것을 만들었어요. 이게 제작자의 첫 걸음이에요.');
 }
 function openWork(i){
   const w=(S.works||[])[i];if(!w)return;
