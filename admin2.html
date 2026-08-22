@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ko"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>컨마 관리자</title>
+<link rel="icon" href="favicon.png">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--bg:#0A0D12;--glass:rgba(255,255,255,.055);--glass-line:rgba(255,255,255,.12);--hairline:rgba(255,255,255,.09);
+ --text-main:#fff;--text-sub:rgba(255,255,255,.62);--text-mute:rgba(255,255,255,.45);--text-faint:rgba(255,255,255,.32);
+ --lime:#d7f34b;--lime-hi:#e6fb84;--wine:#E08585;--ice:#9BC4D9;--cream:#F5E6D3;
+ --e-out:cubic-bezier(.23,1,.32,1)}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}html,body{overscroll-behavior-y:none}
+body{font-family:Pretendard,-apple-system,sans-serif;background:var(--bg);color:var(--text-main);-webkit-font-smoothing:antialiased;min-height:100dvh}
+body::before{content:'';position:fixed;top:-180px;right:-140px;width:560px;height:560px;border-radius:50%;
+ background:radial-gradient(circle,rgba(215,243,75,.14),transparent 65%);filter:blur(30px);pointer-events:none;z-index:0}
+button{font-family:inherit;cursor:pointer}
+button:not(:disabled){transition:transform .2s cubic-bezier(.34,1.56,.64,1),background-color .15s,border-color .15s,box-shadow .18s}
+button:not(:disabled):active{transform:scale(.97)}
+.wrap{max-width:520px;margin:0 auto;position:relative;z-index:1;padding:0 16px 60px}
+.card{background:var(--glass);border:1px solid var(--glass-line);border-radius:16px;padding:16px;
+ backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);
+ box-shadow:0 8px 32px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.14);margin-bottom:12px}
+.inp{width:100%;padding:13px 14px;border-radius:12px;border:1px solid var(--glass-line);background:rgba(0,0,0,.28);
+ color:var(--text-main);font:600 16px Pretendard;outline:none}
+.inp:focus{border-color:rgba(215,243,75,.4)}
+.inp::placeholder{color:var(--text-faint)}
+.btn{display:block;width:100%;padding:14px;border-radius:13px;border:0;
+ background:linear-gradient(160deg,var(--lime-hi),var(--lime));color:#0A0D12;font:800 15px Pretendard;
+ box-shadow:0 6px 20px rgba(215,243,75,.2)}
+.btn.ghost{background:transparent;border:1px solid var(--glass-line);color:var(--text-sub);font-weight:700;box-shadow:none}
+.lbl{font-size:11px;font-weight:700;letter-spacing:.09em;color:var(--text-faint);margin:0 0 8px}
+.muted{color:var(--text-mute);font-size:12.5px;line-height:1.6}
+/* 게이트 */
+#gate{position:fixed;inset:0;z-index:100;background:var(--bg);display:grid;place-items:center;padding:24px}
+#gate.off{display:none}
+.gbox{width:100%;max-width:330px;text-align:center}
+.gbox .t{font-size:21px;font-weight:800}.gbox .s{font-size:12px;color:var(--text-mute);margin:5px 0 20px}
+.lmsg{min-height:18px;font-size:12px;color:var(--wine);margin-top:9px;font-weight:600}
+.pinrow{display:flex;gap:10px;justify-content:center;margin-top:10px}
+.pinbox{width:52px;height:58px;border-radius:14px;border:1px solid var(--glass-line);background:rgba(0,0,0,.28);
+ color:#fff;font:800 24px Pretendard;text-align:center;outline:none;-webkit-text-security:disc}
+.pinbox:focus{border-color:rgba(215,243,75,.4)}
+/* 상단바 + 탭 */
+.topbar{position:sticky;top:0;z-index:30;background:rgba(10,13,18,.6);backdrop-filter:blur(16px);
+ padding:calc(12px + env(safe-area-inset-top)) 16px 10px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--hairline)}
+.topbar .ti{font-size:14.5px;font-weight:800}
+.topbar .sp{flex:1}
+.topbar .tb{background:rgba(255,255,255,.06);border:1px solid var(--hairline);color:var(--text-sub);
+ border-radius:999px;padding:7px 13px;font:700 12px Pretendard;text-decoration:none}
+.tabs{display:flex;gap:6px;padding:12px 16px;max-width:520px;margin:0 auto;position:relative;z-index:1}
+.tab{flex:1;padding:9px 0;border-radius:999px;border:1px solid var(--glass-line);background:var(--glass);
+ color:var(--text-sub);font:700 12px Pretendard}
+.tab.on{background:linear-gradient(160deg,var(--lime-hi),var(--lime));color:#0A0D12;border-color:var(--lime)}
+.pane{display:none}.pane.on{display:block;animation:pin .2s var(--e-out)}
+@keyframes pin{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+/* 현황 */
+.mgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:12px}
+.mcard{background:var(--glass);border:1px solid var(--glass-line);border-radius:14px;padding:14px 8px;text-align:center;
+ backdrop-filter:blur(16px)}
+.mv{font-size:23px;font-weight:800;color:var(--lime-hi)}
+.ml{font-size:10.5px;color:var(--text-faint);margin-top:4px;font-weight:600}
+/* 목록 */
+.item{display:flex;gap:11px;align-items:center;padding:12px 13px;background:var(--glass);
+ border:1px solid var(--glass-line);border-radius:13px;margin-bottom:8px}
+.item .bd{flex:1;min-width:0}
+.item .ti2{font-size:13.5px;font-weight:800;letter-spacing:.04em}
+.item .st{font-size:11px;color:var(--text-faint);margin-top:3px}
+.item .op{display:flex;gap:5px}
+.item .op button{background:transparent;border:1px solid var(--hairline);color:var(--text-sub);
+ border-radius:9px;padding:6px 9px;font:700 11px Pretendard}
+.seg{display:flex;gap:6px;margin-bottom:10px}
+.seg button{flex:1;padding:9px 0;border-radius:11px;border:1px solid var(--glass-line);background:transparent;color:var(--text-sub);font:700 12px Pretendard}
+.seg button.on{background:rgba(215,243,75,.12);border-color:rgba(215,243,75,.4);color:var(--lime-hi)}
+.codecard{border:1px solid rgba(215,243,75,.45);border-radius:16px;padding:18px;text-align:center;margin-top:12px;
+ background:linear-gradient(150deg,rgba(215,243,75,.1),rgba(255,255,255,.03))}
+.codecard .cc{font-size:26px;font-weight:800;letter-spacing:.22em;color:var(--lime-hi)}
+.codecard .cn{font-size:12px;color:var(--text-mute);margin-top:6px}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(14px);z-index:70;
+ background:rgba(18,22,30,.9);border:1px solid rgba(215,243,75,.35);color:#fff;font:700 13px Pretendard;
+ padding:11px 17px;border-radius:999px;opacity:0;pointer-events:none;transition:opacity .3s var(--e-out),transform .3s var(--e-out)}
+.toast.on{opacity:1;transform:translateX(-50%)}
+.empty{padding:30px 14px;text-align:center;color:var(--text-faint);font-size:13px;border:1px dashed rgba(255,255,255,.16);border-radius:14px}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style></head>
+<body>
+
+<div id="gate">
+  <div class="gbox">
+    <div class="t">🛠 컨마 <span style="color:var(--lime)">관리자</span></div>
+    <div class="s">수강생 코드를 발급하고 관리해요</div>
+    <input class="inp" id="gCode" placeholder="관리자 코드" autocapitalize="characters" autocomplete="off" style="text-align:center;letter-spacing:.12em">
+    <div class="pinrow" id="gPins">
+      <input class="pinbox" maxlength="1" inputmode="numeric"><input class="pinbox" maxlength="1" inputmode="numeric">
+      <input class="pinbox" maxlength="1" inputmode="numeric"><input class="pinbox" maxlength="1" inputmode="numeric">
+    </div>
+    <button class="btn" style="margin-top:13px" onclick="gateLogin()">들어가기</button>
+    <a href="v2.html" style="display:block;margin-top:12px;font-size:12px;color:var(--text-faint);text-decoration:none">← 앱으로 돌아가기</a>
+    <div class="lmsg" id="gMsg"></div>
+  </div>
+</div>
+
+<div class="topbar"><span class="ti">🛠 컨마 관리자</span><span class="sp"></span>
+  <a class="tb" href="v2.html">← 앱</a><button class="tb" onclick="doLogout()">로그아웃</button></div>
+<div class="tabs">
+  <button class="tab on" data-t="home" onclick="go('home')">📊 현황</button>
+  <button class="tab" data-t="issue" onclick="go('issue')">➕ 발급</button>
+  <button class="tab" data-t="list" onclick="go('list')">📋 목록</button>
+  <button class="tab" data-t="set" onclick="go('set')">⚙ 설정</button>
+</div>
+<div class="wrap">
+  <div class="pane on" data-p="home">
+    <div class="mgrid">
+      <div class="mcard"><div class="mv" id="mTotal">0</div><div class="ml">총 수강생</div></div>
+      <div class="mcard"><div class="mv" id="mActive">0</div><div class="ml">이용 중</div></div>
+      <div class="mcard"><div class="mv" id="mSigned">0</div><div class="ml">가입 완료</div></div>
+    </div>
+    <div class="lbl">최근 발급</div><div id="recentList"><div class="empty">불러오는 중…</div></div>
+  </div>
+  <div class="pane" data-p="issue">
+    <div class="card">
+      <div class="lbl">코드 (영문·숫자 4자 이상)</div>
+      <input class="inp" id="nCode" placeholder="예) MOON01" autocapitalize="characters" autocomplete="off">
+      <div class="lbl" style="margin-top:13px">이름 (선택)</div>
+      <input class="inp" id="nName" placeholder="수강생 이름">
+      <div class="lbl" style="margin-top:13px">기간</div>
+      <div class="seg" id="nDays">
+        <button data-d="0" class="on">평생</button><button data-d="30">30일</button>
+        <button data-d="90">90일</button><button data-d="365">1년</button>
+      </div>
+      <button class="btn" onclick="createCode()">코드 발급</button>
+      <div id="issued"></div>
+    </div>
+  </div>
+  <div class="pane" data-p="list">
+    <div id="allList"><div class="empty">불러오는 중…</div></div>
+  </div>
+  <div class="pane" data-p="set">
+    <div class="card">
+      <div class="lbl">관리자 비밀번호 바꾸기</div>
+      <p class="muted" style="margin-bottom:11px">바꾸면 다음 로그인부터 새 비밀번호를 써요.</p>
+      <input class="inp" id="pw1" type="password" placeholder="새 비밀번호 4자리" inputmode="numeric" maxlength="4">
+      <input class="inp" id="pw2" type="password" placeholder="한 번 더" inputmode="numeric" maxlength="4" style="margin-top:9px">
+      <button class="btn" style="margin-top:12px" onclick="changePw()">바꾸기</button>
+      <div class="lmsg" id="pwMsg"></div>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const SUPABASE_URL='https://azmayrzdzdeftrjzcycf.supabase.co';
+const SUPABASE_KEY='sb_publishable_U8UKG1E4bimFMLkZVCYlVw_8IQXZcC4';
+const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+async function sha256(t){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(t));
+ return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}
+async function pinHash(code,pin){return sha256(String(code).toUpperCase()+':'+pin)}
+async function rpc(fn,args){const{data,error}=await sb.rpc(fn,args);if(error)throw error;return data}
+let ADM=null;
+function toast(t){const el=document.getElementById('toast');el.textContent=t;el.classList.add('on');
+ clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove('on'),2200)}
+function gmsg(t){document.getElementById('gMsg').textContent=t||''}
+
+/* PIN 칸 배선 */
+(function(){const bs=[...document.querySelectorAll('#gPins .pinbox')];
+bs.forEach((b,i)=>{b.addEventListener('input',()=>{b.value=b.value.replace(/[^0-9]/g,'').slice(-1);
+ if(b.value&&i<3)bs[i+1].focus();if(bs.every(x=>x.value))gateLogin()});
+b.addEventListener('keydown',e=>{if(e.key==='Backspace'&&!b.value&&i>0){bs[i-1].focus();bs[i-1].value=''}})});
+document.getElementById('gCode').addEventListener('keydown',e=>{if(e.key==='Enter')bs[0].focus()})})();
+
+async function gateLogin(){
+  const code=document.getElementById('gCode').value.trim().toUpperCase();
+  const pin=[...document.querySelectorAll('#gPins .pinbox')].map(b=>b.value).join('');
+  if(!code)return gmsg('관리자 코드를 입력해 주세요');
+  if(pin.length<4)return gmsg('비밀번호 네 칸을 채워 주세요');
+  gmsg('');
+  try{
+    const st=await rpc('cm_code_status',{p_code:code});
+    if(!st.exists)return gmsg('없는 코드예요');
+    const h=await pinHash(code,pin);
+    const r=await rpc(st.signedUp?'cm_login':'cm_signup',{p_code:code,p_pin_hash:h});
+    if(!r.ok)return gmsg(r.reason==='badpin'?'비밀번호가 달라요':'들어가지 못했어요');
+    if(!r.user.is_master)return gmsg('관리자 계정이 아니에요');
+    ADM={code:r.user.code,pinHash:h};
+    sessionStorage.setItem('cm2_adm',JSON.stringify(ADM));
+    document.getElementById('gate').classList.add('off');
+    refresh();
+  }catch(e){gmsg('연결이 잠깐 막혔어요')}
+}
+function doLogout(){sessionStorage.removeItem('cm2_adm');location.reload()}
+
+function go(t){document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x.dataset.t===t));
+ document.querySelectorAll('.pane').forEach(x=>x.classList.toggle('on',x.dataset.p===t));
+ if(t==='home'||t==='list')refresh()}
+
+let selDays=0;
+document.querySelectorAll('#nDays button').forEach(b=>b.onclick=()=>{
+ document.querySelectorAll('#nDays button').forEach(x=>x.classList.remove('on'));
+ b.classList.add('on');selDays=+b.dataset.d});
+
+function fmtExp(u){if(!u.expires_at)return'평생';
+ const d=Math.ceil((u.expires_at-Date.now())/864e5);return d<0?'만료됨':'D-'+d}
+function esc(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+
+async function refresh(){
+  if(!ADM)return;
+  try{
+    const st=await rpc('cm2_admin',{p_code:ADM.code,p_pin_hash:ADM.pinHash,p_op:'stats',p_args:{}});
+    if(st.ok){mTotal.textContent=st.total;mActive.textContent=st.active;mSigned.textContent=st.signed}
+    const li=await rpc('cm2_admin',{p_code:ADM.code,p_pin_hash:ADM.pinHash,p_op:'list',p_args:{}});
+    if(li.ok){
+      const row=u=>'<div class="item"><div class="bd"><div class="ti2">'+esc(u.code)+'</div>'+
+       '<div class="st">'+esc(u.name||'이름 없음')+' · '+fmtExp(u)+' · '+(u.signed_up_at?'가입함':'미가입')+'</div></div>'+
+       '<div class="op"><button onclick="extend(\''+esc(u.code)+'\')">+30일</button>'+
+       '<button onclick="resetPin(\''+esc(u.code)+'\')">비번 초기화</button>'+
+       '<button onclick="delCode(\''+esc(u.code)+'\')" style="color:var(--wine)">삭제</button></div></div>';
+      document.getElementById('recentList').innerHTML=li.rows.length?li.rows.slice(0,5).map(row).join(''):'<div class="empty">아직 발급한 코드가 없어요</div>';
+      document.getElementById('allList').innerHTML=li.rows.length?li.rows.map(row).join(''):'<div class="empty">아직 발급한 코드가 없어요</div>';
+    }
+  }catch(e){toast('불러오지 못했어요')}
+}
+async function createCode(){
+  const code=document.getElementById('nCode').value.trim().toUpperCase();
+  const name=document.getElementById('nName').value.trim();
+  if(code.length<4)return toast('코드는 4자 이상이에요');
+  try{
+    const r=await rpc('cm2_admin',{p_code:ADM.code,p_pin_hash:ADM.pinHash,p_op:'create',p_args:{code,name,days:selDays}});
+    if(!r.ok)return toast(r.reason==='dup'?'이미 있는 코드예요':'발급 실패');
+    document.getElementById('issued').innerHTML=
+     '<div class="codecard"><div class="cc">'+esc(code)+'</div><div class="cn">'+esc(name||'')+' · '+(selDays?selDays+'일':'평생')+
+     ' — 첫 로그인 때 본인이 비밀번호를 만들어요</div>'+
+     '<button class="btn ghost" style="margin-top:12px" onclick="copyCode(\''+esc(code)+'\')">코드 복사</button></div>';
+    document.getElementById('nCode').value='';document.getElementById('nName').value='';
+    toast('발급했어요');refresh();
+  }catch(e){toast('발급 실패')}
+}
+function copyCode(c){navigator.clipboard&&navigator.clipboard.writeText(c).then(()=>toast('복사했어요'))}
+async function extend(c){try{await rpc('cm2_admin',{p_code:ADM.code,p_pin_hash:ADM.pinHash,p_op:'extend',p_args:{code:c,days:30}});toast(c+' +30일');refresh()}catch(e){toast('실패')}}
+async function resetPin(c){if(!confirm(c+' 비밀번호를 초기화할까요? 다음 로그인 때 새로 만들게 돼요'))return;
+ try{await rpc('cm2_admin',{p_code:ADM.code,p_pin_hash:ADM.pinHash,p_op:'resetpin',p_args:{code:c}});toast('초기화했어요');refresh()}catch(e){toast('실패')}}
+async function delCode(c){if(!confirm(c+' 코드를 삭제할까요? 되돌릴 수 없어요'))return;
+ try{await rpc('cm2_admin',{p_code:ADM.code,p_pin_hash:ADM.pinHash,p_op:'del',p_args:{code:c}});toast('삭제했어요');refresh()}catch(e){toast('실패')}}
+async function changePw(){
+  const a=pw1.value.trim(),b=pw2.value.trim();
+  const m=document.getElementById('pwMsg');
+  if(a.length<4){m.textContent='4자리로 해주세요';return}
+  if(a!==b){m.textContent='두 입력이 서로 달라요';return}
+  if(a==='2222'){m.textContent='임시 비번(2222)은 못 써요';return}
+  try{
+    const nh=await pinHash(ADM.code,a);
+    const r=await rpc('cm2_admin',{p_code:ADM.code,p_pin_hash:ADM.pinHash,p_op:'setpin',p_args:{new_hash:nh}});
+    if(!r.ok){m.textContent='바꾸지 못했어요';return}
+    ADM.pinHash=nh;sessionStorage.setItem('cm2_adm',JSON.stringify(ADM));
+    pw1.value='';pw2.value='';m.textContent='';toast('비밀번호를 바꿨어요');
+  }catch(e){m.textContent='연결이 잠깐 막혔어요'}
+}
+/* 자동 로그인 */
+(async function(){
+  try{const a=JSON.parse(sessionStorage.getItem('cm2_adm')||'null');
+    if(a){const r=await rpc('cm_login',{p_code:a.code,p_pin_hash:a.pinHash});
+      if(r.ok&&r.user.is_master){ADM=a;document.getElementById('gate').classList.add('off');refresh()}}}catch(e){}
+})();
+</script>
+</body></html>
