@@ -446,7 +446,7 @@ async function rpc(fn,args){const{data,error}=await sb.rpc(fn,args);if(error)thr
 
 /* ═══════════ 상태 ═══════════ */
 let AUTH=null;            // {code,pinHash,name}
-let S={cards:[],pillars:['','',''],room:'basic',cats:[],obs:[],works:[],customer:{},product:{}};   // v2 저장 덩어리
+let S={cards:[],pillars:['','',''],room:'basic',cats:[],obs:[],works:[],customer:{},product:{},room2:null,weekly:{}};   // v2 저장 덩어리
 const CATS_DEFAULT=['공감','정보','반전','도발','스토리'];
 let saveTimer=null;
 function persistLocal(){try{localStorage.setItem('cm2_state',JSON.stringify(S))}catch(e){}}
@@ -1227,16 +1227,63 @@ function saveObs(q){
 }
 function savePillars(){S.pillars=[pl0.value.trim(),pl1.value.trim(),pl2.value.trim()];save();toast('기둥을 세웠어요')}
 
-/* ── 커뮤니티 ── */
+/* ── 커뮤니티 — 옛 컨마 기능 재구성 (서버 배선은 나중, 지금은 내 기기 안에서만) ── */
+function wkKey(){const d=new Date();const t=new Date(d.getFullYear(),d.getMonth(),d.getDate()-((d.getDay()+6)%7));
+ const y=t.getFullYear();const j4=new Date(y,0,4);
+ const w=Math.round(((t-new Date(y,0,4-((j4.getDay()+6)%7)))/864e5)/7)+1;return y+'-'+String(w).padStart(2,'0')}
 function renderCommunity(){
   document.getElementById('barRoom').textContent='커뮤니티';
+  const wk=S.weekly&&S.weekly[wkKey()];
+  const r2=S.room2;
   document.getElementById('tabbody').innerHTML=
   '<div class="top"><div class="h1">같이 하는 <em>사람들</em></div></div>'+
-  '<section><div class="card hi"><div style="font-size:15px;font-weight:800;line-height:1.5">이번 주, 나는</div>'+
-  '<div class="pipe" style="margin-top:12px">'+
-  '<div class="stg act"><div class="n">'+S.cards.filter(c=>Date.now()-c.ts<6048e5).length+'</div><div class="t">이번 주 담음</div></div>'+
-  '<div class="stg"><div class="n">'+S.cards.filter(c=>c.stage>=2&&Date.now()-c.ts<6048e5).length+'</div><div class="t">이번 주 분해</div></div>'+
-  '<div class="stg"><div class="n">'+S.cards.length+'</div><div class="t">전체</div></div></div></div></section>'+
+
+  // ① 이번 주 나 — 축적 숫자 (진짜 데이터)
+  '<section><div class="card hi"><div class="lbl" style="margin-bottom:10px">이번 주, 나는</div>'+
+  '<div class="pipe">'+
+  '<div class="stg act"><div class="n">'+S.cards.filter(c=>Date.now()-c.ts<6048e5).length+'</div><div class="t">담음</div></div>'+
+  '<div class="stg"><div class="n">'+S.cards.filter(c=>c.stage>=2&&Date.now()-c.ts<6048e5).length+'</div><div class="t">분해</div></div>'+
+  '<div class="stg"><div class="n">'+(S.works||[]).filter(w=>Date.now()-w.ts<6048e5).length+'</div><div class="t">원고</div></div></div></div></section>'+
+
+  // ② 주간 성적 — 팔로워·최고 조회·업로드 (옛 cm_weekly_stats 문법)
+  '<section><div class="lbl">✍️ 이번 주 성적 · '+wkKey()+'</div><div class="card">'+
+  (wk?'<div class="pipe">'+
+    '<div class="stg"><div class="n">'+Number(wk.followers||0).toLocaleString()+'</div><div class="t">팔로워</div></div>'+
+    '<div class="stg"><div class="n">'+Number(wk.best||0).toLocaleString()+'</div><div class="t">최고 조회</div></div>'+
+    '<div class="stg"><div class="n">'+(wk.uploads||0)+'</div><div class="t">업로드</div></div></div>'+
+    '<button class="btn ghost" style="margin-top:12px" onclick="openWeekly()">고치기</button>'
+   :'<p class="muted" style="margin-bottom:11px">주 1회, 세 숫자만 적어요 — 팔로워 · 최고 조회수 · 업로드 수.<br>이게 방 판과 내 추이의 재료가 돼요. (인스타 연동하면 자동)</p>'+
+    '<button class="btn" onclick="openWeekly()">이번 주 성적 적기</button>')+
+  '</div></section>'+
+
+  // ③ 우리 방 — 개설/합류/판 (옛 cm_rooms 문법, 아직 내 기기 안에서만)
+  '<section><div class="lbl">🚪 우리 방 <span style="color:var(--text-faint);font-weight:500">· 서버 연결 전 — 지금은 이 기기에만</span></div>'+
+  (r2
+   ?'<div class="card hi">'+
+    '<div style="display:flex;align-items:center;gap:9px"><div style="font-size:15px;font-weight:800;flex:1">'+esc(r2.name)+'</div>'+
+    '<span class="pill">코드 '+esc(r2.code)+'</span></div>'+
+    (r2.notice?'<div class="note" style="margin:11px 0 0;padding:9px 12px">📣 '+esc(r2.notice)+'</div>':'')+
+    '<div class="lbl" style="margin:13px 0 8px">멤버 · 1명</div>'+
+    '<div class="item" style="margin:0 0 8px;cursor:default"><div class="th">🙂</div><div class="bd">'+
+    '<div class="ti">나 ('+esc(AUTH&&AUTH.name||'')+')</div>'+
+    '<div class="st">이번 주 업로드 '+(wk&&wk.uploads||0)+'편'+(wk&&wk.followers?' · 팔로워 '+Number(wk.followers).toLocaleString():'')+'</div></div></div>'+
+    '<div class="empty" style="padding:18px 14px">초대 카드를 뿌리면 여기에 사람이 차요<br><span style="font-size:11px">(합류는 서버 연결 뒤에 열려요)</span></div>'+
+    '<div class="row" style="margin-top:12px">'+
+    '<button class="btn" style="flex:2" onclick="copyInvite()">📋 초대 카드 복사</button>'+
+    '<button class="btn ghost" style="flex:1" onclick="editNotice()">공지</button></div>'+
+    '<button class="btn ghost" style="margin-top:8px" onclick="leaveRoom2()">방 없애기</button></div>'
+   :'<div class="card">'+
+    '<p class="muted" style="margin-bottom:12px">같이 달릴 4~6명의 작은 방. 방을 열면 <b style="color:var(--text-main)">코드 6자리</b>가 생기고, 그 코드로 사람을 부릅니다.</p>'+
+    '<input class="inp" id="r2Name" placeholder="방 이름 — 예) 10월 완주반">'+
+    '<input class="inp" id="r2Pin" placeholder="입장 비밀번호" type="password" style="margin-top:9px">'+
+    '<label style="display:flex;gap:8px;align-items:flex-start;margin:12px 2px 0;font-size:11.5px;color:var(--text-mute);line-height:1.55;cursor:pointer">'+
+    '<input type="checkbox" id="r2Agree" style="margin-top:2px">'+
+    '<span>방에 들어가면 내 주간 성적(상승률·별·업로드 수)이 방 멤버에게 보입니다 — 동의</span></label>'+
+    '<button class="btn" style="margin-top:13px" onclick="makeRoom2()">방 열기</button>'+
+    '<button class="btn ghost" style="margin-top:8px" onclick="toast(\'코드 합류는 서버 연결 뒤에 열려요\')">코드로 들어가기</button></div>')+
+  '</section>'+
+
+  // ④ 담벼락 (이미 배선됨 — 유지)
   '<section><div class="card hi"><div class="lbl" style="margin-bottom:9px">이번 주 담벼락 — 한 줄 남기기</div>'+
   '<textarea class="inp" id="wallBody" rows="2" placeholder="이번 주 한 일, 다짐, 응원 — 뭐든 한 줄"></textarea>'+
   '<button class="btn" style="margin-top:11px" onclick="postWall()">담벼락에 붙이기</button></div></section>'+
@@ -1244,6 +1291,47 @@ function renderCommunity(){
   '<section><button class="btn ghost" onclick="goFork()">갈림길로</button></section>';
   show('scr-room');loadWall();
 }
+function openWeekly(){
+  const wk=S.weekly&&S.weekly[wkKey()]||{};
+  openSheet('<h3>이번 주 성적</h3><div class="sub">'+wkKey()+' 주 — 세 숫자면 돼요. 대충이어도 적는 게 이겨요.</div>'+
+  '<div class="lbl">팔로워 수</div><input class="inp" id="wkF" inputmode="numeric" value="'+(wk.followers||'')+'" placeholder="예) 1240">'+
+  '<div class="lbl" style="margin-top:12px">이번 주 최고 조회수</div><input class="inp" id="wkB" inputmode="numeric" value="'+(wk.best||'')+'" placeholder="예) 8300">'+
+  '<div class="lbl" style="margin-top:12px">이번 주 업로드 수</div><input class="inp" id="wkU" inputmode="numeric" value="'+(wk.uploads||'')+'" placeholder="예) 3">'+
+  '<button class="btn" style="margin-top:14px" onclick="saveWeekly()">기록하기</button>');
+}
+function saveWeekly(){
+  const f=parseInt(wkF.value.replace(/[^0-9]/g,''))||0,b=parseInt(wkB.value.replace(/[^0-9]/g,''))||0,u=parseInt(wkU.value.replace(/[^0-9]/g,''))||0;
+  if(!f&&!b&&!u)return toast('한 칸이라도 적어주세요');
+  (S.weekly=S.weekly||{})[wkKey()]={followers:f,best:b,uploads:u,ts:Date.now()};
+  save();closeSheet();renderCommunity();toast('이번 주 성적을 적었어요');
+}
+function makeRoom2(){
+  const name=document.getElementById('r2Name').value.trim();
+  const pin=document.getElementById('r2Pin').value.trim();
+  if(!name)return toast('방 이름을 지어주세요');
+  if(!pin)return toast('입장 비밀번호를 정해주세요');
+  if(!document.getElementById('r2Agree').checked)return toast('성적 공유 동의에 체크해주세요');
+  const code=Array.from({length:6},(_,i)=>'ABCDEFGHJKMNPQRSTUVWXYZ23456789'[(Date.now()+i*7)%31]).join('');
+  S.room2={name,code,notice:'',ts:Date.now()};
+  save();renderCommunity();toast('🚪 방이 열렸어요 — 초대 카드를 뿌리세요');
+}
+function copyInvite(){
+  const r=S.room2;if(!r)return;
+  const txt='🚪 «'+r.name+'» 방에 초대해요!\n컨텐츠 마스터즈 앱 → 커뮤니티 → 코드로 들어가기\n방 코드: '+r.code;
+  if(navigator.clipboard)navigator.clipboard.writeText(txt).then(()=>toast('초대 카드를 복사했어요'));
+  else toast('복사가 안 되는 기기예요');
+}
+function editNotice(){
+  const r=S.room2;if(!r)return;
+  openSheet('<h3>공지 한 줄</h3><div class="sub">방 맨 위에 붙어요</div>'+
+  '<input class="inp" id="ntc" value="'+esc(r.notice||'')+'" placeholder="예) 이번 주 목표 12편!">'+
+  '<button class="btn" style="margin-top:13px" onclick="S.room2.notice=ntc.value.trim();save();closeSheet();renderCommunity();toast(\'공지를 붙였어요\')">붙이기</button>');
+}
+function leaveRoom2(){
+  if(!confirm('방을 없앨까요? (아직 이 기기에만 있는 방이에요)'))return;
+  S.room2=null;save();renderCommunity();toast('방을 없앴어요');
+}
+
 async function loadWall(){
   const box=document.getElementById('wallList');if(!box)return;
   try{
@@ -1282,40 +1370,7 @@ function removeRow(el){
   },140);
 }
 
-/* 발열 헌법: 숨기면 모션 정지 */
-document.addEventListener('visibilitychange',function(){document.body.classList.toggle('hidden-pause',document.hidden)});
-/* 스크롤 → 상단바 그림자 */
-(function(){var se=document.scrollingElement||document.documentElement,on=false;
-function tick(){var v=((se&&se.scrollTop)||window.pageYOffset||0)>4;
- if(v!==on){on=v;document.body.classList.toggle('scrolled',v)}}
-window.addEventListener('scroll',tick,{passive:true});
-document.addEventListener('scroll',tick,{passive:true,capture:true});tick()})();
-
-/* 시트 드래그 — 손가락을 따라온다 (속도 폭주 가드) */
-(function(){
-  var sh=document.getElementById('sheet'),startY=0,cur=0,drag=false,vel=0,last=0,lastT=0;
-  sh.addEventListener('touchstart',function(e){
-    if(sh.scrollTop>2)return;
-    drag=true;startY=e.touches[0].clientY;cur=0;vel=0;last=0;lastT=e.timeStamp;
-    sh.style.transition='none';
-  },{passive:true});
-  sh.addEventListener('touchmove',function(e){
-    if(!drag)return;
-    cur=Math.max(0,e.touches[0].clientY-startY);
-    var dt=Math.max(8,e.timeStamp-lastT);
-    vel=vel*0.55+((cur-last)/dt*16)*0.45;
-    last=cur;lastT=e.timeStamp;
-    sh.style.transform='translateY('+cur+'px)';
-  },{passive:true});
-  sh.addEventListener('touchend',function(){
-    if(!drag)return;drag=false;
-    sh.style.transition='';
-    if(cur>140||(vel>12&&cur>56)){sh.style.transform='';closeSheet()}
-    else{sh.style.transform='';}
-  });
-})();
-
-/* ═══════════ 시작 ═══════════ */
+/* ═══════════ 시작/* ═══════════ 시작 ═══════════ */
 (async function boot(){
   try{const a=JSON.parse(localStorage.getItem('cm2_auth')||'null');
     if(a&&a.code&&a.pinHash){AUTH=a;
